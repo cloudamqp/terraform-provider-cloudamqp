@@ -46,6 +46,16 @@ func resourceInstance() *schema.Resource {
 				Optional:    true,
 				Description: "RabbitMQ version",
 			},
+			"url": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "URL of the CloudAMQP instance",
+			},
+			"apikey": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "API key for the CloudAMQP instance",
+			},
 		},
 	}
 }
