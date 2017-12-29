@@ -51,11 +51,13 @@ func resourceInstance() *schema.Resource {
 			"url": {
 				Type:        schema.TypeString,
 				Computed:    true,
+				Sensitive:   true,
 				Description: "URL of the CloudAMQP instance",
 			},
 			"apikey": {
 				Type:        schema.TypeString,
 				Computed:    true,
+				Sensitive:   true,
 				Description: "API key for the CloudAMQP instance",
 			},
 		},
