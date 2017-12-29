@@ -100,8 +100,13 @@ func resourceInstanceUpdate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceInstanceDelete(d *schema.ResourceData, meta interface{}) error {
-	// d.SetId("") is automatically called assuming delete returns no errors, but
-	// it is added here for explicitness.
-	d.SetId("")
-	return nil
+	client := meta.(*cloudamqp.Client)
+
+	id, err := strconv.Atoi(d.Id())
+	if err != nil {
+		return err
+	}
+
+	_, err = client.Instances.Delete(id)
+	return err
 }
