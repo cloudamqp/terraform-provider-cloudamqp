@@ -35,6 +35,7 @@ func resourceInstance() *schema.Resource {
 			"vpc_subnet": {
 				Type:        schema.TypeString,
 				Optional:    true,
+				ForceNew:    true,
 				Description: "Dedicated VPC subnet, shouldn't overlap with your current VPC's subnet",
 			},
 			"nodes": {
@@ -66,9 +67,12 @@ func resourceInstanceCreate(d *schema.ResourceData, meta interface{}) error {
 	fmt.Print(client)
 
 	params := &cloudamqp.CreateInstanceParams{
-		Name:   d.Get("name").(string),
-		Plan:   d.Get("plan").(string),
-		Region: d.Get("region").(string),
+		Name:       d.Get("name").(string),
+		Plan:       d.Get("plan").(string),
+		Region:     d.Get("region").(string),
+		VpcSubnet:  d.Get("vpc_subnet").(string),
+		Nodes:      d.Get("nodes").(int),
+		RmqVersion: d.Get("rmq_version").(string),
 	}
 
 	instance, _, err := client.Instances.Create(params)
