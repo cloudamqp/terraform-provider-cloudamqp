@@ -28,8 +28,8 @@
 [[projects]]
   name = "github.com/aws/aws-sdk-go"
   packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/stscreds","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","internal/shareddefaults","private/protocol","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/restxml","private/protocol/xml/xmlutil","service/s3","service/sts"]
-  revision = "82ad808f2307df0776c038bfd7ea85440a35c02e"
-  version = "v1.12.53"
+  revision = "5db34a6d9a78f5a3c6a713197aeb6bf159458211"
+  version = "v1.12.54"
 
 [[projects]]
   branch = "master"
@@ -232,7 +232,7 @@
   branch = "master"
   name = "github.com/waveaccounting/go-cloudamqp"
   packages = ["cloudamqp"]
-  revision = "23151b8864085464590530a6054f9e161a48a8f8"
+  revision = "59ee007a055c5d0b7eb342d9ab8d4f6ff81c4936"
   source = "github.com/waveaccounting/go-cloudamqp"
 
 [[projects]]

@@ -50,9 +50,12 @@ func (s *InstanceService) Get(id int) (*Instance, *http.Response, error) {
 
 // CreateInstanceParams are the parameters for OrganizationService.Create.
 type CreateInstanceParams struct {
-	Name   string `url:"name"`
-	Plan   string `url:"plan"`
-	Region string `url:"region"`
+	Name       string `url:"name"`
+	Plan       string `url:"plan"`
+	Region     string `url:"region"`
+	VpcSubnet  string `url:"vpc_subnet,omitempty"`
+	Nodes      int    `url:"nodes,omitempty"`
+	RmqVersion string `url:"rmq_version,omitempty"`
 }
 
 // Create a new CloudAMP instance.
