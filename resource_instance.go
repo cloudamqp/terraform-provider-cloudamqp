@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/hashicorp/terraform/helper/schema"
@@ -106,7 +107,27 @@ func resourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceInstanceUpdate(d *schema.ResourceData, meta interface{}) error {
-	return nil
+	client := meta.(*cloudamqp.Client)
+
+	id, err := strconv.Atoi(d.Id())
+	if err != nil {
+		return err
+	}
+
+	params := &cloudamqp.UpdateInstanceParams{
+		Name:  d.Get("name").(string),
+		Plan:  d.Get("plan").(string),
+		Nodes: d.Get("nodes").(int),
+	}
+
+	log.Printf("[DEBUG] Updating CloudAMQP instance %s ", d.Get("name").(string))
+
+	_, _, err = client.Instances.Update(id, params)
+	if err != nil {
+		return err
+	}
+
+	return resourceInstanceRead(d, meta)
 }
 
 func resourceInstanceDelete(d *schema.ResourceData, meta interface{}) error {
