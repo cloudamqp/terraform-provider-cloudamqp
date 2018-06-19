@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform/helper/schema"
 )
@@ -31,6 +29,5 @@ func Provider() *schema.Provider {
 }
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
-	log.Println(d.Get("baseurl").(string), d.Get("apikey").(string))
 	return api.New(d.Get("baseurl").(string), d.Get("apikey").(string)), nil
 }
