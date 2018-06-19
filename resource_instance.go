@@ -1,21 +1,16 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"strconv"
-
+	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform/helper/schema"
-	"github.com/waveaccounting/go-cloudamqp/cloudamqp"
 )
 
 func resourceInstance() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceInstanceCreate,
-		Read:   resourceInstanceRead,
-		Update: resourceInstanceUpdate,
-		Delete: resourceInstanceDelete,
-
+		Create: resourceCreate,
+		Read:   resourceRead,
+		Update: resourceUpdate,
+		Delete: resourceDelete,
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:        schema.TypeString,
@@ -40,6 +35,7 @@ func resourceInstance() *schema.Resource {
 			},
 			"nodes": {
 				Type:        schema.TypeInt,
+				Default:     1,
 				Optional:    true,
 				Description: "Number of nodes in cluster (plan must support it)",
 			},
@@ -64,86 +60,51 @@ func resourceInstance() *schema.Resource {
 	}
 }
 
-func resourceInstanceCreate(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*cloudamqp.Client)
-	fmt.Print(client)
-
-	params := &cloudamqp.CreateInstanceParams{
-		Name:       d.Get("name").(string),
-		Plan:       d.Get("plan").(string),
-		Region:     d.Get("region").(string),
-		VpcSubnet:  d.Get("vpc_subnet").(string),
-		Nodes:      d.Get("nodes").(int),
-		RmqVersion: d.Get("rmq_version").(string),
+func resourceCreate(d *schema.ResourceData, meta interface{}) error {
+	api := meta.(*api.API)
+	keys := []string{"name", "plan", "region", "nodes"}
+	params := make(map[string]interface{})
+	for _, k := range keys {
+		if v := d.Get(k); v != nil {
+			params[k] = v
+		}
 	}
-
-	instance, _, err := client.Instances.Create(params)
+	data, err := api.Create(params)
 	if err != nil {
 		return err
 	}
-
-	d.SetId(strconv.Itoa(instance.ID))
-	return resourceInstanceRead(d, meta)
-}
-
-func resourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*cloudamqp.Client)
-
-	id, err := strconv.Atoi(d.Id())
-	if err != nil {
-		return err
+	d.SetId(data["id"].(string))
+	for k, v := range data {
+		d.Set(k, v)
 	}
-
-	instance, _, err := client.Instances.Get(id)
-	if err != nil {
-		// If the resource does not exist, inform Terraform. We want to immediately
-		// return here to prevent further processing.
-		d.SetId("")
-		return nil
-	}
-
-	d.SetId(strconv.Itoa(instance.ID))
-	d.Set("name", instance.Name)
-	d.Set("region", instance.Region)
-	d.Set("plan", instance.Plan)
-	d.Set("url", instance.URL)
-	d.Set("apikey", instance.APIKey)
-
 	return nil
+
 }
 
-func resourceInstanceUpdate(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*cloudamqp.Client)
-
-	id, err := strconv.Atoi(d.Id())
+func resourceRead(d *schema.ResourceData, meta interface{}) error {
+	api := meta.(*api.API)
+	data, err := api.Read(d.Id())
 	if err != nil {
 		return err
 	}
-
-	params := &cloudamqp.UpdateInstanceParams{
-		Name:  d.Get("name").(string),
-		Plan:  d.Get("plan").(string),
-		Nodes: d.Get("nodes").(int),
+	for k, v := range data {
+		d.Set(k, v)
 	}
+	return nil
 
-	log.Printf("[DEBUG] Updating CloudAMQP instance %s ", d.Get("name").(string))
-
-	_, _, err = client.Instances.Update(id, params)
-	if err != nil {
-		return err
-	}
-
-	return resourceInstanceRead(d, meta)
 }
 
-func resourceInstanceDelete(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*cloudamqp.Client)
-
-	id, err := strconv.Atoi(d.Id())
-	if err != nil {
-		return err
+func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
+	api := meta.(*api.API)
+	keys := []string{"name", "plan", "nodes"}
+	params := make(map[string]interface{})
+	for _, k := range keys {
+		params[k] = d.Get(k)
 	}
+	return api.Update(d.Id(), params)
+}
 
-	_, err = client.Instances.Delete(id)
-	return err
+func resourceDelete(d *schema.ResourceData, meta interface{}) error {
+	api := meta.(*api.API)
+	return api.Delete(d.Id())
 }

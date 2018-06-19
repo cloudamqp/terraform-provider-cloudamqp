@@ -1,6 +1,9 @@
 package main
 
 import (
+	"log"
+
+	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
@@ -11,13 +14,13 @@ func Provider() *schema.Provider {
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("CLOUDAMQP_APIKEY", nil),
-				Description: "The API key used to connect to CloudAMQP",
+				Description: "Key used to authentication to the CloudAMQP API",
 			},
-			"base_url": &schema.Schema{
+			"baseurl": &schema.Schema{
 				Type:        schema.TypeString,
-				Required:    true,
-				DefaultFunc: schema.EnvDefaultFunc("CLOUDAMQP_BASE_URL", "https://customer.cloudamqp.com/api/"),
-				Description: "The CloudAMQP Base API URL",
+				Default:     "https://customer.cloudamqp.com",
+				Optional:    true,
+				Description: "Base URL to CloudAMQP website",
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
@@ -28,10 +31,6 @@ func Provider() *schema.Provider {
 }
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
-	config := Config{
-		APIKey:  d.Get("apikey").(string),
-		BaseURL: d.Get("base_url").(string),
-	}
-
-	return config.Client()
+	log.Println(d.Get("baseurl").(string), d.Get("apikey").(string))
+	return api.New(d.Get("baseurl").(string), d.Get("apikey").(string)), nil
 }
