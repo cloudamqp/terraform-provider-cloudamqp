@@ -12,7 +12,7 @@ build:  ## Build cloudamqp provider
 	go build -o terraform-provider-cloudamqp
 
 install: build  ## Install cloudamqp provider into terraform plugin directory
-	cp terraform-provider-cloudamqp ~/.terraform.d/plugins
+	mv terraform-provider-cloudamqp ~/.terraform.d/plugins/
 
 init: install  ## Run terraform init for local testing
 	terraform init
