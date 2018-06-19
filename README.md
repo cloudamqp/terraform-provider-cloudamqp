@@ -2,7 +2,20 @@
 
 Setup your CloudAMQP cluster from Terraform
 
+## Install
+
+```sh
+git clone https://github.com/cloudamqp/terraform-provider.git
+cd terraform-provider
+make depupdate
+make init
 ```
+
+Now the provider is installed in the terraform plugins folder and ready to be used.
+
+## Example
+
+```hcl
 provider "cloudamqp" {}
 
 resource "cloudamqp_instance" "rmq_bunny" {
