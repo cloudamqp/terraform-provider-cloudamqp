@@ -62,7 +62,7 @@ func resourceInstance() *schema.Resource {
 
 func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"name", "plan", "region", "nodes"}
+	keys := []string{"name", "plan", "region", "nodes", "vpc_subnet", "rmq_version"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
