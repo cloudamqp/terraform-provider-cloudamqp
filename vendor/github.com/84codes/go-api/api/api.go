@@ -28,7 +28,9 @@ func (api *API) waitUntilReady(id string) (map[string]interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		if data["ready"] == true {
+
+		// Shared plans don't include the "ready" field, so just assume that they are.
+		if data["ready"] == true || data["plan"] == "lemur" || data["plan"] == "tiger" {
 			data["id"] = id
 			return data, nil
 		}
