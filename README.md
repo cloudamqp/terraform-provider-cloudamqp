@@ -2,8 +2,29 @@
 
 Setup your CloudAMQP cluster from Terraform
 
-## Install
+## Getting Started (As a Terraform User)
+### Prerequisites
 
+* Install golang: https://golang.org/dl/
+
+* Install go dep: https://golang.github.io/dep/docs/installation.html
+
+* Install terraform: https://learn.hashicorp.com/terraform/getting-started/install.html
+
+* Create a CloudAMQP account if you haven't already:
+
+    * Go to https://www.cloudamqp.com/
+
+    * Click "Sign Up"
+
+    * Sign in
+
+    * Go to API access (https://customer.cloudamqp.com/apikeys) and create a key.
+      (note that this is the API key for one of the two APIs CloudAMQP supports.  
+      See https://docs.cloudamqp.com/cloudamqp_api.html.  We will discuss the other
+      later.)
+
+### Install CloudAMQP Terraform Provider
 ```sh
 git clone https://github.com/cloudamqp/terraform-provider.git
 cd terraform-provider
@@ -13,22 +34,22 @@ make init
 
 Now the provider is installed in the terraform plugins folder and ready to be used.
 
-## Example
+### Example Usage: Deploying a First CloudAMQP RMQ server
 
-```hcl
-provider "cloudamqp" {}
+(See the examples.tf file in the repo.  It has a bunny VPC example and a simple lemur example.)
 
-resource "cloudamqp_instance" "rmq_bunny" {
-  name   = "terraform-provider-test"
-  plan   = "bunny"
-  region = "amazon-web-services::us-east-1"
-  vpc_subnet = "10.201.0.0/24"
-}
+```sh
+cd terraform-provider  #This is the root of the repo where examples.tf lives.
+terraform plan
+```
+When prompted paste in your CloudAMQP API key (created above).
 
-output "rmq_url" {
-  value = "${cloudamqp_instance.rmq_bunny.url}"
-}
+This will give you output on stdout that tells you what would have been created:
+* rmq_lemur
+
+Next run--
+```sh
+terraform apply
 ```
 
-
-
+Again, paste in your API key.  This should create an actual CloudAMQP instance.
