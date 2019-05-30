@@ -5,6 +5,12 @@ Setup your CloudAMQP cluster from Terraform
 ## Install
 
 ```sh
+# Go libraries
+go get github.com/84codes/go-api/api
+go get github.com/hashicorp/terraform/helper/schema
+go get github.com/hashicorp/terraform/plugin
+go get github.com/hashicorp/terraform/terraform
+# Provider
 git clone https://github.com/cloudamqp/terraform-provider.git
 cd terraform-provider
 make depupdate
