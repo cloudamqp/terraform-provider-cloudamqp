@@ -39,6 +39,15 @@ func resourceInstance() *schema.Resource {
 				Optional:    true,
 				Description: "Number of nodes in cluster (plan must support it)",
 			},
+			"tags": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				ForceNew:    false,
+				Description: "list of tags for instance",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
 			"rmq_version": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -62,7 +71,7 @@ func resourceInstance() *schema.Resource {
 
 func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"name", "plan", "region", "nodes"}
+	keys := []string{"name", "plan", "region", "vpc_subnet", "nodes", "rmq_version", "tags"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
@@ -96,7 +105,7 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"name", "plan", "nodes"}
+	keys := []string{"name", "plan", "nodes", "rmq_version", "tags"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		params[k] = d.Get(k)
