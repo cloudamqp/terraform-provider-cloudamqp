@@ -31,7 +31,7 @@ Now the provider is installed in the terraform plugins folder and ready to be us
 provider "cloudamqp" {}
 
 resource "cloudamqp_instance" "rmq_url"{
-  name = "qa-rabbitmq-1"
+  name = "rmq_url"
   plan = "lemur"
   nodes = 1
   region = "amazon-web-services::us-east-1"
@@ -40,6 +40,6 @@ resource "cloudamqp_instance" "rmq_url"{
 }
 
 output "rmq_url" {
-  value = "${cloudamqp_instance.rmq_bunny.url}"
+  value = "${cloudamqp_instance.rmq_url.url}"
 }
 ```
