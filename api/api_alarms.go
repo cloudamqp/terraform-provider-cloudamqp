@@ -21,15 +21,6 @@ func New(baseUrl, apiKey string) *AlarmAPI {
 	}
 }
 
-func New(baseUrl, apiKey string) *AlarmAPI {
-	return &AlarmAPI{
-		sling: sling.New().
-			Client(http.DefaultClient).
-			Base(baseUrl).
-			SetBasicAuth("", apiKey),
-	}
-}
-
 func (api *AlarmAPI) Create(params map[string]interface{}) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 	_, err := api.sling.Post("/api/alarms").BodyJSON(params).ReceiveSuccess(&data)
@@ -50,7 +41,7 @@ func (api *AlarmAPI) Read(id string) (map[string]interface{}, error) {
 }
 
 // alarm_id, type
-func (api *AlarmAPI) Delete(id string, type string) error {
+func (api *AlarmAPI) Delete(id string, alarm_type string) error {
 	_, err := api.sling.Path("/api/alarms/").Delete(id).ReceiveSuccess(nil)
 	return err
 }
