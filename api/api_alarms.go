@@ -12,7 +12,7 @@ type AlarmAPI struct {
 	sling *sling.Sling
 }
 
-func New(baseUrl, apiKey string) *AlarmAPI {
+func NewAlarmApi(baseUrl, apiKey string) *AlarmAPI {
 	return &AlarmAPI{
 		sling: sling.New().
 			Client(http.DefaultClient).
