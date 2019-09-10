@@ -12,17 +12,19 @@ func Provider() *schema.Provider {
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("CLOUDAMQP_APIKEY", nil),
-				Description: "Key used to authentication to the CloudAMQP API",
+				Description: "Key used to authentication to the CloudAMQP Customer API",
 			},
 			"baseurl": &schema.Schema{
 				Type:        schema.TypeString,
 				Default:     "https://customer.cloudamqp.com",
 				Optional:    true,
-				Description: "Base URL to CloudAMQP website",
+				Description: "Base URL to CloudAMQP Customer website",
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"cloudamqp_instance": resourceInstance(),
+			"cloudamqp_instance" : resourceInstance(),
+			"cloudamqp_notification" : resourceNotification(),
+			"cloudamqp_alarm" : resourceAlarm(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
