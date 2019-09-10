@@ -26,12 +26,12 @@
 
 
 [[constraint]]
-  branch = "master"
+  branch = "extend_api"
   name = "github.com/84codes/go-api"
 
 [[constraint]]
   name = "github.com/hashicorp/terraform"
-  version = "0.12.0"
+  version = "0.12.3"
 
 [prune]
   go-tests = true
