@@ -57,9 +57,12 @@ func resourceInstance() *schema.Resource {
 				Description: "API key for the CloudAMQP instance",
 			},
 			"tags": {
-				Type:        schema.TypeString,
+				Type:        schema.TypeList,
 				Optional:    true,
-				Description: "Tag the instances with optional tags (CSV-fortmatted)",
+				Elem: &schema.Schema{
+          Type:         schema.TypeString,
+        },
+				Description: "Tag the instances with optional tags",
 			},
 		},
 	}

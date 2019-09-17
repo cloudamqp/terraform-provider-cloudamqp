@@ -4,6 +4,7 @@ resource "cloudamqp_instance" "rmq_lemur" {
   name   = "terraform-provider-test-lemur"
   plan   = "lemur"
   region = "amazon-web-services::us-east-1"
+  tags   = ["test", "test-2"]
 }
 
 output "rmq_lemur_url" {

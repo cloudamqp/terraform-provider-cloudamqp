@@ -24,7 +24,7 @@ Golang, Dep
     * Sign in
 
     * Go to API access (https://customer.cloudamqp.com/apikeys) and create a key.
-      (note that this is the API key for one of the two APIs CloudAMQP supports.  
+      (note that this is the API key for one of the two APIs CloudAMQP supports.
       See https://docs.cloudamqp.com/cloudamqp_api.html.  We will discuss the other
       later.)
 
@@ -73,6 +73,7 @@ resource "cloudamqp_instance" "rmq_url"{
   region = "amazon-web-services::us-east-1"
   rmq_version = "3.6.16"
   vpc_subnet = "10.201.0.0/24"
+  tags = ["production", "project-name"]
 }
 
 output "rmq_url" {
