@@ -56,10 +56,10 @@ func resourceInstance() *schema.Resource {
 				Sensitive:   true,
 				Description: "API key for the CloudAMQP instance",
 			},
-			"notifications": {
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem: resourceNotification(),
+			"tags": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Tag the instances with optional tags (CSV-fortmatted)",
 			},
 		},
 	}
@@ -67,7 +67,7 @@ func resourceInstance() *schema.Resource {
 
 func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"name", "plan", "region", "nodes"}
+	keys := []string{"name", "plan", "region", "nodes", "tags"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
@@ -100,7 +100,7 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"name", "plan", "nodes"}
+	keys := []string{"name", "plan", "nodes", "tags"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		params[k] = d.Get(k)
