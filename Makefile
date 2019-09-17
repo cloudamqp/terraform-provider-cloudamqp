@@ -5,7 +5,7 @@ else
     ifeq ($(UNAME_P),AMD64)
         GOARCH += amd64
     endif
-       
+
 endif
 
 UNAME_S := $(shell uname -s)
@@ -32,7 +32,8 @@ build:  ## Build cloudamqp provider
 	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o terraform-provider-cloudamqp
 
 install: build  ## Install cloudamqp provider into terraform plugin directory
-	mv $(CURDIR)/terraform-provider-cloudamqp ~/.terraform.d/plugins/
+	cp $(CURDIR)/terraform-provider-cloudamqp ~/.terraform.d/plugins/
+	mv $(CURDIR)/terraform-provider-cloudamqp $(CURDIR)/bin/
 
 init: install  ## Run terraform init for local testing
 	terraform init
