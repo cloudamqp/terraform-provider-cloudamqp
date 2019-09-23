@@ -2,8 +2,8 @@ package api
 
 import (
 	"strconv"
-	"time"
 	"fmt"
+	"errors"
 )
 
 type NotificationQuery struct {
@@ -11,56 +11,60 @@ type NotificationQuery struct {
 	Type string 		`url:"type,omitempty"`
 }
 
-func (api *API) waitForNotification(instance_id int, recipient_id, recipient_type string) (map[string]interface{}, error) {
-	data := make(map[string]interface{})
-	params := &NotificationQuery{ Id: recipient_id, Type: recipient_type}
-	for {
-		path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
-		_, err := api.sling.Get(path).QueryStruct(params).ReceiveSuccess(&data)
-		if err != nil {
-			return nil, err
-		}
-		if data["type"] == recipient_type {
-			data["id"] = recipient_id
-			return data, nil
-		}
-		time.Sleep(10 * time.Second)
-	}
-}
-
 func (api *API) CreateNotification(instance_id int, params map[string]interface{}) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
+	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
-	_, err := api.sling.Post(path).BodyJSON(params).ReceiveSuccess(&data)
-	time.Sleep(10 * time.Second)
+	response, err := api.sling.Post(path).BodyJSON(params).Receive(&data, &failed)
+
 	if err != nil {
 		return nil, err
 	}
-	string_id := strconv.Itoa(int(data["id"].(float64)))
-	api.waitForNotification(instance_id, string_id, data["type"].(string))
-	data["id"] = string_id
+	if response.StatusCode != 201 {
+		return nil, errors.New(fmt.Sprintf("CreateNotification failed, status: %v, message: %s", response.StatusCode, failed))
+	}
+
+	data["id"] = strconv.FormatFloat(data["id"].(float64), 'f', 0, 64 )
 	return data, err
 }
 
 func (api *API) ReadNotification(instance_id int, id string) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
+	failed := make(map[string]interface{})
 	params := &NotificationQuery{ Id: id }
 	path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
-	_, err := api.sling.Path(path).QueryStruct(params).ReceiveSuccess(&data)
+	response, err := api.sling.Path(path).QueryStruct(params).Receive(&data, &failed)
+
 	if err != nil {
 		return nil, err
 	}
+	if response.StatusCode != 200 {
+		return nil, errors.New(fmt.Sprintf("ReadNotification failed, status: %v, message: %s", response.StatusCode, failed))
+	}
+
 	return data, err
 }
 
 func (api *API) UpdateNotification(instance_id int, params map[string]interface{}) error {
+	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
-	_, err := api.sling.Put(path).BodyJSON(params).ReceiveSuccess(nil)
+	response, err := api.sling.Put(path).BodyJSON(params).Receive(nil, &failed)
+
+	if response.StatusCode != 200 {
+		return errors.New(fmt.Sprintf("UpdateNotification failed, status: %v, message: %s", response.StatusCode, failed))
+	}
+
 	return err
 }
 
 func (api *API) DeleteNotification(instance_id int, params map[string]interface{}) error {
+	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
-	_, err := api.sling.Delete(path).BodyJSON(params).ReceiveSuccess(nil)
+	response, err := api.sling.Delete(path).BodyJSON(params).Receive(nil, &failed)
+
+	if response.StatusCode != 200 {
+		return errors.New(fmt.Sprintf("DeleteNotificaion failed, status: %v, message: %s", response.StatusCode, failed))
+	}
+
 	return err
 }

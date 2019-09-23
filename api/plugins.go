@@ -1,43 +1,69 @@
 package api
 
+import (
+	"fmt"
+	"errors"
+)
+
 type PluginParams struct {
 	Name    string `url:"plugin_name,omitempty"`
 	Enable    bool `url:"enable,omitempty"`
 }
 
-func (api *API) EnablePlugin(name string) error {
+func (api *API) EnablePlugin(instance_id int, name string) error {
+	failed := make(map[string]interface{})
 	params := &PluginParams{Name: name}
-	_, err := api.sling.Post("/api/plugins").BodyForm(params).ReceiveSuccess(nil)
+	path := fmt.Sprintf("/api/instances/%d/plugins", instance_id)
+	response, err := api.sling.Post(path).BodyForm(params).Receive(nil, &failed)
+
 	if err != nil {
 		return err
 	}
+	if response.StatusCode != 200 {
+		return errors.New(fmt.Sprintf("EnablePlugin failed, status: %v, message: %s", response.StatusCode, failed))
+	}
+
 	return nil
 }
 
-func (api *API) ReadPlugins() (map[string]interface{}, error) {
+func (api *API) ReadPlugins(instance_id int) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
-	_, err := api.sling.Get("/api/plugins").ReceiveSuccess(&data)
+	failed := make(map[string]interface{})
+	path := fmt.Sprintf("/api/instances/%d/plugins", instance_id)
+	response, err := api.sling.Get(path).Receive(&data, &failed)
+
 	if err != nil {
 		return nil, err
 	}
+	if response.StatusCode != 200 {
+		return nil, errors.New(fmt.Sprintf("ReadPlugin failed, status: %v, message: %s", response.StatusCode, failed))
+	}
+
 	return data, nil
 }
 
-func (api *API) UpdatePlugin(name string, enable bool) error {
+func (api *API) UpdatePlugin(instance_id int, name string, enable bool) error {
+	failed := make(map[string]interface{})
 	params := &PluginParams{Name: name, Enable: enable}
-	_, err := api.sling.Put("api/plugins").BodyForm(params).ReceiveSuccess(nil)
-	if err != nil {
-		return err
+	path := fmt.Sprintf("/api/instances/%d/plugins", instance_id)
+	response, err := api.sling.Put(path).BodyForm(params).Receive(nil, &failed)
+
+	if response.StatusCode != 200 {
+		return errors.New(fmt.Sprintf("UpdatePlugin failed, status: %v, message: %s", response.StatusCode, failed))
 	}
-	return nil
+
+	return err
 }
 
-// alarm_id, type
-func (api *API) DisablePlugin(name string) error {
+func (api *API) DisablePlugin(instance_id int, name string) error {
+	failed := make(map[string]interface{})
 	params := &PluginParams{Name: name}
-	_, err := api.sling.Delete("/api/alarms/").BodyForm(params).ReceiveSuccess(nil)
-	if err != nil {
-		return err
+	path := fmt.Sprintf("/api/instances/%d/plugins", instance_id)
+	response, err := api.sling.Delete(path).BodyForm(params).Receive(nil, &failed)
+
+	if response.StatusCode != 200 {
+		return errors.New(fmt.Sprintf("DisablePlugin failed, status: %v, message: %s", response.StatusCode, failed))
 	}
-	return nil
+
+	return err
 }
