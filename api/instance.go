@@ -36,12 +36,12 @@ func (api *API) CreateInstance(params map[string]interface{}) (map[string]interf
 	if err != nil {
 		return nil, err
 	}
-	if response.StatusCode != 201 {
+	if response.StatusCode != 200 {
 		return nil, errors.New(fmt.Sprintf("CreateInstance failed, status: %v, message: %s", response.StatusCode, failed))
 	}
 
-	string_id := strconv.Itoa(int(data["id"].(int)))
-	return api.waitUntilReady(string_id)
+	data["id"] = strconv.FormatFloat(data["id"].(float64), 'f', 0, 64 )
+	return api.waitUntilReady(data["id"].(string))
 }
 
 func (api *API) ReadInstance(id string) (map[string]interface{}, error) {
@@ -95,7 +95,7 @@ func (api *API) DeleteInstance(id string) error {
 	if err != nil {
 		return err
 	}
-	if response.StatusCode != 200 {
+	if response.StatusCode != 204 {
 		return errors.New(fmt.Sprintf("DeleteInstance failed, status: %v, message: %s", response.StatusCode, failed))
 	}
 

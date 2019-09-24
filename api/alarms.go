@@ -69,7 +69,7 @@ func (api *API) UpdateAlarm(instance_id int, params map[string]interface{}) erro
 	if err != nil {
 		return err
 	}
-	if response.StatusCode != 204 {
+	if response.StatusCode != 201 {
 		return errors.New(fmt.Sprintf("Alarms::UpdateAlarm failed, status: %v, message: %s", response.StatusCode, failed))
 	}
 
@@ -81,7 +81,7 @@ func (api *API) DeleteAlarm(instance_id int, params map[string]interface{}) erro
 	path := fmt.Sprintf("/api/instances/%d/alarms", instance_id)
 	response, err := api.sling.Delete(path).BodyJSON(params).Receive(nil, &failed)
 
-	if response.StatusCode != 200 {
+	if response.StatusCode != 204 {
 		return errors.New(fmt.Sprintf("Alarm::DeleteAlarm failed, status: %v, message: %s", response.StatusCode, failed))
 	}
 

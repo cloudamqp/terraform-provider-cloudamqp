@@ -62,7 +62,7 @@ func (api *API) DeleteNotification(instance_id int, params map[string]interface{
 	path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
 	response, err := api.sling.Delete(path).BodyJSON(params).Receive(nil, &failed)
 
-	if response.StatusCode != 200 {
+	if response.StatusCode != 204 {
 		return errors.New(fmt.Sprintf("DeleteNotificaion failed, status: %v, message: %s", response.StatusCode, failed))
 	}
 
