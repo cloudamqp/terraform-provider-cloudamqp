@@ -26,8 +26,30 @@ func (api *API) EnablePlugin(instance_id int, name string) error {
 	return nil
 }
 
-func (api *API) ReadPlugins(instance_id int) (map[string]interface{}, error) {
-	data := make(map[string]interface{})
+func (api *API) ReadPlugin(instance_id int, plugin_name string) (map[string]interface{}, error) {
+	var data []map[string]interface{}
+	failed := make(map[string]interface{})
+	path := fmt.Sprintf("/api/instances/%d/plugins", instance_id)
+	response, err := api.sling.Get(path).Receive(&data, &failed)
+
+	if err != nil {
+		return nil, err
+	}
+	if response.StatusCode != 200 {
+		return nil, errors.New(fmt.Sprintf("ReadPlugin failed, status: %v, message: %s", response.StatusCode, failed))
+	}
+
+	for index, value := range data {
+		if value["name"] == plugin_name {
+			return data[index], nil
+		}
+	}
+
+	return nil, nil
+}
+
+func (api *API) ReadPlugins(instance_id int) ([]map[string]interface{}, error) {
+	var data []map[string]interface{}
 	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%d/plugins", instance_id)
 	response, err := api.sling.Get(path).Receive(&data, &failed)
