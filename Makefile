@@ -26,6 +26,15 @@ clean:  ## Clean files
 depupdate: clean  ## Update all vendored dependencies
 	dep ensure -update
 
+release: ## Cross-compile release provider for different architecture
+	GOOS=linux GOARCH=amd64 go build -o terraform-provider-cloudamqp
+	tar -czvf terraform-provider-cloudamqp_linux_amd64.tar.gz terraform-provider-cloudamqp
+	mv terraform-provider-cloudamqp_linux_amd64.tar.gz bin/release/linux/amd64/
+
+	GOOS=darwin GOARCH=amd64 go build -o terraform-provider-cloudamqp
+	tar -czvf terraform-provider-cloudamqp_darwin_amd64.tar.gz terraform-provider-cloudamqp
+	mv terraform-provider-cloudamqp_darwin_amd64.tar.gz bin/release/darwin/amd64/
+
 build:  ## Build cloudamqp provider
 	@echo $(GOOS);
 	@echo $(GOARCH);
