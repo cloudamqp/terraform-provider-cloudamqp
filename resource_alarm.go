@@ -3,7 +3,9 @@ package main
 import (
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform/helper/schema"
-	"fmt"
+	"strconv"
+	"strings"
+	"errors"
 )
 
 func resourceAlarm() *schema.Resource {
@@ -17,11 +19,6 @@ func resourceAlarm() *schema.Resource {
 				Type:				schema.TypeInt,
 				Required: 	true,
 				Description: "Instance identifier",
-			},
-			"alarm_id": {
-				Type:				schema.TypeInt,
-				Optional: 	true,
-				Description: "Alarm identifier",
 			},
 			"type": {
 				Type:        schema.TypeString,
@@ -48,11 +45,11 @@ func resourceAlarm() *schema.Resource {
 				Optional:    true,
 				Description: "Regex for which queues to check",
 			},
-			"notifications": {
+			"notification_ids": {
 				Type:        schema.TypeList,
 				Optional:    true,
 				Elem: &schema.Schema{
-          Type:         schema.TypeString,
+          Type:         schema.TypeInt,
         },
 				Description: "Identifiers for recipients to be notified. Leave empty to notifiy all recipients.",
 			},
@@ -62,7 +59,7 @@ func resourceAlarm() *schema.Resource {
 
 func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "value_threshold", "time_threshold", "vhost_regex", "queue_regex", "notifications"}
+	keys := []string{"type", "value_threshold", "time_threshold", "vhost_regex", "queue_regex", "notification_ids"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
@@ -70,46 +67,88 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
+	var notificationIDs []int
+	if attr := d.Get("notification_ids").([]interface{}); len(attr) > 0 {
+		for _, v := range attr {
+			val, ok := v.(int)
+			if ok {
+				notificationIDs = append(notificationIDs, val)
+			}
+		}
+	}
+
+	params["notifications"] = notificationIDs
+	delete(params, "notification_ids")
+
 	data, err := api.CreateAlarm(d.Get("instance_id").(int), params)
+
 	if err != nil {
 		return err
 	}
-
 	if data["id"] != nil {
 		d.SetId(data["id"].(string))
 	}
+
 	for k, v := range data {
 		if k == "id" {
 			continue
 		}
 		d.Set(k, v)
 	}
+
 	return nil
 }
 
 func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
+	if strings.Contains(d.Id(), ",") {
+		s := strings.Split(d.Id(), ",")
+		d.SetId(s[0])
+		instance_id, _ := strconv.Atoi(s[1])
+		d.Set("instance_id", instance_id)
+	}
+	if d.Get("instance_id").(int) == 0 {
+		return errors.New("Missing instance identifier: {resource_id},{instance_id}")
+	}
+
 	api := meta.(*api.API)
-	fmt.Println("resourceAlarmRead: " + d.Id())
 	data, err := api.ReadAlarm(d.Get("instance_id").(int), d.Id())
+
 	if err != nil {
 		return err
 	}
+
 	for k, v := range data {
 		d.Set(k, v)
 	}
+
 	return nil
 }
 
 func resourceAlarmUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "value_threshold", "time_threshold", "vhost_regex", "queue_regex", "notifications"}
+	keys := []string{"type", "value_threshold", "time_threshold", "vhost_regex", "queue_regex", "notification_ids"}
 	params := make(map[string]interface{})
 	params["alarm_id"] = d.Id()
+
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
 			params[k] = v
 		}
 	}
+
+	var notificationIDs []int
+	if attr := d.Get("notification_ids").([]interface{}); len(attr) > 0 {
+		for _, v := range attr {
+			val, ok := v.(int)
+			if ok {
+				notificationIDs = append(notificationIDs, val)
+			}
+		}
+	}
+
+	params["notifications"] = notificationIDs
+	delete(params, "notification_ids")
+
 	return api.UpdateAlarm(d.Get("instance_id").(int), params)
 }
 
