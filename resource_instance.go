@@ -11,6 +11,9 @@ func resourceInstance() *schema.Resource {
 		Read:   resourceRead,
 		Update: resourceUpdate,
 		Delete: resourceDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:        schema.TypeString,

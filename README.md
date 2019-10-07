@@ -94,3 +94,34 @@ resource "cloudamqp_alarm" "alarm_01" {
   notifications = ["${cloudamqp_notification.recipient_01.id}"]
 }
 ```
+
+## Import
+
+Import existing infrastructure into state and bring the resource under Terraform management. Information about the resource will be added to the terraform.state file. Then add manually the given information to the .tf file. Once this is done, run terraform plan to see that the resource is under Terraform management. From here it's possible to add more resources such as alarm.
+
+### Instance:
+
+Import cloudamqp instance and bring it under Terraform management. First declare an empty instance resource
+
+```resource "cloudamqp_instance"."rmq_url" {}´´´
+
+Generic form of terraform import command
+```terraform import {resource_type}.{resource_name} {resource_id}´´´
+
+Example of terraform import command
+```terraform import cloudamqp_instance.rmq_url 80´´´
+
+### Resources depending on an instance:
+
+All resources depending on the instance resource also need the instance id when using Terraform import. This is becuse the API call made, need to know what instance the resource depends on. Resource id and instance id is seperated with ",".
+
+Resource affected by this is:
+- cloudamqp_notification
+- cloudmaqp_alarm
+
+Generic form of terraform import command
+```terraform import {resource_type}.{resource_name} {resource_id},{instance_id}´´´
+
+Example of terraform import command
+```terraform import cloudamqp_notification.recipient_01 10,80´´´
+```terraform import cloudamqp_alarm.alarm_01 65,80´´´

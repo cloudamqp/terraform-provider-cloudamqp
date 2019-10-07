@@ -14,6 +14,9 @@ func resourceAlarm() *schema.Resource {
 		Read:   resourceAlarmRead,
 		Update: resourceAlarmUpdate,
 		Delete: resourceAlarmDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 		Schema: map[string]*schema.Schema{
 			"instance_id" : {
 				Type:				schema.TypeInt,

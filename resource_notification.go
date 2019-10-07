@@ -3,6 +3,9 @@ package main
 import (
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform/helper/schema"
+	"strings"
+	"strconv"
+	"errors"
 )
 
 func resourceNotification() *schema.Resource {
@@ -11,6 +14,9 @@ func resourceNotification() *schema.Resource {
 		Read:   resourceNotificationRead,
 		Update: resourceNotificationUpdate,
 		Delete: resourceNotificationDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
 				Type: 			schema.TypeInt,
@@ -20,22 +26,12 @@ func resourceNotification() *schema.Resource {
 			"type": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "Type of the alarm, valid options are: cpu, memory, disk_usage, queue_length, connection_count, consumers_count, net_split",
+				Description: "Type of the notification, valid options are: email, webhook, pagerduty, victorops, opsgenie, opsgenie-eu, slack",
 			},
 			"value": {
 				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "What value to trigger the alarm for",
-			},
-			"account_id": {
-				Type:        schema.TypeInt,
-				Optional:    true,
-				Description: "For how long (in seconds) the value_threshold should be active before trigger alarm",
-			},
-			"last_status": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "Regex for which vhost the queues are in",
+				Required:    true,
+				Description: "Notification endpoint, where to send the notifcation",
 			},
 		},
 	}
@@ -50,14 +46,15 @@ func resourceNotificationCreate(d *schema.ResourceData, meta interface{}) error 
 			params[k] = v
 		}
 	}
+
 	data, err := api.CreateNotification(d.Get("instance_id").(int), params)
 	if err != nil {
 		return err
 	}
-
 	if data["id"] != nil {
 		d.SetId(data["id"].(string))
 	}
+
 	for k, v := range data {
 		if k == "id" {
 			continue
@@ -68,6 +65,16 @@ func resourceNotificationCreate(d *schema.ResourceData, meta interface{}) error 
 }
 
 func resourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
+	if strings.Contains(d.Id(), ",") {
+		s := strings.Split(d.Id(), ",")
+		d.SetId(s[0])
+		instance_id, _ := strconv.Atoi(s[1])
+		d.Set("instance_id", instance_id)
+	}
+	if d.Get("instance_id").(int) == 0 {
+		return errors.New("Missing instance identifier: {resource_id},{instance_id}")
+	}
+
 	api := meta.(*api.API)
 	data, err := api.ReadNotification(d.Get("instance_id").(int), d.Id())
 	if err != nil {
