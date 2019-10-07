@@ -61,6 +61,21 @@ func(api *API) ReadAlarms(instance_id int) ([]map[string]interface{}, error) {
 	return data, err
 }
 
+func (api *API) ListAlarm(apikey string) ([]map[string]interface{}, error) {
+	client := New("http://localhost:9292", apikey)
+	var data []map[string]interface{}
+	failed := make(map[string]interface{})
+	response, err := client.sling.Get("/api/alarms").Receive(&data, &failed)
+
+	if err != nil {
+		return nil, err
+	}
+	if response.StatusCode != 200 {
+		return nil, errors.New(fmt.Sprintf("Alarms::ListAlarms failed, status: %v, message: %s", response.StatusCode, failed))
+	}
+	return data, nil
+}
+
 func (api *API) UpdateAlarm(instance_id int, params map[string]interface{}) error {
 	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%d/alarms", instance_id)
