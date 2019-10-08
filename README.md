@@ -103,18 +103,22 @@ Import existing infrastructure into state and bring the resource under Terraform
 
 Import cloudamqp instance and bring it under Terraform management. First declare an empty instance resource in the .tf file. Followed by running the terraform import command
 ```
-   resource "cloudamqp_instance"."rmq_url" {}
+resource "cloudamqp_instance"."rmq_url" {}
 ```
 
 Generic form of terraform import command
-```terraform import {resource_type}.{resource_name} {resource_id}```
+```
+terraform import {resource_type}.{resource_name} {resource_id}
+```
 
 Example of terraform import command (with resource_id=80)
-```terraform import cloudamqp_instance.rmq_url 80```
+```
+terraform import cloudamqp_instance.rmq_url 80
+```
 
 ### Resources depending on an instance:
 
-All resources depending on the instance resource also needs the instance id when using Terraform import. In order to make correct API calls. Resource id and instance id is seperated with ",".
+All resources depending on the instance resource also needs the instance id when using terraform import, in order to make correct API calls. Resource id and instance id is seperated with ",".
 
 Resource affected by this is:
 - cloudamqp_notification
@@ -122,13 +126,17 @@ Resource affected by this is:
 
 First declare two empty notification and alarm resources in the .tf file. Followed by running the terraform import command.
 ```
-   resource "cloudamqp_notification"."recipient_01" {}
-   resource "cloudamqp_alarm"."alarm_01" {}
+resource "cloudamqp_notification"."recipient_01" {}
+resource "cloudamqp_alarm"."alarm_01" {}
 ```
 
 Generic form of terraform import command
-```terraform import {resource_type}.{resource_name} {resource_id},{instance_id}```
+```
+terraform import {resource_type}.{resource_name} {resource_id},{instance_id}
+```
 
 Example of terraform import command (with instance_id=80)
-```terraform import cloudamqp_notification.recipient_01 10,80```
-```terraform import cloudamqp_alarm.alarm_01 65,80```
+```
+terraform import cloudamqp_notification.recipient_01 10,80
+terraform import cloudamqp_alarm.alarm_01 65,80
+```

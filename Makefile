@@ -31,6 +31,10 @@ release: ## Cross-compile release provider for different architecture
 	tar -czvf terraform-provider-cloudamqp_linux_amd64.tar.gz terraform-provider-cloudamqp
 	mv terraform-provider-cloudamqp_linux_amd64.tar.gz bin/release/linux/amd64/
 
+	GOOS=darwin GOARCH=386 go build -o terraform-provider-cloudamqp
+	tar -czvf terraform-provider-cloudamqp_darwin_386.tar.gz terraform-provider-cloudamqp
+	mv terraform-provider-cloudamqp_darwin_386.tar.gz bin/release/darwin/386/
+
 	GOOS=darwin GOARCH=amd64 go build -o terraform-provider-cloudamqp
 	tar -czvf terraform-provider-cloudamqp_darwin_amd64.tar.gz terraform-provider-cloudamqp
 	mv terraform-provider-cloudamqp_darwin_amd64.tar.gz bin/release/darwin/amd64/
