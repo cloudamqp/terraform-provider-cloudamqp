@@ -77,21 +77,21 @@ resource "cloudamqp_instance" "rmq_url"{
 }
 
 output "rmq_url" {
-  value = "${cloudamqp_instance.rmq_url.url}"
+  value = cloudamqp_instance.rmq_url.url
 }
 
 resource "cloudamqp_notification" "recipient_01" {
-  instance_id = "${cloudamqp_instance.rmq_url.id}"
+  instance_id = cloudamqp_instance.rmq_url.id
   type = "email"
   value = "alarm@example.com"
 }
 
 resource "cloudamqp_alarm" "alarm_01" {
-  instance_id = "${cloudamqp_instance.rmq_url.id}"
+  instance_id = cloudamqp_instance.rmq_url.id
   type = "cpu"
   value_threshold = 90
   time_threshold = 600
-  notifications = ["${cloudamqp_notification.recipient_01.id}"]
+  notifications = [cloudamqp_notification.recipient_01.id]
 }
 ```
 
