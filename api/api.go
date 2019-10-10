@@ -9,6 +9,16 @@ type API struct {
 	sling *sling.Sling
 }
 
+func (api *API) DefaultRmqVersion() (map[string]interface{}, error) {
+	data := make(map[string]interface{})
+	failed := make(map[string]interface{})
+	_, err := api.sling.Get("/api/default_rabbitmq_version").Receive(&data, &failed)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
 func New(baseUrl, apiKey string) *API {
 	return &API{
 		sling: sling.New().
