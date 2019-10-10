@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform/helper/schema"
-	"log"
 )
 
 func resourceInstance() *schema.Resource {
