@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform/helper/schema"
+	"log"
 )
 
 func resourceInstance() *schema.Resource {
@@ -73,11 +74,15 @@ func resourceInstance() *schema.Resource {
 
 func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"name", "plan", "region", "nodes", "tags"}
+	keys := []string{"name", "plan", "region", "nodes", "tags", "rmq_version"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
 			params[k] = v
+		}
+		if k == "rmq_version" {
+			version, _ := api.DefaultRmqVersion()
+			params[k] = version["default_rmq_version"]
 		}
 	}
 	data, err := api.CreateInstance(params)
@@ -86,10 +91,12 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 	}
 	d.SetId(data["id"].(string))
 	for k, v := range data {
+		if k == "id" {
+			continue
+		}
 		d.Set(k, v)
 	}
 	return nil
-
 }
 
 func resourceRead(d *schema.ResourceData, meta interface{}) error {
