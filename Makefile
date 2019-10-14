@@ -24,7 +24,7 @@ clean:  ## Clean files
 	rm -f ~/.terraform.d/plugins/terraform-provider-cloudamqp
 
 depupdate: clean  ## Update all vendored dependencies
-	dep ensure -update
+	dep ensure -v -update
 
 release: ## Cross-compile release provider for different architecture
 	GOOS=linux GOARCH=amd64 go build -o terraform-provider-cloudamqp
