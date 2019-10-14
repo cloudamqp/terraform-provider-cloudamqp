@@ -30,13 +30,10 @@ Golang, Dep
 
 ### Install CloudAMQP Terraform Provider
 ```sh
-cd $GOPATH/src/github.com
-mkdir cloudamqp
-cd cloudamqp
-git clone https://github.com/cloudamqp/terraform-provider.git
-cd terraform-provider
+go get -d -u -v github.com/cloudamqp/terraform-provider-cloudamqp
+cd $GOPATH/src/github.com/cloudamqp/terraform-provider
 make depupdate
-make init
+make install
 ```
 
 Now the provider is installed in the terraform plugins folder and ready to be used.
