@@ -61,39 +61,8 @@ terraform apply
 
 Again, paste in your API key.  This should create an actual CloudAMQP instance.
 
-## Example
-
-```hcl
-provider "cloudamqp" {}
-
-resource "cloudamqp_instance" "rmq_url"{
-  name = "rmq_url"
-  plan = "lemur"
-  nodes = 1
-  region = "amazon-web-services::us-east-1"
-  rmq_version = "3.6.16"
-  vpc_subnet = "10.201.0.0/24"
-  tags = ["production", "project-name"]
-}
-
-output "rmq_url" {
-  value = cloudamqp_instance.rmq_url.url
-}
-
-resource "cloudamqp_notification" "recipient_01" {
-  instance_id = cloudamqp_instance.rmq_url.id
-  type = "email"
-  value = "alarm@example.com"
-}
-
-resource "cloudamqp_alarm" "alarm_01" {
-  instance_id = cloudamqp_instance.rmq_url.id
-  type = "cpu"
-  value_threshold = 90
-  time_threshold = 600
-  notifications = [cloudamqp_notification.recipient_01.id]
-}
-```
+## Resources
+Resource documentation can be found [here](https://docs.cloudamqp.com/cloudamqp_terraform.html)
 
 ## Import
 
