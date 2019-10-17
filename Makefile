@@ -24,19 +24,22 @@ clean:  ## Clean files
 	rm -f ~/.terraform.d/plugins/terraform-provider-cloudamqp
 
 depupdate: clean  ## Update all vendored dependencies
-	dep ensure -update
+	dep ensure -v -update
 
 release: ## Cross-compile release provider for different architecture
 	GOOS=linux GOARCH=amd64 go build -o terraform-provider-cloudamqp
 	tar -czvf terraform-provider-cloudamqp_linux_amd64.tar.gz terraform-provider-cloudamqp
+	mkdir -p $(CURDIR)/bin/release/linux/amd64
 	mv terraform-provider-cloudamqp_linux_amd64.tar.gz bin/release/linux/amd64/
 
 	GOOS=darwin GOARCH=386 go build -o terraform-provider-cloudamqp
 	tar -czvf terraform-provider-cloudamqp_darwin_386.tar.gz terraform-provider-cloudamqp
+	mkdir -p $(CURDIR)/bin/release/darwin/386
 	mv terraform-provider-cloudamqp_darwin_386.tar.gz bin/release/darwin/386/
 
 	GOOS=darwin GOARCH=amd64 go build -o terraform-provider-cloudamqp
 	tar -czvf terraform-provider-cloudamqp_darwin_amd64.tar.gz terraform-provider-cloudamqp
+	mkdir -p $(CURDIR)/bin/release/darwin/amd64
 	mv terraform-provider-cloudamqp_darwin_amd64.tar.gz bin/release/darwin/amd64/
 
 build:  ## Build cloudamqp provider
@@ -45,8 +48,8 @@ build:  ## Build cloudamqp provider
 	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o terraform-provider-cloudamqp
 
 install: build  ## Install cloudamqp provider into terraform plugin directory
+	mkdir -p ~/.terraform.d/plugins
 	cp $(CURDIR)/terraform-provider-cloudamqp ~/.terraform.d/plugins/
-	mv $(CURDIR)/terraform-provider-cloudamqp $(CURDIR)/bin/
 
 init: install  ## Run terraform init for local testing
 	terraform init
