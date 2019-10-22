@@ -1,11 +1,14 @@
 package main
 
 import (
-	"github.com/84codes/go-api/api"
-	"github.com/hashicorp/terraform/helper/schema"
+	"errors"
+	"log"
 	"strconv"
 	"strings"
-	"errors"
+
+	"github.com/84codes/go-api/api"
+	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform/helper/validation"
 )
 
 func resourceAlarm() *schema.Resource {
@@ -18,15 +21,16 @@ func resourceAlarm() *schema.Resource {
 			State: schema.ImportStatePassthrough,
 		},
 		Schema: map[string]*schema.Schema{
-			"instance_id" : {
-				Type:				schema.TypeInt,
-				Required: 	true,
+			"instance_id": {
+				Type:        schema.TypeInt,
+				Required:    true,
 				Description: "Instance identifier",
 			},
 			"type": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "Type of the alarm, valid options are: cpu, memory, disk_usage, queue_length, connection_count, consumers_count, net_split",
+				Type:         schema.TypeString,
+				Required:     true,
+				Description:  "Type of the alarm, valid options are: cpu, memory, disk_usage, queue_length, connection_count, consumers_count, net_split",
+				ValidateFunc: validateAlarmType(),
 			},
 			"value_threshold": {
 				Type:        schema.TypeInt,
@@ -49,11 +53,11 @@ func resourceAlarm() *schema.Resource {
 				Description: "Regex for which queues to check",
 			},
 			"notification_ids": {
-				Type:        schema.TypeList,
-				Optional:    true,
+				Type:     schema.TypeList,
+				Optional: true,
 				Elem: &schema.Schema{
-          Type:         schema.TypeInt,
-        },
+					Type: schema.TypeInt,
+				},
 				Description: "Identifiers for recipients to be notified. Leave empty to notifiy all recipients.",
 			},
 		},
@@ -115,7 +119,7 @@ func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
 
 	api := meta.(*api.API)
 	data, err := api.ReadAlarm(d.Get("instance_id").(int), d.Id())
-
+	log.Printf("resourceAlarmRead: %s", data)
 	if err != nil {
 		return err
 	}
@@ -160,4 +164,16 @@ func resourceAlarmDelete(d *schema.ResourceData, meta interface{}) error {
 	params := make(map[string]interface{})
 	params["alarm_id"] = d.Id()
 	return api.DeleteAlarm(d.Get("instance_id").(int), params)
+}
+
+func validateAlarmType() schema.SchemaValidateFunc {
+	return validation.StringInSlice([]string{
+		"cpu",
+		"memory",
+		"disk_usage",
+		"queue_length",
+		"connection_count",
+		"consumers_count",
+		"net_split",
+	}, true)
 }

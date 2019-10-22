@@ -1,11 +1,13 @@
 package main
 
 import (
+	"errors"
+	"strconv"
+	"strings"
+
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform/helper/schema"
-	"strings"
-	"strconv"
-	"errors"
+	"github.com/hashicorp/terraform/helper/validation"
 )
 
 func resourceNotification() *schema.Resource {
@@ -19,14 +21,15 @@ func resourceNotification() *schema.Resource {
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
-				Type: 			schema.TypeInt,
-				Required: 	true,
+				Type:        schema.TypeInt,
+				Required:    true,
 				Description: "Instance identifier",
 			},
 			"type": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "Type of the notification, valid options are: email, webhook, pagerduty, victorops, opsgenie, opsgenie-eu, slack",
+				Type:         schema.TypeString,
+				Required:     true,
+				Description:  "Type of the notification, valid options are: email, webhook, pagerduty, victorops, opsgenie, opsgenie-eu, slack",
+				ValidateFunc: validateNotificationType(),
 			},
 			"value": {
 				Type:        schema.TypeString,
@@ -104,4 +107,16 @@ func resourceNotificationDelete(d *schema.ResourceData, meta interface{}) error 
 	params := make(map[string]interface{})
 	params["id"] = d.Id()
 	return api.DeleteNotification(d.Get("instance_id").(int), params)
+}
+
+func validateNotificationType() schema.SchemaValidateFunc {
+	return validation.StringInSlice([]string{
+		"email",
+		"webhook",
+		"pagerduty",
+		"victorops",
+		"opsgenie",
+		"opsgenie-eu",
+		"slack",
+	}, true)
 }
