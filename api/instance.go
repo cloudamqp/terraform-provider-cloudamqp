@@ -1,10 +1,10 @@
 package api
 
 import (
+	"errors"
+	"fmt"
 	"strconv"
 	"time"
-	"fmt"
-	"errors"
 )
 
 func (api *API) waitUntilReady(id string) (map[string]interface{}, error) {
@@ -40,7 +40,7 @@ func (api *API) CreateInstance(params map[string]interface{}) (map[string]interf
 		return nil, errors.New(fmt.Sprintf("CreateInstance failed, status: %v, message: %s", response.StatusCode, failed))
 	}
 
-	data["id"] = strconv.FormatFloat(data["id"].(float64), 'f', 0, 64 )
+	data["id"] = strconv.FormatFloat(data["id"].(float64), 'f', 0, 64)
 	return api.waitUntilReady(data["id"].(string))
 }
 
@@ -76,7 +76,7 @@ func (api *API) ReadInstances() ([]map[string]interface{}, error) {
 
 func (api *API) UpdateInstance(id string, params map[string]interface{}) error {
 	failed := make(map[string]interface{})
-	response, err := api.sling.Put("/api/instances/" + id).BodyJSON(params).Receive(nil, &failed)
+	response, err := api.sling.Put("/api/instances/"+id).BodyJSON(params).Receive(nil, &failed)
 
 	if err != nil {
 		return err

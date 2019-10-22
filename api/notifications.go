@@ -1,14 +1,14 @@
 package api
 
 import (
-	"strconv"
-	"fmt"
 	"errors"
+	"fmt"
+	"strconv"
 )
 
 type NotificationQuery struct {
-	Id 	string 			`url:"id,omitempty"`
-	Type string 		`url:"type,omitempty"`
+	Id   string `url:"recipient_id,omitempty"`
+	Type string `url:"type,omitempty"`
 }
 
 func (api *API) CreateNotification(instance_id int, params map[string]interface{}) (map[string]interface{}, error) {
@@ -24,14 +24,14 @@ func (api *API) CreateNotification(instance_id int, params map[string]interface{
 		return nil, errors.New(fmt.Sprintf("CreateNotification failed, status: %v, message: %s", response.StatusCode, failed))
 	}
 
-	data["id"] = strconv.FormatFloat(data["id"].(float64), 'f', 0, 64 )
+	data["id"] = strconv.FormatFloat(data["id"].(float64), 'f', 0, 64)
 	return data, err
 }
 
 func (api *API) ReadNotification(instance_id int, id string) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
-	params := &NotificationQuery{ Id: id }
+	params := &NotificationQuery{Id: id}
 	path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
 	response, err := api.sling.Path(path).QueryStruct(params).Receive(&data, &failed)
 
