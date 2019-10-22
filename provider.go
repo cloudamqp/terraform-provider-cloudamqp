@@ -21,10 +21,13 @@ func Provider() *schema.Provider {
 				Description: "Base URL to CloudAMQP Customer website",
 			},
 		},
+		DataSourcesMap: map[string]*schema.Resource{
+			"cloudamqp_credentials": dataSourceCredentials(),
+		},
 		ResourcesMap: map[string]*schema.Resource{
-			"cloudamqp_instance" : resourceInstance(),
-			"cloudamqp_notification" : resourceNotification(),
-			"cloudamqp_alarm" : resourceAlarm(),
+			"cloudamqp_instance":     resourceInstance(),
+			"cloudamqp_notification": resourceNotification(),
+			"cloudamqp_alarm":        resourceAlarm(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
