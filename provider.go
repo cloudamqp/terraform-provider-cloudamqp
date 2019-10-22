@@ -22,12 +22,16 @@ func Provider() *schema.Provider {
 			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"cloudamqp_credentials": dataSourceCredentials(),
+			"cloudamqp_credentials":       dataSourceCredentials(),
+			"cloudamqp_plugins":           dataSourcePlugins(),
+			"cloudamqp_plugins_community": dataSourcePluginsCommunity(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"cloudamqp_instance":     resourceInstance(),
-			"cloudamqp_notification": resourceNotification(),
-			"cloudamqp_alarm":        resourceAlarm(),
+			"cloudamqp_instance":         resourceInstance(),
+			"cloudamqp_notification":     resourceNotification(),
+			"cloudamqp_alarm":            resourceAlarm(),
+			"cloudamqp_plugin":           resourcePlugin(),
+			"cloudamqp_plugin_community": resourcePluginCommunity(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
