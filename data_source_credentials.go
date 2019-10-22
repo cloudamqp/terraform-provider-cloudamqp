@@ -5,7 +5,6 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 
 	"fmt"
-	"log"
 )
 
 func dataSourceCredentials() *schema.Resource {
@@ -13,34 +12,32 @@ func dataSourceCredentials() *schema.Resource {
 		Read: dataSourceCredentialsRead,
 
 		Schema: map[string]*schema.Schema{
-			"instance_id" : {
-				Type:				schema.TypeInt,
-				Required: 	true,
+			"instance_id": {
+				Type:        schema.TypeInt,
+				Required:    true,
 				Description: "Instance identifier",
 			},
 			"username": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Sensitive:   true,
+				Type:      schema.TypeString,
+				Optional:  true,
+				Sensitive: true,
 			},
 			"password": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Sensitive:   true,
+				Type:      schema.TypeString,
+				Optional:  true,
+				Sensitive: true,
 			},
 		},
 	}
 }
 
 func dataSourceCredentialsRead(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("dataSourceCredentials")
 	api := meta.(*api.API)
 	data, err := api.ReadCredentials(d.Get("instance_id").(int))
 	if err != nil {
 		return err
 	}
 
-	log.Printf("dataSourceCredentials data: %s", data)
 	d.SetId(fmt.Sprintf("%v.%s", d.Get("instance_id").(int), data["username"]))
 	d.Set("username", data["username"])
 	d.Set("password", data["password"])

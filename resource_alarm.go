@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"log"
 	"strconv"
 	"strings"
 
@@ -119,7 +118,6 @@ func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
 
 	api := meta.(*api.API)
 	data, err := api.ReadAlarm(d.Get("instance_id").(int), d.Id())
-	log.Printf("resourceAlarmRead: %s", data)
 	if err != nil {
 		return err
 	}

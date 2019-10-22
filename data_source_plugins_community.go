@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform/helper/schema"
@@ -45,7 +44,6 @@ func dataSourcePluginsCommunity() *schema.Resource {
 func dataSourcePluginsCommunityRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	data, err := api.ReadPluginsCommunity(d.Get("instance_id").(int))
-	log.Printf("[DEBUG] data source plugins community, data: %v", data)
 	d.SetId(fmt.Sprintf("%v.plugins_community", d.Get("instance_id").(int)))
 	if err != nil {
 		return err
