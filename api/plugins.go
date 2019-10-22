@@ -1,47 +1,58 @@
 package api
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
+	"time"
 )
 
 type PluginParams struct {
 	Name    string `url:"plugin_name,omitempty"`
-	Enable    bool `url:"enable,omitempty"`
+	Enabled bool   `url:"enabled,omitempty"`
 }
 
-func (api *API) EnablePlugin(instance_id int, name string) error {
+func (api *API) waitUntilPluginChanged(instance_id int, name string, enabled bool) (map[string]interface{}, error) {
+	time.Sleep(10 * time.Second)
+	for {
+		response, err := api.ReadPlugin(instance_id, name)
+
+		if err != nil {
+			return nil, err
+		}
+		if response["enabled"] == enabled {
+			return response, nil
+		}
+
+		time.Sleep(10 * time.Second)
+	}
+}
+
+func (api *API) EnablePlugin(instance_id int, name string) (map[string]interface{}, error) {
 	failed := make(map[string]interface{})
 	params := &PluginParams{Name: name}
 	path := fmt.Sprintf("/api/instances/%d/plugins", instance_id)
 	response, err := api.sling.Post(path).BodyForm(params).Receive(nil, &failed)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
-	if response.StatusCode != 200 {
-		return errors.New(fmt.Sprintf("EnablePlugin failed, status: %v, message: %s", response.StatusCode, failed))
+	if response.StatusCode != 204 {
+		return nil, errors.New(fmt.Sprintf("EnablePlugin failed, status: %v, message: %s", response.StatusCode, failed))
 	}
 
-	return nil
+	return api.waitUntilPluginChanged(instance_id, name, true)
 }
 
 func (api *API) ReadPlugin(instance_id int, plugin_name string) (map[string]interface{}, error) {
 	var data []map[string]interface{}
-	failed := make(map[string]interface{})
-	path := fmt.Sprintf("/api/instances/%d/plugins", instance_id)
-	response, err := api.sling.Get(path).Receive(&data, &failed)
-
+	data, err := api.ReadPlugins(instance_id)
 	if err != nil {
 		return nil, err
 	}
-	if response.StatusCode != 200 {
-		return nil, errors.New(fmt.Sprintf("ReadPlugin failed, status: %v, message: %s", response.StatusCode, failed))
-	}
 
-	for index, value := range data {
-		if value["name"] == plugin_name {
-			return data[index], nil
+	for _, plugin := range data {
+		if plugin["name"] == plugin_name {
+			return plugin, nil
 		}
 	}
 
@@ -64,28 +75,33 @@ func (api *API) ReadPlugins(instance_id int) ([]map[string]interface{}, error) {
 	return data, nil
 }
 
-func (api *API) UpdatePlugin(instance_id int, name string, enable bool) error {
+func (api *API) UpdatePlugin(instance_id int, params map[string]interface{}) (map[string]interface{}, error) {
 	failed := make(map[string]interface{})
-	params := &PluginParams{Name: name, Enable: enable}
+	pluginParams := &PluginParams{Name: params["name"].(string), Enabled: params["enabled"].(bool)}
 	path := fmt.Sprintf("/api/instances/%d/plugins", instance_id)
-	response, err := api.sling.Put(path).BodyForm(params).Receive(nil, &failed)
+	response, err := api.sling.Put(path).BodyForm(pluginParams).Receive(nil, &failed)
 
-	if response.StatusCode != 200 {
-		return errors.New(fmt.Sprintf("UpdatePlugin failed, status: %v, message: %s", response.StatusCode, failed))
+	if err != nil {
+		return nil, err
+	}
+	if response.StatusCode != 204 {
+		return nil, errors.New(fmt.Sprintf("UpdatePlugin failed, status: %v, message: %s", response.StatusCode, failed))
 	}
 
-	return err
+	return api.waitUntilPluginChanged(instance_id, params["name"].(string), params["enabled"].(bool))
 }
 
-func (api *API) DisablePlugin(instance_id int, name string) error {
+func (api *API) DisablePlugin(instance_id int, name string) (map[string]interface{}, error) {
 	failed := make(map[string]interface{})
-	params := &PluginParams{Name: name}
-	path := fmt.Sprintf("/api/instances/%d/plugins", instance_id)
-	response, err := api.sling.Delete(path).BodyForm(params).Receive(nil, &failed)
+	path := fmt.Sprintf("/api/instances/%d/plugins/%s", instance_id, name)
+	response, err := api.sling.Delete(path).Receive(nil, &failed)
 
-	if response.StatusCode != 200 {
-		return errors.New(fmt.Sprintf("DisablePlugin failed, status: %v, message: %s", response.StatusCode, failed))
+	if err != nil {
+		return nil, err
+	}
+	if response.StatusCode != 204 {
+		return nil, errors.New(fmt.Sprintf("DisablePlugin failed, status: %v, message: %s", response.StatusCode, failed))
 	}
 
-	return err
+	return api.waitUntilPluginChanged(instance_id, name, false)
 }
