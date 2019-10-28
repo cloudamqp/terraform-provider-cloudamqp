@@ -24,7 +24,12 @@ func (api *API) CreateNotification(instance_id int, params map[string]interface{
 		return nil, errors.New(fmt.Sprintf("CreateNotification failed, status: %v, message: %s", response.StatusCode, failed))
 	}
 
-	data["id"] = strconv.FormatFloat(data["id"].(float64), 'f', 0, 64)
+	if v, ok := data["id"]; ok {
+		data["id"] = strconv.FormatFloat(v.(float64), 'f', 0, 64)
+	} else {
+		return nil, errors.New(fmt.Sprintf("Invalid notification identifier. id: %v", data["id"]))
+	}
+
 	return data, err
 }
 
