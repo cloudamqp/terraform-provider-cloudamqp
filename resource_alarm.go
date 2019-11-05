@@ -168,10 +168,11 @@ func validateAlarmType() schema.SchemaValidateFunc {
 	return validation.StringInSlice([]string{
 		"cpu",
 		"memory",
-		"disk_usage",
-		"queue_length",
-		"connection_count",
-		"consumers_count",
-		"net_split",
+		"disk",
+		"queue",
+		"connection",
+		"consumer",
+		"netsplit",
+		"ssh",
 	}, true)
 }
