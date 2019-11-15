@@ -1,12 +1,19 @@
+## Check if a 64 bit kernel is running
+UNAME_M := $(shell uname -m)
+
 UNAME_P := $(shell uname -p)
 ifeq ($(UNAME_P),i386)
-    GOARCH += 386
+	ifeq ($(UNAME_M),x86_64)
+		GOARCH += amd64
+	else
+		GOARCH += i386
+	endif
 else
     ifeq ($(UNAME_P),AMD64)
         GOARCH += amd64
     endif
-
 endif
+
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
