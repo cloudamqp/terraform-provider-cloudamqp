@@ -25,6 +25,7 @@ func Provider() *schema.Provider {
 			"cloudamqp_credentials":       dataSourceCredentials(),
 			"cloudamqp_plugins":           dataSourcePlugins(),
 			"cloudamqp_plugins_community": dataSourcePluginsCommunity(),
+			"cloudamqp_vpc_info":          dataSourceVpcInfo(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"cloudamqp_instance":          resourceInstance(),
@@ -33,6 +34,7 @@ func Provider() *schema.Provider {
 			"cloudamqp_plugin":            resourcePlugin(),
 			"cloudamqp_plugin_community":  resourcePluginCommunity(),
 			"cloudamqp_security_firewall": resourceSecurityFirewall(),
+			"cloudamqp_vpc_peering":       resourceVpcPeering(),
 		},
 		ConfigureFunc: providerConfigure,
 	}

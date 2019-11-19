@@ -60,11 +60,11 @@ func resourceInstance() *schema.Resource {
 				Description: "API key for the CloudAMQP instance",
 			},
 			"tags": {
-				Type:        schema.TypeList,
-				Optional:    true,
+				Type:     schema.TypeList,
+				Optional: true,
 				Elem: &schema.Schema{
-          Type:         schema.TypeString,
-        },
+					Type: schema.TypeString,
+				},
 				Description: "Tag the instances with optional tags",
 			},
 		},
@@ -73,17 +73,22 @@ func resourceInstance() *schema.Resource {
 
 func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"name", "plan", "region", "nodes", "tags", "rmq_version"}
+	keys := []string{"name", "plan", "region", "nodes", "tags", "rmq_version", "vpc_subnet"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
 			params[k] = v
-		}
-		if k == "rmq_version" {
+		} else if k == "rmq_version" {
 			version, _ := api.DefaultRmqVersion()
 			params[k] = version["default_rmq_version"]
 		}
+		if k == "vpc_subnet" {
+			if d.Get(k) == "" {
+				delete(params, "vpc_subnet")
+			}
+		}
 	}
+
 	data, err := api.CreateInstance(params)
 	if err != nil {
 		return err
@@ -92,8 +97,9 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 	for k, v := range data {
 		if k == "id" {
 			continue
+		} else {
+			d.Set(k, v)
 		}
-		d.Set(k, v)
 	}
 	return nil
 }
@@ -101,11 +107,16 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 func resourceRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	data, err := api.ReadInstance(d.Id())
+
 	if err != nil {
 		return err
 	}
 	for k, v := range data {
-		d.Set(k, v)
+		if k == "vpc" {
+			d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
+		} else {
+			d.Set(k, v)
+		}
 	}
 	return nil
 }
@@ -115,7 +126,9 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 	keys := []string{"name", "plan", "nodes", "tags"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
-		params[k] = d.Get(k)
+		if v := d.Get(k); v != nil {
+			params[k] = d.Get(k)
+		}
 	}
 	return api.UpdateInstance(d.Id(), params)
 }
