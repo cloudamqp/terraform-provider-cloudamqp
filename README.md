@@ -31,7 +31,7 @@ Golang, Dep
 ### Install CloudAMQP Terraform Provider
 ```sh
 go get -d -u -v github.com/cloudamqp/terraform-provider-cloudamqp
-cd $GOPATH/src/github.com/cloudamqp/terraform-provider
+cd $GOPATH/src/github.com/cloudamqp/terraform-provider-cloudamqp
 make depupdate
 make install
 ```
