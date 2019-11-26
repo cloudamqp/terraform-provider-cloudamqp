@@ -8,7 +8,7 @@ import (
 func (api *API) CreateFirewallSettings(instance_id int, params []map[string]interface{}) error {
 	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%d/security/firewall", instance_id)
-	response, err := api.sling.Post(path).BodyJSON(params).Receive(nil, &failed)
+	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(nil, &failed)
 
 	if err != nil {
 		return err
@@ -24,7 +24,7 @@ func (api *API) ReadFirewallSettings(instance_id int) ([]map[string]interface{},
 	var data []map[string]interface{}
 	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%d/security/firewall", instance_id)
-	response, err := api.sling.Path(path).Receive(&data, &failed)
+	response, err := api.sling.New().Path(path).Receive(&data, &failed)
 
 	if err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func (api *API) ReadFirewallSettings(instance_id int) ([]map[string]interface{},
 func (api *API) UpdateFirewallSettings(instance_id int, params []map[string]interface{}) error {
 	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%d/security/firewall", instance_id)
-	response, err := api.sling.Put(path).BodyJSON(params).Receive(nil, &failed)
+	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 
 	if err != nil {
 		return err
@@ -58,7 +58,7 @@ func (api *API) DeleteFirewallSettings(instance_id int) error {
 
 	// Use default firewall rule and update firewall upon delete.
 	params[0] = DefaultFirewallSettings()
-	response, err := api.sling.Delete(path).BodyJSON(params).Receive(nil, &failed)
+	response, err := api.sling.New().Delete(path).BodyJSON(params).Receive(nil, &failed)
 
 	if err != nil {
 		return err

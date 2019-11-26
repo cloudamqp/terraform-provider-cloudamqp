@@ -15,7 +15,7 @@ func (api *API) CreateNotification(instance_id int, params map[string]interface{
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
-	response, err := api.sling.Post(path).BodyJSON(params).Receive(&data, &failed)
+	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
 
 	if err != nil {
 		return nil, err
@@ -38,7 +38,7 @@ func (api *API) ReadNotification(instance_id int, id string) (map[string]interfa
 	failed := make(map[string]interface{})
 	params := &NotificationQuery{Id: id}
 	path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
-	response, err := api.sling.Path(path).QueryStruct(params).Receive(&data, &failed)
+	response, err := api.sling.New().Path(path).QueryStruct(params).Receive(&data, &failed)
 
 	if err != nil {
 		return nil, err
@@ -53,7 +53,7 @@ func (api *API) ReadNotification(instance_id int, id string) (map[string]interfa
 func (api *API) UpdateNotification(instance_id int, params map[string]interface{}) error {
 	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
-	response, err := api.sling.Put(path).BodyJSON(params).Receive(nil, &failed)
+	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 
 	if response.StatusCode != 200 {
 		return errors.New(fmt.Sprintf("UpdateNotification failed, status: %v, message: %s", response.StatusCode, failed))
@@ -65,7 +65,7 @@ func (api *API) UpdateNotification(instance_id int, params map[string]interface{
 func (api *API) DeleteNotification(instance_id int, params map[string]interface{}) error {
 	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
-	response, err := api.sling.Delete(path).BodyJSON(params).Receive(nil, &failed)
+	response, err := api.sling.New().Delete(path).BodyJSON(params).Receive(nil, &failed)
 
 	if response.StatusCode != 204 {
 		return errors.New(fmt.Sprintf("DeleteNotificaion failed, status: %v, message: %s", response.StatusCode, failed))

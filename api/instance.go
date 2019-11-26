@@ -11,7 +11,7 @@ func (api *API) waitUntilReady(id string) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
 	for {
-		response, err := api.sling.Path("/api/instances/").Get(id).Receive(&data, &failed)
+		response, err := api.sling.New().Path("/api/instances/").Get(id).Receive(&data, &failed)
 
 		if err != nil {
 			return nil, err
@@ -31,7 +31,7 @@ func (api *API) waitUntilReady(id string) (map[string]interface{}, error) {
 func (api *API) CreateInstance(params map[string]interface{}) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
-	response, err := api.sling.Post("/api/instances").BodyJSON(params).Receive(&data, &failed)
+	response, err := api.sling.New().Post("/api/instances").BodyJSON(params).Receive(&data, &failed)
 
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func (api *API) CreateInstance(params map[string]interface{}) (map[string]interf
 func (api *API) ReadInstance(id string) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
-	response, err := api.sling.Path("/api/instances/").Get(id).Receive(&data, &failed)
+	response, err := api.sling.New().Path("/api/instances/").Get(id).Receive(&data, &failed)
 
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (api *API) ReadInstance(id string) (map[string]interface{}, error) {
 func (api *API) ReadInstances() ([]map[string]interface{}, error) {
 	var data []map[string]interface{}
 	failed := make(map[string]interface{})
-	response, err := api.sling.Get("/api/instances").Receive(&data, &failed)
+	response, err := api.sling.New().Get("/api/instances").Receive(&data, &failed)
 
 	if err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ func (api *API) ReadInstances() ([]map[string]interface{}, error) {
 
 func (api *API) UpdateInstance(id string, params map[string]interface{}) error {
 	failed := make(map[string]interface{})
-	response, err := api.sling.Put("/api/instances/"+id).BodyJSON(params).Receive(nil, &failed)
+	response, err := api.sling.New().Put("/api/instances/"+id).BodyJSON(params).Receive(nil, &failed)
 
 	if err != nil {
 		return err
@@ -90,7 +90,7 @@ func (api *API) UpdateInstance(id string, params map[string]interface{}) error {
 
 func (api *API) DeleteInstance(id string) error {
 	failed := make(map[string]interface{})
-	response, err := api.sling.Path("/api/instances/").Delete(id).Receive(nil, &failed)
+	response, err := api.sling.New().Path("/api/instances/").Delete(id).Receive(nil, &failed)
 
 	if err != nil {
 		return err

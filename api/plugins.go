@@ -31,7 +31,7 @@ func (api *API) EnablePlugin(instance_id int, name string) (map[string]interface
 	failed := make(map[string]interface{})
 	params := &PluginParams{Name: name}
 	path := fmt.Sprintf("/api/instances/%d/plugins", instance_id)
-	response, err := api.sling.Post(path).BodyForm(params).Receive(nil, &failed)
+	response, err := api.sling.New().Post(path).BodyForm(params).Receive(nil, &failed)
 
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func (api *API) ReadPlugins(instance_id int) ([]map[string]interface{}, error) {
 	var data []map[string]interface{}
 	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%d/plugins", instance_id)
-	response, err := api.sling.Get(path).Receive(&data, &failed)
+	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 
 	if err != nil {
 		return nil, err
@@ -79,7 +79,7 @@ func (api *API) UpdatePlugin(instance_id int, params map[string]interface{}) (ma
 	failed := make(map[string]interface{})
 	pluginParams := &PluginParams{Name: params["name"].(string), Enabled: params["enabled"].(bool)}
 	path := fmt.Sprintf("/api/instances/%d/plugins", instance_id)
-	response, err := api.sling.Put(path).BodyForm(pluginParams).Receive(nil, &failed)
+	response, err := api.sling.New().Put(path).BodyForm(pluginParams).Receive(nil, &failed)
 
 	if err != nil {
 		return nil, err
@@ -94,7 +94,7 @@ func (api *API) UpdatePlugin(instance_id int, params map[string]interface{}) (ma
 func (api *API) DisablePlugin(instance_id int, name string) (map[string]interface{}, error) {
 	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%d/plugins/%s", instance_id, name)
-	response, err := api.sling.Delete(path).Receive(nil, &failed)
+	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 
 	if err != nil {
 		return nil, err

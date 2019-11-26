@@ -11,7 +11,7 @@ func (api *API) waitForPeeringStatus(instance_id int, peering_id string) (map[st
 	failed := make(map[string]interface{})
 	for {
 		path := fmt.Sprintf("/api/instances/%v/vpc-peering/status/%v", instance_id, peering_id)
-		response, err := api.sling.Path(path).Receive(&data, &failed)
+		response, err := api.sling.New().Path(path).Receive(&data, &failed)
 
 		if err != nil {
 			return nil, err
@@ -31,7 +31,7 @@ func (api *API) ReadVpcInfo(instance_id int) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%v/vpc-peering/info", instance_id)
-	response, err := api.sling.Get(path).Receive(&data, &failed)
+	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 
 	if err != nil {
 		return nil, err
@@ -46,9 +46,8 @@ func (api *API) ReadVpcInfo(instance_id int) (map[string]interface{}, error) {
 func (api *API) ReadVpcPeeringRequest(instance_id int, peering_id string) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
-
 	path := fmt.Sprintf("/api/instances/%v/vpc-peering/request/%v", instance_id, peering_id)
-	response, err := api.sling.Get(path).Receive(&data, &failed)
+	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 
 	if err != nil {
 		return nil, err
@@ -66,7 +65,7 @@ func (api *API) AcceptVpcPeering(instance_id int, peering_id string) (map[string
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%v/vpc-peering/request/%v", instance_id, peering_id)
-	response, err := api.sling.Put(path).Receive(&data, &failed)
+	response, err := api.sling.New().Put(path).Receive(&data, &failed)
 
 	if err != nil {
 		return nil, err
@@ -81,7 +80,7 @@ func (api *API) AcceptVpcPeering(instance_id int, peering_id string) (map[string
 func (api *API) RemoveVpcPeering(instance_id int, peering_id string) error {
 	failed := make(map[string]interface{})
 	path := fmt.Sprintf("/api/instances/%v/vpc-peering/%v", instance_id, peering_id)
-	response, err := api.sling.Delete(path).Receive(nil, &failed)
+	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 
 	if err != nil {
 		return err

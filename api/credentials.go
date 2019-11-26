@@ -11,7 +11,7 @@ func (api *API) ReadCredentials(id int) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
 	instance_id := strconv.Itoa(id)
-	response, err := api.sling.Path("/api/instances/").Get(instance_id).Receive(&data, &failed)
+	response, err := api.sling.New().Path("/api/instances/").Get(instance_id).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
 	}
