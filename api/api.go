@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+
 	"github.com/dghubble/sling"
 )
 
@@ -19,11 +20,15 @@ func (api *API) DefaultRmqVersion() (map[string]interface{}, error) {
 	return data, nil
 }
 
-func New(baseUrl, apiKey string) *API {
+func New(baseUrl, apiKey string, useragent string) *API {
+	if len(useragent) == 0 {
+		useragent = "84codes go-api"
+	}
 	return &API{
 		sling: sling.New().
 			Client(http.DefaultClient).
 			Base(baseUrl).
-			SetBasicAuth("", apiKey),
+			SetBasicAuth("", apiKey).
+			Set("User-Agent", useragent),
 	}
 }
