@@ -1,6 +1,6 @@
 # Gopkg.toml example
 #
-# Refer to https://github.com/golang/dep/blob/master/docs/Gopkg.toml.md
+# Refer to https://golang.github.io/dep/docs/Gopkg.toml.html
 # for detailed Gopkg.toml documentation.
 #
 # required = ["github.com/user/thing/cmd/thing"]
@@ -31,7 +31,7 @@
 
 [[constraint]]
   name = "github.com/hashicorp/terraform"
-  version = "0.12.3"
+  version = "0.12.9"
 
 [prune]
   go-tests = true

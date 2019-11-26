@@ -1,8 +1,10 @@
 .terraform/
 terraform.*
-terraform-provider-cloudamqp
+terraform-provider-cloudamqp*
 .idea/
 *.iml
 vendor/
 crash.log
 graph.png
+.DS_store
+bin/

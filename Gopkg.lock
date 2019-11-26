@@ -2,7 +2,7 @@
 
 
 [[projects]]
-  digest = "1:2f8be25abd6bdd80bf1ae9217643f33cfd893320f20ffe8ec31eb53b40475497"
+  digest = "1:0337e04bf4c96d837c19b5de2ad815f40cb5151e7ecd96785a302b5fc1ad950b"
   name = "cloud.google.com/go"
   packages = [
     ".",
@@ -15,16 +15,16 @@
     "storage",
   ]
   pruneopts = "UT"
-  revision = "cfe8f6d1fe6976d03af790d7a8b9bf6aa73287bd"
-  version = "v0.47.0"
+  revision = "d1ee711ee996fa74abaffbdb572963f368f215a9"
+  version = "v0.49.0"
 
 [[projects]]
   branch = "master"
-  digest = "1:a15a300af57545d0f101a93c321bcbd81e579772a21bf48d4432cc4e3b2c67df"
+  digest = "1:f913e7f2589af2432063d887526191b70a2461b903226285d1dcb3b67161534f"
   name = "github.com/84codes/go-api"
   packages = ["api"]
   pruneopts = "UT"
-  revision = "1bb7acac36677becd632e9e7439ae2f29cfc6229"
+  revision = "8befdcf0c7fd784f3462f664d9f9826aa8f57028"
 
 [[projects]]
   digest = "1:9f3b30d9f8e0d7040f729b82dcbc8f0dead820a133b3147ce355fc451f32d761"
@@ -67,7 +67,7 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:7a573a3426fb787e1d6e103ee3cf450dcfccbf8d1881ffbd66ceb1ede8c179a4"
+  digest = "1:1f70089ff82dfde02b6352c04ea67f454ee3044c6f208f894d3ba6973e36e61a"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -109,8 +109,8 @@
     "service/sts/stsiface",
   ]
   pruneopts = "UT"
-  revision = "8b44c74850c51562a4360837e9e4d6e7c47b7d81"
-  version = "v1.25.11"
+  revision = "fa5d4e90b1d11a693d05ec339807127020b3a143"
+  version = "v1.25.40"
 
 [[projects]]
   branch = "master"
@@ -166,7 +166,7 @@
   name = "github.com/golang/groupcache"
   packages = ["lru"]
   pruneopts = "UT"
-  revision = "404acd9df4cc9859d64fb9eed42e5c026187287a"
+  revision = "611e8accdfc92c4187d399e95ce826046d4c8d73"
 
 [[projects]]
   digest = "1:15b834d22254d28e02f4a591ff89427a1045e597b3832660cb1776546e3523b3"
@@ -254,12 +254,12 @@
   version = "v1.4.0"
 
 [[projects]]
-  digest = "1:cf6b61e1b4c26b0c7526cee4a0cee6d8302b17798af4b2a56a90eedac0aef11a"
+  digest = "1:aa40cb84bb38458098a6d8394484e79d28e9fa033dd77c4f79564050e98761c7"
   name = "github.com/hashicorp/go-hclog"
   packages = ["."]
   pruneopts = "UT"
-  revision = "5ccdce08c75b6c7b37af61159f13f6a4f5e2e928"
-  version = "v0.9.2"
+  revision = "234833755cb25ae46996d0ef823326f492f89243"
+  version = "v0.10.0"
 
 [[projects]]
   digest = "1:f668349b83f7d779567c880550534addeca7ebadfdcf44b0b9c39be61864b4b7"
@@ -354,7 +354,7 @@
   revision = "97b3a9cdfa9349086cfad7ea2fe3165bfe3cbf63"
 
 [[projects]]
-  digest = "1:4ce57a4052097c79e9f4dbaf0c62d8d5514055402a8a372398347ffb21b64a4f"
+  digest = "1:eb45e3f14df44cdeced9ca136d2eb3f2aa112b78e31fd3e1987a70e84950e30e"
   name = "github.com/hashicorp/terraform"
   packages = [
     "addrs",
@@ -368,6 +368,8 @@
     "helper/hilmapstructure",
     "helper/plugin",
     "helper/schema",
+    "helper/structure",
+    "helper/validation",
     "httpclient",
     "internal/tfplugin5",
     "lang",
@@ -396,6 +398,18 @@
   pruneopts = "UT"
   revision = "abec0acf40d8e31ac612a244cf3886fb3bcce0bb"
   version = "v0.12.9"
+
+[[projects]]
+  branch = "master"
+  digest = "1:7fa5c152d6dd0b07697a0afdd629ec8f6baf3ca782fcc8227151060bc4f9aa46"
+  name = "github.com/hashicorp/terraform-svchost"
+  packages = [
+    ".",
+    "auth",
+    "disco",
+  ]
+  pruneopts = "UT"
+  revision = "d2e4933b91362709122c21cd14b6b51cf6e5bfca"
 
 [[projects]]
   branch = "master"
@@ -513,17 +527,16 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:57e168c6dfcc02c1c53bdf1589afbef59694d819cac65bfd3a855de2256d4950"
+  digest = "1:501dea7fe37f7b9a45babc8a871cf645e94486b50ce48e25d2cb6fbdf2715b02"
   name = "github.com/posener/complete"
   packages = [
     ".",
     "cmd",
     "cmd/install",
-    "match",
   ]
   pruneopts = "UT"
-  revision = "3ef9b31a6a0613ae832e7ecf208374027c3b2343"
-  version = "v1.2.1"
+  revision = "05b68ffc813dd10c420993cb1cf927b346c057b8"
+  version = "v1.2.3"
 
 [[projects]]
   digest = "1:bb495ec276ab82d3dd08504bbc0594a65de8c3b22c6f2aaa92d05b73fbf3a82e"
@@ -561,7 +574,7 @@
   version = "v4.1.1"
 
 [[projects]]
-  digest = "1:6ed13021ce04904b5d9fe9e0e442b630f21f09bbcbe31d315c056e9d56dc486c"
+  digest = "1:a6c5ab44d09b463220e70b89e20e55e182ba4f7d15144697fe8dfc449d553e73"
   name = "github.com/vmihailenco/tagparser"
   packages = [
     ".",
@@ -569,8 +582,8 @@
     "internal/parser",
   ]
   pruneopts = "UT"
-  revision = "30ae5c3178272fa372e1e9c17e68f181e0ebe285"
-  version = "v0.1.0"
+  revision = "e4b6c8cf4f3d7bb572551d5a531a9f2068b2fd6e"
+  version = "v0.1.1"
 
 [[projects]]
   digest = "1:bdc499682de63db43dc2fe114105141bee794b9bdff270da8abbd60e8250c03b"
@@ -598,7 +611,7 @@
   version = "v1.0.1"
 
 [[projects]]
-  digest = "1:b984f402fbabb0e9eb0476f0ecfa51d0b2ff11cd0ac03538d6284091033b39ae"
+  digest = "1:7b6ca9454e8d16e34b251f181a4ae430a25805acca64ea46b0448583b44fcfe6"
   name = "go.opencensus.io"
   packages = [
     ".",
@@ -619,12 +632,12 @@
     "trace/tracestate",
   ]
   pruneopts = "UT"
-  revision = "59d1ce35d30f3c25ba762169da2a37eab6ffa041"
-  version = "v0.22.1"
+  revision = "aad2c527c5defcf89b5afab7f37274304195a6b2"
+  version = "v0.22.2"
 
 [[projects]]
   branch = "master"
-  digest = "1:268a8dbbbb2a02be1bdf503f567dd111f13a82837ea000cfad2d83218d0d28d3"
+  digest = "1:4d562d72d7dd581cf734e1aa29c64e457eced160ae95e2283021771e6e758434"
   name = "golang.org/x/crypto"
   packages = [
     "bcrypt",
@@ -638,18 +651,18 @@
     "openpgp/s2k",
   ]
   pruneopts = "UT"
-  revision = "87dc89f01550277dc22b74ffcf4cd89fa2f40f4c"
+  revision = "4f8c1d86b1ba699e7a66cd649947ed270a74e0bb"
 
 [[projects]]
   branch = "master"
-  digest = "1:ccd3d665276bdd47801eb85e30e322f424c97d10b4f5db03cb9c57ed65b8b6d3"
+  digest = "1:b1444bc98b5838c3116ed23e231fee4fa8509f975abd96e5d9e67e572dd01604"
   name = "golang.org/x/exp"
   packages = [
     "apidiff",
     "cmd/apidiff",
   ]
   pruneopts = "UT"
-  revision = "a1355ae1e2c30eb123356c2a35c2f420652999f9"
+  revision = "a1ab85dbe136a36c66fbea07de5e3d62a0ce60ad"
 
 [[projects]]
   branch = "master"
@@ -664,7 +677,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:bf89144f888e7e621c7eaba03e68c5426b22fb008bf70d2ebf417beea541bb58"
+  digest = "1:ecff0c65c627299ff316258a094c11f8e0582e3484563d6fe8eadfbf72abc137"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -677,7 +690,7 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "491137f692577e390404f177a0515c9f86f79754"
+  revision = "fc4aabc6c91483155dade6fbb627cc953a723260"
 
 [[projects]]
   branch = "master"
@@ -695,11 +708,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:7c927f17d868be652a4cfe7de23e4292dea5b14d974a1d536e3b7cb7e79fd695"
+  digest = "1:fc96eb481f72e9a5edeb4bb3f3610d3b9384c036f7c1e39f8c0dedff23d0c34d"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "b09406accb4736d857a32bf9444cd7edae2ffa79"
+  revision = "bd437916bb0eb726b873ee8e9b2dcf212d32e2fd"
 
 [[projects]]
   digest = "1:8d8faad6b12a3a4c819a3f9618cb6ee1fa1cfc33253abeeea8b55336721e3405"
@@ -728,7 +741,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:007c564a388928f33c65f9b2ca484d9c0c69eea919f0646c8ed1d5cf38213b26"
+  digest = "1:60def203eff42773e383a73bcd1f6339c6830fd8594b20c162adfb4816ed3817"
   name = "golang.org/x/tools"
   packages = [
     "cmd/goimports",
@@ -748,19 +761,20 @@
     "internal/imports",
     "internal/module",
     "internal/semver",
+    "internal/span",
   ]
   pruneopts = "UT"
-  revision = "5fa5b1782b2c597541464a432bc01e7ff6de2c19"
+  revision = "f774e2e2e5be3c071167a977af341ec529b77226"
 
 [[projects]]
-  digest = "1:2c198c7697dfdca1572813b46d0ec54356c1338f49c6fe71da05b98fa9a803e0"
+  digest = "1:d1204867de197747eaeedf6eb705968289bce4796c9e9f48ef7c8ef27a227528"
   name = "google.golang.org/api"
   packages = [
     "googleapi",
-    "googleapi/internal/uritemplates",
     "googleapi/transport",
     "internal",
     "internal/gensupport",
+    "internal/third_party/uritemplates",
     "iterator",
     "option",
     "storage/v1",
@@ -768,8 +782,8 @@
     "transport/http/internal/propagation",
   ]
   pruneopts = "UT"
-  revision = "d7605a20bfcb4659ee2ea347b1f8f5be12b8a5b7"
-  version = "v0.11.0"
+  revision = "8a410c21381766a810817fd6200fce8838ecb277"
+  version = "v0.14.0"
 
 [[projects]]
   digest = "1:afb4c626a093946a42f2f7b531c46cb2aebc1c4a30243e9499af43342f1c9843"
@@ -795,7 +809,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:bef0b15c7587f13aed86ea55e067b863837c18d0a2a47410ee85c3c5008686b3"
+  digest = "1:c21fbca8f5af1be04e383c4c57be0b85abeea2fe370a54dc805b1b04e443c9e9"
   name = "google.golang.org/genproto"
   packages = [
     "googleapis/api/annotations",
@@ -805,13 +819,14 @@
     "googleapis/type/expr",
   ]
   pruneopts = "UT"
-  revision = "548a555dbc03994223efbaba0090152849259498"
+  revision = "83cc0476cb11ea0da33dacd4c6354ab192de6fe6"
 
 [[projects]]
-  digest = "1:7d3dc9da8a606ed421ace211357afdc4bdd8ee8eb7dd2c38677c71d2382a7dee"
+  digest = "1:90144846abdf8b6d0293d60da07df75389afd88f18ab122b3766fa65c2e70a3a"
   name = "google.golang.org/grpc"
   packages = [
     ".",
+    "backoff",
     "balancer",
     "balancer/base",
     "balancer/roundrobin",
@@ -829,10 +844,13 @@
     "internal/backoff",
     "internal/balancerload",
     "internal/binarylog",
+    "internal/buffer",
     "internal/channelz",
     "internal/envconfig",
     "internal/grpcrand",
     "internal/grpcsync",
+    "internal/resolver/dns",
+    "internal/resolver/passthrough",
     "internal/syscall",
     "internal/transport",
     "keepalive",
@@ -840,16 +858,14 @@
     "naming",
     "peer",
     "resolver",
-    "resolver/dns",
-    "resolver/passthrough",
     "serviceconfig",
     "stats",
     "status",
     "tap",
   ]
   pruneopts = "UT"
-  revision = "f6d0f9ee430895e87ef1ceb5ac8f39725bafceef"
-  version = "v1.24.0"
+  revision = "1a3960e4bd028ac0cec0a2afd27d7d8e67c11514"
+  version = "v1.25.1"
 
 [[projects]]
   digest = "1:131158a88aad1f94854d0aa21a64af2802d0a470fb0f01cb33c04fafd2047111"
@@ -891,6 +907,7 @@
   input-imports = [
     "github.com/84codes/go-api/api",
     "github.com/hashicorp/terraform/helper/schema",
+    "github.com/hashicorp/terraform/helper/validation",
     "github.com/hashicorp/terraform/plugin",
     "github.com/hashicorp/terraform/terraform",
   ]
