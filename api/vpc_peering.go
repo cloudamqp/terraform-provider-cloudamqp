@@ -3,8 +3,6 @@ package api
 import (
 	"errors"
 	"fmt"
-	"log"
-	"strconv"
 	"time"
 )
 
@@ -48,7 +46,6 @@ func (api *API) ReadVpcInfo(instance_id int) (map[string]interface{}, error) {
 func (api *API) ReadVpcPeeringRequest(instance_id int, peering_id string) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
-	log.Printf("[DEBUG] - go-api::vpc_peering::ReadVpcPeeringRequest instance_id: %v, peering_id: %v", instance_id, peering_id)
 
 	path := fmt.Sprintf("/api/instances/%v/vpc-peering/request/%v", instance_id, peering_id)
 	response, err := api.sling.Get(path).Receive(&data, &failed)
@@ -60,7 +57,6 @@ func (api *API) ReadVpcPeeringRequest(instance_id int, peering_id string) (map[s
 		return nil, errors.New(fmt.Sprintf("ReadRequest failed, status: %v, message: %s", response.StatusCode, failed))
 	}
 
-	data["id"] = strconv.FormatFloat(data["id"].(float64), 'f', 0, 64)
 	return data, nil
 }
 
