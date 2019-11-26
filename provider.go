@@ -1,11 +1,17 @@
 package main
 
 import (
+	"fmt"
+	"log"
+
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
+var version string
+
 func Provider() *schema.Provider {
+	log.Printf("Terraform-Provider-CloudAMQP Version: %s", version)
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"apikey": &schema.Schema{
@@ -41,5 +47,6 @@ func Provider() *schema.Provider {
 }
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
-	return api.New(d.Get("baseurl").(string), d.Get("apikey").(string)), nil
+	useragent := fmt.Sprintf("terraform-provider-cloudamqp_v%s", version)
+	return api.New(d.Get("baseurl").(string), d.Get("apikey").(string), useragent), nil
 }

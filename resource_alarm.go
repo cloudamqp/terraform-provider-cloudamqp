@@ -82,7 +82,6 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 			}
 		}
 	}
-
 	params["notifications"] = notificationIDs
 	delete(params, "notification_ids")
 
@@ -118,6 +117,7 @@ func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
 
 	api := meta.(*api.API)
 	data, err := api.ReadAlarm(d.Get("instance_id").(int), d.Id())
+
 	if err != nil {
 		return err
 	}

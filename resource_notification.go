@@ -80,6 +80,7 @@ func resourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
 
 	api := meta.(*api.API)
 	data, err := api.ReadNotification(d.Get("instance_id").(int), d.Id())
+
 	if err != nil {
 		return err
 	}
