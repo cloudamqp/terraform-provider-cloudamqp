@@ -1,4 +1,4 @@
-package main
+package cloudamqp
 
 import (
 	"github.com/84codes/go-api/api"

@@ -1,4 +1,4 @@
-package main
+package cloudamqp
 
 import (
 	"errors"
@@ -10,12 +10,12 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
-func resourcePluginCommunity() *schema.Resource {
+func resourcePlugin() *schema.Resource {
 	return &schema.Resource{
-		Create: resourcePluginCommunityCreate,
-		Read:   resourcePluginCommunityRead,
-		Update: resourcePluginCommunityUpdate,
-		Delete: resourcePluginCommunityDelete,
+		Create: resourcePluginCreate,
+		Read:   resourcePluginRead,
+		Update: resourcePluginUpdate,
+		Delete: resourcePluginDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
@@ -39,9 +39,9 @@ func resourcePluginCommunity() *schema.Resource {
 	}
 }
 
-func resourcePluginCommunityCreate(d *schema.ResourceData, meta interface{}) error {
+func resourcePluginCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	data, err := api.EnablePluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
+	data, err := api.EnablePlugin(d.Get("instance_id").(int), d.Get("name").(string))
 	if err != nil {
 		return err
 	}
@@ -52,7 +52,7 @@ func resourcePluginCommunityCreate(d *schema.ResourceData, meta interface{}) err
 	return nil
 }
 
-func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error {
+func resourcePluginRead(d *schema.ResourceData, meta interface{}) error {
 	if strings.Contains(d.Id(), ",") {
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
@@ -65,7 +65,7 @@ func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error
 	}
 
 	api := meta.(*api.API)
-	data, err := api.ReadPluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
+	data, err := api.ReadPlugin(d.Get("instance_id").(int), d.Get("name").(string))
 	if err != nil {
 		return err
 	}
@@ -77,7 +77,7 @@ func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error
 	return nil
 }
 
-func resourcePluginCommunityUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourcePluginUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	keys := []string{"name", "enabled"}
 	params := make(map[string]interface{})
@@ -86,12 +86,12 @@ func resourcePluginCommunityUpdate(d *schema.ResourceData, meta interface{}) err
 			params[k] = v
 		}
 	}
-	_, err := api.UpdatePluginCommunity(d.Get("instance_id").(int), params)
+	_, err := api.UpdatePlugin(d.Get("instance_id").(int), params)
 	return err
 }
 
-func resourcePluginCommunityDelete(d *schema.ResourceData, meta interface{}) error {
+func resourcePluginDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	_, err := api.DisablePluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
+	_, err := api.DisablePlugin(d.Get("instance_id").(int), d.Get("name").(string))
 	return err
 }

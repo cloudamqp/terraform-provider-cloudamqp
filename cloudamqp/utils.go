@@ -1,4 +1,4 @@
-package main
+package cloudamqp
 
 func unique(stringSlice []string) []string {
 	keys := make(map[string]bool)
