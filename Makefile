@@ -38,17 +38,17 @@ depupdate: clean  ## Update all vendored dependencies
 
 release: ## Cross-compile release provider for different architecture
 	GOOS=linux GOARCH=amd64 go build -o terraform-provider-cloudamqp_v$(version)
-	tar -czvf terraform-provider-cloudamqp_v$(version)_linux_amd64.tar.gz terraform-provider-cloudamqp
+	tar -czvf terraform-provider-cloudamqp_v$(version)_linux_amd64.tar.gz terraform-provider-cloudamqp_v$(version)
 	mkdir -p $(CURDIR)/bin/release/linux/amd64
 	mv terraform-provider-cloudamqp_v$(version)_linux_amd64.tar.gz bin/release/linux/amd64/
 
 	GOOS=darwin GOARCH=386 go build -o terraform-provider-cloudamqp_v$(version)
-	tar -czvf terraform-provider-cloudamqp_v$(version)_darwin_386.tar.gz terraform-provider-cloudamqp
+	tar -czvf terraform-provider-cloudamqp_v$(version)_darwin_386.tar.gz terraform-provider-cloudamqp_v$(version)
 	mkdir -p $(CURDIR)/bin/release/darwin/386
 	mv terraform-provider-cloudamqp_v$(version)_darwin_386.tar.gz bin/release/darwin/386/
 
 	GOOS=darwin GOARCH=amd64 go build -o terraform-provider-cloudamqp_v$(version)
-	tar -czvf terraform-provider-cloudamqp_v$(version)_darwin_amd64.tar.gz terraform-provider-cloudamqp
+	tar -czvf terraform-provider-cloudamqp_v$(version)_darwin_amd64.tar.gz terraform-provider-cloudamqp_v$(version)
 	mkdir -p $(CURDIR)/bin/release/darwin/amd64
 	mv terraform-provider-cloudamqp_v$(version)_darwin_amd64.tar.gz bin/release/darwin/amd64/
 

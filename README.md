@@ -43,7 +43,7 @@ Now the provider is installed in the terraform plugins folder and ready to be us
 (See the examples.tf file in the repo.  It has a bunny VPC example and a simple lemur example.)
 
 ```sh
-cd terraform-provider  #This is the root of the repo where examples.tf lives.
+cd terraform-provider-cloudamqp  #This is the root of the repo where examples.tf lives.
 terraform plan
 ```
 When prompted paste in your CloudAMQP API key (created above).
@@ -57,6 +57,10 @@ terraform apply
 ```
 
 Again, paste in your API key.  This should create an actual CloudAMQP instance.
+
+## Versioning
+
+Enabled versioning to the Makefile, which also automatically adds it to the built provider. New name is therefore terraform-provider-cloudamqp_vx.y.z, where x.y.z is the version.
 
 ## Resources
 Resource documentation can be found [here](https://docs.cloudamqp.com/cloudamqp_terraform.html)
@@ -106,3 +110,8 @@ Example of terraform import command (with instance_id=80)
 terraform import cloudamqp_notification.recipient_01 10,80
 terraform import cloudamqp_alarm.alarm_01 65,80
 ```
+
+## AWS VPC Setup
+Support for setting up VPC peering connection between AWS instance and CloudAMQP. Requires that the AWS instance is used as the requester and CloudAMQP used as an accepter. More detailed description can be found here: [setup](https://docs.cloudamqp.com/cloudamqp_terraform.html#aws-vpc-setup)
+
+Together with at full example found under *sample/aws_vpc*.
