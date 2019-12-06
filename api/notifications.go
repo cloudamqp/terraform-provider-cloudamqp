@@ -3,6 +3,7 @@ package api
 import (
 	"errors"
 	"fmt"
+	"log"
 	"strconv"
 )
 
@@ -14,8 +15,10 @@ type NotificationQuery struct {
 func (api *API) CreateNotification(instance_id int, params map[string]interface{}) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
+	log.Printf("[DEBUG] go-api::notification::create instance id: %v, params: %v", instance_id, params)
 	path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
+	log.Printf("[DEBUG] go-api::notification::create data: %v", data)
 
 	if err != nil {
 		return nil, err
@@ -26,6 +29,7 @@ func (api *API) CreateNotification(instance_id int, params map[string]interface{
 
 	if v, ok := data["id"]; ok {
 		data["id"] = strconv.FormatFloat(v.(float64), 'f', 0, 64)
+		log.Printf("[DEBUG] go-api::notification::create id set: %v", data["id"])
 	} else {
 		return nil, errors.New(fmt.Sprintf("Invalid notification identifier. id: %v", data["id"]))
 	}
@@ -37,8 +41,10 @@ func (api *API) ReadNotification(instance_id int, id string) (map[string]interfa
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
 	params := &NotificationQuery{Id: id}
+	log.Printf("[DEBUG] go-api::notification::read instance id: %v, recipient id: %v", instance_id, id)
 	path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
 	response, err := api.sling.New().Path(path).QueryStruct(params).Receive(&data, &failed)
+	log.Printf("[DEBUG] go-api::notification::read data: %v", data)
 
 	if err != nil {
 		return nil, err
@@ -52,6 +58,7 @@ func (api *API) ReadNotification(instance_id int, id string) (map[string]interfa
 
 func (api *API) UpdateNotification(instance_id int, params map[string]interface{}) error {
 	failed := make(map[string]interface{})
+	log.Printf("[DEBUG] go-api::notification::update instance id: %v, params: %v", instance_id, params)
 	path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 
@@ -64,6 +71,7 @@ func (api *API) UpdateNotification(instance_id int, params map[string]interface{
 
 func (api *API) DeleteNotification(instance_id int, params map[string]interface{}) error {
 	failed := make(map[string]interface{})
+	log.Printf("[DEBUG] go-api::notification::delete instance id: %v, params: %v", instance_id, params)
 	path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
 	response, err := api.sling.New().Delete(path).BodyJSON(params).Receive(nil, &failed)
 
