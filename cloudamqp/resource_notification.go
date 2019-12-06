@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"errors"
+	"log"
 	"strconv"
 	"strings"
 
@@ -49,13 +50,17 @@ func resourceNotificationCreate(d *schema.ResourceData, meta interface{}) error 
 			params[k] = v
 		}
 	}
+	log.Printf("[DEBUG] cloudamqp::resource::notification::create params: %v", params)
 
 	data, err := api.CreateNotification(d.Get("instance_id").(int), params)
+	log.Printf("[DEBUG] cloudamqp::resource::notification::create data: %v", data)
+
 	if err != nil {
 		return err
 	}
 	if data["id"] != nil {
 		d.SetId(data["id"].(string))
+		log.Printf("[DEBUG] cloudamqp::resource::notification::create id set: %v", d.Id())
 	}
 
 	for k, v := range data {
@@ -78,8 +83,10 @@ func resourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
 		return errors.New("Missing instance identifier: {resource_id},{instance_id}")
 	}
 
+	log.Printf("[DEBUG] cloudamqp::resource::notification::read instance id: %v, id: %v", d.Get("instance_id"), d.Id())
 	api := meta.(*api.API)
 	data, err := api.ReadNotification(d.Get("instance_id").(int), d.Id())
+	log.Printf("[DEBUG] cloudamqp::resource::notification::read data: %v", data)
 
 	if err != nil {
 		return err
@@ -100,6 +107,7 @@ func resourceNotificationUpdate(d *schema.ResourceData, meta interface{}) error 
 			params[k] = v
 		}
 	}
+	log.Printf("[DEBUG] cloudamqp::resource::notification::update params: %v", params)
 	return api.UpdateNotification(d.Get("instance_id").(int), params)
 }
 
@@ -107,6 +115,7 @@ func resourceNotificationDelete(d *schema.ResourceData, meta interface{}) error 
 	api := meta.(*api.API)
 	params := make(map[string]interface{})
 	params["id"] = d.Id()
+	log.Printf("[DEBUG] cloudamqp::resource::notification::delete instance_id: %v, params: %v", d.Get("instance_id"), params)
 	return api.DeleteNotification(d.Get("instance_id").(int), params)
 }
 

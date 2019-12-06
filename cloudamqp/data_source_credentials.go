@@ -1,6 +1,8 @@
 package cloudamqp
 
 import (
+	"log"
+
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform/helper/schema"
 
@@ -33,6 +35,7 @@ func dataSourceCredentials() *schema.Resource {
 
 func dataSourceCredentialsRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
+	log.Printf("[DEBUG] cloudamqp::data_source::credentials::read instance id: %v", d.Get("instance_id"))
 	data, err := api.ReadCredentials(d.Get("instance_id").(int))
 	if err != nil {
 		return err

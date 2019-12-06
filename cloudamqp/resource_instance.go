@@ -1,6 +1,8 @@
 package cloudamqp
 
 import (
+	"log"
+
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform/helper/schema"
 )
@@ -88,12 +90,16 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 			}
 		}
 	}
+	log.Printf("[DEBUG] cloudamqp::resource::instance::create params: %v", params)
 
 	data, err := api.CreateInstance(params)
+	log.Printf("[DEBUG] cloudamqp::resource::instance::create data: %v", data)
+
 	if err != nil {
 		return err
 	}
 	d.SetId(data["id"].(string))
+	log.Printf("[DEBUG] cloudamqp::resource::instance::create id set: %v", d.Id())
 	for k, v := range data {
 		if k == "id" {
 			continue
@@ -106,7 +112,9 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
+	log.Printf("[DEBUG] cloudamqp::resource::instance::read id: %v", d.Id())
 	data, err := api.ReadInstance(d.Id())
+	log.Printf("[DEBUG] cloudamqp::resource::instance::read data: %v", data)
 
 	if err != nil {
 		return err
@@ -130,10 +138,12 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 			params[k] = d.Get(k)
 		}
 	}
+	log.Printf("[DEBUG] cloudamqp::resource::instance::update params: %v", params)
 	return api.UpdateInstance(d.Id(), params)
 }
 
 func resourceDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
+	log.Printf("[DEBUG] cloudamqp::resource::instance::delete id: %v", d.Id())
 	return api.DeleteInstance(d.Id())
 }

@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"errors"
+	"log"
 	"strconv"
 	"strings"
 
@@ -72,6 +73,7 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 			params[k] = v
 		}
 	}
+	log.Printf("[DEBUG] cloudamqp::resource::alarm::create params: %v", params)
 
 	var notificationIDs []int
 	if attr := d.Get("notification_ids").([]interface{}); len(attr) > 0 {
@@ -86,12 +88,14 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 	delete(params, "notification_ids")
 
 	data, err := api.CreateAlarm(d.Get("instance_id").(int), params)
+	log.Printf("[DEBUG] cloudamqp::resource::alarm::create data: %v", data)
 
 	if err != nil {
 		return err
 	}
 	if data["id"] != nil {
 		d.SetId(data["id"].(string))
+		log.Printf("[DEBUG] cloudamqp::resource::alarm::create id set: %v", d.Id())
 	}
 
 	for k, v := range data {
@@ -106,6 +110,7 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
 	if strings.Contains(d.Id(), ",") {
+		log.Printf("[DEBUG] cloudamqp::resource::alarm::read id contains ,: %v", d.Id())
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
 		instance_id, _ := strconv.Atoi(s[1])
@@ -116,7 +121,9 @@ func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	api := meta.(*api.API)
+	log.Printf("[DEBUG] cloudamqp::resource::alarm::read instance id: %v", d.Get("instance_id"))
 	data, err := api.ReadAlarm(d.Get("instance_id").(int), d.Id())
+	log.Printf("[DEBUG] cloudamqp::resource::alarm::read data: %v", data)
 
 	if err != nil {
 		return err
@@ -134,6 +141,7 @@ func resourceAlarmUpdate(d *schema.ResourceData, meta interface{}) error {
 	keys := []string{"type", "value_threshold", "time_threshold", "vhost_regex", "queue_regex", "notification_ids"}
 	params := make(map[string]interface{})
 	params["alarm_id"] = d.Id()
+	log.Printf("[DEBUG] cloudamqp::resource::alarm::update params: %v", params)
 
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
@@ -150,9 +158,9 @@ func resourceAlarmUpdate(d *schema.ResourceData, meta interface{}) error {
 			}
 		}
 	}
-
 	params["notifications"] = notificationIDs
 	delete(params, "notification_ids")
+	log.Printf("[DEBUG] cloudamqp::resource::alarm::create updated params: %v", params)
 
 	return api.UpdateAlarm(d.Get("instance_id").(int), params)
 }
@@ -161,6 +169,7 @@ func resourceAlarmDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	params := make(map[string]interface{})
 	params["alarm_id"] = d.Id()
+	log.Printf("[DEBUG] cloudamqp::resource::alarm::delete params: %v", params)
 	return api.DeleteAlarm(d.Get("instance_id").(int), params)
 }
 

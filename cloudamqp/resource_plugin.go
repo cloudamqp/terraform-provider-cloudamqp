@@ -3,6 +3,7 @@ package cloudamqp
 import (
 	"errors"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 
@@ -41,11 +42,13 @@ func resourcePlugin() *schema.Resource {
 
 func resourcePluginCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
+	log.Printf("[DEBUG] cloudamqp::resource::plugin::create instance id: %v, name: %v", d.Get("instance_id"), d.Get("name"))
 	data, err := api.EnablePlugin(d.Get("instance_id").(int), d.Get("name").(string))
 	if err != nil {
 		return err
 	}
 	d.SetId(fmt.Sprintf("%s", d.Get("name").(string)))
+	log.Printf("[DEBUG] cloudamqp::resource::plugin::create id set: %v", d.Id())
 	for k, v := range data {
 		d.Set(k, v)
 	}
@@ -65,7 +68,9 @@ func resourcePluginRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	api := meta.(*api.API)
+	log.Printf("[DEBUG] cloudamqp::resource::plugin::read instance id: %v, name: %v", d.Get("instance_id"), d.Get("name"))
 	data, err := api.ReadPlugin(d.Get("instance_id").(int), d.Get("name").(string))
+	log.Printf("[DEBUG] cloudamqp::resource::plugin::read data: %v", data)
 	if err != nil {
 		return err
 	}
@@ -86,12 +91,14 @@ func resourcePluginUpdate(d *schema.ResourceData, meta interface{}) error {
 			params[k] = v
 		}
 	}
+	log.Printf("[DEBUG] cloudamqp::resource::plugin::update instance id: %v, params: %v", d.Get("instance_id"), params)
 	_, err := api.UpdatePlugin(d.Get("instance_id").(int), params)
 	return err
 }
 
 func resourcePluginDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
+	log.Printf("[DEBUG] cloudamqp::resource::plugin::delete instance id: %v, name: %v", d.Get("instance_id"), d.Get("name"))
 	_, err := api.DisablePlugin(d.Get("instance_id").(int), d.Get("name").(string))
 	return err
 }

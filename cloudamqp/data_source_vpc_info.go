@@ -1,6 +1,8 @@
 package cloudamqp
 
 import (
+	"log"
+
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform/helper/schema"
 )
@@ -36,7 +38,9 @@ func dataSourceVpcInfo() *schema.Resource {
 
 func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
+	log.Printf("[DEBUG] cloudamqp::data_source::vpc_info::read instance id: %v", d.Get("instance_id"))
 	data, err := api.ReadVpcInfo(d.Get("instance_id").(int))
+	log.Printf("[DEBUG] cloudamqp::data_source::vpc_info::read data: %v", data)
 
 	if err != nil {
 		return err

@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform/helper/schema"
@@ -43,6 +44,7 @@ func dataSourcePluginsCommunity() *schema.Resource {
 
 func dataSourcePluginsCommunityRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
+	log.Printf("[DEBUG] cloudamqp::data_source::plugin_comminity::read instance id: %v", d.Get("instance_id"))
 	data, err := api.ReadPluginsCommunity(d.Get("instance_id").(int))
 	d.SetId(fmt.Sprintf("%v.plugins_community", d.Get("instance_id").(int)))
 	if err != nil {

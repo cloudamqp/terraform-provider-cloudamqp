@@ -1,6 +1,7 @@
 package cloudamqp
 
 import (
+	"log"
 	"strconv"
 
 	"github.com/84codes/go-api/api"
@@ -59,21 +60,26 @@ func resourceSecurityFirewallCreate(d *schema.ResourceData, meta interface{}) er
 	api := meta.(*api.API)
 	var params []map[string]interface{}
 	localFirewalls := d.Get("rules").(*schema.Set).List()
+	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create localFirewalls: %v", localFirewalls)
 
 	for _, k := range localFirewalls {
 		params = append(params, k.(map[string]interface{}))
 	}
 
 	instance_id := d.Get("instance_id").(int)
+	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create instance id: %v", instance_id)
 	err := api.CreateFirewallSettings(instance_id, params)
 	d.SetId(strconv.Itoa(instance_id))
+	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create id set: %v", d.Id())
 	return err
 }
 
 func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	instance_id, _ := strconv.Atoi(d.Id())
+	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read instance id: %v", instance_id)
 	data, err := api.ReadFirewallSettings(instance_id)
+	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create data: %v", data)
 	if err != nil {
 		return err
 	}
@@ -90,12 +96,14 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 	for _, k := range localFirewalls {
 		params = append(params, k.(map[string]interface{}))
 	}
+	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::update instance id: %v, params: %v", d.Get("instance_id"), params)
 	err := api.UpdateFirewallSettings(d.Get("instance_id").(int), params)
 	return err
 }
 
 func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
+	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete instance id: %v", d.Get("instance_id"))
 	err := api.DeleteFirewallSettings(d.Get("instance_id").(int))
 	return err
 }

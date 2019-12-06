@@ -48,5 +48,6 @@ func Provider() *schema.Provider {
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	useragent := fmt.Sprintf("terraform-provider-cloudamqp_v%s", version)
+	log.Printf("[DEBUG] cloudamqp::provider::configure useragent: %v", useragent)
 	return api.New(d.Get("baseurl").(string), d.Get("apikey").(string), useragent), nil
 }
