@@ -79,7 +79,7 @@ func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) erro
 	instance_id, _ := strconv.Atoi(d.Id())
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read instance id: %v", instance_id)
 	data, err := api.ReadFirewallSettings(instance_id)
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create data: %v", data)
+	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read data: %v", data)
 	if err != nil {
 		return err
 	}
