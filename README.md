@@ -62,6 +62,15 @@ Again, paste in your API key.  This should create an actual CloudAMQP instance.
 
 Enabled versioning to the Makefile, which also automatically adds it to the built provider. New name is therefore terraform-provider-cloudamqp_vx.y.z, where x.y.z is the version.
 
+## Debug log
+
+If more information needed, it's possible to increase Terraform log level. Using *DEBUG* will enable both CloudAMQP and underlying go-api debug logging.
+
+To enable Terraform debug logging.
+```
+export TF_LOG=DEBUG
+```
+
 ## Resources
 Resource documentation can be found [here](https://docs.cloudamqp.com/cloudamqp_terraform.html)
 
