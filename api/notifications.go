@@ -31,7 +31,9 @@ func (api *API) CreateNotification(instance_id int, params map[string]interface{
 		data["id"] = strconv.FormatFloat(v.(float64), 'f', 0, 64)
 		log.Printf("[DEBUG] go-api::notification::create id set: %v", data["id"])
 	} else {
-		return nil, errors.New(fmt.Sprintf("Invalid notification identifier. id: %v", data["id"]))
+		msg := fmt.Sprintf("go-api::notification::create Invalid notification identifier: %v", data["id"])
+		log.Printf("[ERROR] %s", msg)
+		return nil, errors.New(msg)
 	}
 
 	return data, err

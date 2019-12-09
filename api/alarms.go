@@ -27,8 +27,15 @@ func (api *API) CreateAlarm(instance_id int, params map[string]interface{}) (map
 		return nil, errors.New(fmt.Sprintf("CreateAlarm failed, status: %v, message: %s", response.StatusCode, failed))
 	}
 
-	data["id"] = strconv.FormatFloat(data["id"].(float64), 'f', 0, 64)
-	log.Printf("[DEBUG] go-api::alarm::create id set: %v", data["id"])
+	if id, ok := data["id"]; ok {
+		data["id"] = strconv.FormatFloat(id.(float64), 'f', 0, 64)
+		log.Printf("[DEBUG] go-api::alarm::create id set: %v", data["id"])
+	} else {
+		msg := fmt.Sprintf("go-api::instance::create Invalid alarm identifier: %v", data["id"])
+		log.Printf("[ERROR] %s", msg)
+		return nil, errors.New(msg)
+	}
+
 	return data, err
 }
 

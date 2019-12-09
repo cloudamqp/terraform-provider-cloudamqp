@@ -62,8 +62,15 @@ func (api *API) CreateInstance(params map[string]interface{}) (map[string]interf
 		return nil, errors.New(fmt.Sprintf("CreateInstance failed, status: %v, message: %s", response.StatusCode, failed))
 	}
 
-	data["id"] = strconv.FormatFloat(data["id"].(float64), 'f', 0, 64)
-	log.Printf("[DEBUG] go-api::instance::create id set: %v", data["id"])
+	if id, ok := data["id"]; ok {
+		data["id"] = strconv.FormatFloat(id.(float64), 'f', 0, 64)
+		log.Printf("[DEBUG] go-api::instance::create id set: %v", data["id"])
+	} else {
+		msg := fmt.Sprintf("go-api::instance::create Invalid instance identifier: %v", data["id"])
+		log.Printf("[ERROR] %s", msg)
+		return nil, errors.New(msg)
+	}
+
 	return api.waitUntilReady(data["id"].(string))
 }
 
@@ -103,7 +110,8 @@ func (api *API) ReadInstances() ([]map[string]interface{}, error) {
 func (api *API) UpdateInstance(id string, params map[string]interface{}) error {
 	failed := make(map[string]interface{})
 	log.Printf("[DEBUG] go-api::instance::update instance id: %v, params: %v", id, params)
-	response, err := api.sling.New().Put("/api/instances/"+id).BodyJSON(params).Receive(nil, &failed)
+	path := fmt.Sprintf("api/instances/%v", id)
+	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 
 	if err != nil {
 		return err
