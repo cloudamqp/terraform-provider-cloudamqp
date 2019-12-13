@@ -69,6 +69,16 @@ func resourceInstance() *schema.Resource {
 				},
 				Description: "Tag the instances with optional tags",
 			},
+			"host": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Host name for the CloudAMQP instance",
+			},
+			"vhost": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The virtual host",
+			},
 		},
 	}
 }
@@ -125,6 +135,12 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 		} else {
 			d.Set(k, v)
 		}
+	}
+
+	data = api.UrlInformation(data["url"].(string))
+	if err == nil {
+		d.Set("host", data["host"])
+		d.Set("vhost", data["vhost"])
 	}
 	return nil
 }
