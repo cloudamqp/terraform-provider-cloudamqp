@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"regexp"
 	"strconv"
 	"time"
 )
@@ -136,4 +137,27 @@ func (api *API) DeleteInstance(id string) error {
 	}
 
 	return api.waitUntilDeletion(id)
+}
+
+func (api *API) UrlInformation(url string) map[string]interface{} {
+	paramsMap := make(map[string]interface{})
+	r := regexp.MustCompile(`amqp:\/\/(?P<username>(.*)):(?P<password>(.*))@(?P<host>(.*))\/(?P<vhost>(.*))`)
+	match := r.FindStringSubmatch(url)
+
+	for i, value := range r.SubexpNames() {
+		if value == "username" {
+			paramsMap["username"] = match[i]
+		}
+		if value == "password" {
+			paramsMap["password"] = match[i]
+		}
+		if value == "host" {
+			paramsMap["host"] = match[i]
+		}
+		if value == "vhost" {
+			paramsMap["vhost"] = match[i]
+		}
+	}
+
+	return paramsMap
 }
