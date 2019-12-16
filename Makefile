@@ -1,5 +1,5 @@
 ## CloudAMQP provider version
-version = 1.2.1
+version = 1.2.2
 
 ## Check if a 64 bit kernel is running
 UNAME_M := $(shell uname -m)
@@ -67,10 +67,10 @@ release: ## Cross-compile release provider for different architecture
 	mkdir -p $(CURDIR)/bin/release/windows/amd64
 	mv terraform-provider-cloudamqp_v$(version)_windows_amd64.tar.gz bin/release/windows/amd64/
 
-build:  ## Build cloudamqp provider
+build: clean ## Build cloudamqp provider
 	@echo $(GOOS);
 	@echo $(GOARCH);
-	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -ldflags "-X main.version=$(version)" -o terraform-provider-cloudamqp_v$(version)
+	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -ldflags "-X 'github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp.version=$(version)'" -o terraform-provider-cloudamqp_v$(version)
 
 install: build  ## Install cloudamqp provider into terraform plugin directory
 	mkdir -p ~/.terraform.d/plugins
