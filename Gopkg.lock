@@ -20,11 +20,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:f913e7f2589af2432063d887526191b70a2461b903226285d1dcb3b67161534f"
+  digest = "1:7ba255022be0c4dee75b4c3c345ed2d1b2f04898e9275d3ee55a03cb2ad0b421"
   name = "github.com/84codes/go-api"
   packages = ["api"]
   pruneopts = "UT"
-  revision = "8befdcf0c7fd784f3462f664d9f9826aa8f57028"
+  revision = "9c826acead17e64ac65a52cbdd3d9460364cb13b"
 
 [[projects]]
   digest = "1:9f3b30d9f8e0d7040f729b82dcbc8f0dead820a133b3147ce355fc451f32d761"
@@ -398,18 +398,6 @@
   pruneopts = "UT"
   revision = "abec0acf40d8e31ac612a244cf3886fb3bcce0bb"
   version = "v0.12.9"
-
-[[projects]]
-  branch = "master"
-  digest = "1:7fa5c152d6dd0b07697a0afdd629ec8f6baf3ca782fcc8227151060bc4f9aa46"
-  name = "github.com/hashicorp/terraform-svchost"
-  packages = [
-    ".",
-    "auth",
-    "disco",
-  ]
-  pruneopts = "UT"
-  revision = "d2e4933b91362709122c21cd14b6b51cf6e5bfca"
 
 [[projects]]
   branch = "master"
