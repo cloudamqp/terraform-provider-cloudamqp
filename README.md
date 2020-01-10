@@ -5,13 +5,14 @@ Setup your CloudAMQP cluster from Terraform
 ## Getting Started (As a Terraform User)
 
 ### Prerequisites
+
 Golang, make, Terraform
 
 ## Install
 
 * Install golang: https://golang.org/dl/
   Example with default paths
-  * Download latest version and extract to /usr/local/go
+  * Download latest version and extract to `/usr/local/go`
   * Set environmental variable `export GOROOT=/usr/local/go`
   * Set environmental variable `export GOPATH=$HOME/go`
   * Set environmental variable `export PATH=$GOROOT/bin:$GOPATH:$PATH`
@@ -32,6 +33,7 @@ Golang, make, Terraform
     later.)
 
 ### Install CloudAMQP Terraform Provider
+
 ```sh
 go get -d -u -v github.com/cloudamqp/terraform-provider-cloudamqp
 cd $GOPATH/src/github.com/cloudamqp/terraform-provider-cloudamqp
@@ -41,6 +43,9 @@ make install
 
 Now the provider is installed in the terraform plugins folder and ready to be used.
 
+To update the dependencies, then run again.
+`go get -u`
+
 ### Example Usage: Deploying a First CloudAMQP RMQ server
 
 (See the examples.tf file in the repo.  It has a bunny VPC example and a simple lemur example.)
@@ -49,12 +54,15 @@ Now the provider is installed in the terraform plugins folder and ready to be us
 cd $GOPATH/src/github.com/cloudamqp/terraform-provider-cloudamqp  #This is the root of the repo where examples.tf lives.
 terraform plan
 ```
+
 When prompted paste in your CloudAMQP API key (created above).
 
 This will give you output on stdout that tells you what would have been created:
+
 * rmq_lemur
 
 Next run
+
 ```sh
 terraform apply
 ```
@@ -73,6 +81,7 @@ To enable Terraform debug logging.
 `export TF_LOG=DEBUG`
 
 ## Resources
+
 Resource documentation can be found [here](https://docs.cloudamqp.com/cloudamqp_terraform.html)
 
 ## Import
@@ -82,17 +91,20 @@ Import existing infrastructure into state and bring the resource under Terraform
 ### Instance:
 
 Import cloudamqp instance and bring it under Terraform management. First declare an empty instance resource in the .tf file. Followed by running the terraform import command
-```
+
+```sh
 resource "cloudamqp_instance"."rmq_url" {}
 ```
 
 Generic form of terraform import command
-```
+
+```sh
 terraform import {resource_type}.{resource_name} {resource_id}
 ```
 
 Example of terraform import command (with resource_id=80)
-```
+
+```sh
 terraform import cloudamqp_instance.rmq_url 80
 ```
 
@@ -101,27 +113,32 @@ terraform import cloudamqp_instance.rmq_url 80
 All resources depending on the instance resource also needs the instance id when using terraform import, in order to make correct API calls. Resource id and instance id is seperated with ",".
 
 Resource affected by this is:
-- cloudamqp_notification
-- cloudmaqp_alarm
+
+* cloudamqp_notification
+* cloudmaqp_alarm
 
 First declare two empty notification and alarm resources in the .tf file. Followed by running the terraform import command.
-```
+
+```sh
 resource "cloudamqp_notification"."recipient_01" {}
 resource "cloudamqp_alarm"."alarm_01" {}
 ```
 
 Generic form of terraform import command
-```
+
+```sh
 terraform import {resource_type}.{resource_name} {resource_id},{instance_id}
 ```
 
 Example of terraform import command (with instance_id=80)
-```
+
+```sh
 terraform import cloudamqp_notification.recipient_01 10,80
 terraform import cloudamqp_alarm.alarm_01 65,80
 ```
 
 ## AWS VPC Setup
+
 Support for setting up VPC peering connection between AWS instance and CloudAMQP. Requires that the AWS instance is used as the requester and CloudAMQP used as an accepter. More detailed description can be found here: [setup](https://docs.cloudamqp.com/cloudamqp_terraform.html#aws-vpc-setup)
 
 Together with at full example found under *sample/aws_vpc*.
