@@ -5,34 +5,37 @@ Setup your CloudAMQP cluster from Terraform
 ## Getting Started (As a Terraform User)
 
 ### Prerequisites
-Golang, Dep
+Golang, make, Terraform
 
 ## Install
 
 * Install golang: https://golang.org/dl/
-
-* Install go dep: https://golang.github.io/dep/docs/installation.html
-
+  Example with default paths
+  * Download latest version and extract to /usr/local/go
+  * Set environmental variable `export GOROOT=/usr/local/go`
+  * Set environmental variable `export GOPATH=$HOME/go`
+  * Set environmental variable `export PATH=$GOROOT/bin:$GOPATH:$PATH`
+  * Activate module mode `export GO111MODULE=on`
+* Install make
+  * `sudo apt install make`
 * Install terraform: https://learn.hashicorp.com/terraform/getting-started/install.html
+  * Download the latest version and extract to /usr/local/terraform
+  * Set environmental variable `export PATH=/usr/local/terraform:$PATH`
 
 * Create a CloudAMQP account if you haven't already:
-
-    * Go to https://www.cloudamqp.com/
-
-    * Click "Sign Up"
-
-    * Sign in
-
-    * Go to API access (https://customer.cloudamqp.com/apikeys) and create a key.
-      (note that this is the API key for one of the two APIs CloudAMQP supports.
-      See https://docs.cloudamqp.com/cloudamqp_api.html.  We will discuss the other
-      later.)
+  * Go to https://www.cloudamqp.com/
+  * Click "Sign Up"
+  * Sign in
+  * Go to API access (https://customer.cloudamqp.com/apikeys) and create a key.
+    (note that this is the API key for one of the two APIs CloudAMQP supports.
+    See https://docs.cloudamqp.com/cloudamqp_api.html.  We will discuss the other
+    later.)
 
 ### Install CloudAMQP Terraform Provider
 ```sh
 go get -d -u -v github.com/cloudamqp/terraform-provider-cloudamqp
 cd $GOPATH/src/github.com/cloudamqp/terraform-provider-cloudamqp
-make depupdate
+go get -u
 make install
 ```
 
@@ -43,7 +46,7 @@ Now the provider is installed in the terraform plugins folder and ready to be us
 (See the examples.tf file in the repo.  It has a bunny VPC example and a simple lemur example.)
 
 ```sh
-cd terraform-provider-cloudamqp  #This is the root of the repo where examples.tf lives.
+cd $GOPATH/src/github.com/cloudamqp/terraform-provider-cloudamqp  #This is the root of the repo where examples.tf lives.
 terraform plan
 ```
 When prompted paste in your CloudAMQP API key (created above).
@@ -51,7 +54,7 @@ When prompted paste in your CloudAMQP API key (created above).
 This will give you output on stdout that tells you what would have been created:
 * rmq_lemur
 
-Next run--
+Next run
 ```sh
 terraform apply
 ```
@@ -67,9 +70,7 @@ Enabled versioning to the Makefile, which also automatically adds it to the buil
 If more information needed, it's possible to increase Terraform log level. Using *DEBUG* will enable both CloudAMQP and underlying go-api debug logging.
 
 To enable Terraform debug logging.
-```
-export TF_LOG=DEBUG
-```
+`export TF_LOG=DEBUG`
 
 ## Resources
 Resource documentation can be found [here](https://docs.cloudamqp.com/cloudamqp_terraform.html)
