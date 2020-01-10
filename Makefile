@@ -40,30 +40,35 @@ release: ## Cross-compile release provider for different architecture
 	echo "Building linux-386"
 	GOOS=linux GOARCH=386 go build -o terraform-provider-cloudamqp_v$(version)
 	tar -czvf terraform-provider-cloudamqp_v$(version)_linux_386.tar.gz terraform-provider-cloudamqp_v$(version)
+	rm terraform-provider-cloudamqp_v$(version)
 	mkdir -p $(CURDIR)/bin/release/linux/386
 	mv terraform-provider-cloudamqp_v$(version)_linux_386.tar.gz bin/release/linux/386/
 
 	echo "Building linux-amd64"
 	GOOS=linux GOARCH=amd64 go build -o terraform-provider-cloudamqp_v$(version)
 	tar -czvf terraform-provider-cloudamqp_v$(version)_linux_amd64.tar.gz terraform-provider-cloudamqp_v$(version)
+	rm terraform-provider-cloudamqp_v$(version)
 	mkdir -p $(CURDIR)/bin/release/linux/amd64
 	mv terraform-provider-cloudamqp_v$(version)_linux_amd64.tar.gz bin/release/linux/amd64/
 
 	echo "Building darwin-amd64"
 	GOOS=darwin GOARCH=amd64 go build -o terraform-provider-cloudamqp_v$(version)
 	tar -czvf terraform-provider-cloudamqp_v$(version)_darwin_amd64.tar.gz terraform-provider-cloudamqp_v$(version)
+	rm terraform-provider-cloudamqp_v$(version)
 	mkdir -p $(CURDIR)/bin/release/darwin/amd64
 	mv terraform-provider-cloudamqp_v$(version)_darwin_amd64.tar.gz bin/release/darwin/amd64/
 
 	echo "Building windows-386"
-	GOOS=windows GOARCH=386 go build -o terraform-provider-cloudamqp_v$(version)
-	tar -czvf terraform-provider-cloudamqp_v$(version)_windows_386.tar.gz terraform-provider-cloudamqp_v$(version)
+	GOOS=windows GOARCH=386 go build -o terraform-provider-cloudamqp_v$(version).exe
+	tar -czvf terraform-provider-cloudamqp_v$(version)_windows_386.tar.gz terraform-provider-cloudamqp_v$(version).exe
+	rm terraform-provider-cloudamqp_v$(version).exe
 	mkdir -p $(CURDIR)/bin/release/windows/386
 	mv terraform-provider-cloudamqp_v$(version)_windows_386.tar.gz bin/release/windows/386/
 
 	echo "Building windows-amd64"
-	GOOS=windows GOARCH=amd64 go build -o terraform-provider-cloudamqp_v$(version)
-	tar -czvf terraform-provider-cloudamqp_v$(version)_windows_amd64.tar.gz terraform-provider-cloudamqp_v$(version)
+	GOOS=windows GOARCH=amd64 go build -o terraform-provider-cloudamqp_v$(version).exe
+	tar -czvf terraform-provider-cloudamqp_v$(version)_windows_amd64.tar.gz terraform-provider-cloudamqp_v$(version).exe
+	rm terraform-provider-cloudamqp_v$(version).exe
 	mkdir -p $(CURDIR)/bin/release/windows/amd64
 	mv terraform-provider-cloudamqp_v$(version)_windows_amd64.tar.gz bin/release/windows/amd64/
 
