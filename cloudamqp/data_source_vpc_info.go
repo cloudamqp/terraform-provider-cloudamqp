@@ -1,7 +1,6 @@
 package cloudamqp
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/84codes/go-api/api"
@@ -20,43 +19,23 @@ func dataSourceVpcInfo() *schema.Resource {
 			},
 			"name": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Computed:    true,
 				Description: "VPC name",
 			},
 			"vpc_subnet": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Computed:    true,
 				Description: "VPC subnet",
 			},
 			"owner_id": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Computed:    true,
 				Description: "Owner identifier",
 			},
-			"security_group": {
-				Type:     schema.TypeList,
-				MaxItems: 1,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"id": {
-							Type:     schema.TypeString,
-							Required: true,
-						},
-						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-						"description": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-						"owner_id": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-					},
-				},
+			"security_group_id": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The security group identifier",
 			},
 		},
 	}
@@ -75,22 +54,7 @@ func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("name", data["name"])
 	d.Set("vpc_subnet", data["subnet"])
 	d.Set("owner_id", data["owner_id"])
-	setSecurityGroup(d, data["security_group"].(map[string]interface{}))
+	sg := data["security_group"].(map[string]interface{})
+	d.Set("security_group_id", sg["id"])
 	return nil
-}
-
-func setSecurityGroup(d *schema.ResourceData, data map[string]interface{}) error {
-	if data == nil {
-		return fmt.Errorf("Unexpected nil pointer in: %s", data)
-	}
-
-	securityGroup := make([]map[string]interface{}, 0, len(data))
-	securityGroup = append(securityGroup, map[string]interface{}{
-		"id":          data["id"],
-		"name":        data["name"],
-		"description": data["description"],
-		"owner_id":    data["owner_id"],
-	})
-
-	return d.Set("security_group", securityGroup)
 }
