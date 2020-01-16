@@ -1,5 +1,15 @@
 # Changelog for CloudAMQP Provider
 
+## 1.3.0 (Jan 16, 2019)
+
+FEATURES:
+
+* Additional information about security group added to data_source_vpc_info.go
+* Changed depedenacy mangement from package to modules.
+
+IMPROVEMENTS:
+* Added .exe extension on Windows release
+
 ## 1.2.3 (Dec 16, 2019) // Unreleased
 
 IMPROVEMENTS:
