@@ -16,7 +16,7 @@ Golang, make, Terraform
   * Set environmental variable `export GOROOT=/usr/local/go`
   * Set environmental variable `export GOPATH=$HOME/go`
   * Set environmental variable `export PATH=$GOROOT/bin:$GOPATH:$PATH`
-  * Activate module mode `export GO111MODULE=on`
+  * Activate module mode `export GO111MODULE=on` (Very importent!)
 * Install make
   * `sudo apt install make`
 * Install terraform: https://learn.hashicorp.com/terraform/getting-started/install.html
@@ -27,10 +27,11 @@ Golang, make, Terraform
   * Go to https://www.cloudamqp.com/
   * Click "Sign Up"
   * Sign in
-  * Go to API access (https://customer.cloudamqp.com/apikeys) and create a key.
-    (note that this is the API key for one of the two APIs CloudAMQP supports.
-    See https://docs.cloudamqp.com/cloudamqp_api.html.  We will discuss the other
-    later.)
+  * Go to API access (https://customer.cloudamqp.com/apikeys) and create a key. (note that this is the API key for one of the two APIs CloudAMQP supports.)
+
+`
+The two APIs supported can be found at https://docs.cloudamqp.com (called customer) and https://docs.cloudamqp.com/cloudamqp_api.html (called api). The API key created gain access to the customer API (used to handle the instance). While the second API handles different resources on the instace (such as alarms, notification etc.). The customer API also has a proxy service, which makes it possible for the provider to access the second API through customer API using the same created API key.
+`
 
 ### Install CloudAMQP Terraform Provider
 
@@ -45,6 +46,11 @@ Now the provider is installed in the terraform plugins folder and ready to be us
 
 To update the dependencies, then run again.
 `go get -u`
+
+To clean up the .mod and .sum files from unused dependencies, run.
+`go mod tidy`
+
+More detailed documentation of the provider can be found at: https://docs.cloudamqp.com/cloudamqp_terraform.html
 
 ### Example Usage: Deploying a First CloudAMQP RMQ server
 
