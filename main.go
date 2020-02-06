@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp"
-	"github.com/hashicorp/terraform/plugin"
-	"github.com/hashicorp/terraform/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/plugin"
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
 func main() {
