@@ -39,9 +39,11 @@ func (api *API) waitUntilDeletion(id string) error {
 		response, err := api.sling.New().Path("/api/instances/").Get(id).Receive(&data, &failed)
 
 		if err != nil {
+			log.Printf("[DEBUG] go-api::instance::waitUntilDeletion error: %v", err)
 			return err
 		}
 		if response.StatusCode == 404 {
+			log.Print("[DEBUG] go-api::instance::waitUntilDeletion deleted")
 			return nil
 		}
 
@@ -141,7 +143,7 @@ func (api *API) DeleteInstance(id string) error {
 
 func (api *API) UrlInformation(url string) map[string]interface{} {
 	paramsMap := make(map[string]interface{})
-	r := regexp.MustCompile(`amqp:\/\/(?P<username>(.*)):(?P<password>(.*))@(?P<host>(.*))\/(?P<vhost>(.*))`)
+	r := regexp.MustCompile(`^.*:\/\/(?P<username>(.*)):(?P<password>(.*))@(?P<host>(.*))\/(?P<vhost>(.*))`)
 	match := r.FindStringSubmatch(url)
 
 	for i, value := range r.SubexpNames() {
