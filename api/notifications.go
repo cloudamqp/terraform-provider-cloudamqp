@@ -58,6 +58,24 @@ func (api *API) ReadNotification(instance_id int, id string) (map[string]interfa
 	return data, err
 }
 
+func (api *API) ReadNotifications(instance_id int) ([]map[string]interface{}, error) {
+	var data []map[string]interface{}
+	failed := make(map[string]interface{})
+	log.Printf("[DEBUG] go-api::ReadNotifications::read instance id: %v", instance_id)
+	path := fmt.Sprintf("/api/instances/%d/alarms/recipients", instance_id)
+	response, err := api.sling.New().Path(path).Receive(&data, &failed)
+	log.Printf("[DEBUG] go-api::ReadNotifications::read data: %v", data)
+
+	if err != nil {
+		return nil, err
+	}
+	if response.StatusCode != 200 {
+		return nil, errors.New(fmt.Sprintf("ReadNotifications failed, status: %v, message: %s", response.StatusCode, failed))
+	}
+
+	return data, err
+}
+
 func (api *API) UpdateNotification(instance_id int, params map[string]interface{}) error {
 	failed := make(map[string]interface{})
 	log.Printf("[DEBUG] go-api::notification::update instance id: %v, params: %v", instance_id, params)
