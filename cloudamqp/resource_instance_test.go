@@ -127,3 +127,16 @@ func testAccInstanceConfig_basic_update(new_name string) string {
 		}
 	`, new_name)
 }
+
+// func testAccInstanceConfig_Dedicated_AWS region: amazon-web-services::us-east-1, plan: bunny
+// func testAccInstanceConfig_Shared_AWS region: amazon-web-services::us-east-1, plan
+
+// func testAccInstanceConfig_AWS_Scale_Up region: amazon-web-services::us-east-1, plan: bunny -> rabbit, nodes: 1 -> 3
+// func testAccInstanceConfig_AWS_Scale_Down region: amazon-web-services::us-east-1, plan rabbit -> bunny, nodes: 3 -> 1
+
+// func testAccInstanceConfig_Dedicated_Azure, region: azure-arm::east-us
+// func testAccInstanceConfig_Shared_Azure, region: azure-arm::east-us
+// func testAccInstanceConfig_Dedicated_GCE, region: google-compute-engine::us-central1
+// func testAccInstanceConfig_Shared_GCE, region: google-compute-engine::us-central1
+
+// func testAccInstanceConfig_Dedicated_DO, region: digital-ocean::nyc3

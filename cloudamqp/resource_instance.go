@@ -1,6 +1,7 @@
 package cloudamqp
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/84codes/go-api/api"
@@ -79,6 +80,11 @@ func resourceInstance() *schema.Resource {
 				Computed:    true,
 				Description: "The virtual host",
 			},
+			"ready": {
+				Type:        schema.TypeBool,
+				Computed:    true,
+				Description: "Flag describing if the resource is ready",
+			},
 		},
 	}
 }
@@ -137,6 +143,7 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return err
 	}
+	d.SetId(fmt.Sprintf("%v", data["id"]))
 	for k, v := range data {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {
