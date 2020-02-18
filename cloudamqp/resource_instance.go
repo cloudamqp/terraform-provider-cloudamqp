@@ -117,6 +117,12 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 			d.Set(k, v)
 		}
 	}
+
+	data = api.UrlInformation(data["url"].(string))
+	if err == nil {
+		d.Set("host", data["host"])
+		d.Set("vhost", data["vhost"])
+	}
 	return nil
 }
 

@@ -1,5 +1,5 @@
 ## CloudAMQP provider version
-version = 1.3.1
+version = 1.3.2
 
 ## Check if a 64 bit kernel is running
 UNAME_M := $(shell uname -m)
