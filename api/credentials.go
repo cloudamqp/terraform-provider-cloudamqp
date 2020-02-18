@@ -26,7 +26,7 @@ func (api *API) ReadCredentials(id int) (map[string]interface{}, error) {
 
 func ExtractInfo(url string) map[string]interface{} {
 	paramsMap := make(map[string]interface{})
-	r := regexp.MustCompile(`amqp:\/\/(?P<username>(.*?)):(?P<password>(.*?))@`)
+	r := regexp.MustCompile(`^.*:\/\/(?P<username>(.*)):(?P<password>(.*))@`)
 	match := r.FindStringSubmatch(url)
 
 	for i, name := range r.SubexpNames() {
