@@ -7,11 +7,6 @@ import (
 	"strconv"
 )
 
-type AlarmQuery struct {
-	AlarmId   string `url:"alarm_id,omitempty"`
-	AlarmType string `url:"alarm_type,omitempty"`
-}
-
 func (api *API) CreateAlarm(instance_id int, params map[string]interface{}) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
@@ -42,10 +37,9 @@ func (api *API) CreateAlarm(instance_id int, params map[string]interface{}) (map
 func (api *API) ReadAlarm(instance_id int, id string) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
-	params := &AlarmQuery{AlarmId: id}
 	log.Printf("[DEBUG] go-api::alarm::read instance id: %v, alarm id: %v", instance_id, id)
-	path := fmt.Sprintf("/api/instances/%d/alarms", instance_id)
-	response, err := api.sling.New().Get(path).QueryStruct(params).Receive(&data, &failed)
+	path := fmt.Sprintf("/api/instances/%v/alarms/%v", instance_id, id)
+	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	log.Printf("[DEBUG] go-api::alarm::read data : %v", data)
 
 	if err != nil {
@@ -79,7 +73,7 @@ func (api *API) ReadAlarms(instance_id int) ([]map[string]interface{}, error) {
 func (api *API) UpdateAlarm(instance_id int, params map[string]interface{}) error {
 	failed := make(map[string]interface{})
 	log.Printf("[DEBUG] go-api::alarm::update instance id: %v, params: %v", instance_id, params)
-	path := fmt.Sprintf("/api/instances/%d/alarms", instance_id)
+	path := fmt.Sprintf("/api/instances/%v/alarms/%v", instance_id, params["id"])
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 
 	if err != nil {
@@ -95,7 +89,7 @@ func (api *API) UpdateAlarm(instance_id int, params map[string]interface{}) erro
 func (api *API) DeleteAlarm(instance_id int, params map[string]interface{}) error {
 	failed := make(map[string]interface{})
 	log.Printf("[DEBUG] go-api::alarm::delete instance id: %v, params: %v", instance_id, params)
-	path := fmt.Sprintf("/api/instances/%d/alarms", instance_id)
+	path := fmt.Sprintf("/api/instances/%v/alarms/%v", instance_id, params["id"])
 	response, err := api.sling.New().Delete(path).BodyJSON(params).Receive(nil, &failed)
 
 	if response.StatusCode != 204 {
