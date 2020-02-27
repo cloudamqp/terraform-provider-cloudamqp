@@ -32,6 +32,11 @@ func resourceAlarm() *schema.Resource {
 				Description:  "Type of the alarm, valid options are: cpu, memory, disk_usage, queue_length, connection_count, consumers_count, net_split",
 				ValidateFunc: validateAlarmType(),
 			},
+			"enabled": {
+				Type:        schema.TypeBool,
+				Required:    true,
+				Description: "Enable or disable an alarm",
+			},
 			"value_threshold": {
 				Type:        schema.TypeInt,
 				Optional:    true,
@@ -52,13 +57,13 @@ func resourceAlarm() *schema.Resource {
 				Optional:    true,
 				Description: "Regex for which queues to check",
 			},
-			"notification_ids": {
+			"recipients": {
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeInt,
 				},
-				Description: "Identifiers for recipients to be notified. Leave empty to notifiy all recipients.",
+				Description: "Identifiers for recipients to be notified.",
 			},
 		},
 	}
@@ -66,7 +71,7 @@ func resourceAlarm() *schema.Resource {
 
 func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "value_threshold", "time_threshold", "vhost_regex", "queue_regex", "notification_ids"}
+	keys := []string{"type", "enabled", "value_threshold", "time_threshold", "vhost_regex", "queue_regex", "recipients"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
@@ -74,18 +79,6 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 	log.Printf("[DEBUG] cloudamqp::resource::alarm::create params: %v", params)
-
-	var notificationIDs []int
-	if attr := d.Get("notification_ids").([]interface{}); len(attr) > 0 {
-		for _, v := range attr {
-			val, ok := v.(int)
-			if ok {
-				notificationIDs = append(notificationIDs, val)
-			}
-		}
-	}
-	params["notifications"] = notificationIDs
-	delete(params, "notification_ids")
 
 	data, err := api.CreateAlarm(d.Get("instance_id").(int), params)
 	log.Printf("[DEBUG] cloudamqp::resource::alarm::create data: %v", data)
@@ -99,10 +92,9 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	for k, v := range data {
-		if k == "id" {
-			continue
+		if validateSchemaAttribute(k) {
+			d.Set(k, v)
 		}
-		d.Set(k, v)
 	}
 
 	return nil
@@ -130,7 +122,9 @@ func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	for k, v := range data {
-		d.Set(k, v)
+		if validateSchemaAttribute(k) {
+			d.Set(k, v)
+		}
 	}
 
 	return nil
@@ -138,9 +132,9 @@ func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceAlarmUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "value_threshold", "time_threshold", "vhost_regex", "queue_regex", "notification_ids"}
+	keys := []string{"type", "enabled", "value_threshold", "time_threshold", "vhost_regex", "queue_regex", "recipients"}
 	params := make(map[string]interface{})
-	params["alarm_id"] = d.Id()
+	params["id"] = d.Id()
 	log.Printf("[DEBUG] cloudamqp::resource::alarm::update params: %v", params)
 
 	for _, k := range keys {
@@ -149,26 +143,13 @@ func resourceAlarmUpdate(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
-	var notificationIDs []int
-	if attr := d.Get("notification_ids").([]interface{}); len(attr) > 0 {
-		for _, v := range attr {
-			val, ok := v.(int)
-			if ok {
-				notificationIDs = append(notificationIDs, val)
-			}
-		}
-	}
-	params["notifications"] = notificationIDs
-	delete(params, "notification_ids")
-	log.Printf("[DEBUG] cloudamqp::resource::alarm::create updated params: %v", params)
-
 	return api.UpdateAlarm(d.Get("instance_id").(int), params)
 }
 
 func resourceAlarmDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	params := make(map[string]interface{})
-	params["alarm_id"] = d.Id()
+	params["id"] = d.Id()
 	log.Printf("[DEBUG] cloudamqp::resource::alarm::delete params: %v", params)
 	return api.DeleteAlarm(d.Get("instance_id").(int), params)
 }
@@ -184,4 +165,18 @@ func validateAlarmType() schema.SchemaValidateFunc {
 		"netsplit",
 		"ssh",
 	}, true)
+}
+
+func validateSchemaAttribute(key string) bool {
+	switch key {
+	case "type",
+		"enabled",
+		"value_threshold",
+		"time_threshold",
+		"vhost_regex",
+		"queue_regex",
+		"recipients":
+		return true
+	}
+	return false
 }

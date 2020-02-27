@@ -37,13 +37,18 @@ func resourceNotification() *schema.Resource {
 				Required:    true,
 				Description: "Notification endpoint, where to send the notifcation",
 			},
+			"name": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Optional display name of the recipient",
+			},
 		},
 	}
 }
 
 func resourceNotificationCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "value"}
+	keys := []string{"type", "value", "name"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
@@ -64,10 +69,9 @@ func resourceNotificationCreate(d *schema.ResourceData, meta interface{}) error 
 	}
 
 	for k, v := range data {
-		if k == "id" {
-			continue
+		if validateRecipientAttribute(k) {
+			d.Set(k, v)
 		}
-		d.Set(k, v)
 	}
 	return nil
 }
@@ -91,15 +95,18 @@ func resourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return err
 	}
+
 	for k, v := range data {
-		d.Set(k, v)
+		if validateRecipientAttribute(k) {
+			d.Set(k, v)
+		}
 	}
 	return nil
 }
 
 func resourceNotificationUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "value"}
+	keys := []string{"type", "value", "name"}
 	params := make(map[string]interface{})
 	params["id"] = d.Id()
 	for _, k := range keys {
@@ -129,4 +136,14 @@ func validateNotificationType() schema.SchemaValidateFunc {
 		"opsgenie-eu",
 		"slack",
 	}, true)
+}
+
+func validateRecipientAttribute(key string) bool {
+	switch key {
+	case "type",
+		"value",
+		"name":
+		return true
+	}
+	return false
 }
