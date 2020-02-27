@@ -50,6 +50,9 @@ func resourcePluginCreate(d *schema.ResourceData, meta interface{}) error {
 	d.SetId(fmt.Sprintf("%s", d.Get("name").(string)))
 	log.Printf("[DEBUG] cloudamqp::resource::plugin::create id set: %v", d.Id())
 	for k, v := range data {
+		if k == "id" || k == "version" || k == "description" {
+			continue
+		}
 		d.Set(k, v)
 	}
 	return nil
@@ -76,6 +79,9 @@ func resourcePluginRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	for k, v := range data {
+		if k == "id" || k == "version" || k == "description" {
+			continue
+		}
 		d.Set(k, v)
 	}
 
@@ -93,6 +99,9 @@ func resourcePluginUpdate(d *schema.ResourceData, meta interface{}) error {
 	}
 	log.Printf("[DEBUG] cloudamqp::resource::plugin::update instance id: %v, params: %v", d.Get("instance_id"), params)
 	_, err := api.UpdatePlugin(d.Get("instance_id").(int), params)
+	if err != nil {
+		log.Printf("[ERROR] cloudamqp::resource::plugin::update Failed to update pluign: %v", err)
+	}
 	return err
 }
 

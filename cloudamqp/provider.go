@@ -22,7 +22,7 @@ func Provider() *schema.Provider {
 			},
 			"baseurl": &schema.Schema{
 				Type:        schema.TypeString,
-				Default:     "http://localhost:9393", //"https://customer.cloudamqp.com",
+				Default:     "https://customer.cloudamqp.com",
 				Optional:    true,
 				Description: "Base URL to CloudAMQP Customer website",
 			},
