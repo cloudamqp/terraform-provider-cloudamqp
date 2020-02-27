@@ -85,7 +85,7 @@ init: install  ## Run terraform init for local testing
 	terraform init
 
 testcase:
-	TF_ACC=1 TF_SCHEMA_PANIC_ON_ERROR=1 go test -count 1 -v ./cloudamqp -run TestAccNotification_Import
+	TF_ACC=1 TF_SCHEMA_PANIC_ON_ERROR=1 go test -count 1 -v ./cloudamqp -run TestAccInstance_Scale
 
 testacc:
 	TF_ACC=1 TF_SCHEMA_PANIC_ON_ERROR=1 go test -count 1 -v ./cloudamqp -run TestAccInstance_Basics
