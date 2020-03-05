@@ -26,6 +26,7 @@ func TestAccAlarm_Basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckInstanceExists(resource_name),
 					resource.TestCheckResourceAttr(resource_name, "type", "connection"),
+					resource.TestCheckResourceAttr(resource_name, "enabled", "true"),
 					resource.TestCheckResourceAttr(resource_name, "value_threshold", "0"),
 					resource.TestCheckResourceAttr(resource_name, "time_threshold", "60"),
 				),
@@ -125,9 +126,10 @@ func testAccAlarmConfig_Basic() string {
 		resource "cloudamqp_alarm" "connection_01" {
 			instance_id 			= cloudamqp_instance.instance_alarm.id
 			type 							= "connection"
+			enabled						=  true
 			value_threshold 	= 0
 			time_threshold 		= 60
-			notification_ids = []
+			recipients = []
 		}
 		`)
 }
@@ -147,9 +149,10 @@ func testAccAlarmConfig_Update() string {
 		resource "cloudamqp_alarm" "connection_01" {
 			instance_id 			= cloudamqp_instance.instance_alarm.id
 			type 							= "connection"
+			enabled 					= true
 			value_threshold 	= 25
 			time_threshold 		= 120
-			notification_ids = []
+			recipients = []
 		}
 		`)
 }
