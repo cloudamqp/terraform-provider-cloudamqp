@@ -58,11 +58,11 @@ func resourceAlarm() *schema.Resource {
 				Description: "Regex for which queues to check",
 			},
 			"message_type": {
-				Type: schema.TypeString,
-				Optional: true,
-				Description: "Message types (total, unacked, ready) of the queue to trigger the alarm",
+				Type:         schema.TypeString,
+				Optional:     true,
+				Description:  "Message types (total, unacked, ready) of the queue to trigger the alarm",
 				ValidateFunc: validateMessageType(),
-			}
+			},
 			"recipients": {
 				Type:     schema.TypeList,
 				Required: true,
