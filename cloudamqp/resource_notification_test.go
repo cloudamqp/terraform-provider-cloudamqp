@@ -15,7 +15,7 @@ func TestAccNotificiaiton_Basic(t *testing.T) {
 	instance_name := "cloudamqp_instance.instance_notification"
 	resource_name := "cloudamqp_notification.recipient_01"
 
-	resource.ParallelTest(t, resource.TestCase{
+	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckNotificationDestroy(instance_name, resource_name),
@@ -28,14 +28,14 @@ func TestAccNotificiaiton_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(resource_name, "value", "test@example.com"),
 				),
 			},
-			{
-				Config: testAccNotificationConfig_Update(),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckNotificationExists(instance_name, resource_name),
-					resource.TestCheckResourceAttr(resource_name, "type", "webhook"),
-					resource.TestCheckResourceAttr(resource_name, "value", "http://example.com/webhook"),
-				),
-			},
+			// {
+			// 	Config: testAccNotificationConfig_Update(),
+			// 	Check: resource.ComposeTestCheckFunc(
+			// 		testAccCheckNotificationExists(instance_name, resource_name),
+			// 		resource.TestCheckResourceAttr(resource_name, "type", "webhook"),
+			// 		resource.TestCheckResourceAttr(resource_name, "value", "http://example.com/webhook"),
+			// 	),
+			// },
 		},
 	})
 }
@@ -114,34 +114,34 @@ func testAccNotificationConfig_Basic() string {
 			region 			= "amazon-web-services::eu-north-1"
 			rmq_version = "3.8.2"
 			tags 				= ["terraform"]
-			vpc_subnet = "192.168.0.1/24"
 		}
 
 		resource "cloudamqp_notification" "recipient_01" {
 			instance_id = cloudamqp_instance.instance_notification.id
 			type = "email"
 			value = "test@example.com"
+			name = "Default"
 		}
 		`)
 }
 
-func testAccNotificationConfig_Update() string {
-	log.Printf("[DEBUG] resource_notification::testAccNotificationConfig_Update")
-	return fmt.Sprintf(`
-		resource "cloudamqp_instance" "instance_notification" {
-			name 				= "terraform-notification-test"
-			nodes 			= 1
-			plan  			= "bunny"
-			region 			= "amazon-web-services::eu-north-1"
-			rmq_version = "3.8.2"
-			tags 				= ["terraform"]
-			vpc_subnet = "192.168.0.1/24"
-		}
+// func testAccNotificationConfig_Update() string {
+// 	log.Printf("[DEBUG] resource_notification::testAccNotificationConfig_Update")
+// 	return fmt.Sprintf(`
+// 		resource "cloudamqp_instance" "instance_notification" {
+// 			name 				= "terraform-notification-test"
+// 			nodes 			= 1
+// 			plan  			= "bunny"
+// 			region 			= "amazon-web-services::eu-north-1"
+// 			rmq_version = "3.8.2"
+// 			tags 				= ["terraform"]
+// 		}
 
-		resource "cloudamqp_notification" "recipient_01" {
-			instance_id = cloudamqp_instance.instance_notification.id
-			type = "webhook"
-			value = "http://example.com/webhook"
-		}
-		`)
-}
+// 		resource "cloudamqp_notification" "recipient_01" {
+// 			instance_id = cloudamqp_instance.instance_notification.id
+// 			type = "webhook"
+// 			value = "http://example.com/webhook"
+// 			name = "webhook"
+// 		}
+// 		`)
+// }

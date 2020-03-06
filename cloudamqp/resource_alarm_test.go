@@ -24,22 +24,22 @@ func TestAccAlarm_Basic(t *testing.T) {
 			{
 				Config: testAccAlarmConfig_Basic(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckInstanceExists(resource_name),
+					testAccCheckAlarmExist(instance_name, resource_name),
 					resource.TestCheckResourceAttr(resource_name, "type", "connection"),
 					resource.TestCheckResourceAttr(resource_name, "enabled", "true"),
 					resource.TestCheckResourceAttr(resource_name, "value_threshold", "0"),
 					resource.TestCheckResourceAttr(resource_name, "time_threshold", "60"),
 				),
 			},
-			// {
-			// 	Config: testAccAlarmConfig_Update(),
-			// 	Check: resource.ComposeTestCheckFunc(
-			// 		testAccCheckInstanceExists(resource_name),
-			// 		resource.TestCheckResourceAttr(resource_name, "type", "connection"),
-			// 		resource.TestCheckResourceAttr(resource_name, "value_threshold", "25"),
-			// 		resource.TestCheckResourceAttr(resource_name, "time_threshold", "120"),
-			// 	),
-			// },
+			{
+				Config: testAccAlarmConfig_Update(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckAlarmExist(instance_name, resource_name),
+					resource.TestCheckResourceAttr(resource_name, "type", "connection"),
+					resource.TestCheckResourceAttr(resource_name, "value_threshold", "25"),
+					resource.TestCheckResourceAttr(resource_name, "time_threshold", "120"),
+				),
+			},
 		},
 	})
 }
@@ -101,7 +101,6 @@ func testAccCheckAlarmDestroy(instance_name, resource_name string) resource.Test
 		if err == nil {
 			return fmt.Errorf("Alert still exists")
 		}
-		return nil
 		notFoundErr := "Invalid ID"
 		expectedErr := regexp.MustCompile(notFoundErr)
 		if !expectedErr.Match([]byte(err.Error())) {
