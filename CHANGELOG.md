@@ -1,5 +1,36 @@
 # Changelog for CloudAMQP Provider
 
+## 1.4.1 (Mar 6, 2020)
+
+IMPROVEMENTS:
+
+* Missing required message type fields for queue alarms.
+
+## 1.4.0 (Feb 27, 2020)
+
+NOTES:
+
+* Underlying API changes required updated payload for alarm and notification.
+
+FEATURES:
+
+* Alarm: Additional schema attributes [enabled]
+* Alarm: Rename of schema attribute notification_ids -> recipients
+* Notifications: Additional schema attributes [name]
+
+## 1.3.2 (Feb 18, 2020)
+
+IMPROVEMENTS:
+
+* Update go-api dependency with minor regex fix.
+* Extract host and vhost information when creating new instance.
+
+## 1.3.1 (Feb 17, 2020)
+
+IMPROVEMENTS:
+
+* Updated go-api dependency with minor regex fix.
+
 ## 1.3.0 (Jan 16, 2019)
 
 FEATURES:
