@@ -77,7 +77,7 @@ func resourceAlarm() *schema.Resource {
 
 func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "enabled", "value_threshold", "time_threshold", "vhost_regex", "queue_regex", "recipients"}
+	keys := []string{"type", "enabled", "value_threshold", "time_threshold", "vhost_regex", "queue_regex", "message_type", "recipients"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
@@ -138,7 +138,7 @@ func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceAlarmUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "enabled", "value_threshold", "time_threshold", "vhost_regex", "queue_regex", "recipients"}
+	keys := []string{"type", "enabled", "value_threshold", "time_threshold", "vhost_regex", "queue_regex", "message_type", "recipients"}
 	params := make(map[string]interface{})
 	params["id"] = d.Id()
 	log.Printf("[DEBUG] cloudamqp::resource::alarm::update params: %v", params)
@@ -181,6 +181,7 @@ func validateSchemaAttribute(key string) bool {
 		"time_threshold",
 		"vhost_regex",
 		"queue_regex",
+		"message_type",
 		"recipients":
 		return true
 	}
