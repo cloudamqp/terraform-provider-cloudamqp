@@ -1,5 +1,17 @@
 # Changelog for CloudAMQP Provider
 
+## 1.5.0 (Mar 10, 2020)
+
+FEATURES:
+
+* New data source: data_source_instance - Extract instance
+
+IMPROVEMENTS:
+
+* Validating message type attribute when populating alarm schema
+* Message type key in create and update for alarm
+* Validating attributes when populating instance schema
+
 ## 1.4.1 (Mar 6, 2020)
 
 IMPROVEMENTS:
