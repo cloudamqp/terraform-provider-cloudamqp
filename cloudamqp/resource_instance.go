@@ -111,10 +111,12 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 	d.SetId(data["id"].(string))
 	log.Printf("[DEBUG] cloudamqp::resource::instance::create id set: %v", d.Id())
 	for k, v := range data {
-		if k == "id" {
-			continue
-		} else {
-			d.Set(k, v)
+		if validateInstanceSchemaAttribute(k) {
+			if k == "vpc" {
+				d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
+			} else {
+				d.Set(k, v)
+			}
 		}
 	}
 
@@ -136,10 +138,12 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 	for k, v := range data {
-		if k == "vpc" {
-			d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
-		} else {
-			d.Set(k, v)
+		if validateInstanceSchemaAttribute(k) {
+			if k == "vpc" {
+				d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
+			} else {
+				d.Set(k, v)
+			}
 		}
 	}
 
@@ -168,4 +172,20 @@ func resourceDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	log.Printf("[DEBUG] cloudamqp::resource::instance::delete id: %v", d.Id())
 	return api.DeleteInstance(d.Id())
+}
+
+func validateInstanceSchemaAttribute(key string) bool {
+	switch key {
+	case "name",
+		"plan",
+		"region",
+		"vpc",
+		"nodes",
+		"rmq_version",
+		"url",
+		"apikey",
+		"tags":
+		return true
+	}
+	return false
 }
