@@ -28,10 +28,12 @@ func Provider() *schema.Provider {
 			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
+			"cloudamqp_alarm":             dataSourceAlarm(),
 			"cloudamqp_credentials":       dataSourceCredentials(),
 			"cloudamqp_instance":          dataSourceInstance(),
 			"cloudamqp_plugins":           dataSourcePlugins(),
 			"cloudamqp_plugins_community": dataSourcePluginsCommunity(),
+			"cloudamqp_notification":      dataSourceNotification(),
 			"cloudamqp_vpc_info":          dataSourceVpcInfo(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
