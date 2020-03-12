@@ -98,7 +98,7 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	for k, v := range data {
-		if validateSchemaAttribute(k) {
+		if validateAlarmSchemaAttribute(k) {
 			d.Set(k, v)
 		}
 	}
@@ -128,7 +128,7 @@ func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	for k, v := range data {
-		if validateSchemaAttribute(k) {
+		if validateAlarmSchemaAttribute(k) {
 			d.Set(k, v)
 		}
 	}
@@ -173,7 +173,7 @@ func validateAlarmType() schema.SchemaValidateFunc {
 	}, true)
 }
 
-func validateSchemaAttribute(key string) bool {
+func validateAlarmSchemaAttribute(key string) bool {
 	switch key {
 	case "type",
 		"enabled",
