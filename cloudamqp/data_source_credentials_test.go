@@ -2,7 +2,6 @@ package cloudamqp
 
 import (
 	"fmt"
-	"log"
 	"regexp"
 	"testing"
 
@@ -11,17 +10,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
-func TestAccCredentialsDataSource(t *testing.T) {
-	instance_name := "cloudamqp_instance.instance_credentials"
+func TestAccCredentialsDataSource_Basic(t *testing.T) {
+	instance_name := "cloudamqp_instance.instance"
 	resource_name := "data.cloudamqp_credentials.credentials"
 
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:  func() { testAccPreCheck(t) },
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
-			{
-				Config: testAccCredentialsDataSourceConfig_Instance(),
-			},
 			{
 				Config: testAccCredentialsDataSourceConfig_Basic(),
 				Check: resource.ComposeTestCheckFunc(
@@ -33,7 +29,6 @@ func TestAccCredentialsDataSource(t *testing.T) {
 }
 
 func testAccCheckCredentialsDataSourceExists(instance_name, resource_name string) resource.TestCheckFunc {
-	log.Printf("[DEBUG] data_source_credentials::testAccCheckCredentialsDataSourceExists")
 	return func(state *terraform.State) error {
 		rs, ok := state.RootModule().Resources[instance_name]
 		if !ok {
@@ -82,27 +77,10 @@ func testAccCheckCredentialsDataSourceExists(instance_name, resource_name string
 	}
 }
 
-func testAccCredentialsDataSourceConfig_Instance() string {
-	log.Printf("[DEBUG] data_source_credentials::testAccCredentialsDataSourceConfig_Instance")
-	return fmt.Sprintf(`
-		resource "cloudamqp_instance" "instance_credentials" {
-			lifecycle {
-				prevent_destroy = true
-			}
-			name 				= "terraform-credentials-test"
-			nodes 			= 1
-			plan  			= "bunny"
-			region 			= "amazon-web-services::eu-north-1"
-			rmq_version = "3.8.2"
-			tags 				= ["terraform"]
-		}`)
-}
-
 func testAccCredentialsDataSourceConfig_Basic() string {
-	log.Printf("[DEBUG] data_source_credentials::testAccCredentialsDataSourceConfig_Basic")
 	return fmt.Sprintf(`
-		resource "cloudamqp_instance" "instance_credentials" {
-			name 				= "terraform-credentials-test"
+		resource "cloudamqp_instance" "instance" {
+			name 				= "terraform-credentials-ds-test"
 			nodes 			= 1
 			plan  			= "bunny"
 			region 			= "amazon-web-services::eu-north-1"
@@ -111,7 +89,7 @@ func testAccCredentialsDataSourceConfig_Basic() string {
 		}
 
 		data "cloudamqp_credentials" "credentials" {
-			instance_id = cloudamqp_instance.instance_credentials.id
+			instance_id = cloudamqp_instance.instance.id
 		}
 		`)
 }
