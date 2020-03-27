@@ -12,10 +12,10 @@ import (
 )
 
 func TestAccSecurityFirewall_Basic(t *testing.T) {
-	instance_name := "cloudamqp_instance.instance_firewall"
+	instance_name := "cloudamqp_instance.instance"
 	resource_name := "cloudamqp_security_firewall.firewall"
 
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccSecurityFirewallDestroy(instance_name, resource_name),
@@ -23,36 +23,32 @@ func TestAccSecurityFirewall_Basic(t *testing.T) {
 			{
 				Config: testAccSecurityFirewallConfig_Basic(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckSecurityFirewallExists(instance_name, resource_name),
-					resource.TestCheckResourceAttr(resource_name, "rule", "rabbitmq_web_mqtt"),
+					testAccCheckSecurityFirewallExists(instance_name),
+					resource.TestCheckResourceAttr(resource_name, "rules.#", "1"),
+					resource.TestCheckResourceAttr(resource_name, "rules.0.ip", "0.0.0.0/0"),
+					resource.TestCheckResourceAttr(resource_name, "rules.0.ports.#", "0"),
+					resource.TestCheckResourceAttr(resource_name, "rules.0.services.#", "6"),
 				),
 			},
-			// {
-			// 	Config: testAccNotificationConfig_Update(),
-			// 	Check: resource.ComposeTestCheckFunc(
-			// 		testAccCheckNotificationExists(instance_name, resource_name),
-			// 		resource.TestCheckResourceAttr(resource_name, "type", "webhook"),
-			// 		resource.TestCheckResourceAttr(resource_name, "value", "http://example.com/webhook"),
-			// 	),
-			// },
+			{
+				Config: testAccSecurityFirewallConfig_Update(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckSecurityFirewallExists(instance_name),
+					resource.TestCheckResourceAttr(resource_name, "rules.#", "1"),
+					resource.TestCheckResourceAttr(resource_name, "rules.0.ip", "192.168.0.0/24"),
+					resource.TestCheckResourceAttr(resource_name, "rules.0.ports.#", "1"),
+					resource.TestCheckResourceAttr(resource_name, "rules.0.ports.0", "4567"),
+					resource.TestCheckResourceAttr(resource_name, "rules.0.services.#", "1"),
+					resource.TestCheckResourceAttr(resource_name, "rules.0.services.0", "AMQPS"),
+				),
+			},
 		},
 	})
 }
 
-func testAccCheckSecurityFirewallExists(instance_name, resource_name string) resource.TestCheckFunc {
-	log.Printf("[DEBUG] resource_plugin::testAccCheckPluginEnabled resource: %s", resource_name)
-
+func testAccCheckSecurityFirewallExists(instance_name string) resource.TestCheckFunc {
 	return func(state *terraform.State) error {
-		rs, ok := state.RootModule().Resources[resource_name]
-		if !ok {
-			return fmt.Errorf("Resource: %s not found", resource_name)
-		}
-		if rs.Primary.ID == "" {
-			return fmt.Errorf("No Record ID is set")
-		}
-		plugin_name := rs.Primary.Attributes["name"]
-
-		rs, ok = state.RootModule().Resources[instance_name]
+		rs, ok := state.RootModule().Resources[instance_name]
 		if !ok {
 			return fmt.Errorf("Instance resource not found")
 		}
@@ -62,13 +58,13 @@ func testAccCheckSecurityFirewallExists(instance_name, resource_name string) res
 		instance_id, _ := strconv.Atoi(rs.Primary.ID)
 
 		api := testAccProvider.Meta().(*api.API)
-		data, err := api.ReadPlugin(instance_id, plugin_name)
+		data, err := api.ReadFirewallSettings(instance_id)
 		log.Printf("[DEBUG] resource_plugin::testAccCheckPluginEnabled data: %v", data)
 		if err != nil {
-			return fmt.Errorf("Error fetching item with resource %s. %s", resource_name, err)
+			return fmt.Errorf("Error fetching item %s", err)
 		}
-		if data["enabled"] == false {
-			return fmt.Errorf("Error resource: %s not enabled", resource_name)
+		if data != nil {
+			return fmt.Errorf("Error security firewall doesn't exists")
 		}
 		return nil
 	}
@@ -76,19 +72,7 @@ func testAccCheckSecurityFirewallExists(instance_name, resource_name string) res
 
 func testAccSecurityFirewallDestroy(instance_name, resource_name string) resource.TestCheckFunc {
 	return func(state *terraform.State) error {
-		log.Printf("[DEBUG] resource_plugins::testAccCheckPluginDisable")
-		api := testAccProvider.Meta().(*api.API)
-
-		rs, ok := state.RootModule().Resources[resource_name]
-		if !ok {
-			return fmt.Errorf("Resource %s not found", resource_name)
-		}
-		if rs.Primary.ID == "" {
-			return fmt.Errorf("No Record ID is set")
-		}
-		plugin_name := rs.Primary.Attributes["name"]
-
-		rs, ok = state.RootModule().Resources[instance_name]
+		rs, ok := state.RootModule().Resources[instance_name]
 		if !ok {
 			return fmt.Errorf("Instance resource not found")
 		}
@@ -97,22 +81,32 @@ func testAccSecurityFirewallDestroy(instance_name, resource_name string) resourc
 		}
 		instance_id, _ := strconv.Atoi(rs.Primary.ID)
 
-		data, err := api.ReadNotification(instance_id, plugin_name)
+		api := testAccProvider.Meta().(*api.API)
+		data, err := api.ReadFirewallSettings(instance_id)
 		if data != nil || err == nil {
-			return fmt.Errorf("Recipient still exists")
-		}
-		if data["enabled"] == true {
-			return fmt.Errorf("Error resource: %s not disabled", resource_name)
+			return fmt.Errorf("Firewall still exists")
 		}
 		return nil
 	}
 }
 
 func testAccSecurityFirewallConfig_Basic() string {
-	log.Printf("[DEBUG] resource_plugins::testAccPluginConfig_Basic")
 	return fmt.Sprintf(`
-		resource "cloudamqp_instance" "instance_plugin" {
-			name 				= "terraform-plugin-test"
+		resource "cloudamqp_instance" "instance" {
+			name 				= "terraform-security-firewall-test"
+			nodes 			= 1
+			plan  			= "bunny"
+			region 			= "amazon-web-services::eu-north-1"
+			rmq_version = "3.8.2"
+			tags 				= ["terraform"]
+		}
+		`)
+}
+
+func testAccSecurityFirewallConfig_Update() string {
+	return fmt.Sprintf(`
+		resource "cloudamqp_instance" "instance" {
+			name 				= "terraform-security-firewall-test"
 			nodes 			= 1
 			plan  			= "bunny"
 			region 			= "amazon-web-services::eu-north-1"
@@ -120,31 +114,13 @@ func testAccSecurityFirewallConfig_Basic() string {
 			tags 				= ["terraform"]
 		}
 
-		resource "cloudamqp_plugin" "mqtt_plugin" {
-			instance_id = cloudamqp_instance.instance_plugin.id
-			name = "rabbitmq_web_mqtt"
-			enabled = true
+		resource "cloudamqp_instance" "security_firewall" {
+			instance_id = cloudamqp_instance.instance.id
+			rules {
+				ip = "192.168.0.0/24"
+				ports = [4567]
+				services = ["AMQPS"]
+			}
 		}
 		`)
 }
-
-// func testAccNotificationConfig_Update() string {
-// 	log.Printf("[DEBUG] resource_notification::testAccNotificationConfig_Update")
-// 	return fmt.Sprintf(`
-// 		resource "cloudamqp_instance" "instance_notification" {
-// 			name 				= "terraform-notification-test"
-// 			nodes 			= 1
-// 			plan  			= "bunny"
-// 			region 			= "amazon-web-services::eu-north-1"
-// 			rmq_version = "3.8.2"
-// 			tags 				= ["terraform"]
-// 			vpc_subnet = "192.168.0.1/24"
-// 		}
-
-// 		resource "cloudamqp_notification" "recipient_01" {
-// 			instance_id = cloudamqp_instance.instance_notification.id
-// 			type = "webhook"
-// 			value = "http://example.com/webhook"
-// 		}
-// 		`)
-// }

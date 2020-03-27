@@ -1,6 +1,8 @@
 ## CloudAMQP provider version
 version = 1.5.0
 
+TESTARGS = -short
+
 ## Check if a 64 bit kernel is running
 UNAME_M := $(shell uname -m)
 
@@ -84,11 +86,17 @@ install: build  ## Install cloudamqp provider into terraform plugin directory
 init: install  ## Run terraform init for local testing
 	terraform init
 
-testcase:
-	TF_ACC=1 TF_SCHEMA_PANIC_ON_ERROR=1 go test -count 1 -v ./cloudamqp -run TestAccAlarm_Basic
+fmtcheck:
+	@sh -c "'$(CURDIR)/scripts/gofmtcheck.sh'"
 
-testacc:
-	TF_ACC=1 TF_SCHEMA_PANIC_ON_ERROR=1 go test -count 1 -v ./cloudamqp -run TestAccInstance_Basics
+testcase:
+	TF_ACC=1 TF_SCHEMA_PANIC_ON_ERROR=1 go test -count 1 -v ./cloudamqp -run TestAccSecurityFirewall_Basic
+
+test:
+	TF_ACC=1 go test $(TEST) $(TESTARGS) -v ./cloudamqp -timeout=120s -parallel=4
+
+#testacc:
+#	TF_ACC=1 TF_SCHEMA_PANIC_ON_ERROR=1 go test -count 1 -v ./cloudamqp -run TestAccInstance_Basics
 
 .PHONY: help build install init
 .DEFAULT_GOAL := help
