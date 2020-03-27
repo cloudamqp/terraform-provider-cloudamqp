@@ -12,10 +12,10 @@ import (
 )
 
 func TestAccPlugin_Basic(t *testing.T) {
-	instance_name := "cloudamqp_instance.instance_plugin"
+	instance_name := "cloudamqp_instance.instance"
 	resource_name := "cloudamqp_plugin.mqtt_plugin"
 
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckPluginDisable(instance_name, resource_name),
@@ -62,10 +62,8 @@ func testAccCheckPluginEnabled(instance_name, resource_name string) resource.Tes
 		}
 		instance_id, _ := strconv.Atoi(rs.Primary.ID)
 
-		log.Printf("[DEBUG] resource_plugin::restAccCheckPluginEnabled instance_id: %v, plugin_name: %v", instance_id, plugin_name)
 		api := testAccProvider.Meta().(*api.API)
 		data, err := api.ReadPlugin(instance_id, plugin_name)
-		log.Printf("[DEBUG] resource_plugin::testAccCheckPluginEnabled data: %v", data)
 		if err != nil {
 			return fmt.Errorf("Error fetching item with resource %s. %s", resource_name, err)
 		}
@@ -113,7 +111,7 @@ func testAccCheckPluginDisable(instance_name, resource_name string) resource.Tes
 func testAccPluginConfig_Basic() string {
 	log.Printf("[DEBUG] resource_plugins::testAccPluginConfig_Basic")
 	return fmt.Sprintf(`
-		resource "cloudamqp_instance" "instance_plugin" {
+		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-plugin-test"
 			nodes 			= 1
 			plan  			= "bunny"
@@ -124,7 +122,7 @@ func testAccPluginConfig_Basic() string {
 		}
 
 		resource "cloudamqp_plugin" "mqtt_plugin" {
-			instance_id = cloudamqp_instance.instance_plugin.id
+			instance_id = cloudamqp_instance.instance.id
 			name = "rabbitmq_web_mqtt"
 			enabled = true
 		}
@@ -134,7 +132,7 @@ func testAccPluginConfig_Basic() string {
 func testAccPluginConfig_Update() string {
 	log.Printf("[DEBUG] resource_notification::testAccNotificationConfig_Update")
 	return fmt.Sprintf(`
-		resource "cloudamqp_instance" "instance_plugin" {
+		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-plugin-test"
 			nodes 			= 1
 			plan  			= "bunny"
@@ -145,7 +143,7 @@ func testAccPluginConfig_Update() string {
 		}
 
 		resource "cloudamqp_plugin" "mqtt_plugin" {
-			instance_id = cloudamqp_instance.instance_plugin.id
+			instance_id = cloudamqp_instance.instance.id
 			name = "rabbitmq_web_mqtt"
 			enabled = false
 		}
