@@ -2,7 +2,6 @@ package cloudamqp
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 
 	"github.com/84codes/go-api/api"
@@ -23,7 +22,7 @@ func dataSourceNotification() *schema.Resource {
 			},
 			"recipient_id": {
 				Type:        schema.TypeInt,
-				Required:    true,
+				Optional:    true,
 				Description: "Recipient identifier",
 			},
 			"type": {
@@ -38,7 +37,7 @@ func dataSourceNotification() *schema.Resource {
 			},
 			"name": {
 				Type:        schema.TypeString,
-				Computed:    true,
+				Optional:    true,
 				Description: "Optional display name of the recipient",
 			},
 		},
@@ -46,10 +45,15 @@ func dataSourceNotification() *schema.Resource {
 }
 
 func dataSourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	recipient_id := strconv.Itoa(d.Get("recipient_id").(int))
-	data, err := api.ReadNotification(d.Get("instance_id").(int), recipient_id)
-	log.Printf("[DEBUG] cloudamqp::data_source::notification::read data: %v", data)
+	var data map[string]interface{}
+	var err error
+
+	// Multiple purpose read. To be used when using data source either by declaring recipient id or type.
+	if d.Get("recipient_id") != 0 {
+		data, err = dataSourceNotificationIdRead(d.Get("instance_id").(int), d.Get("recipient_id").(int), meta)
+	} else if d.Get("name") != "" {
+		data, err = dataSourceNotificationTypeRead(d.Get("instance_id").(int), d.Get("name").(string), meta)
+	}
 
 	if err != nil {
 		return err
@@ -61,4 +65,26 @@ func dataSourceNotificationRead(d *schema.ResourceData, meta interface{}) error 
 		}
 	}
 	return nil
+}
+
+func dataSourceNotificationIdRead(instance_id int, alarm_id int, meta interface{}) (map[string]interface{}, error) {
+	api := meta.(*api.API)
+	id := strconv.Itoa(alarm_id)
+	recipient, err := api.ReadNotification(instance_id, id)
+	return recipient, err
+}
+
+func dataSourceNotificationTypeRead(instance_id int, name string, meta interface{}) (map[string]interface{}, error) {
+	api := meta.(*api.API)
+	recipients, err := api.ReadNotifications(instance_id)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, recipient := range recipients {
+		if recipient["name"] == name {
+			return recipient, nil
+		}
+	}
+	return nil, nil
 }
