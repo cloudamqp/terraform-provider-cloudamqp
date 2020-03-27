@@ -22,12 +22,12 @@ func dataSourceAlarm() *schema.Resource {
 			},
 			"alarm_id": {
 				Type:        schema.TypeInt,
-				Required:    true,
+				Optional:    true,
 				Description: "Alarm identifier",
 			},
 			"type": {
 				Type:        schema.TypeString,
-				Computed:    true,
+				Optional:    true,
 				Description: "Type of the alarm",
 			},
 			"enabled": {
@@ -73,9 +73,15 @@ func dataSourceAlarm() *schema.Resource {
 }
 
 func dataSourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	alarm_id := strconv.Itoa(d.Get("alarm_id").(int))
-	data, err := api.ReadAlarm(d.Get("instance_id").(int), alarm_id)
+	var data map[string]interface{}
+	var err error
+
+	// Multiple purpose read. To be used when using data source either by declaring alarm id or type.
+	if d.Get("alarm_id") != 0 {
+		data, err = dataSourceAlarmIdRead(d.Get("instance_id").(int), d.Get("alarm_id").(int), meta)
+	} else if d.Get("type") != "" {
+		data, err = dataSourceAlarmTypeRead(d.Get("instance_id").(int), d.Get("type").(string), meta)
+	}
 
 	if err != nil {
 		return err
@@ -88,4 +94,26 @@ func dataSourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	return nil
+}
+
+func dataSourceAlarmIdRead(instance_id int, alarm_id int, meta interface{}) (map[string]interface{}, error) {
+	api := meta.(*api.API)
+	id := strconv.Itoa(alarm_id)
+	alarm, err := api.ReadAlarm(instance_id, id)
+	return alarm, err
+}
+
+func dataSourceAlarmTypeRead(instance_id int, alarm_type string, meta interface{}) (map[string]interface{}, error) {
+	api := meta.(*api.API)
+	alarms, err := api.ReadAlarms(instance_id)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, alarm := range alarms {
+		if alarm["type"] == alarm_type {
+			return alarm, nil
+		}
+	}
+	return nil, nil
 }
