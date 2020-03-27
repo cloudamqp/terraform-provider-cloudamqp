@@ -1,8 +1,6 @@
 package cloudamqp
 
 import (
-	"log"
-
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
@@ -43,18 +41,33 @@ func dataSourceVpcInfo() *schema.Resource {
 
 func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	log.Printf("[DEBUG] cloudamqp::data_source::vpc_info::read instance id: %v", d.Get("instance_id"))
 	data, err := api.ReadVpcInfo(d.Get("instance_id").(int))
-	log.Printf("[DEBUG] cloudamqp::data_source::vpc_info::read data: %v", data)
 
 	if err != nil {
 		return err
 	}
+
 	d.SetId(data["id"].(string))
-	d.Set("name", data["name"])
-	d.Set("vpc_subnet", data["subnet"])
-	d.Set("owner_id", data["owner_id"])
-	sg := data["security_group"].(map[string]interface{})
-	d.Set("security_group_id", sg["id"])
+	for k, v := range data {
+		if validateVpcInfoSchemaAttribute(k) {
+			if k == "security_group_id" {
+				sg := data[k].(map[string]interface{})
+				d.Set(k, sg["id"])
+			} else {
+				d.Set(k, v)
+			}
+		}
+	}
 	return nil
+}
+
+func validateVpcInfoSchemaAttribute(key string) bool {
+	switch key {
+	case "name",
+		"vpc_subnet",
+		"owner_id",
+		"security_group_id":
+		return true
+	}
+	return false
 }
