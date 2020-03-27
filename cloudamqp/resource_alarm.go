@@ -170,6 +170,8 @@ func validateAlarmType() schema.SchemaValidateFunc {
 		"consumer",
 		"netsplit",
 		"ssh",
+		"notice",
+		"server_unreachable",
 	}, true)
 }
 

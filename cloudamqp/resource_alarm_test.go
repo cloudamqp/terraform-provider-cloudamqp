@@ -13,10 +13,10 @@ import (
 )
 
 func TestAccAlarm_Basic(t *testing.T) {
-	instance_name := "cloudamqp_instance.instance_alarm"
+	instance_name := "cloudamqp_instance.instance"
 	resource_name := "cloudamqp_alarm.connection_01"
 
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckAlarmDestroy(instance_name, resource_name),
@@ -36,8 +36,16 @@ func TestAccAlarm_Basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAlarmExist(instance_name, resource_name),
 					resource.TestCheckResourceAttr(resource_name, "type", "connection"),
+					resource.TestCheckResourceAttr(resource_name, "enabled", "true"),
 					resource.TestCheckResourceAttr(resource_name, "value_threshold", "25"),
 					resource.TestCheckResourceAttr(resource_name, "time_threshold", "120"),
+				),
+			},
+			{
+				Config: testAccAlarmConfig_Disable(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckAlarmExist(instance_name, resource_name),
+					resource.TestCheckResourceAttr(resource_name, "enabled", "false"),
 				),
 			},
 		},
@@ -66,8 +74,7 @@ func testAccCheckAlarmExist(instance_name, resource_name string) resource.TestCh
 		instance_id, _ := strconv.Atoi(rs.Primary.ID)
 
 		api := testAccProvider.Meta().(*api.API)
-		data, err := api.ReadAlarm(instance_id, id)
-		log.Printf("[DEBUG] resource_alarm::testAccCheckAlarmExist data: %v", data)
+		_, err := api.ReadAlarm(instance_id, id)
 		if err != nil {
 			return fmt.Errorf("Error fetching item with resource %s. %s", resource_name, err)
 		}
@@ -111,9 +118,8 @@ func testAccCheckAlarmDestroy(instance_name, resource_name string) resource.Test
 }
 
 func testAccAlarmConfig_Basic() string {
-	log.Printf("[DEBUG] resource_alarm::testAccAlarmConfig_Basic")
 	return fmt.Sprintf(`
-		resource "cloudamqp_instance" "instance_alarm" {
+		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-alarm-test"
 			nodes 			= 1
 			plan  			= "bunny"
@@ -122,21 +128,25 @@ func testAccAlarmConfig_Basic() string {
 			tags 				= ["terraform"]
 		}
 
+		data "cloudamqp_notification" "default_recipient" {
+			instance_id = cloudamqp_instance.instance.id
+			name 				= "Default"
+		}
+
 		resource "cloudamqp_alarm" "connection_01" {
-			instance_id 			= cloudamqp_instance.instance_alarm.id
+			instance_id 			= cloudamqp_instance.instance.id
 			type 							= "connection"
 			enabled						=  true
 			value_threshold 	= 0
 			time_threshold 		= 60
-			recipients = []
+			recipients = [data.cloudamqp_notification.default_recipient.id]
 		}
 		`)
 }
 
 func testAccAlarmConfig_Update() string {
-	log.Printf("[DEBUG] resource_alarm::testAccAlarmConfig_Update")
 	return fmt.Sprintf(`
-		resource "cloudamqp_instance" "instance_alarm" {
+		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-alarm-test"
 			nodes 			= 1
 			plan  			= "bunny"
@@ -145,13 +155,45 @@ func testAccAlarmConfig_Update() string {
 			tags 				= ["terraform"]
 		}
 
+		data "cloudamqp_notification" "default_recipient" {
+			instance_id = cloudamqp_instance.instance.id
+			name 				= "Default"
+		}
+
 		resource "cloudamqp_alarm" "connection_01" {
-			instance_id 			= cloudamqp_instance.instance_alarm.id
+			instance_id 			= cloudamqp_instance.instance.id
 			type 							= "connection"
 			enabled 					= true
 			value_threshold 	= 25
 			time_threshold 		= 120
-			recipients = []
+			recipients = [data.cloudamqp_notification.default_recipient.id]
+		}
+		`)
+}
+
+func testAccAlarmConfig_Disable() string {
+	return fmt.Sprintf(`
+		resource "cloudamqp_instance" "instance" {
+			name 				= "terraform-alarm-test"
+			nodes 			= 1
+			plan  			= "bunny"
+			region 			= "amazon-web-services::eu-north-1"
+			rmq_version = "3.8.2"
+			tags 				= ["terraform"]
+		}
+
+		data "cloudamqp_notification" "default_recipient" {
+			instance_id = cloudamqp_instance.instance.id
+			name 				= "Default"
+		}
+
+		resource "cloudamqp_alarm" "connection_01" {
+			instance_id 			= cloudamqp_instance.instance.id
+			type 							= "connection"
+			enabled 					= false
+			value_threshold 	= 25
+			time_threshold 		= 120
+			recipients = [data.cloudamqp_notification.default_recipient.id]
 		}
 		`)
 }
