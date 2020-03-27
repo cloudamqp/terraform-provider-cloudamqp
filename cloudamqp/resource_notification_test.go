@@ -12,10 +12,10 @@ import (
 )
 
 func TestAccNotificiaiton_Basic(t *testing.T) {
-	instance_name := "cloudamqp_instance.instance_notification"
+	instance_name := "cloudamqp_instance.instance"
 	resource_name := "cloudamqp_notification.recipient_01"
 
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckNotificationDestroy(instance_name, resource_name),
@@ -28,14 +28,14 @@ func TestAccNotificiaiton_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(resource_name, "value", "test@example.com"),
 				),
 			},
-			// {
-			// 	Config: testAccNotificationConfig_Update(),
-			// 	Check: resource.ComposeTestCheckFunc(
-			// 		testAccCheckNotificationExists(instance_name, resource_name),
-			// 		resource.TestCheckResourceAttr(resource_name, "type", "webhook"),
-			// 		resource.TestCheckResourceAttr(resource_name, "value", "http://example.com/webhook"),
-			// 	),
-			// },
+			{
+				Config: testAccNotificationConfig_Update(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckNotificationExists(instance_name, resource_name),
+					resource.TestCheckResourceAttr(resource_name, "type", "email"),
+					resource.TestCheckResourceAttr(resource_name, "value", "notification@example.com"),
+				),
+			},
 		},
 	})
 }
@@ -63,8 +63,7 @@ func testAccCheckNotificationExists(instance_name, resource_name string) resourc
 		instance_id, _ := strconv.Atoi(rs.Primary.ID)
 
 		api := testAccProvider.Meta().(*api.API)
-		data, err := api.ReadNotification(instance_id, recipient_id)
-		log.Printf("[DEBUG] resource_notification::testAccCheckNotificationExists data: %v", data)
+		_, err := api.ReadNotification(instance_id, recipient_id)
 		if err != nil {
 			return fmt.Errorf("Error fetching item with resource %s. %s", resource_name, err)
 		}
@@ -105,9 +104,8 @@ func testAccCheckNotificationDestroy(instance_name, resource_name string) resour
 }
 
 func testAccNotificationConfig_Basic() string {
-	log.Printf("[DEBUG] resource_notification::testAccNotificationConfig_Basic")
 	return fmt.Sprintf(`
-		resource "cloudamqp_instance" "instance_notification" {
+		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-notification-test"
 			nodes 			= 1
 			plan  			= "bunny"
@@ -117,31 +115,30 @@ func testAccNotificationConfig_Basic() string {
 		}
 
 		resource "cloudamqp_notification" "recipient_01" {
-			instance_id = cloudamqp_instance.instance_notification.id
+			instance_id = cloudamqp_instance.instance.id
 			type = "email"
 			value = "test@example.com"
-			name = "Default"
+			name = "test"
 		}
 		`)
 }
 
-// func testAccNotificationConfig_Update() string {
-// 	log.Printf("[DEBUG] resource_notification::testAccNotificationConfig_Update")
-// 	return fmt.Sprintf(`
-// 		resource "cloudamqp_instance" "instance_notification" {
-// 			name 				= "terraform-notification-test"
-// 			nodes 			= 1
-// 			plan  			= "bunny"
-// 			region 			= "amazon-web-services::eu-north-1"
-// 			rmq_version = "3.8.2"
-// 			tags 				= ["terraform"]
-// 		}
+func testAccNotificationConfig_Update() string {
+	return fmt.Sprintf(`
+		resource "cloudamqp_instance" "instance" {
+			name 				= "terraform-notification-test"
+			nodes 			= 1
+			plan  			= "bunny"
+			region 			= "amazon-web-services::eu-north-1"
+			rmq_version = "3.8.2"
+			tags 				= ["terraform"]
+		}
 
-// 		resource "cloudamqp_notification" "recipient_01" {
-// 			instance_id = cloudamqp_instance.instance_notification.id
-// 			type = "webhook"
-// 			value = "http://example.com/webhook"
-// 			name = "webhook"
-// 		}
-// 		`)
-// }
+		resource "cloudamqp_notification" "recipient_01" {
+			instance_id = cloudamqp_instance.instance.id
+			type = "email"
+			value = "notification@example.com"
+			name = "test"
+		}
+		`)
+}
