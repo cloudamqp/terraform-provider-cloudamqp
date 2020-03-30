@@ -100,6 +100,15 @@ func testAccSecurityFirewallConfig_Basic() string {
 			rmq_version = "3.8.2"
 			tags 				= ["terraform"]
 		}
+
+		resource "cloudamqp_instance" "security_firewall" {
+			instance_id = cloudamqp_instance.instance.id
+			rules {
+				ip = "0.0.0.0/24"
+				ports = []
+				services = ["STOMP", "AMQP", "MQTTS", "STOMPS", "MQTT", "AMQPS"]
+			}
+		}
 		`)
 }
 
