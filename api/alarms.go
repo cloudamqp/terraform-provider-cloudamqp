@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"time"
 )
 
 func (api *API) CreateAlarm(instance_id int, params map[string]interface{}) (map[string]interface{}, error) {
@@ -90,11 +91,33 @@ func (api *API) DeleteAlarm(instance_id int, params map[string]interface{}) erro
 	failed := make(map[string]interface{})
 	log.Printf("[DEBUG] go-api::alarm::delete instance id: %v, params: %v", instance_id, params)
 	path := fmt.Sprintf("/api/instances/%v/alarms/%v", instance_id, params["id"])
-	response, err := api.sling.New().Delete(path).BodyJSON(params).Receive(nil, &failed)
+	response, _ := api.sling.New().Delete(path).BodyJSON(params).Receive(nil, &failed)
 
 	if response.StatusCode != 204 {
 		return errors.New(fmt.Sprintf("Alarm::DeleteAlarm failed, status: %v, message: %s", response.StatusCode, failed))
 	}
 
-	return err
+	//return err
+	return api.waitUntilAlarmDeletion(instance_id, params["id"].(string))
+}
+
+func (api *API) waitUntilAlarmDeletion(instance_id int, id string) error {
+	log.Printf("[DEBUG] go-api::alarm::waitUntilAlarmDeletion waiting")
+	data := make(map[string]interface{})
+	failed := make(map[string]interface{})
+	for {
+		path := fmt.Sprintf("/api/instances/%v/alarms/%v", instance_id, id)
+		response, err := api.sling.New().Path(path).Receive(&data, &failed)
+
+		if err != nil {
+			log.Printf("[DEBUG] go-api::alarm::waitUntilAlarmDeletion error: %v", err)
+			return err
+		}
+		if response.StatusCode == 404 {
+			log.Print("[DEBUG] go-api::alarm::waitUntilAlarmDeletion deleted")
+			return nil
+		}
+
+		time.Sleep(10 * time.Second)
+	}
 }
