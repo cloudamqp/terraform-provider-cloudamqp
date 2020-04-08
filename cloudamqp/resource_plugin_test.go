@@ -41,7 +41,7 @@ func TestAccPlugin_Basic(t *testing.T) {
 }
 
 func testAccCheckPluginEnabled(instance_name, resource_name string) resource.TestCheckFunc {
-	log.Printf("[DEBUG] resource_plugin::testAccCheckPluginEnabled resource: %s", resource_name)
+	log.Printf("[DEBUG] resource::plugin::testAccCheckPluginEnabled resource: %s", resource_name)
 
 	return func(state *terraform.State) error {
 		rs, ok := state.RootModule().Resources[resource_name]
@@ -76,7 +76,7 @@ func testAccCheckPluginEnabled(instance_name, resource_name string) resource.Tes
 
 func testAccCheckPluginDisable(instance_name, resource_name string) resource.TestCheckFunc {
 	return func(state *terraform.State) error {
-		log.Printf("[DEBUG] resource_plugins::testAccCheckPluginDisable")
+		log.Printf("[DEBUG] resource::plugins::testAccCheckPluginDisable")
 		api := testAccProvider.Meta().(*api.API)
 
 		rs, ok := state.RootModule().Resources[resource_name]
@@ -109,7 +109,6 @@ func testAccCheckPluginDisable(instance_name, resource_name string) resource.Tes
 }
 
 func testAccPluginConfig_Basic() string {
-	log.Printf("[DEBUG] resource_plugins::testAccPluginConfig_Basic")
 	return fmt.Sprintf(`
 		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-plugin-test"
@@ -130,7 +129,6 @@ func testAccPluginConfig_Basic() string {
 }
 
 func testAccPluginConfig_Update() string {
-	log.Printf("[DEBUG] resource_notification::testAccNotificationConfig_Update")
 	return fmt.Sprintf(`
 		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-plugin-test"
