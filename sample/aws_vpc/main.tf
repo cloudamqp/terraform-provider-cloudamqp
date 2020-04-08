@@ -2,7 +2,7 @@
 // CLOUDAMQP
 // =========
 provider "cloudamqp" {
-  apikey  = ""
+  apikey  = "<apikey>"
 }
 
 // === Instance resource ===
