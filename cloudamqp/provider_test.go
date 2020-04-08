@@ -37,3 +37,14 @@ func testAccPreCheck(t *testing.T) {
 		t.Fatal("baseurl must be set for acceptence test")
 	}
 }
+
+func testAccPreCheckVpc(t *testing.T) {
+	testAccPreCheck(t)
+	if v := os.Getenv("AWS_KEY"); v == "" {
+		t.Fatal("AWS_KEY must be set for VPC acceptence test.")
+	}
+
+	if v := os.Getenv("AWS_SECRET"); v == "" {
+		t.Fatal("AWS_SECRET must be set for VPC acceptence test")
+	}
+}
