@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/84codes/go-api/api"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -86,6 +87,12 @@ func resourceInstance() *schema.Resource {
 				Description: "Flag describing if the resource is ready",
 			},
 		},
+		CustomizeDiff: customdiff.All(
+			customdiff.ForceNewIfChange("plan", func(old, new, meta interface{}) bool {
+				// Recreate instance if changing plan type (from dedicated to shared or vice versa)
+				return !(getPlanType(old.(string)) == getPlanType(new.(string)))
+			}),
+		),
 	}
 }
 
@@ -195,4 +202,15 @@ func validateInstanceSchemaAttribute(key string) bool {
 		return true
 	}
 	return false
+}
+
+func getPlanType(plan string) string {
+	switch plan {
+	case "lemur", "tiger":
+		return "shared"
+	case "bunny", "rabbit", "panda", "ape", "hippo", "lion":
+		return "dedicated"
+	default:
+		return "unknown" // This shouldn't happen. However we shouldn't break if a new instance type gets implemented
+	}
 }
