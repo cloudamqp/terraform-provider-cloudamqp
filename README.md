@@ -90,6 +90,13 @@ To enable Terraform debug logging.
 
 Resource documentation can be found [here](https://docs.cloudamqp.com/cloudamqp_terraform.html)
 
+### Instance ###
+
+**IMPORTANT - PLAN CHANGES BETWEEN SHARED AND DEDICATED**
+`
+It’s possible to change between shared and dedicated plans (or vice versa). This will however force a destruction of the old instance, before creating a new one. All data will be lost and a new hostname will be created with corresponding DNS record.
+`
+
 ## Import
 
 Import existing infrastructure into state and bring the resource under Terraform management. Information about the resource will be added to the terraform.state file. Then add manually the given information to the .tf file. Once this is done, run terraform plan to see that the resource is under Terraform management. From here it's possible to add more resources such as alarm.
