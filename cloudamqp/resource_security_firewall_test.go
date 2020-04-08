@@ -12,6 +12,10 @@ import (
 )
 
 func TestAccSecurityFirewall_Basic(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping TestAccSecurityFirewall_Basic, since test is in short mode")
+	}
+
 	instance_name := "cloudamqp_instance.instance"
 	resource_name := "cloudamqp_security_firewall.firewall"
 
