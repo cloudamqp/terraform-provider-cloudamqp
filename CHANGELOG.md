@@ -1,5 +1,18 @@
 # Changelog for CloudAMQP Provider
 
+## 1.6.0 (Apr 27, 2020)
+
+FEATURES:
+
+* New resource: resource_integration_log - Log integration to third party service
+* New resource: resource_integration_metric - Metric integration to third party service
+* Acceptence test for majority of data sources and resources
+
+IMPROVEMENTS:
+
+* Instance: Merged contribution to handle plan changes between shared and dedicated
+* VPC Peering: Peering request status information
+
 ## 1.5.0 (Mar 10, 2020)
 
 FEATURES:
