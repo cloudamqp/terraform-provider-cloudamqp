@@ -34,34 +34,34 @@ func resourceIntegrationLog() *schema.Resource {
 			"url": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Papertrail - The URL to push the logs to.",
+				Description: "The URL to push the logs to. (Papertrail)",
 			},
 			"host_port": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Splunk - Destination to send the logs",
+				Description: "Destination to send the logs. (Splunk)",
 			},
 			"token": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Loggly/Logentries/Splunk - The token used for authentication",
+				Description: "The token used for authentication. (Loggly, Logentries, Splunk)",
 			},
 			"region": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "CloudWatch - AWS region used for Cloudwatch",
+				Description: "The region hosting integration service. (Cloudwatch)",
 			},
 			"access_key_id": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
-				Description: "CloudWatch - AWS access key id",
+				Description: "AWS access key identifier. (Cloudwatch)",
 			},
 			"secret_access_key": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
-				Description: "CloudWatch - AWS secret access key",
+				Description: "AWS secret access key. (Cloudwatch)",
 			},
 		},
 	}

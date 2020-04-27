@@ -32,48 +32,48 @@ func resourceIntegrationMetric() *schema.Resource {
 			"region": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "AWS region for Cloudwatch and [US/EU] for Data dog/New relic",
+				Description: "AWS region for Cloudwatch and [US/EU] for Data dog/New relic. (Cloudwatch, Data Dog, New Relic)",
 			},
 			"access_key_id": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "CloudWatch/CloudWatch v2 - aws access key id",
+				Description: "AWS access key identifier. (Cloudwatch)",
 			},
 			"secret_access_key": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
-				Description: "CloudWatch/CloudWatch v2 - aws secret key",
-			},
-			"tags": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "All - (optional) tags. E.g. env=prod,region=europe",
-			},
-			"queue_whitelist": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "All - (optional) whitelist using regular expression",
-			},
-			"vhost_whitelist": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "All - (optional) whitelist using regular expression",
+				Description: "AWS secret key. (Cloudwatch)",
 			},
 			"api_key": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Librato/New relic v2 - The API key for the integration services",
+				Description: "The API key for the integration service. (Librato)",
 			},
 			"email": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Librato - The email address",
+				Description: "The email address registred for the integration service. (Librato)",
 			},
 			"license_key": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "New relic - The license key",
+				Description: "The license key registred for the integration service. (New Relic)",
+			},
+			"tags": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "(optional) tags. E.g. env=prod,region=europe",
+			},
+			"queue_whitelist": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "(optional) whitelist using regular expression",
+			},
+			"vhost_whitelist": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "(optional) whitelist using regular expression",
 			},
 		},
 	}
