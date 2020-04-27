@@ -2,7 +2,8 @@ package cloudamqp
 
 import (
 	"errors"
-	"log"
+	"strconv"
+	"strings"
 
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -13,6 +14,7 @@ func resourceIntegrationLog() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceIntegrationLogCreate,
 		Read:   resourceIntegrationLogRead,
+		Update: resourceIntegrationLogUpdate,
 		Delete: resourceIntegrationLogDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
@@ -21,39 +23,45 @@ func resourceIntegrationLog() *schema.Resource {
 			"instance_id": {
 				Type:        schema.TypeInt,
 				Required:    true,
-				Description: "Instance identifier",
+				Description: "Instance identifier used to make proxy calls",
 			},
-			"type": {
+			"name": {
 				Type:         schema.TypeString,
 				Required:     true,
-				Description:  "The type of log integration",
-				ValidateFunc: validateIntegrationLogType(),
+				Description:  "The name of log integration",
+				ValidateFunc: validateIntegrationLogName(),
 			},
-			"address": {
+			"url": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Papertrail/Splunk - address",
+				Description: "Papertrail - The URL to push the logs to.",
+			},
+			"host_port": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Splunk - Destination to send the logs",
 			},
 			"token": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Loggly/Logentries/Splunk - token",
+				Description: "Loggly/Logentries/Splunk - The token used for authentication",
 			},
 			"region": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "CloudWatch - region",
+				Description: "CloudWatch - AWS region used for Cloudwatch",
 			},
-			"aws_key": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "CloudWatch - aws access key id",
-			},
-			"aws_secret": {
+			"access_key_id": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
-				Description: "CloudWatch - aws secret key",
+				Description: "CloudWatch - AWS access key id",
+			},
+			"secret_access_key": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Sensitive:   true,
+				Description: "CloudWatch - AWS secret access key",
 			},
 		},
 	}
@@ -61,23 +69,21 @@ func resourceIntegrationLog() *schema.Resource {
 
 func resourceIntegrationLogCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"address", "token", "region", "aws_key", "aws_secrect"}
+	keys := integrationLogKeys(d.Get("name").(string))
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
 			params[k] = v
 		}
 	}
-	log.Printf("[DEBUG] cloudamqp::resource::log_integration::create params: %v", params)
 
-	data, err := api.CreateIntegration(d.Get("instance_id").(int), "logs", d.Get("type").(string), params)
+	data, err := api.CreateIntegration(d.Get("instance_id").(int), "logs", d.Get("name").(string), params)
 
 	if err != nil {
 		return err
 	}
 	if data["id"] != nil {
 		d.SetId(data["id"].(string))
-		log.Printf("[DEBUG] cloudamqp::resource::log_integration::create id set: %v", d.Id())
 	}
 
 	for k, v := range data {
@@ -89,14 +95,16 @@ func resourceIntegrationLogCreate(d *schema.ResourceData, meta interface{}) erro
 }
 
 func resourceIntegrationLogRead(d *schema.ResourceData, meta interface{}) error {
-	if d.Get("instance_id").(int) == 0 {
-		return errors.New("Missing instance identifier: {instance_id}")
+	if strings.Contains(d.Id(), ",") {
+		s := strings.Split(d.Id(), ",")
+		d.SetId(s[0])
+		instance_id, _ := strconv.Atoi(s[1])
+		d.Set("instance_id", instance_id)
 	}
-	if len(d.Get("type").(string)) == 0 {
-		return errors.New("Missing type representation: {type}")
+	if d.Get("instance_id").(int) == 0 {
+		return errors.New("Missing instance identifier: {resource_id},{instance_id}")
 	}
 
-	log.Printf("[DEBUG] cloudamqp::resource::log_integration::read instance id: %v, id: %v", d.Get("instance_id"), d.Id())
 	api := meta.(*api.API)
 	data, err := api.ReadIntegration(d.Get("instance_id").(int), "logs", d.Id())
 
@@ -112,33 +120,64 @@ func resourceIntegrationLogRead(d *schema.ResourceData, meta interface{}) error 
 	return nil
 }
 
+func resourceIntegrationLogUpdate(d *schema.ResourceData, meta interface{}) error {
+	keys := integrationLogKeys(d.Get("name").(string))
+	params := make(map[string]interface{})
+	for _, k := range keys {
+		if v := d.Get(k); v != nil {
+			params[k] = v
+		}
+	}
+
+	api := meta.(*api.API)
+	err := api.UpdateIntegration(d.Get("instance_id").(int), "logs", d.Id(), params)
+	return err
+}
+
 func resourceIntegrationLogDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	params := make(map[string]interface{})
 	params["id"] = d.Id()
-	log.Printf("[DEBUG] cloudamqp::resource::log_integration::delete instance_id: %v, type: %s, id: %s", d.Get("instance_id"), d.Get("type"), d.Id())
 	return api.DeleteIntegration(d.Get("instance_id").(int), "logs", d.Id())
 }
 
-func validateIntegrationLogType() schema.SchemaValidateFunc {
+func validateIntegrationLogName() schema.SchemaValidateFunc {
 	return validation.StringInSlice([]string{
 		"papertrail",
 		"loggly",
 		"logentries",
 		"splunk",
 		"cloudwatchlog",
-		"stackdriver",
 	}, true)
 }
 
 func validateIntegrationLogsSchemaAttribute(key string) bool {
 	switch key {
-	case "address",
+	case "type",
+		"url",
+		"host_port",
 		"token",
 		"region",
-		"aws_key",
-		"aws_secret":
+		"access_key_id",
+		"secret_access_key":
 		return true
 	}
 	return false
+}
+
+func integrationLogKeys(intName string) []string {
+	switch intName {
+	case "papertrail":
+		return []string{"url"}
+	case "loggly":
+		return []string{"token"}
+	case "logentries":
+		return []string{"token"}
+	case "splunk":
+		return []string{"host_port", "token"}
+	case "cloudwatchlog":
+		return []string{"region", "access_key_id", "secret_access_key"}
+	default:
+		return []string{"url", "host_port", "token", "region", "access_key_id", "secret_access_key"}
+	}
 }
