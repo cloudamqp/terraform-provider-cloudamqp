@@ -2,14 +2,14 @@
 // CLOUDAMQP
 // =========
 provider "cloudamqp" {
-  apikey  = "<apikey>"
+  apikey  = "<cloudamqp_apikey>"
 }
 
 // === Instance resource ===
 resource "cloudamqp_instance" "cloudamqp_instance" {
   name   = "terraform-vpc-accepter-test"
   plan   = "bunny"
-  region = "amazon-web-services::eu-north-1"
+  region = "amazon-web-services::us-east-1"
   nodes = 1
   tags   = ["test"]
   rmq_version = "3.7.21"
@@ -26,7 +26,7 @@ data "cloudamqp_vpc_info" "vpc_info" {
 // AWS
 // ===
 provider "aws" {
-  region = "eu-north-1"
+  region = "us-east-1"
   access_key = "<aws_access_key>"
   secret_key = "<aws_secret_key>"
 }

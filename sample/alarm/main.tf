@@ -1,5 +1,5 @@
 provider "cloudamqp" {
-  apikey = "<apikey>"
+  apikey = "<cloudamqp_apikey>"
 }
 
 // Instance
