@@ -35,6 +35,7 @@ func Provider() *schema.Provider {
 			"cloudamqp_plugins_community": dataSourcePluginsCommunity(),
 			"cloudamqp_notification":      dataSourceNotification(),
 			"cloudamqp_vpc_info":          dataSourceVpcInfo(),
+			"cloudamqp_nodes":             dataSourceNodes(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"cloudamqp_instance":           resourceInstance(),

@@ -1,6 +1,7 @@
 ## CloudAMQP provider version
-version = 1.5.0
+version = 1.6.0
 
+## Test arguments
 TESTARGS = -short
 
 ## Check if a 64 bit kernel is running
@@ -90,7 +91,7 @@ fmtcheck:
 	@sh -c "'$(CURDIR)/scripts/gofmtcheck.sh'"
 
 testcase:
-	TF_ACC=1 TF_SCHEMA_PANIC_ON_ERROR=1 go test -count 1 -v ./cloudamqp -run TestAccSecurityFirewall_Basic
+	TF_ACC=1 TF_SCHEMA_PANIC_ON_ERROR=1 go test -count 1 -v ./cloudamqp -run TestAccNodesDataSource_Basic
 
 test:
 	TF_ACC=1 go test $(TEST) $(TESTARGS) -v ./cloudamqp -timeout=120s -parallel=4
