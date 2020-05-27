@@ -5,9 +5,11 @@ description: |-
   Creates and manages recipients to receive alarm notifications.
 ---
 
-# cloudamqp_instance
+# cloudamqp_notification
 
-This resource allows you to create and manage recipients to receive alarm notifications. There will always be a default recipient created upon instance creation. This recipient will use team email and receive notifications from default alarms.
+This resource allows you to create and manage recipients to receive alarm notifications. There will always be a default recipient created upon instance creation. This recipient will use team email and receive notifications from default alarms. This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+
+Available for all subscription plans.
 
 ## Example Usage
 
