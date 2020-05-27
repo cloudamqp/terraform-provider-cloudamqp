@@ -2,12 +2,12 @@
 layout: "cloudamqp"
 page_title: "CloudAMQP: data source cloudamqp_instance"
 description: |-
-  Get information about the already created CloudAMQP instance
+  Get information about an already created CloudAMQP instance
 ---
 
 # cloudamqp_instance
 
-Use this data source to retrieve information about the CloudAMQP instance. Require to know the CloudAMQP instance identifier in order to retrieve the correct information.
+Use this data source to retrieve information about an already created CloudAMQP instance. Require to know the CloudAMQP instance identifier in order to retrieve the correct information.
 
 ## Eample Usage
 

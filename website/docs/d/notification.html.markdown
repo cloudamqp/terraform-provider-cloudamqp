@@ -2,19 +2,19 @@
 layout: "cloudamqp"
 page_title: "CloudAMQP: data source cloudamqp_notification"
 description: |-
-  Get information about the recipients for the CloudAMQP instance.
+  Get information on pre-defined or created recipients.
 ---
 
 # cloudamqp_notification
 
-Use this data source to retrieve information about the recipients created by CloudAMQP instance. Require to know the identifier of the corresponding `cloudamqp_instance`resource or data source. Then either `recipient_id` or `name` to retrieve the recipient.
+Use this data source to retrieve information about a pre-defined or created recipients. The recipient will receive notifications of the mapped alarm is triggerd. Require to know the identifier of the corresponding `cloudamqp_instance`resource or data source. Then either `recipient_id` or `name` to retrieve the recipient.
 
 ## Eample Usage
 
 ```hcl
 data "cloudamqp_notification" "default_recipient" {
   instance_id = cloudamqp_instance.instance.id
-  name = "defualt"
+  name = "default"
 }
 ```
 

@@ -2,12 +2,12 @@
 layout: "cloudamqp"
 page_title: "CloudAMQP: data source cloudamqp_credentials"
 description: |-
-  Get credentials information, extracted from `cloudamqp_instance.url`
+  Get credentials information
 ---
 
-# cloudamqp_alarm
+# cloudamqp_credentials
 
-Use this data source to retrieve information about the credentials configured in Rabbit MQ. Require to know the identifier of the corresponding `cloudamqp_instance`resource or data source.
+Use this data source to retrieve information about the credentials of the configured user in Rabbit MQ. Extract the information found in `cloudamqp_instance.instance.url`. Require to know the identifier of the corresponding `cloudamqp_instance`resource or data source.
 
 ## Eample Usage
 
@@ -23,5 +23,5 @@ data "cloudamqp_credentials" "credentials" {
 
 ## Attribute reference
 
-* `username`    - (Computed/Sensitive) The username configured in Rabbit MQ.
+* `username`    - (Computed/Sensitive) The username for the configured user in Rabbit MQ.
 * `password`    - (Computed/Sensitive) The password used by the `username`.

@@ -5,7 +5,7 @@ description: |-
   Get information installed and available plugins.
 ---
 
-# cloudamqp_notification
+# cloudamqp_plugins
 
 Use this data source to retrieve information about installed and available plugins for the CloudAMQP instance. Require to know the identifier of the corresponding `cloudamqp_instance`resource or data source.
 
@@ -23,7 +23,8 @@ data "cloudamqp_plugins" "plugins" {
 
 ## Attribute reference
 
-* `plugins`       - (Computed) Elem array with plugins information.
+* `plugins` - (Computed) An array of plugins. Each `plugin` block consists of the fields documented below.
+
   * `name`        - (Computed) The type of the recipient.
   * `version`     - (Computed) Rabbit MQ version that the plugins is shipped with.
   * `description` - (Computed) Description of what the plugin does.

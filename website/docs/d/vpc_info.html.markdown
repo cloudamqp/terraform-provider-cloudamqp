@@ -5,9 +5,11 @@ description: |-
   Get information about VPC hosted in AWS.
 ---
 
-# cloudamqp_notification
+# cloudamqp_vpc_info
 
-Use this data source to retrieve information about VPC hosted in AWS for a CloudAMQP instance. Require to know the identifier of the corresponding `cloudamqp_instance`resource or data source.
+Use this data source to retrieve information about VPC for a CloudAMQP instance. Require to know the identifier of the corresponding `cloudamqp_instance`resource or data source.
+
+Only available for CloudAMQP instances hosted in AWS.
 
 ## Eample Usage
 
