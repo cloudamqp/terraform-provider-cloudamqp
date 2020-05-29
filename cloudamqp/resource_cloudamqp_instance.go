@@ -86,6 +86,11 @@ func resourceInstance() *schema.Resource {
 				Computed:    true,
 				Description: "Flag describing if the resource is ready",
 			},
+			"dedicated": {
+				Type:        schema.TypeBool,
+				Computed:    true,
+				Description: "Is the instance hosted on a dedicated server",
+			},
 		},
 		CustomizeDiff: customdiff.All(
 			customdiff.ForceNewIfChange("plan", func(old, new, meta interface{}) bool {
@@ -127,6 +132,10 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {
 				d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
+			} else if k == "plan" {
+				d.Set(k, v)
+				dedicated := getPlanType(v.(string)) == "dedicated"
+				d.Set("dedicated", dedicated)
 			} else {
 				d.Set(k, v)
 			}
@@ -155,6 +164,10 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {
 				d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
+			} else if k == "plan" {
+				d.Set(k, v)
+				dedicated := getPlanType(v.(string)) == "dedicated"
+				d.Set("dedicated", dedicated)
 			} else {
 				d.Set(k, v)
 			}
@@ -179,7 +192,13 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 	log.Printf("[DEBUG] cloudamqp::resource::instance::update params: %v", params)
-	return api.UpdateInstance(d.Id(), params)
+	err := api.UpdateInstance(d.Id(), params)
+	if err != nil {
+		log.Printf("[ERROR] cloudmaqp::resource::instance::update - Failed to update instance: %v", err)
+		return err
+	}
+
+	return resourceRead(d, meta)
 }
 
 func resourceDelete(d *schema.ResourceData, meta interface{}) error {

@@ -44,6 +44,7 @@ func resourceIntegrationLog() *schema.Resource {
 			"token": {
 				Type:        schema.TypeString,
 				Optional:    true,
+				Sensitive:   true,
 				Description: "The token used for authentication. (Loggly, Logentries, Splunk)",
 			},
 			"region": {
@@ -158,7 +159,10 @@ func resourceIntegrationLogUpdate(d *schema.ResourceData, meta interface{}) erro
 
 	api := meta.(*api.API)
 	err := api.UpdateIntegration(d.Get("instance_id").(int), "logs", d.Id(), params)
-	return err
+	if err != nil {
+		return err
+	}
+	return resourceIntegrationLogRead(d, meta)
 }
 
 func resourceIntegrationLogDelete(d *schema.ResourceData, meta interface{}) error {

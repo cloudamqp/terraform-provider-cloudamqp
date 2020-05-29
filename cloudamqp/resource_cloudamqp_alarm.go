@@ -149,7 +149,12 @@ func resourceAlarmUpdate(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
-	return api.UpdateAlarm(d.Get("instance_id").(int), params)
+	err := api.UpdateAlarm(d.Get("instance_id").(int), params)
+	if err != nil {
+		return err
+	}
+
+	return resourceAlarmRead(d, meta)
 }
 
 func resourceAlarmDelete(d *schema.ResourceData, meta interface{}) error {

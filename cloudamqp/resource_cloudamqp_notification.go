@@ -115,7 +115,12 @@ func resourceNotificationUpdate(d *schema.ResourceData, meta interface{}) error 
 		}
 	}
 	log.Printf("[DEBUG] cloudamqp::resource::notification::update params: %v", params)
-	return api.UpdateNotification(d.Get("instance_id").(int), params)
+	err := api.UpdateNotification(d.Get("instance_id").(int), params)
+	if err != nil {
+		return err
+	}
+
+	return resourceNotificationRead(d, meta)
 }
 
 func resourceNotificationDelete(d *schema.ResourceData, meta interface{}) error {

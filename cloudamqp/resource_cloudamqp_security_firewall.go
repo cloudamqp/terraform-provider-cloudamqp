@@ -98,7 +98,10 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 	}
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::update instance id: %v, params: %v", d.Get("instance_id"), params)
 	err := api.UpdateFirewallSettings(d.Get("instance_id").(int), params)
-	return err
+	if err != nil {
+		return err
+	}
+	return resourceSecurityFirewallRead(d, meta)
 }
 
 func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) error {

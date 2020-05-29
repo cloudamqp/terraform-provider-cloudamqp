@@ -139,7 +139,10 @@ func resourceIntegrationMetricUpdate(d *schema.ResourceData, meta interface{}) e
 		}
 	}
 	err := api.UpdateIntegration(d.Get("instance_id").(int), "metrics", d.Id(), params)
-	return err
+	if err != nil {
+		return err
+	}
+	return resourceIntegrationMetricRead(d, meta)
 }
 
 func resourceIntegrationMetricDelete(d *schema.ResourceData, meta interface{}) error {

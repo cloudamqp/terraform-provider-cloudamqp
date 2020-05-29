@@ -102,7 +102,7 @@ func resourcePluginUpdate(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		log.Printf("[ERROR] cloudamqp::resource::plugin::update Failed to update pluign: %v", err)
 	}
-	return err
+	return resourcePluginRead(d, meta)
 }
 
 func resourcePluginDelete(d *schema.ResourceData, meta interface{}) error {
