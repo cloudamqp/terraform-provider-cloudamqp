@@ -2,7 +2,7 @@
 // CLOUDAMQP
 // =========
 provider "cloudamqp" {
-  apikey  = "<cloudamqp_apikey>"
+  apikey  = cloudamqp_customer_api_key
 }
 
 // === Instance resource ===
@@ -26,9 +26,9 @@ data "cloudamqp_vpc_info" "vpc_info" {
 // AWS
 // ===
 provider "aws" {
-  region = "us-east-1"
-  access_key = "<aws_access_key>"
-  secret_key = "<aws_secret_key>"
+  region = var.aws_region
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
 }
 
 // === AWS instance resource ===

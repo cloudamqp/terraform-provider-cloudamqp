@@ -1,5 +1,5 @@
 provider "cloudamqp" {
-  apikey = "<cloudamqp_apikey>"
+  apikey = var.cloudamqp_customer_api_key
 }
 
 resource "cloudamqp_instance" "instance" {
@@ -16,62 +16,62 @@ resource "cloudamqp_instance" "instance" {
 resource "cloudamqp_integration_log" "cloudwatchlog" {
   instance_id = cloudamqp_instance.instance.id
   name = "cloudwatchlog"
-  access_key_id = "<aws_access_key_id>"
-  secret_access_key = "<aws_secret_access_key>"
-  region = "us-east-1"
+  access_key_id = var.aws_access_key
+  secret_access_key = var.aws_secret_key
+  region = var.aws_region
 }
 
 resource "cloudamqp_integration_log" "logentries" {
   instance_id = cloudamqp_instance.instance.id
   name = "logentries"
-  token = "<token>"
+  token = var.logentries_token
 }
 
 resource "cloudamqp_integration_log" "loggly" {
   instance_id = cloudamqp_instance.instance.id
   name = "loggly"
-  token = "<token>"
+  token = var.loggly_token
 }
 
 resource "cloudamqp_integration_log" "papertrail" {
   instance_id = cloudamqp_instance.instance.id
   name = "papertrail"
-  url = "<url>"
+  url = var.papertrail_url
 }
 
 resource "cloudamqp_integration_log" "splunk" {
   instance_id = cloudamqp_instance.instance.id
   name = "splunk"
-  token = "<token>"
-  host_port = "<host_port>"
+  token = var.splunk_token
+  host_port = var.splunk_host_port
 }
 
 // METRIC INTEGRATION
 resource "cloudamqp_integration_metric" "cloudwatch" {
   instance_id = cloudamqp_instance.instance.id
   name = "cloudwatch"
-  access_key_id = "<aws_access_key_id>"
-  secret_access_key = "<aws_secret_access_key>"
-  region = "us-east-1"
+  access_key_id = var.aws_access_key
+  secret_access_key = var.aws_secret_key
+  region = var.aws_region
 }
 
 resource "cloudamqp_integration_metric" "datadog" {
   instance_id = cloudamqp_instance.instance.id
   name = "datadog_v2"
-  region = "us"
-  api_key = "<api_key>"
+  region = var.datadog_region
+  api_key = var.datadog_apikey
 }
 
 resource "cloudamqp_integration_metric" "librato" {
   instance_id = cloudamqp_instance.instance.id
   name = "librato"
   email = "integration@example.com"
-  api_key = "<api_key>"
+  api_key = var.librato_apikey
 }
 
 resource "cloudamqp_integration_metric" "newrelic_v2" {
   instance_id = cloudamqp_instance.instance.id
   name = "newrelic_v2"
-  region = "us"
-  api_key = "<api_key>"
+  region = var.newrelic_region
+  api_key = var.newrelic_apikey
 }

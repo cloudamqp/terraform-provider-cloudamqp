@@ -1,5 +1,5 @@
 provider "cloudamqp" {
-  apikey = "<cloudamqp_apikey>"
+  apikey = var.cloudamqp_customer_api_key
 }
 
 resource "cloudamqp_instance" "instance" {
