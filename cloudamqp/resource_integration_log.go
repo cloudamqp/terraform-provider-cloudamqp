@@ -74,6 +74,22 @@ func resourceIntegrationLog() *schema.Resource {
 				Optional:    true,
 				Description: "(optional) tags. E.g. env=prod,region=europe. (Datadog)",
 			},
+			"project_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Project ID. (Stackdriver)",
+			},
+			"private_key": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Sensitive:   true,
+				Description: "The private key. (Stackdriver)",
+			},
+			"client_email": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The client email. (Stackdriver)",
+			},
 		},
 	}
 }
@@ -160,6 +176,7 @@ func validateIntegrationLogName() schema.SchemaValidateFunc {
 		"splunk",
 		"cloudwatchlog",
 		"datadog",
+		"stackdriver",
 	}, true)
 }
 
@@ -173,7 +190,10 @@ func validateIntegrationLogsSchemaAttribute(key string) bool {
 		"access_key_id",
 		"secret_access_key",
 		"api_key",
-		"tags":
+		"tags",
+		"project_id",
+		"private_key",
+		"client_email":
 		return true
 	}
 	return false
@@ -193,6 +213,8 @@ func integrationLogKeys(intName string) []string {
 		return []string{"region", "access_key_id", "secret_access_key"}
 	case "datadog":
 		return []string{"region", "api_key", "tags"}
+	case "stackdriver":
+		return []string{"project_id", "private_key", "client_email"}
 	default:
 		return []string{"url", "host_port", "token", "region", "access_key_id", "secret_access_key"}
 	}
