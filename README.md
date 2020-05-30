@@ -16,7 +16,7 @@ Golang, make, Terraform
   * Set environmental variable `export GOROOT=/usr/local/go`
   * Set environmental variable `export GOPATH=$HOME/go`
   * Set environmental variable `export PATH=$GOROOT/bin:$GOPATH:$PATH`
-  * Activate module mode `export GO111MODULE=on` (Very importent!)
+  * Activate module mode `export GO111MODULE=on` (Very important!)
 * Install make
   * `sudo apt install make`
 * Install terraform: https://learn.hashicorp.com/terraform/getting-started/install.html
