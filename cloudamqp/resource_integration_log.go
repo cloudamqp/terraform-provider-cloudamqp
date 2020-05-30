@@ -49,7 +49,7 @@ func resourceIntegrationLog() *schema.Resource {
 			"region": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "The region hosting integration service. (Cloudwatch)",
+				Description: "The region hosting integration service. (Cloudwatch, Datadog)",
 			},
 			"access_key_id": {
 				Type:        schema.TypeString,
@@ -62,6 +62,17 @@ func resourceIntegrationLog() *schema.Resource {
 				Optional:    true,
 				Sensitive:   true,
 				Description: "AWS secret access key. (Cloudwatch)",
+			},
+			"api_key": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Sensitive:   true,
+				Description: "The API key for the integration service. (Datadog)",
+			},
+			"tags": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "(optional) tags. E.g. env=prod,region=europe. (Datadog)",
 			},
 		},
 	}
@@ -148,6 +159,7 @@ func validateIntegrationLogName() schema.SchemaValidateFunc {
 		"logentries",
 		"splunk",
 		"cloudwatchlog",
+		"datadog",
 	}, true)
 }
 
@@ -159,7 +171,9 @@ func validateIntegrationLogsSchemaAttribute(key string) bool {
 		"token",
 		"region",
 		"access_key_id",
-		"secret_access_key":
+		"secret_access_key",
+		"api_key",
+		"tags":
 		return true
 	}
 	return false
@@ -177,6 +191,8 @@ func integrationLogKeys(intName string) []string {
 		return []string{"host_port", "token"}
 	case "cloudwatchlog":
 		return []string{"region", "access_key_id", "secret_access_key"}
+	case "datadog":
+		return []string{"region", "api_key", "tags"}
 	default:
 		return []string{"url", "host_port", "token", "region", "access_key_id", "secret_access_key"}
 	}
