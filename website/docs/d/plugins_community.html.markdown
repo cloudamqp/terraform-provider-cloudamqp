@@ -9,7 +9,7 @@ description: |-
 
 Use this data source to retrieve information about available community plugins for the CloudAMQP instance. Require to know the identifier of the corresponding `cloudamqp_instance`resource or data source.
 
-## Eample Usage
+## Example Usage
 
 ```hcl
 data "cloudamqp_plugins_community" "communit_plugins" {
@@ -27,7 +27,7 @@ data "cloudamqp_plugins_community" "communit_plugins" {
 
 ___
 
-The `plugins` block consits of
+The `plugins` block consists of
 
 * `name`        - (Computed) The type of the recipient.
 * `require`     - (Computed) Min. required Rabbit MQ version to be used.

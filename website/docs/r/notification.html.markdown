@@ -45,6 +45,6 @@ Valid options for notification type.
 
 ## Import
 
-`cloudamqp_notification` can be imported using CloudAMQP internal ID of a recipient together (CSV seperated) with the instance ID. To see the ID of a recipient, use [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-notification-recipients)
+`cloudamqp_notification` can be imported using CloudAMQP internal ID of a recipient together (CSV separated) with the instance ID. To see the ID of a recipient, use [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-notification-recipients)
 
 `terraform import cloudamqp_notificaion.recipient <recpient_ID>,<ID>`

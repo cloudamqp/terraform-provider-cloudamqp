@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_alarm
 
-Use this data source to retrieve information about a pre-defined or created alarms. Require to know the identifier of the corresponding `cloudamqp_instance`resource or data source. Then either `alarm_id` or `type` to retrieve the alarm.
+Use this data source to retrieve information about pre-defined or created alarms. Depends on the identifier of the corresponding `cloudamqp_instance`resource or data source. Then either `alarm_id` or `type` to retrieve the alarm.
 
 ## Eample Usage
 
@@ -27,7 +27,7 @@ data "cloudamqp_alarm" "default_cpu_alarm" {
 ## Attribute reference
 
 * `enabled`         - (Computed) Enable/disable status of the alarm.
-* `value_threshold` - (Computed) The value threshold that trigger the alarm.
+* `value_threshold` - (Computed) The value threshold that triggers the alarm.
 * `time_threshold`  - (Computed) The time interval (in seconds) the `value_threshold` should be active before trigger an alarm.
 * `queue_regex`     - (Computed) Regex for which queue to check.
 * `vhost_regex`     - (Computed) Regex for which vhost to check

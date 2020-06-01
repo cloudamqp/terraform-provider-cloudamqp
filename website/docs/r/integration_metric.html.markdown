@@ -35,10 +35,10 @@ The following arguments are supported:
 * `email`             - (Optional) The email address registred for the integration service.
 * `licene_key`        - (Optional) The license key registred for the integration service.
 * `tags`              - (Optional) Tags. e.g. env=prod, region=europe.
-* `queue_whitelist`   - (Optional) Whitelist queues using regular expression.
+* `queue_whitelist`   - (Optional) Whitelist queuesa using regular expression.
 * `vhost_whitelist`   - (Optional) Whitelist vhost using regular expression.
 
-This is the full list of all arguments. But a subset of arugments are used based in which type of integration used. See table below for more information.
+This is the full list of all arguments. But a subset of arguments are used based on which type of integration used. See table below for more information.
 
 ## Integration service references
 
@@ -46,8 +46,8 @@ Valid names for third party log integration.
 
 | Name          | Description |
 |---------------|---------------------------------------------------------------|
-| cloudwatch    | Create a IAM with programmatic access. |
-| cloudwatch_v2 | Create a IAM with programmatic access. |
+| cloudwatch    | Create an IAM with programmatic access. |
+| cloudwatch_v2 | Create an IAM with programmatic access. |
 | datadog       | Create a Datadog API key at app.datadoghq.com |
 | datadog_v2    | Create a Datadog API key at app.datadoghq.com
 | librato       | Create a new API token (with record only permissions) here: https://metrics.librato.com/tokens |
@@ -72,6 +72,6 @@ Optional arguments for all integrations: tags, queue_whitelist, vhost_whitelist
 | New relic v2           | newrelic_v2    | license_key |
 
 ## Import
-`cloudamqp_integration_metric`can be imported using name argument of the resource together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
+`cloudamqp_integration_metric`can be imported using the name argument of the resource together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
 
 `terraform import cloudamqp_integration_metric.cloudwatch <name>,<instance_id>`

@@ -35,7 +35,7 @@ The following arguments are supported:
 * `access_key_id`     - (Optional/Sensitive) AWS access key identifier.
 * `secret_access_key` - (Optional/Sensitive) AWS secret access key.
 
-This is the full list of all arguments. But a subset of arugments are used based in which type of integration used. See table below for more information.
+This is the full list of all arguments. But a subset of arguments are used based on which type of integration used. See table below for more information.
 
 ## Argument Reference (cloudwatchlog)
 
@@ -47,7 +47,7 @@ Cloudwatch argument reference and example. Create an IAM user with programmatic 
 * DescribeLogStreams
 * PutLogEvents
 
-## Integration service refernce
+## Integration service reference
 
 Valid names for third party log integration.
 
@@ -74,6 +74,6 @@ Required arguments for all integrations: name
 | Splunk | splunk | token, host_port
 
 ## Import
-`cloudamqp_integration_log`can be imported using name argument of the resource together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
+`cloudamqp_integration_log`can be imported using the name argument of the resource together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
 
 `terraform import cloudamqp_integration_log.cloudwatchlog <name>,<instance_id>`

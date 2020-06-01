@@ -2,7 +2,7 @@
 layout: "cloudamqp"
 page_title: "CloudAMQP: cloudamqo_plugin"
 description: |-
-  Enable and disbale Rabbit MQ plugin.
+  Enable and disable Rabbit MQ plugin.
 ---
 
 # cloudamqp_plugin
@@ -32,6 +32,6 @@ The following arguments are supported:
 
 ## Import
 
-`cloudamqp_plugin` can be imported using name argument of the resource together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
+`cloudamqp_plugin` can be imported using the name argument of the resource together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
 
 `terraform import cloudamqp_plugin.rabbitmq_management rabbitmq_management,<instance_id>`

@@ -7,9 +7,9 @@ description: |-
 
 # cloudamqp_notification
 
-Use this data source to retrieve information about a pre-defined or created recipients. The recipient will receive notifications of the mapped alarm is triggerd. Require to know the identifier of the corresponding `cloudamqp_instance`resource or data source. Then either `recipient_id` or `name` to retrieve the recipient.
+Use this data source to retrieve information about pre-defined or created recipients. The recipient will receive notifications when the mapped alarm is triggered. Require to know the identifier of the corresponding `cloudamqp_instance`resource or data source. Then either `recipient_id` or `name` to retrieve the recipient.
 
-## Eample Usage
+## Example Usage
 
 ```hcl
 data "cloudamqp_notification" "default_recipient" {

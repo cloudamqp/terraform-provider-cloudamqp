@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_security_firewall
 
-This resource allows you to configure and manage firewall rules for the CloudAMQP instance. Beware that all rules needs to present, since all older configurations will be overwritten. Depends on `cloudamqp_instance`resource and the instance identifier.
+This resource allows you to configure and manage firewall rules for the CloudAMQP instance. Beware that all rules need to be present, since all older configurations will be overwritten. Depends on `cloudamqp_instance`resource and the instance identifier.
 
 Only available for dedicated subscription plans.
 
@@ -36,7 +36,7 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 Top level argument reference
 
 * `instance_id` - (Required) The CloudAMQP instance ID.
-* `rules`       - (Required) An array of rules, minimum of 1 needs to be configured. Each `rules` block consists of the filed documented below.
+* `rules`       - (Required) An array of rules, minimum of 1 needs to be configured. Each `rules` block consists of the field documented below.
 
 ___
 

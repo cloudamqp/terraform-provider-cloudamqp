@@ -7,9 +7,9 @@ description: |-
 
 # cloudamqp_instance
 
-Use this data source to retrieve information about an already created CloudAMQP instance. Require to know the CloudAMQP instance identifier in order to retrieve the correct information.
+Use this data source to retrieve information about an already created CloudAMQP instance. In order to retrieve the correct informationm, the CoudAMQP instance identifier is needed.
 
-## Eample Usage
+## Example Usage
 
 ```hcl
 data "cloudamqp_instance" "instance" {

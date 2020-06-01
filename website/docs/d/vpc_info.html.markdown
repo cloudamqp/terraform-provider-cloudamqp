@@ -11,7 +11,7 @@ Use this data source to retrieve information about VPC for a CloudAMQP instance.
 
 Only available for CloudAMQP instances hosted in AWS.
 
-## Eample Usage
+## Example Usage
 
 ```hcl
 data "cloudamqp_vpc_info" "vpc-_info" {

@@ -7,9 +7,9 @@ description: |-
 
 # cloudamqp_nodes
 
-Use this data source to retrieve information about the node(s) created by CloudAMQP instance. Require to know the identifier of the corresponding `cloudamqp_instance`resource or data source.
+Use this data source to retrieve information about the node(s) created by CloudAMQP instance. Depens on the identifier of the corresponding `cloudamqp_instance`resource or data source.
 
-## Eample Usage
+## Example Usage
 
 ```hcl
 data "cloudamqp_nodes" "nodes" {
