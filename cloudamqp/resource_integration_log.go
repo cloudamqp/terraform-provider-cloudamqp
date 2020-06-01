@@ -49,7 +49,7 @@ func resourceIntegrationLog() *schema.Resource {
 			"region": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "The region hosting integration service. (Cloudwatch)",
+				Description: "The region hosting integration service. (Cloudwatch, Datadog)",
 			},
 			"access_key_id": {
 				Type:        schema.TypeString,
@@ -62,6 +62,33 @@ func resourceIntegrationLog() *schema.Resource {
 				Optional:    true,
 				Sensitive:   true,
 				Description: "AWS secret access key. (Cloudwatch)",
+			},
+			"api_key": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Sensitive:   true,
+				Description: "The API key for the integration service. (Datadog)",
+			},
+			"tags": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "(optional) tags. E.g. env=prod,region=europe. (Datadog)",
+			},
+			"project_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Project ID. (Stackdriver)",
+			},
+			"private_key": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Sensitive:   true,
+				Description: "The private key. (Stackdriver)",
+			},
+			"client_email": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The client email. (Stackdriver)",
 			},
 		},
 	}
@@ -148,6 +175,8 @@ func validateIntegrationLogName() schema.SchemaValidateFunc {
 		"logentries",
 		"splunk",
 		"cloudwatchlog",
+		"datadog",
+		"stackdriver",
 	}, true)
 }
 
@@ -159,7 +188,12 @@ func validateIntegrationLogsSchemaAttribute(key string) bool {
 		"token",
 		"region",
 		"access_key_id",
-		"secret_access_key":
+		"secret_access_key",
+		"api_key",
+		"tags",
+		"project_id",
+		"private_key",
+		"client_email":
 		return true
 	}
 	return false
@@ -177,6 +211,10 @@ func integrationLogKeys(intName string) []string {
 		return []string{"host_port", "token"}
 	case "cloudwatchlog":
 		return []string{"region", "access_key_id", "secret_access_key"}
+	case "datadog":
+		return []string{"region", "api_key", "tags"}
+	case "stackdriver":
+		return []string{"project_id", "private_key", "client_email"}
 	default:
 		return []string{"url", "host_port", "token", "region", "access_key_id", "secret_access_key"}
 	}
