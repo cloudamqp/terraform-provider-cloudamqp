@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_plugin
 
-This resource allows you to enable or disable Rabbit MQ plugins.
+This resource allows you to enable or disable Rabbit MQ plugins. This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
 Only available for dedicated subscription plans.
 

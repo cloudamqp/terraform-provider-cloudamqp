@@ -14,11 +14,12 @@ Available for all subscription plans.
 ## Example Usage
 
 ```hcl
-resource "cloudamqp_notification" "default_recipient" {
-  instance_id       = cloudamqp_instance.instance.id
-  type              = "email"
-  value             = "notification@example.com"
-  name              = "default"
+# New recipient to receieve notifications
+resource "cloudamqp_notification" "recipient_01" {
+  instance_id = cloudamqp_instance.instance.id
+  type        = "email"
+  value       = "alarm@example.com"
+  name        = "alarm"
 }
 ```
 
@@ -45,6 +46,6 @@ Valid options for notification type.
 
 ## Import
 
-`cloudamqp_notification` can be imported using CloudAMQP internal ID of a recipient together (CSV separated) with the instance ID. To see the ID of a recipient, use [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-notification-recipients)
+`cloudamqp_notification` can be imported using CloudAMQP internal identifier of a recipient together (CSV separated) with the instance identifier. To see the ID of a recipient, use [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-notification-recipients)
 
-`terraform import cloudamqp_notificaion.recipient <recpient_ID>,<ID>`
+`terraform import cloudamqp_notificaion.recipient <recpient_id>,<indstance_id>`

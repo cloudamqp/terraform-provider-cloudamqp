@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_instance
 
-Use this data source to retrieve information about an already created CloudAMQP instance. In order to retrieve the correct informationm, the CoudAMQP instance identifier is needed.
+Use this data source to retrieve information about an already created CloudAMQP instance. In order to retrieve the correct information,the CoudAMQP instance identifier is needed.
 
 ## Example Usage
 
@@ -29,8 +29,8 @@ data "cloudamqp_instance" "instance" {
 * `vpc_subnet`  - (Computed) Dedicated VPC subnet configured for the CloudAMQP instance.
 * `nodes`       - (Computed) Number of nodes in the cluster of the CloudAMQP instance.
 * `rmq_version` - (Computed) The version of installed Rabbit MQ.
-* `url`         - (Computed/Sensitive) The AMQP url, used by clients to connect for pub/sub. Contains configured Rabbit MQ credentials.
+* `url`         - (Computed/Sensitive) The AMQP url, used by clients to connect for pub/sub.
 * `apikey`      - (Computed/Sensitive) The API key to secondary API handing alarms, integration etc.
 * `tags`        - (Computed) Tags the CloudAMQP instance with categories.
-* `host`        - (Computed) The hostname configred for the CloudAMQP instance.
-* `vhost`       - (Computed) The virtaul host configured in Rabbit MQ.
+* `host`        - (Computed) The hostname for the CloudAMQP instance.
+* `vhost`       - (Computed) The virtual host configured in Rabbit MQ.

@@ -7,20 +7,39 @@ description: |-
 
 # cloudamqp_alarm
 
-This resource allows you to create and manage alarms to trigger and send notifications to given recipients. There will always be default alarms (cpu, memory, disk and notice) created upon CloudAMQP instance creation. All default alarms use the default recipient for notifications. This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+This resource allows you to create and manage alarms to trigger and send notifications to assigned recipients. There will always be default alarms (cpu, memory, disk and notice) created upon CloudAMQP instance creation. All default alarms use the default recipient for notifications. This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
-Available for all subscription plans, but `lemur`and `tiger`are limited to fewer alarm types. The limited types supported can be seen in the table below in `Alarm Type Reference'.
+Available for all subscription plans, but `lemur`and `tiger`are limited to fewer alarm types. The limited types supported can be seen in the table below in [Alarm Type Reference](#alarm-type-reference).
 
 ## Example Usage
 
 ```hcl
-resource "cloudamqp_alarm" "default_cpu_alarm" {
+# New recipient
+resource "cloudamqp_notification" "recipient_01" {
+  instance_id = cloudamqp_instance.instance.id
+  type        = "email"
+  value       = "alarm@example.com"
+  name        = "alarm"
+}
+
+# New cpu alarm
+resource "cloudamqp_alarm" "cpu_alarm" {
   instance_id       = cloudamqp_instance.instance.id
   type              = "cpu"
   enabled           = true
-  value_threshol    = 90
+  value_threshold   = 95
   time_threshold    = 600
-  recipient         = [1]
+  recipient         = [2]
+}
+
+# New memory alarm
+resource "cloudamqp_alarm" "memory_alarm" {
+  instance_id       = cloudamqp_instance.instance.id
+  type              = "memiry"
+  enabled           = true
+  value_threshold   = 95
+  time_threshold    = 600
+  recipient         = [2]
 }
 ```
 
@@ -44,20 +63,20 @@ Based on alarm type, different arguments are flagged as required or optional.
 
 Valid options for notification type.
 
-Required arguments for all alarms: instance_id, type and enabled
-Optional argument for all alarms: tags, queue_regex, vhost_regex
+Required arguments for all alarms: *instance_id*, *type* and *enabled*<br>
+Optional argument for all alarms: *tags*, *queue_regex*, *vhost_regex*
 
-Name | Type | Shared | Dedicated | Required arguments |
----- | ---- | ---- | ---- | ---- | ---- |
-CPU | cpu | - | x | time_threshold, value_threshold
-Memory | memory | - | x | time_threshold, value_threshold
-Disk space | disk | - | x | time_threshold, value_threshold
-Queue | queue | x | x | time_threshold, value_threshold, queue_regex, vhost_regex, message_type
-Connection | connection | x | x | time_threshold, value_threshold
-Consumer | consumer | x | x | time_threshold, value_threshold, queue, vhost
-Netsplit | netsplit | - | x | time_threshold
-Server unreachable | server_unreachable | - | x | time_threshold
-Notice | notice | x | x |
+| Name | Type | Shared | Dedicated | Required arguments |
+| ---- | ---- | ---- | ---- | ---- | ---- |
+| CPU | cpu | - | &#10004; | time_threshold, value_threshold |
+| Memory | memory | - | &#10004;  | time_threshold, value_threshold |
+| Disk space | disk | - | &#10004;  | time_threshold, value_threshold |
+| Queue | queue | &#10004;  | &#10004;  | time_threshold, value_threshold, queue_regex, vhost_regex, message_type |
+| Connection | connection | &#10004; | &#10004; | time_threshold, value_threshold |
+| Consumer | consumer | &#10004; | &#10004; | time_threshold, value_threshold, queue, vhost |
+| Netsplit | netsplit | - | &#10004; | time_threshold |
+| Server unreachable | server_unreachable  | - | &#10004;  | time_threshold |
+| Notice | notice | &#10004; | &#10004; |
 
 ## Import
 

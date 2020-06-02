@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_plugin_community
 
-This resource allows you to install or uninstall community plugins. Once installed the plugin gets available in `cloudamqp_plugin`.
+This resource allows you to install or uninstall community plugins. Once installed the plugin will be available in `cloudamqp_plugin`. This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
 Only available for dedicated subscription plans.
 

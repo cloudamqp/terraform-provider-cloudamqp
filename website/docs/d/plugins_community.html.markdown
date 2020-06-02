@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_plugins_community
 
-Use this data source to retrieve information about available community plugins for the CloudAMQP instance. Require to know the identifier of the corresponding `cloudamqp_instance`resource or data source.
+Use this data source to retrieve information about available community plugins for the CloudAMQP instance. Depens on the identifier of the corresponding `cloudamqp_instance`resource or data source.
 
 ## Example Usage
 
@@ -23,7 +23,7 @@ data "cloudamqp_plugins_community" "communit_plugins" {
 
 ## Attribute reference
 
-* `plugins` - (Computed) An array of community plugins. Each `plugin`block consists of the fields documented below.
+* `plugins` - (Computed) An array of community plugins. Each `plugins` block consists of the fields documented below.
 
 ___
 

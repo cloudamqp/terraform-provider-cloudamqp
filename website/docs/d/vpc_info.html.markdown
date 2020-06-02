@@ -7,14 +7,14 @@ description: |-
 
 # cloudamqp_vpc_info
 
-Use this data source to retrieve information about VPC for a CloudAMQP instance. Require to know the identifier of the corresponding `cloudamqp_instance`resource or data source.
+Use this data source to retrieve information about VPC for a CloudAMQP instance. Depens on the identifier of the corresponding `cloudamqp_instance`resource or data source.
 
 Only available for CloudAMQP instances hosted in AWS.
 
 ## Example Usage
 
 ```hcl
-data "cloudamqp_vpc_info" "vpc-_info" {
+data "cloudamqp_vpc_info" "vpc_info" {
   instance_id = cloudamqp_instance.instance.id
 }
 ```

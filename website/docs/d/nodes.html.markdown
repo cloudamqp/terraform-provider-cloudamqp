@@ -23,11 +23,11 @@ data "cloudamqp_nodes" "nodes" {
 
 ## Attribute reference
 
-* `nodes` - (Computed) An array of node information. Each `node` block consists of the fields documented below.
+* `nodes` - (Computed) An array of node information. Each `nodes` block consists of the fields documented below.
 
 ___
 
-The `nodes`block consist of
+The `nodes` block consist of
 
 * `hostname`          - (Computed) Hostname assigned to the node.
 * `name`              - (Computed) Name of the node.

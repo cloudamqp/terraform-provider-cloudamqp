@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_plugins
 
-Use this data source to retrieve information about installed and available plugins for the CloudAMQP instance. Require to know the identifier of the corresponding `cloudamqp_instance`resource or data source.
+Use this data source to retrieve information about installed and available plugins for the CloudAMQP instance. Depens on the identifier of the corresponding `cloudamqp_instance`resource or data source.
 
 ## Example Usage
 
@@ -23,7 +23,7 @@ data "cloudamqp_plugins" "plugins" {
 
 ## Attribute reference
 
-* `plugins` - (Computed) An array of plugins. Each `plugin` block consists of the fields documented below.
+* `plugins` - (Computed) An array of plugins. Each `plugins` block consists of the fields documented below.
 
   * `name`        - (Computed) The type of the recipient.
   * `version`     - (Computed) Rabbit MQ version that the plugins are shipped with.
