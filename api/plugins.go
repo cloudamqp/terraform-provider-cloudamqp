@@ -113,3 +113,19 @@ func (api *API) DisablePlugin(instance_id int, name string) (map[string]interfac
 
 	return api.waitUntilPluginChanged(instance_id, name, false)
 }
+
+func (api *API) DeletePlugin(instance_id int, name string) error {
+	failed := make(map[string]interface{})
+	log.Print("[DEBUG] go-api::plugin::delete instance: %v, name: %v", instance_id, name)
+	path := fmt.Sprintf("/api/instances/%d/plugins/%s", instance_id, name)
+	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
+
+	if err != nil {
+		return err
+	}
+	if response.StatusCode != 204 {
+		return fmt.Errorf("DeletePlugin failed, status: %v, message: %s", response.StatusCode, failed)
+	}
+
+	return nil
+}
