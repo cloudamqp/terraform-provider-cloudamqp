@@ -16,7 +16,7 @@ func (api *API) ReadNodes(instanceID int) ([]map[string]interface{}, error) {
 		return nil, err
 	}
 	if response.StatusCode != 200 {
-		return nil, fmt.Errorf(fmt.Sprintf("ReadNodes failed, status: %v, message: %s", response.StatusCode, failed))
+		return nil, fmt.Errorf("ReadNodes failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 	return data, nil
 }
