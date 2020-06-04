@@ -36,6 +36,7 @@ func resourceSecurityFirewall() *schema.Resource {
 								Type:         schema.TypeString,
 								ValidateFunc: validateServices(),
 							},
+							Description: "Pre-defined services 'AMQP', 'AMQPS', 'MQTT', 'MQTTS', 'STOMP', 'STOMPS'",
 						},
 						"ports": {
 							Type:     schema.TypeList,
@@ -44,10 +45,17 @@ func resourceSecurityFirewall() *schema.Resource {
 								Type:         schema.TypeInt,
 								ValidateFunc: validation.IntBetween(0, 65554),
 							},
+							Description: "Custom ports between 0 - 65554",
 						},
 						"ip": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "IP address together with netmask to allow acces",
+						},
+						"description": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Naming descripton e.g. 'Default'",
 						},
 					},
 				},
@@ -83,6 +91,7 @@ func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) erro
 	if err != nil {
 		return err
 	}
+
 	d.Set("instance_id", instance_id)
 	d.Set("rules", data)
 
