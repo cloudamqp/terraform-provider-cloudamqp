@@ -50,10 +50,13 @@ func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
 	d.SetId(data["id"].(string))
 	for k, v := range data {
 		if validateVpcInfoSchemaAttribute(k) {
-			if k == "security_group_id" {
+			if k == "security_group" {
 				sg := data[k].(map[string]interface{})
-				d.Set(k, sg["id"])
+				d.Set("security_group_id", sg["id"])
+			} else if k == "subnet" {
+				d.Set("vpc_subnet", v)
 			} else {
+
 				d.Set(k, v)
 			}
 		}
@@ -64,8 +67,10 @@ func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
 func validateVpcInfoSchemaAttribute(key string) bool {
 	switch key {
 	case "name",
+		"subnet",
 		"vpc_subnet",
 		"owner_id",
+		"security_group",
 		"security_group_id":
 		return true
 	}
