@@ -27,7 +27,7 @@ resource "cloudamqp_instance" "instance" {
 # }
 
 # Or overwrite the firewall settings directly with new settings.
-resource "cloudamqp_security_firewall.firewall" {
+resource "cloudamqp_security_firewall" "firewall" {
   instance_id = cloudamqp_insntance.instance.id
   rules {
     ip = "192.168.0.0/0"

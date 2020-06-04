@@ -2,7 +2,7 @@
 // CLOUDAMQP
 // =========
 provider "cloudamqp" {
-  apikey  = cloudamqp_customer_api_key
+  apikey  = var.cloudamqp_customer_api_key
 }
 
 // === Instance resource ===
@@ -36,7 +36,7 @@ data "aws_instance" "aws_instance" {
   provider = aws
 
   instance_tags = {
-    Name   = "<instance_name>"
+    Name   = var.aws_instance_name
   }
 }
 
@@ -56,7 +56,7 @@ resource "aws_vpc_peering_connection" "aws_vpc_peering" {
   //requester {
   //  allow_remote_vpc_dns_resolution = true
   //}
-  tags = { Name = "<peering_name>" }
+  tags = { Name = var.aws_peering_name }
 }
 
 // === CLOUDAMQP - VPC accept peering ===
