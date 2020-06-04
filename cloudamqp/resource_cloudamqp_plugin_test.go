@@ -117,7 +117,6 @@ func testAccPluginConfig_Basic() string {
 			region 			= "amazon-web-services::eu-north-1"
 			rmq_version = "3.8.2"
 			tags 				= ["terraform"]
-			vpc_subnet = "192.168.0.1/24"
 		}
 
 		resource "cloudamqp_plugin" "mqtt_plugin" {
@@ -137,7 +136,6 @@ func testAccPluginConfig_Update() string {
 			region 			= "amazon-web-services::eu-north-1"
 			rmq_version = "3.8.2"
 			tags 				= ["terraform"]
-			vpc_subnet = "192.168.0.1/24"
 		}
 
 		resource "cloudamqp_plugin" "mqtt_plugin" {

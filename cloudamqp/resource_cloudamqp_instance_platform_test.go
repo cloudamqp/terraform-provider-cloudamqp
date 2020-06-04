@@ -263,3 +263,17 @@ func TestAccInstance_Shared_GCE(t *testing.T) {
 		},
 	})
 }
+
+func testAccInstanceConfig_Custom_Scale(name, region, plan string, nodes int) string {
+	return fmt.Sprintf(`
+		resource "cloudamqp_instance" "instance" {
+			name 				= "%s"
+			nodes 			= %d
+			plan 				= "%s"
+			region 			= "%s"
+			rmq_version = "3.8.2"
+			tags 				= ["terraform"]
+			vpc_subnet 	= "192.168.0.1/24"
+		}
+	`, name, nodes, plan, region)
+}

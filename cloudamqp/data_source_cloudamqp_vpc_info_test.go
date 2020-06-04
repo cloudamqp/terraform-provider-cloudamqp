@@ -22,7 +22,7 @@ func TestAccDataSourceVpcInfo_Basic(t *testing.T) {
 				Config: testAccVpcInfoDataSourceConfig_Basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckVpcInfoDataSourceExists(instance_name),
-					resource.TestCheckResourceAttr(resource_name, "vpc", "192.168.0.1/24"),
+					resource.TestCheckResourceAttr(resource_name, "vpc_subnet", "10.56.72.0/24"),
 				),
 			},
 		},
@@ -59,7 +59,7 @@ func testAccVpcInfoDataSourceConfig_Basic() string {
 			region 			= "amazon-web-services::eu-north-1"
 			rmq_version = "3.8.2"
 			tags 				= ["terraform"]
-			vpc_subnet 	= "192.168.0.1/24"
+			vpc_subnet 	= "10.56.72.0/24"
 		}
 
 		data "cloudamqp_vpc_info" "vpc_info" {

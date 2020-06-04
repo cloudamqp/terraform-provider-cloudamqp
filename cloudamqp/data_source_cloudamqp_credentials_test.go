@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
-func TestAccCredentialsDataSource_Basic(t *testing.T) {
+func TestAccDataSourceCredentials_Basic(t *testing.T) {
 	instance_name := "cloudamqp_instance.instance"
 	resource_name := "data.cloudamqp_credentials.credentials"
 

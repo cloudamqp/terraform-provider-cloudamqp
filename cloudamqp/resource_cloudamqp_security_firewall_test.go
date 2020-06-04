@@ -17,7 +17,7 @@ func TestAccSecurityFirewall_Basic(t *testing.T) {
 	}
 
 	instance_name := "cloudamqp_instance.instance"
-	resource_name := "cloudamqp_security_firewall.firewall"
+	resource_name := "cloudamqp_security_firewall.firewall_settings"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
@@ -32,6 +32,12 @@ func TestAccSecurityFirewall_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(resource_name, "rules.0.ip", "0.0.0.0/0"),
 					resource.TestCheckResourceAttr(resource_name, "rules.0.ports.#", "0"),
 					resource.TestCheckResourceAttr(resource_name, "rules.0.services.#", "6"),
+					resource.TestCheckResourceAttr(resource_name, "rules.0.services.0", "STOMP"),
+					resource.TestCheckResourceAttr(resource_name, "rules.0.services.1", "AMQP"),
+					resource.TestCheckResourceAttr(resource_name, "rules.0.services.2", "MQTTS"),
+					resource.TestCheckResourceAttr(resource_name, "rules.0.services.3", "STOMPS"),
+					resource.TestCheckResourceAttr(resource_name, "rules.0.services.4", "MQTT"),
+					resource.TestCheckResourceAttr(resource_name, "rules.0.services.5", "AMQPS"),
 				),
 			},
 			{
@@ -63,11 +69,11 @@ func testAccCheckSecurityFirewallExists(instance_name string) resource.TestCheck
 
 		api := testAccProvider.Meta().(*api.API)
 		data, err := api.ReadFirewallSettings(instance_id)
-		log.Printf("[DEBUG] resource_plugin::testAccCheckPluginEnabled data: %v", data)
+		log.Printf("[DEBUG] resource_security_firewall::testAccCheckSecurityFirewallExists data: %v", data)
 		if err != nil {
 			return fmt.Errorf("Error fetching item %s", err)
 		}
-		if data != nil {
+		if data == nil {
 			return fmt.Errorf("Error security firewall doesn't exists")
 		}
 		return nil
@@ -87,28 +93,37 @@ func testAccSecurityFirewallDestroy(instance_name, resource_name string) resourc
 
 		api := testAccProvider.Meta().(*api.API)
 		data, err := api.ReadFirewallSettings(instance_id)
-		if data != nil || err == nil {
-			return fmt.Errorf("Firewall still exists")
+		log.Printf("[DEBUG] resource_security_firewall::testAccSecurityFirewallDestroy data: %v", data)
+
+		if err != nil {
+			return fmt.Errorf("Error fetching item %s", err)
 		}
-		return nil
+
+		for _, rule := range data {
+			log.Printf("[DEBUG] resource_security_firewall::testAccSecurityFirewallDestroy rule: %v", rule)
+			if rule["description"] == "Default" {
+				return nil
+			}
+		}
+		return fmt.Errorf("Failed to configure with default settings")
 	}
 }
 
 func testAccSecurityFirewallConfig_Basic() string {
 	return fmt.Sprintf(`
 		resource "cloudamqp_instance" "instance" {
-			name 				= "terraform-security-firewall-test"
+			name 				= "terraform-test-change"
 			nodes 			= 1
-			plan  			= "bunny"
+			plan 				= "bunny"
 			region 			= "amazon-web-services::eu-north-1"
 			rmq_version = "3.8.2"
 			tags 				= ["terraform"]
 		}
 
-		resource "cloudamqp_instance" "security_firewall" {
+		resource "cloudamqp_security_firewall" "firewall_settings" {
 			instance_id = cloudamqp_instance.instance.id
 			rules {
-				ip = "0.0.0.0/24"
+				ip = "0.0.0.0/0"
 				ports = []
 				services = ["STOMP", "AMQP", "MQTTS", "STOMPS", "MQTT", "AMQPS"]
 			}
@@ -121,13 +136,13 @@ func testAccSecurityFirewallConfig_Update() string {
 		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-security-firewall-test"
 			nodes 			= 1
-			plan  			= "bunny"
+			plan 				= "bunny"
 			region 			= "amazon-web-services::eu-north-1"
 			rmq_version = "3.8.2"
 			tags 				= ["terraform"]
 		}
 
-		resource "cloudamqp_instance" "security_firewall" {
+		resource "cloudamqp_security_firewall" "firewall_settings" {
 			instance_id = cloudamqp_instance.instance.id
 			rules {
 				ip = "192.168.0.0/24"

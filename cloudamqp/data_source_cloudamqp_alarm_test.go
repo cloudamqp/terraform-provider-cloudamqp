@@ -102,7 +102,7 @@ func testAccAlarmDefaultDataSourceConfig_Basic() string {
 			type 				= "memory"
 		}
 
-		data "cloudamqp_alarm" "default_memory" {
+		data "cloudamqp_alarm" "default_disk" {
 			instance_id = cloudamqp_instance.instance.id
 			type 				= "disk"
 		}
