@@ -42,9 +42,10 @@ ___
 
 The `rules` block consists of:
 
-* `ip`        - (Required) Source ip and netmask for the rule. (e.g. 10.56.72.0/24)
-* `ports`     - (Optional) Custom ports to be opened
-* `services`  - (Required) Pre-defined service ports
+* `ip`          - (Required) Source ip and netmask for the rule. (e.g. 10.56.72.0/24)
+* `ports`       - (Optional) Custom ports to be opened
+* `services`    - (Required) Pre-defined service ports
+* `description` - (Optional) Description name of the rule. e.g. Default.
 
 Supported services: *AMQP*, *AMQPS*, *MQTT*, *MQTTS*, *STOMP*, *STOMPS*
 
