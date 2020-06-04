@@ -108,6 +108,6 @@ func resourcePluginUpdate(d *schema.ResourceData, meta interface{}) error {
 func resourcePluginDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	log.Printf("[DEBUG] cloudamqp::resource::plugin::delete instance id: %v, name: %v", d.Get("instance_id"), d.Get("name"))
-	_, err := api.DisablePlugin(d.Get("instance_id").(int), d.Get("name").(string))
+	err := api.DeletePlugin(d.Get("instance_id").(int), d.Get("name").(string))
 	return err
 }
