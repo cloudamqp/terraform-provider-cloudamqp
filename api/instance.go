@@ -141,7 +141,7 @@ func (api *API) DeleteInstance(instanceID string) error {
 	return api.waitUntilDeletion(instanceID)
 }
 
-func (api *API) urlInformation(url string) map[string]interface{} {
+func (api *API) UrlInformation(url string) map[string]interface{} {
 	paramsMap := make(map[string]interface{})
 	r := regexp.MustCompile(`^.*:\/\/(?P<username>(.*)):(?P<password>(.*))@(?P<host>(.*))\/(?P<vhost>(.*))`)
 	match := r.FindStringSubmatch(url)
