@@ -1,6 +1,8 @@
 package cloudamqp
 
 import (
+	"fmt"
+
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
@@ -52,12 +54,15 @@ func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
 		if validateVpcInfoSchemaAttribute(k) {
 			if k == "security_group" {
 				sg := data[k].(map[string]interface{})
-				d.Set("security_group_id", sg["id"])
+				err = d.Set("security_group_id", sg["id"])
 			} else if k == "subnet" {
-				d.Set("vpc_subnet", v)
+				err = d.Set("vpc_subnet", v)
 			} else {
+				err = d.Set(k, v)
+			}
 
-				d.Set(k, v)
+			if err != nil {
+				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}

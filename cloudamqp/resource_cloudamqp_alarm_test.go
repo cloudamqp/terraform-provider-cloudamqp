@@ -13,98 +13,98 @@ import (
 )
 
 func TestAccAlarm_Basic(t *testing.T) {
-	instance_name := "cloudamqp_instance.instance"
-	resource_name := "cloudamqp_alarm.connection_01"
+	instanceName := "cloudamqp_instance.instance"
+	resourceName := "cloudamqp_alarm.connection_01"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckAlarmDestroy(instance_name, resource_name),
+		CheckDestroy: testAccCheckAlarmDestroy(instanceName, resourceName),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccAlarmConfig_Basic(),
+				Config: testAccAlarmConfigBasic(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckAlarmExist(instance_name, resource_name),
-					resource.TestCheckResourceAttr(resource_name, "type", "connection"),
-					resource.TestCheckResourceAttr(resource_name, "enabled", "true"),
-					resource.TestCheckResourceAttr(resource_name, "value_threshold", "0"),
-					resource.TestCheckResourceAttr(resource_name, "time_threshold", "60"),
+					testAccCheckAlarmExist(instanceName, resourceName),
+					resource.TestCheckResourceAttr(resourceName, "type", "connection"),
+					resource.TestCheckResourceAttr(resourceName, "enabled", "true"),
+					resource.TestCheckResourceAttr(resourceName, "value_threshold", "0"),
+					resource.TestCheckResourceAttr(resourceName, "time_threshold", "60"),
 				),
 			},
 			{
-				Config: testAccAlarmConfig_Update(),
+				Config: testAccAlarmConfigUpdate(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckAlarmExist(instance_name, resource_name),
-					resource.TestCheckResourceAttr(resource_name, "type", "connection"),
-					resource.TestCheckResourceAttr(resource_name, "enabled", "true"),
-					resource.TestCheckResourceAttr(resource_name, "value_threshold", "25"),
-					resource.TestCheckResourceAttr(resource_name, "time_threshold", "120"),
+					testAccCheckAlarmExist(instanceName, resourceName),
+					resource.TestCheckResourceAttr(resourceName, "type", "connection"),
+					resource.TestCheckResourceAttr(resourceName, "enabled", "true"),
+					resource.TestCheckResourceAttr(resourceName, "value_threshold", "25"),
+					resource.TestCheckResourceAttr(resourceName, "time_threshold", "120"),
 				),
 			},
 			{
-				Config: testAccAlarmConfig_Disable(),
+				Config: testAccAlarmConfigDisable(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckAlarmExist(instance_name, resource_name),
-					resource.TestCheckResourceAttr(resource_name, "enabled", "false"),
+					testAccCheckAlarmExist(instanceName, resourceName),
+					resource.TestCheckResourceAttr(resourceName, "enabled", "false"),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckAlarmExist(instance_name, resource_name string) resource.TestCheckFunc {
-	log.Printf("[DEBUG] resource_alarm::testAccCheckAlarmExist resource: %s", resource_name)
+func testAccCheckAlarmExist(instanceName, resourceName string) resource.TestCheckFunc {
+	log.Printf("[DEBUG] resource_alarm::testAccCheckAlarmExist resource: %s", resourceName)
 	return func(state *terraform.State) error {
-		rs, ok := state.RootModule().Resources[resource_name]
+		rs, ok := state.RootModule().Resources[resourceName]
 		if !ok {
-			return fmt.Errorf("Resource: %s not found", resource_name)
+			return fmt.Errorf("Resource: %s not found", resourceName)
 		}
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No Record ID is set")
 		}
-		id := rs.Primary.ID
+		alarmID := rs.Primary.ID
 
-		rs, ok = state.RootModule().Resources[instance_name]
+		rs, ok = state.RootModule().Resources[instanceName]
 		if !ok {
 			return fmt.Errorf("Instance resource not found")
 		}
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No Record ID is set for instance")
 		}
-		instance_id, _ := strconv.Atoi(rs.Primary.ID)
+		instanceID, _ := strconv.Atoi(rs.Primary.ID)
 
 		api := testAccProvider.Meta().(*api.API)
-		_, err := api.ReadAlarm(instance_id, id)
+		_, err := api.ReadAlarm(instanceID, alarmID)
 		if err != nil {
-			return fmt.Errorf("Error fetching item with resource %s. %s", resource_name, err)
+			return fmt.Errorf("Error fetching item with resource %s. %s", resourceName, err)
 		}
 		return nil
 	}
 }
 
-func testAccCheckAlarmDestroy(instance_name, resource_name string) resource.TestCheckFunc {
-	log.Printf("[DEBUG] resource_alarm::testAccCheckAlarmDestroy resource: %s", resource_name)
+func testAccCheckAlarmDestroy(instanceName, resourceName string) resource.TestCheckFunc {
+	log.Printf("[DEBUG] resource_alarm::testAccCheckAlarmDestroy resource: %s", resourceName)
 	return func(state *terraform.State) error {
-		rs, ok := state.RootModule().Resources[resource_name]
+		rs, ok := state.RootModule().Resources[resourceName]
 		if !ok {
-			return fmt.Errorf("Resource: %s not found", resource_name)
+			return fmt.Errorf("Resource: %s not found", resourceName)
 		}
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No record ID is set for the resource")
 		}
-		resource_id := rs.Primary.ID
+		alarmID := rs.Primary.ID
 
-		rs, ok = state.RootModule().Resources[instance_name]
+		rs, ok = state.RootModule().Resources[instanceName]
 		if !ok {
 			return fmt.Errorf("Instance resource not found")
 		}
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No record id is set for the instance")
 		}
-		instance_id, _ := strconv.Atoi(rs.Primary.ID)
+		instanceID, _ := strconv.Atoi(rs.Primary.ID)
 
 		api := testAccProvider.Meta().(*api.API)
-		_, err := api.ReadAlarm(instance_id, resource_id)
+		_, err := api.ReadAlarm(instanceID, alarmID)
 		if err == nil {
 			return fmt.Errorf("Alert still exists")
 		}
@@ -117,8 +117,8 @@ func testAccCheckAlarmDestroy(instance_name, resource_name string) resource.Test
 	}
 }
 
-func testAccAlarmConfig_Basic() string {
-	return fmt.Sprintf(`
+func testAccAlarmConfigBasic() string {
+	return `
 		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-alarm-test"
 			nodes 			= 1
@@ -141,11 +141,11 @@ func testAccAlarmConfig_Basic() string {
 			time_threshold 		= 60
 			recipients = [data.cloudamqp_notification.default_recipient.id]
 		}
-		`)
+		`
 }
 
-func testAccAlarmConfig_Update() string {
-	return fmt.Sprintf(`
+func testAccAlarmConfigUpdate() string {
+	return `
 		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-alarm-test"
 			nodes 			= 1
@@ -168,11 +168,11 @@ func testAccAlarmConfig_Update() string {
 			time_threshold 		= 120
 			recipients = [data.cloudamqp_notification.default_recipient.id]
 		}
-		`)
+		`
 }
 
-func testAccAlarmConfig_Disable() string {
-	return fmt.Sprintf(`
+func testAccAlarmConfigDisable() string {
+	return `
 		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-alarm-test"
 			nodes 			= 1
@@ -195,5 +195,5 @@ func testAccAlarmConfig_Disable() string {
 			time_threshold 		= 120
 			recipients = [data.cloudamqp_notification.default_recipient.id]
 		}
-		`)
+		`
 }

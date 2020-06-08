@@ -81,14 +81,19 @@ func dataSourceInstance() *schema.Resource {
 				Computed:    true,
 				Description: "The virtual host",
 			},
+			"dedicated": {
+				Type:        schema.TypeBool,
+				Computed:    true,
+				Description: "Is the instance hosted on a dedicated server",
+			},
 		},
 	}
 }
 
 func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	instance_id := strconv.Itoa(d.Get("instance_id").(int))
-	data, err := api.ReadInstance(instance_id)
+	instanceID := strconv.Itoa(d.Get("instance_id").(int))
+	data, err := api.ReadInstance(instanceID)
 
 	if err != nil {
 		return err
@@ -97,17 +102,29 @@ func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 	for k, v := range data {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {
-				d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
+				err = d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
 			} else {
-				d.Set(k, v)
+				err = d.Set(k, v)
+			}
+
+			if err != nil {
+				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
 
+	dedicated := getPlanType(d.Get("plan").(string)) == "dedicated"
+	if err = d.Set("dedicated", dedicated); err != nil {
+		return fmt.Errorf("error setting dedicated for resource %s: %s", d.Id(), err)
+	}
+
 	data = api.UrlInformation(data["url"].(string))
-	if err == nil {
-		d.Set("host", data["host"])
-		d.Set("vhost", data["vhost"])
+	for k, v := range data {
+		if validateInstanceSchemaAttribute(k) {
+			if err = d.Set(k, v); err != nil {
+				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+			}
+		}
 	}
 	return nil
 }

@@ -54,6 +54,8 @@ func dataSourcePluginsRead(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return err
 	}
-	d.Set("plugins", data)
+	if err = d.Set("plugins", data); err != nil {
+		return fmt.Errorf("error setting plugins for resource %s: %s", d.Id(), err)
+	}
 	return nil
 }

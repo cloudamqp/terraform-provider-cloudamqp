@@ -1,6 +1,7 @@
 package cloudamqp
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 
@@ -74,26 +75,31 @@ func resourceSecurityFirewallCreate(d *schema.ResourceData, meta interface{}) er
 		params = append(params, k.(map[string]interface{}))
 	}
 
-	instance_id := d.Get("instance_id").(int)
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create instance id: %v", instance_id)
-	err := api.CreateFirewallSettings(instance_id, params)
-	d.SetId(strconv.Itoa(instance_id))
+	instanceID := d.Get("instance_id").(int)
+	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create instance id: %v", instanceID)
+	err := api.CreateFirewallSettings(instanceID, params)
+	if err != nil {
+		return fmt.Errorf("error setting security firewall for resource %s: %s", d.Id(), err)
+	}
+	d.SetId(strconv.Itoa(instanceID))
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create id set: %v", d.Id())
-	return err
+	return resourceSecurityFirewallRead(d, meta)
 }
 
 func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	instance_id, _ := strconv.Atoi(d.Id())
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read instance id: %v", instance_id)
-	data, err := api.ReadFirewallSettings(instance_id)
+	instanceID, _ := strconv.Atoi(d.Id())
+	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read instance id: %v", instanceID)
+	data, err := api.ReadFirewallSettings(instanceID)
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read data: %v", data)
 	if err != nil {
 		return err
 	}
 
-	d.Set("instance_id", instance_id)
-	d.Set("rules", data)
+	d.Set("instance_id", instanceID)
+	if err = d.Set("rules", data); err != nil {
+		return fmt.Errorf("error setting rules for resource %s: %s", d.Id(), err)
+	}
 
 	return nil
 }

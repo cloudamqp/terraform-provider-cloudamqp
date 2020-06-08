@@ -1,6 +1,7 @@
 package cloudamqp
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/84codes/go-api/api"
@@ -66,8 +67,10 @@ func dataSourceNodesRead(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return err
 	}
-	id := strconv.Itoa(d.Get("instance_id").(int))
-	d.SetId(id)
-	d.Set("nodes", data)
+	instanceID := strconv.Itoa(d.Get("instance_id").(int))
+	d.SetId(instanceID)
+	if err = d.Set("nodes", data); err != nil {
+		return fmt.Errorf("error setting nodes for resource %s: %s", d.Id(), err)
+	}
 	return nil
 }

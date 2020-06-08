@@ -11,37 +11,37 @@ import (
 )
 
 func TestAccDataSourceVpcInfo_Basic(t *testing.T) {
-	instance_name := "cloudamqp_instance.instance"
-	resource_name := "data.cloudamqp_vpc_info.vpc_info"
+	instanceName := "cloudamqp_instance.instance"
+	resourceName := "data.cloudamqp_vpc_info.vpc_info"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:  func() { testAccPreCheck(t) },
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccVpcInfoDataSourceConfig_Basic(),
+				Config: testAccDataSourceVpcInfoConfigBasic(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckVpcInfoDataSourceExists(instance_name),
-					resource.TestCheckResourceAttr(resource_name, "vpc_subnet", "10.56.72.0/24"),
+					testAccCheckDataSourceVpcInfoExists(instanceName),
+					resource.TestCheckResourceAttr(resourceName, "vpc_subnet", "10.56.72.0/24"),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckVpcInfoDataSourceExists(instance_name string) resource.TestCheckFunc {
+func testAccCheckDataSourceVpcInfoExists(instanceName string) resource.TestCheckFunc {
 	return func(state *terraform.State) error {
-		rs, ok := state.RootModule().Resources[instance_name]
+		rs, ok := state.RootModule().Resources[instanceName]
 		if !ok {
-			return fmt.Errorf("Resource %s not found", instance_name)
+			return fmt.Errorf("Resource %s not found", instanceName)
 		}
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No resource id set")
 		}
-		instance_id, _ := strconv.Atoi(rs.Primary.ID)
+		instanceID, _ := strconv.Atoi(rs.Primary.ID)
 
 		api := testAccProvider.Meta().(*api.API)
-		_, err := api.ReadVpcInfo(instance_id)
+		_, err := api.ReadVpcInfo(instanceID)
 		if err != nil {
 			return fmt.Errorf("Failed to fetch instance: %v", err)
 		}
@@ -50,8 +50,8 @@ func testAccCheckVpcInfoDataSourceExists(instance_name string) resource.TestChec
 	}
 }
 
-func testAccVpcInfoDataSourceConfig_Basic() string {
-	return fmt.Sprintf(`
+func testAccDataSourceVpcInfoConfigBasic() string {
+	return `
 		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-vpc-info-ds-test"
 			nodes 			= 1
@@ -65,5 +65,5 @@ func testAccVpcInfoDataSourceConfig_Basic() string {
 		data "cloudamqp_vpc_info" "vpc_info" {
 			instance_id = cloudamqp_instance.instance.id
 		}
-	`)
+	`
 }

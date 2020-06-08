@@ -2,7 +2,6 @@ package cloudamqp
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
@@ -118,66 +117,50 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 			}
 		}
 	}
-	log.Printf("[DEBUG] cloudamqp::resource::instance::create params: %v", params)
 
 	data, err := api.CreateInstance(params)
-	log.Printf("[DEBUG] cloudamqp::resource::instance::create data: %v", data)
-
 	if err != nil {
 		return err
 	}
-	d.SetId(data["id"].(string))
-	log.Printf("[DEBUG] cloudamqp::resource::instance::create id set: %v", d.Id())
-	for k, v := range data {
-		if validateInstanceSchemaAttribute(k) {
-			if k == "vpc" {
-				d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
-			} else if k == "plan" {
-				d.Set(k, v)
-				dedicated := getPlanType(v.(string)) == "dedicated"
-				d.Set("dedicated", dedicated)
-			} else {
-				d.Set(k, v)
-			}
-		}
-	}
 
-	data = api.UrlInformation(data["url"].(string))
-	if err == nil {
-		d.Set("host", data["host"])
-		d.Set("vhost", data["vhost"])
-	}
-	return nil
+	d.SetId(data["id"].(string))
+	return resourceRead(d, meta)
 }
 
 func resourceRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	log.Printf("[DEBUG] cloudamqp::resource::instance::read id: %v", d.Id())
 	data, err := api.ReadInstance(d.Id())
-	log.Printf("[DEBUG] cloudamqp::resource::instance::read data: %v", data)
 
 	if err != nil {
 		return err
 	}
-	d.SetId(fmt.Sprintf("%v", data["id"]))
+
 	for k, v := range data {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {
-				d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
-			} else if k == "plan" {
-				d.Set(k, v)
-				dedicated := getPlanType(v.(string)) == "dedicated"
-				d.Set("dedicated", dedicated)
+				err = d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
 			} else {
-				d.Set(k, v)
+				err = d.Set(k, v)
+			}
+
+			if err != nil {
+				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
 
+	dedicated := getPlanType(d.Get("plan").(string)) == "dedicated"
+	if err = d.Set("dedicated", dedicated); err != nil {
+		return fmt.Errorf("error setting dedicated for resource %s: %s", d.Id(), err)
+	}
+
 	data = api.UrlInformation(data["url"].(string))
-	if err == nil {
-		d.Set("host", data["host"])
-		d.Set("vhost", data["vhost"])
+	for k, v := range data {
+		if validateInstanceSchemaAttribute(k) {
+			if err = d.Set(k, v); err != nil {
+				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+			}
+		}
 	}
 	return nil
 }
@@ -191,10 +174,8 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 			params[k] = d.Get(k)
 		}
 	}
-	log.Printf("[DEBUG] cloudamqp::resource::instance::update params: %v", params)
-	err := api.UpdateInstance(d.Id(), params)
-	if err != nil {
-		log.Printf("[ERROR] cloudmaqp::resource::instance::update - Failed to update instance: %v", err)
+
+	if err := api.UpdateInstance(d.Id(), params); err != nil {
 		return err
 	}
 
@@ -203,7 +184,6 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	log.Printf("[DEBUG] cloudamqp::resource::instance::delete id: %v", d.Id())
 	return api.DeleteInstance(d.Id())
 }
 
@@ -213,11 +193,15 @@ func validateInstanceSchemaAttribute(key string) bool {
 		"plan",
 		"region",
 		"vpc",
+		"vpc_subnet",
+		"subnet",
 		"nodes",
 		"rmq_version",
 		"url",
 		"apikey",
-		"tags":
+		"tags",
+		"host",
+		"vhost":
 		return true
 	}
 	return false

@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -98,12 +99,7 @@ func resourceIntegrationMetricCreate(d *schema.ResourceData, meta interface{}) e
 		d.SetId(data["id"].(string))
 	}
 
-	for k, v := range data {
-		if validateIntegrationMetricSchemaAttribute(k) {
-			d.Set(k, v)
-		}
-	}
-	return nil
+	return resourceIntegrationMetricRead(d, meta)
 }
 
 func resourceIntegrationMetricRead(d *schema.ResourceData, meta interface{}) error {
@@ -123,7 +119,9 @@ func resourceIntegrationMetricRead(d *schema.ResourceData, meta interface{}) err
 
 	for k, v := range data {
 		if validateIntegrationMetricSchemaAttribute(k) {
-			d.Set(k, v)
+			if err = d.Set(k, v); err != nil {
+				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+			}
 		}
 	}
 	return nil
@@ -147,8 +145,6 @@ func resourceIntegrationMetricUpdate(d *schema.ResourceData, meta interface{}) e
 
 func resourceIntegrationMetricDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	params := make(map[string]interface{})
-	params["id"] = d.Id()
 	return api.DeleteIntegration(d.Get("instance_id").(int), "metrics", d.Id())
 }
 

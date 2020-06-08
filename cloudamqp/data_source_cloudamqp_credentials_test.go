@@ -11,35 +11,35 @@ import (
 )
 
 func TestAccDataSourceCredentials_Basic(t *testing.T) {
-	instance_name := "cloudamqp_instance.instance"
-	resource_name := "data.cloudamqp_credentials.credentials"
+	instanceName := "cloudamqp_instance.instance"
+	resourceName := "data.cloudamqp_credentials.credentials"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:  func() { testAccPreCheck(t) },
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCredentialsDataSourceConfig_Basic(),
+				Config: testAccDataSourceCredentielsConfigBasic(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckCredentialsDataSourceExists(instance_name, resource_name),
+					testAccCheckDataSourceCredentialsExists(instanceName, resourceName),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckCredentialsDataSourceExists(instance_name, resource_name string) resource.TestCheckFunc {
+func testAccCheckDataSourceCredentialsExists(instanceName, resourceName string) resource.TestCheckFunc {
 	return func(state *terraform.State) error {
-		rs, ok := state.RootModule().Resources[instance_name]
+		rs, ok := state.RootModule().Resources[instanceName]
 		if !ok {
-			return fmt.Errorf("Resource %s not found", instance_name)
+			return fmt.Errorf("Resource %s not found", instanceName)
 		}
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No resource id set")
 		}
-		instance_id := rs.Primary.ID
+		instanceID := rs.Primary.ID
 		api := testAccProvider.Meta().(*api.API)
-		data, err := api.ReadInstance(instance_id)
+		data, err := api.ReadInstance(instanceID)
 		if err != nil {
 			return fmt.Errorf("Failed to fetch instance: %v", err)
 		}
@@ -56,9 +56,9 @@ func testAccCheckCredentialsDataSourceExists(instance_name, resource_name string
 			}
 		}
 
-		rs, ok = state.RootModule().Resources[resource_name]
+		rs, ok = state.RootModule().Resources[resourceName]
 		if !ok {
-			return fmt.Errorf("Resource %s not found", resource_name)
+			return fmt.Errorf("Resource %s not found", resourceName)
 		}
 		if rs.Primary.Attributes["username"] == "" {
 			return fmt.Errorf("No username attribute set for resource")
@@ -77,8 +77,8 @@ func testAccCheckCredentialsDataSourceExists(instance_name, resource_name string
 	}
 }
 
-func testAccCredentialsDataSourceConfig_Basic() string {
-	return fmt.Sprintf(`
+func testAccDataSourceCredentielsConfigBasic() string {
+	return `
 		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-credentials-ds-test"
 			nodes 			= 1
@@ -90,6 +90,5 @@ func testAccCredentialsDataSourceConfig_Basic() string {
 
 		data "cloudamqp_credentials" "credentials" {
 			instance_id = cloudamqp_instance.instance.id
-		}
-		`)
+		}`
 }

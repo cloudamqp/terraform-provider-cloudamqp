@@ -3,7 +3,6 @@ package cloudamqp
 import (
 	"errors"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
@@ -42,18 +41,12 @@ func resourcePluginCommunity() *schema.Resource {
 
 func resourcePluginCommunityCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	log.Printf("[DEBUG] cloudamqp::resource::plugin_community::create instance id: %v, name: %v", d.Get("instance_id"), d.Get("name"))
-	data, err := api.EnablePluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
-	log.Printf("[DEBUG] cloudamqp::resource::plugin_community::create data: %v", data)
+	_, err := api.EnablePluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
 	if err != nil {
 		return err
 	}
-	d.SetId(fmt.Sprintf("%s", d.Get("name").(string)))
-	log.Printf("[DEBUG] cloudamqp::resource::plugin::create id set: %v", d.Id())
-	for k, v := range data {
-		d.Set(k, v)
-	}
-	return nil
+	d.SetId(d.Get("name").(string))
+	return resourcePluginCommunityRead(d, meta)
 }
 
 func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error {
@@ -61,23 +54,23 @@ func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
 		d.Set("name", s[0])
-		instance_id, _ := strconv.Atoi(s[1])
-		d.Set("instance_id", instance_id)
+		instanceID, _ := strconv.Atoi(s[1])
+		d.Set("instance_id", instanceID)
 	}
 	if d.Get("instance_id").(int) == 0 {
 		return errors.New("Missing instance identifier: {resource_id},{instance_id}")
 	}
 
 	api := meta.(*api.API)
-	log.Printf("[DEBUG] cloudamqp::resource::plugin_community::read instance id: %v, name: %v", d.Get("instance_id"), d.Get("name"))
 	data, err := api.ReadPluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
-	log.Printf("[DEBUG] cloudamqp::resource::plugin::read data: %v", data)
 	if err != nil {
 		return err
 	}
 
 	for k, v := range data {
-		d.Set(k, v)
+		if err = d.Set(k, v); err != nil {
+			return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+		}
 	}
 
 	return nil
@@ -92,14 +85,15 @@ func resourcePluginCommunityUpdate(d *schema.ResourceData, meta interface{}) err
 			params[k] = v
 		}
 	}
-	log.Printf("[DEBUG] cloudamqp::resource::plugin::update instance id: %v, params: %v", d.Get("instance_id"), params)
 	_, err := api.UpdatePluginCommunity(d.Get("instance_id").(int), params)
-	return err
+	if err != nil {
+		return err
+	}
+	return resourcePluginCommunityRead(d, meta)
 }
 
 func resourcePluginCommunityDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	log.Printf("[DEBUG] cloudamqp::resource::plugin::delete instance id: %v, name: %v", d.Get("instance_id"), d.Get("name"))
 	_, err := api.DisablePluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
 	return err
 }

@@ -50,6 +50,8 @@ func dataSourcePluginsCommunityRead(d *schema.ResourceData, meta interface{}) er
 	if err != nil {
 		return err
 	}
-	d.Set("plugins", data)
+	if err = d.Set("plugins", data); err != nil {
+		return fmt.Errorf("error setting community plugins for resource %s: %s", d.Id(), err)
+	}
 	return nil
 }

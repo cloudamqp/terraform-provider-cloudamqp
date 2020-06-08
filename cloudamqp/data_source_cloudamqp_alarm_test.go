@@ -11,68 +11,74 @@ import (
 )
 
 func TestAccDataSourceAlarmDefault_Basic(t *testing.T) {
-	instance_name := "cloudamqp_instance.instance"
-	cpu_resource := "data.cloudamqp_alarm.default_cpu"
-	memory_resource := "data.cloudamqp_alarm.default_memory"
-	disk_resource := "data.cloudamqp_alarm.default_disk"
+	instanceName := "cloudamqp_instance.instance"
+	cpuResource := "data.cloudamqp_alarm.default_cpu"
+	memoryResource := "data.cloudamqp_alarm.default_memory"
+	diskResource := "data.cloudamqp_alarm.default_disk"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:  func() { testAccPreCheck(t) },
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccAlarmDefaultDataSourceConfig_Basic(),
+				ResourceName:  instanceName,
+				ImportStateId: "412",
+				ImportState:   true,
+				//ImportStateVerify: 	true
+			},
+			{
+				Config: testAccAlarmDefaultDataSourceConfigBasic(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckAlarmDataSourceExists(instance_name, cpu_resource),
-					resource.TestCheckResourceAttr(cpu_resource, "type", "cpu"),
-					resource.TestCheckResourceAttr(cpu_resource, "time_threshold", "600"),
-					resource.TestCheckResourceAttr(cpu_resource, "value_threshold", "90"),
+					testAccCheckAlarmDataSourceExists(instanceName, cpuResource),
+					resource.TestCheckResourceAttr(cpuResource, "type", "cpu"),
+					resource.TestCheckResourceAttr(cpuResource, "time_threshold", "600"),
+					resource.TestCheckResourceAttr(cpuResource, "value_threshold", "90"),
 				),
 			},
 			{
-				Config: testAccAlarmDefaultDataSourceConfig_Basic(),
+				Config: testAccAlarmDefaultDataSourceConfigBasic(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckAlarmDataSourceExists(instance_name, memory_resource),
-					resource.TestCheckResourceAttr(memory_resource, "type", "memory"),
-					resource.TestCheckResourceAttr(memory_resource, "time_threshold", "600"),
-					resource.TestCheckResourceAttr(memory_resource, "value_threshold", "90"),
+					testAccCheckAlarmDataSourceExists(instanceName, memoryResource),
+					resource.TestCheckResourceAttr(memoryResource, "type", "memory"),
+					resource.TestCheckResourceAttr(memoryResource, "time_threshold", "600"),
+					resource.TestCheckResourceAttr(memoryResource, "value_threshold", "90"),
 				),
 			},
 			{
-				Config: testAccAlarmDefaultDataSourceConfig_Basic(),
+				Config: testAccAlarmDefaultDataSourceConfigBasic(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckAlarmDataSourceExists(instance_name, disk_resource),
-					resource.TestCheckResourceAttr(disk_resource, "type", "disk"),
-					resource.TestCheckResourceAttr(disk_resource, "time_threshold", "600"),
-					resource.TestCheckResourceAttr(disk_resource, "value_threshold", "5"),
+					testAccCheckAlarmDataSourceExists(instanceName, diskResource),
+					resource.TestCheckResourceAttr(diskResource, "type", "disk"),
+					resource.TestCheckResourceAttr(diskResource, "time_threshold", "600"),
+					resource.TestCheckResourceAttr(diskResource, "value_threshold", "5"),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckAlarmDataSourceExists(instance_name, resource_name string) resource.TestCheckFunc {
+func testAccCheckAlarmDataSourceExists(instanceName, resourceName string) resource.TestCheckFunc {
 	return func(state *terraform.State) error {
-		rs, ok := state.RootModule().Resources[instance_name]
+		rs, ok := state.RootModule().Resources[instanceName]
 		if !ok {
-			return fmt.Errorf("Resource %s not found", instance_name)
+			return fmt.Errorf("Resource %s not found", instanceName)
 		}
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No resource id set")
 		}
-		instance_id, _ := strconv.Atoi(rs.Primary.ID)
+		instanceID, _ := strconv.Atoi(rs.Primary.ID)
 
-		rs, ok = state.RootModule().Resources[resource_name]
+		rs, ok = state.RootModule().Resources[resourceName]
 		if !ok {
-			return fmt.Errorf("Resource %s not found", resource_name)
+			return fmt.Errorf("Resource %s not found", resourceName)
 		}
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No resource id set")
 		}
-		alarm_id := rs.Primary.ID
+		alarmID := rs.Primary.ID
 
 		api := testAccProvider.Meta().(*api.API)
-		_, err := api.ReadAlarm(instance_id, alarm_id)
+		_, err := api.ReadAlarm(instanceID, alarmID)
 		if err != nil {
 			return fmt.Errorf("Failed to fetch instance: %v", err)
 		}
@@ -81,8 +87,8 @@ func testAccCheckAlarmDataSourceExists(instance_name, resource_name string) reso
 	}
 }
 
-func testAccAlarmDefaultDataSourceConfig_Basic() string {
-	return fmt.Sprintf(`
+func testAccAlarmDefaultDataSourceConfigBasic() string {
+	return `
 		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-alarm-ds-test"
 			nodes 			= 1
@@ -106,5 +112,5 @@ func testAccAlarmDefaultDataSourceConfig_Basic() string {
 			instance_id = cloudamqp_instance.instance.id
 			type 				= "disk"
 		}
-	`)
+	`
 }

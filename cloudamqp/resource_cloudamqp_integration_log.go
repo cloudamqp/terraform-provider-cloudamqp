@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -114,20 +115,15 @@ func resourceIntegrationLogCreate(d *schema.ResourceData, meta interface{}) erro
 		d.SetId(data["id"].(string))
 	}
 
-	for k, v := range data {
-		if validateIntegrationLogsSchemaAttribute(k) {
-			d.Set(k, v)
-		}
-	}
-	return nil
+	return resourceIntegrationLogRead(d, meta)
 }
 
 func resourceIntegrationLogRead(d *schema.ResourceData, meta interface{}) error {
 	if strings.Contains(d.Id(), ",") {
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
-		instance_id, _ := strconv.Atoi(s[1])
-		d.Set("instance_id", instance_id)
+		instanceID, _ := strconv.Atoi(s[1])
+		d.Set("instance_id", instanceID)
 	}
 	if d.Get("instance_id").(int) == 0 {
 		return errors.New("Missing instance identifier: {resource_id},{instance_id}")
@@ -142,7 +138,9 @@ func resourceIntegrationLogRead(d *schema.ResourceData, meta interface{}) error 
 
 	for k, v := range data {
 		if validateIntegrationLogsSchemaAttribute(k) {
-			d.Set(k, v)
+			if err = d.Set(k, v); err != nil {
+				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+			}
 		}
 	}
 	return nil
@@ -167,8 +165,6 @@ func resourceIntegrationLogUpdate(d *schema.ResourceData, meta interface{}) erro
 
 func resourceIntegrationLogDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	params := make(map[string]interface{})
-	params["id"] = d.Id()
 	return api.DeleteIntegration(d.Get("instance_id").(int), "logs", d.Id())
 }
 

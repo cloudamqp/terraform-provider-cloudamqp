@@ -14,98 +14,98 @@ import (
 
 // Basic instance test case. Creating dedicated AWS instance and do some minor updates.
 func TestAccInstance_Basics(t *testing.T) {
-	resource_name := "cloudamqp_instance.instance"
+	resourceName := "cloudamqp_instance.instance"
 	name := acctest.RandomWithPrefix("terraform")
-	new_name := acctest.RandomWithPrefix("terraform")
+	newName := acctest.RandomWithPrefix("terraform")
 	region := "amazon-web-services::us-east-1"
 	plan := "bunny"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckInstanceDestroy(resource_name),
+		CheckDestroy: testAccCheckInstanceDestroy(resourceName),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccInstanceConfig_Basic(name, region, plan),
+				Config: testAccInstanceConfigBasic(name, region, plan),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckInstanceExists(resource_name),
-					resource.TestCheckResourceAttr(resource_name, "name", name),
-					resource.TestCheckResourceAttr(resource_name, "nodes", "1"),
-					resource.TestCheckResourceAttr(resource_name, "plan", plan),
-					resource.TestCheckResourceAttr(resource_name, "region", region),
-					resource.TestCheckResourceAttr(resource_name, "rmq_version", "3.8.2"),
-					resource.TestCheckResourceAttr(resource_name, "tags.#", "1"),
-					resource.TestCheckResourceAttr(resource_name, "tags.0", "terraform"),
+					testAccCheckInstanceExists(resourceName),
+					resource.TestCheckResourceAttr(resourceName, "name", name),
+					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
+					resource.TestCheckResourceAttr(resourceName, "plan", plan),
+					resource.TestCheckResourceAttr(resourceName, "region", region),
+					resource.TestCheckResourceAttr(resourceName, "rmq_version", "3.8.2"),
+					resource.TestCheckResourceAttr(resourceName, "tags.#", "1"),
+					resource.TestCheckResourceAttr(resourceName, "tags.0", "terraform"),
 				),
 			},
 			{
-				Config: testAccInstanceConfig_Basic(new_name, region, plan),
+				Config: testAccInstanceConfigBasic(newName, region, plan),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckInstanceExists(resource_name),
-					resource.TestCheckResourceAttr(resource_name, "name", new_name),
-					resource.TestCheckResourceAttr(resource_name, "nodes", "1"),
-					resource.TestCheckResourceAttr(resource_name, "plan", plan),
-					resource.TestCheckResourceAttr(resource_name, "region", region),
-					resource.TestCheckResourceAttr(resource_name, "rmq_version", "3.8.2"),
-					resource.TestCheckResourceAttr(resource_name, "tags.#", "1"),
-					resource.TestCheckResourceAttr(resource_name, "tags.0", "terraform"),
+					testAccCheckInstanceExists(resourceName),
+					resource.TestCheckResourceAttr(resourceName, "name", newName),
+					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
+					resource.TestCheckResourceAttr(resourceName, "plan", plan),
+					resource.TestCheckResourceAttr(resourceName, "region", region),
+					resource.TestCheckResourceAttr(resourceName, "rmq_version", "3.8.2"),
+					resource.TestCheckResourceAttr(resourceName, "tags.#", "1"),
+					resource.TestCheckResourceAttr(resourceName, "tags.0", "terraform"),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckInstanceExists(resource_name string) resource.TestCheckFunc {
-	log.Printf("[DEBUG] resource_instance::testAccCheckInstanceExists resource: %s", resource_name)
+func testAccCheckInstanceExists(resourceName string) resource.TestCheckFunc {
+	log.Printf("[DEBUG] resource_instance::testAccCheckInstanceExists resource: %s", resourceName)
 	return func(state *terraform.State) error {
-		rs, ok := state.RootModule().Resources[resource_name]
+		rs, ok := state.RootModule().Resources[resourceName]
 		if !ok {
-			return fmt.Errorf("Resource: %s not found", resource_name)
+			return fmt.Errorf("Resource: %s not found", resourceName)
 		}
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No id is set for instance resource")
 		}
-		instance_id := rs.Primary.ID
+		instanceID := rs.Primary.ID
 
 		api := testAccProvider.Meta().(*api.API)
-		data, err := api.ReadInstance(instance_id)
+		data, err := api.ReadInstance(instanceID)
 		log.Printf("[DEBUG] resource_instance::testAccCheckInstanceExists data: %v", data)
 		if err != nil {
-			return fmt.Errorf("Error fetching item with resource %s. %s", resource_name, err)
+			return fmt.Errorf("Error fetching item with resource %s. %s", resourceName, err)
 		}
 		return nil
 	}
 }
 
-func testAccCheckInstanceDestroy(resource_name string) resource.TestCheckFunc {
+func testAccCheckInstanceDestroy(resourceName string) resource.TestCheckFunc {
 	return func(state *terraform.State) error {
 		log.Printf("[DEBUG] resource_instance::testAccCheckInstanceDestroy")
 		api := testAccProvider.Meta().(*api.API)
 
-		rs, ok := state.RootModule().Resources[resource_name]
+		rs, ok := state.RootModule().Resources[resourceName]
 		if !ok {
-			return fmt.Errorf("Resource: %s not found", resource_name)
+			return fmt.Errorf("Resource: %s not found", resourceName)
 		}
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No id is set for instance resource")
 		}
-		instance_id := rs.Primary.ID
+		instanceID := rs.Primary.ID
 
-		_, err := api.ReadInstance(instance_id)
+		_, err := api.ReadInstance(instanceID)
 		if err == nil {
 			return fmt.Errorf("Instance resource still exists")
 		}
-		invalidIdErr := "Invalid ID"
-		expectedErr := regexp.MustCompile(invalidIdErr)
+		invalidIDErr := "Invalid ID"
+		expectedErr := regexp.MustCompile(invalidIDErr)
 		if !expectedErr.Match([]byte(err.Error())) {
-			return fmt.Errorf("Expected %s, got %s", invalidIdErr, err)
+			return fmt.Errorf("Expected %s, got %s", invalidIDErr, err)
 		}
 
 		return nil
 	}
 }
 
-func testAccInstanceConfig_Basic(name, region, plan string) string {
+func testAccInstanceConfigBasic(name, region, plan string) string {
 	log.Printf("[DBEUG] resource_instance::testAccInstanceConfig_Basic name: %s, region: %s, plan: %s", name, region, plan)
 	return fmt.Sprintf(`
 		resource "cloudamqp_instance" "instance" {
@@ -115,20 +115,6 @@ func testAccInstanceConfig_Basic(name, region, plan string) string {
 			region 			= "%s"
 			rmq_version = "3.8.2"
 			tags 				= ["terraform"]
-			vpc_subnet 	= "192.168.0.1/24"
 		}
 	`, name, plan, region)
-}
-
-func testAccInstanceConfig_Basic_Without_VPC(instance_name, name, region, plan, version string) string {
-	return fmt.Sprintf(`
-		resource "cloudamqp_instance" "%s" {
-			name 				= "%s"
-			nodes 			= 1
-			plan 				= "%s"
-			region 			= "%s"
-			rmq_version = "%s"
-			tags 				= ["terraform"]
-		}
-	`, instance_name, name, plan, region, version)
 }

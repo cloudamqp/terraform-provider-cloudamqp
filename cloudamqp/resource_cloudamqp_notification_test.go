@@ -12,89 +12,89 @@ import (
 )
 
 func TestAccNotificiaiton_Basic(t *testing.T) {
-	instance_name := "cloudamqp_instance.instance"
-	resource_name := "cloudamqp_notification.recipient_01"
+	instanceName := "cloudamqp_instance.instance"
+	resourceName := "cloudamqp_notification.recipient_01"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckNotificationDestroy(instance_name, resource_name),
+		CheckDestroy: testAccCheckNotificationDestroy(instanceName, resourceName),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNotificationConfig_Basic(),
+				Config: testAccNotificationConfigBasic(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckNotificationExists(instance_name, resource_name),
-					resource.TestCheckResourceAttr(resource_name, "type", "email"),
-					resource.TestCheckResourceAttr(resource_name, "value", "test@example.com"),
+					testAccCheckNotificationExists(instanceName, resourceName),
+					resource.TestCheckResourceAttr(resourceName, "type", "email"),
+					resource.TestCheckResourceAttr(resourceName, "value", "test@example.com"),
 				),
 			},
 			{
-				Config: testAccNotificationConfig_Update(),
+				Config: testAccNotificationConfigUpdate(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckNotificationExists(instance_name, resource_name),
-					resource.TestCheckResourceAttr(resource_name, "type", "email"),
-					resource.TestCheckResourceAttr(resource_name, "value", "notification@example.com"),
+					testAccCheckNotificationExists(instanceName, resourceName),
+					resource.TestCheckResourceAttr(resourceName, "type", "email"),
+					resource.TestCheckResourceAttr(resourceName, "value", "notification@example.com"),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckNotificationExists(instance_name, resource_name string) resource.TestCheckFunc {
-	log.Printf("[DEBUG] resource_notification::testAccCheckNotificationExists resource: %s", resource_name)
+func testAccCheckNotificationExists(instanceName, resourceName string) resource.TestCheckFunc {
+	log.Printf("[DEBUG] resource_notification::testAccCheckNotificationExists resource: %s", resourceName)
 
 	return func(state *terraform.State) error {
-		rs, ok := state.RootModule().Resources[resource_name]
+		rs, ok := state.RootModule().Resources[resourceName]
 		if !ok {
-			return fmt.Errorf("Resource: %s not found", resource_name)
+			return fmt.Errorf("Resource: %s not found", resourceName)
 		}
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No id is set for notification resource")
 		}
-		recipient_id := rs.Primary.ID
+		recipientID := rs.Primary.ID
 
-		rs, ok = state.RootModule().Resources[instance_name]
+		rs, ok = state.RootModule().Resources[instanceName]
 		if !ok {
 			return fmt.Errorf("Instance resource not found")
 		}
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No id is set for instance resource")
 		}
-		instance_id, _ := strconv.Atoi(rs.Primary.ID)
+		instanceID, _ := strconv.Atoi(rs.Primary.ID)
 
 		api := testAccProvider.Meta().(*api.API)
-		_, err := api.ReadNotification(instance_id, recipient_id)
+		_, err := api.ReadNotification(instanceID, recipientID)
 		if err != nil {
-			return fmt.Errorf("Error fetching item with resource %s. %s", resource_name, err)
+			return fmt.Errorf("Error fetching item with resource %s. %s", resourceName, err)
 		}
 		return nil
 	}
 }
 
-func testAccCheckNotificationDestroy(instance_name, resource_name string) resource.TestCheckFunc {
+func testAccCheckNotificationDestroy(instanceName, resourceName string) resource.TestCheckFunc {
 	return func(state *terraform.State) error {
 		log.Printf("[DEBUG] resource_notification::testAccCheckInstanceDestroy")
 		api := testAccProvider.Meta().(*api.API)
 
-		rs, ok := state.RootModule().Resources[resource_name]
+		rs, ok := state.RootModule().Resources[resourceName]
 		if !ok {
-			return fmt.Errorf("Resource %s not found", resource_name)
+			return fmt.Errorf("Resource %s not found", resourceName)
 		}
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No id is set for notification resource")
 		}
-		recipient_id := rs.Primary.ID
+		recipientID := rs.Primary.ID
 
-		rs, ok = state.RootModule().Resources[instance_name]
+		rs, ok = state.RootModule().Resources[instanceName]
 		if !ok {
 			return fmt.Errorf("Instance resource not found")
 		}
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No id is set for instance resource")
 		}
-		instance_id, _ := strconv.Atoi(rs.Primary.ID)
+		instanceID, _ := strconv.Atoi(rs.Primary.ID)
 
-		data, err := api.ReadNotification(instance_id, recipient_id)
+		data, err := api.ReadNotification(instanceID, recipientID)
 		if data != nil || err == nil {
 			return fmt.Errorf("Recipient still exists")
 		}
@@ -103,8 +103,8 @@ func testAccCheckNotificationDestroy(instance_name, resource_name string) resour
 	}
 }
 
-func testAccNotificationConfig_Basic() string {
-	return fmt.Sprintf(`
+func testAccNotificationConfigBasic() string {
+	return `
 		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-notification-test"
 			nodes 			= 1
@@ -120,11 +120,11 @@ func testAccNotificationConfig_Basic() string {
 			value = "test@example.com"
 			name = "test"
 		}
-		`)
+		`
 }
 
-func testAccNotificationConfig_Update() string {
-	return fmt.Sprintf(`
+func testAccNotificationConfigUpdate() string {
+	return `
 		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-notification-test"
 			nodes 			= 1
@@ -140,5 +140,5 @@ func testAccNotificationConfig_Update() string {
 			value = "notification@example.com"
 			name = "test"
 		}
-		`)
+		`
 }

@@ -39,7 +39,21 @@ func dataSourceCredentialsRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	d.SetId(fmt.Sprintf("%v.%s", d.Get("instance_id").(int), data["username"]))
-	d.Set("username", data["username"])
-	d.Set("password", data["password"])
+	for k, v := range data {
+		if validateCredentialsSchemaAttribute(k) {
+			if err = d.Set(k, v); err != nil {
+				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+			}
+		}
+	}
 	return nil
+}
+
+func validateCredentialsSchemaAttribute(key string) bool {
+	switch key {
+	case "username",
+		"password":
+		return true
+	}
+	return false
 }

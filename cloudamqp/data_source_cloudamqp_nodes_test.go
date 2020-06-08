@@ -10,40 +10,40 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
-func TestAccNodesDataSource_Basic(t *testing.T) {
-	instance_name := "cloudamqp_instance.instance"
-	resource_name := "data.cloudamqp_nodes.nodes"
+func TestAccDataSourceNodes_Basic(t *testing.T) {
+	instanceName := "cloudamqp_instance.instance"
+	resourceName := "data.cloudamqp_nodes.nodes"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:  func() { testAccPreCheck(t) },
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNodesDataSourceConfig_Basic(),
+				Config: testAccDataSourceNodesConfigBasic(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckNodesDataSourceExists(instance_name, resource_name),
-					resource.TestCheckResourceAttr(resource_name, "nodes.#", "1"),
-					resource.TestCheckResourceAttr(resource_name, "nodes.0.rabbitmq_version", "3.8.2"),
-					resource.TestCheckResourceAttr(resource_name, "nodes.0.running", "true"),
-					resource.TestCheckResourceAttr(resource_name, "nodes.0.hipe", "false"),
+					testAccCheckDataSourceNodesExists(instanceName, resourceName),
+					resource.TestCheckResourceAttr(resourceName, "nodes.#", "1"),
+					resource.TestCheckResourceAttr(resourceName, "nodes.0.rabbitmq_version", "3.8.2"),
+					resource.TestCheckResourceAttr(resourceName, "nodes.0.running", "true"),
+					resource.TestCheckResourceAttr(resourceName, "nodes.0.hipe", "false"),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckNodesDataSourceExists(instance_name, resource_name string) resource.TestCheckFunc {
+func testAccCheckDataSourceNodesExists(instanceName, resourceName string) resource.TestCheckFunc {
 	return func(state *terraform.State) error {
-		rs, ok := state.RootModule().Resources[instance_name]
+		rs, ok := state.RootModule().Resources[instanceName]
 		if !ok {
-			return fmt.Errorf("Resource %s not found", instance_name)
+			return fmt.Errorf("Resource %s not found", instanceName)
 		}
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No resource id set")
 		}
-		instance_id, _ := strconv.Atoi(rs.Primary.ID)
+		instanceID, _ := strconv.Atoi(rs.Primary.ID)
 		api := testAccProvider.Meta().(*api.API)
-		_, err := api.ReadNodes(instance_id)
+		_, err := api.ReadNodes(instanceID)
 		if err != nil {
 			return fmt.Errorf("Failed to fetch instance: %v", err)
 		}
@@ -52,8 +52,8 @@ func testAccCheckNodesDataSourceExists(instance_name, resource_name string) reso
 	}
 }
 
-func testAccNodesDataSourceConfig_Basic() string {
-	return fmt.Sprintf(`
+func testAccDataSourceNodesConfigBasic() string {
+	return `
 		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-nodes-ds-test"
 			nodes 			= 1
@@ -66,5 +66,5 @@ func testAccNodesDataSourceConfig_Basic() string {
 		data "cloudamqp_nodes" "nodes" {
 			instance_id = cloudamqp_instance.instance.id
 		}
-		`)
+	`
 }

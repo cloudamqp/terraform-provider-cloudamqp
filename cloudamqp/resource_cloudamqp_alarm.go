@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"strconv"
 	"strings"
@@ -97,13 +98,7 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 		log.Printf("[DEBUG] cloudamqp::resource::alarm::create id set: %v", d.Id())
 	}
 
-	for k, v := range data {
-		if validateAlarmSchemaAttribute(k) {
-			d.Set(k, v)
-		}
-	}
-
-	return nil
+	return resourceAlarmRead(d, meta)
 }
 
 func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
@@ -111,8 +106,8 @@ func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
 		log.Printf("[DEBUG] cloudamqp::resource::alarm::read id contains ,: %v", d.Id())
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
-		instance_id, _ := strconv.Atoi(s[1])
-		d.Set("instance_id", instance_id)
+		instanceID, _ := strconv.Atoi(s[1])
+		d.Set("instance_id", instanceID)
 	}
 	if d.Get("instance_id").(int) == 0 {
 		return errors.New("Missing instance identifier: {resource_id},{instance_id}")
@@ -129,7 +124,9 @@ func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
 
 	for k, v := range data {
 		if validateAlarmSchemaAttribute(k) {
-			d.Set(k, v)
+			if err = d.Set(k, v); err != nil {
+				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+			}
 		}
 	}
 
@@ -149,8 +146,7 @@ func resourceAlarmUpdate(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
-	err := api.UpdateAlarm(d.Get("instance_id").(int), params)
-	if err != nil {
+	if err := api.UpdateAlarm(d.Get("instance_id").(int), params); err != nil {
 		return err
 	}
 

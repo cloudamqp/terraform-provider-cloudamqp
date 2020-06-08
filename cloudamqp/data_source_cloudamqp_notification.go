@@ -50,7 +50,7 @@ func dataSourceNotificationRead(d *schema.ResourceData, meta interface{}) error 
 
 	// Multiple purpose read. To be used when using data source either by declaring recipient id or type.
 	if d.Get("recipient_id") != 0 {
-		data, err = dataSourceNotificationIdRead(d.Get("instance_id").(int), d.Get("recipient_id").(int), meta)
+		data, err = dataSourceNotificationIDRead(d.Get("instance_id").(int), d.Get("recipient_id").(int), meta)
 	} else if d.Get("name") != "" {
 		data, err = dataSourceNotificationTypeRead(d.Get("instance_id").(int), d.Get("name").(string), meta)
 	}
@@ -61,22 +61,24 @@ func dataSourceNotificationRead(d *schema.ResourceData, meta interface{}) error 
 	d.SetId(fmt.Sprintf("%v", data["id"]))
 	for k, v := range data {
 		if validateRecipientAttribute(k) {
-			d.Set(k, v)
+			if err = d.Set(k, v); err != nil {
+				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+			}
 		}
 	}
 	return nil
 }
 
-func dataSourceNotificationIdRead(instance_id int, alarm_id int, meta interface{}) (map[string]interface{}, error) {
+func dataSourceNotificationIDRead(instanceID int, alarmID int, meta interface{}) (map[string]interface{}, error) {
 	api := meta.(*api.API)
-	id := strconv.Itoa(alarm_id)
-	recipient, err := api.ReadNotification(instance_id, id)
+	id := strconv.Itoa(alarmID)
+	recipient, err := api.ReadNotification(instanceID, id)
 	return recipient, err
 }
 
-func dataSourceNotificationTypeRead(instance_id int, name string, meta interface{}) (map[string]interface{}, error) {
+func dataSourceNotificationTypeRead(instanceID int, name string, meta interface{}) (map[string]interface{}, error) {
 	api := meta.(*api.API)
-	recipients, err := api.ReadNotifications(instance_id)
+	recipients, err := api.ReadNotifications(instanceID)
 
 	if err != nil {
 		return nil, err

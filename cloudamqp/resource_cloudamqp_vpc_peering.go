@@ -2,7 +2,7 @@ package cloudamqp
 
 import (
 	"errors"
-	"log"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -38,7 +38,6 @@ func resourceVpcPeering() *schema.Resource {
 
 func resourceVpcPeeringAccept(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	log.Printf("[DEBUG] cloudamqp::resource::vpc_peering::accept instance id: %v, peering id: %v", d.Get("instance_id"), d.Get("peering_id"))
 	_, err := api.AcceptVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string))
 
 	if err != nil {
@@ -46,7 +45,6 @@ func resourceVpcPeeringAccept(d *schema.ResourceData, meta interface{}) error {
 	}
 	if d.Get("peering_id") != nil {
 		d.SetId(d.Get("peering_id").(string))
-		log.Printf("[DEBUG] cloudamqp::resource::vpc_peering::accept id set: %v", d.Id())
 	}
 
 	return nil
@@ -56,15 +54,14 @@ func resourceVpcPeeringRead(d *schema.ResourceData, meta interface{}) error {
 	if strings.Contains(d.Id(), ",") {
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
-		instance_id, _ := strconv.Atoi(s[1])
-		d.Set("instance_id", instance_id)
+		instanceID, _ := strconv.Atoi(s[1])
+		d.Set("instance_id", instanceID)
 	}
 	if d.Get("instance_id").(int) == 0 {
 		return errors.New("Missing instance identifier: {resource_id},{instance_id}")
 	}
 
 	api := meta.(*api.API)
-	log.Printf("[DEBUG] cloudamqp::resource::vpc_peering::read instance id: %v, peering id: %v", d.Get("instance_id"), d.Get("peering_id"))
 	data, err := api.ReadVpcPeeringRequest(d.Get("instance_id").(int), d.Get("peering_id").(string))
 
 	if err != nil {
@@ -73,7 +70,9 @@ func resourceVpcPeeringRead(d *schema.ResourceData, meta interface{}) error {
 	for k, v := range data {
 		if k == "status" {
 			status := v.(map[string]interface{})
-			d.Set(k, status["code"])
+			if err = d.Set(k, status["code"]); err != nil {
+				return fmt.Errorf("error setting status for resource %s: %s", d.Id(), err)
+			}
 		}
 	}
 
@@ -82,12 +81,5 @@ func resourceVpcPeeringRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceVpcPeeringDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	log.Printf("[DEBUG] cloudamqp::resource::vpc_peering::delete instance id: %v, peering id: %v", d.Get("instance_id"), d.Get("peering_id"))
-	err := api.RemoveVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string))
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return api.RemoveVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string))
 }
