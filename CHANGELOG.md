@@ -15,6 +15,8 @@ IMPROVEMENTS:
 * Updated samples with use of variables
 * Double checked data sources and resource for required, optional, computed and sensitive properties.
 * Trigger read resource information when the resource has been updated.
+* Lint: naming convetion
+* Lint: error checks
 
 BUG FIXES:
 
