@@ -34,18 +34,18 @@ func (api *API) CreateIntegration(instanceID int, intType string, intName string
 }
 
 // ReadIntegration retrieves a specific logs or metrics integration
-func (api *API) ReadIntegration(instanceID int, intType, id string) (map[string]interface{}, error) {
+func (api *API) ReadIntegration(instanceID int, intType, intID string) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
-	log.Printf("[DEBUG] go-api::integration::read instance id: %d, int_type: %s, id: %s", instanceID, intType, id)
-	path := fmt.Sprintf("/api/instances/%d/integrations/%s/%s", instanceID, intType, id)
+	log.Printf("[DEBUG] go-api::integration::read instance ID: %d, intType: %s, intID: %s", instanceID, intType, intID)
+	path := fmt.Sprintf("/api/instances/%d/integrations/%s/%s", instanceID, intType, intID)
 	response, err := api.sling.New().Path(path).Receive(&data, &failed)
 
 	if err != nil {
 		return nil, err
 	}
 	if response.StatusCode != 200 {
-		return nil, fmt.Errorf(fmt.Sprintf("ReadIntegration failed, status: %v, message: %s", response.StatusCode, failed))
+		return nil, fmt.Errorf("ReadIntegration failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
 	// Convert API response body, config part, into single map
@@ -65,28 +65,28 @@ func (api *API) ReadIntegration(instanceID int, intType, id string) (map[string]
 }
 
 // UpdateIntegration updated the integration with new information
-func (api *API) UpdateIntegration(instanceID int, intType, id string, params map[string]interface{}) error {
+func (api *API) UpdateIntegration(instanceID int, intType, intID string, params map[string]interface{}) error {
 	failed := make(map[string]interface{})
-	log.Printf("[DEBIG] go-api::integration::update instance id: %d, intType: %s, id: %s", instanceID, intType, id)
-	path := fmt.Sprintf("/api/instances/%d/integrations/%s/%s", instanceID, intType, id)
+	log.Printf("[DEBIG] go-api::integration::update instance ID: %d, intType: %s, intID: %s", instanceID, intType, intID)
+	path := fmt.Sprintf("/api/instances/%d/integrations/%s/%s", instanceID, intType, intID)
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 
 	if response.StatusCode != 204 {
-		return fmt.Errorf(fmt.Sprintf("UpdateIntegration failed, status: %v, message: %s", response.StatusCode, failed))
+		return fmt.Errorf("UpdateIntegration failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
 	return err
 }
 
 // DeleteIntegration removes log or metric integration.
-func (api *API) DeleteIntegration(instanceID int, intType, id string) error {
+func (api *API) DeleteIntegration(instanceID int, intType, intID string) error {
 	failed := make(map[string]interface{})
-	log.Printf("[DEBUG] go-api::integration::delete instance id: %d, intType: %s, id: %s", instanceID, intType, id)
-	path := fmt.Sprintf("/api/instances/%d/integrations/%s/%s", instanceID, intType, id)
+	log.Printf("[DEBUG] go-api::integration::delete instance ID: %d, intType: %s, intID: %s", instanceID, intType, intID)
+	path := fmt.Sprintf("/api/instances/%d/integrations/%s/%s", instanceID, intType, intID)
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 
 	if response.StatusCode != 204 {
-		return fmt.Errorf(fmt.Sprintf("DeleteNotificaion failed, status: %v, message: %s", response.StatusCode, failed))
+		return fmt.Errorf("DeleteNotificaion failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
 	return err
