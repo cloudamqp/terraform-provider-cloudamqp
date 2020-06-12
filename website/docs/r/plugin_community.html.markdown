@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_plugin_community
 
-This resource allows you to install or uninstall community plugins. Once installed the plugin will be available in `cloudamqp_plugin`. This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+This resource allows you to install or uninstall community plugins. Once installed the plugin will be available in `cloudamqp_plugin`.
 
 Only available for dedicated subscription plans.
 
@@ -29,9 +29,12 @@ The following arguments are supported:
 * `name`        - (Required) The name of the Rabbit MQ plugin.
 * `enabled`     - (Required) Enable or disable the plugins.
 
+## Depedency
+
+This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
 ## Import
 
 `cloudamqp_plugin` can be imported using the name argument of the resource together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
 
-`terraform import cloudamqp_plugin.delayed_message_exchange rabbitmq_delayed_message_exchange,<instance_id>`
+`terraform import cloudamqp_plugin.<resource_name> <plugin_name>,<instance_id>`

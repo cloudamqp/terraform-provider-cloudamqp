@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_integration_log
 
-This resource allows you to create and manage third party log integrations for a CloudAMQP instance. Once configured, the logs produced will be forward to corresponding integration. This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+This resource allows you to create and manage third party log integrations for a CloudAMQP instance. Once configured, the logs produced will be forward to corresponding integration.
 
 Only available for dedicated subscription plans.
 
@@ -123,7 +123,11 @@ Required arguments for all integrations: name
 | Data Dog | datadog | region, api_keys, tags |
 | Stackdriver | stackdriver | project_id, private_key, client_email |
 
+## Dependency
+
+This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+
 ## Import
 `cloudamqp_integration_log`can be imported using the name argument of the resource together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
 
-`terraform import cloudamqp_integration_log.cloudwatchlog <name>,<instance_id>`
+`terraform import cloudamqp_integration_log.<resource_name> <name>,<instance_id>`

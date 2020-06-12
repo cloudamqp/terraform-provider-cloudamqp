@@ -1,3 +1,10 @@
+## 1.7.1 (Jun 12, 2020)
+
+IMPROVEMENTS:
+
+* Addded `no_default_alarms` to `cloudamqp_instance`.
+* Updated Terraform.io documents.
+
 ## 1.7.0 (Jun, 8, 2020)
 
 NOTES:

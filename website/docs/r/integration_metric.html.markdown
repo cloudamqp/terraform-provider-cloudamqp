@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_integration_metric
 
-This resource allows you to create and manage, forwarding metrics to third party integrations for a CloudAMQP instance. Once configured, the metrics produced will be forward to corresponding integration. This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+This resource allows you to create and manage, forwarding metrics to third party integrations for a CloudAMQP instance. Once configured, the metrics produced will be forward to corresponding integration.
 
 Only available for dedicated subscription plans.
 
@@ -104,7 +104,11 @@ Optional arguments for all integrations: *tags*, *queue_whitelist*, *vhost_white
 | New relic v2           | newrelic_v2    | api_key, region |
 | Stackdriver            | stackdriver    | project_id, private_key, client_email |
 
+## Dependency
+
+This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+
 ## Import
 `cloudamqp_integration_metric`can be imported using the name argument of the resource together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
 
-`terraform import cloudamqp_integration_metric.cloudwatch <name>,<instance_id>`
+`terraform import cloudamqp_integration_metric.<resource_name> <name>,<instance_id>`

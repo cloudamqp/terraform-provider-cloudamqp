@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_plugins_community
 
-Use this data source to retrieve information about available community plugins for the CloudAMQP instance. Depens on the identifier of the corresponding `cloudamqp_instance`resource or data source.
+Use this data source to retrieve information about available community plugins for the CloudAMQP instance.
 
 ## Example Usage
 
@@ -32,3 +32,7 @@ The `plugins` block consists of
 * `name`        - (Computed) The type of the recipient.
 * `require`     - (Computed) Min. required Rabbit MQ version to be used.
 * `description` - (Computed) Description of what the plugin does.
+
+## Dependency
+
+This data source depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.

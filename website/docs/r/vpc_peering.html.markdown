@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_vpc_peering
 
-This resouce allows you to accepting VPC peering request from an AWS requester. This is only available for CloudAMQP instance hosted in AWS. This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+This resouce allows you to accepting VPC peering request from an AWS requester. This is only available for CloudAMQP instance hosted in AWS.
 
 Only available for dedicated subscription plans.
 
@@ -94,8 +94,12 @@ resource "aws_route" "accepter_route" {
 * `instance_id` - (Required) The CloudAMQP instance ID.
 * `peering_id` - (Required) Peering identifier created by AW peering request.
 
+## Depedency
+
+This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+
 ## Import
 
 `cloudamqp_vpc_peering` can be imported using the CloudAMQP instance identifier.
 
-`terraform import cloudamqp_vpc_peering.aws_vpc_peering <instance_id>`
+`terraform import cloudamqp_vpc_peering.<resource_name> <instance_id>`

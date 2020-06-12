@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_nodes
 
-Use this data source to retrieve information about the node(s) created by CloudAMQP instance. Depens on the identifier of the corresponding `cloudamqp_instance`resource or data source.
+Use this data source to retrieve information about the node(s) created by CloudAMQP instance.
 
 ## Example Usage
 
@@ -35,3 +35,7 @@ The `nodes` block consist of
 * `rabbitmq_version`  - (Computed) Currently configured Rabbit MQ version on the node.
 * `erlang_version`    - (Computed) Currently used Erlanbg version on the node.
 * `hipe`              - (Computed) Enable or disable High-performance Erlang.
+
+## Dependency
+
+This data source depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.

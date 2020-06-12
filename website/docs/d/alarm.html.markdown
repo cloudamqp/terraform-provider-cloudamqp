@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_alarm
 
-Use this data source to retrieve information about pre-defined or created alarms. Depends on the identifier of the corresponding `cloudamqp_instance`resource or data source. Then either use `alarm_id` or `type` to retrieve the alarm.
+Use this data source to retrieve information about default or created alarms. Either use `alarm_id` or `type` to retrieve the alarm.
 
 ## Example Usage
 
@@ -33,3 +33,7 @@ data "cloudamqp_alarm" "default_cpu_alarm" {
 * `vhost_regex`     - (Computed) Regular expression for which vhost to check
 * `recipients`      - (Computed) Identifier for recipient to be notified.
 * `message_type`    - (Computed) Message type `(total, unacked, ready)` used by queue alarm type.
+
+## Dependency
+
+This data source depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.

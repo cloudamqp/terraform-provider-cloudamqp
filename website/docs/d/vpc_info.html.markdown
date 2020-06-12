@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_vpc_info
 
-Use this data source to retrieve information about VPC for a CloudAMQP instance. Depens on the identifier of the corresponding `cloudamqp_instance`resource or data source.
+Use this data source to retrieve information about VPC for a CloudAMQP instance.
 
 Only available for CloudAMQP instances hosted in AWS.
 
@@ -29,3 +29,7 @@ data "cloudamqp_vpc_info" "vpc_info" {
 * `vpc_subnet`          - (Computed) Dedicated VPC subnet.
 * `owner_id`            - (Computed) AWS account identifier.
 * `security_group_id`   - (Computed) AWS security group identifier.
+
+## Dependency
+
+This data source depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.

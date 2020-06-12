@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_instance
 
-Use this data source to retrieve information about an already created CloudAMQP instance. In order to retrieve the correct information,the CoudAMQP instance identifier is needed.
+Use this data source to retrieve information about an already created CloudAMQP instance. In order to retrieve the correct information, the CoudAMQP instance identifier is needed.
 
 ## Example Usage
 

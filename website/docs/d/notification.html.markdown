@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_notification
 
-Use this data source to retrieve information about pre-defined or created recipients. The recipient will receive notifications assigned to an alarm that has triggered. Depens on the identifier of the corresponding `cloudamqp_instance`resource or data source. Together with either `recipient_id` or `name` in order to retrieve the recipient.
+Use this data source to retrieve information about default or created recipients. The recipient will receive notifications assigned to an alarm that has triggered. To retrieve the recipient either use `recipient_id` or `name`.
 
 ## Example Usage
 
@@ -28,3 +28,7 @@ data "cloudamqp_notification" "default_recipient" {
 
 * `type`  - (Computed) The type of the recipient.
 * `value` - (Computed) The notification endpoint, where to send the notification.
+
+## Dependency
+
+This data source depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
