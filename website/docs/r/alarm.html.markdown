@@ -7,7 +7,9 @@ description: |-
 
 # cloudamqp_alarm
 
-This resource allows you to create and manage alarms to trigger and send notifications to assigned recipients. There will always be default alarms (cpu, memory, disk and notice) created upon CloudAMQP instance creation. All default alarms use the default recipient for notifications. This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+This resource allows you to create and manage alarms to trigger based on a set of conditions. Once triggerd a notification will be sent to the assigned recipients. When creating a new instance, there will also be a set of default alarms (cpu, memory and disk) created. All default alarms uses the default recipient for notifications.
+
+By setting `no_default_alarms` to *true* in `cloudamqp_instance`. This will create the instance without default alarms and avoid the need to import them to get full control.
 
 Available for all subscription plans, but `lemur`and `tiger`are limited to fewer alarm types. The limited types supported can be seen in the table below in [Alarm Type Reference](#alarm-type-reference).
 
@@ -35,7 +37,7 @@ resource "cloudamqp_alarm" "cpu_alarm" {
 # New memory alarm
 resource "cloudamqp_alarm" "memory_alarm" {
   instance_id       = cloudamqp_instance.instance.id
-  type              = "memiry"
+  type              = "memory"
   enabled           = true
   value_threshold   = 95
   time_threshold    = 600
@@ -78,8 +80,12 @@ Optional argument for all alarms: *tags*, *queue_regex*, *vhost_regex*
 | Server unreachable | server_unreachable  | - | &#10004;  | time_threshold |
 | Notice | notice | &#10004; | &#10004; |
 
+## Dependency
+
+This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+
 ## Import
 
-`cloudamqp_alarm` can be imported using CloudAMQP internal identifier of a recipient together (CSV separated) with the instance identifier. To see the recipient identifier, use [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-notification-recipients)
+`cloudamqp_alarm` can be imported using CloudAMQP internal identifier of the alarm together (CSV separated) with the instance identifier. To retrieve the alarm identifier, use [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-alarms)
 
-`terraform import cloudamqp_notificaion.recipient <recipient_id>,<instance_od>`
+`terraform import cloudamqp_alarm.alarm <alarm_id>,<instance_id>`

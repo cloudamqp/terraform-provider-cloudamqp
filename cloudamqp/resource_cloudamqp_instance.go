@@ -90,6 +90,11 @@ func resourceInstance() *schema.Resource {
 				Computed:    true,
 				Description: "Is the instance hosted on a dedicated server",
 			},
+			"no_default_alarms": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Set to true to not create default alarms",
+			},
 		},
 		CustomizeDiff: customdiff.All(
 			customdiff.ForceNewIfChange("plan", func(old, new, meta interface{}) bool {
@@ -102,7 +107,7 @@ func resourceInstance() *schema.Resource {
 
 func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"name", "plan", "region", "nodes", "tags", "rmq_version", "vpc_subnet"}
+	keys := []string{"name", "plan", "region", "nodes", "tags", "rmq_version", "vpc_subnet", "no_default_alarms"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
@@ -201,7 +206,8 @@ func validateInstanceSchemaAttribute(key string) bool {
 		"apikey",
 		"tags",
 		"host",
-		"vhost":
+		"vhost",
+		"no_default_alarms":
 		return true
 	}
 	return false

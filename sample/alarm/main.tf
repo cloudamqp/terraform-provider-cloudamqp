@@ -7,11 +7,12 @@ resource "cloudamqp_instance" "rmq_bunny" {
   name   = "terraform-provider-test"
   plan   = "bunny"
   region = "amazon-web-services::us-east-1"
+  no_default_alarms = true
 }
 
 // Notification and recipient
-// Each instance will get one default recipient,
-// can either be imported as a resource or loaded as a data source.
+// Each instance will get one default recipient.
+// The default recipient can either be imported as a resource or loaded as a data source.
 data "cloudamqp_notificaion" "default_recipient" {
   instance_id = cloudamqp_instance.rmq_bunny.id
   name = "Default"
@@ -29,9 +30,11 @@ resource "cloudamqp_notification" "recipient_02" {
   value       = "notification@example.com"
 }
 
-// Alarm
-// Each instance will get a set of alarms upon creation.
-// Can either be imported as resources or loaded as a data source.
+// Default alarms
+// Each instance will get a set of default alarms (cpu, memory and disk) upon creation.
+// The default alarms can either be imported as resources or loaded as a data source.
+// Unless the `no_default_alarms` is set to true in cloudamqp_instance.
+// Then no default alarms will be created, when the instance is created.
 data "cloudamqp_alarm" "default_cpu" {
   instance_id = cloudamqp_instance.instance.id
   type 				= "cpu"
