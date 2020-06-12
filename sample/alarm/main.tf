@@ -33,8 +33,8 @@ resource "cloudamqp_notification" "recipient_02" {
 // Default alarms
 // Each instance will get a set of default alarms (cpu, memory and disk) upon creation.
 // The default alarms can either be imported as resources or loaded as a data source.
-// Unless the `no_default_alarms` is set to true in cloudamqp_instance.
-// Then no default alarms will be created, when the instance is created.
+// To disable creating default alarms when creating a new instance. Set `no_default_alarms`
+// attribute to true in the instance resource.
 data "cloudamqp_alarm" "default_cpu" {
   instance_id = cloudamqp_instance.instance.id
   type 				= "cpu"
