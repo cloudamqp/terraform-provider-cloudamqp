@@ -6,7 +6,7 @@ IMPROVEMENTS:
 
 BUG FIXES:
 
-* Renamed GNUmakefile to correct missing target for make.
+* Renamed GNUmakefile to correct naming, due to missing target for make.
 
 ## 1.7.1 (Jun 12, 2020)
 
