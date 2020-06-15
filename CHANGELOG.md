@@ -1,3 +1,13 @@
+## 1.7.2 (Jun 15, 2020)
+
+IMPROVEMENTS:
+
+* Updated install instructions.
+
+BUG FIXES:
+
+* Renamed GNUmakefile to correct missing target for make.
+
 ## 1.7.1 (Jun 12, 2020)
 
 IMPROVEMENTS:
