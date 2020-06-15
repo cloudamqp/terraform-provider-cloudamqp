@@ -8,14 +8,14 @@ Setup your CloudAMQP cluster from Terraform
 
 Golang, make, Terraform
 
-## Install
+## Setup prerequisites and CloudAMQP account
 
 * Install golang: https://golang.org/dl/
   Example with default paths
   * Download latest version and extract to `/usr/local/go`
   * Set environmental variable `export GOROOT=/usr/local/go`
   * Set environmental variable `export GOPATH=$HOME/go`
-  * Set environmental variable `export PATH=$GOROOT/bin:$GOPATH:$PATH`
+  * Set environmental variable `export PATH=$GOROOT/bin:$GOPATH:$GOPATH/bin:$PATH`
   * Activate module mode `export GO111MODULE=on` (Very important!)
 * Install make
   * `sudo apt install make`
@@ -33,22 +33,24 @@ Golang, make, Terraform
 The two APIs supported can be found at https://docs.cloudamqp.com (called customer) and https://docs.cloudamqp.com/cloudamqp_api.html (called api). The API key created gain access to the customer API (used to handle the instance). While the second API handles different resources on the instace (such as alarms, notification etc.). The customer API also has a proxy service, which makes it possible for the provider to access the second API through customer API using the same created API key.
 `
 
-### Install CloudAMQP Terraform Provider
+## Install the CloudAMQP Terraform Provider
+
+Clone repository to `$GOPATH/src/github.com/cloudamqp/terraform-provider-cloudamqp`
+
+Change directory and build the provider from make. This will call `go intall` and install the plugin under `$GOPATH/bin`.
 
 ```sh
-go get -d -u -v github.com/cloudamqp/terraform-provider-cloudamqp
-cd $GOPATH/src/github.com/cloudamqp/terraform-provider-cloudamqp
-go get -u
-make install
+$ cd $GOPATH/src/github.com/cloudamqp/terraform-provider-cloudamqp
+$ make build
 ```
 
-Now the provider is installed in the terraform plugins folder and ready to be used.
+Run `terraform init` from the same folder as the tf.file is located. Terraform should also search in `$GOPATH/bin`. If this not the case, the provider needs to be manually installed by moving it to `$HOME/.terraform.d/plugins`. [Install plugins](https://www.terraform.io/docs/plugins/basics.html#installing-plugins).
 
-To update the dependencies, then run again.
-`go get -u`
-
-To clean up the .mod and .sum files from unused dependencies, run.
-`go mod tidy`
+```sh
+$ cd <path_to_tf_file>
+$ cp $GOPATH/bin/terraform-provider-cloudamqp $HOME/.terraform.d/plugins/terraform-provider-cloudamqp
+$ terraform init
+```
 
 More detailed documentation of the provider can be found at: https://docs.cloudamqp.com/cloudamqp_terraform.html
 
@@ -75,9 +77,6 @@ terraform apply
 
 Again, paste in your API key.  This should create an actual CloudAMQP instance.
 
-## Versioning
-
-Enabled versioning to the Makefile, which also automatically adds it to the built provider. New name is therefore terraform-provider-cloudamqp_vx.y.z, where x.y.z is the version.
 
 ## Debug log
 
