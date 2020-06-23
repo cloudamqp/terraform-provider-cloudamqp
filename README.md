@@ -142,6 +142,8 @@ Generic form of terraform import command
 terraform import {resource_type}.{resource_name} {resource_id},{instance_id}
 ```
 
+You can find `{instance_id}` through [the API](https://docs.cloudamqp.com/#instances)
+
 Example of terraform import command (with instance_id=80)
 
 ```sh
