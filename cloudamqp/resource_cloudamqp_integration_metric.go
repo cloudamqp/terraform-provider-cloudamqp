@@ -76,6 +76,22 @@ func resourceIntegrationMetric() *schema.Resource {
 				Optional:    true,
 				Description: "(optional) whitelist using regular expression",
 			},
+			"project_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Project ID. (Stackdriver)",
+			},
+			"private_key": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Sensitive:   true,
+				Description: "The private key. (Stackdriver)",
+			},
+			"client_email": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The client email. (Stackdriver)",
+			},
 		},
 	}
 }
@@ -171,7 +187,10 @@ func validateIntegrationMetricSchemaAttribute(key string) bool {
 		"vhost_whitelist",
 		"api_key",
 		"email",
-		"license_key":
+		"license_key",
+		"project_id",
+		"private_key",
+		"client_email":
 		return true
 	default:
 		return false
@@ -195,6 +214,8 @@ func integrationMetricKeys(intName string) []string {
 		return append(keys, "license_key")
 	case "newrelic_v2":
 		return append(keys, "api_key", "region")
+	case "stackdriver":
+		return append(keys, "project_id", "private_key", "client_email")
 	default:
 		return append(keys, "region", "access_keys", "secret_access_keys", "email", "api_key", "license_key")
 	}
