@@ -3,22 +3,33 @@ package api
 import (
 	"fmt"
 	"log"
+	"time"
 )
 
-func (api *API) CreateFirewallSettings(instanceID int, params []map[string]interface{}) error {
+func (api *API) waitUntilFirewallReady(instanceID int) ([]map[string]interface{}, error) {
+	log.Printf("[DEBUG] go-api::security_firewall::waitUntilFirewallReady waiting")
+	// Need to wait at least 10 seconds in order for firewall service invalidate the cache.
+	// Not possible to call or get notification when this is done.
+	time.Sleep(20 * time.Second)
+	data, err := api.ReadFirewallSettings(instanceID)
+	log.Printf("[DEBUG go-api::security_firewall::waitUntilFirewallReady data: %v", data)
+	return data, err
+}
+
+func (api *API) CreateFirewallSettings(instanceID int, params []map[string]interface{}) ([]map[string]interface{}, error) {
 	failed := make(map[string]interface{})
 	log.Printf("[DEBUG] go-api::security_firewall::create instance ID: %v, params: %v", instanceID, params)
 	path := fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(nil, &failed)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if response.StatusCode != 201 {
-		return fmt.Errorf("CreateFirewallSettings failed, status: %v, message: %s", response.StatusCode, failed)
+		return nil, fmt.Errorf("CreateFirewallSettings failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
-	return err
+	return api.waitUntilFirewallReady(instanceID)
 }
 
 func (api *API) ReadFirewallSettings(instanceID int) ([]map[string]interface{}, error) {
@@ -39,23 +50,23 @@ func (api *API) ReadFirewallSettings(instanceID int) ([]map[string]interface{}, 
 	return data, err
 }
 
-func (api *API) UpdateFirewallSettings(instanceID int, params []map[string]interface{}) error {
+func (api *API) UpdateFirewallSettings(instanceID int, params []map[string]interface{}) ([]map[string]interface{}, error) {
 	failed := make(map[string]interface{})
 	log.Printf("[DEBUG] go-api::security_firewall::update instance id: %v, params: %v", instanceID, params)
 	path := fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if response.StatusCode != 204 {
-		return fmt.Errorf("UpdateNotification failed, status: %v, message: %s", response.StatusCode, failed)
+		return nil, fmt.Errorf("UpdateNotification failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
-	return err
+	return api.waitUntilFirewallReady(instanceID)
 }
 
-func (api *API) DeleteFirewallSettings(instanceID int) error {
+func (api *API) DeleteFirewallSettings(instanceID int) ([]map[string]interface{}, error) {
 	var params [1]map[string]interface{}
 	failed := make(map[string]interface{})
 	log.Printf("[DEBUG] go-api::security_firewall::delete instance id: %v", instanceID)
@@ -67,13 +78,13 @@ func (api *API) DeleteFirewallSettings(instanceID int) error {
 	response, err := api.sling.New().Delete(path).BodyJSON(params).Receive(nil, &failed)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if response.StatusCode != 204 {
-		return fmt.Errorf("DeleteNotificaion failed, status: %v, message: %s", response.StatusCode, failed)
+		return nil, fmt.Errorf("DeleteNotificaion failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
-	return err
+	return api.waitUntilFirewallReady(instanceID)
 }
 
 func DefaultFirewallSettings() map[string]interface{} {
