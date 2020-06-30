@@ -77,13 +77,15 @@ func resourceSecurityFirewallCreate(d *schema.ResourceData, meta interface{}) er
 
 	instanceID := d.Get("instance_id").(int)
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create instance id: %v", instanceID)
-	err := api.CreateFirewallSettings(instanceID, params)
+	data, err := api.CreateFirewallSettings(instanceID, params)
 	if err != nil {
 		return fmt.Errorf("error setting security firewall for resource %s: %s", d.Id(), err)
 	}
 	d.SetId(strconv.Itoa(instanceID))
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create id set: %v", d.Id())
-	return resourceSecurityFirewallRead(d, meta)
+	d.Set("rules", data)
+
+	return nil
 }
 
 func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) error {
@@ -97,9 +99,7 @@ func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) erro
 	}
 
 	d.Set("instance_id", instanceID)
-	if err = d.Set("rules", data); err != nil {
-		return fmt.Errorf("error setting rules for resource %s: %s", d.Id(), err)
-	}
+	d.Set("rules", data)
 
 	return nil
 }
@@ -112,17 +112,19 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 		params = append(params, k.(map[string]interface{}))
 	}
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::update instance id: %v, params: %v", d.Get("instance_id"), params)
-	err := api.UpdateFirewallSettings(d.Get("instance_id").(int), params)
+	data, err := api.UpdateFirewallSettings(d.Get("instance_id").(int), params)
 	if err != nil {
 		return err
 	}
-	return resourceSecurityFirewallRead(d, meta)
+	d.Set("rules", data)
+	return nil
 }
 
 func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete instance id: %v", d.Get("instance_id"))
-	err := api.DeleteFirewallSettings(d.Get("instance_id").(int))
+	data, err := api.DeleteFirewallSettings(d.Get("instance_id").(int))
+	d.Set("rules", data)
 	return err
 }
 
