@@ -44,11 +44,12 @@ $ cd $GOPATH/src/github.com/cloudamqp/terraform-provider-cloudamqp
 $ make build
 ```
 
-Run `terraform init` from the same folder as the tf.file is located. Terraform should also search in `$GOPATH/bin`. If this not the case, the provider needs to be manually installed by moving it to `$HOME/.terraform.d/plugins`. [Install plugins](https://www.terraform.io/docs/plugins/basics.html#installing-plugins).
+Run `terraform init` from the same folder as the tf.file is located. Terraform should also search in `$GOPATH/bin`. If this not the case, the provider needs to be manually installed by moving it to `$HOME/.terraform.d/plugins`. [Install plugins](https://www.terraform.io/docs/plugins/basics.html#installing-plugins). If `$HOME/.terraform.d/plugins` don't exists, the directory needs to be created.
 
 ```sh
-$ cd <path_to_tf_file>
+$ mkdir -p ~/.terraform.d/plugins
 $ cp $GOPATH/bin/terraform-provider-cloudamqp $HOME/.terraform.d/plugins/terraform-provider-cloudamqp
+$ cd <path_to_tf_file>
 $ terraform init
 ```
 

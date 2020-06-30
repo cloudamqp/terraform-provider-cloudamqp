@@ -48,7 +48,6 @@ Valid options for notification type.
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
-
 ## Import
 
 `cloudamqp_notification` can be imported using CloudAMQP internal identifier of a recipient together (CSV separated) with the instance identifier. To retrieve the identifier of a recipient, use [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-notification-recipients)
