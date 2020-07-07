@@ -1,3 +1,9 @@
+## 1.8.0 (Unreleased)
+
+NOTES:
+
+* Initial release for Terraform Provider Development Program
+
 ## 1.7.3 (Jul 7, 2020)
 
 IMPROVEMENTS:
