@@ -128,7 +128,7 @@ All resources depending on the instance resource also needs the instance id when
 Resource affected by this is:
 
 * cloudamqp_notification
-* cloudmaqp_alarm
+* cloudamqp_alarm
 
 First declare two empty notification and alarm resources in the .tf file. Followed by running the terraform import command.
 
