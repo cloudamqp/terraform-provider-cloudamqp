@@ -1,3 +1,11 @@
+## 1.7.3 (Jul 7, 2020)
+
+IMPROVEMENTS:
+
+* README information about where to find instance info
+* Firewall: Handling updates in wrapper API (go-api 1.3.3), waiting on firewall changes.
+* Metrics integrations: Enable contributed Stackdriver functionality.
+
 ## 1.7.2 (Jun 15, 2020)
 
 IMPROVEMENTS:
