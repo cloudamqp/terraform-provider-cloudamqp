@@ -6,5 +6,5 @@ go 1.12
 
 require (
 	github.com/84codes/go-api v1.3.3
-	github.com/hashicorp/terraform-plugin-sdk v1.14.0
+	github.com/hashicorp/terraform-plugin-sdk v1.15.0
 )
