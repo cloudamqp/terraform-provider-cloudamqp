@@ -182,8 +182,7 @@ func validateIntegrationLogName() schema.SchemaValidateFunc {
 
 func validateIntegrationLogsSchemaAttribute(key string) bool {
 	switch key {
-	case "type",
-		"url",
+	case "url",
 		"host_port",
 		"token",
 		"region",

@@ -1,3 +1,9 @@
+## 1.8.1 (Unreleased)
+
+BUG FIXES:
+
+* Removed invalid attribute validation, caused log integration to fail.
+
 ## 1.8.0 (Unreleased)
 
 NOTES:
