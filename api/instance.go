@@ -31,6 +31,35 @@ func (api *API) waitUntilReady(instanceID string) (map[string]interface{}, error
 	}
 }
 
+func (api *API) waitUntilAllNodesReady(instanceID string) error {
+	log.Printf("[DEBUG] go-api::instance::waitUntilAllNodesReady waiting")
+	var data []map[string]interface{}
+	failed := make(map[string]interface{})
+
+	for {
+		path := fmt.Sprintf("api/instances/%v/nodes", instanceID)
+		_, err := api.sling.New().Path(path).Receive(&data, &failed)
+		if err != nil {
+			log.Printf("[ERROR] go-api::instance::waitUntilAllNodesReady error: %v", err)
+			return err
+		}
+
+		log.Printf("[DEBUG] go-api::instance::waitUntilAllNodesReady data: %v", data)
+		ready := false
+		for _, node := range data {
+			log.Printf("[DEBUG] go-api:instances::waitUntilAllNodesReady ready: %v, node: %v", ready, node)
+			ready = ready && node["running"].(bool) && node["configured"].(bool)
+			log.Printf("[DEBUG] go-api::instances::waitUntilNodesReady ready: %v", ready)
+		}
+
+		if ready {
+			return nil
+		}
+
+		time.Sleep(30 * time.Second)
+	}
+}
+
 func (api *API) waitUntilDeletion(instanceID string) error {
 	log.Printf("[DEBUG] go-api::instance::waitUntilDeletion waiting")
 	data := make(map[string]interface{})
@@ -123,7 +152,7 @@ func (api *API) UpdateInstance(instanceID string, params map[string]interface{})
 		return fmt.Errorf("UpdateInstance failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
-	return nil
+	return api.waitUntilAllNodesReady(instanceID)
 }
 
 func (api *API) DeleteInstance(instanceID string) error {
