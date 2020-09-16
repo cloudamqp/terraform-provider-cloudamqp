@@ -40,6 +40,7 @@ func (api *API) ReadIntegration(instanceID int, intType, intID string) (map[stri
 	log.Printf("[DEBUG] go-api::integration::read instance ID: %d, intType: %s, intID: %s", instanceID, intType, intID)
 	path := fmt.Sprintf("/api/instances/%d/integrations/%s/%s", instanceID, intType, intID)
 	response, err := api.sling.New().Path(path).Receive(&data, &failed)
+	log.Printf("[DEBUG] go-api::integration::read data: %v", data)
 
 	if err != nil {
 		return nil, err
@@ -61,13 +62,14 @@ func (api *API) ReadIntegration(instanceID int, intType, intID string) (map[stri
 			}
 		}
 	}
+	log.Printf("[DEBUG] go-api::integration::read convertedDatat: %v", convertedData)
 	return convertedData, err
 }
 
 // UpdateIntegration updated the integration with new information
 func (api *API) UpdateIntegration(instanceID int, intType, intID string, params map[string]interface{}) error {
 	failed := make(map[string]interface{})
-	log.Printf("[DEBIG] go-api::integration::update instance ID: %d, intType: %s, intID: %s", instanceID, intType, intID)
+	log.Printf("[DEBUG] go-api::integration::update instance ID: %d, intType: %s, intID: %s", instanceID, intType, intID)
 	path := fmt.Sprintf("/api/instances/%d/integrations/%s/%s", instanceID, intType, intID)
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 
