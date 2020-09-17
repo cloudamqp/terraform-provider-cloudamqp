@@ -48,7 +48,7 @@ func (api *API) waitUntilAllNodesReady(instanceID string) error {
 		ready := false
 		for _, node := range data {
 			log.Printf("[DEBUG] go-api:instances::waitUntilAllNodesReady ready: %v, node: %v", ready, node)
-			ready = ready && node["running"].(bool) && node["configured"].(bool)
+			ready = node["running"].(bool) && node["configured"].(bool)
 			log.Printf("[DEBUG] go-api::instances::waitUntilNodesReady ready: %v", ready)
 		}
 
