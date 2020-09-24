@@ -32,10 +32,11 @@ func (api *API) waitUntilReady(instanceID string) (map[string]interface{}, error
 }
 
 func (api *API) waitUntilAllNodesReady(instanceID string) error {
-	log.Printf("[DEBUG] go-api::instance::waitUntilAllNodesReady waiting")
 	var data []map[string]interface{}
 	failed := make(map[string]interface{})
 
+	numberOfNodes, _ := api.numberOfNodes(instanceID)
+	log.Printf("[DEBUG] go-api::instance::waitUntilAllNodesReady number of nodes: %v", numberOfNodes)
 	for {
 		path := fmt.Sprintf("api/instances/%v/nodes", instanceID)
 		_, err := api.sling.New().Path(path).Receive(&data, &failed)
@@ -45,17 +46,20 @@ func (api *API) waitUntilAllNodesReady(instanceID string) error {
 		}
 
 		log.Printf("[DEBUG] go-api::instance::waitUntilAllNodesReady data: %v", data)
-		ready := false
-		for _, node := range data {
-			log.Printf("[DEBUG] go-api:instances::waitUntilAllNodesReady ready: %v, node: %v", ready, node)
-			ready = node["running"].(bool) && node["configured"].(bool)
-			log.Printf("[DEBUG] go-api::instances::waitUntilNodesReady ready: %v", ready)
-		}
+		if numberOfNodes == len(data) {
+			var ready bool // default set to false
+			for index, node := range data {
+				if index == 0 {
+					ready = node["configured"].(bool) && node["running"].(bool)
+				} else {
+					ready = ready && node["configured"].(bool) && node["running"].(bool)
+				}
+			}
 
-		if ready {
-			return nil
+			if ready {
+				return nil
+			}
 		}
-
 		time.Sleep(30 * time.Second)
 	}
 }
@@ -78,6 +82,28 @@ func (api *API) waitUntilDeletion(instanceID string) error {
 
 		time.Sleep(10 * time.Second)
 	}
+}
+
+func (api *API) numberOfNodes(instanceID string) (int, error) {
+	data := make(map[string]interface{})
+	failed := make(map[string]interface{})
+	response, err := api.sling.New().Path("/api/instances/").Get(instanceID).Receive(&data, &failed)
+	log.Printf("[DEBUG] go-api::instances::numberOfNodes data: %v", data)
+
+	if err != nil {
+		fmt.Errorf("[ERROR] go-api::instances::numberOfNodes error: %v", err)
+		return -1, err
+	}
+	if response.StatusCode != 200 {
+		return -1, fmt.Errorf("go-api::instances::numberOfNodes failed, status: %v, message: %v", response.StatusCode, failed)
+	}
+
+	if data["nodes"] == nil {
+		log.Printf("[ERROR] go-api::instances::numberOfNodes is nil")
+		return -1, fmt.Errorf("go-api::instances::numberOfNodes is nil")
+	}
+
+	return int(data["nodes"].(float64)), nil
 }
 
 func (api *API) CreateInstance(params map[string]interface{}) (map[string]interface{}, error) {
