@@ -47,6 +47,7 @@ func Provider() *schema.Provider {
 			"cloudamqp_vpc_peering":        resourceVpcPeering(),
 			"cloudamqp_integration_log":    resourceIntegrationLog(),
 			"cloudamqp_integration_metric": resourceIntegrationMetric(),
+			"cloudamqp_webhook":            resourceWebhook(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
