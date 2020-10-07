@@ -1,3 +1,13 @@
+## 1.9.0 (Unreleased)
+
+FEATURES:
+
+* Added support for webhook implementation.
+
+IMPROVEMENTS:
+
+* Updated instance to wait until all nodes are finished configuring after update.
+
 ## 1.8.1 (Unreleased)
 
 BUG FIXES:
