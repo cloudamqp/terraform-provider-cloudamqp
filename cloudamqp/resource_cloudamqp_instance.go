@@ -26,7 +26,7 @@ func resourceInstance() *schema.Resource {
 			"plan": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "Name of the plan, valid options are: lemur, tiger, bunny, rabbit, panda, ape, hippo, lion",
+				Description: "Name of the plan, valid options are: squirrel, lemur, tiger, bunny, rabbit, panda, ape, hippo, lion, rhino",
 			},
 			"region": {
 				Type:        schema.TypeString,
@@ -217,7 +217,7 @@ func getPlanType(plan string) string {
 	switch plan {
 	case "lemur", "tiger":
 		return "shared"
-	case "bunny", "rabbit", "panda", "ape", "hippo", "lion":
+	case "squirrel", "bunny", "rabbit", "panda", "ape", "hippo", "lion", "rhino":
 		return "dedicated"
 	default:
 		return "unknown" // This shouldn't happen. However we shouldn't break if a new instance type gets implemented
