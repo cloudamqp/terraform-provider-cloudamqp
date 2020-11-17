@@ -199,8 +199,8 @@ func validateIntegrationMetricSchemaAttribute(key string) bool {
 		"access_key_id",
 		"secret_access_key",
 		"tags",
-		"queue_whitelist",
-		"vhost_whitelist",
+		"queue_allowlist",
+		"vhost_allowlist",
 		"api_key",
 		"email",
 		"license_key",
@@ -214,7 +214,7 @@ func validateIntegrationMetricSchemaAttribute(key string) bool {
 }
 
 func integrationMetricKeys(intName string) []string {
-	keys := []string{"tags", "queue_whitelist", "vhost_whitelist"}
+	keys := []string{"tags", "queue_allowlist", "vhost_allowlist"}
 	switch intName {
 	case "cloudwatch":
 		return append(keys, "region", "access_key_id", "secret_access_key")
