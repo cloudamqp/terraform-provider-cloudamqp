@@ -66,8 +66,10 @@ The following arguments are supported:
 * `private_key`       - (Optional) The private access key.
 * `client_email`      - (Optional) The client email registered for the integration service.
 * `tags`              - (Optional) Tags. e.g. env=prod, region=europe.
-* `queue_whitelist`   - (Optional) Whitelist queues using regular expression. Leave empty to include all queues.
-* `vhost_whitelist`   - (Optional) Whitelist vhost using regular expression. Leave empty to include all vhosts.
+* `queue_allowlist`   - (Optional) Allowlist queues using regular expression. Leave empty to include all queues.
+* `vhost_allowlist`   - (Optional) Allowlist vhost using regular expression. Leave empty to include all vhosts.
+* `queue_whitelist`   - **Deprecated** Use queue_allowlist instead
+* `vhost_whitelist`   - **Deprecated** Use vhost_allowlist instead
 
 This is the full list of all arguments. Only a subset of arguments are used based on which type of integration used. See [Integration type reference](#integration-type-reference) below for more information.
 
@@ -91,7 +93,7 @@ Valid names for third party log integration.
 Valid arguments for third party log integrations.
 
 Required arguments for all integrations: *name*<br>
-Optional arguments for all integrations: *tags*, *queue_whitelist*, *vhost_whitelist*
+Optional arguments for all integrations: *tags*, *queue_allowlist*, *vhost_allowlist*
 
 | Name | Type | Required arguments |
 | ---- | ---- | ---- |

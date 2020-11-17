@@ -67,14 +67,30 @@ func resourceIntegrationMetric() *schema.Resource {
 				Description: "(optional) tags. E.g. env=prod,region=europe",
 			},
 			"queue_whitelist": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "(optional) whitelist using regular expression",
+				Type:          schema.TypeString,
+				Optional:      true,
+				Description:   "**Deprecated**",
+				Deprecated:    "use queue_allowlist instead",
+				ConflictsWith: []string{"queue_allowlist"},
 			},
 			"vhost_whitelist": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "(optional) whitelist using regular expression",
+				Type:          schema.TypeString,
+				Optional:      true,
+				Description:   "**Deprecated**",
+				Deprecated:    "use vhost_allowlist instead",
+				ConflictsWith: []string{"vhost_allowlist"},
+			},
+			"queue_allowlist": {
+				Type:          schema.TypeString,
+				Optional:      true,
+				Description:   "(optional) allowlist using regular expression",
+				ConflictsWith: []string{"queue_whitelist"},
+			},
+			"vhost_allowlist": {
+				Type:          schema.TypeString,
+				Optional:      true,
+				Description:   "(optional) allowlist using regular expression",
+				ConflictsWith: []string{"vhost_whitelist"},
 			},
 			"project_id": {
 				Type:        schema.TypeString,
@@ -183,8 +199,8 @@ func validateIntegrationMetricSchemaAttribute(key string) bool {
 		"access_key_id",
 		"secret_access_key",
 		"tags",
-		"queue_whitelist",
-		"vhost_whitelist",
+		"queue_allowlist",
+		"vhost_allowlist",
 		"api_key",
 		"email",
 		"license_key",
@@ -198,7 +214,7 @@ func validateIntegrationMetricSchemaAttribute(key string) bool {
 }
 
 func integrationMetricKeys(intName string) []string {
-	keys := []string{"tags", "queue_whitelist", "vhost_whitelist"}
+	keys := []string{"tags", "queue_allowlist", "vhost_allowlist"}
 	switch intName {
 	case "cloudwatch":
 		return append(keys, "region", "access_key_id", "secret_access_key")
