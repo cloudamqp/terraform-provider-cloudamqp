@@ -93,7 +93,9 @@ func resourceInstance() *schema.Resource {
 			},
 			"no_default_alarms": {
 				Type:        schema.TypeBool,
+				Computed:    true,
 				Optional:    true,
+				Default:     false,
 				Description: "Set to true to not create default alarms",
 			},
 		},
