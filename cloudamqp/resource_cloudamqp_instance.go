@@ -47,6 +47,7 @@ func resourceInstance() *schema.Resource {
 			},
 			"rmq_version": {
 				Type:        schema.TypeString,
+				Computed:    true,
 				Optional:    true,
 				Description: "RabbitMQ version",
 			},
@@ -110,7 +111,7 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 	keys := []string{"name", "plan", "region", "nodes", "tags", "rmq_version", "vpc_subnet", "no_default_alarms"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
-		if v := d.Get(k); v != nil {
+		if v := d.Get(k); v != nil && v != "" {
 			params[k] = v
 		} else if k == "rmq_version" {
 			version, _ := api.DefaultRmqVersion()
