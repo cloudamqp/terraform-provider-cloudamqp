@@ -1,4 +1,36 @@
-## 1.9.0 (Unreleased)
+## 1.8.5 (Dec 8, 2020)
+
+BUG FIXES:
+
+* Failed to fetch default RMQ version from CloudAMQP API.
+
+IMPROVEMENTS:
+
+* Updated CHANGELOG with missing releases.
+* Cleaned up OS/arch combinations, reverted back during initial publish to Terraform registry.
+
+## 1.8.4 (Nov 18, 2020)
+
+NOTES:
+
+* Cleanup of language used, deprecate white-/blacklist
+
+IMPROVEMENTS:
+
+* Deprecated white-/blacklist, added allow-/blocklist.
+
+## 1.8.3 (Nov 12, 2020)
+
+IMPROVEMENTS:
+
+* Remove some OS/arch combinations.
+
+## 1.8.2 (Nov 12, 2020)
+
+NOTES:
+
+* Terraform Registry: New releases automatically updates registry with the help of GitHub actions.
+* Webhook added already Oct 6, but no release until Nov 12.
 
 FEATURES:
 
@@ -6,6 +38,7 @@ FEATURES:
 
 IMPROVEMENTS:
 
+* Using version 1.3.4 of wrapper API (go-api).
 * Updated instance to wait until all nodes are finished configuring after update.
 
 ## 1.8.1 (Unreleased)
