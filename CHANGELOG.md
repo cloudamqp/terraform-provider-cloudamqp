@@ -1,3 +1,9 @@
+## 1.8.6 (Dec 9, 2020)
+
+BUG FIX
+
+* Removed default values from attributes with computed/optional combination.
+
 ## 1.8.5 (Dec 8, 2020)
 
 BUG FIXES:

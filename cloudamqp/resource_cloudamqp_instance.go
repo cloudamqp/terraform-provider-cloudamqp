@@ -95,7 +95,6 @@ func resourceInstance() *schema.Resource {
 				Type:        schema.TypeBool,
 				Computed:    true,
 				Optional:    true,
-				Default:     false,
 				Description: "Set to true to not create default alarms",
 			},
 		},
@@ -118,6 +117,8 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 		} else if k == "rmq_version" {
 			version, _ := api.DefaultRmqVersion()
 			params[k] = version["default_rmq_version"]
+		} else if k == "no_default_alarms" {
+			params[k] = false
 		}
 		if k == "vpc_subnet" {
 			if d.Get(k) == "" {
