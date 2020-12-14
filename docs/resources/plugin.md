@@ -1,6 +1,6 @@
 ---
 layout: "cloudamqp"
-page_title: "CloudAMQP: cloudamqo_plugin"
+page_title: "CloudAMQP: cloudamqp_plugin"
 description: |-
   Enable and disable Rabbit MQ plugin.
 ---
