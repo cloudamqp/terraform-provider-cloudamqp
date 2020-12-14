@@ -22,7 +22,7 @@ resource "cloudamqp_integration_metric" "cloudwatch" {
   region = var.aws_region
 }
 
-resource "cloudamqo_integration_metric" "datadog" {
+resource "cloudamqp_integration_metric" "datadog" {
   instance_id = cloudamqp_instance.instance.id
   name = "datadog"
   api_key = var.datadog_api_key
