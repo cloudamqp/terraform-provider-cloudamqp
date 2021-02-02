@@ -221,9 +221,20 @@ func getPlanType(plan string) string {
 	switch plan {
 	case "lemur", "tiger":
 		return "shared"
+	// Legacy plans
 	case "bunny", "rabbit", "panda", "ape", "hippo", "lion":
+	// 2020 plans
+	case "squirrel-1":
+	case "bunny-1", "bunny-3":
+	case "rabbit-1", "rabbit-3", "rabbit-5":
+	case "panda-1", "panda-3", "panda-5":
+	case "ape-1", "ape-3", "ape-5":
+	case "hippo-1", "hippo-3", "hippo-5":
+	case "lion-1", "lion-3", "lion-5":
+	case "rhino-1":
 		return "dedicated"
 	default:
 		return "unknown" // This shouldn't happen. However we shouldn't break if a new instance type gets implemented
 	}
+	return ""
 }
