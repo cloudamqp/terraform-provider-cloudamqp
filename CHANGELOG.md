@@ -1,3 +1,9 @@
+## 1.9.0 (Feb 2, 2021)
+
+NOTES:
+
+* Enabled switching to new subscription plans. See documentation for more information.
+
 ## 1.8.6 (Dec 9, 2020)
 
 BUG FIX
