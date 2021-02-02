@@ -7,7 +7,7 @@ description: |-
 
 # subscription plans
 
-Table below shows depricated subscription plans for CloudAMQP. Existing plans will still work, but there will not be possible to create new ones.
+Table below shows deprecated subscription plans for CloudAMQP. Existing plans will still work, but there will not be possible to create new ones.
 
 Name | Plan | Type
 ---- | ---- | ----
