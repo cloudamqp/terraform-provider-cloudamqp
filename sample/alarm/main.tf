@@ -5,7 +5,7 @@ provider "cloudamqp" {
 // Instance
 resource "cloudamqp_instance" "rmq_bunny" {
   name   = "terraform-provider-test"
-  plan   = "bunny"
+  plan   = "bunny-1"
   region = "amazon-web-services::us-east-1"
   no_default_alarms = true
 }

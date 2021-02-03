@@ -1,6 +1,7 @@
 ---
 layout: "cloudamqp"
 page_title: "CloudAMQP: subscription plans"
+subcategory: "info"
 description: |-
   Available subscription plans for CloudAMQP.
 ---

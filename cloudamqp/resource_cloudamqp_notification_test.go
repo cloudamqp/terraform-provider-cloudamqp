@@ -108,7 +108,7 @@ func testAccNotificationConfigBasic() string {
 		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-notification-test"
 			nodes 			= 1
-			plan  			= "bunny"
+			plan  			= "bunny-1"
 			region 			= "amazon-web-services::eu-north-1"
 			rmq_version = "3.8.2"
 			tags 				= ["terraform"]
@@ -128,7 +128,7 @@ func testAccNotificationConfigUpdate() string {
 		resource "cloudamqp_instance" "instance" {
 			name 				= "terraform-notification-test"
 			nodes 			= 1
-			plan  			= "bunny"
+			plan  			= "bunny-1"
 			region 			= "amazon-web-services::eu-north-1"
 			rmq_version = "3.8.2"
 			tags 				= ["terraform"]

@@ -1,6 +1,7 @@
 ---
 layout: "cloudamqp"
 page_title: "CloudAMQP: instance regions"
+subcategory: "info"
 description: |-
   Available regions for CloudAMQP instances
 ---

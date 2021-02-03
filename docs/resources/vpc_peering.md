@@ -24,7 +24,7 @@ resource "cloudamqp" {
 # CloudAMQP - new instance, need to be created with a vpc
 resource "cloudamqp_instance" "instance" {
   name   = "terraform-vpc-accepter"a
-  plan   = "bunny"
+  plan   = "bunny-1"
   region = "amazon-web-services::us-east-1"
   nodes = 1
   tags   = ["terraform"]

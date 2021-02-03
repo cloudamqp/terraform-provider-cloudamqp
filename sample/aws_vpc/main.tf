@@ -8,7 +8,7 @@ provider "cloudamqp" {
 // === Instance resource ===
 resource "cloudamqp_instance" "cloudamqp_instance" {
   name   = "terraform-vpc-accepter-test"
-  plan   = "bunny"
+  plan   = "bunny-1"
   region = "amazon-web-services::us-east-1"
   nodes = 1
   tags   = ["test"]

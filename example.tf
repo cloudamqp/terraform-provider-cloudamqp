@@ -14,7 +14,7 @@ output "rmq_lemur_url" {
 
 #resource "cloudamqp_instance" "rmq_bunny" {
 #  name   = "terraform-provider-test-vpc-bunny"
-#  plan   = "bunny"
+#  plan   = "bunny-1"
 #  region = "amazon-web-services::us-east-1"
 #  vpc_subnet = "10.201.0.0/24"
 #}

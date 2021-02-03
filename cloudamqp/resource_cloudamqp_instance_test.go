@@ -18,7 +18,7 @@ func TestAccInstance_Basics(t *testing.T) {
 	name := acctest.RandomWithPrefix("terraform")
 	newName := acctest.RandomWithPrefix("terraform")
 	region := "amazon-web-services::us-east-1"
-	plan := "bunny"
+	plan := "bunny-1"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },

@@ -26,7 +26,7 @@ func resourceInstance() *schema.Resource {
 			"plan": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "Name of the plan, valid options are: lemur, tiger, bunny, rabbit, panda, ape, hippo, lion",
+				Description: "Name of the plan, see documentation for valid plans",
 			},
 			"region": {
 				Type:        schema.TypeString,

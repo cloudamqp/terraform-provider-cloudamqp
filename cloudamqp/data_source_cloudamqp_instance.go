@@ -28,7 +28,7 @@ func dataSourceInstance() *schema.Resource {
 			"plan": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "Name of the plan, valid options are: lemur, tiger, bunny, rabbit, panda, ape, hippo, lion",
+				Description: "Name of the plan, see documentation for valid options",
 			},
 			"region": {
 				Type:        schema.TypeString,

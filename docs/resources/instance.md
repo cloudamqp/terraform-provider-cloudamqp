@@ -24,7 +24,7 @@ resource "cloudamqp_instance" "lemur_instance" {
 # New dedicated bunny instance
 resource "cloudamqp_instance" "instance" {
   name              = "terraform-cloudamqp-instance"
-  plan              = "bunny"
+  plan              = "bunny-1"
   region            = "amazon-web-services::us-west-1"
   nodes             = 1
   tags              = [ "terraform" ]
@@ -38,9 +38,9 @@ resource "cloudamqp_instance" "instance" {
 The following arguments are supported:
 
 * `name`        - (Required) Name of the CloudAMQP instance.
-* `plan`        - (Required) The subscription plan. See available [plans](../plan.html)
-* `region`      - (Required) The region to host the instance in. See [Instance regions](../instance_region.html)
-* `nodes`       - (Optional) Number of nodes, 1 to 3, in the CloudAMQP instance, default set to 1. The plan chosen must support the number of nodes.
+* `plan`        - (Required) The subscription plan. See available [plans](../guides/info_plan.md)
+* `region`      - (Required) The region to host the instance in. See [Instance regions](../guides/info_region.md)
+* `nodes`       - (Computed) Number of nodes, 1, 3 or 5. **Note: Changed from optional to computed. In order to change number of nodes, the subscription plan needs to be updated.**
 * `tags`        - (Optional) One or more tags for the CloudAMQP instance, makes it possible to categories multiple instances in console view. Default there is no tags assigned.
 * `rmq_version` - (Computed/Optional) The Rabbit MQ version. Can be left out, will then be set to default value used by CloudAMQP API. **Note: There is not yet any support in the provider to change the RMQ version. Once it's set in the initial creation, it will remain.**
 * `vpc_subnet`  - (Optional) Creates a dedicated VPC subnet, shouldn't overlap with other VPC subnet, default subnet used 10.56.72.0/24. **NOTE: extra fee will be charged when using VPC, see [CloudAMQP](https://cloudamqp.com) for more information.**

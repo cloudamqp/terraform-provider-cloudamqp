@@ -24,7 +24,7 @@ provider "cloudamqp" {
 # Create a new cloudamqp instance
 resource "cloudamqp_instance" "instance" {
   name          = "terraform-cloudamqp-instance"
-  plan          = "bunny"
+  plan          = "bunny-1"
   region        = "amazon-web-services::region=us-west-1"
   nodes         = 1
   tags          = [ "terraform" ]
