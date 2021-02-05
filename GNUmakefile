@@ -2,7 +2,7 @@ TEST?=$$(go list ./... |grep -v 'vendor')
 GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 WEBSITE_REPO=github.com/hashicorp/terraform-website
 PKG_NAME=cloudamqp
-PROVIDER_VERSION = 1.7.0
+PROVIDER_VERSION = 1.9.1
 
 
 default: build
@@ -13,6 +13,19 @@ tools:
 
 build: fmtcheck
 	go install -ldflags "-X 'github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp.version=$(PROVIDER_VERSION)'"
+
+local-clean:  ## Clean files
+	rm -f ~/.terraform.d/plugins/terraform-provider-cloudamqp*
+
+## Local clean, build and install
+local-build: local-clean
+	@echo $(GOOS);
+	@echo $(GOARCH);
+	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -ldflags "-X 'github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp.version=$(version)'" -o terraform-provider-cloudamqp_v$(PROVIDER_VERSION)
+
+local-install: local-build
+	mkdir -p ~/.terraform.d/plugins
+	cp $(CURDIR)/terraform-provider-cloudamqp_v$(PROVIDER_VERSION) ~/.terraform.d/plugins/
 
 fmt:
 	@echo "==> Fixing source code with gofmt..."
