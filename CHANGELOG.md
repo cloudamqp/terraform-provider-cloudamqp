@@ -1,3 +1,9 @@
+## 1.9.1 (Feb 5, 2021)
+
+IMPROVEMENTS:
+
+* Validation of plan name before execution
+
 ## 1.9.0 (Feb 2, 2021)
 
 NOTES:

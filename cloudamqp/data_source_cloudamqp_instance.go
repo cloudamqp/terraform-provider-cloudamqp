@@ -113,7 +113,8 @@ func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
-	dedicated := getPlanType(d.Get("plan").(string)) == "dedicated"
+	planType, _ := getPlanType(d.Get("plan").(string))
+	dedicated := planType == "dedicated"
 	if err = d.Set("dedicated", dedicated); err != nil {
 		return fmt.Errorf("error setting dedicated for resource %s: %s", d.Id(), err)
 	}

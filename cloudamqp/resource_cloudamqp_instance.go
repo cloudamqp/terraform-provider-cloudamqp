@@ -6,6 +6,7 @@ import (
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 func resourceInstance() *schema.Resource {
@@ -24,9 +25,10 @@ func resourceInstance() *schema.Resource {
 				Description: "Name of the instance",
 			},
 			"plan": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "Name of the plan, see documentation for valid plans",
+				Type:         schema.TypeString,
+				Required:     true,
+				Description:  "Name of the plan, see documentation for valid plans",
+				ValidateFunc: validatePlanName(),
 			},
 			"region": {
 				Type:        schema.TypeString,
@@ -101,7 +103,9 @@ func resourceInstance() *schema.Resource {
 		CustomizeDiff: customdiff.All(
 			customdiff.ForceNewIfChange("plan", func(old, new, meta interface{}) bool {
 				// Recreate instance if changing plan type (from dedicated to shared or vice versa)
-				return !(getPlanType(old.(string)) == getPlanType(new.(string)))
+				oldPlanType, _ := getPlanType(old.(string))
+				newPlanType, _ := getPlanType(new.(string))
+				return !(oldPlanType == newPlanType)
 			}),
 		),
 	}
@@ -158,7 +162,8 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
-	dedicated := getPlanType(d.Get("plan").(string)) == "dedicated"
+	planType, _ := getPlanType(d.Get("plan").(string))
+	dedicated := planType == "dedicated"
 	if err = d.Set("dedicated", dedicated); err != nil {
 		return fmt.Errorf("error setting dedicated for resource %s: %s", d.Id(), err)
 	}
@@ -217,10 +222,10 @@ func validateInstanceSchemaAttribute(key string) bool {
 	return false
 }
 
-func getPlanType(plan string) string {
+func getPlanType(plan string) (string, error) {
 	switch plan {
 	case "lemur", "tiger":
-		return "shared"
+		return "shared", nil
 	// Legacy plans
 	case "bunny", "rabbit", "panda", "ape", "hippo", "lion":
 	// 2020 plans
@@ -232,9 +237,21 @@ func getPlanType(plan string) string {
 	case "hippo-1", "hippo-3", "hippo-5":
 	case "lion-1", "lion-3", "lion-5":
 	case "rhino-1":
-		return "dedicated"
-	default:
-		return "unknown" // This shouldn't happen. However we shouldn't break if a new instance type gets implemented
+		return "dedicated", nil
 	}
-	return ""
+	return "", fmt.Errorf("couldn't find a matching plan type for: %s", plan)
+}
+
+func validatePlanName() schema.SchemaValidateFunc {
+	return validation.StringInSlice([]string{
+		"lemur", "tiger",
+		"bunny", "rabbit", "panda", "ape", "hippo", "lion",
+		"squirrel-1", "bunny-1", "bunny-3",
+		"rabbit-1", "rabbit-3", "rabbit-5",
+		"panda-1", "panda-3", "panda-5",
+		"ape-1", "ape-3", "ape-5",
+		"hippo-1", "hippo-3", "hippo-5",
+		"lion-1", "lion-3", "lion-5",
+		"rhino-1",
+	}, true)
 }
