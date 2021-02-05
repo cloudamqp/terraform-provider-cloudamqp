@@ -11,6 +11,13 @@ This resource allows you to enable or disable Rabbit MQ plugins.
 
 Only available for dedicated subscription plans.
 
+**Note: Known issue when changing multiple plugins:**
+Rabbit MQ can only change one plugin at a time. Therefore if multiple plugins should be changed, Terraform needs to be changed from working in parallel to be working in sequence. This can be done by adding parallelism (default set to 10) command to apply.
+
+```
+terraform apply -parallelism=1
+```
+
 ## Example Usage
 
 ```hcl
