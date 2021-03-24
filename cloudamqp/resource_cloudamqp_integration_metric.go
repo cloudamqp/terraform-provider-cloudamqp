@@ -3,6 +3,8 @@ package cloudamqp
 import (
 	"errors"
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -135,11 +137,14 @@ func resourceIntegrationMetricCreate(d *schema.ResourceData, meta interface{}) e
 }
 
 func resourceIntegrationMetricRead(d *schema.ResourceData, meta interface{}) error {
-	if d.Get("instance_id").(int) == 0 {
-		return errors.New("Missing instance identifier: {instance_id}")
+	if strings.Contains(d.Id(), ",") {
+		s := strings.Split(d.Id(), ",")
+		d.SetId(s[0])
+		instanceID, _ := strconv.Atoi(s[1])
+		d.Set("instance_id", instanceID)
 	}
-	if len(d.Get("name").(string)) == 0 {
-		return errors.New("Missing type representation: {name}")
+	if d.Get("instance_id").(int) == 0 {
+		return errors.New("Missing instance identifier: {resource_id},{instance_id}")
 	}
 
 	api := meta.(*api.API)
@@ -150,6 +155,9 @@ func resourceIntegrationMetricRead(d *schema.ResourceData, meta interface{}) err
 	}
 
 	for k, v := range data {
+		if k == "type" {
+			d.Set("name", v)
+		}
 		if validateIntegrationMetricSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
 				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)

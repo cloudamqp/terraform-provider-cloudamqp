@@ -137,6 +137,9 @@ func resourceIntegrationLogRead(d *schema.ResourceData, meta interface{}) error 
 	}
 
 	for k, v := range data {
+		if k == "type" {
+			d.Set("name", v)
+		}
 		if validateIntegrationLogsSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
 				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)

@@ -111,6 +111,6 @@ Optional arguments for all integrations: *tags*, *queue_allowlist*, *vhost_allow
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
 ## Import
-`cloudamqp_integration_metric`can be imported using the name argument of the resource together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
+`cloudamqp_integration_metric`can be imported using the resource identifier together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
 
-`terraform import cloudamqp_integration_metric.<resource_name> <name>,<instance_id>`
+`terraform import cloudamqp_integration_metric.<resource_name> <resource_id>,<instance_id>`
