@@ -22,7 +22,7 @@ resource "cloudamqp_instance" "instance" {
 #   rules {
 #     ip = "0.0.0.0/0"
 #     ports = []
-#     services = ["STOMP", "AMQP", "MQTTS", "STOMPS", "MQTT", "AMQPS"]
+#     services = ["HTTPS", "STOMP", "AMQP", "MQTTS", "STOMPS", "MQTT", "AMQPS"]
 #   }
 # }
 
@@ -32,7 +32,7 @@ resource "cloudamqp_security_firewall" "firewall" {
   rules {
     ip = "192.168.0.0/0"
     ports = [4567]
-    services = ["MQTTS", "STOMPS", "AMQPS"]
+    services = ["MQTTS", "STOMPS", "AMQPS", "HTTPS"]
   }
 }
 

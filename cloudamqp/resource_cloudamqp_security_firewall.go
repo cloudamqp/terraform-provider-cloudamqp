@@ -37,7 +37,7 @@ func resourceSecurityFirewall() *schema.Resource {
 								Type:         schema.TypeString,
 								ValidateFunc: validateServices(),
 							},
-							Description: "Pre-defined services 'AMQP', 'AMQPS', 'MQTT', 'MQTTS', 'STOMP', 'STOMPS'",
+							Description: "Pre-defined services 'AMQP', 'AMQPS', 'HTTPS', 'MQTT', 'MQTTS', 'STOMP', 'STOMPS'",
 						},
 						"ports": {
 							Type:     schema.TypeList,
@@ -132,6 +132,7 @@ func validateServices() schema.SchemaValidateFunc {
 	return validation.StringInSlice([]string{
 		"AMQP",
 		"AMQPS",
+		"HTTPS",
 		"MQTT",
 		"MQTTS",
 		"STOMP",
