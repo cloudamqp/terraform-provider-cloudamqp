@@ -20,13 +20,13 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   rules {
     ip          = "192.168.0.0/24"
     ports       = [4567, 4568]
-    services    = ["AMQP","AMQPS"]
+    services    = ["AMQP","AMQPS", "HTTPS"]
   }
 
   rules {
     ip          = "10.56.72.0/24"
     ports       = []
-    services    = ["AMQP","AMQPS"]
+    services    = [AMQP","AMQPS", "HTTPS"]
   }
 }
 ```
@@ -47,7 +47,7 @@ The `rules` block consists of:
 * `services`    - (Required) Pre-defined service ports
 * `description` - (Optional) Description name of the rule. e.g. Default.
 
-Supported services: *AMQP*, *AMQPS*, *MQTT*, *MQTTS*, *STOMP*, *STOMPS*
+Supported services: *AMQP*, *AMQPS*, *HTTPS*, *MQTT*, *MQTTS*, *STOMP*, *STOMPS*
 
 ## Depedency
 
