@@ -1,3 +1,16 @@
+## 1.9.2 (May 21, 2021)
+
+IMPROVEMENTS:
+
+* Add HTTPS as a supported firewall service
+* Allow MS Teams to be used as recipient type
+
+BUG FIXES:
+
+* Import of log intergration, corrected the identifiers needed to fetch integration
+* Import of metrics integration, corrected the identifier needed to fetch integration
+* Display of hostname and internal hostname
+
 ## 1.9.1 (Feb 5, 2021)
 
 IMPROVEMENTS:
