@@ -43,6 +43,7 @@ Valid options for notification type.
 * opsgenie
 * opsgenie-eu
 * slack
+* teams
 
 ## Dependency
 

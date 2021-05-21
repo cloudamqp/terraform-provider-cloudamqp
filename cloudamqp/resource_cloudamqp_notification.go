@@ -29,7 +29,7 @@ func resourceNotification() *schema.Resource {
 			"type": {
 				Type:         schema.TypeString,
 				Required:     true,
-				Description:  "Type of the notification, valid options are: email, webhook, pagerduty, victorops, opsgenie, opsgenie-eu, slack",
+				Description:  "Type of the notification, valid options are: email, webhook, pagerduty, victorops, opsgenie, opsgenie-eu, slack, teams",
 				ValidateFunc: validateNotificationType(),
 			},
 			"value": {
@@ -131,6 +131,7 @@ func validateNotificationType() schema.SchemaValidateFunc {
 		"opsgenie",
 		"opsgenie-eu",
 		"slack",
+		"teams",
 	}, true)
 }
 
