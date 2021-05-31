@@ -35,6 +35,26 @@ The two APIs supported can be found at https://docs.cloudamqp.com (called custom
 
 ## Install the CloudAMQP Terraform Provider
 
+### From Terraform Registry
+
+The CloudAMQP provider is available from the registry at https://registry.terraform.io/providers/cloudamqp/cloudamqp
+
+If you are using Terraform 0.13+:
+
+```yaml
+terraform {
+  required_providers {
+    cloudamqp = {
+      source = "cloudamqp/cloudamqp"
+    }
+  }
+}
+```
+
+Read more at https://www.terraform.io/docs/language/providers/requirements.html
+
+### From source
+
 Clone repository to `$GOPATH/src/github.com/cloudamqp/terraform-provider-cloudamqp`
 
 Change directory and build the provider from make. This will call `go intall` and install the plugin under `$GOPATH/bin`.
