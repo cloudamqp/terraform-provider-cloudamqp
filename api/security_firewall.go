@@ -6,11 +6,11 @@ import (
 	"time"
 )
 
-func (api *API) waitUntilFirewallReady(instanceID int) ([]map[string]interface{}, error) {
-	log.Printf("[DEBUG] go-api::security_firewall::waitUntilFirewallReady waiting")
+func (api *API) waitUntilFirewallConfigured(instanceID int) ([]map[string]interface{}, error) {
+	log.Printf("[DEBUG] go-api::security_firewall::waitUntilFirewallConfigured waiting")
 	var data []map[string]interface{}
 	failed := make(map[string]interface{})
-	path := fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
+	path := fmt.Sprintf("/api/instances/%d/security/firewall/configured", instanceID)
 	for {
 		response, err := api.sling.New().Path(path).Receive(&data, &failed)
 		if err != nil {
@@ -18,8 +18,8 @@ func (api *API) waitUntilFirewallReady(instanceID int) ([]map[string]interface{}
 		}
 		if response.StatusCode == 200 {
 			return data, nil
-		} else if response.StatusCode == 504 {
-			log.Printf("[DEBUG] go-api::security_firewall#waitUntilFirewallReady: The cluster is unavailable, firewall configuring")
+		} else if response.StatusCode == 400 {
+			log.Printf("[DEBUG] go-api::security_firewall#waitUntilFirewallConfigured: The cluster is unavailable, firewall configuring")
 		} else {
 			return nil, fmt.Errorf("waitUntilReady failed, status: %v, message: %s", response.StatusCode, failed)
 		}
@@ -41,7 +41,7 @@ func (api *API) CreateFirewallSettings(instanceID int, params []map[string]inter
 		return nil, fmt.Errorf("CreateFirewallSettings failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
-	api.waitUntilFirewallReady(instanceID)
+	api.waitUntilFirewallConfigured(instanceID)
 	return api.ReadFirewallSettings(instanceID)
 }
 
@@ -78,7 +78,7 @@ func (api *API) UpdateFirewallSettings(instanceID int, params []map[string]inter
 		return nil, fmt.Errorf("UpdateNotification failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
-	api.waitUntilFirewallReady(instanceID)
+	api.waitUntilFirewallConfigured(instanceID)
 	return api.ReadFirewallSettings(instanceID)
 }
 
@@ -100,7 +100,7 @@ func (api *API) DeleteFirewallSettings(instanceID int) ([]map[string]interface{}
 		return nil, fmt.Errorf("DeleteNotificaion failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
-	api.waitUntilFirewallReady(instanceID)
+	api.waitUntilFirewallConfigured(instanceID)
 	return api.ReadFirewallSettings(instanceID)
 }
 
