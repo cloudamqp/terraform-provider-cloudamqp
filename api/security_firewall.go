@@ -91,7 +91,7 @@ func (api *API) DeleteFirewallSettings(instanceID int) ([]map[string]interface{}
 	// Use default firewall rule and update firewall upon delete.
 	params[0] = DefaultFirewallSettings()
 	log.Printf("[DEBUG] go-api::security_firewall::delete default firewall: %v", params[0])
-	response, err := api.sling.New().Delete(path).BodyJSON(params).Receive(nil, &failed)
+	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 
 	if err != nil {
 		return nil, err
