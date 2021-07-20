@@ -13,7 +13,7 @@ resource "cloudamqp_instance" "rmq_bunny" {
 // Notification and recipient
 // Each instance will get one default recipient.
 // The default recipient can either be imported as a resource or loaded as a data source.
-data "cloudamqp_notificaion" "default_recipient" {
+data "cloudamqp_notification" "default_recipient" {
   instance_id = cloudamqp_instance.rmq_bunny.id
   name = "Default"
 }
@@ -36,17 +36,17 @@ resource "cloudamqp_notification" "recipient_02" {
 // To disable creating default alarms when creating a new instance. Set `no_default_alarms`
 // attribute to true in the instance resource.
 data "cloudamqp_alarm" "default_cpu" {
-  instance_id = cloudamqp_instance.instance.id
+  instance_id = cloudamqp_instance.rmq_bunny.id
   type 				= "cpu"
 }
 
 data "cloudamqp_alarm" "default_memory" {
-  instance_id = cloudamqp_instance.instance.id
+  instance_id = cloudamqp_instance.rmq_bunny.id
   type 				= "memory"
 }
 
 data "cloudamqp_alarm" "default_memory" {
-  instance_id = cloudamqp_instance.instance.id
+  instance_id = cloudamqp_instance.rmq_bunny.id
   type 				= "disk"
 }
 
@@ -56,7 +56,7 @@ resource "cloudamqp_alarm" "alarm_01" {
   type            = "cpu"
   value_threshold = 90
   time_threshold  = 600
-  recipients      = [cloudamqp_notification.recipient_01.id, cloudamqp_notification.recipient_02]
+  recipients      = [cloudamqp_notification.recipient_01.id, cloudamqp_notification.recipient_02.id]
 }
 
 resource "cloudamqp_alarm" "alarm_02" {
@@ -64,7 +64,7 @@ resource "cloudamqp_alarm" "alarm_02" {
   type            = "memory"
   value_threshold = 90
   time_threshold  = 600
-  recipients      = [cloudamqp_notification.recipient_01.id, cloudamqp_notification.recipient_02]
+  recipients      = [cloudamqp_notification.recipient_01.id, cloudamqp_notification.recipient_02.id]
 }
 
 resource "cloudamqp_alarm" "alarm_03" {

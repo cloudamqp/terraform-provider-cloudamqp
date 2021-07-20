@@ -41,6 +41,6 @@ output "alarm_time_threshold" {
   value = "${cloudamqp_alarm.alarm_01_cpu.time_threshold}"
 }
 
-output "alarm_notificaions" {
+output "alarm_notifications" {
   value = "${cloudamqp_alarm.alarm_01_cpu.notifications}"
 }
