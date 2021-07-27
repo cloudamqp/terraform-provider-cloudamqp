@@ -70,7 +70,7 @@ func (api *API) DeleteFirewallSettings(instanceID int) error {
 		return err
 	}
 	if response.StatusCode != 204 {
-		return fmt.Errorf("DeleteNotification failed, status: %v, message: %s", response.StatusCode, failed)
+		return fmt.Errorf("DeleteNotificaion failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
 	return err
