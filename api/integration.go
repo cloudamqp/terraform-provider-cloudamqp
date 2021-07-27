@@ -88,7 +88,7 @@ func (api *API) DeleteIntegration(instanceID int, intType, intID string) error {
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 
 	if response.StatusCode != 204 {
-		return fmt.Errorf("DeleteNotificaion failed, status: %v, message: %s", response.StatusCode, failed)
+		return fmt.Errorf("DeleteNotification failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
 	return err

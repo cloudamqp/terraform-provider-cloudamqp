@@ -90,7 +90,7 @@ func (api *API) DeleteNotification(instanceID int, params map[string]interface{}
 	response, err := api.sling.New().Delete(path).BodyJSON(params).Receive(nil, &failed)
 
 	if response.StatusCode != 204 {
-		return fmt.Errorf("DeleteNotificaion failed, status: %v, message: %s", response.StatusCode, failed)
+		return fmt.Errorf("DeleteNotification failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
 	return err
