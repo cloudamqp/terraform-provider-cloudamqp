@@ -20,38 +20,35 @@ func dataSourceNodes() *schema.Resource {
 			},
 			"nodes": {
 				Type:     schema.TypeList,
-				Optional: true,
 				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"hostname": {
 							Type:     schema.TypeString,
-							Optional: true,
 							Computed: true,
 						},
 						"name": {
 							Type:     schema.TypeString,
-							Optional: true,
 							Computed: true,
 						},
 						"running": {
 							Type:     schema.TypeBool,
-							Optional: true,
 							Computed: true,
 						},
 						"rabbitmq_version": {
 							Type:     schema.TypeString,
-							Optional: true,
 							Computed: true,
 						},
 						"erlang_version": {
 							Type:     schema.TypeString,
-							Optional: true,
 							Computed: true,
 						},
 						"hipe": {
 							Type:     schema.TypeBool,
-							Optional: true,
+							Computed: true,
+						},
+						"configured": {
+							Type:     schema.TypeBool,
 							Computed: true,
 						},
 					},
