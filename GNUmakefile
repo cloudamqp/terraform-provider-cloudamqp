@@ -15,7 +15,10 @@ build: fmtcheck
 	go install -ldflags "-X 'github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp.version=$(PROVIDER_VERSION)'"
 
 local-clean:  ## Clean files
-	rm -f ~/.terraform.d/plugins/terraform-provider-cloudamqp*
+  ## 0.12 version
+	## rm -f ~/.terraform.d/plugins/terraform-provider-cloudamqp*
+	## 0.13+ version
+	rm -rf ~/.terraform.d/plugins/localhost/cloudamqp/cloudamqp/*
 
 ## Local clean, build and install
 local-build: local-clean
@@ -24,8 +27,12 @@ local-build: local-clean
 	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -ldflags "-X 'github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp.version=$(version)'" -o terraform-provider-cloudamqp_v$(PROVIDER_VERSION)
 
 local-install: local-build
-	mkdir -p ~/.terraform.d/plugins
-	cp $(CURDIR)/terraform-provider-cloudamqp_v$(PROVIDER_VERSION) ~/.terraform.d/plugins/
+	## 0.12 version
+	## mkdir -p ~/.terraform.d/plugins
+	## cp $(CURDIR)/terraform-provider-cloudamqp_v$(PROVIDER_VERSION) ~/.terraform.d/plugins/
+	## 0.13+ version
+	mkdir -p ~/.terraform.d/plugins/localhost/cloudamqp/cloudamqp/$(PROVIDER_VERSION)/darwin_amd64
+	cp $(CURDIR)/terraform-provider-cloudamqp_v$(PROVIDER_VERSION) ~/.terraform.d/plugins/localhost/cloudamqp/cloudamqp/$(PROVIDER_VERSION)/darwin_amd64
 
 fmt:
 	@echo "==> Fixing source code with gofmt..."
