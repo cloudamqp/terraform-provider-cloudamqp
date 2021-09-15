@@ -66,8 +66,40 @@ func dataSourceNodesRead(d *schema.ResourceData, meta interface{}) error {
 	}
 	instanceID := strconv.Itoa(d.Get("instance_id").(int))
 	d.SetId(instanceID)
-	if err = d.Set("nodes", data); err != nil {
-		return fmt.Errorf("error setting nodes for resource %s: %s", d.Id(), err)
+
+	nodes := make([]map[string]interface{}, len(data))
+	for k, v := range data {
+		nodes[k] = readNode(v)
 	}
+
+	if err = d.Set("nodes", nodes); err != nil {
+		return fmt.Errorf("error setting nodes for resource %s, %s", d.Id(), err)
+	}
+
 	return nil
+}
+
+func readNode(data map[string]interface{}) map[string]interface{} {
+	node := make(map[string]interface{})
+	for k, v := range data {
+		if validateNodesSchemaAttribute(k) {
+			node[k] = v
+		}
+	}
+	return node
+}
+
+func validateNodesSchemaAttribute(key string) bool {
+	switch key {
+	case "hostname",
+		"name",
+		"running",
+		"rabbitmq_version",
+		"erlang_version",
+		"hipe",
+		"configured",
+		"rmq_version":
+		return true
+	}
+	return false
 }
