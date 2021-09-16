@@ -40,6 +40,7 @@ func (api *API) ReadIntegration(instanceID int, intType, intID string) (map[stri
 	log.Printf("[DEBUG] go-api::integration::read instance ID: %d, intType: %s, intID: %s", instanceID, intType, intID)
 	path := fmt.Sprintf("/api/instances/%d/integrations/%s/%s", instanceID, intType, intID)
 	response, err := api.sling.New().Path(path).Receive(&data, &failed)
+	log.Printf("[DEBUG] go-api::integration::read data: %v", data)
 
 	if err != nil {
 		return nil, err
@@ -51,6 +52,7 @@ func (api *API) ReadIntegration(instanceID int, intType, intID string) (map[stri
 	// Convert API response body, config part, into single map
 	convertedData := make(map[string]interface{})
 	for k, v := range data {
+		log.Printf("[DEBUG] go-api::integration::read k: %v, v: %v", k, v)
 		if k == "id" {
 			convertedData[k] = v
 		} else if k == "type" {
@@ -61,6 +63,7 @@ func (api *API) ReadIntegration(instanceID int, intType, intID string) (map[stri
 			}
 		}
 	}
+	log.Printf("[DEBUG] go-api::integration::read convertedDatat: %v", convertedData)
 	return convertedData, err
 }
 
