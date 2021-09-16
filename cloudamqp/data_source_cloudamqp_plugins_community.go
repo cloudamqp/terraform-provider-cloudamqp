@@ -50,8 +50,24 @@ func dataSourcePluginsCommunityRead(d *schema.ResourceData, meta interface{}) er
 	if err != nil {
 		return err
 	}
-	if err = d.Set("plugins", data); err != nil {
+
+	plugins := make([]map[string]interface{}, len(data))
+	for k, v := range data {
+		plugins[k] = readCommunityPlugin(v)
+	}
+
+	if err = d.Set("plugins", plugins); err != nil {
 		return fmt.Errorf("error setting community plugins for resource %s: %s", d.Id(), err)
 	}
 	return nil
+}
+
+func readCommunityPlugin(data map[string]interface{}) map[string]interface{} {
+	plugin := make(map[string]interface{})
+	for k, v := range data {
+		if validateCommunityPluginSchemaAttribute(k) {
+			plugin[k] = v
+		}
+	}
+	return plugin
 }

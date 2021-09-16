@@ -54,8 +54,35 @@ func dataSourcePluginsRead(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return err
 	}
-	if err = d.Set("plugins", data); err != nil {
+
+	plugins := make([]map[string]interface{}, len(data))
+	for k, v := range data {
+		plugins[k] = readPlugin(v)
+	}
+
+	if err = d.Set("plugins", plugins); err != nil {
 		return fmt.Errorf("error setting plugins for resource %s: %s", d.Id(), err)
 	}
 	return nil
+}
+
+func readPlugin(data map[string]interface{}) map[string]interface{} {
+	plugin := make(map[string]interface{})
+	for k, v := range data {
+		if validatePluginsSchemaAttribute(k) {
+			plugin[k] = v
+		}
+	}
+	return plugin
+}
+
+func validatePluginsSchemaAttribute(key string) bool {
+	switch key {
+	case "name",
+		"version",
+		"description",
+		"enabled":
+		return true
+	}
+	return false
 }

@@ -97,9 +97,16 @@ func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) erro
 	if err != nil {
 		return err
 	}
-
 	d.Set("instance_id", instanceID)
-	d.Set("rules", data)
+
+	rules := make([]map[string]interface{}, len(data))
+	for k, v := range data {
+		rules[k] = readRule(v)
+	}
+
+	if err = d.Set("rules", rules); err != nil {
+		return fmt.Errorf("error setting rules for resource %s, %s", d.Id(), err)
+	}
 
 	return nil
 }
@@ -128,6 +135,16 @@ func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) er
 	return err
 }
 
+func readRule(data map[string]interface{}) map[string]interface{} {
+	rule := make(map[string]interface{})
+	for k, v := range data {
+		if validateRulesSchemaAttribute(k) {
+			rule[k] = v
+		}
+	}
+	return rule
+}
+
 func validateServices() schema.SchemaValidateFunc {
 	return validation.StringInSlice([]string{
 		"AMQP",
@@ -138,4 +155,15 @@ func validateServices() schema.SchemaValidateFunc {
 		"STOMP",
 		"STOMPS",
 	}, true)
+}
+
+func validateRulesSchemaAttribute(key string) bool {
+	switch key {
+	case "services",
+		"port",
+		"ip",
+		"description":
+		return true
+	}
+	return false
 }

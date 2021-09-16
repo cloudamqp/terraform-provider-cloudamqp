@@ -26,9 +26,10 @@ func dataSourceAlarm() *schema.Resource {
 				Description: "Alarm identifier",
 			},
 			"type": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "Type of the alarm",
+				Type:         schema.TypeString,
+				Optional:     true,
+				Description:  "Type of the alarm",
+				ValidateFunc: validateAlarmType(),
 			},
 			"enabled": {
 				Type:        schema.TypeBool,

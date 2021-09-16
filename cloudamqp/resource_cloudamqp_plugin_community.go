@@ -68,8 +68,10 @@ func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error
 	}
 
 	for k, v := range data {
-		if err = d.Set(k, v); err != nil {
-			return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+		if validateCommunityPluginSchemaAttribute(k) {
+			if err = d.Set(k, v); err != nil {
+				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+			}
 		}
 	}
 
@@ -96,4 +98,14 @@ func resourcePluginCommunityDelete(d *schema.ResourceData, meta interface{}) err
 	api := meta.(*api.API)
 	_, err := api.DisablePluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
 	return err
+}
+
+func validateCommunityPluginSchemaAttribute(key string) bool {
+	switch key {
+	case "name",
+		"require",
+		"description":
+		return true
+	}
+	return false
 }
