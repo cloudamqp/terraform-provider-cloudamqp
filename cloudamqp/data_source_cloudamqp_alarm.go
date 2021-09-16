@@ -88,6 +88,7 @@ func dataSourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 	d.SetId(fmt.Sprintf("%v", data["id"]))
+	d.Set("alarm_id", data["id"])
 	for k, v := range data {
 		if validateAlarmSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
