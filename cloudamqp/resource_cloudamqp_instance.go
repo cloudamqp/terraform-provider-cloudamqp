@@ -227,16 +227,16 @@ func getPlanType(plan string) (string, error) {
 	case "lemur", "tiger":
 		return "shared", nil
 	// Legacy plans
-	case "bunny", "rabbit", "panda", "ape", "hippo", "lion":
-	// 2020 plans
-	case "squirrel-1":
-	case "bunny-1", "bunny-3":
-	case "rabbit-1", "rabbit-3", "rabbit-5":
-	case "panda-1", "panda-3", "panda-5":
-	case "ape-1", "ape-3", "ape-5":
-	case "hippo-1", "hippo-3", "hippo-5":
-	case "lion-1", "lion-3", "lion-5":
-	case "rhino-1":
+	case "bunny", "rabbit", "panda", "ape", "hippo", "lion",
+		// 2020 plans
+		"squirrel-1",
+		"bunny-1", "bunny-3",
+		"rabbit-1", "rabbit-3", "rabbit-5",
+		"panda-1", "panda-3", "panda-5",
+		"ape-1", "ape-3", "ape-5",
+		"hippo-1", "hippo-3", "hippo-5",
+		"lion-1", "lion-3", "lion-5",
+		"rhino-1":
 		return "dedicated", nil
 	}
 	return "", fmt.Errorf("couldn't find a matching plan type for: %s", plan)
