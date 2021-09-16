@@ -55,6 +55,8 @@ func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
 			if k == "security_group" {
 				sg := data[k].(map[string]interface{})
 				err = d.Set("security_group_id", sg["id"])
+			} else if k == "security_group_id" {
+				continue
 			} else if k == "subnet" {
 				err = d.Set("vpc_subnet", v)
 			} else {
