@@ -94,6 +94,12 @@ resource "aws_route" "accepter_route" {
 * `instance_id` - (Required) The CloudAMQP instance ID.
 * `peering_id` - (Required) Peering identifier created by AW peering request.
 
+## Attributes Reference
+
+All attributes reference are computed
+
+* `id`  - The identifier for this resource.
+
 ## Depedency
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.

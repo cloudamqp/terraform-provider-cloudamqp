@@ -61,11 +61,17 @@ The following arguments are supported:
 
 Based on alarm type, different arguments are flagged as required or optional.
 
+## Attributes Reference
+
+All attributes reference are computed
+
+* `id`  - The identifier for this resource.
+
 ## Alarm Type reference
 
 Valid options for notification type.
 
-Required arguments for all alarms: *instance_id*, *type* and *enabled*<br>
+Required arguments for all alarms: *instance_id*, *type* and *enabled*
 Optional argument for all alarms: *tags*, *queue_regex*, *vhost_regex*
 
 | Name | Type | Shared | Dedicated | Required arguments |
@@ -88,4 +94,4 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 `cloudamqp_alarm` can be imported using CloudAMQP internal identifier of the alarm together (CSV separated) with the instance identifier. To retrieve the alarm identifier, use [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-alarms)
 
-`terraform import cloudamqp_alarm.alarm <alarm_id>,<instance_id>`
+`terraform import cloudamqp_alarm.alarm <id>,<instance_id>`

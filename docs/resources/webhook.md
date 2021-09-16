@@ -35,6 +35,12 @@ The following arguments are supported:
 * `retry_interval`  - (Required) How often we retry if your endpoint fails (in seconds).
 * `concurrency`     - (Required) Max simultaneous requests to the endpoint.
 
+## Attributes Reference
+
+All attributes reference are computed
+
+* `id`  - The identifier for this resource.
+
 Note: If the endpoint returns a HTTP status code in the 200 range the message will be acknowledged and removed from the queue, otherwise retried.
 
 Note 2: Each argument reference is also set to `ForceNew`, since there is no support for updating the resource. Gives that each change in any of the argument, will force the provider to destroy and re-create the resource.
@@ -47,4 +53,4 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 `cloudamqp_webhook` can be imported using the resource identifier together with CloudAMQP instance identifier. The identifiers are CSV separated, see example below.
 
-`terraform import cloudamqp_webhook.webhook_queue <webhook_id>,<instance_id>`
+`terraform import cloudamqp_webhook.webhook_queue <id>,<instance_id>`

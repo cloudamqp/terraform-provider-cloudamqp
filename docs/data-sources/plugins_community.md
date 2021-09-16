@@ -21,17 +21,20 @@ data "cloudamqp_plugins_community" "communit_plugins" {
 
 * `instance_id` - (Required) The CloudAMQP instance identifier.
 
-## Attribute reference
+## Attributes reference
 
-* `plugins` - (Computed) An array of community plugins. Each `plugins` block consists of the fields documented below.
+All attributes reference are computed
+
+* `id`      - The identifier for this resource.
+* `plugins` - An array of community plugins. Each `plugins` block consists of the fields documented below.
 
 ___
 
 The `plugins` block consists of
 
-* `name`        - (Computed) The type of the recipient.
-* `require`     - (Computed) Min. required Rabbit MQ version to be used.
-* `description` - (Computed) Description of what the plugin does.
+* `name`        - The type of the recipient.
+* `require`     - Min. required Rabbit MQ version to be used.
+* `description` - Description of what the plugin does.
 
 ## Dependency
 

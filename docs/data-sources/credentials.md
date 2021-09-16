@@ -21,10 +21,13 @@ data "cloudamqp_credentials" "credentials" {
 
 * `instance_id` - (Required) The CloudAMQP instance identifier.
 
-## Attribute reference
+## Attributes reference
 
-* `username`    - (Computed/Sensitive) The username for the configured user in Rabbit MQ.
-* `password`    - (Computed/Sensitive) The password used by the `username`.
+All attributes reference are computed.
+
+* `id`          - The identifier for this data source.
+* `username`    - (Sensitive) The username for the configured user in Rabbit MQ.
+* `password`    - (Sensitive) The password used by the `username`.
 
 ## Dependency
 

@@ -92,7 +92,7 @@ Valid names for third party log integration.
 
 Valid arguments for third party log integrations.
 
-Required arguments for all integrations: *name*<br>
+Required arguments for all integrations: *name*
 Optional arguments for all integrations: *tags*, *queue_allowlist*, *vhost_allowlist*
 
 | Name | Type | Required arguments |
@@ -106,11 +106,18 @@ Optional arguments for all integrations: *tags*, *queue_allowlist*, *vhost_allow
 | New relic v2           | newrelic_v2    | api_key, region |
 | Stackdriver            | stackdriver    | project_id, private_key, client_email |
 
+## Attributes Reference
+
+All attributes reference are computed
+
+* `id`  - The identifier for this resource.
+
 ## Dependency
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
 ## Import
+
 `cloudamqp_integration_metric`can be imported using the resource identifier together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
 
 `terraform import cloudamqp_integration_metric.<resource_name> <resource_id>,<instance_id>`

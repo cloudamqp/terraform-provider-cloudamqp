@@ -101,7 +101,7 @@ Valid names for third party log integration.
 |------------|---------------------------------------------------------------|
 | cloudwatchlog | Create a IAM with programmatic access. |
 | logentries | Create a Logentries token at https://logentries.com/app#/add-log/manual  |
-| loggly     | Create a Loggly token at https://{your-company}.loggly.com/tokens |
+| loggly     | Create a Loggly token at https://your-company}.loggly.com/tokens |
 | papertrail | Create a Papertrail endpoint https://papertrailapp.com/systems/setup |
 | splunk     | Create a HTTP Event Collector token at https://.cloud.splunk.com/en-US/manager/search/http-eventcollector |
 | datadog       | Create a Datadog API key at app.datadoghq.com |
@@ -123,11 +123,18 @@ Required arguments for all integrations: name
 | Data Dog | datadog | region, api_keys, tags |
 | Stackdriver | stackdriver | project_id, private_key, client_email |
 
+## Attributes Reference
+
+All attributes reference are computed
+
+* `id`  - The identifier for this resource`
+
 ## Dependency
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
 ## Import
+
 `cloudamqp_integration_log`can be imported using the resource identifier together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
 
-`terraform import cloudamqp_integration_log.<resource_name> <resource_id>,<instance_id>`
+`terraform import cloudamqp_integration_log.<resource_name> <id>,<instance_id>`

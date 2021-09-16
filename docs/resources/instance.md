@@ -46,16 +46,18 @@ The following arguments are supported:
 * `vpc_subnet`  - (Optional) Creates a dedicated VPC subnet, shouldn't overlap with other VPC subnet, default subnet used 10.56.72.0/24. **NOTE: extra fee will be charged when using VPC, see [CloudAMQP](https://cloudamqp.com) for more information.**
 * `no_default_alarms`- (Computed/Optional) Set to true to discard creating default alarms when the instance is created. Can be left out, will then use default value = false.
 
-
-
 ## Attributes Reference
 
-* `url`     - (Computed) AMQP server endpoint. `amqps://{username}:{password}@{hostname}/{vhost}`
-* `apikey`  - (Computed) API key needed to communicate to CloudAMQP's second API. The second API is used to manage alarms, integration and more, full description [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html).
-* `host`    - (Computed) The host name for the CloudAMQP instance.
-* `vhost`   - (Computed) The virtual host used by Rabbit MQ.
+All attributes reference are computed
+
+* `id`      - The identifier (instance_id) for this resource, used as a reference by almost all other resource and data sources
+* `url`     - AMQP server endpoint. `amqps://{username}:{password}@{hostname}/{vhost}`
+* `apikey`  - API key needed to communicate to CloudAMQP's second API. The second API is used to manage alarms, integration and more, full description [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html).
+* `host`    - The host name for the CloudAMQP instance.
+* `vhost`   - The virtual host used by Rabbit MQ.
 
 ## Import
+
 `cloudamqp_instance`can be imported using CloudAMQP internal identifier. To retrieve the identifier for an instance, use [CloudAMQP customer API](https://docs.cloudamqp.com/#list-instances).
 
-`terraform import cloudamqp_instance.instance <instance_id>`
+`terraform import cloudamqp_instance.instance <id>`

@@ -32,6 +32,12 @@ The following arguments are supported:
 * `value`       - (Required) Endpoint to send the notification.
 * `name`        - (Optional) Display name of the recipient.
 
+## Attributes Reference
+
+All attributes reference are computed
+
+* `id`  - The identifier for this resource.
+
 ## Notification Type reference
 
 Valid options for notification type.
@@ -53,4 +59,4 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 `cloudamqp_notification` can be imported using CloudAMQP internal identifier of a recipient together (CSV separated) with the instance identifier. To retrieve the identifier of a recipient, use [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-notification-recipients)
 
-`terraform import cloudamqp_notification.recipient <recipient_id>,<instance_id>`
+`terraform import cloudamqp_notification.recipient <id>,<instance_id>`

@@ -49,6 +49,12 @@ The `rules` block consists of:
 
 Supported services: *AMQP*, *AMQPS*, *HTTPS*, *MQTT*, *MQTTS*, *STOMP*, *STOMPS*
 
+## Attributes Reference
+
+All attributes reference are computed
+
+* `id`  - The identifier for this resource.
+
 ## Depedency
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.

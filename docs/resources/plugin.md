@@ -36,6 +36,12 @@ The following arguments are supported:
 * `name`        - (Required) The name of the Rabbit MQ plugin.
 * `enabled`     - (Required) Enable or disable the plugins.
 
+## Attributes Reference
+
+All attributes reference are computed
+
+* `id`  - The identifier for this resource.
+
 ## Dependency
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
