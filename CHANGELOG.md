@@ -1,3 +1,7 @@
+## 1.9.4 (Sep, 16 2021)
+
+Note: Re-release 1.9.3 with missing information
+
 ## 1.9.3 (Sep, 16 2021)
 
 IMPROVEMENTS:
