@@ -37,8 +37,7 @@ func dataSourceInstance() *schema.Resource {
 			},
 			"vpc_subnet": {
 				Type:        schema.TypeString,
-				Optional:    true,
-				ForceNew:    true,
+				Computed:    true,
 				Description: "Dedicated VPC subnet, shouldn't overlap with your current VPC's subnet",
 			},
 			"nodes": {

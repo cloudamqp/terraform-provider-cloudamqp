@@ -19,12 +19,12 @@ func dataSourceCredentials() *schema.Resource {
 			},
 			"username": {
 				Type:      schema.TypeString,
-				Optional:  true,
+				Computed:  true,
 				Sensitive: true,
 			},
 			"password": {
 				Type:      schema.TypeString,
-				Optional:  true,
+				Computed:  true,
 				Sensitive: true,
 			},
 		},
