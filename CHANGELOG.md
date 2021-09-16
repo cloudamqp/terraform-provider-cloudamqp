@@ -1,3 +1,17 @@
+## 1.9.3 (Sep, 16 2021)
+
+IMPROVEMENTS:
+
+* Validate schema attributes when reading response from API calls.
+* Optional attributes changed to computed for data sources.
+* Alarm: Populate alarm_id with correct identifier.
+* Documentation: Added identifier attribute reference to all resources and data source.
+
+BUG FIXES:
+
+* Added configured attribute to nodes data source.
+* Instance: Updated switch statement to get correct plan type.
+
 ## 1.9.2 (May 21, 2021)
 
 IMPROVEMENTS:

@@ -1,6 +1,6 @@
 module github.com/cloudamqp/terraform-provider-cloudamqp
 
-go 1.12
+go 1.16
 
 //replace github.com/84codes/go-api => ../../84codes/go-api
 
