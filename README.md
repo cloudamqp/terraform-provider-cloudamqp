@@ -57,7 +57,7 @@ Read more at https://www.terraform.io/docs/language/providers/requirements.html
 
 Clone repository to `$GOPATH/src/github.com/cloudamqp/terraform-provider-cloudamqp`
 
-Change directory and build the provider from make. This will call `go intall` and install the plugin under `$GOPATH/bin`.
+Change directory and build the provider from make. This will call `go install` and install the plugin under `$GOPATH/bin`.
 
 ```sh
 $ cd $GOPATH/src/github.com/cloudamqp/terraform-provider-cloudamqp
