@@ -34,7 +34,7 @@ func (api *API) ReadVpcInfo(instanceID int) (map[string]interface{}, error) {
 	return api.readVpcInfo(instanceID, 5, 20)
 }
 
-func (api *API) readVpcInfo(instanceID, attempts, sleep int) (map[string]interface{}, error) {
+func (api *API) readVpcInfoWithRetry(instanceID, attempts, sleep int) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
 	log.Printf("[DEBUG] go-api::vpc_peering::info instance id: %v", instanceID)
