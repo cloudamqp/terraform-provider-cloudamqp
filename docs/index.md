@@ -85,3 +85,4 @@ The following arguments are supported in the `provider` block:
 * `apikey` - (Required) This is the CloudAMQP Customer API key needed to make calls to the customer API.
              It can be sourced from login in to your CloudAMQP account and go to API access or go
              directly to [API Keys](https://customer.cloudamqp.com/apikeys).
+             The API key can also be read from the environment variable `CLOUDAMQP_APIKEY`.
