@@ -1,3 +1,11 @@
+## 1.10.0 (Sep, 20 2021)
+
+Note: Update the API wrapper (go-api) dependency with never version (1.4.0)
+
+IMPORVEMENTS:
+
+* Indirect improve common request that can fail due to backend beeing busy.
+
 ## 1.9.4 (Sep, 16 2021)
 
 Note: Re-release 1.9.3 with missing information
