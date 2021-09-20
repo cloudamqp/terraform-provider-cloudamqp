@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -46,7 +47,6 @@ func (api *API) EnablePlugin(instanceID int, pluginName string) (map[string]inte
 }
 
 func (api *API) ReadPlugin(instanceID int, pluginName string) (map[string]interface{}, error) {
-	var data []map[string]interface{}
 	log.Printf("[DEBUG] go-api::plugin::read instance id: %v, name: %v", instanceID, pluginName)
 	data, err := api.ReadPlugins(instanceID)
 	if err != nil {
@@ -64,19 +64,38 @@ func (api *API) ReadPlugin(instanceID int, pluginName string) (map[string]interf
 }
 
 func (api *API) ReadPlugins(instanceID int) ([]map[string]interface{}, error) {
+	// Initiale values, 5 attempts and 20 second sleep
+	return api.readPluginsWithRetry(instanceID, 5, 20)
+}
+
+func (api *API) readPluginsWithRetry(instanceID, attempts, sleep int) ([]map[string]interface{}, error) {
+	//data := make(map[string]interface{})
 	var data []map[string]interface{}
 	failed := make(map[string]interface{})
-	log.Printf("[DEBUG] go-api::plugin::read instance id: %v", instanceID)
+	log.Printf("[DEBUG] go-api::plugin::readWithRetry instance id: %v", instanceID)
 	path := fmt.Sprintf("/api/instances/%d/plugins", instanceID)
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
+	log.Printf("[DEBUG] go-api::plugin::readWithRetry data: %v", data)
 
 	if err != nil {
 		return nil, err
 	}
-	if response.StatusCode != 200 {
-		return nil, fmt.Errorf("ReadPlugin failed, status: %v, message: %s", response.StatusCode, failed)
-	}
 
+	statusCode := response.StatusCode
+	log.Printf("[DEBUG] go-api::plugins::readWithRetry statusCode: %d", statusCode)
+	switch {
+	case statusCode == 400:
+		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
+			if attempts--; attempts > 0 {
+				log.Printf("[INFO] go-api::plugin::readWithRetry Timeout talking to backend "+
+					"attempts left %d and retry in %d seconds", attempts, sleep)
+				time.Sleep(time.Duration(sleep) * time.Second)
+				return api.readPluginsWithRetry(instanceID, attempts, 2*sleep)
+			} else {
+				return nil, fmt.Errorf("ReadWithRetry failed, status: %v, message: %s", response.StatusCode, failed)
+			}
+		}
+	}
 	return data, nil
 }
 

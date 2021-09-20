@@ -31,7 +31,7 @@ func (api *API) waitForPeeringStatus(instanceID int, peeringID string) (map[stri
 
 func (api *API) ReadVpcInfo(instanceID int) (map[string]interface{}, error) {
 	// Initiale values, 5 attempts and 20 second sleep
-	return api.readVpcInfo(instanceID, 5, 20)
+	return api.readVpcInfoWithRetry(instanceID, 5, 20)
 }
 
 func (api *API) readVpcInfoWithRetry(instanceID, attempts, sleep int) (map[string]interface{}, error) {
@@ -55,7 +55,7 @@ func (api *API) readVpcInfoWithRetry(instanceID, attempts, sleep int) (map[strin
 				log.Printf("[INFO] go-api::vpc_peering::info Timeout talking to backend "+
 					"attempts left %d and retry in %d seconds", attempts, sleep)
 				time.Sleep(time.Duration(sleep) * time.Second)
-				return api.readVpcInfo(instanceID, attempts, 2*sleep)
+				return api.readVpcInfoWithRetry(instanceID, attempts, 2*sleep)
 			} else {
 				return nil, fmt.Errorf("ReadInfo failed, status: %v, message: %s", response.StatusCode, failed)
 			}
