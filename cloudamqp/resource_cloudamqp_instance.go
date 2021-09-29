@@ -2,6 +2,8 @@ package cloudamqp
 
 import (
 	"fmt"
+	"regexp"
+	"strconv"
 
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
@@ -43,7 +45,7 @@ func resourceInstance() *schema.Resource {
 			},
 			"nodes": {
 				Type:        schema.TypeInt,
-				Default:     1,
+				Computed:    true,
 				Optional:    true,
 				Description: "Number of nodes in cluster (plan must support it)",
 			},
@@ -124,6 +126,15 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 		} else if k == "no_default_alarms" {
 			params[k] = false
 		}
+
+		if k == "nodes" {
+			plan := d.Get("plan").(string)
+			if is2020Plan(plan) {
+				nodes := numberOfNodes(plan)
+				params[k] = nodes
+			}
+		}
+
 		if k == "vpc_subnet" {
 			if d.Get(k) == "" {
 				delete(params, "vpc_subnet")
@@ -152,6 +163,14 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {
 				err = d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
+			} else if k == "nodes" {
+				plan := d.Get("plan").(string)
+				if is2020Plan(plan) {
+					nodes := numberOfNodes(plan)
+					err = d.Set(k, nodes)
+				} else {
+					err = d.Set(k, v)
+				}
 			} else {
 				err = d.Set(k, v)
 			}
@@ -186,6 +205,13 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
 			params[k] = d.Get(k)
+		}
+		if k == "nodes" {
+			plan := d.Get("plan").(string)
+			if is2020Plan(plan) {
+				nodes := numberOfNodes(plan)
+				params[k] = nodes
+			}
 		}
 	}
 
@@ -254,4 +280,27 @@ func validatePlanName() schema.SchemaValidateFunc {
 		"lion-1", "lion-3", "lion-5",
 		"rhino-1",
 	}, true)
+}
+
+func is2020Plan(plan string) bool {
+	switch plan {
+	case
+		"squirrel-1",
+		"bunny-1", "bunny-3",
+		"rabbit-1", "rabbit-3", "rabbit-5",
+		"panda-1", "panda-3", "panda-5",
+		"ape-1", "ape-3", "ape-5",
+		"hippo-1", "hippo-3", "hippo-5",
+		"lion-1", "lion-3", "lion-5",
+		"rhino-1":
+		return true
+	}
+	return false
+}
+
+func numberOfNodes(plan string) int {
+	r := regexp.MustCompile("[135]")
+	match := r.FindString(plan)
+	nodes, _ := strconv.Atoi(match)
+	return nodes
 }
