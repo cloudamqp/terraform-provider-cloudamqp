@@ -35,8 +35,6 @@ func (api *API) waitUntilAllNodesReady(instanceID string) error {
 	var data []map[string]interface{}
 	failed := make(map[string]interface{})
 
-	numberOfNodes, _ := api.numberOfNodes(instanceID)
-	log.Printf("[DEBUG] go-api::instance::waitUntilAllNodesReady number of nodes: %v", numberOfNodes)
 	for {
 		path := fmt.Sprintf("api/instances/%v/nodes", instanceID)
 		_, err := api.sling.New().Path(path).Receive(&data, &failed)
@@ -44,22 +42,18 @@ func (api *API) waitUntilAllNodesReady(instanceID string) error {
 			log.Printf("[ERROR] go-api::instance::waitUntilAllNodesReady error: %v", err)
 			return err
 		}
-
+		log.Printf("[DEBUG] go-api::instance::waitUntilAllNodesReady numberOfNodes: %v", len(data))
 		log.Printf("[DEBUG] go-api::instance::waitUntilAllNodesReady data: %v", data)
-		if numberOfNodes == len(data) {
-			var ready bool // default set to false
-			for index, node := range data {
-				if index == 0 {
-					ready = node["configured"].(bool) && node["running"].(bool)
-				} else {
-					ready = ready && node["configured"].(bool) && node["running"].(bool)
-				}
-			}
-
-			if ready {
-				return nil
-			}
+		ready := true
+		for _, node := range data {
+			log.Printf("[DEBUG] go-api::instance::waitUntilAllNodesReady ready: %v, configured: %v", ready, node["configured"])
+			ready = ready && node["configured"].(bool)
 		}
+		log.Printf("[DEBUG] go-api::instance::waitUntilAllNodesReady ready: %v", ready)
+		if ready {
+			return nil
+		}
+
 		time.Sleep(30 * time.Second)
 	}
 }
