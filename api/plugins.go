@@ -69,7 +69,6 @@ func (api *API) ReadPlugins(instanceID int) ([]map[string]interface{}, error) {
 }
 
 func (api *API) readPluginsWithRetry(instanceID, attempts, sleep int) ([]map[string]interface{}, error) {
-	//data := make(map[string]interface{})
 	var data []map[string]interface{}
 	failed := make(map[string]interface{})
 	log.Printf("[DEBUG] go-api::plugin::readWithRetry instance id: %v", instanceID)

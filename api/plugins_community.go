@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -60,19 +61,37 @@ func (api *API) ReadPluginCommunity(instanceID int, pluginName string) (map[stri
 }
 
 func (api *API) ReadPluginsCommunity(instanceID int) ([]map[string]interface{}, error) {
+	// Initiale values, 5 attempts and 20 second sleep
+	return api.readPluginsCommunityWithRetry(instanceID, 5, 20)
+}
+
+func (api *API) readPluginsCommunityWithRetry(instanceID, attempts, sleep int) ([]map[string]interface{}, error) {
 	var data []map[string]interface{}
 	failed := make(map[string]interface{})
-	log.Printf("[DEBUG] go-api::plugin_community::read instance ID: %v", instanceID)
+	log.Printf("[DEBUG] go-api::plugin_community::readPluginsCommunityWithRetry instance id: %v", instanceID)
 	path := fmt.Sprintf("/api/instances/%d/plugins/community", instanceID)
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
+	log.Printf("[DEBUG] go-api::plugin_community::readPluginsCommunityWithRetry data: %v", data)
 
 	if err != nil {
 		return nil, err
 	}
-	if response.StatusCode != 200 {
-		return nil, fmt.Errorf("ReadPluginsCommunity failed, status: %v, message: %s", response.StatusCode, failed)
-	}
 
+	statusCode := response.StatusCode
+	log.Printf("[DEBUG] go-api::plugin_community::readPluginsCommunityWithRetry statusCode: %d", statusCode)
+	switch {
+	case statusCode == 400:
+		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
+			if attempts--; attempts > 0 {
+				log.Printf("[INFO] go-api::plugin_community::readPluginsCommunityWithRetry Timeout talking to backend "+
+					"attempts left %d and retry in %d seconds", attempts, sleep)
+				time.Sleep(time.Duration(sleep) * time.Second)
+				return api.readPluginsCommunityWithRetry(instanceID, attempts, 2*sleep)
+			} else {
+				return nil, fmt.Errorf("ReadWithRetry failed, status: %v, message: %s", response.StatusCode, failed)
+			}
+		}
+	}
 	return data, nil
 }
 
