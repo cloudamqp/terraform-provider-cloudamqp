@@ -28,7 +28,7 @@ func dataSourceInstance() *schema.Resource {
 			"plan": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "Name of the plan, see documentation for valid options",
+				Description: "Name of the plan, see documentation for valid plans",
 			},
 			"region": {
 				Type:        schema.TypeString,
@@ -80,10 +80,20 @@ func dataSourceInstance() *schema.Resource {
 				Computed:    true,
 				Description: "The virtual host",
 			},
+			"ready": {
+				Type:        schema.TypeBool,
+				Computed:    true,
+				Description: "Flag describing if the resource is ready",
+			},
 			"dedicated": {
 				Type:        schema.TypeBool,
 				Computed:    true,
 				Description: "Is the instance hosted on a dedicated server",
+			},
+			"no_default_alarms": {
+				Type:        schema.TypeBool,
+				Computed:    true,
+				Description: "If default alarms set or not for the instance",
 			},
 		},
 	}
@@ -102,6 +112,14 @@ func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {
 				err = d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
+			} else if k == "nodes" {
+				plan := d.Get("plan").(string)
+				if is2020Plan(plan) {
+					nodes := numberOfNodes(plan)
+					err = d.Set(k, nodes)
+				} else {
+					err = d.Set(k, v)
+				}
 			} else {
 				err = d.Set(k, v)
 			}
@@ -110,6 +128,10 @@ func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
+	}
+
+	if data["no_default_alarms"] == nil {
+		d.Set("no_default_alarms", false)
 	}
 
 	planType, _ := getPlanType(d.Get("plan").(string))

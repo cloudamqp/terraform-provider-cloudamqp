@@ -242,7 +242,8 @@ func validateInstanceSchemaAttribute(key string) bool {
 		"tags",
 		"host",
 		"vhost",
-		"no_default_alarms":
+		"no_default_alarms",
+		"ready":
 		return true
 	}
 	return false
