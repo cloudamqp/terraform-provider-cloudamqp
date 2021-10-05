@@ -12,7 +12,7 @@ tools:
 	GO111MODULE=on go install github.com/golangci/golangci-lint/cmd/golangci-lint
 
 build: fmtcheck
-	go install -ldflags "-X 'github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp.version=$(PROVIDER_VERSION)'"
+	go install -ldflags "-X 'main.version=$(PROVIDER_VERSION)'"
 
 local-clean:  ## Clean files
   ## 0.12 version
@@ -24,7 +24,7 @@ local-clean:  ## Clean files
 local-build: local-clean
 	@echo $(GOOS);
 	@echo $(GOARCH);
-	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -ldflags "-X 'github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp.version=$(version)'" -o terraform-provider-cloudamqp_v$(PROVIDER_VERSION)
+	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -ldflags "-X 'main.version=$(PROVIDER_VERSION)'" -o terraform-provider-cloudamqp_v$(PROVIDER_VERSION)
 
 local-install: local-build
 	## 0.12 version

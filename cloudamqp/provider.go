@@ -10,7 +10,8 @@ import (
 
 var version string
 
-func Provider() *schema.Provider {
+func Provider(v string) *schema.Provider {
+	version = v
 	log.Printf("Terraform-Provider-CloudAMQP Version: %s", version)
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
