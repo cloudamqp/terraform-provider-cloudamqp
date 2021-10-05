@@ -11,6 +11,8 @@ This resource allows you to install or uninstall community plugins. Once install
 
 Only available for dedicated subscription plans.
 
+⚠️  From our go API wrapper [v1.5.0](https://github.com/84codes/go-api/releases/tag/v1.5.0) there is support for multiple retries when requesting information about community plugins. This was introduced to avoid `ReadPluginCommunity error 400: Timeout talking to backend`.
+
 ## Example Usage
 
 ```hcl
@@ -26,7 +28,7 @@ resource "cloudamqp_plugin_community" "rabbitmq_delayed_message_exchange" {
 The following arguments are supported:
 
 * `instance_id` - (Required) The CloudAMQP instance ID.
-* `name`        - (Required) The name of the Rabbit MQ plugin.
+* `name`        - (Required) The name of the Rabbit MQ community plugin.
 * `enabled`     - (Required) Enable or disable the plugins.
 
 ## Attributes Reference

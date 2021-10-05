@@ -11,20 +11,36 @@ This resource allows you to enable or disable Rabbit MQ plugins.
 
 Only available for dedicated subscription plans.
 
-**Note: Known issue when changing multiple plugins:**
-Rabbit MQ can only change one plugin at a time. Therefore if multiple plugins should be changed, Terraform needs to be changed from working in parallel to be working in sequence. This can be done by adding parallelism (default set to 10) command to apply.
+⚠️  From our go API wrapper [v1.4.0](https://github.com/84codes/go-api/releases/tag/v1.4.0) there is support for multiple retries when requesting information about plugins. This was introduced to avoid `ReadPlugin error 400: Timeout talking to backend`.
 
-```
-terraform apply -parallelism=1
-```
+**Enable multiple plugins:** Rabbit MQ can only change one plugin at a time. It will fail if multiple plugins resources are used, unless by creating dependencies with `depend_on` between the resources. Once one plugin has been enabled, the other will continue. See example below.
 
 ## Example Usage
 
 ```hcl
-resource "cloudamqp_plugin" "plugin_rabbitmq_top" {
+resource "cloudamqp_plugin" "rabbitmq_top" {
   instance_id = cloudamqp_instance.instance.id
   name = "rabbitmq_top"
   enabled = true
+}
+```
+
+**Enable multiple plugins**
+```hcl
+resource "cloudamqp_plugin" "rabbitmq_top" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "rabbitmq_top"
+  enabled = true
+}
+
+resource "cloudamqp_plugin" "rabbitmq_amqp1_0" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "rabbitmq_amqp1_0"
+  enabled = true
+
+  depends_on = [
+    cloudamqp_plugin.rabbitmq_top
+  ]
 }
 ```
 
@@ -45,6 +61,8 @@ All attributes reference are computed
 ## Dependency
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+
+If multiple plugins should be enable, create dependencies between the plugin resources. See example above.
 
 ## Import
 
