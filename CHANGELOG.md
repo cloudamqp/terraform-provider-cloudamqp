@@ -1,10 +1,33 @@
+## 1.11.0 (Oct 06, 2021)
+
+Note:
+
+* Updated the API wrapper (go-api) dependency with newer version (1.5.1)
+* Updated go to version 1.17
+* Updated Terraform Plugin SKD to version 1.17.2
+
+FEATURES:
+
+* Added resource for account
+* Added resource for custom domain
+
+IMPROVEMENTS:
+
+* Updated internal handling of provider version number
+* Updated handling of number of nodes
+* Indirect improve community plugin request that can fail due to backend being busy (go-api v1.5.0)
+
+BUG FIXES:
+
+* Added missing schema attributes for instance data source
+
 ## 1.10.0 (Sep, 20 2021)
 
-Note: Update the API wrapper (go-api) dependency with never version (1.4.0)
+Note: Update the API wrapper (go-api) dependency with newer version (1.4.0)
 
 IMPORVEMENTS:
 
-* Indirect improve common request that can fail due to backend beeing busy.
+* Indirect improve common request that can fail due to backend being busy.
 
 ## 1.9.4 (Sep, 16 2021)
 
