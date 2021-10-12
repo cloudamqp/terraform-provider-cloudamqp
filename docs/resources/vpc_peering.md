@@ -17,7 +17,7 @@ One way to manage the vpc peering is to combine CloudAMQP Terraform provider wit
 
 ```hcl
 # Configure CloudAMQP provider
-resource "cloudamqp" {
+provider "cloudamqp" {
   apikey = var.cloudamqp_customer_api_key
 }
 
