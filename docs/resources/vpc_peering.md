@@ -23,10 +23,10 @@ provider "cloudamqp" {
 
 # CloudAMQP - new instance, need to be created with a vpc
 resource "cloudamqp_instance" "instance" {
-  name   = "terraform-vpc-accepter"a
+  name   = "terraform-vpc-accepter"
   plan   = "bunny-1"
   region = "amazon-web-services::us-east-1"
-  nodes = 1
+  nodes  = 1
   tags   = ["terraform"]
   rmq_version = "3.8.4"
   vpc_subnet = "10.40.72.0/24"
