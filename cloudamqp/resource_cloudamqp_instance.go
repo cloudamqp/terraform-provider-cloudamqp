@@ -37,8 +37,16 @@ func resourceInstance() *schema.Resource {
 				Required:    true,
 				Description: "Name of the region you want to create your instance in",
 			},
+			"vpc_id": {
+				Type:        schema.TypeInt,
+				Computed:    true,
+				Optional:    true,
+				ForceNew:    true,
+				Description: "The ID of the VPC to create your instance in",
+			},
 			"vpc_subnet": {
 				Type:        schema.TypeString,
+				Computed:    true,
 				Optional:    true,
 				ForceNew:    true,
 				Description: "Dedicated VPC subnet, shouldn't overlap with your current VPC's subnet",
@@ -115,7 +123,7 @@ func resourceInstance() *schema.Resource {
 
 func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"name", "plan", "region", "nodes", "tags", "rmq_version", "vpc_subnet", "no_default_alarms"}
+	keys := []string{"name", "plan", "region", "nodes", "tags", "rmq_version", "vpc_id", "vpc_subnet", "no_default_alarms"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil && v != "" {
@@ -132,6 +140,12 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 			if is2020Plan(plan) {
 				nodes := numberOfNodes(plan)
 				params[k] = nodes
+			}
+		}
+
+		if k == "vpc_id" {
+			if d.Get(k) == "" {
+				delete(params, "vpc_id")
 			}
 		}
 
@@ -162,6 +176,7 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 	for k, v := range data {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {
+				err = d.Set("vpc_id", v.(map[string]interface{})["id"])
 				err = d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
 			} else if k == "nodes" {
 				plan := d.Get("plan").(string)

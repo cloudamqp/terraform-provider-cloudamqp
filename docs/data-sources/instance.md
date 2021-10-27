@@ -29,6 +29,7 @@ All attributes reference are computed
 * `name`        - The name of the CloudAMQP instance.
 * `plan`        - The subscription plan for the CloudAMQP instance.
 * `region`      - The cloud platform and region that host the CloudAMQP instance, `{platform}::{region}`.
+* `vpc_id`      - ID of the VPC configured for the CloudAMQP instance.
 * `vpc_subnet`  - Dedicated VPC subnet configured for the CloudAMQP instance.
 * `nodes`       - Number of nodes in the cluster of the CloudAMQP instance.
 * `rmq_version` - The version of installed Rabbit MQ.
