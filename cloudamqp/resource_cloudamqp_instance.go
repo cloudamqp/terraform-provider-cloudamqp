@@ -233,8 +233,6 @@ func validateInstanceSchemaAttribute(key string) bool {
 		"plan",
 		"region",
 		"vpc",
-		"vpc_subnet",
-		"subnet",
 		"nodes",
 		"rmq_version",
 		"url",
