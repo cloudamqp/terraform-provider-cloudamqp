@@ -35,6 +35,11 @@ func dataSourceInstance() *schema.Resource {
 				Computed:    true,
 				Description: "Name of the region you want to create your instance in",
 			},
+			"vpc_id": {
+				Type:        schema.TypeInt,
+				Computed:    true,
+				Description: "The ID of the VPC to create your instance in",
+			},
 			"vpc_subnet": {
 				Type:        schema.TypeString,
 				Computed:    true,
@@ -111,6 +116,7 @@ func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 	for k, v := range data {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {
+				err = d.Set("vpc_id", v.(map[string]interface{})["id"])
 				err = d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
 			} else if k == "nodes" {
 				plan := d.Get("plan").(string)
