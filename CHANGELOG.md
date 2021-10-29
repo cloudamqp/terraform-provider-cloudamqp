@@ -1,3 +1,19 @@
+## 1.12.0 (Oct 29, 2021)
+
+Note:
+
+* Create instance in existing VPC
+
+FEATURES:
+
+* Added support for creating instance in existing VPC
+* Added config for auto generated release notes
+
+IMPROVEMENTS:
+
+* Updated typos in documentation
+* Removed unused attributes from instance resource
+
 ## 1.11.0 (Oct 06, 2021)
 
 Note:
