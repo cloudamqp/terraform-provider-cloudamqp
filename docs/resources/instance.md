@@ -38,7 +38,7 @@ The following arguments are supported:
 
 * `name`        - (Required) Name of the CloudAMQP instance.
 * `plan`        - (Required) The subscription plan. See available [plans](../guides/info_plan.md)
-* `region`      - (Required) The region to host the instance in. See [Instance regions](../guides/info_region.md)
+* `region`      - (Required) The region to host the instance in. See [Instance regions](../guides/info_region.md) **Note: Changing region will force the instance to be destroyed and a new created in the new region. All data will be lost and a new name assigned.**
 * `nodes`       - (Computed/Optional) Number of nodes, 1, 3 or 5 depending on plan used. **DEPRECATED. Old subscriptions plan can still change this to scale up or down the instance. New subscriptions plans use the plan to determine number of nodes. In order to change number of nodes the `plan` needs to be updated.**
 * `tags`        - (Optional) One or more tags for the CloudAMQP instance, makes it possible to categories multiple instances in console view. Default there is no tags assigned.
 * `rmq_version` - (Computed/Optional) The Rabbit MQ version. Can be left out, will then be set to default value used by CloudAMQP API. **Note: There is not yet any support in the provider to change the RMQ version. Once it's set in the initial creation, it will remain.**
