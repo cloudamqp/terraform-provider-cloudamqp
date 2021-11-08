@@ -35,6 +35,7 @@ func resourceInstance() *schema.Resource {
 			"region": {
 				Type:        schema.TypeString,
 				Required:    true,
+				ForceNew:    true,
 				Description: "Name of the region you want to create your instance in",
 			},
 			"vpc_id": {
