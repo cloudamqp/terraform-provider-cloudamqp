@@ -51,9 +51,10 @@ The following arguments are supported:
 All attributes reference are computed
 
 * `id`      - The identifier (instance_id) for this resource, used as a reference by almost all other resource and data sources
-* `url`     - AMQP server endpoint. `amqps://{username}:{password}@{hostname}/{vhost}`
+* `url`     - The AMQP URL (uses the internal hostname if the instance was created with VPC). Has the format: `amqps://{username}:{password}@{hostname}/{vhost}`
 * `apikey`  - API key needed to communicate to CloudAMQP's second API. The second API is used to manage alarms, integration and more, full description [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html).
-* `host`    - The host name for the CloudAMQP instance.
+* `host`    - The external hostname for the CloudAMQP instance.
+* `host_internal` - The internal hostname for the CloudAMQP instance.
 * `vhost`   - The virtual host used by Rabbit MQ.
 
 ## Import

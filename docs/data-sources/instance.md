@@ -33,8 +33,9 @@ All attributes reference are computed
 * `vpc_subnet`  - Dedicated VPC subnet configured for the CloudAMQP instance.
 * `nodes`       - Number of nodes in the cluster of the CloudAMQP instance.
 * `rmq_version` - The version of installed Rabbit MQ.
-* `url`         - (Sensitive) The AMQP url, used by clients to connect for pub/sub.
+* `url`         - (Sensitive) The AMQP URL (uses the internal hostname if the instance was created with VPC), used by clients to connect for pub/sub.
 * `apikey`      - (Sensitive) The API key to secondary API handing alarms, integration etc.
 * `tags`        - Tags the CloudAMQP instance with categories.
-* `host`        - The hostname for the CloudAMQP instance.
+* `host`        - The external hostname for the CloudAMQP instance.
+* `host_internal` - The internal hostname for the CloudAMQP instance.
 * `vhost`       - The virtual host configured in Rabbit MQ.
