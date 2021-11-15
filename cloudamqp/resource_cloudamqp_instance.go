@@ -87,7 +87,12 @@ func resourceInstance() *schema.Resource {
 			"host": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "Host name for the CloudAMQP instance",
+				Description: "External hostname for the CloudAMQP instance",
+			},
+			"host_internal": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Internal hostname for the CloudAMQP instance",
 			},
 			"vhost": {
 				Type:        schema.TypeString,
@@ -197,6 +202,14 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
+	if err = d.Set("host", data["hostname_external"].(string)); err != nil {
+		return fmt.Errorf("error setting host for resource %s: %s", d.Id(), err)
+	}
+
+	if err = d.Set("host_internal", data["hostname_internal"].(string)); err != nil {
+		return fmt.Errorf("error setting host for resource %s: %s", d.Id(), err)
+	}
+
 	planType, _ := getPlanType(d.Get("plan").(string))
 	dedicated := planType == "dedicated"
 	if err = d.Set("dedicated", dedicated); err != nil {
@@ -254,7 +267,6 @@ func validateInstanceSchemaAttribute(key string) bool {
 		"url",
 		"apikey",
 		"tags",
-		"host",
 		"vhost",
 		"no_default_alarms",
 		"ready":

@@ -78,7 +78,12 @@ func dataSourceInstance() *schema.Resource {
 			"host": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "Host name for the CloudAMQP instance",
+				Description: "External hostname for the CloudAMQP instance",
+			},
+			"host_internal": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Internal hostname for the CloudAMQP instance",
 			},
 			"vhost": {
 				Type:        schema.TypeString,
@@ -134,6 +139,14 @@ func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
+	}
+
+	if err = d.Set("host", data["hostname_external"].(string)); err != nil {
+		return fmt.Errorf("error setting host for resource %s: %s", d.Id(), err)
+	}
+
+	if err = d.Set("host_internal", data["hostname_internal"].(string)); err != nil {
+		return fmt.Errorf("error setting host for resource %s: %s", d.Id(), err)
 	}
 
 	if data["no_default_alarms"] == nil {
