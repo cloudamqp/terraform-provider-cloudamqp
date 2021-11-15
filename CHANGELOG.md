@@ -1,3 +1,14 @@
+## 1.13.0 (Nov 15, 2021)
+
+IMPROVEMENTS:
+
+* Add attribute `host_internal` to instance resource ([#127])
+* Make the attribute `host` always return the external hostname ([#127])
+* Set `ForceNew` on `region` in instance resource ([#122]) (**Note**: when forcing a region change, the previous instance will be destroyed and a new one created)
+
+[#127]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/127
+[#122]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/122
+
 ## 1.12.0 (Oct 29, 2021)
 
 Note:
@@ -20,7 +31,7 @@ Note:
 
 * Updated the API wrapper (go-api) dependency with newer version (1.5.1)
 * Updated go to version 1.17
-* Updated Terraform Plugin SKD to version 1.17.2
+* Updated Terraform Plugin SDK to version 1.17.2
 
 FEATURES:
 
