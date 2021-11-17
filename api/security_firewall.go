@@ -106,7 +106,7 @@ func (api *API) DeleteFirewallSettings(instanceID int) ([]map[string]interface{}
 
 func DefaultFirewallSettings() map[string]interface{} {
 	defaultRule := map[string]interface{}{
-		"services":    []string{"AMQP", "AMQPS", "STOMP", "STOMPS", "MQTT", "MQTTS", "HTTPS"},
+		"services":    []string{"AMQP", "AMQPS", "STOMP", "STOMPS", "MQTT", "MQTTS", "HTTPS", "STREAM", "STREAM_SSL"},
 		"ports":       []int{},
 		"ip":          "0.0.0.0/0",
 		"description": "Default",
