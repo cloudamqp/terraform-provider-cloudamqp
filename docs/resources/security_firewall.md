@@ -47,7 +47,7 @@ The `rules` block consists of:
 * `services`    - (Required) Pre-defined service ports
 * `description` - (Optional) Description name of the rule. e.g. Default.
 
-Supported services: *AMQP*, *AMQPS*, *HTTPS*, *MQTT*, *MQTTS*, *STOMP*, *STOMPS*
+Supported services: *AMQP*, *AMQPS*, *HTTPS*, *MQTT*, *MQTTS*, *STOMP*, *STOMPS*, *STREAM*, *STREAM\_SSL*
 
 ## Attributes Reference
 
