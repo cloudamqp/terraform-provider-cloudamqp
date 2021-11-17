@@ -22,13 +22,13 @@ resource "cloudamqp_instance" "instance" {
 #   rules {
 #     ip = "0.0.0.0/0"
 #     ports = []
-#     services = ["HTTPS", "STOMP", "AMQP", "MQTTS", "STOMPS", "MQTT", "AMQPS"]
+#     services = ["HTTPS", "STOMP", "AMQP", "MQTTS", "STOMPS", "MQTT", "AMQPS", "STREAM", "STREAM_SSL"]
 #   }
 # }
 
 # Or overwrite the firewall settings directly with new settings.
 resource "cloudamqp_security_firewall" "firewall" {
-  instance_id = cloudamqp_insntance.instance.id
+  instance_id = cloudamqp_instance.instance.id
   rules {
     ip = "192.168.0.0/0"
     ports = [4567]
