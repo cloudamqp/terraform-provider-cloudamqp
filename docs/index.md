@@ -51,7 +51,7 @@ resource "cloudamqp_alarm" "cpu_alarm" {
 
 # Configure firewall
 resource "cloudamqp_security_firewall" "firewall" {
-  instance_id = cloudamqp_insntance.instance.id
+  instance_id = cloudamqp_instance.instance.id
   rules {
     ip = "10.54.72.0/0"
     ports = [4567]
