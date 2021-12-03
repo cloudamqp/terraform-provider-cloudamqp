@@ -1,3 +1,13 @@
+## 1.14.0 (Dec 3, 2021)
+
+Note:
+
+* Updated the API wrapper (go-api) dependency with newer version (1.5.2) ([#129](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/129))
+
+IMPROVEMENTS:
+
+* Add `STREAM`, `STREAM_SSL` as supported firewall services ([#128](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/128))
+
 ## 1.13.0 (Nov 15, 2021)
 
 IMPROVEMENTS:
