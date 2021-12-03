@@ -2,5 +2,16 @@ changelog:
   exclude:
     labels:
       - ignore-for-release
-    authors:
-      - dependabot
+  categories:
+    - title: Features
+      labels:
+        - release-feature
+    - title: Improvements
+      labels:
+        - release-improvements
+    - title: Bug Fixes
+      labels:
+        - release-bug-fix
+    - title: Other Changes
+      labels:
+        - "*"
