@@ -49,6 +49,7 @@ func Provider(v string) *schema.Provider {
 			"cloudamqp_plugin_community":   resourcePluginCommunity(),
 			"cloudamqp_security_firewall":  resourceSecurityFirewall(),
 			"cloudamqp_vpc_peering":        resourceVpcPeering(),
+			"cloudamqp_vpc_gcp_peering":    resourceVpcGcpPeering(),
 			"cloudamqp_integration_log":    resourceIntegrationLog(),
 			"cloudamqp_integration_metric": resourceIntegrationMetric(),
 			"cloudamqp_webhook":            resourceWebhook(),
