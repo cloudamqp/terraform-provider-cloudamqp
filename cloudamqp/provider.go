@@ -36,6 +36,7 @@ func Provider(v string) *schema.Provider {
 			"cloudamqp_plugins":           dataSourcePlugins(),
 			"cloudamqp_plugins_community": dataSourcePluginsCommunity(),
 			"cloudamqp_notification":      dataSourceNotification(),
+			"cloudamqp_vpc_gcp_info":      dataSourceVpcGcpInfo(),
 			"cloudamqp_vpc_info":          dataSourceVpcInfo(),
 			"cloudamqp_nodes":             dataSourceNodes(),
 		},
