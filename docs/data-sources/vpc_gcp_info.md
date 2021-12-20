@@ -20,7 +20,6 @@ data "cloudamqp_vpc_gcp_info" "vpc_info" {
 ## Argument reference
 
 * `instance_id` - (Required) The CloudAMQP instance identifier.
-* `peer_subnet` - (Required)
 
 ## Attributes reference
 
