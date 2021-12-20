@@ -1,3 +1,14 @@
+## 1.15.0 (Dec 20, 2021)
+
+NOTE:
+
+* Updated the API wrapper (go-api) dependency with newer version (1.5.3)
+
+FEATURES:
+
+* Added VPC information for Google Cloud Platform ([#131](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/131))
+* Added VPC peer configuration for Google Cloud Platform ([#74](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/74))
+
 ## 1.14.0 (Dec 3, 2021)
 
 Note:
