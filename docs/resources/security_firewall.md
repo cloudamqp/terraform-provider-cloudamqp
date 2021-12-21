@@ -59,6 +59,8 @@ All attributes reference are computed
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
+If used together with [VPC GPC peering](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/vpc_gcp_peering#create-vpc-peering-with-additional-firewall-rules), see additional information.
+
 ## Import
 
 `cloudamqp_security_firewall` can be imported using CloudAMQP instance identifier.
