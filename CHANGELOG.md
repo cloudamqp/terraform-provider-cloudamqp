@@ -1,3 +1,16 @@
+##  1.15.1 (Dec 21, 2021)
+
+NOTE:
+
+* Updated the API wrapper (go-api) dependency with newer version (1.5.4)
+
+IMPROVEMENTS:
+
+* Removed peer_subnet as schema attribute from VPC GCP peering
+* Removed formatting response data for firewall rules
+* Indirect multiple retry functionality to create and update firewall rules
+* Updated VPC GCP peering documentation
+
 ## 1.15.0 (Dec 20, 2021)
 
 NOTE:
