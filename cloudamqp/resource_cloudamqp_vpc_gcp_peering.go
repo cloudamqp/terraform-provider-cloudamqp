@@ -19,11 +19,6 @@ func resourceVpcGcpPeering() *schema.Resource {
 				Required:    true,
 				Description: "Instance identifier",
 			},
-			"peer_subnet": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "VPC subnet",
-			},
 			"peer_network_uri": {
 				Type:        schema.TypeString,
 				Required:    true,
@@ -50,7 +45,7 @@ func resourceVpcGcpPeering() *schema.Resource {
 
 func resourceCreateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"peer_subnet", "peer_network_uri"}
+	keys := []string{"peer_network_uri"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil && v != "" {
