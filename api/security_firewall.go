@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -29,20 +30,42 @@ func (api *API) waitUntilFirewallConfigured(instanceID int) ([]map[string]interf
 }
 
 func (api *API) CreateFirewallSettings(instanceID int, params []map[string]interface{}) ([]map[string]interface{}, error) {
+	// Initiale values, 10 attempts, 30 second sleep
+	err := api.createFirewallSettingsWithReply(instanceID, params, 10, 30)
+	if err != nil {
+		return nil, err
+	}
+	api.waitUntilFirewallConfigured(instanceID)
+	return api.ReadFirewallSettings(instanceID)
+}
+
+func (api *API) createFirewallSettingsWithReply(instanceID int, params []map[string]interface{}, attempts int, sleep int) error {
 	failed := make(map[string]interface{})
 	log.Printf("[DEBUG] go-api::security_firewall::create instance ID: %v, params: %v", instanceID, params)
 	path := fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(nil, &failed)
 
 	if err != nil {
-		return nil, err
-	}
-	if response.StatusCode != 201 {
-		return nil, fmt.Errorf("CreateFirewallSettings failed, status: %v, message: %s", response.StatusCode, failed)
+		return err
 	}
 
-	api.waitUntilFirewallConfigured(instanceID)
-	return api.ReadFirewallSettings(instanceID)
+	statusCode := response.StatusCode
+	log.Printf("[DEBUG] go-api::security_firewall::create statusCode: %d", statusCode)
+	switch {
+	case statusCode == 400:
+		if strings.Compare(failed["message"].(string), "Your new firewall rules have not finished "+
+			"configuring yet,try again in a few minutes") == 0 {
+			if attempts--; attempts > 0 {
+				log.Printf("[INFO] go-api::security_firewall::create Firewall not finished configuring "+
+					"attempts left %d and retry in %d seconds", attempts, sleep)
+				time.Sleep(time.Duration(sleep) * time.Second)
+				return api.createFirewallSettingsWithReply(instanceID, params, attempts, sleep)
+			} else {
+				return fmt.Errorf("Create new firewall rules failed, status: %v, message: %s", response.StatusCode, failed)
+			}
+		}
+	}
+	return nil
 }
 
 func (api *API) ReadFirewallSettings(instanceID int) ([]map[string]interface{}, error) {
@@ -57,29 +80,50 @@ func (api *API) ReadFirewallSettings(instanceID int) ([]map[string]interface{}, 
 		return nil, err
 	}
 	if response.StatusCode == 200 {
-		return data, err
-	} else if response.StatusCode == 504 {
-		return nil, nil
-	} else {
-		return nil, fmt.Errorf("ReadFirewallSettings failed, status: %v, message: %s", response.StatusCode, failed)
+		return data, nil
 	}
+	return nil, fmt.Errorf("ReadFirewallSettings failed, status: %v, message: %s", response.StatusCode, failed)
 }
 
 func (api *API) UpdateFirewallSettings(instanceID int, params []map[string]interface{}) ([]map[string]interface{}, error) {
+	// Initiale values, 10 attempts, 30 second sleep
+	err := api.updateFirewallSettingsWithRetry(instanceID, params, 10, 30)
+	if err != nil {
+		return nil, err
+	}
+	api.waitUntilFirewallConfigured(instanceID)
+	return api.ReadFirewallSettings(instanceID)
+}
+
+func (api *API) updateFirewallSettingsWithRetry(instanceID int, params []map[string]interface{}, attempts int, sleep int) error {
 	failed := make(map[string]interface{})
 	log.Printf("[DEBUG] go-api::security_firewall::update instance id: %v, params: %v", instanceID, params)
 	path := fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 
 	if err != nil {
-		return nil, err
-	}
-	if response.StatusCode != 204 {
-		return nil, fmt.Errorf("UpdateNotification failed, status: %v, message: %s", response.StatusCode, failed)
+		return err
 	}
 
-	api.waitUntilFirewallConfigured(instanceID)
-	return api.ReadFirewallSettings(instanceID)
+	statusCode := response.StatusCode
+	log.Printf("[DEBUG] go-api::security_firewall::update statusCode: %d", statusCode)
+	switch {
+	case statusCode == 400:
+		if strings.Compare(failed["message"].(string), "Your new firewall rules have not finished "+
+			"configuring yet,try again in a few minutes") == 0 {
+			if attempts--; attempts > 0 {
+				log.Printf("[INFO] go-api::security_firewall::update Firewall not finished configuring "+
+					"attempts left %d and retry in %d seconds", attempts, sleep)
+				time.Sleep(time.Duration(sleep) * time.Second)
+				return api.updateFirewallSettingsWithRetry(instanceID, params, attempts, sleep)
+			} else {
+				return fmt.Errorf("Update firewall rules failed, status: %v, message: %s", response.StatusCode, failed)
+			}
+		}
+	case statusCode != 204:
+		return fmt.Errorf("Update firewall rules failed, status: %v, message: %s", response.StatusCode, failed)
+	}
+	return nil
 }
 
 func (api *API) DeleteFirewallSettings(instanceID int) ([]map[string]interface{}, error) {
