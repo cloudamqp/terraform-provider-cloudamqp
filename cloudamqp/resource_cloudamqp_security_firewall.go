@@ -100,12 +100,7 @@ func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) erro
 	}
 	d.Set("instance_id", instanceID)
 
-	rules := make([]map[string]interface{}, len(data))
-	for k, v := range data {
-		rules[k] = readRule(v)
-	}
-
-	if err = d.Set("rules", rules); err != nil {
+	if err = d.Set("rules", data); err != nil {
 		return fmt.Errorf("error setting rules for resource %s, %s", d.Id(), err)
 	}
 
