@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_vpc_gcp_peering
 
-This resouce creates a VPC peering configuration for the CloudAMQP instance. The configuration will connect to another VPC network hosted in GCP. More information to create VPC peering configuration for [GCP](https://cloud.google.com/vpc/docs/using-vpc-peering).
+This resouce creates a VPC peering configuration for the CloudAMQP instance. The configuration will connect to another VPC network hosted on Google Cloud Platform (GCP). See the [GCP documentation](https://cloud.google.com/vpc/docs/using-vpc-peering) for more information on how to create the VPC peering configuration. 
 
 Only available for dedicated subscription plans.
 
@@ -42,7 +42,8 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 }
 ```
 
-**Note: Creating a VPC peering configuration will trigger a firewall change. Automatically add rules for the peered subnet.**
+**Note: Creating a VPC peering configuration will trigger a firewall change to automatically add rules for the peered subnet.**
+
 ```
 rules {
   ip          = "<PEERED-NETWORK-SUBNET>"
@@ -72,10 +73,10 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Create VPC Peering with additional firewall rules
 
-To create a VPC peering configuration with additional firewall rules. It's required to chain the [cloudamqp_security_firewall](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall)
-resource to avoid parallell resource calls and ensure all the firewall rules are overwritten last. This is done by adding dependency from the firewall resource to the VPC peering resource.
+To create a VPC peering configuration with additional firewall rules, it's required to chain the [cloudamqp_security_firewall](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall)
+resource to avoid parallel conflicting resource calls. This is done by adding dependency from the firewall resource to the VPC peering resource.
 
-Furthermore since all firewall rules are overwritten, the otherwise automatically added rules for the VPC peering also needs to be added.
+Furthermore, since all firewall rules are overwritten, the otherwise automatically added rules for the VPC peering also needs to be added.
 
 See example below.
 
