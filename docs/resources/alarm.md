@@ -49,15 +49,19 @@ resource "cloudamqp_alarm" "memory_alarm" {
 
 The following arguments are supported:
 
-* `instance_id`     - (Required) The CloudAMQP instance ID.
-* `type`            - (Required) The alarm type, see valid options below.
-* `enabled`         - (Required) Enable or disable the alarm to trigger.
-* `value_threshold` - (Optional) The value to trigger the alarm for.
-* `time_threshold`  - (Optional) The time interval (in seconds) the `value_threshold` should be active before triggering an alarm.
-* `queue_regex`     - (Optional) Regex for which queue to check.
-* `vhost_regex`     - (Optional) Regex for which vhost to check
-* `recipients`      - (Optional) Identifier for recipient to be notified. Leave empty to notify all recipients.
-* `message_type`    - (Optional) Message type `(total, unacked, ready)` used by queue alarm type.
+* `instance_id`         - (Required) The CloudAMQP instance ID.
+* `type`                - (Required) The alarm type, see valid options below.
+* `enabled`             - (Required) Enable or disable the alarm to trigger.
+* `value_threshold`     - (Optional) The value to trigger the alarm for.
+* `time_threshold`      - (Optional) The time interval (in seconds) the `value_threshold` should be active before triggering an alarm.
+* `queue_regex`         - (Optional) Regex for which queue to check.
+* `vhost_regex`         - (Optional) Regex for which vhost to check
+* `recipients`          - (Optional) Identifier for recipient to be notified. Leave empty to notify all recipients.
+* `message_type`        - (Optional) Message type `(total, unacked, ready)` used by queue alarm type.
+
+Specific argument for `disk` alarm
+
+* `value_calculation`   - (Optional) Disk value threshold calculation, `fixed, percentage` of disk space remaining.
 
 Based on alarm type, different arguments are flagged as required or optional.
 
@@ -69,10 +73,10 @@ All attributes reference are computed
 
 ## Alarm Type reference
 
-Valid options for notification type.
+Supported alarm types: `cpu, memory, disk, queue, connection, consumer, netsplit, server_unreachable, notice`
 
-Required arguments for all alarms: *instance_id*, *type* and *enabled*
-Optional argument for all alarms: *tags*, *queue_regex*, *vhost_regex*
+Required arguments for all alarms: `instance_id, type, enabled`<br>
+Optional argument for all alarms: `tags, queue_regex, vhost_regex`
 
 | Name | Type | Shared | Dedicated | Required arguments |
 | ---- | ---- | ---- | ---- | ---- |

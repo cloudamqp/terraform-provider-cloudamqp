@@ -41,6 +41,11 @@ func dataSourceAlarm() *schema.Resource {
 				Computed:    true,
 				Description: "What value to trigger the alarm for",
 			},
+			"value_calculation": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Disk value threshold calculation. Fixed or percentage of disk space remaining",
+			},
 			"time_threshold": {
 				Type:        schema.TypeInt,
 				Computed:    true,
