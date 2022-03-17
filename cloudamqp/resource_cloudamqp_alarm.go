@@ -43,6 +43,12 @@ func resourceAlarm() *schema.Resource {
 				Optional:    true,
 				Description: "What value to trigger the alarm for",
 			},
+			"value_calculation": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Disk value threshold calculation. Fixed or percentage of disk space remaining",
+				ValidateFunc: validateValueCalculation(),
+			},
 			"time_threshold": {
 				Type:        schema.TypeInt,
 				Optional:    true,
@@ -78,7 +84,7 @@ func resourceAlarm() *schema.Resource {
 
 func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "enabled", "value_threshold", "time_threshold", "vhost_regex", "queue_regex", "message_type", "recipients"}
+	keys := alarmAttributeKeys()
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
@@ -135,7 +141,7 @@ func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceAlarmUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "enabled", "value_threshold", "time_threshold", "vhost_regex", "queue_regex", "message_type", "recipients"}
+	keys := alarmAttributeKeys()
 	params := make(map[string]interface{})
 	params["id"] = d.Id()
 	log.Printf("[DEBUG] cloudamqp::resource::alarm::update params: %v", params)
@@ -181,6 +187,7 @@ func validateAlarmSchemaAttribute(key string) bool {
 	case "type",
 		"enabled",
 		"value_threshold",
+		"value_calculation",
 		"time_threshold",
 		"vhost_regex",
 		"queue_regex",
@@ -197,4 +204,25 @@ func validateMessageType() schema.SchemaValidateFunc {
 		"unacked",
 		"ready",
 	}, true)
+}
+
+func validateValueCalculation() schema.SchemaValidateFunc {
+	return validation.StringInSlice([]string{
+		"fixed",
+		"percentage",
+	}, true)
+}
+
+func alarmAttributeKeys() []string {
+	return []string {
+		"type",
+		"enabled",
+		"value_threshold",
+		"value_calculation",
+		"time_threshold",
+		"vhost_regex",
+		"queue_regex",
+		"message_type",
+		"recipients",
+	}
 }
