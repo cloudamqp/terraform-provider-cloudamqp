@@ -37,8 +37,8 @@ func resourceSecurityFirewall() *schema.Resource {
 								Type:         schema.TypeString,
 								ValidateFunc: validateServices(),
 							},
-							Description: "Pre-defined services 'AMQP', 'AMQPS', 'HTTPS', 'MQTT', 'MQTTS', 'STOMP', 'STOMPS', "+
-																								 "'STREAM', 'STREAM_SSL'",
+							Description: "Pre-defined services 'AMQP', 'AMQPS', 'HTTPS', 'MQTT', 'MQTTS', 'STOMP', 'STOMPS', " +
+								"'STREAM', 'STREAM_SSL'",
 						},
 						"ports": {
 							Type:     schema.TypeList,
@@ -99,8 +99,12 @@ func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) erro
 		return err
 	}
 	d.Set("instance_id", instanceID)
-
-	if err = d.Set("rules", data); err != nil {
+	rules := make([]map[string]interface{}, len(data))
+	for k, v := range data {
+		rules[k] = readRule(v)
+	}
+	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read rules: %v", rules)
+	if err = d.Set("rules", rules); err != nil {
 		return fmt.Errorf("error setting rules for resource %s, %s", d.Id(), err)
 	}
 
@@ -119,7 +123,14 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 	if err != nil {
 		return err
 	}
-	d.Set("rules", data)
+	rules := make([]map[string]interface{}, len(data))
+	for k, v := range data {
+		rules[k] = readRule(v)
+	}
+
+	if err = d.Set("rules", rules); err != nil {
+		return fmt.Errorf("error setting rules for resource %s, %s", d.Id(), err)
+	}
 	return nil
 }
 
@@ -158,7 +169,7 @@ func validateServices() schema.SchemaValidateFunc {
 func validateRulesSchemaAttribute(key string) bool {
 	switch key {
 	case "services",
-		"port",
+		"ports",
 		"ip",
 		"description":
 		return true
