@@ -10,6 +10,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
+type ServicePort struct {
+	Port    int
+	Service string
+}
+
 func resourceSecurityFirewall() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceSecurityFirewallCreate,
@@ -44,8 +49,16 @@ func resourceSecurityFirewall() *schema.Resource {
 							Type:     schema.TypeList,
 							Optional: true,
 							Elem: &schema.Schema{
-								Type:         schema.TypeInt,
-								ValidateFunc: validation.IntBetween(0, 65554),
+								Type: schema.TypeInt,
+								ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+									v := val.(int)
+									if v < 0 || v > 65554 {
+										errs = append(errs, fmt.Errorf("%q must be between 0 and 65554, got: %d", key, v))
+									} else if validateServicePort(v) {
+										errs = append(errs, fmt.Errorf("port %d, pre-defined as service %q", v, portToService(v)))
+									}
+									return
+								},
 							},
 							Description: "Custom ports between 0 - 65554",
 						},
@@ -164,6 +177,39 @@ func validateServices() schema.SchemaValidateFunc {
 		"STREAM",
 		"STREAM_SSL",
 	}, true)
+}
+
+func servicePorts() []ServicePort {
+	return []ServicePort{{Port: 443, Service: "HTTPS"},
+		{Port: 443, Service: "HTTPS"},
+		{Port: 1883, Service: "MQTT"},
+		{Port: 5551, Service: "STREAM_SSL"},
+		{Port: 5552, Service: "STREAM"},
+		{Port: 5671, Service: "AMQPS"},
+		{Port: 5672, Service: "AMQP"},
+		{Port: 8883, Service: "MQTTS"},
+		{Port: 61613, Service: "STOMP"},
+		{Port: 61614, Service: "STOMPS"}}
+}
+
+func validateServicePort(port int) bool {
+	servicePorts := servicePorts()
+	for i := range servicePorts {
+		if servicePorts[i].Port == port {
+			return true
+		}
+	}
+	return false
+}
+
+func portToService(port int) string {
+	servicePorts := servicePorts()
+	for i := range servicePorts {
+		if servicePorts[i].Port == port {
+			return servicePorts[i].Service
+		}
+	}
+	return ""
 }
 
 func validateRulesSchemaAttribute(key string) bool {
