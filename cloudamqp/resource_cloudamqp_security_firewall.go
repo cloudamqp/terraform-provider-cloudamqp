@@ -180,16 +180,17 @@ func validateServices() schema.SchemaValidateFunc {
 }
 
 func servicePorts() []ServicePort {
-	return []ServicePort{{Port: 443, Service: "HTTPS"},
-		{Port: 443, Service: "HTTPS"},
-		{Port: 1883, Service: "MQTT"},
-		{Port: 5551, Service: "STREAM_SSL"},
-		{Port: 5552, Service: "STREAM"},
-		{Port: 5671, Service: "AMQPS"},
-		{Port: 5672, Service: "AMQP"},
-		{Port: 8883, Service: "MQTTS"},
-		{Port: 61613, Service: "STOMP"},
-		{Port: 61614, Service: "STOMPS"}}
+	return []ServicePort{
+		{Service: "AMQP", Port: 5672},
+		{Service: "AMQPS", Port: 5671},
+		{Service: "HTTPS", Port: 443},
+		{Service: "MQTT", Port: 1883},
+		{Service: "MQTTS", Port: 8883},
+		{Service: "STOMP", Port: 61613},
+		{Service: "STOMPS", Port: 61614},
+		{Service: "STREAM", Port: 5552},
+		{Service: "STREAM_SSL", Port: 5551},
+	}
 }
 
 func validateServicePort(port int) bool {
