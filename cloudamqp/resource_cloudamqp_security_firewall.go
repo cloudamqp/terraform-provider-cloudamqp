@@ -55,7 +55,7 @@ func resourceSecurityFirewall() *schema.Resource {
 									if v < 0 || v > 65554 {
 										errs = append(errs, fmt.Errorf("%q must be between 0 and 65554, got: %d", key, v))
 									} else if validateServicePort(v) {
-										errs = append(errs, fmt.Errorf("port %d, pre-defined as service %q", v, portToService(v)))
+										errs = append(errs, fmt.Errorf("Port %d found in \"ports\", needs to be added as %q in \"services\" instead", v, portToService(v)))
 									}
 									return
 								},
