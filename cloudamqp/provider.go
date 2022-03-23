@@ -23,7 +23,7 @@ func Provider(v string) *schema.Provider {
 			},
 			"baseurl": {
 				Type:        schema.TypeString,
-				Default:     "https://customer.cloudamqp.com",
+				DefaultFunc: schema.EnvDefaultFunc("CLOUDAMQP_BASEURL", "https://customer.cloudamqp.com"),
 				Optional:    true,
 				Description: "Base URL to CloudAMQP Customer website",
 			},
