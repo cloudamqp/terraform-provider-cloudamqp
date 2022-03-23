@@ -81,7 +81,18 @@ If used together with [VPC GPC peering](https://registry.terraform.io/providers/
 
 ## Known issues
 
-### Custom ports trigger new update every time
+<details>
+  <summary>Custom ports trigger new update every time</summary>
+
+  Before release [v1.15.1](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.15.1) using the custom ports can cause a missmatch upon reading data and trigger a new update every time.
+
+  Reason is that there is a bug in validating the response from the underlying API.
+
+  Update the provider to at least v1.15.1 to fix the issue.
+ </details>
+
+<details>
+  <summary>Using pre-defined service port in ports</summary>
 
 Using one of the port from the pre-defined services in ports argument, see example of using port 5671 instead of the service *AMQPS*.
 
@@ -113,4 +124,5 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 }
 ```
 
-The provider from [v1.16.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.16.0) will start to warn about using this.
+The provider from [v1.15.2](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.16.0) will start to warn about using this.
+ </details>
