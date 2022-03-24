@@ -10,6 +10,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
+type ServicePort struct {
+	Port    int
+	Service string
+}
+
 func resourceSecurityFirewall() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceSecurityFirewallCreate,
@@ -37,15 +42,23 @@ func resourceSecurityFirewall() *schema.Resource {
 								Type:         schema.TypeString,
 								ValidateFunc: validateServices(),
 							},
-							Description: "Pre-defined services 'AMQP', 'AMQPS', 'HTTPS', 'MQTT', 'MQTTS', 'STOMP', 'STOMPS', "+
-																								 "'STREAM', 'STREAM_SSL'",
+							Description: "Pre-defined services 'AMQP', 'AMQPS', 'HTTPS', 'MQTT', 'MQTTS', 'STOMP', 'STOMPS', " +
+								"'STREAM', 'STREAM_SSL'",
 						},
 						"ports": {
 							Type:     schema.TypeList,
 							Optional: true,
 							Elem: &schema.Schema{
-								Type:         schema.TypeInt,
-								ValidateFunc: validation.IntBetween(0, 65554),
+								Type: schema.TypeInt,
+								ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+									v := val.(int)
+									if v < 0 || v > 65554 {
+										errs = append(errs, fmt.Errorf("%q must be between 0 and 65554, got: %d", key, v))
+									} else if validateServicePort(v) {
+										warns = append(warns, fmt.Sprintf("Port %d found in \"ports\", needs to be added as %q in \"services\" instead", v, portToService(v)))
+									}
+									return
+								},
 							},
 							Description: "Custom ports between 0 - 65554",
 						},
@@ -99,8 +112,12 @@ func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) erro
 		return err
 	}
 	d.Set("instance_id", instanceID)
-
-	if err = d.Set("rules", data); err != nil {
+	rules := make([]map[string]interface{}, len(data))
+	for k, v := range data {
+		rules[k] = readRule(v)
+	}
+	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read rules: %v", rules)
+	if err = d.Set("rules", rules); err != nil {
 		return fmt.Errorf("error setting rules for resource %s, %s", d.Id(), err)
 	}
 
@@ -119,7 +136,14 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 	if err != nil {
 		return err
 	}
-	d.Set("rules", data)
+	rules := make([]map[string]interface{}, len(data))
+	for k, v := range data {
+		rules[k] = readRule(v)
+	}
+
+	if err = d.Set("rules", rules); err != nil {
+		return fmt.Errorf("error setting rules for resource %s, %s", d.Id(), err)
+	}
 	return nil
 }
 
@@ -155,10 +179,44 @@ func validateServices() schema.SchemaValidateFunc {
 	}, true)
 }
 
+func servicePorts() []ServicePort {
+	return []ServicePort{
+		{Service: "AMQP", Port: 5672},
+		{Service: "AMQPS", Port: 5671},
+		{Service: "HTTPS", Port: 443},
+		{Service: "MQTT", Port: 1883},
+		{Service: "MQTTS", Port: 8883},
+		{Service: "STOMP", Port: 61613},
+		{Service: "STOMPS", Port: 61614},
+		{Service: "STREAM", Port: 5552},
+		{Service: "STREAM_SSL", Port: 5551},
+	}
+}
+
+func validateServicePort(port int) bool {
+	servicePorts := servicePorts()
+	for i := range servicePorts {
+		if servicePorts[i].Port == port {
+			return true
+		}
+	}
+	return false
+}
+
+func portToService(port int) string {
+	servicePorts := servicePorts()
+	for i := range servicePorts {
+		if servicePorts[i].Port == port {
+			return servicePorts[i].Service
+		}
+	}
+	return ""
+}
+
 func validateRulesSchemaAttribute(key string) bool {
 	switch key {
 	case "services",
-		"port",
+		"ports",
 		"ip",
 		"description":
 		return true
