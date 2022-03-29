@@ -2,7 +2,7 @@ TEST?=$$(go list ./... |grep -v 'vendor')
 GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 WEBSITE_REPO=github.com/hashicorp/terraform-website
 PKG_NAME=cloudamqp
-PROVIDER_VERSION = 1.15.1
+PROVIDER_VERSION = 1.15.2
 
 
 default: build
@@ -18,7 +18,7 @@ local-clean:  ## Clean files
   ## 0.12 version
 	## rm -f ~/.terraform.d/plugins/terraform-provider-cloudamqp*
 	## 0.13+ version
-	rm -rf ~/.terraform.d/plugins/localhost/cloudamqp/cloudamqp/*
+	rm -rf ~/.terraform.d/plugins/localhost/cloudamqp/cloudamqp/$(PROVIDER_VERSION)/darwin_amd64/*
 
 ## Local clean, build and install
 local-build: local-clean

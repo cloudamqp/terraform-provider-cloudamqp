@@ -1,4 +1,15 @@
-##  1.15.1 (Dec 21, 2021)
+## 1.15.2 (Mar 29, 2022)
+
+IMPROVEMENTS:
+
+* Add new attribute, value_calculation, to alarms ([#138]https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/138)
+* Add support for `CLOUDAMQP_BASEURL` in provider, make testing easier ([#143](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/143))
+
+BUG FIXES:
+
+* Correct validation for firewall rule attributes ([#141]https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/141)
+
+## 1.15.1 (Dec 21, 2021)
 
 NOTE:
 
