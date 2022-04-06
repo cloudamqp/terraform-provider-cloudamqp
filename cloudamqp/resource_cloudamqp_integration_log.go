@@ -46,7 +46,7 @@ func resourceIntegrationLog() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
-				Description: "The token used for authentication. (Loggly, Logentries, Splunk)",
+				Description: "The token used for authentication. (Loggly, Logentries, Splunk, Scalyr)",
 			},
 			"region": {
 				Type:        schema.TypeString,
@@ -91,6 +91,12 @@ func resourceIntegrationLog() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Description: "The client email. (Stackdriver)",
+			},
+			"host": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Description:  "The host information. (Scalyr)",
+				ValidateFunc: validateIntegrationLogScalyrHost(),
 			},
 		},
 	}
@@ -180,6 +186,14 @@ func validateIntegrationLogName() schema.SchemaValidateFunc {
 		"cloudwatchlog",
 		"datadog",
 		"stackdriver",
+		"scalyr",
+	}, true)
+}
+
+func validateIntegrationLogScalyrHost() schema.SchemaValidateFunc {
+	return validation.StringInSlice([]string{
+		"app.scalyr.com",
+		"app.eu.scalyr.com",
 	}, true)
 }
 
@@ -195,7 +209,8 @@ func validateIntegrationLogsSchemaAttribute(key string) bool {
 		"tags",
 		"project_id",
 		"private_key",
-		"client_email":
+		"client_email",
+		"host":
 		return true
 	}
 	return false
@@ -217,6 +232,8 @@ func integrationLogKeys(intName string) []string {
 		return []string{"region", "api_key", "tags"}
 	case "stackdriver":
 		return []string{"project_id", "private_key", "client_email"}
+	case "scalyr":
+		return []string{"token", "host"}
 	default:
 		return []string{"url", "host_port", "token", "region", "access_key_id", "secret_access_key"}
 	}

@@ -62,6 +62,13 @@ resource "cloudamqp_integration_log" "stackdriver" {
   private_key = var.stackdriver_private_key
   client_email = var.stackdriver_client_email
 }
+
+resource "cloudamqp_integration_log" "scalyr" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "scalyr"
+  token = var.scalyr_token
+  host = var.scalyr_host
+}
 ```
 
 ## Argument Reference
@@ -80,6 +87,7 @@ The following arguments are supported:
 * `project_id`        - (Optional) The project identifier.
 * `private_key`       - (Optional) The private access key.
 * `client_email`      - (Optional) The client email registered for the integration service.
+* `host`              - (Optional) The host for Scalyr integration. (app.scalyr.com, app.eu.scalyr.com)
 
 This is the full list of all arguments. Only a subset of arguments are used based on which type of integration used. See [Integration Type reference](#integration-type-reference) table below for more information.
 
@@ -106,6 +114,7 @@ Valid names for third party log integration.
 | splunk     | Create a HTTP Event Collector token at https://.cloud.splunk.com/en-US/manager/search/http-eventcollector |
 | datadog       | Create a Datadog API key at app.datadoghq.com |
 | stackdriver   | Create a service account and add 'monitor metrics writer' role, then download credentials. |
+| scalyr        | Create a Log write token at https://app.scalyr.com/keys |
 
 ## Integration Type reference
 
@@ -122,6 +131,7 @@ Required arguments for all integrations: name
 | Splunk | splunk | token, host_port |
 | Data Dog | datadog | region, api_keys, tags |
 | Stackdriver | stackdriver | project_id, private_key, client_email |
+| Scalyr | scalyr | token, host |
 
 ## Attributes Reference
 
