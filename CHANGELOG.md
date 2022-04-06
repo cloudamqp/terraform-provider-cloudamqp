@@ -1,3 +1,10 @@
+## 1.15.3 (Apr 06, 2022)
+
+IMPROVEMENTS:
+
+* Add support for Scalyr log integrations ([#147]
+https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/147)
+
 ## 1.15.2 (Mar 29, 2022)
 
 IMPROVEMENTS:
