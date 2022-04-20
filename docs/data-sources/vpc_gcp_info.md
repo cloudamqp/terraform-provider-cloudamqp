@@ -11,15 +11,37 @@ Use this data source to retrieve information about VPC for a CloudAMQP instance 
 
 ## Example Usage
 
+<details>
+<summary><b><i>AWS VPC peering pre v1.16.0</i></b></summary>
 ```hcl
 data "cloudamqp_vpc_gcp_info" "vpc_info" {
   instance_id = cloudamqp_instance.instance.id
 }
 ```
+</details>
+
+<details>
+<summary><b><i>AWS VPC peering post v1.16.0 (Managed VPC)</i></b></summary>
+```hcl
+data "cloudamqp_vpc_gcp_info" "vpc_info" {
+  vpc_id = cloudamqp_vpc.vpc.id
+  # vpc_id prefered over instance_id
+  # instance_id = cloudamqp_instance.instance.id
+}
+```
+</details>
 
 ## Argument reference
 
-* `instance_id` - (Required) The CloudAMQP instance identifier.
+ *Note: this resource require either `instance_id` or `vpc_id` from v1.16.0*
+
+* `instance_id` - (Optional) The CloudAMQP instance identifier.
+
+ ***Deprecated: Changed from required to optional in v1.16.0 will be removed in next major version (v2.0)***
+
+* `vpc_id` - (Optional) The managed VPC identifier.
+
+ ***Note: Added as optional in version v1.16.0 and will be required in next major version (v2.0)***
 
 ## Attributes reference
 
@@ -32,4 +54,8 @@ All attributes reference are computed
 
 ## Dependency
 
-This data source depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+*Pre v1.16.0*
+This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+
+*Post v1.16.0*
+This resource depends on CloudAMQP managed VPC identifier, `cloudamqp_vpc.vpc.id` or instance identifier, `cloudamqp_instance.instance.id`.

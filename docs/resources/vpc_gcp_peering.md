@@ -7,12 +7,14 @@ description: |-
 
 # cloudamqp_vpc_gcp_peering
 
-This resouce creates a VPC peering configuration for the CloudAMQP instance. The configuration will connect to another VPC network hosted on Google Cloud Platform (GCP). See the [GCP documentation](https://cloud.google.com/vpc/docs/using-vpc-peering) for more information on how to create the VPC peering configuration. 
+This resouce creates a VPC peering configuration for the CloudAMQP instance. The configuration will connect to another VPC network hosted on Google Cloud Platform (GCP). See the [GCP documentation](https://cloud.google.com/vpc/docs/using-vpc-peering) for more information on how to create the VPC peering configuration.
 
 Only available for dedicated subscription plans.
 
 ## Example Usage
 
+<details>
+<summary><b><i>AWS VPC peering pre v1.16.0</i></b></summary>
 ```hcl
 # Configure CloudAMQP provider
 provider "cloudamqp" {
@@ -24,9 +26,8 @@ resource "cloudamqp_instance" "instance" {
   name   = "terraform-vpc-peering"
   plan   = "bunny-1"
   region = "google-compute-engine::europe-north1"
-  nodes  = 1
   tags   = ["terraform"]
-  rmq_version = "3.8.4"
+  rmq_version = "3.9.14"
   vpc_subnet = "10.40.72.0/24"
 }
 
@@ -41,21 +42,65 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
   peer_network_uri = "https://www.googleapis.com/compute/v1/projects/<PROJECT-NAME>/global/networks/<NETWORK-NAME>"
 }
 ```
+</details>
 
-**Note: Creating a VPC peering configuration will trigger a firewall change to automatically add rules for the peered subnet.**
+<details>
+<summary><b><i>AWS VPC peering post v1.16.0 (Managed VPC)</i></b></summary>
+```hcl
+# Configure CloudAMQP provider
+provider "cloudamqp" {
+  apikey = var.cloudamqp_customer_api_key
+}
 
+# Managed VPC resource
+resource "cloudamqp_vpc" "vpc" {
+  name = "<VPC name>"
+  region = "google-compute-engine::europe-north1"
+  subnet = "10.56.72.0/24"
+  tags = []
+}
+
+# CloudAMQP instance
+resource "cloudamqp_instance" "instance" {
+  name   = "terraform-vpc-peering"
+  plan   = "bunny-1"
+  region = "google-compute-engine::europe-north1"
+  tags   = ["terraform"]
+  rmq_version = "3.9.14"
+  vpc_id = cloudamqp_vpc.vpc.id
+}
+
+# VPC information
+data "cloudamqp_vpc_gcp info" "vpc_info" {
+  vpc_id = cloudamqp_vpc.vpc.info
+  # vpc_id prefered over instance_id
+  # instance_id = cloudamqp_instance.instance.id
+}
+
+# VPC peering configuration
+resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
+  vpc_id = cloudamqp_vpc.vpc.id
+  # vpc_id prefered over instance_id
+  # instance_id = cloudamqp_instance.instance.id
+  peer_network_uri = "https://www.googleapis.com/compute/v1/projects/<PROJECT-NAME>/global/networks/<NETWORK-NAME>"
+}
 ```
-rules {
-  ip          = "<PEERED-NETWORK-SUBNET>"
-  ports       = [15672]
-  services    = ["AMQP","AMQPS", "STREAM", "STREAM_SSL"]
-  description = "VPC peering for <NETWORK-NAME>"
-  }
-```
+</details>
+
+*Note: Creating a VPC peering configuration will trigger a firewall change to automatically add rules for the peered subnet.*
 
 ## Argument Reference
 
-* `instance_id` - (Required) The CloudAMQP instance ID.
+ *Note: this resource require either `instance_id` or `vpc_id` from v1.16.0*
+
+* `instance_id` - (Optional) The CloudAMQP instance identifier.
+
+ ***Depreacted: Changed from required to optional in v1.16.0, will be removed in next major version (v2.0)***
+
+* `vpc_id` - (Optional) The managed VPC identifier.
+
+ ***Note: Added as optional in version v1.16.0, will be required in next major version (v2.0)***
+
 * `peer_network_uri`- (Required) Network uri of the VPC network to which you will peer with.
 
 ## Attributes Reference
@@ -69,7 +114,11 @@ All attributes reference are computed
 
 ## Depedency
 
+*Pre v1.16.0*
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+
+*Post v1.16.0*
+This resource depends on CloudAMQP managed VPC identifier, `cloudamqp_vpc.vpc.id` or instance identifier, `cloudamqp_instance.instance.id`.
 
 ## Create VPC Peering with additional firewall rules
 
@@ -82,10 +131,59 @@ See example below.
 
 ## Example Usage with additional firewall rules
 
+<details>
+  <summary>
+    <b>
+      <i>AWS VPC peering pre v1.16.0</i>
+    </b>
+  </summary>
+
 ```hcl
 # VPC peering configuration
 resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
   instance_id = cloudamqp_instance.instance.id
+  peer_network_uri = var.peer_network_uri
+}
+
+# Firewall rules
+
+resource "cloudamqp_security_firewall" "firewall_settings" {
+  instance_id = cloudamqp_instance.instance.id
+
+  rules {
+    ip          =  var.peer_subnet
+    ports       = [15672]
+    services    = ["AMQP","AMQPS", "STREAM", "STREAM_SSL"]
+    description = "VPC peering for <NETWORK>"
+  }
+
+  rules {
+    ip          = "192.168.0.0/24"
+    ports       = [4567, 4568]
+    services    = ["AMQP","AMQPS", "HTTPS"]
+  }
+
+  depends_on = [
+    cloudamqp_vpc_gcp_peering.vpc_peering_request
+  ]
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>AWS VPC peering post v1.16.0 (Managed VPC)</i>
+    </b>
+  </summary>
+
+```hcl
+# VPC peering configuration
+resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
+  vpc_id = cloudamqp_vpc.vpc.id
+  # vpc_id prefered over instance_id
+  # instance_id = cloudamqp_instance.instance.id
   peer_network_uri = var.peer_network_uri
 }
 
@@ -111,3 +209,5 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   ]
 }
 ```
+
+</details>

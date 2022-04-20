@@ -115,6 +115,12 @@ func resourceInstance() *schema.Resource {
 				Optional:    true,
 				Description: "Set to true to not create default alarms",
 			},
+			"keep_associated_vpc": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Keep associated VPC when deleting instance",
+			},
 		},
 		CustomizeDiff: customdiff.All(
 			customdiff.ForceNewIfChange("plan", func(old, new, meta interface{}) bool {
@@ -129,7 +135,7 @@ func resourceInstance() *schema.Resource {
 
 func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"name", "plan", "region", "nodes", "tags", "rmq_version", "vpc_id", "vpc_subnet", "no_default_alarms"}
+	keys := instanceCreateAttributeKeys()
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil && v != "" {
@@ -150,14 +156,14 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 		}
 
 		if k == "vpc_id" {
-			if d.Get(k) == "" {
-				delete(params, "vpc_id")
+			if d.Get(k).(int) == 0 {
+				delete(params, k)
 			}
 		}
 
 		if k == "vpc_subnet" {
 			if d.Get(k) == "" {
-				delete(params, "vpc_subnet")
+				delete(params, k)
 			}
 		}
 	}
@@ -183,7 +189,7 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {
 				err = d.Set("vpc_id", v.(map[string]interface{})["id"])
-				err = d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
+				//err = d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
 			} else if k == "nodes" {
 				plan := d.Get("plan").(string)
 				if is2020Plan(plan) {
@@ -253,7 +259,7 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	return api.DeleteInstance(d.Id())
+	return api.DeleteInstance(d.Id(), d.Get("keep_associated_vpc").(bool))
 }
 
 func validateInstanceSchemaAttribute(key string) bool {
@@ -330,4 +336,18 @@ func numberOfNodes(plan string) int {
 	match := r.FindString(plan)
 	nodes, _ := strconv.Atoi(match)
 	return nodes
+}
+
+func instanceCreateAttributeKeys() []string {
+	return []string{
+		"name",
+		"plan",
+		"region",
+		"nodes",
+		"tags",
+		"rmq_version",
+		"vpc_id",
+		"vpc_subnet",
+		"no_default_alarms",
+	}
 }

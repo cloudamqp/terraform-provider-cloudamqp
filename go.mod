@@ -2,14 +2,13 @@ module github.com/cloudamqp/terraform-provider-cloudamqp
 
 go 1.17
 
-require (
-	github.com/84codes/go-api v1.5.4
-	github.com/hashicorp/terraform-plugin-sdk v1.17.2
-)
+//github.com/84codes/go-api v1.5.4
+require github.com/hashicorp/terraform-plugin-sdk v1.17.2
 
 require (
 	cloud.google.com/go v0.65.0 // indirect
 	cloud.google.com/go/storage v1.10.0 // indirect
+	github.com/84codes/go-api v1.5.4 // indirect
 	github.com/Masterminds/goutils v1.1.0 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible // indirect
@@ -89,4 +88,4 @@ require (
 	google.golang.org/protobuf v1.25.0 // indirect
 )
 
-//replace github.com/84codes/go-api => ../../84codes/go-api
+replace github.com/84codes/go-api => ../../84codes/go-api

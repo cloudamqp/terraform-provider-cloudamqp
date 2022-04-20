@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"log"
+	"errors"
 
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -16,8 +17,13 @@ func resourceVpcGcpPeering() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
 				Type:        schema.TypeInt,
-				Required:    true,
+				Optional:    true,
 				Description: "Instance identifier",
+			},
+			"vpc_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "VPC instance identifier",
 			},
 			"peer_network_uri": {
 				Type:        schema.TypeString,
@@ -53,7 +59,19 @@ func resourceCreateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 		}
 	}
 
-	data, err := api.RequestVpcGcpPeering(d.Get("instance_id").(int), params)
+	// Todo: Create if/else if/else to check either instance_id or vpc_id. Different calls!
+	// data, err := api.RequestVpcGcpPeering(d.Get("instance_id").(int), params)
+	log.Printf("[DEBUG] cloudamqp::vpc_gcp_peering::create instance_id: %v, vpc_id: %v", d.Get("instance_id"), d.Get("vpc_id"))
+	data := make(map[string]interface{})
+	err := errors.New("")
+	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
+		return errors.New("Missing both instance identifier or vpc identifier")
+	} else if d.Get("instance_id") != 0 {
+		data, err = api.RequestVpcGcpPeering(d.Get("instance_id").(int), params)
+	} else if d.Get("vpc_id") != nil {
+		data, err = api.RequestVpcGcpPeeringTemp(d.Get("vpc_id").(string), params)
+	}
+
 	if err != nil {
 		return err
 	}
@@ -69,11 +87,25 @@ func resourceCreateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 
 func resourceReadVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	data, err := api.ReadVpcGcpPeering(d.Get("instance_id").(int), d.Id())
+	// Todo: Create if/else if/else to check either instance_id or vpc_id. Different calls!
+	// data, err := api.ReadVpcGcpPeering(d.Get("instance_id").(int), d.Id())
+	data := make(map[string]interface{})
+	err := errors.New("")
+	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
+		return errors.New("Missing both instance identifier or vpc identifier")
+	} else if d.Get("instance_id") != 0 {
+		data, err = api.ReadVpcGcpPeering(d.Get("instance_id").(int), d.Id())
+	} else if d.Get("vpc_id") != nil {
+		data, err = api.ReadVpcGcpPeeringTemp(d.Get("vpc_id").(string), d.Id())
+	}
 	log.Printf("[DEBUG] cloudamqp::vpc_gcp_peering::read data: %v", data)
 
 	if err != nil {
 		return err
+	}
+	// Todo: Needed?
+	if data["rows"] == nil {
+		return errors.New("No peering data available")
 	}
 
 	rows := data["rows"].([]interface{})
@@ -106,7 +138,16 @@ func resourceUpdateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 
 func resourceDeleteVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	return api.RemoveVpcGcpPeering(d.Get("instance_id").(int), d.Id())
+	// Todo: Create if/else if/else to check either instance_id or vpc_id. Different calls!
+	// return api.RemoveVpcGcpPeering(d.Get("instance_id").(int), d.Id())
+	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
+		return errors.New("Missing both instance identifier or vpc identifier")
+	} else if d.Get("instance_id") != 0 {
+		return api.RemoveVpcGcpPeering(d.Get("instance_id").(int), d.Id())
+	} else if d.Get("vpc_id") != nil {
+		return api.RemoveVpcGcpPeeringTemp(d.Get("vpc_id").(string), d.Id())
+	}
+	return errors.New("Failed to remove VPC peering")
 }
 
 func validateGcpPeeringSchemaAttribute(key string) bool {
