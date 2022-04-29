@@ -43,7 +43,7 @@ resource "cloudamqp_instance" "instance_02" {
   tags                = ["terraform"]
   rmq_version         = "3.9.14"
   vpc_id = cloudamqp_vpc.vpc.id
- keep_associated_vpc = true
+  keep_associated_vpc = true
 }
 ```
 
