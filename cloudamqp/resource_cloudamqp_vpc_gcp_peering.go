@@ -1,8 +1,8 @@
 package cloudamqp
 
 import (
-	"log"
 	"errors"
+	"log"
 
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -65,7 +65,7 @@ func resourceCreateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 	data := make(map[string]interface{})
 	err := errors.New("")
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
-		return errors.New("Missing both instance identifier or vpc identifier")
+		return errors.New("You need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
 		data, err = api.RequestVpcGcpPeering(d.Get("instance_id").(int), params)
 	} else if d.Get("vpc_id") != nil {
@@ -92,7 +92,7 @@ func resourceReadVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
 	data := make(map[string]interface{})
 	err := errors.New("")
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
-		return errors.New("Missing both instance identifier or vpc identifier")
+		return errors.New("You need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
 		data, err = api.ReadVpcGcpPeering(d.Get("instance_id").(int), d.Id())
 	} else if d.Get("vpc_id") != nil {
@@ -141,7 +141,7 @@ func resourceDeleteVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 	// Todo: Create if/else if/else to check either instance_id or vpc_id. Different calls!
 	// return api.RemoveVpcGcpPeering(d.Get("instance_id").(int), d.Id())
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
-		return errors.New("Missing both instance identifier or vpc identifier")
+		return errors.New("You need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
 		return api.RemoveVpcGcpPeering(d.Get("instance_id").(int), d.Id())
 	} else if d.Get("vpc_id") != nil {

@@ -47,7 +47,7 @@ func resourceVpcPeeringAccept(d *schema.ResourceData, meta interface{}) error {
 	// _, err := api.AcceptVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string))
 	err := errors.New("")
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
-		return errors.New("Missing both instance identifier or vpc identifier")
+		return errors.New("You need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
 		_, err = api.AcceptVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string))
 	} else if d.Get("vpc_id") != nil {
@@ -87,7 +87,7 @@ func resourceVpcPeeringRead(d *schema.ResourceData, meta interface{}) error {
 	err := errors.New("")
 	data := make(map[string]interface{})
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
-		return errors.New("Missing both instance identifier or vpc identifier")
+		return errors.New("You need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
 		data, err = api.ReadVpcPeeringRequest(d.Get("instance_id").(int), d.Get("peering_id").(string))
 	} else if d.Get("vpc_id") != nil {
@@ -114,7 +114,7 @@ func resourceVpcPeeringDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	//return api.RemoveVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string))
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
-		return errors.New("Missing both instance identifier or vpc identifier")
+		return errors.New("You need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
 		return api.RemoveVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string))
 	} else if d.Get("vpc_id") != nil {
