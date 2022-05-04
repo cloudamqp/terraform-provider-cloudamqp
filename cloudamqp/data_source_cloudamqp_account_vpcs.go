@@ -66,7 +66,7 @@ func dataSourceAccountVpcsRead(d *schema.ResourceData, meta interface{}) error {
 	} else if len(data) == 0 {
 		return fmt.Errorf("no vpcs found for resoruce %s", d.Id())
 	}
-	d.SetId("na")
+	d.SetId("noId")
 	vpcs := make([]map[string]interface{}, len(data))
 	for k, v := range data {
 		vpcs[k] = readAccountVpc(v)
