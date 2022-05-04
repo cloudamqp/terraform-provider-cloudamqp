@@ -48,14 +48,6 @@ func resourceVpc() *schema.Resource {
 				Computed:    true,
 				Description: "VPC name given when hosted at the cloud provider",
 			},
-			// "instances": {
-			// 	Type:     schema.TypeList,
-			// 	Computed: true,
-			// 	Elem: &schema.Schema{
-			// 		Type: schema.TypeInt,
-			// 	},
-			// 	Description: "Collection of instance identifiers connected to the VPC",
-			// },
 		},
 	}
 }
@@ -77,7 +69,6 @@ func resourceVpcCreate(d *schema.ResourceData, meta interface{}) error {
 
 	log.Printf("[DEBUG] cloudamqp::vpc::create data: %v", data)
 	d.SetId(data["id"].(string))
-	//d.Set("vpc_name", data["name"].(string))
 	return resourceVpcRead(d, meta)
 }
 
@@ -120,14 +111,6 @@ func resourceVpcUpdate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceVpcDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-
-	// Todo: Remove this check and trust the response from API?
-	// Cannot update this resource with instances changes before running an extra
-	// "terraform plan" or "terraform apply --refresh-only"
-	// instances := d.Get("instances").([]interface{})
-	// if len(instances) > 0 {
-	// 	return fmt.Errorf("VPC still contains instances: %v", instances)
-	// }
 	return api.DeleteVpcInstance(d.Id())
 }
 
@@ -138,7 +121,6 @@ func validateVpcSchemaAttribute(key string) bool {
 		"subnet",
 		"tags",
 		"vpc_name":
-		// "instances":
 		return true
 	}
 	return false

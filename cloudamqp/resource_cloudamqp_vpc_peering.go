@@ -43,8 +43,6 @@ func resourceVpcPeering() *schema.Resource {
 
 func resourceVpcPeeringAccept(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	// Todo: Create if/else if/else to check either instance_id or vpc_id. Different calls!
-	// _, err := api.AcceptVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string))
 	err := errors.New("")
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
 		return errors.New("You need to specify either instance_id or vpc_id")
@@ -65,8 +63,6 @@ func resourceVpcPeeringAccept(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceVpcPeeringRead(d *schema.ResourceData, meta interface{}) error {
-	// Todo: Create if/else if/else to check either instance_id or vpc_id. Different calls!
-	// Temporary introduce resource_id, instance_id, vpc_id for import
 	if strings.Contains(d.Id(), ",") {
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
@@ -83,7 +79,6 @@ func resourceVpcPeeringRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	api := meta.(*api.API)
-	//data, err := api.ReadVpcPeeringRequest(d.Get("instance_id").(int), d.Get("peering_id").(string))
 	err := errors.New("")
 	data := make(map[string]interface{})
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
@@ -110,9 +105,7 @@ func resourceVpcPeeringRead(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceVpcPeeringDelete(d *schema.ResourceData, meta interface{}) error {
-	// Todo: Create if/else if/else to check either instance_id or vpc_id. Different calls!
 	api := meta.(*api.API)
-	//return api.RemoveVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string))
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
 		return errors.New("You need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
