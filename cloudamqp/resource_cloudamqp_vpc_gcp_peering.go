@@ -67,7 +67,7 @@ func resourceCreateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 	} else if d.Get("instance_id") != 0 {
 		data, err = api.RequestVpcGcpPeering(d.Get("instance_id").(int), params)
 	} else if d.Get("vpc_id") != nil {
-		data, err = api.RequestVpcGcpPeeringTemp(d.Get("vpc_id").(string), params)
+		data, err = api.RequestVpcGcpPeeringWithVpcId(d.Get("vpc_id").(string), params)
 	}
 
 	if err != nil {
@@ -93,7 +93,7 @@ func resourceReadVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
 	} else if d.Get("instance_id") != 0 {
 		data, err = api.ReadVpcGcpPeering(d.Get("instance_id").(int), d.Id())
 	} else if d.Get("vpc_id") != nil {
-		data, err = api.ReadVpcGcpPeeringTemp(d.Get("vpc_id").(string), d.Id())
+		data, err = api.ReadVpcGcpPeeringWithVpcId(d.Get("vpc_id").(string), d.Id())
 	}
 	log.Printf("[DEBUG] cloudamqp::vpc_gcp_peering::read data: %v", data)
 
@@ -140,7 +140,7 @@ func resourceDeleteVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 	} else if d.Get("instance_id") != 0 {
 		return api.RemoveVpcGcpPeering(d.Get("instance_id").(int), d.Id())
 	} else if d.Get("vpc_id") != nil {
-		return api.RemoveVpcGcpPeeringTemp(d.Get("vpc_id").(string), d.Id())
+		return api.RemoveVpcGcpPeeringWithVpcId(d.Get("vpc_id").(string), d.Id())
 	}
 	return errors.New("Failed to remove VPC peering")
 }

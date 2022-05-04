@@ -49,7 +49,7 @@ func dataSourceVpcInfo() *schema.Resource {
 
 func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	
+
 	data := make(map[string]interface{})
 	err := errors.New("")
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
@@ -57,7 +57,7 @@ func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
 	} else if d.Get("instance_id") != 0 {
 		data, err = api.ReadVpcInfo(d.Get("instance_id").(int))
 	} else if d.Get("vpc_id") != nil {
-		data, err = api.ReadVpcInfoTemp(d.Get("vpc_id").(string))
+		data, err = api.ReadVpcInfoWithVpcId(d.Get("vpc_id").(string))
 	}
 
 	if err != nil {

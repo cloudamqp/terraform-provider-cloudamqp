@@ -45,7 +45,6 @@ func dataSourceVpcGcpInfo() *schema.Resource {
 
 func dataSourceVpcGcpInfoRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	//data, err := api.ReadVpcGcpInfo(d.Get("instance_id").(int))
 	data := make(map[string]interface{})
 	err := errors.New("")
 	log.Printf("[DEBUG] cloudamqp::data::vpc_gcp_info::request instance_id: %v, vpc_id: %v", d.Get("instance_id"), d.Get("vpc_id"))
@@ -54,7 +53,7 @@ func dataSourceVpcGcpInfoRead(d *schema.ResourceData, meta interface{}) error {
 	} else if d.Get("instance_id") != 0 {
 		data, err = api.ReadVpcGcpInfo(d.Get("instance_id").(int))
 	} else if d.Get("vpc_id") != nil {
-		data, err = api.ReadVpcGcpInfoTemp(d.Get("vpc_id").(string))
+		data, err = api.ReadVpcGcpInfoWithVpcId(d.Get("vpc_id").(string))
 	}
 
 	if err != nil {

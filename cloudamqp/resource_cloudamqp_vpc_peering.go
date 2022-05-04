@@ -49,7 +49,7 @@ func resourceVpcPeeringAccept(d *schema.ResourceData, meta interface{}) error {
 	} else if d.Get("instance_id") != 0 {
 		_, err = api.AcceptVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string))
 	} else if d.Get("vpc_id") != nil {
-		_, err = api.AcceptVpcPeeringTemp(d.Get("vpc_id").(string), d.Get("peering_id").(string))
+		_, err = api.AcceptVpcPeeringWithVpcId(d.Get("vpc_id").(string), d.Get("peering_id").(string))
 	}
 
 	if err != nil {
@@ -86,7 +86,7 @@ func resourceVpcPeeringRead(d *schema.ResourceData, meta interface{}) error {
 	} else if d.Get("instance_id") != 0 {
 		data, err = api.ReadVpcPeeringRequest(d.Get("instance_id").(int), d.Get("peering_id").(string))
 	} else if d.Get("vpc_id") != nil {
-		data, err = api.ReadVpcPeeringRequestTemp(d.Get("vpc_id").(string), d.Get("peering_id").(string))
+		data, err = api.ReadVpcPeeringRequestWithVpcId(d.Get("vpc_id").(string), d.Get("peering_id").(string))
 	}
 
 	if err != nil {
@@ -111,7 +111,7 @@ func resourceVpcPeeringDelete(d *schema.ResourceData, meta interface{}) error {
 	} else if d.Get("instance_id") != 0 {
 		return api.RemoveVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string))
 	} else if d.Get("vpc_id") != nil {
-		return api.RemoveVpcPeeringTemp(d.Get("vpc_id").(string), d.Get("peering_id").(string))
+		return api.RemoveVpcPeeringWithVpcId(d.Get("vpc_id").(string), d.Get("peering_id").(string))
 	}
 	return errors.New("")
 }
