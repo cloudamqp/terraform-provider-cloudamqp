@@ -12,6 +12,7 @@ func (api *API) waitForPeeringStatus(instanceID int, peeringID string) (map[stri
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
 	for {
+		time.Sleep(10 * time.Second)
 		path := fmt.Sprintf("/api/instances/%v/vpc-peering/status/%v", instanceID, peeringID)
 		response, err := api.sling.New().Path(path).Receive(&data, &failed)
 
@@ -25,7 +26,6 @@ func (api *API) waitForPeeringStatus(instanceID int, peeringID string) (map[stri
 		case "active", "pending-acceptance":
 			return data, nil
 		}
-		time.Sleep(10 * time.Second)
 	}
 }
 

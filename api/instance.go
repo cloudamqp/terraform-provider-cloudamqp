@@ -176,10 +176,11 @@ func (api *API) UpdateInstance(instanceID string, params map[string]interface{})
 	return api.waitUntilAllNodesReady(instanceID)
 }
 
-func (api *API) DeleteInstance(instanceID string) error {
+func (api *API) DeleteInstance(instanceID string, keep_vpc bool) error {
 	failed := make(map[string]interface{})
 	log.Printf("[DEBUG] go-api::instance::delete instance ID: %v", instanceID)
-	response, err := api.sling.New().Path("/api/instances/").Delete(instanceID).Receive(nil, &failed)
+	path := fmt.Sprintf("api/instances/%s?keep_vpc=%v", instanceID, keep_vpc)
+	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 
 	if err != nil {
 		return err
