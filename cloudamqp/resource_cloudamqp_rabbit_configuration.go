@@ -3,8 +3,12 @@ package cloudamqp
 import (
 	"fmt"
 	"log"
+	"strconv"
+	"strings"
 
+	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 func resourceRabbitConfiguration() *schema.Resource {
@@ -30,6 +34,22 @@ func resourceRabbitConfiguration() *schema.Resource {
 					v := val.(int)
 					if v < 0 {
 						errs = append(errs, fmt.Errorf("%q must be greater then 0, got: %d", key, v))
+					}
+					return
+				},
+			},
+			"connection_max": {
+				Type:        schema.TypeInt,
+				Computed:    true,
+				Optional:    true,
+				Description: "Set the maximum permissible number of connection.",
+				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+					v := val.(int)
+					if v == -1 {
+						return
+					}
+					if v < 0 {
+						errs = append(errs, fmt.Errorf("%q must be -1 or greater then 0, got: %d", key, v))
 					}
 					return
 				},
@@ -73,7 +93,7 @@ func resourceRabbitConfiguration() *schema.Resource {
 					return
 				},
 			},
-			"queue_index_embeded_msgs_below": {
+			"queue_index_embed_msgs_below": {
 				Type:        schema.TypeInt,
 				Computed:    true,
 				Optional:    true,
@@ -99,70 +119,114 @@ func resourceRabbitConfiguration() *schema.Resource {
 					return
 				},
 			},
+			"log_exchange_level": {
+				Type:     schema.TypeString,
+				Computed: true,
+				Optional: true,
+				Description: "Log level for the logger used for log integrations and the CloudAMQP Console log view. " +
+					"Does not affect the file logger. Requires a RabbitMQ restart to be applied.",
+				ValidateFunc: validateLogLevel(),
+			},
 		},
 	}
 }
 
 func resourceRabbitConfigurationRead(d *schema.ResourceData, meta interface{}) error {
-	// api := meta.(*api.API)
-	// instanceID, _ := strconv.Atoi(d.Id())
-	// data, err := api.ReadRabbitConfiguration(instanceID)
-	// log.Printf("[DEBUG] cloudamqp::resource::rabbit_configuration::read data: %v", data)
-	// if err != nil {
-	// 	return err
-	// }
-	// d.Set("instance_id", instanceID)
-	// for k, v := range data {
-	// 	if v == nil {
-	// 		continue
-	// 	}
-	// 	if validateRabbitConfigurationJsonField(k) {
-	// 		key := strings.ReplaceAll(k, "rabbit.", "")
-	// 		d.Set(key, v)
-	// 	}
-	// }
+	api := meta.(*api.API)
+	instanceID, _ := strconv.Atoi(d.Id())
+	data, err := api.ReadRabbitConfiguration(instanceID)
+	log.Printf("[DEBUG] cloudamqp::resource::rabbit_configuration::read data: %v", data)
+	if err != nil {
+		return err
+	}
+	d.Set("instance_id", instanceID)
+	for k, v := range data {
+		if validateRabbitConfigurationJSONField(k) {
+			key := strings.ReplaceAll(k, "rabbit.", "")
+			if key == "connection_max" {
+				if v == "infinity" || v == nil {
+					v = -1
+				}
+			} else if key == "queue_index_embed_msgs_below" {
+				if v == nil {
+					v = 4096
+				}
+			} else if key == "max_message_size" {
+				if v == nil {
+					v = 134217728
+				}
+			} else if key == "log.exchange.level" {
+				key = "log_exchange_level"
+			}
+			d.Set(key, v)
+		}
+	}
 	return nil
 }
 
 func resourceRabbitConfigurationUpdate(d *schema.ResourceData, meta interface{}) error {
-	//api := meta.(*api.API)
-	keys := []string{"heartbeat", "channel_max", "consumer_timeout", "vm_memory_high_watermark", "queue_index_embeded_msgs_below", "max_message_size"}
+	api := meta.(*api.API)
+	keys := rabbitConfigurationUpdateAttributeKeys()
 	params := make(map[string]interface{})
 	for _, k := range keys {
-		log.Printf("[DEBUG] cloudamqp::resource::rabbit_configuration::update k: %v, value: %v", k, d.Get(k))
-		if v := d.Get(k); v != nil {
-			params["rabbit."+k] = d.Get(k)
-			if k == "queue_index_embeded_msgs_below" || k == "max_message_size" {
-				if v == 0 {
-					params["rabbit."+k] = nil
-				}
+		v := d.Get(k)
+		if k == "connection_max" {
+			if v == -1 {
+				v = "infinity"
 			}
+		} else if k == "log_exchange_level" {
+			k = "log.exchange.level"
 		}
+		params["rabbit."+k] = v
 	}
-	log.Printf("[DEBUG] cloudamqp::resource::rabbit_configuration::update instance id: %v, params: %v", d.Get("instance_id"), params)
-	// err := api.UpdateRabbitConfiguration(d.Get("instance_id").(int), params)
-	// if err != nil {
-	// 	return err
-	// }
+
+	err := api.UpdateRabbitConfiguration(d.Get("instance_id").(int), params)
+	if err != nil {
+		return err
+	}
 	return resourceRabbitConfigurationRead(d, meta)
 }
 
 func resourceRabbitConfigurationDelete(d *schema.ResourceData, meta interface{}) error {
-	// api := meta.(*api.API)
-	// err := api.DeleteRabbitConfiguration()
-	// return err
 	return nil
 }
 
-func validateRabbitConfigurationJsonField(key string) bool {
+func validateRabbitConfigurationJSONField(key string) bool {
 	switch key {
 	case "rabbit.heartbeat",
+		"rabbit.connection_max",
 		"rabbit.channel_max",
 		"rabbit.consumer_timeout",
 		"rabbit.vm_memory_high_watermark",
-		"rabbit.queue_index_embeded_msgs_below",
-		"rabbit.max_message_size":
+		"rabbit.queue_index_embed_msgs_below",
+		"rabbit.max_message_size",
+		"rabbit.log.exchange.level":
 		return true
 	}
 	return false
+}
+
+func validateLogLevel() schema.SchemaValidateFunc {
+	return validation.StringInSlice([]string{
+		"debug",
+		"info",
+		"warning",
+		"error",
+		"critical",
+		"critical",
+		"none",
+	}, true)
+}
+
+func rabbitConfigurationUpdateAttributeKeys() []string {
+	return []string{
+		"heartbeat",
+		"connection_max",
+		"channel_max",
+		"consumer_timeout",
+		"vm_memory_high_watermark",
+		"queue_index_embed_msgs_below",
+		"max_message_size",
+		"log_exchange_level",
+	}
 }
