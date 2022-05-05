@@ -12,7 +12,12 @@ Use this data source to retrieve information about VPC for a CloudAMQP instance 
 ## Example Usage
 
 <details>
-<summary><b><i>AWS VPC peering pre v1.16.0</i></b></summary>
+  <summary>
+    <b>
+      <i>AWS VPC peering pre v1.16.0</i>
+    </b>
+  </summary>
+
 ```hcl
 data "cloudamqp_vpc_gcp_info" "vpc_info" {
   instance_id = cloudamqp_instance.instance.id
@@ -21,7 +26,12 @@ data "cloudamqp_vpc_gcp_info" "vpc_info" {
 </details>
 
 <details>
-<summary><b><i>AWS VPC peering post v1.16.0 (Managed VPC)</i></b></summary>
+  <summary>
+    <b>
+      <i>AWS VPC peering post v1.16.0 (Managed VPC)</i>
+    </b>
+  </summary>
+
 ```hcl
 data "cloudamqp_vpc_gcp_info" "vpc_info" {
   vpc_id = cloudamqp_vpc.vpc.id

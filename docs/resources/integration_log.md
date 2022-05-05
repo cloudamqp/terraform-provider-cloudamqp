@@ -13,6 +13,13 @@ Only available for dedicated subscription plans.
 
 ## Example Usage
 
+<details>
+  <summary>
+    <b>
+      <i>Cloudwatch log integration</i>
+    </b>
+  </summary>
+
 ```hcl
 resource "cloudamqp_integration_log" "cloudwatch" {
   instance_id = cloudamqp_instance.instance.id
@@ -21,32 +28,82 @@ resource "cloudamqp_integration_log" "cloudwatch" {
   secret_access_key = var.aws_secret_access_key
   region = var.aws_region
 }
+```
+</details>
 
+<details>
+  <summary>
+    <b>
+      <i>Logentries log integration</i>
+    </b>
+  </summary>
+
+```hcl
 resource "cloudamqp_integration_log" "logentries" {
   instance_id = cloudamqp_instance.instance.id
   name = "logentries"
   token = var.logentries_token
 }
+```
+</details>
 
+<details>
+  <summary>
+    <b>
+      <i>Loggly log integration</i>
+    </b>
+  </summary>
+
+```hcl
 resource "cloudamqp_integration_log" "loggly" {
   instance_id = cloudamqp_instance.instance.id
   name = "loggly"
   token = var.loggly_token
 }
+```
+</details>
 
+<details>
+  <summary>
+    <b>
+      <i>Papertrail log integration</i>
+    </b>
+  </summary>
+
+```hcl
 resource "cloudamqp_integration_log" "papertrail" {
   instance_id = cloudamqp_instance.instance.id
   name = "papertrail"
   url = var.papertrail_url
 }
+```
+</details>
 
+<details>
+  <summary>
+    <b>
+      <i>Splunk log integration</i>
+    </b>
+  </summary>
+
+```hcl
 resource "cloudamqp_integration_log" "splunk" {
   instance_id = cloudamqp_instance.instance.id
   name = "splunk"
   token = var.splunk_token
   host_port = var.splunk_host_port
 }
+```
+</details>
 
+<details>
+  <summary>
+    <b>
+      <i>Datadog log integration</i>
+    </b>
+  </summary>
+
+```hcl
 resource "cloudamqp_integration_log" "datadog" {
   instance_id = cloudamqp_instance.instance.id
   name = "datadog"
@@ -54,7 +111,17 @@ resource "cloudamqp_integration_log" "datadog" {
   api_key = var.datadog_api_key
   tags = var.datadog_tags
 }
+```
+</details>
 
+<details>
+  <summary>
+    <b>
+      <i>Stackdriver log integration</i>
+    </b>
+  </summary>
+
+```hcl
 resource "cloudamqp_integration_log" "stackdriver" {
   instance_id = cloudamqp_instance.instance.id
   name = "stackdriver"
@@ -62,7 +129,17 @@ resource "cloudamqp_integration_log" "stackdriver" {
   private_key = var.stackdriver_private_key
   client_email = var.stackdriver_client_email
 }
+```
+</details>
 
+<details>
+  <summary>
+    <b>
+      <i>Scalyr log integration</i>
+    </b>
+  </summary>
+
+```hcl
 resource "cloudamqp_integration_log" "scalyr" {
   instance_id = cloudamqp_instance.instance.id
   name = "scalyr"
@@ -70,6 +147,7 @@ resource "cloudamqp_integration_log" "scalyr" {
   host = var.scalyr_host
 }
 ```
+</details>
 
 ## Argument Reference
 

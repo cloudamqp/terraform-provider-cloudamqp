@@ -120,6 +120,6 @@ resource "cloudamqp_instance" "instance_01" {
 }
 ```
 
-In order to keep the associated VPC the attribute `keep_associated_vpc` can be set to *true*.
+In order to keep the associated VPC the attribute `keep_associated_vpc` must be set to *true*.
 
 Run `terraform apply` to update the state file with the correct data, then the instance can be deleted.

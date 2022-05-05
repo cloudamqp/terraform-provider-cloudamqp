@@ -19,6 +19,7 @@ Once the instance is created it will be assigned a unique identifier. All other 
       <i>Basic example of shared and dedicated instances</i>
     </b>
   </summary>
+
 ```hcl
 # Minimum free lemur instance
 resource "cloudamqp_instance" "lemur_instance" {
@@ -45,6 +46,7 @@ resource "cloudamqp_instance" "instance" {
       <i>Dedicated instance using attribute vpc_subnet to create VPC, pre v1.16.0</i>
     </b>
   </summary>
+
 ```hcl
 resource "cloudamqp_instance" "instance" {
   name                = "terraform-cloudamqp-instance"
@@ -63,6 +65,7 @@ resource "cloudamqp_instance" "instance" {
       <i>Dedicated instance using attribute vpc_subnet to create VPC and then import managed VPC, post v1.16.0 (Managed VPC)</i>
     </b>
   </summary>
+
 ```hcl
 # Dedicated instance that also creates VPC
 resource "cloudamqp_instance" "instance_01" {
@@ -107,6 +110,7 @@ resource "cloudamqp_instance" "instance_01" {
       <i>Dedicated instances and managed VPC, post v1.16.0 (Managed VPC)</i>
     </b>
   </summary>
+
 ```hcl
 # Managed VPC
 resource "cloudamqp_vpc" "vpc" {

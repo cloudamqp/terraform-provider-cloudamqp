@@ -14,7 +14,12 @@ Only available for dedicated subscription plans.
 ## Example Usage
 
 <details>
-<summary><b><i>AWS VPC peering pre v1.16.0</i></b></summary>
+  <summary>
+    <b>
+      <i>AWS VPC peering pre v1.16.0</i>
+    </b>
+  </summary>
+
 ```hcl
 # Configure CloudAMQP provider
 provider "cloudamqp" {
@@ -45,7 +50,12 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 </details>
 
 <details>
-<summary><b><i>AWS VPC peering post v1.16.0 (Managed VPC)</i></b></summary>
+  <summary>
+    <b>
+      <i>AWS VPC peering post v1.16.0 (Managed VPC)</i>
+    </b>
+  </summary>
+
 ```hcl
 # Configure CloudAMQP provider
 provider "cloudamqp" {
@@ -168,7 +178,6 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   ]
 }
 ```
-
 </details>
 
 <details>
@@ -209,5 +218,4 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   ]
 }
 ```
-
 </details>

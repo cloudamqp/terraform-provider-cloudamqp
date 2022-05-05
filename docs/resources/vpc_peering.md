@@ -21,6 +21,7 @@ One way to manage the vpc peering is to combine CloudAMQP Terraform provider wit
       <i>AWS VPC peering pre v1.16.0</i>
     </b>
   </summary>
+
 ```hcl
 # Configure CloudAMQP provider
 provider "cloudamqp" {
@@ -101,6 +102,7 @@ resource "aws_route" "accepter_route" {
       <i>AWS VPC peering post v1.16.0 (Managed VPC)</i>
     </b>
   </summary>
+
 ```hcl
 # Configure CloudAMQP provider
 provider "cloudamqp" {
