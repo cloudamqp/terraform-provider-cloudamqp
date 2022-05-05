@@ -60,7 +60,7 @@ func dataSourceAccountRead(d *schema.ResourceData, meta interface{}) error {
 	} else if len(data) == 0 {
 		return fmt.Errorf("no instances found for resoruce %s", d.Id())
 	}
-	d.SetId("na")
+	d.SetId("noId")
 	instances := make([]map[string]interface{}, len(data))
 	for k, v := range data {
 		instances[k] = readAccount(v)

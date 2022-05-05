@@ -21,7 +21,7 @@ local-clean:  ## Clean files
 	rm -rf ~/.terraform.d/plugins/localhost/cloudamqp/cloudamqp/$(PROVIDER_VERSION)/darwin_amd64/*
 
 ## Local clean, build and install
-local-build: #local-clean
+local-build: local-clean
 	@echo $(GOOS);
 	@echo $(GOARCH);
 	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -ldflags "-X 'main.version=$(PROVIDER_VERSION)'" -o terraform-provider-cloudamqp_v$(PROVIDER_VERSION)
