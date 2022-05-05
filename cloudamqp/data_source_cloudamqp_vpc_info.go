@@ -1,6 +1,7 @@
 package cloudamqp
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/84codes/go-api/api"
@@ -14,8 +15,13 @@ func dataSourceVpcInfo() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
 				Type:        schema.TypeInt,
-				Required:    true,
+				Optional:    true,
 				Description: "Instance identifier",
+			},
+			"vpc_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "VPC instance identifier",
 			},
 			"name": {
 				Type:        schema.TypeString,
@@ -43,7 +49,16 @@ func dataSourceVpcInfo() *schema.Resource {
 
 func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	data, err := api.ReadVpcInfo(d.Get("instance_id").(int))
+
+	data := make(map[string]interface{})
+	err := errors.New("")
+	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
+		return errors.New("You need to specify either instance_id or vpc_id")
+	} else if d.Get("instance_id") != 0 {
+		data, err = api.ReadVpcInfo(d.Get("instance_id").(int))
+	} else if d.Get("vpc_id") != nil {
+		data, err = api.ReadVpcInfoWithVpcId(d.Get("vpc_id").(string))
+	}
 
 	if err != nil {
 		return err

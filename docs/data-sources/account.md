@@ -22,10 +22,10 @@ locals {
   instance_name = "<instance_name>"
 }
 
-data "cloudamqp_account" "account" {}
+data "cloudamqp_account" "instance_list" {}
 
-data "cloudamqp_credentials" "credentials" {
-  instance_id = [for instance in data.cloudamqp_account.account.instances : instance if instance["name"] == local.instance_name][0].id
+output "instance_id" {
+  instance_id = [for instance in data.cloudamqp_account.instance_list.instances : instance if instance["name"] == local.instance_name][0].id
 }
 ```
 
@@ -33,11 +33,18 @@ data "cloudamqp_credentials" "credentials" {
 
 All attributes reference are computed
 
-* `id`      - The identifier for this resource. Set to `na` since there is no unique identifier.
+* `id`          - The identifier for this data source. Set to `na` since there is no unique identifier.
+* `instances`   - An array of instances. Each `instances` block consists of the fields documented below.
+
+___
+
+The `instances` block consist of
+
+* `id`      - The instance identifier.
 * `name`    - The name of the instance.
 * `plan`    - The subscription plan used for the instance.
 * `region`  - The region were the instanece is located in.
-* `tags`    - The tags set for the instance.
+* `tags`    - Optional tags set for the instance.
 
 ## Dependency
 

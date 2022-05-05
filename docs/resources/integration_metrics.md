@@ -13,6 +13,13 @@ Only available for dedicated subscription plans.
 
 ## Example usage
 
+<details>
+  <summary>
+    <b>
+      <i>Cloudwatch v1 and v2 metric integration</i>
+    </b>
+  </summary>
+
 ```hcl
 resource "cloudamqp_integration_metric" "cloudwatch" {
   instance_id = cloudamqp_instance.instance.id
@@ -22,6 +29,24 @@ resource "cloudamqp_integration_metric" "cloudwatch" {
   region = var.aws_region
 }
 
+resource "cloudamqp_integration_metric" "cloudwatch_v2" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "cloudwatch_v2"
+  access_key_id = var.aws_access_key_id
+  secret_access_key = var_aws_secret_acccess_key
+  region = var.aws_region
+}
+```
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>Datadog v1 and v2 metric integration</i>
+    </b>
+  </summary>
+
+```hcl
 resource "cloudamqp_integration_metric" "datadog" {
   instance_id = cloudamqp_instance.instance.id
   name = "datadog"
@@ -29,20 +54,57 @@ resource "cloudamqp_integration_metric" "datadog" {
   region = var.datadog_region
 }
 
+resource "cloudamqp_integration_metric" "datadog_v2" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "datadog_v2"
+  api_key = var.datadog_api_key
+  region = var.datadog_region
+}
+```
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>Librato metric integration</i>
+    </b>
+  </summary>
+
+```hcl
 resource "cloudamqp_integration_metric" "librato" {
   instance_id = cloudamqp_instance.instance.id
   name = "librato"
   email = var.librato_email
   api_key = var.librato_api_key
 }
+```
+</details>
 
+<details>
+  <summary>
+    <b>
+      <i>New relic v2 metric integration</i>
+    </b>
+  </summary>
+
+```hcl
 resource "cloudamqp_integration_metric" "newrelic" {
   instance_id = cloudamqp_instance.instance.id
   name = "newrelic_v2"
   api_key = var.newrelic_api_key
   region = var.newrelic_region
 }
+```
+</details>
 
+<details>
+  <summary>
+    <b>
+      <i>Stackdriver metric integration</i>
+    </b>
+  </summary>
+
+```hcl
 resource "cloudamqp_integration_metric" "stackdriver" {
   instance_id = cloudamqp_instance.instance.id
   name = "stackdriver"
@@ -51,6 +113,7 @@ resource "cloudamqp_integration_metric" "stackdriver" {
   client_email = var.stackriver_email
 }
 ```
+</details>
 
 ## Argument references
 
@@ -82,7 +145,7 @@ Valid names for third party log integration.
 | cloudwatch    | Create an IAM with programmatic access. |
 | cloudwatch_v2 | Create an IAM with programmatic access. |
 | datadog       | Create a Datadog API key at app.datadoghq.com |
-| datadog_v2    | Create a Datadog API key at app.datadoghq.com
+| datadog_v2    | Create a Datadog API key at app.datadoghq.com |
 | librato       | Create a new API token (with record only permissions) here: https://metrics.librato.com/tokens |
 | newrelic      | Deprecated! |
 | newrelic_v2   | Find or register an Insert API key for your account: Go to insights.newrelic.com > Manage data > API keys. |

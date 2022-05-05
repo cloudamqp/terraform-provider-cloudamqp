@@ -26,6 +26,7 @@ resource "cloudamqp_plugin" "rabbitmq_top" {
 ```
 
 **Enable multiple plugins**
+
 ```hcl
 resource "cloudamqp_plugin" "rabbitmq_top" {
   instance_id = cloudamqp_instance.instance.id

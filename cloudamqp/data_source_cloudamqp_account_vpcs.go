@@ -7,12 +7,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
-func dataSourceAccount() *schema.Resource {
+func dataSourceAccountVpcs() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceAccountRead,
+		Read: dataSourceAccountVpcsRead,
 
 		Schema: map[string]*schema.Schema{
-			"instances": {
+			"vpcs": {
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Resource{
@@ -27,15 +27,16 @@ func dataSourceAccount() *schema.Resource {
 							Computed:    true,
 							Description: "The name of the instance",
 						},
-						"plan": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The subscription plan used for the instance",
-						},
 						"region": {
 							Type:        schema.TypeString,
 							Computed:    true,
 							Description: "The region were the instanece is located in",
+						},
+						"subnet": {
+							Type:        schema.TypeString,
+							Required:    true,
+							ForceNew:    true,
+							Description: "The VPC subnet",
 						},
 						"tags": {
 							Type:     schema.TypeList,
@@ -43,7 +44,12 @@ func dataSourceAccount() *schema.Resource {
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
-							Description: "Tag for the instance",
+							Description: "Tag the VPC instance with optional tags",
+						},
+						"vpc_name": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "VPC name given when hosted at the cloud provider",
 						},
 					},
 				},
@@ -52,44 +58,45 @@ func dataSourceAccount() *schema.Resource {
 	}
 }
 
-func dataSourceAccountRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceAccountVpcsRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	data, err := api.ListInstances()
+	data, err := api.ListVpcs()
 	if err != nil {
 		return err
 	} else if len(data) == 0 {
-		return fmt.Errorf("no instances found for resoruce %s", d.Id())
+		return fmt.Errorf("no vpcs found for resoruce %s", d.Id())
 	}
 	d.SetId("noId")
-	instances := make([]map[string]interface{}, len(data))
+	vpcs := make([]map[string]interface{}, len(data))
 	for k, v := range data {
-		instances[k] = readAccount(v)
+		vpcs[k] = readAccountVpc(v)
 	}
 
-	if err = d.Set("instances", instances); err != nil {
-		return fmt.Errorf("error setting instances for resource %s, %s", d.Id(), err)
+	if err = d.Set("vpcs", vpcs); err != nil {
+		return fmt.Errorf("error setting vpcs for resource %s, %s", d.Id(), err)
 	}
 
 	return nil
 }
 
-func readAccount(data map[string]interface{}) map[string]interface{} {
-	instance := make(map[string]interface{})
+func readAccountVpc(data map[string]interface{}) map[string]interface{} {
+	vpc := make(map[string]interface{})
 	for k, v := range data {
-		if validateAccountSchemaAttribute(k) {
-			instance[k] = v
+		if validateAccountVpcsSchemaAttribute(k) {
+			vpc[k] = v
 		}
 	}
-	return instance
+	return vpc
 }
 
-func validateAccountSchemaAttribute(key string) bool {
+func validateAccountVpcsSchemaAttribute(key string) bool {
 	switch key {
 	case "id",
 		"name",
-		"plan",
 		"region",
-		"tags":
+		"subnet",
+		"tags",
+		"vpc_name":
 		return true
 	}
 	return false
