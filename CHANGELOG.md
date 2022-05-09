@@ -1,15 +1,43 @@
+## 1.16.0 (May 09, 2022)
+
+NOTE:
+
+* Updated the API wrapper (go-api) dependency with newer version (1.6.0)
+* Introducing managed VPC resource to decouple VPC from instance. ([#148](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/148))
+* To avoid breaking changes
+    * It's still possible to create VPC from instance with vpc_subnet, but is discouraged.
+    * Default behaviour for instance is still to delete associated VPC. 
+    * To keep managed VPC, set attribute *keep_associated_vpc = true* on each instance resource. This will override the default behaviour when deleting an instance.
+
+FEATURES: 
+* Added support for managed VPC resource.
+* Added list on all available standalone VPC for an account.
+* Added multiple attribute (vpc_id and instance_id) to fetch VPC information.
+* Added multiple attribute (vpc_id and instance_id) to handle VPC peering.
+* Added documentations for managed VPC resources and guide
+
+IMPROVEMENTS:
+* Added keep_associated_vpc attribute for instance resource
+
+DEPRECATED:
+* data_source/vpc_gcp_info, intance_id use vpc_id instead
+* data_source/vpc_info, instance_id use vpc_id instead
+* resource/instance, vpc_subnet create managed VPC instead
+* resource/vpc_gcp_peering, intance_id use vpc_id instead
+* resource/vpc_peering, intance_id use vpc_id instead
+
 ## 1.15.3 (Apr 06, 2022)
 
 IMPROVEMENTS:
 
-* Add support for Scalyr log integrations ([#147](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/147))
+* Added support for Scalyr log integrations ([#147](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/147))
 
 ## 1.15.2 (Mar 29, 2022)
 
 IMPROVEMENTS:
 
-* Add new attribute, value_calculation, to alarms ([#138](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/138))
-* Add support for `CLOUDAMQP_BASEURL` in provider, make testing easier ([#143](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/143))
+* Added new attribute, value_calculation, to alarms ([#138](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/138))
+* Added support for `CLOUDAMQP_BASEURL` in provider, make testing easier ([#143](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/143))
 
 BUG FIXES:
 
