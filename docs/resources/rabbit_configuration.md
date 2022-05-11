@@ -27,6 +27,36 @@ resource "cloudamqp_rabbit_configuration" "rabbit_config" {
 }
 ```
 
+Change log level and combine `cloudamqp_node_actions` for RabbitMQ restart
+
+```hcl
+resource "cloudamqp_rabbit_configuration" "rabbit_config" {
+  instance_id = cloudamqp_instance.instance.id
+  channel_max = 0
+  connection_max = -1
+  consumer_timeout = 7200000
+  heartbeat = 120
+  log_exchange_level = "info"
+  max_message_size = 134217728
+  queue_index_embed_msgs_below = 4096
+  vm_memory_high_watermark = 0.81
+}
+
+data "cloudamqp_nodes" "list_nodes" {
+  instance_id = cloudamqp_instance.instance.id
+}
+
+resource "cloudamqp_node_actions" "node_action" {
+  instance_id = cloudamqp_instance.instance.id
+  node_id = data.cloudamqp_nodes.list_nodes.nodes[0].node_id
+  action = "restart"
+
+  depends_on = [
+    cloudamqp_rabbit_configuration.rabbit_config,
+  ]
+}
+```
+
 ## Argument Reference
 
 The following arguments are supported:
