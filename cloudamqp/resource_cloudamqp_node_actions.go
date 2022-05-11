@@ -14,9 +14,6 @@ func resourceNodeAction() *schema.Resource {
 		Update: resourceNodeActionRequest,
 		Read:   resourceNodeActionRead,
 		Delete: resourceNodeActionRemove,
-		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
-		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
 				Type:        schema.TypeInt,
