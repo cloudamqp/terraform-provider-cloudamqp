@@ -32,6 +32,7 @@ ___
 
 The `nodes` block consist of
 
+* `node_id`           - Node identifier.
 * `hostname`          - External hostname assigned to the node.
 * `name`              - Name of the node.
 * `running`           - Is the node running?
