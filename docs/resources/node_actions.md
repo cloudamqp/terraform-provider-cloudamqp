@@ -24,7 +24,7 @@ resource "cloudamqp_node_actions" "node_action" {
 }
 ```
 
-Using data source `cloudamqp_nodes`
+Using data source `cloudamqp_nodes` to restart RabbitMQ on all nodes
 
 ```hcl
 data "cloudamqp_nodes" "list_nodes" {
@@ -33,8 +33,9 @@ data "cloudamqp_nodes" "list_nodes" {
 
 resource "cloudamqp_node_actions" "node_action" {
   instance_id = cloudamqp_instance.instance.id
-  node_id = data.cloudamqp_nodes.list_nodes.nodes[0].node_id
   action = "restart"
+  count = length(data.cloudamqp_nodes.list_nodes.nodes)
+  node_id = data.cloudamqp_nodes.list_nodes.nodes[count.index].node_id
 }
 ```
 
