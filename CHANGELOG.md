@@ -1,3 +1,13 @@
+## 1.17.0 (Unreleased)
+
+NOTE:
+
+* Updated the API wrapper (go-api) dependency with newer version (1.7.0)
+
+FEATURES:
+
+* Added support to upgrade to latest possible versions for RabbitMQ and Erlang ([#151](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/151))
+
 ## 1.16.0 (May 09, 2022)
 
 NOTE:
@@ -6,10 +16,11 @@ NOTE:
 * Introducing managed VPC resource to decouple VPC from instance. ([#148](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/148))
 * To avoid breaking changes
     * It's still possible to create VPC from instance with vpc_subnet, but is discouraged.
-    * Default behaviour for instance is still to delete associated VPC. 
+    * Default behaviour for instance is still to delete associated VPC.
     * To keep managed VPC, set attribute *keep_associated_vpc = true* on each instance resource. This will override the default behaviour when deleting an instance.
 
-FEATURES: 
+FEATURES:
+
 * Added support for managed VPC resource.
 * Added list on all available standalone VPC for an account.
 * Added multiple attribute (vpc_id and instance_id) to fetch VPC information.
@@ -17,9 +28,11 @@ FEATURES:
 * Added documentations for managed VPC resources and guide
 
 IMPROVEMENTS:
+
 * Added keep_associated_vpc attribute for instance resource
 
 DEPRECATED:
+
 * data_source/vpc_gcp_info, intance_id use vpc_id instead
 * data_source/vpc_info, instance_id use vpc_id instead
 * resource/instance, vpc_subnet create managed VPC instead
