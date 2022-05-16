@@ -5,9 +5,17 @@ description: |-
   Invoke upgrade to latest possible upgradable versions for RabbitMQ and Erlang.
 ---
 
-# cloudamqp_vpc
+# cloudamqp_upgrade_rabbitmq
 
 This resource allows you to automatically upgrade to latest possible upgradable versions for RabbitMQ and Erlang. Depending on initial versions of RabbitMQ and Erlang of the CloudAMQP instance. Multiple runs may be needed to get to latest versions. (E.g. after completed upgrade, check data source `cloudamqp_upgradable_versions` to see if newer versions is available. Then delete `cloudamqp_upgrade_rabbitmq` and create it again to invoke the upgrade.
+
+> :warning: **WARNING: Before using this resource.**
+>
+> Auto delete queues (queues that are marked AD) will be deleted during the update.
+>
+> Any custom plugins support has installed on your behalf will be disabled and you need to contact support@cloudamqp.com and ask to have them re-installed.
+>
+> TLS 1.0 and 1.1 will not be supported after the update.
 
 Only available for dedicated subscription plans.
 
