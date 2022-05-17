@@ -37,6 +37,18 @@ func resourceVpcPeering() *schema.Resource {
 				Computed:    true,
 				Description: "VPC peering status",
 			},
+			"sleep": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     60,
+				Description: "Configurable sleep time in seconds between retries",
+			},
+			"timeout": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     3600,
+				Description: "Configurable timeout time in seconds",
+			},
 		},
 	}
 }
@@ -47,7 +59,8 @@ func resourceVpcPeeringAccept(d *schema.ResourceData, meta interface{}) error {
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
 		return errors.New("You need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
-		_, err = api.AcceptVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string))
+		_, err = api.AcceptVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string),
+			d.Get("sleep").(int), d.Get("timeout").(int))
 	} else if d.Get("vpc_id") != nil {
 		_, err = api.AcceptVpcPeeringWithVpcId(d.Get("vpc_id").(string), d.Get("peering_id").(string))
 	}
@@ -59,7 +72,7 @@ func resourceVpcPeeringAccept(d *schema.ResourceData, meta interface{}) error {
 		d.SetId(d.Get("peering_id").(string))
 	}
 
-	return nil
+	return resourceVpcPeeringRead(d, meta)
 }
 
 func resourceVpcPeeringRead(d *schema.ResourceData, meta interface{}) error {
