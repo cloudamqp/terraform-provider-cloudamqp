@@ -62,7 +62,8 @@ func resourceVpcPeeringAccept(d *schema.ResourceData, meta interface{}) error {
 		_, err = api.AcceptVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string),
 			d.Get("sleep").(int), d.Get("timeout").(int))
 	} else if d.Get("vpc_id") != nil {
-		_, err = api.AcceptVpcPeeringWithVpcId(d.Get("vpc_id").(string), d.Get("peering_id").(string))
+		_, err = api.AcceptVpcPeeringWithVpcId(d.Get("vpc_id").(string), d.Get("peering_id").(string),
+			d.Get("sleep").(int), d.Get("timeout").(int))
 	}
 
 	if err != nil {
