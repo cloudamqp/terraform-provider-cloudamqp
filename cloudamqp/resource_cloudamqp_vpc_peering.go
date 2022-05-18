@@ -41,13 +41,13 @@ func resourceVpcPeering() *schema.Resource {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Default:     60,
-				Description: "Configurable sleep time in seconds between retries",
+				Description: "Configurable sleep time in seconds between retries for accepting or removing peering",
 			},
 			"timeout": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Default:     3600,
-				Description: "Configurable timeout time in seconds",
+				Description: "Configurable timeout time in seconds for accepting or removing peering",
 			},
 		},
 	}
@@ -123,9 +123,11 @@ func resourceVpcPeeringDelete(d *schema.ResourceData, meta interface{}) error {
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
 		return errors.New("You need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
-		return api.RemoveVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string))
+		return api.RemoveVpcPeering(d.Get("instance_id").(int), d.Get("peering_id").(string),
+			d.Get("sleep").(int), d.Get("timeout").(int))
 	} else if d.Get("vpc_id") != nil {
-		return api.RemoveVpcPeeringWithVpcId(d.Get("vpc_id").(string), d.Get("peering_id").(string))
+		return api.RemoveVpcPeeringWithVpcId(d.Get("vpc_id").(string), d.Get("peering_id").(string),
+			d.Get("sleep").(int), d.Get("timeout").(int))
 	}
 	return errors.New("")
 }

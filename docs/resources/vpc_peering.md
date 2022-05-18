@@ -205,8 +205,8 @@ resource "aws_route" "accepter_route" {
  ***Note: Introduced as optional in version v1.16.0, will be required in next major version (v2.0)***
 
 * `peering_id` - (Required) Peering identifier created by AW peering request.
-* `sleep` - (Optional) Configurable sleep time in seconds between retries, default set to 60 seconds.
-* `timeout` - (Optional) - Configurable timeout time in seconds, default set to 3600.
+* `sleep` - (Optional) Configurable sleep time (seconds) between retries for accepting or removing peering. Default set to 60 seconds.
+* `timeout` - (Optional) - Configurable timeout time (seconds) for accepting or removing peering. Default set to 3600 seconds.
 
 ## Attributes Reference
 
