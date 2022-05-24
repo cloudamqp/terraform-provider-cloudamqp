@@ -38,15 +38,21 @@ func resourceAlarm() *schema.Resource {
 				Required:    true,
 				Description: "Enable or disable an alarm",
 			},
+			"reminder_interval": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     0,
+				Description: "The reminder interval (in seconds) to resend the alarm if not resolved. Default set to 0 to not receive any reminders.",
+			},
 			"value_threshold": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Description: "What value to trigger the alarm for",
 			},
 			"value_calculation": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "Disk value threshold calculation. Fixed or percentage of disk space remaining",
+				Type:         schema.TypeString,
+				Optional:     true,
+				Description:  "Disk value threshold calculation. Fixed or percentage of disk space remaining",
 				ValidateFunc: validateValueCalculation(),
 			},
 			"time_threshold": {
@@ -186,6 +192,7 @@ func validateAlarmSchemaAttribute(key string) bool {
 	switch key {
 	case "type",
 		"enabled",
+		"reminder_interval",
 		"value_threshold",
 		"value_calculation",
 		"time_threshold",
@@ -214,9 +221,10 @@ func validateValueCalculation() schema.SchemaValidateFunc {
 }
 
 func alarmAttributeKeys() []string {
-	return []string {
+	return []string{
 		"type",
 		"enabled",
+		"reminder_interval",
 		"value_threshold",
 		"value_calculation",
 		"time_threshold",

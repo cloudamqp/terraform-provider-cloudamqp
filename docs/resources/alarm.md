@@ -29,9 +29,10 @@ resource "cloudamqp_alarm" "cpu_alarm" {
   instance_id       = cloudamqp_instance.instance.id
   type              = "cpu"
   enabled           = true
+  reminder_interval = 600
   value_threshold   = 95
   time_threshold    = 600
-  recipient         = [2]
+  recipient         = [cloudamqp_notification.recipient_01.id]
 }
 
 # New memory alarm
@@ -39,9 +40,10 @@ resource "cloudamqp_alarm" "memory_alarm" {
   instance_id       = cloudamqp_instance.instance.id
   type              = "memory"
   enabled           = true
+  reminder_interval = 600
   value_threshold   = 95
   time_threshold    = 600
-  recipient         = [2]
+  recipient         = [cloudamqp_notification.recipient_01.id]
 }
 ```
 
@@ -52,6 +54,7 @@ The following arguments are supported:
 * `instance_id`         - (Required) The CloudAMQP instance ID.
 * `type`                - (Required) The alarm type, see valid options below.
 * `enabled`             - (Required) Enable or disable the alarm to trigger.
+* `reminder_internval`  - (Optional) The reminder interval (in seconds) to resend the alarm if not resolved. Default set to 0 to not receive any reminders.
 * `value_threshold`     - (Optional) The value to trigger the alarm for.
 * `time_threshold`      - (Optional) The time interval (in seconds) the `value_threshold` should be active before triggering an alarm.
 * `queue_regex`         - (Optional) Regex for which queue to check.

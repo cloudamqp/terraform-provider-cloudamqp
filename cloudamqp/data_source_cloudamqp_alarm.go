@@ -36,6 +36,11 @@ func dataSourceAlarm() *schema.Resource {
 				Computed:    true,
 				Description: "Enable or disable an alarm",
 			},
+			"reminder_interval": {
+				Type:        schema.TypeInt,
+				Computed:    true,
+				Description: "The reminder interval (in seconds) to resend the alarm if not resolved. Set to 0 for no reminders",
+			},
 			"value_threshold": {
 				Type:        schema.TypeInt,
 				Computed:    true,
