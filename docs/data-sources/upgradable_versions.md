@@ -5,7 +5,7 @@ description: |-
   Get information of upgradable versions for RabbitMQ and Erlang.
 ---
 
-# cloudamqp_plugins
+# cloudamqp_upgradable_versions
 
 Use this data source to retrieve information about possible upgradable versions for RabbitMQ and Erlang.
 
