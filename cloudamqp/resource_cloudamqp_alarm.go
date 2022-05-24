@@ -42,7 +42,7 @@ func resourceAlarm() *schema.Resource {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Default:     0,
-				Description: "The reminder interval (in seconds) to resend the alarm if not resolved. Default set to 0 to not receive any reminders.",
+				Description: "The reminder interval (in seconds) to resend the alarm if not resolved. Set to 0 for no reminders. The Default is 0.",
 			},
 			"value_threshold": {
 				Type:        schema.TypeInt,
