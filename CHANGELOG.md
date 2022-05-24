@@ -1,3 +1,9 @@
+## 1.17.1 (May 24, 2022)
+
+IMPROVEMENTS:
+
+* Added `reminder_interval` schema argument for alarms.
+
 ## 1.17.0 (May 24, 2022)
 
 NOTE:
