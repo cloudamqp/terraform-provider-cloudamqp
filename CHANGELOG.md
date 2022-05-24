@@ -1,12 +1,17 @@
-## 1.17.0 (Unreleased)
+## 1.17.0 (May 24, 2022)
 
 NOTE:
 
-* Updated the API wrapper (go-api) dependency with newer version (1.7.0)
+* Updated the API wrapper (go-api) dependency with newer version (1.8.0)
+* Configurable timeout/sleep for VPC peering, avoids firewall configuration blocking VPC peering.
 
 FEATURES:
 
 * Added support to upgrade to latest possible versions for RabbitMQ and Erlang ([#151](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/151))
+
+IMPROVEMENTS:
+
+* Added configurable timeout/sleep for accept/remove VPC peering. ([#153](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/153))
 
 ## 1.16.0 (May 09, 2022)
 
