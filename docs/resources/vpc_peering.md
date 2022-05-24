@@ -172,6 +172,8 @@ resource "cloudamqp_vpc_peering" "vpc_accept_peering" {
   # vpc_id prefered over instance_id
   # instance_id = cloudamqp_instance.instance.id
   peering_id = aws_vpc_peering_connection.aws_vpc_peering.id
+  sleep = 30
+  timeout = 600
 }
 
 # AWS - retrieve the route table created in AWS
@@ -203,12 +205,15 @@ resource "aws_route" "accepter_route" {
  ***Note: Introduced as optional in version v1.16.0, will be required in next major version (v2.0)***
 
 * `peering_id` - (Required) Peering identifier created by AW peering request.
+* `sleep` - (Optional) Configurable sleep time (seconds) between retries for accepting or removing peering. Default set to 60 seconds.
+* `timeout` - (Optional) - Configurable timeout time (seconds) for accepting or removing peering. Default set to 3600 seconds.
 
 ## Attributes Reference
 
 All attributes reference are computed
 
 * `id`  - The identifier for this resource.
+* `status`- VPC peering status
 
 ## Depedency
 
