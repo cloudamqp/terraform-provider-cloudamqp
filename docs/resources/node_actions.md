@@ -19,7 +19,7 @@ Already know the node identifier (e.g. from state file)
 # New recipient to receieve notifications
 resource "cloudamqp_node_actions" "node_action" {
   instance_id = cloudamqp_instance.instance.id
-  node_id = <node_id>
+  node_name = "<node name>"
   action = "restart"
 }
 ```
@@ -31,12 +31,31 @@ data "cloudamqp_nodes" "list_nodes" {
   instance_id = cloudamqp_instance.instance.id
 }
 
-resource "cloudamqp_node_actions" "node_action" {
+resource "cloudamqp_node_actions" "restart_01" {
   instance_id = cloudamqp_instance.instance.id
   action = "restart"
-  count = length(data.cloudamqp_nodes.list_nodes.nodes)
-  node_id = data.cloudamqp_nodes.list_nodes.nodes[count.index].node_id
+  node_name = data.cloudamqp_nodes.list_nodes.nodes[0].name
 }
+
+resource "cloudamqp_node_actions" "restart_02" {
+  instance_id = cloudamqp_instance.instance.id
+  action = "restart"
+  node_name = data.cloudamqp_nodes.list_nodes.nodes[1].name
+  depends_on = [
+    cloudamqp_node_actions.restart_01,
+  ]
+}
+
+resource "cloudamqp_node_actions" "restart_03" {
+  instance_id = cloudamqp_instance.instance.id
+  action = "restart"
+  node_name = data.cloudamqp_nodes.list_nodes.nodes[2].name
+  depends_on = [
+    cloudamqp_node_actions.restart_01,
+    cloudamqp_node_actions.restart_02,
+  ]
+}
+
 ```
 
 ## Argument Reference
@@ -44,8 +63,8 @@ resource "cloudamqp_node_actions" "node_action" {
 The following arguments are supported:
 
 * `instance_id`   - (Required) The CloudAMQP instance ID.
-* `node_id`       - (Required) The node ID.
-* `action`        - (Required) Endpoint to send the notification.
+* `node_name`     - (Required) The node name, e.g `green-guinea-pig-01`.
+* `action`        - (Required) The action to invoke on the node.
 
 ## Attributes Reference
 
@@ -68,7 +87,7 @@ Valid options for action.
 
 ## Dependency
 
-This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id` and node identifier.
+This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id` and node name.
 
 ## Import
 

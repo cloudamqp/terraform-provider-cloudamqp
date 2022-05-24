@@ -1,8 +1,6 @@
 package cloudamqp
 
 import (
-	"strconv"
-
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
@@ -20,15 +18,15 @@ func resourceNodeAction() *schema.Resource {
 				Required:    true,
 				Description: "Instance identifier",
 			},
-			"node_id": {
-				Type:        schema.TypeInt,
+			"node_name": {
+				Type:        schema.TypeString,
 				Required:    true,
 				Description: "The name of the node",
 			},
 			"action": {
 				Type:         schema.TypeString,
 				Required:     true,
-				Description:  "The action set for the node",
+				Description:  "The action to perform on the node",
 				ValidateFunc: validateNodeAction(),
 			},
 			"running": {
@@ -43,14 +41,12 @@ func resourceNodeAction() *schema.Resource {
 func resourceNodeActionRequest(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	data := make(map[string]interface{})
-	params := make(map[string]interface{})
-	params["action"] = d.Get("action")
-	data, err := api.PostAction(d.Get("instance_id").(int), d.Get("node_id").(int), params)
+	nodeName := d.Get("node_name").(string)
+	data, err := api.PostAction(d.Get("instance_id").(int), nodeName, d.Get("action").(string))
 	if err != nil {
 		return err
 	}
-	nodeID := strconv.Itoa(d.Get("node_id").(int))
-	d.SetId(nodeID)
+	d.SetId(nodeName)
 	d.Set("running", data["running"])
 	return nil
 }
@@ -58,7 +54,7 @@ func resourceNodeActionRequest(d *schema.ResourceData, meta interface{}) error {
 func resourceNodeActionRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	data := make(map[string]interface{})
-	data, err := api.ReadNode(d.Get("instance_id").(int), d.Get("node_id").(int))
+	data, err := api.ReadNode(d.Get("instance_id").(int), d.Get("node_name").(string))
 	if err != nil {
 		return err
 	}

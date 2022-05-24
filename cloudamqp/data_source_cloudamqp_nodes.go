@@ -23,10 +23,6 @@ func dataSourceNodes() *schema.Resource {
 				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"node_id": {
-							Type:     schema.TypeInt,
-							Computed: true,
-						},
 						"hostname": {
 							Type:     schema.TypeString,
 							Computed: true,
@@ -86,9 +82,7 @@ func dataSourceNodesRead(d *schema.ResourceData, meta interface{}) error {
 func readNode(data map[string]interface{}) map[string]interface{} {
 	node := make(map[string]interface{})
 	for k, v := range data {
-		if k == "id" {
-			node["node_id"] = v
-		} else if validateNodesSchemaAttribute(k) {
+		if validateNodesSchemaAttribute(k) {
 			node[k] = v
 		}
 	}
