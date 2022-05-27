@@ -32,7 +32,7 @@ resource "cloudamqp_alarm" "cpu_alarm" {
   reminder_interval = 600
   value_threshold   = 95
   time_threshold    = 600
-  recipient         = [cloudamqp_notification.recipient_01.id]
+  recipients        = [cloudamqp_notification.recipient_01.id]
 }
 
 # New memory alarm
@@ -43,7 +43,7 @@ resource "cloudamqp_alarm" "memory_alarm" {
   reminder_interval = 600
   value_threshold   = 95
   time_threshold    = 600
-  recipient         = [cloudamqp_notification.recipient_01.id]
+  recipients        = [cloudamqp_notification.recipient_01.id]
 }
 ```
 
