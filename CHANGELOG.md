@@ -1,3 +1,9 @@
+## 1.17.2 (May 27, 2022)
+
+IMPROVEMENTS:
+
+* Added `flow` as supported alarm type.
+
 ## 1.17.1 (May 24, 2022)
 
 IMPROVEMENTS:
