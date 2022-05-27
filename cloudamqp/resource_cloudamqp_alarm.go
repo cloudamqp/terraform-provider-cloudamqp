@@ -180,6 +180,7 @@ func validateAlarmType() schema.SchemaValidateFunc {
 		"disk",
 		"queue",
 		"connection",
+		"flow",
 		"consumer",
 		"netsplit",
 		"ssh",

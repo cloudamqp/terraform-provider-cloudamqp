@@ -48,4 +48,4 @@ This data source depends on CloudAMQP instance identifier, `cloudamqp_instance.i
 
 ## Alarm types
 
-`cpu, memory, disk, queue, connection, consumer, netsplit, server_unreachable, notice`
+`cpu, memory, disk, queue, connection, flow, consumer, netsplit, server_unreachable, notice`
