@@ -106,7 +106,7 @@ func testAccCheckInstanceDestroy(resourceName string) resource.TestCheckFunc {
 }
 
 func testAccInstanceConfigBasic(name, region, plan string) string {
-	log.Printf("[DBEUG] resource_instance::testAccInstanceConfig_Basic name: %s, region: %s, plan: %s", name, region, plan)
+	log.Printf("[DBEUG] resource_instance::testAccInstanceConfig_Basic name: %s, region: %s, plan: %s", name, region, plan)
 	return fmt.Sprintf(`
 		resource "cloudamqp_instance" "instance" {
 			name 				= "%s"

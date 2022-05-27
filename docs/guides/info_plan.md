@@ -14,12 +14,12 @@ Name | Plan | Type | Nodes
 ---- | ---- | ---- | ----
 Little lemur    | lemur   | shared
 Tough Tiger     | tiger   | shared
-Sassy Squirrel  | squirrel-1    | dedicated | 1
+Sassy Squirrel  | squirrel-1    | dedicated | 1
 Big Bunny       | bunny-1,3     | dedicated | 1,3
 Roaring Rabbit  | rabbit-1,3,5  | dedicated | 1,3,5
-Power Panda     | panda-1,3,5   | dedicated | 1,3,5
+Power Panda     | panda-1,3,5   | dedicated | 1,3,5
 Awesome Ape     | ape-1,3,5     | dedicated | 1,3,5
-Heavy Hippo     | hippo-1,3,5   | dedicated | 1,3,5
+Heavy Hippo     | hippo-1,3,5   | dedicated | 1,3,5
 Loud Lion       | lion-1,3,5    | dedicated | 1,3,5
 Raging Rhino    | rhino-1       | dedicated | 1
 
@@ -34,7 +34,7 @@ Little lemur    | lemur   | shared
 Tough Tiger     | tiger   | shared
 Big Bunny       | bunny   | dedicated
 Roaring Rabbit  | rabbit  | dedicated
-Power Panda     | panda   | dedicated
+Power Panda     | panda   | dedicated
 Awesome Ape     | ape     | dedicated
-Heavy Hippo     | hippo   | dedicated
+Heavy Hippo     | hippo   | dedicated
 Loud Lion       | lion    | dedicated
