@@ -7,11 +7,18 @@ description: |-
 
 # cloudamqp_rabbit_configuration
 
-This resource allows you update RabbitMQ config. The resource needs to first be imported once the CloudAMQP instance have been created and will present the current RabbitMQ config.
+This resource allows you update RabbitMQ config.
 
 Only available for dedicated subscription plans.
 
 ## Example Usage
+
+<details>
+  <summary>
+    <b>
+      <i>RabbitMQ configuration with default values</i>
+    </b>
+  </summary>
 
 ```hcl
 resource "cloudamqp_rabbit_configuration" "rabbit_config" {
@@ -26,8 +33,15 @@ resource "cloudamqp_rabbit_configuration" "rabbit_config" {
   vm_memory_high_watermark = 0.81
 }
 ```
+</details>
 
-Change log level and combine `cloudamqp_node_actions` for RabbitMQ restart
+<details>
+  <summary>
+    <b>
+      <i>Change log level and combine `cloudamqp_node_actions` for RabbitMQ restart</i>
+    </b>
+  </summary>
+
 
 ```hcl
 resource "cloudamqp_rabbit_configuration" "rabbit_config" {
@@ -56,22 +70,39 @@ resource "cloudamqp_node_actions" "node_action" {
   ]
 }
 ```
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>Only change log level for exchange. All other values will be set to default, see table below.</i>
+    </b>
+  </summary>
+
+
+```hcl
+resource "cloudamqp_rabbit_configuration" "rabbit_config" {
+  instance_id = cloudamqp_instance.instance.id
+  log_exchange_level = "info"
+}
+```
+</details>
 
 ## Argument Reference
 
 The following arguments are supported:
 
 * `instance_id`                   - (Required) The CloudAMQP instance ID.
-* `heartbeat`                     - (Computed/Optional) Set the server AMQP 0-9-1 heartbeat timeout in seconds.
-* `connection_max`                - (Computed/Optional) Set the maximum permissible number of connection.
-* `channel_max`                   - (Computed/Optional) Set the maximum permissible number of channels per connection.
-* `consumer_timeout`              - (Computed/Optional) A consumer that has recevied a message and does not acknowledge that message within the timeout in milliseconds
-* `vm_memory_high_watermark`      - (Computed/Optional) When the server will enter memory based flow-control as relative to the maximum available memory.
-* `queue_index_embed_msgs_below`  - (Computed/Optional) Size in bytes below which to embed messages in the queue index.
-* `max_message_size`              - (Computed/Optional) The largest allowed message payload size in bytes.
-* `log_exchange_level`            - (Computed/Optional) Log level for the logger used for log integrations and the CloudAMQP Console log view.
+* `heartbeat`                     - (Optional) Set the server AMQP 0-9-1 heartbeat timeout in seconds.
+* `connection_max`                - (Optional) Set the maximum permissible number of connection.
+* `channel_max`                   - (Optional) Set the maximum permissible number of channels per connection.
+* `consumer_timeout`              - (Optional) A consumer that has recevied a message and does not acknowledge that message within the timeout in milliseconds
+* `vm_memory_high_watermark`      - (Optional) When the server will enter memory based flow-control as relative to the maximum available memory.
+* `queue_index_embed_msgs_below`  - (Optional) Size in bytes below which to embed messages in the queue index.
+* `max_message_size`              - (Optional) The largest allowed message payload size in bytes.
+* `log_exchange_level`            - (Optional) Log level for the logger used for log integrations and the CloudAMQP Console log view.
 
-  ***Note: Requires a RabbitMQ restart to be applied.***
+  ***Note: Requires a restart of RabbitMQ to be applied.***
 
 ## Attributes Reference
 
@@ -83,10 +114,10 @@ All attributes reference are computed
 
 | Argument                     | Type   | Default   | Min   | Max       | Note                                                              |
 |------------------------------|--------|-----------|-------|-----------|-------------------------------------------------------------------|
-| heartbeat                    | int    | 120       | 0     | -         |                                                                   |
+| heartbeat                    | int    | 120       | 1     | -         |                                                                   |
 | connection_max               | int    | -1        | 1     | -         | -1 in the provider corresponds to INFINITY in the RabbitMQ config |
-| channel_max                  | int    | 128       | 0     | -         | 0 means "no limit"                                                |
-| consumer_timeout             | int    | 900000    | 10000 | 25000000  | Timeout in milliseconds                                           |
+| channel_max                  | int    | 0         | 0     | -         | 0 means "no limit"                                                |
+| consumer_timeout             | int    | 7200000   | 10000 | 25000000  | Timeout in milliseconds                                           |
 | vm_memory_high_watermark     | float  | 0.81      | 0.4   | 0.9       |                                                                   |
 | queue_index_embed_msgs_below | int    | 4096      | 1     | 10485760  |                                                                   |
 | max_message_size             | int    | 134217728 | 1     | 536870912 | Size in bytes                                                     |
@@ -98,6 +129,6 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-`cloudamqp_rabbit_configuration` must be imported using CloudAMQP instance identifier. The RabbitMQ config can then be updated with new configuration.
+`cloudamqp_rabbit_configuration` can be imported using the CloudAMQP instance identifier.
 
 `terraform import cloudamqp_rabbit_configuration.rabbit_config <instance_id>`

@@ -13,6 +13,7 @@ import (
 
 func resourceRabbitConfiguration() *schema.Resource {
 	return &schema.Resource{
+		Create: resourceRabbitConfigurationCreate,
 		Read:   resourceRabbitConfigurationRead,
 		Update: resourceRabbitConfigurationUpdate,
 		Delete: resourceRabbitConfigurationDelete,
@@ -131,6 +132,12 @@ func resourceRabbitConfiguration() *schema.Resource {
 	}
 }
 
+func resourceRabbitConfigurationCreate(d *schema.ResourceData, meta interface{}) error {
+	id := strconv.Itoa(d.Get("instance_id").(int))
+	d.SetId(id)
+	return resourceRabbitConfigurationUpdate(d, meta)
+}
+
 func resourceRabbitConfigurationRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	instanceID, _ := strconv.Atoi(d.Id())
@@ -139,6 +146,7 @@ func resourceRabbitConfigurationRead(d *schema.ResourceData, meta interface{}) e
 	if err != nil {
 		return err
 	}
+
 	d.Set("instance_id", instanceID)
 	for k, v := range data {
 		if validateRabbitConfigurationJSONField(k) {
@@ -166,7 +174,7 @@ func resourceRabbitConfigurationRead(d *schema.ResourceData, meta interface{}) e
 
 func resourceRabbitConfigurationUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := rabbitConfigurationUpdateAttributeKeys()
+	keys := rabbitConfigurationWriteAttributeKeys()
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		v := d.Get(k)
@@ -218,7 +226,7 @@ func validateLogLevel() schema.SchemaValidateFunc {
 	}, true)
 }
 
-func rabbitConfigurationUpdateAttributeKeys() []string {
+func rabbitConfigurationWriteAttributeKeys() []string {
 	return []string{
 		"heartbeat",
 		"connection_max",
