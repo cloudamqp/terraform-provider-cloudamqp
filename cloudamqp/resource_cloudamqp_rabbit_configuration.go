@@ -27,50 +27,50 @@ func resourceRabbitConfiguration() *schema.Resource {
 			},
 			"heartbeat": {
 				Type:        schema.TypeInt,
-				Computed:    true,
 				Optional:    true,
+				Default:     120,
 				Description: "Set the server AMQP 0-9-1 heartbeat timeout in seconds.",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
 					if v < 0 {
-						errs = append(errs, fmt.Errorf("%q must be greater then 0, got: %d", key, v))
+						errs = append(errs, fmt.Errorf("%q must be greater than 0, got: %d", key, v))
 					}
 					return
 				},
 			},
 			"connection_max": {
 				Type:        schema.TypeInt,
-				Computed:    true,
 				Optional:    true,
-				Description: "Set the maximum permissible number of connection.",
+				Default:     -1,
+				Description: "Set the maximum permissible number of connection, -1 means infinity.",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
 					if v == -1 {
 						return
 					}
 					if v < 0 {
-						errs = append(errs, fmt.Errorf("%q must be -1 or greater then 0, got: %d", key, v))
+						errs = append(errs, fmt.Errorf("%q must be -1 (infinity) or greater than 0, got: %d", key, v))
 					}
 					return
 				},
 			},
 			"channel_max": {
 				Type:        schema.TypeInt,
-				Computed:    true,
 				Optional:    true,
-				Description: "Set the maximum permissible number of channels per connection.",
+				Default:     0,
+				Description: "Set the maximum permissible number of channels per connection. 0 means unlimited",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
 					if v < 0 {
-						errs = append(errs, fmt.Errorf("%q must be greater then 0, got: %d", key, v))
+						errs = append(errs, fmt.Errorf("%q must be greater than or equal to 0, got: %d", key, v))
 					}
 					return
 				},
 			},
 			"consumer_timeout": {
 				Type:        schema.TypeInt,
-				Computed:    true,
 				Optional:    true,
+				Default:     7200000,
 				Description: "A consumer that has recevied a message and does not acknowledge that message within the timeout in milliseconds",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
@@ -82,8 +82,8 @@ func resourceRabbitConfiguration() *schema.Resource {
 			},
 			"vm_memory_high_watermark": {
 				Type:        schema.TypeFloat,
-				Computed:    true,
 				Optional:    true,
+				Default:     0.81,
 				Description: "When the server will enter memory based flow-control as relative to the maximum available memory.",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(float64)
@@ -95,8 +95,8 @@ func resourceRabbitConfiguration() *schema.Resource {
 			},
 			"queue_index_embed_msgs_below": {
 				Type:        schema.TypeInt,
-				Computed:    true,
 				Optional:    true,
+				Default:     4096,
 				Description: "Size in bytes below which to embed messages in the queue index.",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
@@ -108,8 +108,8 @@ func resourceRabbitConfiguration() *schema.Resource {
 			},
 			"max_message_size": {
 				Type:        schema.TypeInt,
-				Computed:    true,
 				Optional:    true,
+				Default:     134217728,
 				Description: "The largest allowed message payload size in bytes.",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
@@ -121,8 +121,8 @@ func resourceRabbitConfiguration() *schema.Resource {
 			},
 			"log_exchange_level": {
 				Type:     schema.TypeString,
-				Computed: true,
 				Optional: true,
+				Default:  "error",
 				Description: "Log level for the logger used for log integrations and the CloudAMQP Console log view. " +
 					"Does not affect the file logger. Requires a RabbitMQ restart to be applied.",
 				ValidateFunc: validateLogLevel(),
