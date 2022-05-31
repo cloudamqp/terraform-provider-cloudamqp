@@ -23,18 +23,16 @@ func (api *API) readRabbitConfigurationWithRetry(instanceID, attempts, sleep int
 		return nil, err
 	}
 
-	statusCode := response.StatusCode
 	switch {
-	case statusCode == 400:
+	case response.StatusCode == 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
 			if attempts--; attempts > 0 {
 				log.Printf("[INFO] go-api::rabbit-configuration#readWithRetry Timeout talking to backend "+
 					"attempts left %d and retry in %d seconds", attempts, sleep)
 				time.Sleep(time.Duration(sleep) * time.Second)
 				return api.readRabbitConfigurationWithRetry(instanceID, attempts, 2*sleep)
-			} else {
-				return nil, fmt.Errorf("ReadWithRetry failed, status: %v, message: %s", response.StatusCode, failed)
 			}
+			return nil, fmt.Errorf("ReadWithRetry failed, status: %v, message: %s", response.StatusCode, failed)
 		}
 	}
 	return data, nil
@@ -54,9 +52,8 @@ func (api *API) updateRabbitConfigurationWithRetry(instanceID, attempts, sleep i
 		return err
 	}
 
-	statusCode := response.StatusCode
 	switch {
-	case statusCode == 400:
+	case response.StatusCode == 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
 			if attempts--; attempts > 0 {
 				log.Printf("[INFO] go-api::rabbit-configuration#updateWithRetry Timeout talking to backend "+
