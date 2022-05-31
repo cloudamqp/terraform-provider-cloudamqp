@@ -11,12 +11,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
-func resourceRabbitConfiguration() *schema.Resource {
+func resourceRabbitMqConfiguration() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceRabbitConfigurationCreate,
-		Read:   resourceRabbitConfigurationRead,
-		Update: resourceRabbitConfigurationUpdate,
-		Delete: resourceRabbitConfigurationDelete,
+		Create: resourceRabbitMqConfigurationCreate,
+		Read:   resourceRabbitMqConfigurationRead,
+		Update: resourceRabbitMqConfigurationUpdate,
+		Delete: resourceRabbitMqConfigurationDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
@@ -132,16 +132,16 @@ func resourceRabbitConfiguration() *schema.Resource {
 	}
 }
 
-func resourceRabbitConfigurationCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceRabbitMqConfigurationCreate(d *schema.ResourceData, meta interface{}) error {
 	id := strconv.Itoa(d.Get("instance_id").(int))
 	d.SetId(id)
-	return resourceRabbitConfigurationUpdate(d, meta)
+	return resourceRabbitMqConfigurationUpdate(d, meta)
 }
 
-func resourceRabbitConfigurationRead(d *schema.ResourceData, meta interface{}) error {
+func resourceRabbitMqConfigurationRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	instanceID, _ := strconv.Atoi(d.Id())
-	data, err := api.ReadRabbitConfiguration(instanceID)
+	data, err := api.ReadRabbitMqConfiguration(instanceID)
 	log.Printf("[DEBUG] cloudamqp::resource::rabbit_configuration::read data: %v", data)
 	if err != nil {
 		return err
@@ -149,7 +149,7 @@ func resourceRabbitConfigurationRead(d *schema.ResourceData, meta interface{}) e
 
 	d.Set("instance_id", instanceID)
 	for k, v := range data {
-		if validateRabbitConfigurationJSONField(k) {
+		if validateRabbitMqConfigurationJSONField(k) {
 			key := strings.ReplaceAll(k, "rabbit.", "")
 			if key == "connection_max" {
 				if v == "infinity" || v == nil {
@@ -172,9 +172,9 @@ func resourceRabbitConfigurationRead(d *schema.ResourceData, meta interface{}) e
 	return nil
 }
 
-func resourceRabbitConfigurationUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceRabbitMqConfigurationUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := rabbitConfigurationWriteAttributeKeys()
+	keys := rabbitMqConfigurationWriteAttributeKeys()
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		v := d.Get(k)
@@ -188,18 +188,18 @@ func resourceRabbitConfigurationUpdate(d *schema.ResourceData, meta interface{})
 		params["rabbit."+k] = v
 	}
 
-	err := api.UpdateRabbitConfiguration(d.Get("instance_id").(int), params)
+	err := api.UpdateRabbitMqConfiguration(d.Get("instance_id").(int), params)
 	if err != nil {
 		return err
 	}
-	return resourceRabbitConfigurationRead(d, meta)
+	return resourceRabbitMqConfigurationRead(d, meta)
 }
 
-func resourceRabbitConfigurationDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceRabbitMqConfigurationDelete(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func validateRabbitConfigurationJSONField(key string) bool {
+func validateRabbitMqConfigurationJSONField(key string) bool {
 	switch key {
 	case "rabbit.heartbeat",
 		"rabbit.connection_max",
@@ -226,7 +226,7 @@ func validateLogLevel() schema.SchemaValidateFunc {
 	}, true)
 }
 
-func rabbitConfigurationWriteAttributeKeys() []string {
+func rabbitMqConfigurationWriteAttributeKeys() []string {
 	return []string{
 		"heartbeat",
 		"connection_max",

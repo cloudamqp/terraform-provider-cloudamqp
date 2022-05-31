@@ -85,7 +85,7 @@ data "cloudamqp_nodes" "list_nodes" {
   instance_id = cloudamqp_instance.instance.id
 }
 
-resource "cloudamqp_rabbit_configuration" "config" {
+resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
   instance_id = cloudamqp_instance.instance.id
   log_exchange_level = "info"
 }
@@ -95,7 +95,7 @@ resource "cloudamqp_node_actions" "restart_01" {
   action = "restart"
   node_name = data.cloudamqp_nodes.list_nodes.nodes[0].name
   depends_on = [
-    cloudamqp_rabbit_configuration.config,
+    cloudamqp_rabbitmq_configuration.rabbitmq_config,
   ]
 }
 
@@ -104,7 +104,7 @@ resource "cloudamqp_node_actions" "restart_02" {
   action = "restart"
   node_name = data.cloudamqp_nodes.list_nodes.nodes[1].name
   depends_on = [
-    cloudamqp_rabbit_configuration.config,
+    cloudamqp_rabbitmq_configuration.rabbitmq_config,
     cloudamqp_node_actions.restart_01,
   ]
 }
@@ -114,7 +114,7 @@ resource "cloudamqp_node_actions" "restart_03" {
   action = "restart"
   node_name = data.cloudamqp_nodes.list_nodes.nodes[2].name
   depends_on = [
-    cloudamqp_rabbit_configuration.config,
+    cloudamqp_rabbitmq_configuration.rabbitmq_config,
     cloudamqp_node_actions.restart_01,
     cloudamqp_node_actions.restart_02,
   ]

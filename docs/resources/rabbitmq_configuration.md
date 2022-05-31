@@ -1,11 +1,11 @@
 ---
 layout: "cloudamqp"
-page_title: "CloudAMQP: cloudamqp_rabbit_configuration"
+page_title: "CloudAMQP: cloudamqp_rabbitmq_configuration"
 description: |-
-  Enable and disable Rabbit MQ plugin.
+  Update Rabbit MQ config
 ---
 
-# cloudamqp_rabbit_configuration
+# cloudamqp_rabbitmq_configuration
 
 This resource allows you update RabbitMQ config.
 
@@ -21,7 +21,7 @@ Only available for dedicated subscription plans.
   </summary>
 
 ```hcl
-resource "cloudamqp_rabbit_configuration" "rabbit_config" {
+resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
   instance_id = cloudamqp_instance.instance.id
   channel_max = 0
   connection_max = -1
@@ -44,7 +44,7 @@ resource "cloudamqp_rabbit_configuration" "rabbit_config" {
 
 
 ```hcl
-resource "cloudamqp_rabbit_configuration" "rabbit_config" {
+resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
   instance_id = cloudamqp_instance.instance.id
   channel_max = 0
   connection_max = -1
@@ -66,7 +66,7 @@ resource "cloudamqp_node_actions" "node_action" {
   action = "restart"
 
   depends_on = [
-    cloudamqp_rabbit_configuration.rabbit_config,
+    cloudamqp_rabbitmq_configuration.rabbitmq_config,
   ]
 }
 ```
@@ -81,7 +81,7 @@ resource "cloudamqp_node_actions" "node_action" {
 
 
 ```hcl
-resource "cloudamqp_rabbit_configuration" "rabbit_config" {
+resource "cloudamqp_rabbitmq_configuration" "rabbit_config" {
   instance_id = cloudamqp_instance.instance.id
   log_exchange_level = "info"
 }
@@ -129,6 +129,6 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-`cloudamqp_rabbit_configuration` can be imported using the CloudAMQP instance identifier.
+`cloudamqp_rabbitmq_configuration` can be imported using the CloudAMQP instance identifier.
 
-`terraform import cloudamqp_rabbit_configuration.rabbit_config <instance_id>`
+`terraform import cloudamqp_rabbitmq_configuration.config <instance_id>`
