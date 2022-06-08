@@ -1,3 +1,21 @@
+## 1.18.0 (Jun 08, 2022)
+
+NOTE:
+
+* Updated the API wrapper (go-api) dependency with newer version (1.8.1)
+* Updated go-getter dependency with newer version (1.6.1)
+
+FEATURES:
+
+* Added support for updating RabbitMQ config ([#150]
+(https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/150))
+* Added support for invoking node actions ([#150]
+(https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/150))
+
+IMPROVEMENTS:
+
+* Updated wrong information in documentation for VPC peering.
+
 ## 1.17.2 (May 27, 2022)
 
 IMPROVEMENTS:
