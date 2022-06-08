@@ -130,6 +130,10 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 *Post v1.16.0*
 This resource depends on CloudAMQP managed VPC identifier, `cloudamqp_vpc.vpc.id` or instance identifier, `cloudamqp_instance.instance.id`.
 
+## Import
+
+Not possible to import this resource.
+
 ## Create VPC Peering with additional firewall rules
 
 To create a VPC peering configuration with additional firewall rules, it's required to chain the [cloudamqp_security_firewall](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall)

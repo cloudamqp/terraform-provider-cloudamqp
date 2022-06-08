@@ -225,14 +225,4 @@ This resource depends on CloudAMQP managed VPC identifier, `cloudamqp_vpc.vpc.id
 
 ## Import
 
-*Pre v1.16.0*
-`cloudamqp_vpc_peering` can be imported using the CloudAMQP instance identifier.
-
-`terraform import cloudamqp_vpc_peering.<resource_name> <instance_id>`
-
-*Post v1.16.0*
-`cloudamqp_vpc_peering` can be imported using the CloudAMQP managed VPC identifier or instance identifier.
-
-`terraform import cloudamqp_vpc_peering.<resource_name> <vpc_id>`
-
-`terraform import cloudamqp_vpc_peering.<resource_name> <instance_id>`
+Not possible to import this resource.
