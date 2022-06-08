@@ -142,7 +142,7 @@ func resourceRabbitMqConfigurationRead(d *schema.ResourceData, meta interface{})
 	api := meta.(*api.API)
 	instanceID, _ := strconv.Atoi(d.Id())
 	data, err := api.ReadRabbitMqConfiguration(instanceID)
-	log.Printf("[DEBUG] cloudamqp::resource::rabbit_configuration::read data: %v", data)
+	log.Printf("[DEBUG] cloudamqp::resource::rabbitmq_configuration::read data: %v", data)
 	if err != nil {
 		return err
 	}
