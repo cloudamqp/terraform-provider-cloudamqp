@@ -11,7 +11,7 @@ Use this data source to retrieve basic information about all standalone VPCs ava
 
 ## Example Usage
 
-Can be used in other resources/data sources when the VPC identifier is unknown, while other attributes are known. E.g. find correct VPC from `vpc_name`. Then iterate over VPCs to find the matching one and extract the VPC identifier.
+Can be used in other resources/data sources when the VPC identifier is unknown, while other attributes are known. E.g. find correct VPC using the `name` you gave your VPC. Then iterate over VPCs to find the matching one and extract the VPC identifier.
 
 ```hcl
 provider "cloudamqp" {
@@ -19,13 +19,13 @@ provider "cloudamqp" {
 }
 
 locals {
-  vpc_name = "<vpc_name>"
+  my_vpc_name = "<your VPC name>"
 }
 
 data "cloudamqp_account_vpcs" "vpc_list" {}
 
 output "vpc_id" {
-  value = [for vpc in data.cloudamqp_account_vpcs.vpc_list.vpcs : vpc if vpc["vpc_name"] == local.vpc_name][0].id
+  value = [for vpc in data.cloudamqp_account_vpcs.vpc_list.vpcs : vpc if vpc["name"] == local.my_vpc_name][0].id
 }
 ```
 
@@ -41,7 +41,7 @@ ___
 The `vpcs` block consist of
 
 * `id`          - The VPC identifier.
-* `name`        - The internal VPC instance name.
+* `name`        - The VPC instance name.
 * `region`      - The region the VPC is hosted in.
 * `subnet`      - The VPC subnet.
 * `tags`        - Optional tags set for the VPC.
