@@ -45,40 +45,6 @@ func resourceExtraDiskSizeRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-// Need to fetch the extra disk size? Otherwise present in data source for nodes.
-
-// func resourceExtraDiskSizeRead(d *schema.ResourceData, meta interface{}) error {
-// 	// if strings.Contains(d.Id(), ",") {
-// 	// 	s := strings.Split(d.Id(), ",")
-// 	// 	d.SetId(s[0])
-// 	// 	d.Set("name", s[0])
-// 	// 	instanceID, _ := strconv.Atoi(s[1])
-// 	// 	d.Set("instance_id", instanceID)
-// 	// }
-// 	// if d.Get("instance_id").(int) == 0 {
-// 	// 	return errors.New("Missing instance identifier: {resource_id},{instance_id}")
-// 	// }
-
-// 	// api := meta.(*api.API)
-// 	// data, err := api.ReadWebhook(d.Get("instance_id").(int), d.Id())
-
-// 	// if err != nil {
-// 	// 	return err
-// 	// }
-
-// 	// for k, v := range data {
-// 	// 	if validateWebhookSchemaAttribute(k) {
-// 	// 		err = d.Set(k, v)
-
-// 	// 		if err != nil {
-// 	// 			return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
-// 	// 		}
-// 	// 	}
-// 	// }
-
-// 	return nil
-// }
-
 func resourceExtraDiskSizeDelete(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
