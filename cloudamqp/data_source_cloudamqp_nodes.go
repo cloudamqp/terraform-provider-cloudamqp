@@ -51,6 +51,14 @@ func dataSourceNodes() *schema.Resource {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
+						"disk_size": {
+							Type:     schema.TypeInt,
+							Computed: true,
+						},
+						"additional_disk_size": {
+							Type:     schema.TypeInt,
+							Computed: true,
+						},
 					},
 				},
 			},
@@ -98,7 +106,9 @@ func validateNodesSchemaAttribute(key string) bool {
 		"erlang_version",
 		"hipe",
 		"configured",
-		"rmq_version":
+		"rmq_version",
+		"disk_size",
+		"additional_disk_size":
 		return true
 	}
 	return false
