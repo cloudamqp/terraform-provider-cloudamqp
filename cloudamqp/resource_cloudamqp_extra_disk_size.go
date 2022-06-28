@@ -1,6 +1,8 @@
 package cloudamqp
 
 import (
+	"strconv"
+
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
@@ -32,12 +34,14 @@ func resourceExtraDiskSize() *schema.Resource {
 
 func resourceExtraDiskSizeUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	_, err := api.ResizeDisk(d.Get("instance_id").(int), d.Get("extra_disk_size").(int))
+	params := make(map[string]interface{})
+	params["extra_disk_size"] = d.Get("extra_disk_size")
+	_, err := api.ResizeDisk(d.Get("instance_id").(int), params)
 	if err != nil {
 		return err
 	}
-
-	d.SetId("NA")
+	id := strconv.Itoa(d.Get("instance_id").(int))
+	d.SetId(id)
 	return nil
 }
 
