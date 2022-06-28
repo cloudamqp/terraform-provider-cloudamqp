@@ -32,15 +32,7 @@ func resourceExtraDiskSize() *schema.Resource {
 
 func resourceExtraDiskSizeUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"extra_disk_size"}
-	params := make(map[string]interface{})
-	for _, k := range keys {
-		if v := d.Get(k); v != nil {
-			params[k] = v
-		}
-	}
-
-	_, err := api.ResizeDisk(d.Get("instance_id").(int), params)
+	_, err := api.ResizeDisk(d.Get("instance_id").(int), d.Get("extra_disk_size").(int))
 	if err != nil {
 		return err
 	}
