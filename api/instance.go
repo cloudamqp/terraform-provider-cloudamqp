@@ -14,6 +14,7 @@ func (api *API) waitUntilReady(instanceID string) (map[string]interface{}, error
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
 	for {
+		time.Sleep(10 * time.Second)
 		response, err := api.sling.New().Path("/api/instances/").Get(instanceID).Receive(&data, &failed)
 
 		if err != nil {
@@ -26,8 +27,6 @@ func (api *API) waitUntilReady(instanceID string) (map[string]interface{}, error
 			data["id"] = instanceID
 			return data, nil
 		}
-
-		time.Sleep(10 * time.Second)
 	}
 }
 
@@ -36,6 +35,7 @@ func (api *API) waitUntilAllNodesReady(instanceID string) error {
 	failed := make(map[string]interface{})
 
 	for {
+		time.Sleep(15 * time.Second)
 		path := fmt.Sprintf("api/instances/%v/nodes", instanceID)
 		_, err := api.sling.New().Path(path).Receive(&data, &failed)
 		if err != nil {
@@ -53,8 +53,6 @@ func (api *API) waitUntilAllNodesReady(instanceID string) error {
 		if ready {
 			return nil
 		}
-
-		time.Sleep(30 * time.Second)
 	}
 }
 
@@ -63,6 +61,7 @@ func (api *API) waitUntilDeletion(instanceID string) error {
 	data := make(map[string]interface{})
 	failed := make(map[string]interface{})
 	for {
+		time.Sleep(10 * time.Second)
 		response, err := api.sling.New().Path("/api/instances/").Get(instanceID).Receive(&data, &failed)
 
 		if err != nil {
@@ -73,8 +72,6 @@ func (api *API) waitUntilDeletion(instanceID string) error {
 			log.Print("[DEBUG] go-api::instance::waitUntilDeletion deleted")
 			return nil
 		}
-
-		time.Sleep(10 * time.Second)
 	}
 }
 
