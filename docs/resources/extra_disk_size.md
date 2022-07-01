@@ -29,21 +29,28 @@ resource "cloudamqp_instance" "instance" {
   rmq_version = "3.10.1"
 }
 
-data "cloudamqp_nodes" "nodes" {
-  instance_id = cloudamqp_instance.instance.id
-}
-
-# Resize disk with 5 extra GB
+# Resize disk with 25 extra GB
 resource "cloudamqp_extra_disk_size" "resize_disk" {
   instance_id = cloudamqp_instance.instance.id
-  extra_disk_size = 5
+  extra_disk_size = 25
+  depends_on = [
+    cloudamqp_instance.instance,
+  ]
+}
+
+# Refresh nodes info after disk resize
+data "cloudamqp_nodes" "nodes" {
+  instance_id = cloudamqp_instance.instance.id
+  depends_on = [
+    cloudamqp_extra_disk_size.resize_disk,
+  ]
 }
 ```
 
 ## Argument Reference
 
 * `instance_id`       - (Required/ForceNew) The CloudAMQP instance ID.
-* `extra_disk_size`   - (Required/ForceNew) Extra disk size in GB.
+* `extra_disk_size`   - (Required/ForceNew) Extra disk size in GB. Supported values: 25, 50, 100, 250, 500, 1000, 2000
 
 ## Import
 
