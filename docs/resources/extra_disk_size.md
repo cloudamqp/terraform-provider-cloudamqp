@@ -13,6 +13,8 @@ Only available for dedicated subscription plans hosted at Amazon Web Services (A
 
 ⚠️  Due to restrictions from cloud providers, it's only possible to resize the disk every 8 hours.
 
+Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/).
+
 ## Example Usage
 
 ```hcl
