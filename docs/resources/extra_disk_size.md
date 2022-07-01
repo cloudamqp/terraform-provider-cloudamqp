@@ -9,9 +9,9 @@ description: |-
 
 This resource allows you to expand the disk with additional storage capacity.
 
-Only available for dedicated subscription plans hosted at Amazon Web Services.
+Only available for dedicated subscription plans hosted at Amazon Web Services (AWS) at this time.
 
-⚠️  Due to underlying time restriction to expand disk at Amazon Web Services. It's only possible to resize the disk every 8 hours!
+⚠️  Due to restrictions from cloud providers, it's only possible to resize the disk every 8 hours.
 
 ## Example Usage
 
