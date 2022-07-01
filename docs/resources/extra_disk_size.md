@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_extra_disk_size
 
-This resource allows you to expand the disk with additional storage capacity.
+This resource allows you to expand the disk with additional storage capacity. There is no downtime when expanding the disk.
 
 Only available for dedicated subscription plans hosted at Amazon Web Services (AWS) at this time.
 
