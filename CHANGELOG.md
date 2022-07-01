@@ -1,3 +1,19 @@
+## 1.19.0 (Jul 01, 2022)
+
+NOTE:
+
+* Update the API wrapper (go-api) dependecy with newer version (1.9.0)
+* Update goutils dependecy with newer version (1.1.1)
+
+FEATURES:
+
+* Added support for resize disk ([#162]
+(https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/162))
+
+IMPROVEMENTS:
+* Updated nodes data source with original and additional disk sizes ([#162]
+(https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/162))
+
 ## 1.18.0 (Jun 08, 2022)
 
 NOTE:
