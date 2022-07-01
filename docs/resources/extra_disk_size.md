@@ -35,9 +35,6 @@ resource "cloudamqp_instance" "instance" {
 resource "cloudamqp_extra_disk_size" "resize_disk" {
   instance_id = cloudamqp_instance.instance.id
   extra_disk_size = 25
-  depends_on = [
-    cloudamqp_instance.instance,
-  ]
 }
 
 # Refresh nodes info after disk resize
