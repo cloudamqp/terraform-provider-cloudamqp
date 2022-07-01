@@ -45,6 +45,7 @@ func Provider(v string) *schema.Provider {
 		ResourcesMap: map[string]*schema.Resource{
 			"cloudamqp_alarm":                  resourceAlarm(),
 			"cloudamqp_custom_domain":          resourceCustomDomain(),
+			"cloudamqp_extra_disk_size":        resourceExtraDiskSize(),
 			"cloudamqp_instance":               resourceInstance(),
 			"cloudamqp_integration_log":        resourceIntegrationLog(),
 			"cloudamqp_integration_metric":     resourceIntegrationMetric(),
