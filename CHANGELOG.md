@@ -1,3 +1,9 @@
+## 1.19.x (Unreleased)
+
+IMPROVEMENTS:
+
+* Add support to disable consumer_timeout
+
 ## 1.19.0 (Jul 01, 2022)
 
 NOTE:
