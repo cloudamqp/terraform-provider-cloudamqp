@@ -112,16 +112,16 @@ All attributes reference are computed
 
 ## Argument threshold values
 
-| Argument                     | Type   | Default   | Min   | Max       | Note                                                              |
-|------------------------------|--------|-----------|-------|-----------|-------------------------------------------------------------------|
-| heartbeat                    | int    | 120       | 1     | -         |                                                                   |
-| connection_max               | int    | -1        | 1     | -         | -1 in the provider corresponds to INFINITY in the RabbitMQ config |
-| channel_max                  | int    | 0         | 0     | -         | 0 means "no limit"                                                |
-| consumer_timeout             | int    | 7200000   | 10000 | 25000000  | Timeout in milliseconds                                           |
-| vm_memory_high_watermark     | float  | 0.81      | 0.4   | 0.9       |                                                                   |
-| queue_index_embed_msgs_below | int    | 4096      | 1     | 10485760  |                                                                   |
-| max_message_size             | int    | 134217728 | 1     | 536870912 | Size in bytes                                                     |
-| log_exchange_level           | string | error     | -     | -         | debug, info, warning, error, critical                             |
+| Argument | Type | Default | Min | Max | Unit | Affect | Note |
+|---|---|---|---|---|---|---|---|
+| heartbeat | int | 120 | 0 | - |  | Only effects new connections |  |
+| connection_max | int | -1 | 1 | - |  | RabbitMQ restart required | -1 in the provider corresponds to INFINITY in the RabbitMQ config |
+| channel_max | int | 128 | 0 | - |  | Only effects new connections |  |
+| consumer_timeout | int | 900000 | 10000 | 86400000 | milliseconds | Only effects new channels | -1 in the provider corresponds to false (disable) in the RabbitMQ config |
+| vm_memory_high_watermark | float | 0.81 | 0.4 | 0.9 |  | Applied immediately |  |
+| queue_index_embed_msgs_below | int | 4096 | 1 | 10485760 | bytes | Applied immediately for new queues, requires restart for existing queues |  |
+| max_message_size | int | 134217728 | 1 | 536870912 | bytes | Only effects new channels |  |
+| log_exchange_level | string | error | - | - |  | RabbitMQ restart required | debug, info, warning, error, critical |
 
 ## Dependency
 

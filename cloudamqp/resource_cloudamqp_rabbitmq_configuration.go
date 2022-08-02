@@ -75,8 +75,11 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 				Description: "A consumer that has recevied a message and does not acknowledge that message within the timeout in milliseconds",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
-					if v < 10000 || v > 25000000 {
-						errs = append(errs, fmt.Errorf("%q must be between 10000 and 25000000 inclusive, got: %d", key, v))
+					if v == -1 {
+						return
+					}
+					if v < 10000 || v > 86400000 {
+						errs = append(errs, fmt.Errorf("%q must be -1 (unlimited) or between 10000 and 86400000 inclusive, got: %d", key, v))
 					}
 					return
 				},
@@ -155,6 +158,10 @@ func resourceRabbitMqConfigurationRead(d *schema.ResourceData, meta interface{})
 				if v == "infinity" || v == nil {
 					v = -1
 				}
+			} else if key == "consumer_timeout" {
+				if v == "false" {
+					v = -1
+				}
 			} else if key == "queue_index_embed_msgs_below" {
 				if v == nil {
 					v = 4096
@@ -182,12 +189,15 @@ func resourceRabbitMqConfigurationUpdate(d *schema.ResourceData, meta interface{
 			if v == -1 {
 				v = "infinity"
 			}
+		} else if k == "consumer_timeout" {
+			if v == -1 {
+				v = "false"
+			}
 		} else if k == "log_exchange_level" {
 			k = "log.exchange.level"
 		}
 		params["rabbit."+k] = v
 	}
-
 	err := api.UpdateRabbitMqConfiguration(d.Get("instance_id").(int), params)
 	if err != nil {
 		return err
