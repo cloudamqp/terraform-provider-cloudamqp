@@ -1,4 +1,4 @@
-## 1.19.x (Unreleased)
+## 1.19.1 (Aug 04, 2022)
 
 IMPROVEMENTS:
 
