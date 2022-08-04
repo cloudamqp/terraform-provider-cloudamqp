@@ -2,14 +2,15 @@
 
 IMPROVEMENTS:
 
-* Add support to disable consumer_timeout
+* Added support to disable consumer_timeout for RabbitMQ configuration.
+* Excluded nodes argument when using shared instance plan.
 
 ## 1.19.0 (Jul 01, 2022)
 
 NOTE:
 
-* Update the API wrapper (go-api) dependecy with newer version (1.9.0)
-* Update goutils dependecy with newer version (1.1.1)
+* Updated the API wrapper (go-api) dependecy with newer version (1.9.0)
+* Updated goutils dependecy with newer version (1.1.1)
 
 FEATURES:
 
