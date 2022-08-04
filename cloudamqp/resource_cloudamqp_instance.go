@@ -152,6 +152,8 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 			if is2020Plan(plan) {
 				nodes := numberOfNodes(plan)
 				params[k] = nodes
+			} else if isSharedPlan(plan) {
+				delete(params, k)
 			}
 		}
 
@@ -194,6 +196,8 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 				if is2020Plan(plan) {
 					nodes := numberOfNodes(plan)
 					err = d.Set(k, nodes)
+				} else if isSharedPlan(plan) {
+					continue
 				} else {
 					err = d.Set(k, v)
 				}
@@ -245,6 +249,8 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 			if is2020Plan(plan) {
 				nodes := numberOfNodes(plan)
 				params[k] = nodes
+			} else if isSharedPlan(plan) {
+				delete(params, k)
 			}
 		}
 	}
@@ -312,6 +318,16 @@ func validatePlanName() schema.SchemaValidateFunc {
 		"lion-1", "lion-3", "lion-5",
 		"rhino-1",
 	}, true)
+}
+
+func isSharedPlan(plan string) bool {
+	switch plan {
+	case
+		"lemur",
+		"tiger":
+		return true
+	}
+	return false
 }
 
 func is2020Plan(plan string) bool {
