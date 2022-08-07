@@ -136,9 +136,35 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 }
 
 func resourceRabbitMqConfigurationCreate(d *schema.ResourceData, meta interface{}) error {
+
+	api := meta.(*api.API)
+	keys := rabbitMqConfigurationWriteAttributeKeys()
+	params := make(map[string]interface{})
+	for _, k := range keys {
+		v := d.Get(k)
+		if v == nil || v == 0 || v == 0.0 || v == "" {
+			continue
+		} else if k == "connection_max" {
+			if v == -1 {
+				v = "infinity"
+			}
+		} else if k == "consumer_timeout" {
+			if v == -1 {
+				v = "false"
+			}
+		} else if k == "log_exchange_level" {
+			k = "log.exchange.level"
+		}
+		params["rabbit."+k] = v
+	}
+	log.Printf("[DEBUG] cloudamqp::resource::rabbitmq_config::create params: %v", params)
+	err := api.UpdateRabbitMqConfiguration(d.Get("instance_id").(int), params)
+	if err != nil {
+		return err
+	}
 	id := strconv.Itoa(d.Get("instance_id").(int))
 	d.SetId(id)
-	return resourceRabbitMqConfigurationUpdate(d, meta)
+	return resourceRabbitMqConfigurationRead(d, meta)
 }
 
 func resourceRabbitMqConfigurationRead(d *schema.ResourceData, meta interface{}) error {
@@ -186,7 +212,8 @@ func resourceRabbitMqConfigurationUpdate(d *schema.ResourceData, meta interface{
 	for _, k := range keys {
 		v := d.Get(k)
 		// How to handle channel_max, where 0 means "no limit". Needs to be able to update too.
-		if v == nil || v == 0 || v == 0.0 || v == "" {
+		// 	if v == nil  || v == 0 || v == 0.0 || v == ""
+		if v == nil {
 			continue
 		} else if k == "connection_max" {
 			if v == -1 {
