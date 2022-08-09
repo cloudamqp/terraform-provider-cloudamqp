@@ -136,7 +136,6 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 }
 
 func resourceRabbitMqConfigurationCreate(d *schema.ResourceData, meta interface{}) error {
-
 	api := meta.(*api.API)
 	keys := rabbitMqConfigurationWriteAttributeKeys()
 	params := make(map[string]interface{})
@@ -157,7 +156,6 @@ func resourceRabbitMqConfigurationCreate(d *schema.ResourceData, meta interface{
 		}
 		params["rabbit."+k] = v
 	}
-	log.Printf("[DEBUG] cloudamqp::resource::rabbitmq_config::create params: %v", params)
 	err := api.UpdateRabbitMqConfiguration(d.Get("instance_id").(int), params)
 	if err != nil {
 		return err
@@ -211,8 +209,6 @@ func resourceRabbitMqConfigurationUpdate(d *schema.ResourceData, meta interface{
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		v := d.Get(k)
-		// How to handle channel_max, where 0 means "no limit". Needs to be able to update too.
-		// 	if v == nil  || v == 0 || v == 0.0 || v == ""
 		if v == nil {
 			continue
 		} else if k == "connection_max" {
@@ -228,7 +224,6 @@ func resourceRabbitMqConfigurationUpdate(d *schema.ResourceData, meta interface{
 		}
 		params["rabbit."+k] = v
 	}
-	log.Printf("[DEBUG] cloudamqp::resource::rabbitmq_config::update params: %v", params)
 	err := api.UpdateRabbitMqConfiguration(d.Get("instance_id").(int), params)
 	if err != nil {
 		return err
