@@ -75,7 +75,7 @@ resource "cloudamqp_node_actions" "node_action" {
 <details>
   <summary>
     <b>
-      <i>Only change log level for exchange. All other values will be set to default, see table below.</i>
+      <i>Only change log level for exchange. All other values will be read from the configuration.</i>
     </b>
   </summary>
 
@@ -93,14 +93,14 @@ resource "cloudamqp_rabbitmq_configuration" "rabbit_config" {
 The following arguments are supported:
 
 * `instance_id`                   - (Required) The CloudAMQP instance ID.
-* `heartbeat`                     - (Optional) Set the server AMQP 0-9-1 heartbeat timeout in seconds.
-* `connection_max`                - (Optional) Set the maximum permissible number of connection.
-* `channel_max`                   - (Optional) Set the maximum permissible number of channels per connection.
-* `consumer_timeout`              - (Optional) A consumer that has recevied a message and does not acknowledge that message within the timeout in milliseconds
-* `vm_memory_high_watermark`      - (Optional) When the server will enter memory based flow-control as relative to the maximum available memory.
-* `queue_index_embed_msgs_below`  - (Optional) Size in bytes below which to embed messages in the queue index.
-* `max_message_size`              - (Optional) The largest allowed message payload size in bytes.
-* `log_exchange_level`            - (Optional) Log level for the logger used for log integrations and the CloudAMQP Console log view.
+* `heartbeat`                     - (Computed/Optional) Set the server AMQP 0-9-1 heartbeat timeout in seconds.
+* `connection_max`                - (Computed/Optional) Set the maximum permissible number of connection.
+* `channel_max`                   - (Computed/Optional) Set the maximum permissible number of channels per connection.
+* `consumer_timeout`              - (Computed/Optional) A consumer that has recevied a message and does not acknowledge that message within the timeout in milliseconds
+* `vm_memory_high_watermark`      - (Computed/Optional) When the server will enter memory based flow-control as relative to the maximum available memory.
+* `queue_index_embed_msgs_below`  - (Computed/Optional) Size in bytes below which to embed messages in the queue index.
+* `max_message_size`              - (Computed/Optional) The largest allowed message payload size in bytes.
+* `log_exchange_level`            - (Computed/Optional) Log level for the logger used for log integrations and the CloudAMQP Console log view.
 
   ***Note: Requires a restart of RabbitMQ to be applied.***
 
