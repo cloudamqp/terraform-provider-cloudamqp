@@ -1,3 +1,10 @@
+## 1.x.x (Unreleased)
+
+IMPROVEMENTS:
+
+* Updated workflow for updating RabbitMQ configuration 
+([#166](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/166))
+
 ## 1.19.1 (Aug 04, 2022)
 
 IMPROVEMENTS:
