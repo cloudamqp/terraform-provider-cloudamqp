@@ -75,7 +75,7 @@ resource "cloudamqp_node_actions" "node_action" {
 <details>
   <summary>
     <b>
-      <i>Only change log level for exchange. All other values will be read from the configuration.</i>
+      <i>Only change log level for exchange. All other values will be read from the RabbitMQ configuration.</i>
     </b>
   </summary>
 
