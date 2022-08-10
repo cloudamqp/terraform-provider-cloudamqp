@@ -28,12 +28,12 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 			},
 			"heartbeat": {
 				Type:        schema.TypeInt,
+				Computed:    true,
 				Optional:    true,
-				Default:     120,
 				Description: "Set the server AMQP 0-9-1 heartbeat timeout in seconds.",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
-					if v < 0 {
+					if v < 1 {
 						errs = append(errs, fmt.Errorf("%q must be greater than 0, got: %d", key, v))
 					}
 					return
@@ -41,15 +41,15 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 			},
 			"connection_max": {
 				Type:        schema.TypeInt,
+				Computed:    true,
 				Optional:    true,
-				Default:     -1,
 				Description: "Set the maximum permissible number of connection, -1 means infinity.",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
 					if v == -1 {
 						return
 					}
-					if v < 0 {
+					if v < 1 {
 						errs = append(errs, fmt.Errorf("%q must be -1 (infinity) or greater than 0, got: %d", key, v))
 					}
 					return
@@ -57,8 +57,8 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 			},
 			"channel_max": {
 				Type:        schema.TypeInt,
+				Computed:    true,
 				Optional:    true,
-				Default:     0,
 				Description: "Set the maximum permissible number of channels per connection. 0 means unlimited",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
@@ -70,8 +70,8 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 			},
 			"consumer_timeout": {
 				Type:        schema.TypeInt,
+				Computed:    true,
 				Optional:    true,
-				Default:     7200000,
 				Description: "A consumer that has recevied a message and does not acknowledge that message within the timeout in milliseconds",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
@@ -86,8 +86,8 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 			},
 			"vm_memory_high_watermark": {
 				Type:        schema.TypeFloat,
+				Computed:    true,
 				Optional:    true,
-				Default:     0.81,
 				Description: "When the server will enter memory based flow-control as relative to the maximum available memory.",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(float64)
@@ -99,8 +99,8 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 			},
 			"queue_index_embed_msgs_below": {
 				Type:        schema.TypeInt,
+				Computed:    true,
 				Optional:    true,
-				Default:     4096,
 				Description: "Size in bytes below which to embed messages in the queue index.",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
@@ -112,8 +112,8 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 			},
 			"max_message_size": {
 				Type:        schema.TypeInt,
+				Computed:    true,
 				Optional:    true,
-				Default:     134217728,
 				Description: "The largest allowed message payload size in bytes.",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
@@ -125,8 +125,8 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 			},
 			"log_exchange_level": {
 				Type:     schema.TypeString,
+				Computed: true,
 				Optional: true,
-				Default:  "error",
 				Description: "Log level for the logger used for log integrations and the CloudAMQP Console log view. " +
 					"Does not affect the file logger. Requires a RabbitMQ restart to be applied.",
 				ValidateFunc: validateLogLevel(),
@@ -136,9 +136,33 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 }
 
 func resourceRabbitMqConfigurationCreate(d *schema.ResourceData, meta interface{}) error {
+	api := meta.(*api.API)
+	keys := rabbitMqConfigurationWriteAttributeKeys()
+	params := make(map[string]interface{})
+	for _, k := range keys {
+		v := d.Get(k)
+		if v == nil || v == 0 || v == 0.0 || v == "" {
+			continue
+		} else if k == "connection_max" {
+			if v == -1 {
+				v = "infinity"
+			}
+		} else if k == "consumer_timeout" {
+			if v == -1 {
+				v = "false"
+			}
+		} else if k == "log_exchange_level" {
+			k = "log.exchange.level"
+		}
+		params["rabbit."+k] = v
+	}
+	err := api.UpdateRabbitMqConfiguration(d.Get("instance_id").(int), params)
+	if err != nil {
+		return err
+	}
 	id := strconv.Itoa(d.Get("instance_id").(int))
 	d.SetId(id)
-	return resourceRabbitMqConfigurationUpdate(d, meta)
+	return resourceRabbitMqConfigurationRead(d, meta)
 }
 
 func resourceRabbitMqConfigurationRead(d *schema.ResourceData, meta interface{}) error {
@@ -185,7 +209,9 @@ func resourceRabbitMqConfigurationUpdate(d *schema.ResourceData, meta interface{
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		v := d.Get(k)
-		if k == "connection_max" {
+		if v == nil {
+			continue
+		} else if k == "connection_max" {
 			if v == -1 {
 				v = "infinity"
 			}
