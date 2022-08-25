@@ -3,6 +3,7 @@ package cloudamqp
 import (
 	"fmt"
 	"log"
+	"net"
 
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -30,9 +31,17 @@ func resourceVpc() *schema.Resource {
 				Description: "The hosted region for the standalone VPC instance",
 			},
 			"subnet": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
+				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+					v := val.(string)
+					_, _, err := net.ParseCIDR(v)
+					if err != nil {
+						errs = append(errs, fmt.Errorf("Subnet: %v", err))
+					}
+					return
+				},
 				Description: "The VPC subnet",
 			},
 			"tags": {

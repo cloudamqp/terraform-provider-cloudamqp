@@ -28,6 +28,13 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
     ports       = []
     services    = [AMQP","AMQPS", "HTTPS"]
   }
+
+  // Single IP address
+  rules {
+    ip          = "192.168.1.10/32"
+    ports       = []
+    services    = [AMQP","AMQPS", "HTTPS"]
+  }
 }
 ```
 
@@ -42,7 +49,7 @@ ___
 
 The `rules` block consists of:
 
-* `ip`          - (Required) Source ip and netmask for the rule. (e.g. 10.56.72.0/24)
+* `ip`          - (Required) CIDR address: IP address with CIDR notation (e.g. 10.56.72.0/24)
 * `ports`       - (Optional) Custom ports to be opened
 * `services`    - (Required) Pre-defined service ports, see table below
 * `description` - (Optional) Description name of the rule. e.g. Default.
