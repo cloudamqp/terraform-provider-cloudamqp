@@ -14,8 +14,8 @@ type PluginParams struct {
 
 func (api *API) waitUntilPluginChanged(instanceID int, pluginName string, enabled bool) (map[string]interface{}, error) {
 	log.Printf("[DEBUG] go-api::plugin::waitUntilPluginChanged instance id: %v, name: %v", instanceID, pluginName)
-	time.Sleep(10 * time.Second)
 	for {
+		time.Sleep(10 * time.Second)
 		response, err := api.ReadPlugin(instanceID, pluginName)
 		log.Printf("[DEBUG] go-api::plugin::waitUntilPluginChanged response: %v", response)
 		if err != nil {
@@ -24,8 +24,6 @@ func (api *API) waitUntilPluginChanged(instanceID int, pluginName string, enable
 		if response["enabled"] == enabled {
 			return response, nil
 		}
-
-		time.Sleep(10 * time.Second)
 	}
 }
 
@@ -33,7 +31,7 @@ func (api *API) EnablePlugin(instanceID int, pluginName string) (map[string]inte
 	failed := make(map[string]interface{})
 	params := &PluginParams{Name: pluginName}
 	log.Printf("[DEBUG] go-api::plugin::enable instance id: %v, params: %v", instanceID, pluginName)
-	path := fmt.Sprintf("/api/instances/%d/plugins", instanceID)
+	path := fmt.Sprintf("/api/instances/%d/plugins?async=true", instanceID)
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(nil, &failed)
 
 	if err != nil {
@@ -74,7 +72,6 @@ func (api *API) readPluginsWithRetry(instanceID, attempts, sleep int) ([]map[str
 	log.Printf("[DEBUG] go-api::plugin::readWithRetry instance id: %v", instanceID)
 	path := fmt.Sprintf("/api/instances/%d/plugins", instanceID)
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
-	log.Printf("[DEBUG] go-api::plugin::readWithRetry data: %v", data)
 
 	if err != nil {
 		return nil, err
@@ -102,7 +99,7 @@ func (api *API) UpdatePlugin(instanceID int, params map[string]interface{}) (map
 	failed := make(map[string]interface{})
 	pluginParams := &PluginParams{Name: params["name"].(string), Enabled: params["enabled"].(bool)}
 	log.Printf("[DEBUG] go-api::plugin::update instance ID: %v, params: %v", instanceID, pluginParams)
-	path := fmt.Sprintf("/api/instances/%d/plugins", instanceID)
+	path := fmt.Sprintf("/api/instances/%d/plugins?async=true", instanceID)
 	response, err := api.sling.New().Put(path).BodyJSON(pluginParams).Receive(nil, &failed)
 
 	if err != nil {
@@ -118,7 +115,7 @@ func (api *API) UpdatePlugin(instanceID int, params map[string]interface{}) (map
 func (api *API) DisablePlugin(instanceID int, pluginName string) (map[string]interface{}, error) {
 	failed := make(map[string]interface{})
 	log.Printf("[DEBUG] go-api::plugin::disable instance id: %v, name: %v", instanceID, pluginName)
-	path := fmt.Sprintf("/api/instances/%d/plugins/%s", instanceID, pluginName)
+	path := fmt.Sprintf("/api/instances/%d/plugins/%s?async=true", instanceID, pluginName)
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 
 	if err != nil {
@@ -133,8 +130,8 @@ func (api *API) DisablePlugin(instanceID int, pluginName string) (map[string]int
 
 func (api *API) DeletePlugin(instanceID int, pluginName string) error {
 	failed := make(map[string]interface{})
-	log.Print("[DEBUG] go-api::plugin::delete instance: %v, name: %v", instanceID, pluginName)
-	path := fmt.Sprintf("/api/instances/%d/plugins/%s", instanceID, pluginName)
+	log.Printf("[DEBUG] go-api::plugin::delete instance: %v, name: %v", instanceID, pluginName)
+	path := fmt.Sprintf("/api/instances/%d/plugins/%s?async=true", instanceID, pluginName)
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 
 	if err != nil {
@@ -144,5 +141,6 @@ func (api *API) DeletePlugin(instanceID int, pluginName string) error {
 		return fmt.Errorf("DeletePlugin failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
-	return nil
+	_, err = api.waitUntilPluginChanged(instanceID, pluginName, false)
+	return err
 }

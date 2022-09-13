@@ -28,7 +28,7 @@ func (api *API) EnablePluginCommunity(instanceID int, pluginName string) (map[st
 	failed := make(map[string]interface{})
 	params := &PluginParams{Name: pluginName}
 	log.Printf("[DEBUG] go-api::plugin_community::enable instance ID: %v, name: %v", instanceID, pluginName)
-	path := fmt.Sprintf("/api/instances/%d/plugins/community", instanceID)
+	path := fmt.Sprintf("/api/instances/%d/plugins/community?async=true", instanceID)
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(nil, &failed)
 
 	if err != nil {
@@ -71,7 +71,6 @@ func (api *API) readPluginsCommunityWithRetry(instanceID, attempts, sleep int) (
 	log.Printf("[DEBUG] go-api::plugin_community::readPluginsCommunityWithRetry instance id: %v", instanceID)
 	path := fmt.Sprintf("/api/instances/%d/plugins/community", instanceID)
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
-	log.Printf("[DEBUG] go-api::plugin_community::readPluginsCommunityWithRetry data: %v", data)
 
 	if err != nil {
 		return nil, err
@@ -99,7 +98,7 @@ func (api *API) UpdatePluginCommunity(instanceID int, params map[string]interfac
 	failed := make(map[string]interface{})
 	pluginParams := &PluginParams{Name: params["name"].(string), Enabled: params["enabled"].(bool)}
 	log.Printf("[DEBUG] go-api::plugin_community::update instance ID: %v, params: %v", instanceID, params)
-	path := fmt.Sprintf("/api/instances/%d/plugins/community", instanceID)
+	path := fmt.Sprintf("/api/instances/%d/plugins/community?async=true", instanceID)
 	response, err := api.sling.New().Put(path).BodyJSON(pluginParams).Receive(nil, &failed)
 
 	if err != nil {
@@ -115,7 +114,7 @@ func (api *API) UpdatePluginCommunity(instanceID int, params map[string]interfac
 func (api *API) DisablePluginCommunity(instanceID int, pluginName string) (map[string]interface{}, error) {
 	failed := make(map[string]interface{})
 	log.Printf("[DEBUG] go-api::plugin_community::disable instance ID: %v, name: %v", instanceID, pluginName)
-	path := fmt.Sprintf("/api/instances/%d/plugins/community/%s", instanceID, pluginName)
+	path := fmt.Sprintf("/api/instances/%d/plugins/community/%s?async=true", instanceID, pluginName)
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 
 	if err != nil {
