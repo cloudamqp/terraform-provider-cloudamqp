@@ -11,9 +11,9 @@ This resource allows you to enable or disable Rabbit MQ plugins.
 
 Only available for dedicated subscription plans.
 
-⚠️  From our go API wrapper [v1.4.0](https://github.com/84codes/go-api/releases/tag/v1.4.0) there is support for multiple retries when requesting information about plugins. This was introduced to avoid `ReadPlugin error 400: Timeout talking to backend`.
+~> From our go API wrapper [v1.4.0](https://github.com/84codes/go-api/releases/tag/v1.4.0) there is support for multiple retries when requesting information about plugins. This was introduced to avoid `ReadPlugin error 400: Timeout talking to backend`.
 
-**Enable multiple plugins:** Rabbit MQ can only change one plugin at a time. It will fail if multiple plugins resources are used, unless by creating dependencies with `depend_on` between the resources. Once one plugin has been enabled, the other will continue. See example below.
+~> From our go API wrapper [v1.9.1](https://github.com/84codes/go-api/releases/tag/v1.9.1) there is support for asynchronous request for plugin/community actions. Solve issues reported when enable multiple plugins.
 
 ## Example Usage
 
@@ -25,7 +25,14 @@ resource "cloudamqp_plugin" "rabbitmq_top" {
 }
 ```
 
-**Enable multiple plugins**
+<details>
+  <summary>
+    <b>
+      <i>Enable multiple plugins v1.19.1 and older versions
+    </b>
+  </summary>
+
+Rabbit MQ can only change one plugin at a time. It will fail if multiple plugins resources are used, unless by creating dependencies with `depend_on` between the resources. Once one plugin has been enabled, the other will continue. See example below.
 
 ```hcl
 resource "cloudamqp_plugin" "rabbitmq_top" {
@@ -44,6 +51,31 @@ resource "cloudamqp_plugin" "rabbitmq_amqp1_0" {
   ]
 }
 ```
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>Enable multiple plugins from v1.19.2
+    </b>
+  </summary>
+
+CloudAMQP Terraform provider [v1.19.2](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.19.2) support the new go API wrapper [v1.9.1](https://github.com/84codes/go-api/releases/tag/v1.9.1). Updates made to our API backend enables asynchronous request for plugin actions.
+
+```hcl
+resource "cloudamqp_plugin" "rabbitmq_top" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "rabbitmq_top"
+  enabled = true
+}
+
+resource "cloudamqp_plugin" "rabbitmq_amqp1_0" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "rabbitmq_amqp1_0"
+  enabled = true
+}
+```
+</details>
 
 ## Argument Reference
 
