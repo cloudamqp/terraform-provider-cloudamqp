@@ -16,12 +16,20 @@ func (api *API) ResizeDisk(instanceID int, params map[string]interface{}) (map[s
 	if err != nil {
 		return nil, err
 	}
-	if response.StatusCode != 200 {
-		return nil, fmt.Errorf("ResizeDisk failed, status: %v, message: %s", response.StatusCode, failed)
-	}
 
-	if err = api.waitUntilAllNodesReady(id); err != nil {
-		return nil, err
+	switch {
+	case response.StatusCode == 200:
+		if err = api.waitUntilAllNodesReady(id); err != nil {
+			return nil, err
+		}
+		return data, nil
+	case response.StatusCode == 400:
+		switch {
+		case failed["error_code"] == nil:
+			break
+		case failed["error_code"].(float64) == 40002:
+			return nil, fmt.Errorf("Resize disk failed: %s", failed["error"].(string))
+		}
 	}
-	return data, nil
+	return nil, fmt.Errorf("Resize disk failed, status: %v, message: %s", response.StatusCode, failed)
 }
