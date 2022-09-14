@@ -1,13 +1,13 @@
-## 1.x.x (Unreleased)
+## 1.19.2 (Sep 14, 2022)
 
 NOTE:
 
-* Updated the API wrapper (go-api) dependecy with newer version (1.9.1). Now support asynchronous request for plugin/community actions. Solve issues when enable plugins.
+* Updated the API wrapper (go-api) dependecy with newer version (1.9.1). Now support asynchronous request for plugin/community actions. Solve issues when enable multiple plugins.
 
 IMPROVEMENTS:
 
 * Added CIDR address validation ([#168](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/168))
-* Updated workflow for updating RabbitMQ configuration 
+* Updated workflow for updating RabbitMQ configuration
 ([#166](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/166))
 
 ## 1.19.1 (Aug 04, 2022)
