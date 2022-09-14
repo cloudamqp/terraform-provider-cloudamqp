@@ -1,7 +1,12 @@
 ## 1.x.x (Unreleased)
 
+NOTE:
+
+* Updated the API wrapper (go-api) dependecy with newer version (1.9.1). Now support asynchronous request for plugin/community actions. Solve issues when enable plugins.
+
 IMPROVEMENTS:
 
+* Added CIDR address validation ([#168](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/168))
 * Updated workflow for updating RabbitMQ configuration 
 ([#166](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/166))
 
