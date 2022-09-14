@@ -3,6 +3,7 @@ package cloudamqp
 import (
 	"fmt"
 	"log"
+	"net"
 	"strconv"
 
 	"github.com/84codes/go-api/api"
@@ -63,9 +64,17 @@ func resourceSecurityFirewall() *schema.Resource {
 							Description: "Custom ports between 0 - 65554",
 						},
 						"ip": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: "IP address together with netmask to allow acces",
+							Type:     schema.TypeString,
+							Required: true,
+							ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+								v := val.(string)
+								_, _, err := net.ParseCIDR(v)
+								if err != nil {
+									errs = append(errs, fmt.Errorf("%v", err))
+								}
+								return
+							},
+							Description: "CIDR address: IP address with CIDR notation (e.g. 10.56.72.0/24)",
 						},
 						"description": {
 							Type:        schema.TypeString,
