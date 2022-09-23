@@ -113,7 +113,9 @@ func resourcePluginDelete(d *schema.ResourceData, meta interface{}) error {
 func validatePluginSchemaAttribute(key string) bool {
 	switch key {
 	case "name",
-		"enabled":
+		"enabled",
+		"description",
+		"version":
 		return true
 	}
 	return false
