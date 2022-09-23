@@ -51,12 +51,25 @@ func resourcePluginCommunity() *schema.Resource {
 
 func resourcePluginCommunityCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	_, err := api.EnablePluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
+	data, err := api.ReadPluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
+	if err != nil {
+		return err
+	}
+
+	_, err = api.EnablePluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
 	if err != nil {
 		return err
 	}
 	d.SetId(d.Get("name").(string))
-	return resourcePluginCommunityRead(d, meta)
+
+	for k, v := range data {
+		if validateCommunityPluginSchemaAttribute(k) {
+			if err = d.Set(k, v); err != nil {
+				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+			}
+		}
+	}
+	return nil
 }
 
 func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error {
@@ -80,6 +93,7 @@ func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error
 	for k, v := range data {
 		if validateCommunityPluginSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
+
 				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
