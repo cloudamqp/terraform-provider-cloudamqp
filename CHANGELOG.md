@@ -7,7 +7,8 @@ BUG FIXES:
 
 NOTE:
 
-* Updated the API wrapper (go-api) dependecy with newer version (1.9.1). Now support asynchronous request for plugin/community actions. Solve issues when enable multiple plugins.
+* Updated the API wrapper (go-api) dependecy with newer version (1.9.1).
+* Now support asynchronous request for plugin/community actions. Solve issues when enable multiple plugins.
 
 IMPROVEMENTS:
 
