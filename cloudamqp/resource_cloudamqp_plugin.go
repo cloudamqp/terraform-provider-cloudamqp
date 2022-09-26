@@ -35,6 +35,16 @@ func resourcePlugin() *schema.Resource {
 				Required:    true,
 				Description: "If the plugin is enabled",
 			},
+			"description": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The description of the plugin",
+			},
+			"version": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The version of the plugin",
+			},
 		},
 	}
 }
@@ -103,7 +113,9 @@ func resourcePluginDelete(d *schema.ResourceData, meta interface{}) error {
 func validatePluginSchemaAttribute(key string) bool {
 	switch key {
 	case "name",
-		"enabled":
+		"enabled",
+		"description",
+		"version":
 		return true
 	}
 	return false
