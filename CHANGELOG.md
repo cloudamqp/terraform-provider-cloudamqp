@@ -1,3 +1,8 @@
+## 1.x.x (Unreleased)
+
+BUG FIXES:
+* Add additional computed fields to plugins resources ([#170](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/170))
+
 ## 1.19.2 (Sep 14, 2022)
 
 NOTE:
@@ -26,12 +31,10 @@ NOTE:
 
 FEATURES:
 
-* Added support for resize disk ([#162]
-(https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/162))
+* Added support for resize disk ([#162](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/162))
 
 IMPROVEMENTS:
-* Updated nodes data source with original and additional disk sizes ([#162]
-(https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/162))
+* Updated nodes data source with original and additional disk sizes ([#162](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/162))
 
 ## 1.18.0 (Jun 08, 2022)
 
@@ -42,10 +45,8 @@ NOTE:
 
 FEATURES:
 
-* Added support for updating RabbitMQ config ([#150]
-(https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/150))
-* Added support for invoking node actions ([#150]
-(https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/150))
+* Added support for updating RabbitMQ config ([#150](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/150))
+* Added support for invoking node actions ([#150](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/150))
 
 IMPROVEMENTS:
 
