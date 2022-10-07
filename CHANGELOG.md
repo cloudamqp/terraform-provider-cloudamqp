@@ -1,6 +1,12 @@
-## 1.x.x (Unreleased)
+## 1.19.3 (Oct 07, 2022)
+
+NOTES:
+
+* Updated the API wrapper (go-api) dependecy with newer version (1.9.2)
+* Added support for retry VPC peering and wait for status
 
 BUG FIXES:
+
 * Add additional computed fields to plugins resources ([#170](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/170))
 
 ## 1.19.2 (Sep 14, 2022)
