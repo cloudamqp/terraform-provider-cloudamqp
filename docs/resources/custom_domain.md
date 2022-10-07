@@ -11,7 +11,7 @@ This resource allows you to configure and manage your custom domain for the Clou
 
 Adding a custom domain to your instance will generate a TLS certificate from [Let's Encrypt], for the given hostname, and install it on all servers in your cluster. The certificate will be automatically renewed going forward.
 
-⚠️ Please note that when creating, changing or deleting the custom domain, the listeners on your servers will be restarted in order to apply the changes. This will close your current connections.
+~> **WARNING:** Please note that when creating, changing or deleting the custom domain, the listeners on your servers will be restarted in order to apply the changes. This will close your current connections.
 
 Your custom domain name needs to point to your CloudAMQP hostname, preferably using a CNAME DNS record.
 

@@ -39,6 +39,7 @@ resource "cloudamqp_instance" "instance" {
   tags   = []
   rmq_version = "3.9.13"
   vpc_id = cloudamq_vpc.vpc.id
+  keep_associated_vpc = true
 }
 
 # Additional VPC information

@@ -26,7 +26,6 @@ resource "cloudamqp_instance" "instance" {
   name          = "terraform-cloudamqp-instance"
   plan          = "bunny-1"
   region        = "amazon-web-services::us-west-1"
-  nodes         = 1
   tags          = [ "terraform" ]
   rmq_version   = "3.8.3"
 }
