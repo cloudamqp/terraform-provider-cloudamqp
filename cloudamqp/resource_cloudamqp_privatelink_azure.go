@@ -114,7 +114,7 @@ func resourcePrivateLinkAzureUpdate(d *schema.ResourceData, meta interface{}) er
 		params     = make(map[string][]interface{})
 	)
 
-	params["allowed_principals"] = d.Get("allowed_principals").([]interface{})
+	params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
 	if err := api.UpdatePrivatelink(instanceID, params); err != nil {
 		return err
 	}
