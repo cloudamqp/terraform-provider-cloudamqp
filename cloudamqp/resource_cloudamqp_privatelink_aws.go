@@ -40,7 +40,7 @@ func resourcePrivateLinkAws() *schema.Resource {
 				},
 				Computed:    true,
 				Optional:    true,
-				Description: "...",
+				Description: "Allowed principals that have access to connect to this endpoint service",
 			},
 			"active_zones": {
 				Type: schema.TypeList,
@@ -48,7 +48,19 @@ func resourcePrivateLinkAws() *schema.Resource {
 					Type: schema.TypeString,
 				},
 				Computed:    true,
-				Description: "...",
+				Description: "Covering availability zones used when creating an Endpoint from other VPC",
+			},
+			"sleep": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     60,
+				Description: "Configurable sleep in seconds between retries when enable PrivateLink",
+			},
+			"timeout": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     3600,
+				Description: "Configurable timeout in seconds when enable PrivateLink",
 			},
 		},
 	}
@@ -58,12 +70,23 @@ func resourcePrivateLinkAwsCreate(d *schema.ResourceData, meta interface{}) erro
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+		params     = make(map[string][]interface{})
 	)
-	err := api.EnablePrivatelink(instanceID)
-	if err != nil {
+
+	if err := api.EnablePrivatelink(instanceID, sleep, timeout); err != nil {
 		return err
 	}
+
 	d.SetId(fmt.Sprintf("%d", instanceID))
+	params["allowed_principals"] = d.Get("allowed_principals").([]interface{})
+	if len(params) > 0 {
+		if err := api.UpdatePrivatelink(instanceID, params); err != nil {
+			return err
+		}
+	}
+
 	return resourcePrivateLinkAwsRead(d, meta)
 }
 
@@ -71,11 +94,14 @@ func resourcePrivateLinkAwsRead(d *schema.ResourceData, meta interface{}) error 
 	var (
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id()) // Uses d.Id() to allow import
+		data          map[string]interface{}
+		err           error
 	)
-	data, err := api.ReadPrivatelink(instanceID)
-	if err != nil {
+
+	if data, err = api.ReadPrivatelink(instanceID); err != nil {
 		return err
 	}
+
 	for k, v := range data {
 		if validatePrivateLinkAwsSchemaAttribute(k) {
 			d.Set(k, v)
@@ -88,10 +114,11 @@ func resourcePrivateLinkAwsUpdate(d *schema.ResourceData, meta interface{}) erro
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
-		params     = d.Get("allowed_principals").(map[string]interface{})
+		params     = make(map[string][]interface{})
 	)
-	err := api.UpdatePrivatelink(instanceID, params)
-	if err != nil {
+
+	params["allowed_principals"] = d.Get("allowed_principals").([]interface{})
+	if err := api.UpdatePrivatelink(instanceID, params); err != nil {
 		return err
 	}
 	return nil
@@ -102,8 +129,8 @@ func resourcePrivateLinkAwsDelete(d *schema.ResourceData, meta interface{}) erro
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 	)
-	err := api.DisablePrivatelink(instanceID)
-	if err != nil {
+
+	if err := api.DisablePrivatelink(instanceID); err != nil {
 		return err
 	}
 	return nil
