@@ -91,10 +91,12 @@ func resourcePrivateLinkAzureRead(d *schema.ResourceData, meta interface{}) erro
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id()) // Uses d.Id() to allow import
 	)
+
 	data, err := api.ReadPrivatelink(instanceID)
 	if err != nil {
 		return err
 	}
+
 	for k, v := range data {
 		if validatePrivateLinkAzureSchemaAttribute(k) {
 			if k == "alias" {
@@ -126,6 +128,7 @@ func resourcePrivateLinkAzureDelete(d *schema.ResourceData, meta interface{}) er
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 	)
+
 	if err := api.DisablePrivatelink(instanceID); err != nil {
 		return err
 	}
