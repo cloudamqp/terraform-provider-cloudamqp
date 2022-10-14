@@ -31,12 +31,12 @@ func resourcePrivateLinkAzure() *schema.Resource {
 			"service_name": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "Service name of the PrivateLink, needed when creating the endpoint",
+				Description: "Service name (alias) of the PrivateLink, needed when creating the endpoint",
 			},
-			"alias": {
+			"server_name": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "...",
+				Description: "Name of the server having the PrivateLink enabled",
 			},
 			"approved_subscriptions": {
 				Type: schema.TypeList,
@@ -44,7 +44,19 @@ func resourcePrivateLinkAzure() *schema.Resource {
 					Type: schema.TypeString,
 				},
 				Optional:    true,
-				Description: "...",
+				Description: "Approved subscriptions that have access to connect to this endpoint service",
+			},
+			"sleep": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     60,
+				Description: "Configurable sleep in seconds between retries when enable PrivateLink",
+			},
+			"timeout": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     3600,
+				Description: "Configurable timeout in seconds when enable PrivateLink",
 			},
 		},
 	}
@@ -54,12 +66,23 @@ func resourcePrivateLinkAzureCreate(d *schema.ResourceData, meta interface{}) er
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+		params     = make(map[string][]interface{})
 	)
-	err := api.EnablePrivatelink(instanceID)
-	if err != nil {
+
+	if err := api.EnablePrivatelink(instanceID, sleep, timeout); err != nil {
 		return err
 	}
+
 	d.SetId(fmt.Sprintf("%d", instanceID))
+	params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
+	if len(params) > 0 {
+		if err := api.UpdatePrivatelink(instanceID, params); err != nil {
+			return err
+		}
+	}
+
 	return resourcePrivateLinkAwsRead(d, meta)
 }
 
@@ -74,7 +97,11 @@ func resourcePrivateLinkAzureRead(d *schema.ResourceData, meta interface{}) erro
 	}
 	for k, v := range data {
 		if validatePrivateLinkAzureSchemaAttribute(k) {
-			d.Set(k, v)
+			if k == "alias" {
+				d.Set("service_name", v)
+			} else {
+				d.Set(k, v)
+			}
 		}
 	}
 	return nil
@@ -84,10 +111,11 @@ func resourcePrivateLinkAzureUpdate(d *schema.ResourceData, meta interface{}) er
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
-		params     = d.Get("allowed_principals").(map[string]interface{})
+		params     = make(map[string][]interface{})
 	)
-	err := api.UpdatePrivatelink(instanceID, params)
-	if err != nil {
+
+	params["allowed_principals"] = d.Get("allowed_principals").([]interface{})
+	if err := api.UpdatePrivatelink(instanceID, params); err != nil {
 		return err
 	}
 	return nil
@@ -98,8 +126,7 @@ func resourcePrivateLinkAzureDelete(d *schema.ResourceData, meta interface{}) er
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 	)
-	err := api.DisablePrivatelink(instanceID)
-	if err != nil {
+	if err := api.DisablePrivatelink(instanceID); err != nil {
 		return err
 	}
 	return nil
@@ -108,7 +135,7 @@ func resourcePrivateLinkAzureDelete(d *schema.ResourceData, meta interface{}) er
 func validatePrivateLinkAzureSchemaAttribute(key string) bool {
 	switch key {
 	case "status",
-		"service_name",
+		"server_name",
 		"alias",
 		"approved_subscriptions":
 		return true
