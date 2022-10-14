@@ -1,6 +1,10 @@
 package cloudamqp
 
 import (
+	"fmt"
+	"strconv"
+
+	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -44,4 +48,70 @@ func resourcePrivateLinkAzure() *schema.Resource {
 			},
 		},
 	}
+}
+
+func resourcePrivateLinkAzureCreate(d *schema.ResourceData, meta interface{}) error {
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+	)
+	err := api.EnablePrivatelink(instanceID)
+	if err != nil {
+		return err
+	}
+	d.SetId(fmt.Sprintf("%d", instanceID))
+	return resourcePrivateLinkAwsRead(d, meta)
+}
+
+func resourcePrivateLinkAzureRead(d *schema.ResourceData, meta interface{}) error {
+	var (
+		api           = meta.(*api.API)
+		instanceID, _ = strconv.Atoi(d.Id()) // Uses d.Id() to allow import
+	)
+	data, err := api.ReadPrivatelink(instanceID)
+	if err != nil {
+		return err
+	}
+	for k, v := range data {
+		if validatePrivateLinkAzureSchemaAttribute(k) {
+			d.Set(k, v)
+		}
+	}
+	return nil
+}
+
+func resourcePrivateLinkAzureUpdate(d *schema.ResourceData, meta interface{}) error {
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		params     = d.Get("allowed_principals").(map[string]interface{})
+	)
+	err := api.UpdatePrivatelink(instanceID, params)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func resourcePrivateLinkAzureDelete(d *schema.ResourceData, meta interface{}) error {
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+	)
+	err := api.DisablePrivatelink(instanceID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func validatePrivateLinkAzureSchemaAttribute(key string) bool {
+	switch key {
+	case "status",
+		"service_name",
+		"alias",
+		"approved_subscriptions":
+		return true
+	}
+	return false
 }
