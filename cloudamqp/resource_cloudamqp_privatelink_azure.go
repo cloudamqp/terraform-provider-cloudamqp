@@ -44,7 +44,7 @@ func resourcePrivateLinkAzure() *schema.Resource {
 					Type: schema.TypeString,
 				},
 				Optional:    true,
-				Description: "Approved subscriptions that have access to connect to this endpoint service",
+				Description: "Approved subscriptions to access the endpoint service",
 			},
 			"sleep": {
 				Type:        schema.TypeInt,
