@@ -75,14 +75,16 @@ func resourcePrivateLinkAwsCreate(d *schema.ResourceData, meta interface{}) erro
 		params     = make(map[string][]interface{})
 	)
 
-	if err := api.EnablePrivatelink(instanceID, sleep, timeout); err != nil {
+	err := api.EnablePrivatelink(instanceID, sleep, timeout)
+	if err != nil {
 		return err
 	}
 
 	d.SetId(fmt.Sprintf("%d", instanceID))
 	params["allowed_principals"] = d.Get("allowed_principals").([]interface{})
 	if len(params) > 0 {
-		if err := api.UpdatePrivatelink(instanceID, params); err != nil {
+		err := api.UpdatePrivatelink(instanceID, params)
+		if err != nil {
 			return err
 		}
 	}
@@ -94,11 +96,10 @@ func resourcePrivateLinkAwsRead(d *schema.ResourceData, meta interface{}) error 
 	var (
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id()) // Uses d.Id() to allow import
-		data          map[string]interface{}
-		err           error
 	)
 
-	if data, err = api.ReadPrivatelink(instanceID); err != nil {
+	data, err := api.ReadPrivatelink(instanceID)
+	if err != nil {
 		return err
 	}
 
@@ -118,7 +119,8 @@ func resourcePrivateLinkAwsUpdate(d *schema.ResourceData, meta interface{}) erro
 	)
 
 	params["allowed_principals"] = d.Get("allowed_principals").([]interface{})
-	if err := api.UpdatePrivatelink(instanceID, params); err != nil {
+	err := api.UpdatePrivatelink(instanceID, params)
+	if err != nil {
 		return err
 	}
 	return nil
@@ -130,7 +132,8 @@ func resourcePrivateLinkAwsDelete(d *schema.ResourceData, meta interface{}) erro
 		instanceID = d.Get("instance_id").(int)
 	)
 
-	if err := api.DisablePrivatelink(instanceID); err != nil {
+	err := api.DisablePrivatelink(instanceID)
+	if err != nil {
 		return err
 	}
 	return nil

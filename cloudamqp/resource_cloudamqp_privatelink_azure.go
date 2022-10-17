@@ -71,14 +71,16 @@ func resourcePrivateLinkAzureCreate(d *schema.ResourceData, meta interface{}) er
 		params     = make(map[string][]interface{})
 	)
 
-	if err := api.EnablePrivatelink(instanceID, sleep, timeout); err != nil {
+	err := api.EnablePrivatelink(instanceID, sleep, timeout)
+	if err != nil {
 		return err
 	}
 
 	d.SetId(fmt.Sprintf("%d", instanceID))
 	params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
 	if len(params) > 0 {
-		if err := api.UpdatePrivatelink(instanceID, params); err != nil {
+		err := api.UpdatePrivatelink(instanceID, params)
+		if err != nil {
 			return err
 		}
 	}
@@ -117,7 +119,8 @@ func resourcePrivateLinkAzureUpdate(d *schema.ResourceData, meta interface{}) er
 	)
 
 	params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
-	if err := api.UpdatePrivatelink(instanceID, params); err != nil {
+	err := api.UpdatePrivatelink(instanceID, params)
+	if err != nil {
 		return err
 	}
 	return nil
@@ -129,7 +132,8 @@ func resourcePrivateLinkAzureDelete(d *schema.ResourceData, meta interface{}) er
 		instanceID = d.Get("instance_id").(int)
 	)
 
-	if err := api.DisablePrivatelink(instanceID); err != nil {
+	err := api.DisablePrivatelink(instanceID)
+	if err != nil {
 		return err
 	}
 	return nil
