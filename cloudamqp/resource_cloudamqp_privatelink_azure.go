@@ -64,7 +64,7 @@ func resourcePrivateLinkAzure() *schema.Resource {
 		CustomizeDiff: customdiff.All(
 			customdiff.ValidateValue("approved_subscriptions", func(value, meta interface{}) error {
 				for _, v := range value.([]interface{}) {
-					re := regexp.MustCompile(`/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/`)
+					re := regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
 					if !re.MatchString(v.(string)) {
 						return fmt.Errorf("Invalid ARN : %v", v)
 					}
