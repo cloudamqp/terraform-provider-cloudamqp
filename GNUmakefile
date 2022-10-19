@@ -1,11 +1,34 @@
 TEST?=$$(go list ./... |grep -v 'vendor')
 GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
-WEBSITE_REPO=github.com/hashicorp/terraform-website
 PKG_NAME=cloudamqp
 PROVIDER_VERSION = 1.19.3
 
-
 default: build
+
+## Check if a 64 bit kernel is running
+UNAME_M := $(shell uname -m)
+
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+    GOOS += linux
+endif
+ifeq ($(UNAME_S),Darwin)
+    GOOS += darwin
+endif
+
+UNAME_P := $(shell uname -p)
+ifeq ($(UNAME_P),i386)
+	ifeq ($(UNAME_M),x86_64)
+		GOARCH += amd64
+	else
+		GOARCH += i386
+	endif
+else
+    ifeq ($(UNAME_P),AMD64)
+        GOARCH += amd64
+    endif
+endif
+PROVIDER_ARCH = $(GOOS)_$(GOARCH)
 
 tools:
 	GO111MODULE=on go install github.com/client9/misspell/cmd/misspell
@@ -14,25 +37,17 @@ tools:
 build: fmtcheck
 	go install -ldflags "-X 'main.version=$(PROVIDER_VERSION)'"
 
-local-clean:  ## Clean files
-  ## 0.12 version
-	## rm -f ~/.terraform.d/plugins/terraform-provider-cloudamqp*
-	## 0.13+ version
-	rm -rf ~/.terraform.d/plugins/localhost/cloudamqp/cloudamqp/$(PROVIDER_VERSION)/darwin_amd64/*
+local-clean:
+	rm -rf ~/.terraform.d/plugins/localhost/cloudamqp/cloudamqp/$(PROVIDER_VERSION)/$(PROVIDER_ARCH)/terraform-provider-cloudamqp_v$(PROVIDER_VERSION)
 
-## Local clean, build and install
 local-build: local-clean
 	@echo $(GOOS);
 	@echo $(GOARCH);
 	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -ldflags "-X 'main.version=$(PROVIDER_VERSION)'" -o terraform-provider-cloudamqp_v$(PROVIDER_VERSION)
 
 local-install: local-build
-	## 0.12 version
-	## mkdir -p ~/.terraform.d/plugins
-	## cp $(CURDIR)/terraform-provider-cloudamqp_v$(PROVIDER_VERSION) ~/.terraform.d/plugins/
-	## 0.13+ version
-	mkdir -p ~/.terraform.d/plugins/localhost/cloudamqp/cloudamqp/$(PROVIDER_VERSION)/darwin_amd64
-	cp $(CURDIR)/terraform-provider-cloudamqp_v$(PROVIDER_VERSION) ~/.terraform.d/plugins/localhost/cloudamqp/cloudamqp/$(PROVIDER_VERSION)/darwin_amd64
+	mkdir -p ~/.terraform.d/plugins/localhost/cloudamqp/cloudamqp/$(PROVIDER_VERSION)/$(PROVIDER_ARCH)
+	cp $(CURDIR)/terraform-provider-cloudamqp_v$(PROVIDER_VERSION) ~/.terraform.d/plugins/localhost/cloudamqp/cloudamqp/$(PROVIDER_VERSION)/$(PROVIDER_ARCH)
 
 fmt:
 	@echo "==> Fixing source code with gofmt..."
@@ -70,22 +85,4 @@ vet:
 		exit 1; \
 	fi
 
-website:
-ifeq (,$(wildcard $(GOPATH)/src/$(WEBSITE_REPO)))
-	echo "$(WEBSITE_REPO) not found in your GOPATH (necessary for layouts and assets), get-ting..."
-	git clone https://$(WEBSITE_REPO) $(GOPATH)/src/$(WEBSITE_REPO)
-endif
-	@$(MAKE) -C $(GOPATH)/src/$(WEBSITE_REPO) website-provider PROVIDER_PATH=$(shell pwd) PROVIDER_NAME=$(PKG_NAME)
-
-website-lint:
-	@echo "==> Checking website against linters..."
-	@misspell -error -source=text website/
-
-website-test:
-ifeq (,$(wildcard $(GOPATH)/src/$(WEBSITE_REPO)))
-	echo "$(WEBSITE_REPO) not found in your GOPATH (necessary for layouts and assets), get-ting..."
-	git clone https://$(WEBSITE_REPO) $(GOPATH)/src/$(WEBSITE_REPO)
-endif
-	@$(MAKE) -C $(GOPATH)/src/$(WEBSITE_REPO) website-provider-test PROVIDER_PATH=$(shell pwd) PROVIDER_NAME=$(PKG_NAME)
-
-.PHONY: build test testacc vet fmt fmtcheck lint tools test-compile website website-lint website-test
+.PHONY: build test testacc vet fmt fmtcheck lint tools test-compile
