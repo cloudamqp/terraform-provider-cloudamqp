@@ -2,9 +2,11 @@ package cloudamqp
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 
 	"github.com/84codes/go-api/api"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -59,6 +61,17 @@ func resourcePrivateLinkAzure() *schema.Resource {
 				Description: "Configurable timeout in seconds when enable PrivateLink",
 			},
 		},
+		CustomizeDiff: customdiff.All(
+			customdiff.ValidateValue("approved_subscriptions", func(value, meta interface{}) error {
+				for _, v := range value.([]interface{}) {
+					re := regexp.MustCompile(`/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/`)
+					if !re.MatchString(v.(string)) {
+						return fmt.Errorf("Invalid ARN : %v", v)
+					}
+				}
+				return nil
+			}),
+		),
 	}
 }
 
