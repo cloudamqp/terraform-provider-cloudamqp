@@ -2,9 +2,11 @@ package cloudamqp
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 
 	"github.com/84codes/go-api/api"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -63,6 +65,17 @@ func resourcePrivateLinkAws() *schema.Resource {
 				Description: "Configurable timeout in seconds when enable PrivateLink",
 			},
 		},
+		CustomizeDiff: customdiff.All(
+			customdiff.ValidateValue("allowed_principals", func(value, meta interface{}) error {
+				for _, v := range value.([]interface{}) {
+					re := regexp.MustCompile(`^arn:aws:iam::\d{12}:(root|user/.+|role/.+)$`)
+					if !re.MatchString(v.(string)) {
+						return fmt.Errorf("Invalid ARN : %v", v)
+					}
+				}
+				return nil
+			}),
+		),
 	}
 }
 
