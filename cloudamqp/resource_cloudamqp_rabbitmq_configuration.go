@@ -33,8 +33,8 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 				Description: "Set the server AMQP 0-9-1 heartbeat timeout in seconds.",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
-					if v < 1 {
-						errs = append(errs, fmt.Errorf("%q must be greater than 0, got: %d", key, v))
+					if v < 0 {
+						errs = append(errs, fmt.Errorf("%q must be greater than or equal to 0, got: %d", key, v))
 					}
 					return
 				},
