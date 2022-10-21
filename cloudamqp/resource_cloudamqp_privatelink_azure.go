@@ -98,7 +98,7 @@ func resourcePrivateLinkAzureCreate(d *schema.ResourceData, meta interface{}) er
 		}
 	}
 
-	return resourcePrivateLinkAwsRead(d, meta)
+	return resourcePrivateLinkAzureRead(d, meta)
 }
 
 func resourcePrivateLinkAzureRead(d *schema.ResourceData, meta interface{}) error {
