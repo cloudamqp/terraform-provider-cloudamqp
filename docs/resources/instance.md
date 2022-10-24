@@ -11,6 +11,8 @@ This resource allows you to create and manage a CloudAMQP instance running Rabbi
 
 Once the instance is created it will be assigned a unique identifier. All other resource and data sources created for this instance needs to reference the instance identifier.
 
+Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html).
+
 ## Example Usage
 
 <details>

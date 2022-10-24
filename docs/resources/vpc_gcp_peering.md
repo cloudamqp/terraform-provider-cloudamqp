@@ -11,6 +11,8 @@ This resouce creates a VPC peering configuration for the CloudAMQP instance. The
 
 Only available for dedicated subscription plans.
 
+Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html).
+
 ## Example Usage
 
 <details>

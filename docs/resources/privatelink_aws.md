@@ -13,6 +13,8 @@ More information about [CloudAMQP Privatelink](https://www.cloudamqp.com/docs/cl
 
 Only available for dedicated subscription plans.
 
+Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html).
+
 ## Example Usage
 
 CloudAMQP instance without existing VPC
