@@ -11,6 +11,8 @@ This resouce allows you to accepting VPC peering request from an AWS requester. 
 
 Only available for dedicated subscription plans.
 
+Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html).
+
 ## Example Usage
 
 One way to manage the vpc peering is to combine CloudAMQP Terraform provider with AWS Terraform provider and run them at the same time.

@@ -53,6 +53,8 @@ func Provider(v string) *schema.Provider {
 			"cloudamqp_notification":           resourceNotification(),
 			"cloudamqp_plugin_community":       resourcePluginCommunity(),
 			"cloudamqp_plugin":                 resourcePlugin(),
+			"cloudamqp_privatelink_aws":        resourcePrivateLinkAws(),
+			"cloudamqp_privatelink_azure":      resourcePrivateLinkAzure(),
 			"cloudamqp_rabbitmq_configuration": resourceRabbitMqConfiguration(),
 			"cloudamqp_security_firewall":      resourceSecurityFirewall(),
 			"cloudamqp_upgrade_rabbitmq":       resourceUpgradeRabbitMQ(),

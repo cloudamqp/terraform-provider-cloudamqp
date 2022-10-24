@@ -13,6 +13,8 @@ New Cloudamqp instances can be added to the managed VPC. Set the instance *vpc_i
 
 Only available for dedicated subscription plans.
 
+Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html).
+
 ## Example Usage
 
 
