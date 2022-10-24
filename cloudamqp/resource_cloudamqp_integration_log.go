@@ -98,6 +98,11 @@ func resourceIntegrationLog() *schema.Resource {
 				Description:  "The host information. (Scalyr)",
 				ValidateFunc: validateIntegrationLogScalyrHost(),
 			},
+			"sourcetype": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Assign source type to the data exported, eg. generic_single_line. (Splunk)",
+			},
 		},
 	}
 }
@@ -210,7 +215,8 @@ func validateIntegrationLogsSchemaAttribute(key string) bool {
 		"project_id",
 		"private_key",
 		"client_email",
-		"host":
+		"host",
+		"sourcetype":
 		return true
 	}
 	return false
@@ -225,7 +231,7 @@ func integrationLogKeys(intName string) []string {
 	case "logentries":
 		return []string{"token"}
 	case "splunk":
-		return []string{"host_port", "token"}
+		return []string{"host_port", "token", "sourcetype"}
 	case "cloudwatchlog":
 		return []string{"region", "access_key_id", "secret_access_key"}
 	case "datadog":
