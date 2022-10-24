@@ -191,7 +191,7 @@ Valid names for third party log integration.
 | logentries | Create a Logentries token at https://logentries.com/app#/add-log/manual  |
 | loggly     | Create a Loggly token at https://your-company}.loggly.com/tokens |
 | papertrail | Create a Papertrail endpoint https://papertrailapp.com/systems/setup |
-| splunk     | Create a HTTP Event Collector token at https://.cloud.splunk.com/en-US/manager/search/http-eventcollector |
+| splunk     | Create a HTTP Event Collector token at `https://<your-splunk>.cloud.splunk.com/en-US/manager/search/http-eventcollector` |
 | datadog       | Create a Datadog API key at app.datadoghq.com |
 | stackdriver   | Create a service account and add 'monitor metrics writer' role, then download credentials. |
 | scalyr        | Create a Log write token at https://app.scalyr.com/keys |
