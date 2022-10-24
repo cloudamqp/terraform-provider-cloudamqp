@@ -101,7 +101,7 @@ func resourceIntegrationLog() *schema.Resource {
 			"sourcetype": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Source type eg. generic_single_line. (Splunk)",
+				Description: "Assign source type to the data exported, eg. generic_single_line. (Splunk)",
 			},
 		},
 	}

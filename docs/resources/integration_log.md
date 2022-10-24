@@ -92,6 +92,7 @@ resource "cloudamqp_integration_log" "splunk" {
   name = "splunk"
   token = var.splunk_token
   host_port = var.splunk_host_port
+  source_type = "generic_single_line"
 }
 ```
 </details>
@@ -166,6 +167,7 @@ The following arguments are supported:
 * `private_key`       - (Optional) The private access key.
 * `client_email`      - (Optional) The client email registered for the integration service.
 * `host`              - (Optional) The host for Scalyr integration. (app.scalyr.com, app.eu.scalyr.com)
+* `sourcetype`        - (Optional) Assign source type to the data exported, eg. generic_single_line. (Splunk)
 
 This is the full list of all arguments. Only a subset of arguments are used based on which type of integration used. See [Integration Type reference](#integration-type-reference) table below for more information.
 
@@ -206,7 +208,7 @@ Required arguments for all integrations: name
 | Log Entries | logentries | token |
 | Loggly | loggly | token |
 | Papertrail | papertrail | url |
-| Splunk | splunk | token, host_port |
+| Splunk | splunk | token, host_port, sourcetype |
 | Data Dog | datadog | region, api_keys, tags |
 | Stackdriver | stackdriver | project_id, private_key, client_email |
 | Scalyr | scalyr | token, host |
