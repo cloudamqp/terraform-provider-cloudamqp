@@ -1,3 +1,19 @@
+## 1.20.0 (Oct 24, 2022)
+
+NOTES:
+
+* Updated the API wrapper (go-api) dependecy with newer version (1.10.0)
+* Added support for PrivateLink for AWS and Azure
+
+FEATURES:
+
+* Added support for PrivateLink for AWS and Azure ([#173](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/173))
+
+BUG FIXES:
+
+* Updated minimum value of heartbeat to 0 ([#176](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/176))
+* Missing required splunk integration parameter ([#177](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/177))
+
 ## 1.19.3 (Oct 07, 2022)
 
 NOTES:
