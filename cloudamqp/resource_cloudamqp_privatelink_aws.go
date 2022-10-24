@@ -88,20 +88,13 @@ func resourcePrivateLinkAwsCreate(d *schema.ResourceData, meta interface{}) erro
 		params     = make(map[string][]interface{})
 	)
 
-	err := api.EnablePrivatelink(instanceID, sleep, timeout)
+	params["allowed_principals"] = d.Get("allowed_principals").([]interface{})
+	err := api.EnablePrivatelink(instanceID, params, sleep, timeout)
 	if err != nil {
 		return err
 	}
 
 	d.SetId(fmt.Sprintf("%d", instanceID))
-	params["allowed_principals"] = d.Get("allowed_principals").([]interface{})
-	if len(params) > 0 {
-		err := api.UpdatePrivatelink(instanceID, params)
-		if err != nil {
-			return err
-		}
-	}
-
 	return resourcePrivateLinkAwsRead(d, meta)
 }
 

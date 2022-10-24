@@ -84,20 +84,13 @@ func resourcePrivateLinkAzureCreate(d *schema.ResourceData, meta interface{}) er
 		params     = make(map[string][]interface{})
 	)
 
-	err := api.EnablePrivatelink(instanceID, sleep, timeout)
+	params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
+	err := api.EnablePrivatelink(instanceID, params, sleep, timeout)
 	if err != nil {
 		return err
 	}
 
 	d.SetId(fmt.Sprintf("%d", instanceID))
-	params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
-	if len(params) > 0 {
-		err := api.UpdatePrivatelink(instanceID, params)
-		if err != nil {
-			return err
-		}
-	}
-
 	return resourcePrivateLinkAzureRead(d, meta)
 }
 
