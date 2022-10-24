@@ -65,7 +65,7 @@ resource "cloudamqp_privatelink_aws" "privatelink" {
 ## Argument Reference
 
 * `instance_id` - (Required) The CloudAMQP instance identifier.
-* `allowed_principals` - (Optional) Allowed principals to access the endpoint service.
+* `allowed_principals` - (Required) Allowed principals to access the endpoint service.
 * `sleep` - (Optional) Configurable sleep time (seconds) when enable PrivateLink. Default set to 60 seconds.
 * `timeout` - (Optional) - Configurable timeout time (seconds) when enable PrivateLink. Default set to 3600 seconds.
 

@@ -65,7 +65,7 @@ resource "cloudamqp_privatelink_azure" "privatelink" {
 ## Argument Reference
 
 * `instance_id` - (Required) The CloudAMQP instance identifier.
-* `approved_subscriptions` - (Optional) Approved subscriptions to access the endpoint service. See format below.
+* `approved_subscriptions` - (Required) Approved subscriptions to access the endpoint service. See format below.
 * `sleep` - (Optional) Configurable sleep time (seconds) when enable PrivateLink. Default set to 60 seconds.
 * `timeout` - (Optional) - Configurable timeout time (seconds) when enable PrivateLink. Default set to 3600 seconds.
 
