@@ -40,8 +40,7 @@ func resourcePrivateLinkAws() *schema.Resource {
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
-				Computed:    true,
-				Optional:    true,
+				Required:    true,
 				Description: "Allowed principals to access the endpoint service",
 			},
 			"active_zones": {
