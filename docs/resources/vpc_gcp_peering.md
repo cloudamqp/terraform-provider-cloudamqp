@@ -18,7 +18,7 @@ Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html).
 <details>
   <summary>
     <b>
-      <i>AWS VPC peering pre v1.16.0</i>
+      <i>VPC peering pre v1.16.0</i>
     </b>
   </summary>
 
@@ -54,7 +54,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 <details>
   <summary>
     <b>
-      <i>AWS VPC peering post v1.16.0 (Managed VPC)</i>
+      <i>VPC peering post v1.16.0 (Managed VPC)</i>
     </b>
   </summary>
 
@@ -150,7 +150,7 @@ See example below.
 <details>
   <summary>
     <b>
-      <i>AWS VPC peering pre v1.16.0</i>
+      <i>VPC peering pre v1.16.0</i>
     </b>
   </summary>
 
@@ -189,7 +189,7 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 <details>
   <summary>
     <b>
-      <i>AWS VPC peering post v1.16.0 (Managed VPC)</i>
+      <i>VPC peering post v1.16.0 (Managed VPC)</i>
     </b>
   </summary>
 
