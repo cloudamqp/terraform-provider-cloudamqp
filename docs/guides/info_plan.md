@@ -14,6 +14,7 @@ Name | Plan | Type | Nodes
 ---- | ---- | ---- | ----
 Little lemur    | lemur   | shared
 Tough Tiger     | tiger   | shared
+Lemming (Beta)  | lemming | shared
 Sassy Squirrel  | squirrel-1    | dedicated | 1
 Big Bunny       | bunny-1,3     | dedicated | 1,3
 Roaring Rabbit  | rabbit-1,3,5  | dedicated | 1,3,5
