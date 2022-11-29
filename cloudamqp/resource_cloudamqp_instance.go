@@ -288,7 +288,7 @@ func validateInstanceSchemaAttribute(key string) bool {
 
 func getPlanType(plan string) (string, error) {
 	switch plan {
-	case "lemur", "tiger":
+	case "lemur", "tiger", "lemming":
 		return "shared", nil
 	// Legacy plans
 	case "bunny", "rabbit", "panda", "ape", "hippo", "lion",
@@ -308,7 +308,7 @@ func getPlanType(plan string) (string, error) {
 
 func validatePlanName() schema.SchemaValidateFunc {
 	return validation.StringInSlice([]string{
-		"lemur", "tiger",
+		"lemur", "tiger", "lemming",
 		"bunny", "rabbit", "panda", "ape", "hippo", "lion",
 		"squirrel-1", "bunny-1", "bunny-3",
 		"rabbit-1", "rabbit-3", "rabbit-5",
@@ -324,7 +324,8 @@ func isSharedPlan(plan string) bool {
 	switch plan {
 	case
 		"lemur",
-		"tiger":
+		"tiger",
+		"lemming":
 		return true
 	}
 	return false
