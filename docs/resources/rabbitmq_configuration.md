@@ -103,6 +103,8 @@ The following arguments are supported:
 * `log_exchange_level`            - (Computed/Optional) Log level for the logger used for log integrations and the CloudAMQP Console log view.
 
   ***Note: Requires a restart of RabbitMQ to be applied.***
+* `sleep` - (Optional) Configurable sleep time in seconds between retries for RabbitMQ configuration. Default set to 60 seconds.
+* `timeout` - (Optional) - Configurable timeout time in seconds for RabbitMQ configuration. Default set to 3600 seconds.
 
 ## Attributes Reference
 
