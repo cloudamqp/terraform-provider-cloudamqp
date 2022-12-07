@@ -1,3 +1,14 @@
+## 1.20.1 (Dec 07, 2022)
+
+NOTES:
+
+* Updated the API wrapper (go-api) dependecy with newer version (1.10.1)
+* Extended response handling for read/update RabbitMQ configuration
+
+IMPROVEMENTS:
+
+* Added configurable sleep and timeout for RabbitNQ configuration
+
 ## 1.20.0 (Oct 24, 2022)
 
 NOTES:
