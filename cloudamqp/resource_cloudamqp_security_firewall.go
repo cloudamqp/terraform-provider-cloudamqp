@@ -84,6 +84,18 @@ func resourceSecurityFirewall() *schema.Resource {
 					},
 				},
 			},
+			"sleep": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     30,
+				Description: "Configurable sleep time in seconds between retries for firewall configuration",
+			},
+			"timeout": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     1800,
+				Description: "Configurable timeout time in seconds for firewall configuration",
+			},
 		},
 	}
 }
@@ -100,7 +112,7 @@ func resourceSecurityFirewallCreate(d *schema.ResourceData, meta interface{}) er
 
 	instanceID := d.Get("instance_id").(int)
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create instance id: %v", instanceID)
-	data, err := api.CreateFirewallSettings(instanceID, params)
+	data, err := api.CreateFirewallSettings(instanceID, params, d.Get("sleep").(int), d.Get("timeout").(int))
 	if err != nil {
 		return fmt.Errorf("error setting security firewall for resource %s: %s", d.Id(), err)
 	}
@@ -141,7 +153,7 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 		params = append(params, k.(map[string]interface{}))
 	}
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::update instance id: %v, params: %v", d.Get("instance_id"), params)
-	data, err := api.UpdateFirewallSettings(d.Get("instance_id").(int), params)
+	data, err := api.UpdateFirewallSettings(d.Get("instance_id").(int), params, d.Get("sleep").(int), d.Get("timeout").(int))
 	if err != nil {
 		return err
 	}
@@ -159,7 +171,7 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete instance id: %v", d.Get("instance_id"))
-	data, err := api.DeleteFirewallSettings(d.Get("instance_id").(int))
+	data, err := api.DeleteFirewallSettings(d.Get("instance_id").(int), d.Get("sleep").(int), d.Get("timeout").(int))
 	d.Set("rules", data)
 	return err
 }
