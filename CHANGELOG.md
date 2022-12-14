@@ -1,3 +1,13 @@
+## 1.20.2 (Dec 14, 2022)
+
+NOTES:
+
+* Updated the API wrapper (go-api) dependecy with newer version (1.10.2)
+
+IMPROVEMENTS:
+
+* Added configurable sleep and timeout for firewall configuration ([#183]https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/183)
+
 ## 1.20.1 (Dec 07, 2022)
 
 NOTES:
