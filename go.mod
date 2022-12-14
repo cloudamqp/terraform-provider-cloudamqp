@@ -2,7 +2,7 @@ module github.com/cloudamqp/terraform-provider-cloudamqp
 
 go 1.17
 
-require github.com/84codes/go-api v1.10.1
+require github.com/84codes/go-api v1.10.2
 
 require github.com/hashicorp/terraform-plugin-sdk v1.17.2
 
@@ -21,7 +21,7 @@ require (
 	github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d // indirect
 	github.com/bgentry/speakeasy v0.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/dghubble/sling v1.4.0 // indirect
+	github.com/dghubble/sling v1.4.1 // indirect
 	github.com/fatih/color v1.7.0 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
