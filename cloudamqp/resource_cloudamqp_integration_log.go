@@ -1,6 +1,8 @@
 package cloudamqp
 
 import (
+	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strconv"
@@ -78,18 +80,18 @@ func resourceIntegrationLog() *schema.Resource {
 			},
 			"project_id": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Computed:    true,
 				Description: "Project ID. (Stackdriver)",
 			},
 			"private_key": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Computed:    true,
 				Sensitive:   true,
 				Description: "The private key. (Stackdriver)",
 			},
 			"client_email": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Computed:    true,
 				Description: "The client email. (Stackdriver)",
 			},
 			"host": {
@@ -103,21 +105,52 @@ func resourceIntegrationLog() *schema.Resource {
 				Optional:    true,
 				Description: "Assign source type to the data exported, eg. generic_single_line. (Splunk)",
 			},
+			"private_key_id": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Sensitive:   true,
+				Description: "Private key identifier. (Stackdriver)",
+			},
+			"credentials": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Sensitive:   true,
+				Description: "Base64Encoded credentials. (Stackdriver)",
+			},
 		},
 	}
 }
 
 func resourceIntegrationLogCreate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	keys := integrationLogKeys(d.Get("name").(string))
-	params := make(map[string]interface{})
-	for _, k := range keys {
-		if v := d.Get(k); v != nil {
-			params[k] = v
+	var (
+		api     = meta.(*api.API)
+		intName = strings.ToLower(d.Get("name").(string))
+		keys    = integrationLogKeys(intName)
+		params  = make(map[string]interface{})
+	)
+
+	if intName == "stackdriver" {
+		if v := d.Get("credentials"); v != nil {
+			uDec, err := base64.URLEncoding.DecodeString(v.(string))
+			if err != nil {
+				return fmt.Errorf("Log integration failed, error decoding private_key: %s ", err.Error())
+			}
+			var jsonMap map[string]interface{}
+			json.Unmarshal([]byte(uDec), &jsonMap)
+			fmt.Printf("jsonMap: %v", jsonMap)
+			for _, k := range keys {
+				params[k] = jsonMap[k]
+			}
+		}
+	} else {
+		for _, k := range keys {
+			if v := d.Get(k); v != nil {
+				params[k] = v
+			}
 		}
 	}
 
-	data, err := api.CreateIntegration(d.Get("instance_id").(int), "logs", d.Get("name").(string), params)
+	data, err := api.CreateIntegration(d.Get("instance_id").(int), "logs", intName, params)
 
 	if err != nil {
 		return err
@@ -161,11 +194,29 @@ func resourceIntegrationLogRead(d *schema.ResourceData, meta interface{}) error 
 }
 
 func resourceIntegrationLogUpdate(d *schema.ResourceData, meta interface{}) error {
-	keys := integrationLogKeys(d.Get("name").(string))
-	params := make(map[string]interface{})
-	for _, k := range keys {
-		if v := d.Get(k); v != nil {
-			params[k] = v
+	var (
+		intName = strings.ToLower(d.Get("name").(string))
+		keys    = integrationLogKeys(intName)
+		params  = make(map[string]interface{})
+	)
+
+	if intName == "stackdriver" {
+		if v := d.Get("credentials"); v != nil {
+			uDec, err := base64.URLEncoding.DecodeString(v.(string))
+			if err != nil {
+				return fmt.Errorf("Log integration failed, error decoding private_key: %s ", err.Error())
+			}
+			var jsonMap map[string]interface{}
+			json.Unmarshal([]byte(uDec), &jsonMap)
+			for _, k := range keys {
+				params[k] = jsonMap[k]
+			}
+		}
+	} else {
+		for _, k := range keys {
+			if v := d.Get(k); v != nil {
+				params[k] = v
+			}
 		}
 	}
 
@@ -213,8 +264,9 @@ func validateIntegrationLogsSchemaAttribute(key string) bool {
 		"api_key",
 		"tags",
 		"project_id",
-		"private_key",
 		"client_email",
+		"private_key",
+		"private_key_id",
 		"host",
 		"sourcetype":
 		return true
@@ -237,7 +289,7 @@ func integrationLogKeys(intName string) []string {
 	case "datadog":
 		return []string{"region", "api_key", "tags"}
 	case "stackdriver":
-		return []string{"project_id", "private_key", "client_email"}
+		return []string{"client_email", "private_key_id", "private_key", "project_id"}
 	case "scalyr":
 		return []string{"token", "host"}
 	default:
