@@ -142,7 +142,7 @@ resource "cloudamqp_integration_metric" "stackdriver" {
 <details>
   <summary>
     <b>
-      <i>Stackdriver metric integration (v1.30.0 or newer versions)</i>
+      <i>Stackdriver metric integration (v1.21.0 or newer versions)</i>
     </b>
   </summary>
 

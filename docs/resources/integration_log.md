@@ -160,7 +160,7 @@ resource "cloudamqp_integration_log" "stackdriver" {
 <details>
   <summary>
     <b>
-      <i>Stackdriver log integration (v1.30.0 or newer versions)</i>
+      <i>Stackdriver log integration (v1.21.0 or newer versions)</i>
     </b>
   </summary>
 
