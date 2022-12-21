@@ -141,6 +141,7 @@ func resourceIntegrationMetricCreate(d *schema.ResourceData, meta interface{}) e
 		params     = make(map[string]interface{})
 	)
 
+	v := d.Get("credentials")
 	if intName == "stackdriver" && v != "" {
 		uDec, err := base64.URLEncoding.DecodeString(v.(string))
 		if err != nil {
