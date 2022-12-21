@@ -80,17 +80,20 @@ func resourceIntegrationLog() *schema.Resource {
 			},
 			"project_id": {
 				Type:        schema.TypeString,
+				Optional:    true,
 				Computed:    true,
 				Description: "Project ID. (Stackdriver)",
 			},
 			"private_key": {
 				Type:        schema.TypeString,
+				Optional:    true,
 				Computed:    true,
 				Sensitive:   true,
 				Description: "The private key. (Stackdriver)",
 			},
 			"client_email": {
 				Type:        schema.TypeString,
+				Optional:    true,
 				Computed:    true,
 				Description: "The client email. (Stackdriver)",
 			},
@@ -107,6 +110,7 @@ func resourceIntegrationLog() *schema.Resource {
 			},
 			"private_key_id": {
 				Type:        schema.TypeString,
+				Optional:    true,
 				Computed:    true,
 				Sensitive:   true,
 				Description: "Private key identifier. (Stackdriver)",
@@ -129,22 +133,24 @@ func resourceIntegrationLogCreate(d *schema.ResourceData, meta interface{}) erro
 		params  = make(map[string]interface{})
 	)
 
-	if intName == "stackdriver" {
-		if v := d.Get("credentials"); v != nil {
-			uDec, err := base64.URLEncoding.DecodeString(v.(string))
-			if err != nil {
-				return fmt.Errorf("Log integration failed, error decoding private_key: %s ", err.Error())
-			}
-			var jsonMap map[string]interface{}
-			json.Unmarshal([]byte(uDec), &jsonMap)
-			fmt.Printf("jsonMap: %v", jsonMap)
-			for _, k := range keys {
-				params[k] = jsonMap[k]
-			}
+	v := d.Get("credentials")
+	if intName == "stackdriver" && v != "" {
+		uDec, err := base64.URLEncoding.DecodeString(v.(string))
+		if err != nil {
+			return fmt.Errorf("Log integration failed, error decoding private_key: %s ", err.Error())
+		}
+		var jsonMap map[string]interface{}
+		json.Unmarshal([]byte(uDec), &jsonMap)
+		fmt.Printf("jsonMap: %v", jsonMap)
+		for _, k := range keys {
+			params[k] = jsonMap[k]
 		}
 	} else {
 		for _, k := range keys {
-			if v := d.Get(k); v != nil {
+			v := d.Get(k)
+			if k == "tags" && v == "" {
+				delete(params, k)
+			} else if v != nil {
 				params[k] = v
 			}
 		}
@@ -200,21 +206,23 @@ func resourceIntegrationLogUpdate(d *schema.ResourceData, meta interface{}) erro
 		params  = make(map[string]interface{})
 	)
 
-	if intName == "stackdriver" {
-		if v := d.Get("credentials"); v != nil {
-			uDec, err := base64.URLEncoding.DecodeString(v.(string))
-			if err != nil {
-				return fmt.Errorf("Log integration failed, error decoding private_key: %s ", err.Error())
-			}
-			var jsonMap map[string]interface{}
-			json.Unmarshal([]byte(uDec), &jsonMap)
-			for _, k := range keys {
-				params[k] = jsonMap[k]
-			}
+	v := d.Get("credentials")
+	if intName == "stackdriver" && v != "" {
+		uDec, err := base64.URLEncoding.DecodeString(v.(string))
+		if err != nil {
+			return fmt.Errorf("Log integration failed, error decoding private_key: %s ", err.Error())
+		}
+		var jsonMap map[string]interface{}
+		json.Unmarshal([]byte(uDec), &jsonMap)
+		for _, k := range keys {
+			params[k] = jsonMap[k]
 		}
 	} else {
 		for _, k := range keys {
-			if v := d.Get(k); v != nil {
+			v := d.Get(k)
+			if k == "tags" && v == "" {
+				delete(params, k)
+			} else if v != nil {
 				params[k] = v
 			}
 		}
