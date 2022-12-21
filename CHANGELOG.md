@@ -1,3 +1,17 @@
+## 1.21.0 (Dec 21, 2022)
+
+Notes:
+
+* Stackdiver integrations (log & metric) to use raw Google Service Account key credentials.
+
+IMPROVEMENTS:
+
+* Updated Stackdriver integrations to use raw Google Service Account key credentials ([#184]https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/184)
+
+BUG FIXES:
+
+* Exclude additional parameters (tags, queue_allowlist, vhost_allowlist) from integrations when not used ([#184]https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/184)
+
 ## 1.20.2 (Dec 14, 2022)
 
 NOTES:
