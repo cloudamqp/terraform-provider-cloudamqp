@@ -21,6 +21,14 @@ resource "cloudamqp_notification" "recipient_01" {
   value       = "alarm@example.com"
   name        = "alarm"
 }
+
+resource "cloudamqp_notification" "recipient_02" {
+  instance_id = cloudamqp_instance.instance.id
+  type        = "victorops"
+  value       = "<UUID>"
+  name        = "Victorops"
+  routing_key = "ROUTINGKEY"
+}
 ```
 
 ## Argument Reference
@@ -29,8 +37,9 @@ The following arguments are supported:
 
 * `instance_id` - (Required) The CloudAMQP instance ID.
 * `type`        - (Required) Type of the notification. See valid options below.
-* `value`       - (Required) Endpoint to send the notification.
+* `value`       - (Required) Integration/API key or endpoint to send the notification.
 * `name`        - (Optional) Display name of the recipient.
+* `routing_key` - (Optional) Victorops based routing key.
 
 ## Attributes Reference
 
