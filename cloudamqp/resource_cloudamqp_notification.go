@@ -42,17 +42,33 @@ func resourceNotification() *schema.Resource {
 				Optional:    true,
 				Description: "Optional display name of the recipient",
 			},
+			"routing_key": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Routing key used by VictorOps recipients",
+			},
 		},
 	}
 }
 
 func resourceNotificationCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "value", "name"}
+	keys := []string{"type", "value", "name", "routing_key"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
-		if v := d.Get(k); v != nil {
-			params[k] = v
+		v := d.Get(k)
+		if k == "routing_key" {
+			if v == nil {
+				params["options"] = make(map[string]interface{})
+			} else if d.Get("type") == "victorops" {
+				rk := make(map[string]interface{})
+				rk["rk"] = v
+				params["options"] = rk
+			}
+		} else {
+			if v != nil {
+				params[k] = v
+			}
 		}
 	}
 
@@ -88,22 +104,42 @@ func resourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
 
 	for k, v := range data {
 		if validateRecipientAttribute(k) {
+			if k == "options" {
+				if v != nil && v != "" && len(v.(map[string]interface{})) > 0 {
+					k = "routing_key"
+					v = v.(map[string]interface{})["rk"].(string)
+				} else {
+					continue
+				}
+			}
 			if err = d.Set(k, v); err != nil {
 				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
+
 	return nil
 }
 
 func resourceNotificationUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "value", "name"}
+	keys := []string{"type", "value", "name", "routing_key"}
 	params := make(map[string]interface{})
 	params["id"] = d.Id()
 	for _, k := range keys {
-		if v := d.Get(k); v != nil {
-			params[k] = v
+		v := d.Get(k)
+		if k == "routing_key" {
+			if v == nil {
+				params["options"] = make(map[string]interface{})
+			} else if d.Get("type") == "victorops" {
+				rk := make(map[string]interface{})
+				rk["rk"] = v
+				params["options"] = rk
+			}
+		} else {
+			if v != nil {
+				params[k] = v
+			}
 		}
 	}
 
@@ -139,7 +175,8 @@ func validateRecipientAttribute(key string) bool {
 	switch key {
 	case "type",
 		"value",
-		"name":
+		"name",
+		"options":
 		return true
 	}
 	return false
