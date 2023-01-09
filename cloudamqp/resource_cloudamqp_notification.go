@@ -42,13 +42,21 @@ func resourceNotification() *schema.Resource {
 				Optional:    true,
 				Description: "Optional display name of the recipient",
 			},
+			"options": {
+				Type:        schema.TypeMap,
+				Optional:    true,
+				Description: "Optional key-value pair options parameters",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
 		},
 	}
 }
 
 func resourceNotificationCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "value", "name"}
+	keys := []string{"type", "value", "name", "options"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
@@ -81,7 +89,6 @@ func resourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
 
 	api := meta.(*api.API)
 	data, err := api.ReadNotification(d.Get("instance_id").(int), d.Id())
-
 	if err != nil {
 		return err
 	}
@@ -93,12 +100,13 @@ func resourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
 			}
 		}
 	}
+
 	return nil
 }
 
 func resourceNotificationUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "value", "name"}
+	keys := []string{"type", "value", "name", "options"}
 	params := make(map[string]interface{})
 	params["id"] = d.Id()
 	for _, k := range keys {
@@ -139,7 +147,8 @@ func validateRecipientAttribute(key string) bool {
 	switch key {
 	case "type",
 		"value",
-		"name":
+		"name",
+		"options":
 		return true
 	}
 	return false
