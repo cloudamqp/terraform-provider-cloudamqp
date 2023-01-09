@@ -1,12 +1,16 @@
-## 1.xx.x (Unreleased) 
+## 1.22.0 (Jan 09, 2023)
 
-IMPROVEMENTS: 
+NOTES:
+
+* Alarm notification recipients options parameter.
+
+IMPROVEMENTS:
 
 * Optional options key-value pair argument for alarm notification/recipient ([#185](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/185))
 
 ## 1.21.0 (Dec 21, 2022)
 
-Notes:
+NOTES:
 
 * Stackdiver integrations (log & metric) to use raw Google Service Account key credentials.
 
