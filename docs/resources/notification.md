@@ -27,7 +27,9 @@ resource "cloudamqp_notification" "recipient_02" {
   type        = "victorops"
   value       = "<UUID>"
   name        = "Victorops"
-  routing_key = "ROUTINGKEY"
+  options     = {
+    "rk" = "ROUTINGKEY"
+  }
 }
 ```
 
@@ -39,7 +41,7 @@ The following arguments are supported:
 * `type`        - (Required) Type of the notification. See valid options below.
 * `value`       - (Required) Integration/API key or endpoint to send the notification.
 * `name`        - (Optional) Display name of the recipient.
-* `routing_key` - (Optional) Victorops based routing key.
+* `options`     - (Optional) Options argument (e.g. rk used for Victorops routing key).
 
 ## Attributes Reference
 

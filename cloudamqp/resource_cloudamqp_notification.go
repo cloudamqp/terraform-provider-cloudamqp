@@ -42,10 +42,13 @@ func resourceNotification() *schema.Resource {
 				Optional:    true,
 				Description: "Optional display name of the recipient",
 			},
-			"routing_key": {
-				Type:        schema.TypeString,
+			"options": {
+				Type:        schema.TypeMap,
 				Optional:    true,
-				Description: "Routing key used by VictorOps recipients",
+				Description: "Optional key-value pair options parameters",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 			},
 		},
 	}
@@ -53,22 +56,11 @@ func resourceNotification() *schema.Resource {
 
 func resourceNotificationCreate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "value", "name", "routing_key"}
+	keys := []string{"type", "value", "name", "options"}
 	params := make(map[string]interface{})
 	for _, k := range keys {
-		v := d.Get(k)
-		if k == "routing_key" {
-			if v == nil {
-				params["options"] = make(map[string]interface{})
-			} else if d.Get("type") == "victorops" {
-				rk := make(map[string]interface{})
-				rk["rk"] = v
-				params["options"] = rk
-			}
-		} else {
-			if v != nil {
-				params[k] = v
-			}
+		if v := d.Get(k); v != nil {
+			params[k] = v
 		}
 	}
 
@@ -97,21 +89,12 @@ func resourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
 
 	api := meta.(*api.API)
 	data, err := api.ReadNotification(d.Get("instance_id").(int), d.Id())
-
 	if err != nil {
 		return err
 	}
 
 	for k, v := range data {
 		if validateRecipientAttribute(k) {
-			if k == "options" {
-				if v != nil && v != "" && len(v.(map[string]interface{})) > 0 {
-					k = "routing_key"
-					v = v.(map[string]interface{})["rk"].(string)
-				} else {
-					continue
-				}
-			}
 			if err = d.Set(k, v); err != nil {
 				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
@@ -123,23 +106,12 @@ func resourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceNotificationUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	keys := []string{"type", "value", "name", "routing_key"}
+	keys := []string{"type", "value", "name", "options"}
 	params := make(map[string]interface{})
 	params["id"] = d.Id()
 	for _, k := range keys {
-		v := d.Get(k)
-		if k == "routing_key" {
-			if v == nil {
-				params["options"] = make(map[string]interface{})
-			} else if d.Get("type") == "victorops" {
-				rk := make(map[string]interface{})
-				rk["rk"] = v
-				params["options"] = rk
-			}
-		} else {
-			if v != nil {
-				params[k] = v
-			}
+		if v := d.Get(k); v != nil {
+			params[k] = v
 		}
 	}
 
