@@ -1,3 +1,9 @@
+## 1.22.1 (Jan 18, 2023)
+
+IMPROVEMENTS:
+
+* Updated subscription plan validation
+
 ## 1.22.0 (Jan 09, 2023)
 
 NOTES:
