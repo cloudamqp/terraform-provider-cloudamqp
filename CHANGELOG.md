@@ -1,3 +1,54 @@
+## 1.22.1 (Jan 18, 2023)
+
+IMPROVEMENTS:
+
+* Updated subscription plan validation
+
+## 1.22.0 (Jan 09, 2023)
+
+NOTES:
+
+* Alarm notification recipients options parameter.
+
+IMPROVEMENTS:
+
+* Optional options key-value pair argument for alarm notification/recipient ([#185](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/185))
+
+## 1.21.0 (Dec 21, 2022)
+
+NOTES:
+
+* Stackdiver integrations (log & metric) to use raw Google Service Account key credentials.
+
+IMPROVEMENTS:
+
+* Updated Stackdriver integrations to use raw Google Service Account key credentials ([#184](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/184))
+
+BUG FIXES:
+
+* Exclude additional parameters (tags, queue_allowlist, vhost_allowlist) from integrations when not used ([#184](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/184))
+
+## 1.20.2 (Dec 14, 2022)
+
+NOTES:
+
+* Updated the API wrapper (go-api) dependecy with newer version (1.10.2)
+
+IMPROVEMENTS:
+
+* Added configurable sleep and timeout for firewall configuration ([#183](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/183))
+
+## 1.20.1 (Dec 07, 2022)
+
+NOTES:
+
+* Updated the API wrapper (go-api) dependecy with newer version (1.10.1)
+* Extended response handling for read/update RabbitMQ configuration
+
+IMPROVEMENTS:
+
+* Added configurable sleep and timeout for RabbitNQ configuration
+
 ## 1.20.0 (Oct 24, 2022)
 
 NOTES:

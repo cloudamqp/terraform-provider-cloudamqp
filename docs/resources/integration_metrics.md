@@ -100,9 +100,11 @@ resource "cloudamqp_integration_metric" "newrelic" {
 <details>
   <summary>
     <b>
-      <i>Stackdriver metric integration</i>
+      <i>Stackdriver metric integration (v1.20.2 or earlier versions)</i>
     </b>
   </summary>
+
+Use variable file populated with project_id, private_key and client_email
 
 ```hcl
 resource "cloudamqp_integration_metric" "stackdriver" {
@@ -111,6 +113,78 @@ resource "cloudamqp_integration_metric" "stackdriver" {
   project_id = var.stackdriver_project_id
   private_key = var.stackdriver_private_key
   client_email = var.stackriver_email
+}
+```
+
+or by using google_service_account_key resource from Google provider
+
+```hcl
+resource "google_service_account" "service_account" {
+  account_id = "<account_id>"
+  description = "<description>"
+  display_name = "<display_name>"
+}
+
+resource "google_service_account_key" "service_account_key" {
+  service_account_id = google_service_account.service_account.name
+}
+
+resource "cloudamqp_integration_metric" "stackdriver" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "stackdriver"
+  project_id = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).project_id
+  private_key = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).private_key
+  client_email = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).client_email
+}
+```
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>Stackdriver metric integration (v1.21.0 or newer versions)</i>
+    </b>
+  </summary>
+
+Use credentials argument and let the provider do the Base64decode and internally populate, *project_id, client_name, private_key*
+
+```hcl
+resource "google_service_account" "service_account" {
+  account_id = "<account_id>"
+  description = "<description>"
+  display_name = "<display_name>"
+}
+
+resource "google_service_account_key" "service_account_key" {
+  service_account_id = google_service_account.service_account.name
+}
+
+resource "cloudamqp_integration_metric" "stackdriver" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "stackdriver"
+  credentials = google_service_account_key.service_account_key.private_key
+}
+```
+
+or use the same as earlier version and decode the google service account key
+
+```hcl
+resource "google_service_account" "service_account" {
+  account_id = "<account_id>"
+  description = "<description>"
+  display_name = "<display_name>"
+}
+
+resource "google_service_account_key" "service_account_key" {
+  service_account_id = google_service_account.service_account.name
+}
+
+resource "cloudamqp_integration_metric" "stackdriver" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "stackdriver"
+  project_id = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).project_id
+  private_key = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).private_key
+  client_email = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).client_email
 }
 ```
 </details>
@@ -125,9 +199,10 @@ The following arguments are supported:
 * `secret_access_key` - (Optional) AWS secret access key.
 * `api_key`           - (Optional) The API key for the integration service.
 * `email`             - (Optional) The email address registred for the integration service.
-* `project_id`        - (Optional) The project identifier.
-* `private_key`       - (Optional) The private access key.
-* `client_email`      - (Optional) The client email registered for the integration service.
+* `credentials`       - (Optional) Google Service Account private key credentials.
+* `project_id`        - (Optional/Computed) The project identifier.
+* `private_key`       - (Optional/Computed) The private access key.
+* `client_email`      - (Optional/Computed) The client email registered for the integration service.
 * `tags`              - (Optional) Tags. e.g. env=prod, region=europe.
 * `queue_allowlist`   - (Optional) Allowlist queues using regular expression. Leave empty to include all queues.
 * `vhost_allowlist`   - (Optional) Allowlist vhost using regular expression. Leave empty to include all vhosts.
@@ -149,13 +224,13 @@ Valid names for third party log integration.
 | librato       | Create a new API token (with record only permissions) here: https://metrics.librato.com/tokens |
 | newrelic      | Deprecated! |
 | newrelic_v2   | Find or register an Insert API key for your account: Go to insights.newrelic.com > Manage data > API keys. |
-| stackdriver   | Create a service account and add 'monitor metrics writer' role, then download credentials. |
+| stackdriver   | Create a service account and add 'monitor metrics writer' role from your Google Cloud Account |
 
 ## Integration type reference
 
 Valid arguments for third party log integrations.
 
-Required arguments for all integrations: *name*
+Required arguments for all integrations: *name*</br>
 Optional arguments for all integrations: *tags*, *queue_allowlist*, *vhost_allowlist*
 
 | Name | Type | Required arguments |
@@ -167,7 +242,9 @@ Optional arguments for all integrations: *tags*, *queue_allowlist*, *vhost_allow
 | Librato                | librato        | email, api_key |
 | New relic (deprecated) | newrelic       | - |
 | New relic v2           | newrelic_v2    | api_key, region |
-| Stackdriver            | stackdriver    | project_id, private_key, client_email |
+| Stackdriver            | stackdriver    | credentials |
+
+***Note:*** Stackdriver (v1.20.2 or earlier versions) required arguments  : project_id, private_key, client_email
 
 ## Attributes Reference
 

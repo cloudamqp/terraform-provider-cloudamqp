@@ -118,9 +118,11 @@ resource "cloudamqp_integration_log" "datadog" {
 <details>
   <summary>
     <b>
-      <i>Stackdriver log integration</i>
+      <i>Stackdriver log integration (v1.20.2 or earlier versions)</i>
     </b>
   </summary>
+
+Use variable file populated with project_id, private_key and client_email
 
 ```hcl
 resource "cloudamqp_integration_log" "stackdriver" {
@@ -129,6 +131,78 @@ resource "cloudamqp_integration_log" "stackdriver" {
   project_id = var.stackdriver_project_id
   private_key = var.stackdriver_private_key
   client_email = var.stackdriver_client_email
+}
+```
+
+or by using google_service_account_key resource from Google provider
+
+```hcl
+resource "google_service_account" "service_account" {
+  account_id = "<account_id>"
+  description = "<description>"
+  display_name = "<display_name>"
+}
+
+resource "google_service_account_key" "service_account_key" {
+  service_account_id = google_service_account.service_account.name
+}
+
+resource "cloudamqp_integration_log" "stackdriver" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "stackdriver"
+  project_id = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).project_id
+  private_key = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).private_key
+  client_email = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).client_email
+}
+```
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>Stackdriver log integration (v1.21.0 or newer versions)</i>
+    </b>
+  </summary>
+
+Use credentials argument and let the provider do the Base64decode and internally populate, *project_id, client_name, private_key*
+
+```hcl
+resource "google_service_account" "service_account" {
+  account_id = "<account_id>"
+  description = "<description>"
+  display_name = "<display_name>"
+}
+
+resource "google_service_account_key" "service_account_key" {
+  service_account_id = google_service_account.service_account.name
+}
+
+resource "cloudamqp_integration_log" "stackdriver" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "stackdriver"
+  credentials = google_service_account_key.service_account_key.private_key
+}
+```
+
+or use the same as earlier version and decode the google service account key
+
+```hcl
+resource "google_service_account" "service_account" {
+  account_id = "<account_id>"
+  description = "<description>"
+  display_name = "<display_name>"
+}
+
+resource "google_service_account_key" "service_account_key" {
+  service_account_id = google_service_account.service_account.name
+}
+
+resource "cloudamqp_integration_log" "stackdriver" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "stackdriver"
+  project_id = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).project_id
+  private_key = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).private_key
+  client_email = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).client_email
 }
 ```
 </details>
@@ -163,9 +237,10 @@ The following arguments are supported:
 * `secret_access_key` - (Optional) AWS secret access key.
 * `api_key`           - (Optional) The API key.
 * `tags`              - (Optional) Tag the integration, e.g. env=prod, region=europe.
-* `project_id`        - (Optional) The project identifier.
-* `private_key`       - (Optional) The private access key.
-* `client_email`      - (Optional) The client email registered for the integration service.
+* `credentials`       - (Optional) Google Service Account private key credentials.
+* `project_id`        - (Optional/Computed) The project identifier.
+* `private_key`       - (Optional/Computed) The private access key.
+* `client_email`      - (Optional/Computed) The client email registered for the integration service.
 * `host`              - (Optional) The host for Scalyr integration. (app.scalyr.com, app.eu.scalyr.com)
 * `sourcetype`        - (Optional) Assign source type to the data exported, eg. generic_single_line. (Splunk)
 
@@ -193,7 +268,7 @@ Valid names for third party log integration.
 | papertrail | Create a Papertrail endpoint https://papertrailapp.com/systems/setup |
 | splunk     | Create a HTTP Event Collector token at `https://<your-splunk>.cloud.splunk.com/en-US/manager/search/http-eventcollector` |
 | datadog       | Create a Datadog API key at app.datadoghq.com |
-| stackdriver   | Create a service account and add 'monitor metrics writer' role, then download credentials. |
+| stackdriver   | Create a service account and add 'monitor metrics writer' role from your Google Cloud Account |
 | scalyr        | Create a Log write token at https://app.scalyr.com/keys |
 
 ## Integration Type reference
@@ -210,8 +285,10 @@ Required arguments for all integrations: name
 | Papertrail | papertrail | url |
 | Splunk | splunk | token, host_port, sourcetype |
 | Data Dog | datadog | region, api_keys, tags |
-| Stackdriver | stackdriver | project_id, private_key, client_email |
+| Stackdriver | stackdriver | credentials |
 | Scalyr | scalyr | token, host |
+
+***Note:*** Stackdriver (v1.20.2 or earlier versions) required arguments  : project_id, private_key, client_email
 
 ## Attributes Reference
 

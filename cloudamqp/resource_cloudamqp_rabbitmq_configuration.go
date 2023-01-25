@@ -92,7 +92,7 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(float64)
 					if v < 0.4 || v > 0.9 {
-						errs = append(errs, fmt.Errorf("%q must be between 0.4 and 0.9 inclusive, got: %d", key, v))
+						errs = append(errs, fmt.Errorf("%q must be between 0.4 and 0.9 inclusive, got: %v", key, v))
 					}
 					return
 				},
@@ -131,6 +131,18 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 					"Does not affect the file logger. Requires a RabbitMQ restart to be applied.",
 				ValidateFunc: validateLogLevel(),
 			},
+			"sleep": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     60,
+				Description: "Configurable sleep time in seconds between retries for RabbitMQ configuration",
+			},
+			"timeout": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     3600,
+				Description: "Configurable timeout time in seconds for RabbitMQ configuration",
+			},
 		},
 	}
 }
@@ -156,7 +168,7 @@ func resourceRabbitMqConfigurationCreate(d *schema.ResourceData, meta interface{
 		}
 		params["rabbit."+k] = v
 	}
-	err := api.UpdateRabbitMqConfiguration(d.Get("instance_id").(int), params)
+	err := api.UpdateRabbitMqConfiguration(d.Get("instance_id").(int), params, d.Get("sleep").(int), d.Get("timeout").(int))
 	if err != nil {
 		return err
 	}
@@ -168,7 +180,7 @@ func resourceRabbitMqConfigurationCreate(d *schema.ResourceData, meta interface{
 func resourceRabbitMqConfigurationRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	instanceID, _ := strconv.Atoi(d.Id())
-	data, err := api.ReadRabbitMqConfiguration(instanceID)
+	data, err := api.ReadRabbitMqConfiguration(instanceID, d.Get("sleep").(int), d.Get("timeout").(int))
 	log.Printf("[DEBUG] cloudamqp::resource::rabbitmq_configuration::read data: %v", data)
 	if err != nil {
 		return err
@@ -224,7 +236,7 @@ func resourceRabbitMqConfigurationUpdate(d *schema.ResourceData, meta interface{
 		}
 		params["rabbit."+k] = v
 	}
-	err := api.UpdateRabbitMqConfiguration(d.Get("instance_id").(int), params)
+	err := api.UpdateRabbitMqConfiguration(d.Get("instance_id").(int), params, d.Get("sleep").(int), d.Get("timeout").(int))
 	if err != nil {
 		return err
 	}

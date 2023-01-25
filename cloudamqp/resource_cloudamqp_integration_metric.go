@@ -1,6 +1,8 @@
 package cloudamqp
 
 import (
+	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strconv"
@@ -97,34 +99,79 @@ func resourceIntegrationMetric() *schema.Resource {
 			"project_id": {
 				Type:        schema.TypeString,
 				Optional:    true,
+				Computed:    true,
 				Description: "Project ID. (Stackdriver)",
 			},
 			"private_key": {
 				Type:        schema.TypeString,
 				Optional:    true,
+				Computed:    true,
 				Sensitive:   true,
 				Description: "The private key. (Stackdriver)",
 			},
 			"client_email": {
 				Type:        schema.TypeString,
 				Optional:    true,
+				Computed:    true,
 				Description: "The client email. (Stackdriver)",
+			},
+			"private_key_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Computed:    true,
+				Sensitive:   true,
+				Description: "Private key identifier. (Stackdriver)",
+			},
+			"credentials": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Sensitive:   true,
+				Description: "Base64Encoded credentials. (Stackdriver)",
 			},
 		},
 	}
 }
 
 func resourceIntegrationMetricCreate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	keys := integrationMetricKeys(d.Get("name").(string))
-	params := make(map[string]interface{})
-	for _, k := range keys {
-		if v := d.Get(k); v != nil {
-			params[k] = v
+	var (
+		api        = meta.(*api.API)
+		intName    = strings.ToLower(d.Get("name").(string))
+		commonKeys = []string{"tags", "queue_allowlist", "vhost_allowlist"}
+		keys       = integrationMetricKeys(commonKeys, intName)
+		params     = make(map[string]interface{})
+	)
+
+	v := d.Get("credentials")
+	if intName == "stackdriver" && v != "" {
+		uDec, err := base64.URLEncoding.DecodeString(v.(string))
+		if err != nil {
+			return fmt.Errorf("Log integration failed, error decoding private_key: %s ", err.Error())
+		}
+		var jsonMap map[string]interface{}
+		json.Unmarshal([]byte(uDec), &jsonMap)
+		for _, k := range keys {
+			if contains(commonKeys, k) {
+				if v := d.Get(k); v == "" || v == nil {
+					delete(params, k)
+				} else {
+					params[k] = v
+				}
+			} else {
+				params[k] = jsonMap[k]
+			}
+		}
+	} else {
+		for _, k := range keys {
+			v := d.Get(k)
+			if contains(commonKeys, k) && v == "" {
+				delete(params, k)
+			} else if v != nil {
+				params[k] = v
+			}
 		}
 	}
 
-	data, err := api.CreateIntegration(d.Get("instance_id").(int), "metrics", d.Get("name").(string), params)
+	data, err := api.CreateIntegration(d.Get("instance_id").(int), "metrics", intName, params)
 
 	if err != nil {
 		return err
@@ -168,18 +215,49 @@ func resourceIntegrationMetricRead(d *schema.ResourceData, meta interface{}) err
 }
 
 func resourceIntegrationMetricUpdate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	keys := integrationMetricKeys(d.Get("name").(string))
-	params := make(map[string]interface{})
-	for _, k := range keys {
-		if v := d.Get(k); v != nil {
-			params[k] = v
+	var (
+		api        = meta.(*api.API)
+		intName    = strings.ToLower(d.Get("name").(string))
+		commonKeys = []string{"tags", "queue_allowlist", "vhost_allowlist"}
+		keys       = integrationMetricKeys(commonKeys, intName)
+		params     = make(map[string]interface{})
+	)
+
+	v := d.Get("credentials")
+	if intName == "stackdriver" && v != "" {
+		uDec, err := base64.URLEncoding.DecodeString(v.(string))
+		if err != nil {
+			return fmt.Errorf("Log integration failed, error decoding private_key: %s ", err.Error())
+		}
+		var jsonMap map[string]interface{}
+		json.Unmarshal([]byte(uDec), &jsonMap)
+		for _, k := range keys {
+			if contains(commonKeys, k) {
+				if v := d.Get(k); v == "" || v == nil {
+					delete(params, k)
+				} else {
+					params[k] = v
+				}
+			} else {
+				params[k] = jsonMap[k]
+			}
+		}
+	} else {
+		for _, k := range keys {
+			v := d.Get(k)
+			if contains(commonKeys, k) && v == "" {
+				delete(params, k)
+			} else if v != nil {
+				params[k] = v
+			}
 		}
 	}
+
 	err := api.UpdateIntegration(d.Get("instance_id").(int), "metrics", d.Id(), params)
 	if err != nil {
 		return err
 	}
+
 	return resourceIntegrationMetricRead(d, meta)
 }
 
@@ -214,15 +292,16 @@ func validateIntegrationMetricSchemaAttribute(key string) bool {
 		"license_key",
 		"project_id",
 		"private_key",
-		"client_email":
+		"client_email",
+		"private_key_id":
 		return true
 	default:
 		return false
 	}
 }
 
-func integrationMetricKeys(intName string) []string {
-	keys := []string{"tags", "queue_allowlist", "vhost_allowlist"}
+func integrationMetricKeys(commonKeys []string, intName string) []string {
+	keys := commonKeys
 	switch intName {
 	case "cloudwatch":
 		return append(keys, "region", "access_key_id", "secret_access_key")
@@ -239,8 +318,17 @@ func integrationMetricKeys(intName string) []string {
 	case "newrelic_v2":
 		return append(keys, "api_key", "region")
 	case "stackdriver":
-		return append(keys, "project_id", "private_key", "client_email")
+		return append(keys, "client_email", "private_key_id", "private_key", "project_id")
 	default:
 		return append(keys, "region", "access_keys", "secret_access_keys", "email", "api_key", "license_key")
 	}
+}
+
+func contains(s []string, searchString string) bool {
+	for i := range s {
+		if searchString == s[i] {
+			return true
+		}
+	}
+	return false
 }

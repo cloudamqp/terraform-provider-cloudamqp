@@ -294,6 +294,7 @@ func getPlanType(plan string) (string, error) {
 	case "bunny", "rabbit", "panda", "ape", "hippo", "lion",
 		// 2020 plans
 		"squirrel-1",
+		"hare-1", "hare-3",
 		"bunny-1", "bunny-3",
 		"rabbit-1", "rabbit-3", "rabbit-5",
 		"panda-1", "panda-3", "panda-5",
@@ -310,7 +311,9 @@ func validatePlanName() schema.SchemaValidateFunc {
 	return validation.StringInSlice([]string{
 		"lemur", "tiger", "lemming",
 		"bunny", "rabbit", "panda", "ape", "hippo", "lion",
-		"squirrel-1", "bunny-1", "bunny-3",
+		"squirrel-1",
+		"hare-1", "hare-3",
+		"bunny-1", "bunny-3",
 		"rabbit-1", "rabbit-3", "rabbit-5",
 		"panda-1", "panda-3", "panda-5",
 		"ape-1", "ape-3", "ape-5",
@@ -335,6 +338,7 @@ func is2020Plan(plan string) bool {
 	switch plan {
 	case
 		"squirrel-1",
+		"hare-1", "hare-3",
 		"bunny-1", "bunny-3",
 		"rabbit-1", "rabbit-3", "rabbit-5",
 		"panda-1", "panda-3", "panda-5",

@@ -44,6 +44,8 @@ Top level argument reference
 
 * `instance_id` - (Required) The CloudAMQP instance ID.
 * `rules`       - (Required) An array of rules, minimum of 1 needs to be configured. Each `rules` block consists of the field documented below.
+* `sleep`       - (Optional) Configurable sleep time in seconds between retries for firewall configuration. Default set to 30 seconds.
+* `timeout`     - (Optional) Configurable timeout time in seconds for firewall configuration. Default set to 1800 seconds.
 
 ___
 
