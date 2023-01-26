@@ -1,3 +1,13 @@
+## 1.23.0 (Jan 26, 2023)
+
+NOTES:
+
+* Enable creating shared subscription beta plan for [LavinMQ](https://lavinmq.com/).
+
+IMPROVEMENTS
+
+* Add LavinMQ lemming ([#182](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/182))
+
 ## 1.22.1 (Jan 18, 2023)
 
 IMPROVEMENTS:
