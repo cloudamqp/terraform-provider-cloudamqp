@@ -26,14 +26,14 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   rules {
     ip          = "10.56.72.0/24"
     ports       = []
-    services    = [AMQP","AMQPS", "HTTPS"]
+    services    = ["AMQP","AMQPS", "HTTPS"]
   }
 
   // Single IP address
   rules {
     ip          = "192.168.1.10/32"
     ports       = []
-    services    = [AMQP","AMQPS", "HTTPS"]
+    services    = ["AMQP","AMQPS", "HTTPS"]
   }
 }
 ```
