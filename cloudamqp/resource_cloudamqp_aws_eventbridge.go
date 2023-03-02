@@ -59,8 +59,8 @@ func resourceAwsEventBridge() *schema.Resource {
 func resourceAwsEventBridgeCreate(d *schema.ResourceData, meta interface{}) error {
 	var (
 		api        = meta.(*api.API)
-		keys       = alarmAttributeKeys()
-		params     map[string]interface{}
+		keys       = awsEventbridgeAttributeKeys()
+		params     = make(map[string]interface{})
 		instanceID = d.Get("instance_id").(int)
 	)
 
@@ -76,17 +76,16 @@ func resourceAwsEventBridgeCreate(d *schema.ResourceData, meta interface{}) erro
 	}
 
 	d.SetId(data["id"].(string))
-	return resourceAlarmRead(d, meta)
+	return nil
 }
 
 func resourceAwsEventBridgeRead(d *schema.ResourceData, meta interface{}) error {
 	var (
-		api           = meta.(*api.API)
-		instanceID    = d.Get("instance_id").(int)
-		eventbridgeID = d.Get("id").(string)
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
 	)
 
-	data, err := api.ReadAwsEventBridge(instanceID, eventbridgeID)
+	data, err := api.ReadAwsEventBridge(instanceID, d.Id())
 	if err != nil {
 		return err
 	}
@@ -96,18 +95,13 @@ func resourceAwsEventBridgeRead(d *schema.ResourceData, meta interface{}) error 
 	return nil
 }
 
-func resourceAwsEventBridgeUpdate(d *schema.ResourceData, meta interface{}) error {
-	return nil
-}
-
 func resourceAwsEventBridgeDelete(d *schema.ResourceData, meta interface{}) error {
 	var (
-		api           = meta.(*api.API)
-		instanceID    = d.Get("instance_id").(int)
-		eventbridgeID = d.Get("id").(string)
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
 	)
 
-	return api.DeleteAwsEventBridge(instanceID, eventbridgeID)
+	return api.DeleteAwsEventBridge(instanceID, d.Id())
 }
 
 func awsEventbridgeAttributeKeys() []string {
