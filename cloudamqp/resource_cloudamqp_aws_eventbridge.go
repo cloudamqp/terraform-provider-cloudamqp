@@ -13,33 +13,38 @@ func resourceAwsEventBridge() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
 				Type:        schema.TypeInt,
+				ForceNew:    true,
 				Required:    true,
 				Description: "Instance identifier",
 			},
 			"aws_account_id": {
 				Type:        schema.TypeString,
+				ForceNew:    true,
 				Required:    true,
 				Description: "",
 			},
 			"aws_region": {
 				Type:        schema.TypeString,
+				ForceNew:    true,
 				Required:    true,
 				Description: "",
 			},
 			"vhost": {
 				Type:        schema.TypeString,
+				ForceNew:    true,
 				Required:    true,
 				Description: "",
 			},
 			"queue": {
 				Type:        schema.TypeString,
+				ForceNew:    true,
 				Required:    true,
 				Description: "",
 			},
 			"with_headers": {
 				Type:        schema.TypeBool,
-				Default:     false,
-				Optional:    true,
+				ForceNew:    true,
+				Required:    true,
 				Description: "",
 			},
 			"status": {
