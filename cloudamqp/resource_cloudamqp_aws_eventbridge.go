@@ -50,7 +50,7 @@ func resourceAwsEventBridge() *schema.Resource {
 			"status": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "Status for the EventBridge.",
+				Description: "Always set to null, unless there is an error starting the EventBridge",
 			},
 		},
 	}

@@ -51,7 +51,7 @@ The following arguments are supported:
 All attributes reference are computed
 
 * `id`  - The identifier for this resource.
-* `status` - The status for the EventBridge.
+* `status` - Always set to null, unless there is an error starting the EventBridge.
 
 ## Dependency
 
