@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_integration_aws_eventbridge
 
-This resource allows you to create and manage, an [AWS EventBridge](https://aws.amazon.com/eventbridge/) for a CloudAMQP instance. Once created continue and mapping the EventBridge in the [AWS Eventbridge console](https://console.aws.amazon.com/events/home).
+This resource allows you to create and manage, an [AWS EventBridge](https://aws.amazon.com/eventbridge/) for a CloudAMQP instance. Once created, continue to map the EventBridge in the [AWS Eventbridge console](https://console.aws.amazon.com/events/home).
 
 ~>  If messages are too large (maximum body size allowed is 256kb) or are not valid JSON, AWS EventBridge will not accept it and the message will be rejected (Tips: setup a dead-letter queue to catch them).
 
