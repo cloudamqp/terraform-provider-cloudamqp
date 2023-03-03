@@ -9,7 +9,7 @@ description: |-
 
 This resource allows you to create and manage, an [AWS EventBridge](https://aws.amazon.com/eventbridge/) for a CloudAMQP instance. Once created, continue to map the EventBridge in the [AWS Eventbridge console](https://console.aws.amazon.com/events/home).
 
-~>  If messages are too large (maximum body size allowed is 256kb) or are not valid JSON, AWS EventBridge will not accept it and the message will be rejected (Tips: setup a dead-letter queue to catch them).
+~>  Our consumer needs to have exclusive usage to the configured queue and the maximum body size allowed on msgs by AWS is 256kb. The message body has to be valid JSON for AWS Eventbridge to accept it. If messages are too large or are not valid JSON, they will be rejected (tip: setup a dead-letter queue to catch them).
 
 Not possible to update this resource. Any changes made to the argument will destroy and recreate the resource. Hence why all arguments use ForceNew.
 
