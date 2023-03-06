@@ -59,4 +59,6 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-Not possible to import this resource.
+`cloudamqp_integration_aws_eventbridge` can be imported using CloudAMQP internal identifier of the AWS EventBridge together (CSV separated) with the instance identifier. To retrieve the AWS EventBridge identifier, use [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-eventbridges)
+
+`terraform import cloudamqp_integration_aws_eventbridge.aws_eventbridge <id>,<instance_id>`
