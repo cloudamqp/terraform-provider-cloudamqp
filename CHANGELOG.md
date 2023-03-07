@@ -1,21 +1,25 @@
-## 1.xx.x (Not released)
+## 1.24.0 (Mar 07, 2023)
 
-NOTES: 
+NOTES:
 
 * Bump github.com/hashicorp/go-getter from 1.6.1 to 1.7.0 ([#187](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/187))
 * Bump golang.org/x/net from 0.0.0-20210326060303-6b1517762897 to 0.7.0 ([#190](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/190))
 * Bump golang.org/x/crypto from 0.0.0-20210921155107-089bfa567519 to 0.1.0 ([#191](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/191))
 * Updated the API wrapper (go-api) dependecy with newer version (1.11.0)
 
+FEATURES:
+
+* Added support for AWS EventBridge integration ([192](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/192))
+
 ## 1.23.0 (Jan 26, 2023)
 
 NOTES:
 
-* Enable creating shared subscription beta plan for [LavinMQ](https://lavinmq.com/).
+* Enabled creating shared subscription beta plan for [LavinMQ](https://lavinmq.com/).
 
 IMPROVEMENTS:
 
-* Add LavinMQ lemming ([#182](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/182))
+* Added LavinMQ lemming ([#182](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/182))
 
 ## 1.22.1 (Jan 18, 2023)
 
