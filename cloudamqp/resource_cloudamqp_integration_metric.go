@@ -153,9 +153,13 @@ func resourceIntegrationMetricCreate(d *schema.ResourceData, meta interface{}) e
 			if contains(commonKeys, k) {
 				if v := d.Get(k); v == "" || v == nil {
 					delete(params, k)
-				} else {
-					params[k] = v
+					continue
+				} else if k == "queue_allowlist" {
+					k = "queue_regex"
+				} else if k == "vhost_allowlist" {
+					k = "vhost_regex"
 				}
+				params[k] = v
 			} else {
 				params[k] = jsonMap[k]
 			}
@@ -165,7 +169,14 @@ func resourceIntegrationMetricCreate(d *schema.ResourceData, meta interface{}) e
 			v := d.Get(k)
 			if contains(commonKeys, k) && v == "" {
 				delete(params, k)
-			} else if v != nil {
+				continue
+			} else if k == "queue_allowlist" {
+				k = "queue_regex"
+			} else if k == "vhost_allowlist" {
+				k = "vhost_regex"
+			}
+
+			if v != nil {
 				params[k] = v
 			}
 		}
@@ -206,6 +217,12 @@ func resourceIntegrationMetricRead(d *schema.ResourceData, meta interface{}) err
 			d.Set("name", v)
 		}
 		if validateIntegrationMetricSchemaAttribute(k) {
+			if k == "queue_regex" {
+				k = "queue_allowlist"
+			} else if k == "vhost_regex" {
+				k = "vhost_allowlist"
+			}
+
 			if err = d.Set(k, v); err != nil {
 				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
@@ -235,9 +252,13 @@ func resourceIntegrationMetricUpdate(d *schema.ResourceData, meta interface{}) e
 			if contains(commonKeys, k) {
 				if v := d.Get(k); v == "" || v == nil {
 					delete(params, k)
-				} else {
-					params[k] = v
+					continue
+				} else if k == "queue_allowlist" {
+					k = "queue_regex"
+				} else if k == "vhost_allowlist" {
+					k = "vhost_regex"
 				}
+				params[k] = v
 			} else {
 				params[k] = jsonMap[k]
 			}
@@ -247,7 +268,14 @@ func resourceIntegrationMetricUpdate(d *schema.ResourceData, meta interface{}) e
 			v := d.Get(k)
 			if contains(commonKeys, k) && v == "" {
 				delete(params, k)
-			} else if v != nil {
+				continue
+			} else if k == "queue_allowlist" {
+				k = "queue_regex"
+			} else if k == "vhost_allowlist" {
+				k = "vhost_regex"
+			}
+
+			if v != nil {
 				params[k] = v
 			}
 		}
@@ -285,8 +313,8 @@ func validateIntegrationMetricSchemaAttribute(key string) bool {
 		"access_key_id",
 		"secret_access_key",
 		"tags",
-		"queue_allowlist",
-		"vhost_allowlist",
+		"queue_regex",
+		"vhost_regex",
 		"api_key",
 		"email",
 		"license_key",
