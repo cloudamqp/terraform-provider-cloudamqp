@@ -1,3 +1,9 @@
+## 1.24.1 (Mar 14, 2023)
+
+BUG FIXES:
+
+* Convert optional queue/vhost to correct JSON fields for metrics integration
+
 ## 1.24.0 (Mar 07, 2023)
 
 NOTES:
