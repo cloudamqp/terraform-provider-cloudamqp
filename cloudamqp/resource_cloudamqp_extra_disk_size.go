@@ -53,12 +53,14 @@ func resourceExtraDiskSize() *schema.Resource {
 							Computed: true,
 						},
 						"disk_size": {
-							Type:     schema.TypeInt,
-							Computed: true,
+							Type:        schema.TypeInt,
+							Computed:    true,
+							Description: "Subscription plan disk size",
 						},
 						"additional_disk_size": {
-							Type:     schema.TypeInt,
-							Computed: true,
+							Type:        schema.TypeInt,
+							Computed:    true,
+							Description: "Additional added disk size",
 						},
 					},
 				},
@@ -76,7 +78,7 @@ func resourceExtraDiskSizeUpdate(d *schema.ResourceData, meta interface{}) error
 	params["extra_disk_size"] = d.Get("extra_disk_size")
 	params["allow_downtime"] = d.Get("allow_downtime")
 
-	_, err := api.ResizeDisk(d.Get("instance_id").(int), params, 30, 1800)
+	_, err := api.ResizeDisk(d.Get("instance_id").(int), params, d.Get("sleep").(int), d.Get("timeout").(int))
 	if err != nil {
 		return err
 	}
