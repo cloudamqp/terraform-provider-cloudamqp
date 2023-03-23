@@ -188,11 +188,11 @@ data "cloudamqp_nodes" "nodes" {
 
 ## Argument Reference
 
-* `instance_id`       - (Required) The CloudAMQP instance ID.
-* `extra_disk_size`   - (Required) Extra disk size in GB. Supported values: 25, 50, 100, 250, 500, 1000, 2000
-* `allow_downtime`    - (Optional) When resizing the disk, allow downtime to do so. Default set to false. (Only Available from v1.25.0).
-* `sleep`             - (Optional) Configurable sleep time in seconds between retries for firewall configuration. Default set to 30 seconds.
-* `timeout`           - (Optional) Configurable timeout time in seconds for firewall configuration. Default set to 1800 seconds.
+Any changes to the arguments will destroy and recreate this resource.
+
+* `instance_id`       - (ForceNew/Required) The CloudAMQP instance ID.
+* `extra_disk_size`   - (ForceNew/Required) Extra disk size in GB. Supported values: 25, 50, 100, 250, 500, 1000, 2000
+* `allow_downtime`    - (ForceNew/Required) When resizing the disk, allow downtime to do so. Default set to false. (Only Available from v1.25.0).
 
 ## Attributes reference
 

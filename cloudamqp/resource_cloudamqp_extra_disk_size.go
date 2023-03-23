@@ -12,36 +12,25 @@ func resourceExtraDiskSize() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceExtraDiskSizeUpdate,
 		Read:   resourceExtraDiskSizeRead,
-		Update: resourceExtraDiskSizeUpdate,
 		Delete: resourceExtraDiskSizeDelete,
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
 				Type:        schema.TypeInt,
+				ForceNew:    true,
 				Required:    true,
 				Description: "Instance identifier",
 			},
 			"extra_disk_size": {
 				Type:        schema.TypeInt,
+				ForceNew:    true,
 				Required:    true,
 				Description: "Extra disk size in GB",
 			},
 			"allow_downtime": {
 				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     false,
+				ForceNew:    true,
+				Required:    true,
 				Description: "When resizing disk, allow downtime to do so",
-			},
-			"sleep": {
-				Type:        schema.TypeInt,
-				Optional:    true,
-				Default:     30,
-				Description: "Configurable sleep time in seconds between retries for firewall configuration",
-			},
-			"timeout": {
-				Type:        schema.TypeInt,
-				Optional:    true,
-				Default:     1800,
-				Description: "Configurable timeout time in seconds for firewall configuration",
 			},
 			"nodes": {
 				Type:     schema.TypeList,
@@ -71,14 +60,16 @@ func resourceExtraDiskSize() *schema.Resource {
 
 func resourceExtraDiskSizeUpdate(d *schema.ResourceData, meta interface{}) error {
 	var (
-		api    = meta.(*api.API)
-		params = make(map[string]interface{})
+		api     = meta.(*api.API)
+		params  = make(map[string]interface{})
+		sleep   = 30   // 30 seconds between retires when polling if extra disk size been succesfull.
+		timeout = 1800 // seconds between polling will timeout.
 	)
 
 	params["extra_disk_size"] = d.Get("extra_disk_size")
 	params["allow_downtime"] = d.Get("allow_downtime")
 
-	_, err := api.ResizeDisk(d.Get("instance_id").(int), params, d.Get("sleep").(int), d.Get("timeout").(int))
+	_, err := api.ResizeDisk(d.Get("instance_id").(int), params, sleep, timeout)
 	if err != nil {
 		return err
 	}
