@@ -13,7 +13,7 @@ This resource allows you to resize the disk with additional storage capacity.
 
 ***Post v1.25.0***: Now also available for Google-Compute-Engine (GCE) and Azure.
 
-Introducing an additional optional argument called `allow_downtime`, default set to *false*. This will resize the disk without downtime for *AWS* and *GCE*. While Azure only support swapping the disk, and this argument needs to be set to *true*.
+Introducing a new required argument called `allow_downtime`. This will resize the disk without downtime for *AWS* and *GCE*. While Azure only support swapping the disk, and this argument needs to be set to *true*.
 
 Allow downtime also makes it possible to circumvent the time rate limit or shrinking the disk.
 
@@ -23,7 +23,9 @@ Allow downtime also makes it possible to circumvent the time rate limit or shrin
 | google-compute-engine | Expand current disk  | Try to expand, otherwise swap |
 | azure-arm             | Not supported        | Swap disk to new size         |
 
-~> **WARNING:** Due to restrictions from cloud providers, it's only possible to resize the disk every 8 hours. Unless the `allow_downtime=true` is set. Then the disk will be swapped for a new.
+<br>
+
+~> **WARNING:** Due to restrictions from cloud providers, it's only possible to resize the disk every 8 hours. Unless the `allow_downtime=true` is set, then the disk will be swapped for a new.
 
 Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/).
 
@@ -58,7 +60,8 @@ resource "cloudamqp_extra_disk_size" "resize_disk" {
   extra_disk_size = 25
 }
 
-# Refresh nodes info after disk resize
+# Optional, refresh nodes info after disk resize by adding dependency
+# to cloudamqp_extra_disk_size.resize_disk resource
 data "cloudamqp_nodes" "nodes" {
   instance_id = cloudamqp_instance.instance.id
   depends_on = [
@@ -97,7 +100,8 @@ resource "cloudamqp_extra_disk_size" "resize_disk" {
   allow_downtime = false
 }
 
-# Refresh nodes info after disk resize
+# Optional, refresh nodes info after disk resize by adding dependency
+# to cloudamqp_extra_disk_size.resize_disk resource
 data "cloudamqp_nodes" "nodes" {
   instance_id = cloudamqp_instance.instance.id
   depends_on = [
@@ -136,7 +140,8 @@ resource "cloudamqp_extra_disk_size" "resize_disk" {
   allow_downtime = false
 }
 
-# Refresh nodes info after disk resize
+# Optional, refresh nodes info after disk resize by adding dependency
+# to cloudamqp_extra_disk_size.resize_disk resource
 data "cloudamqp_nodes" "nodes" {
   instance_id = cloudamqp_instance.instance.id
   depends_on = [
@@ -175,7 +180,8 @@ resource "cloudamqp_extra_disk_size" "resize_disk" {
   allow_downtime = true
 }
 
-# Refresh nodes info after disk resize
+# Optional, refresh nodes info after disk resize by adding dependency
+# to cloudamqp_extra_disk_size.resize_disk resource
 data "cloudamqp_nodes" "nodes" {
   instance_id = cloudamqp_instance.instance.id
   depends_on = [
