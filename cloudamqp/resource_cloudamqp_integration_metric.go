@@ -158,6 +158,8 @@ func resourceIntegrationMetricCreate(d *schema.ResourceData, meta interface{}) e
 					k = "queue_regex"
 				} else if k == "vhost_allowlist" {
 					k = "vhost_regex"
+				} else {
+					continue
 				}
 				params[k] = v
 			} else {
@@ -257,6 +259,8 @@ func resourceIntegrationMetricUpdate(d *schema.ResourceData, meta interface{}) e
 					k = "queue_regex"
 				} else if k == "vhost_allowlist" {
 					k = "vhost_regex"
+				} else {
+					continue
 				}
 				params[k] = v
 			} else {
