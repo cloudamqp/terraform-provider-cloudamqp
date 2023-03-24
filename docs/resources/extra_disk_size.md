@@ -19,13 +19,15 @@ Allow downtime also makes it possible to circumvent the time rate limit or shrin
 
 | Cloud Platform        | allow_downtime=false | allow_downtime=true           |
 |-----------------------|----------------------|-------------------------------|
-| amazon-web-services   | Expand current disk  | Try to expand, otherwise swap |
-| google-compute-engine | Expand current disk  | Try to expand, otherwise swap |
+| amazon-web-services   | Expand current disk* | Try to expand, otherwise swap |
+| google-compute-engine | Expand current disk* | Try to expand, otherwise swap |
 | azure-arm             | Not supported        | Swap disk to new size         |
 
-<br>
+*Preferable method to use.
 
 ~> **WARNING:** Due to restrictions from cloud providers, it's only possible to resize the disk every 8 hours. Unless the `allow_downtime=true` is set, then the disk will be swapped for a new.
+
+<br>
 
 Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/).
 
@@ -198,7 +200,7 @@ Any changes to the arguments will destroy and recreate this resource.
 
 * `instance_id`       - (ForceNew/Required) The CloudAMQP instance ID.
 * `extra_disk_size`   - (ForceNew/Required) Extra disk size in GB. Supported values: 25, 50, 100, 250, 500, 1000, 2000
-* `allow_downtime`    - (ForceNew/Required) When resizing the disk, allow downtime to do so. Default set to false. (Only Available from v1.25.0).
+* `allow_downtime`    - (ForceNew/Required) When resizing the disk, allow downtime to do so. (Only Available from v1.25.0).
 
 ## Attributes reference
 
