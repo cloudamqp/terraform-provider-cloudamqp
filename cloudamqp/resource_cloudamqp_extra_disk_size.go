@@ -62,8 +62,8 @@ func resourceExtraDiskSizeUpdate(d *schema.ResourceData, meta interface{}) error
 	var (
 		api     = meta.(*api.API)
 		params  = make(map[string]interface{})
-		sleep   = 30   // 30 seconds between retires when polling if extra disk size been succesfull.
-		timeout = 1800 // seconds between polling will timeout.
+		sleep   = 30   // Seconds between retires when either polling for ready nodes or catching busy backend.
+		timeout = 1800 // Seconds until timeout when either polling for ready nodes or catching busy backend.
 	)
 
 	params["extra_disk_size"] = d.Get("extra_disk_size")
