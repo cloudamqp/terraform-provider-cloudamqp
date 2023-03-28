@@ -30,7 +30,7 @@ func resourceExtraDiskSize() *schema.Resource {
 				Type:        schema.TypeBool,
 				ForceNew:    true,
 				Required:    true,
-				Description: "When resizing disk, allow downtime to do so",
+				Description: "When resizing disk, allow cluster downtime to do so",
 			},
 			"nodes": {
 				Type:     schema.TypeList,
@@ -103,7 +103,8 @@ func resourceExtraDiskSizeRead(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceExtraDiskSizeDelete(d *schema.ResourceData, meta interface{}) error {
-	// Just remove this resource from the state file, no action taken in backend.
+	// Just remove this resource from the state file, as the delete route does not exist in the backend
+	// but we need to allow delete to happen, e.g. when you destroy your instance
 	return nil
 }
 
