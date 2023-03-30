@@ -151,7 +151,8 @@ func resourceIntegrationMetricCreate(d *schema.ResourceData, meta interface{}) e
 		json.Unmarshal([]byte(uDec), &jsonMap)
 		for _, k := range keys {
 			if contains(commonKeys, k) {
-				if v := d.Get(k); v == "" || v == nil {
+				v := d.Get(k)
+				if v == "" || v == nil {
 					delete(params, k)
 					continue
 				} else if k == "queue_allowlist" {
@@ -250,7 +251,8 @@ func resourceIntegrationMetricUpdate(d *schema.ResourceData, meta interface{}) e
 		json.Unmarshal([]byte(uDec), &jsonMap)
 		for _, k := range keys {
 			if contains(commonKeys, k) {
-				if v := d.Get(k); v == "" || v == nil {
+				v := d.Get(k)
+				if v == "" || v == nil {
 					delete(params, k)
 					continue
 				} else if k == "queue_allowlist" {
