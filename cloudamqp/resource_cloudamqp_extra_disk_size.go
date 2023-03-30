@@ -12,6 +12,7 @@ func resourceExtraDiskSize() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceExtraDiskSizeUpdate,
 		Read:   resourceExtraDiskSizeRead,
+		Update: resourceExtraDiskSizeUpdate,
 		Delete: resourceExtraDiskSizeDelete,
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -28,9 +29,21 @@ func resourceExtraDiskSize() *schema.Resource {
 			},
 			"allow_downtime": {
 				Type:        schema.TypeBool,
-				ForceNew:    true,
-				Required:    true,
+				Optional:    true,
+				Default:     false,
 				Description: "When resizing disk, allow cluster downtime to do so",
+			},
+			"sleep": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     30,
+				Description: "Configurable sleep time in seconds between retries for resizing the disk",
+			},
+			"timeout": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     1800,
+				Description: "Configurable timeout time in seconds for resizing the disk",
 			},
 			"nodes": {
 				Type:     schema.TypeList,
@@ -62,8 +75,8 @@ func resourceExtraDiskSizeUpdate(d *schema.ResourceData, meta interface{}) error
 	var (
 		api     = meta.(*api.API)
 		params  = make(map[string]interface{})
-		sleep   = 30   // Seconds between retires when either polling for ready nodes or catching busy backend.
-		timeout = 1800 // Seconds until timeout when either polling for ready nodes or catching busy backend.
+		sleep   = d.Get("sleep").(int)
+		timeout = d.Get("timeout").(int)
 	)
 
 	params["extra_disk_size"] = d.Get("extra_disk_size")
