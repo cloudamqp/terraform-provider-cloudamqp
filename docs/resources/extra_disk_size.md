@@ -11,11 +11,12 @@ This resource allows you to resize the disk with additional storage capacity.
 
 ***Pre v1.25.0***: Only available for Amazon Web Services (AWS) and it done without downtime
 
-***Post v1.25.0***: Now also available for Google-Compute-Engine (GCE) and Azure.
+***Post v1.25.0***: Now also available for Google Compute Engine (GCE) and Azure.
 
-Introducing a new required argument called `allow_downtime`. This will resize the disk without downtime for *AWS* and *GCE*. While Azure only support swapping the disk, and this argument needs to be set to *true*.
+Introducing a new optional argument called `allow_downtime`.  Leaving it out or set it to false will proceed to try and resize the disk without downtime, available for *AWS* and *GCE*.
+While *Azure* only support swapping the disk, and this argument needs to be set to *true*.
 
-Allow downtime also makes it possible to circumvent the time rate limit or shrinking the disk.
+`allow_downtime` also makes it possible to circumvent the time rate limit or shrinking the disk.
 
 | Cloud Platform        | allow_downtime=false | allow_downtime=true           |
 |-----------------------|----------------------|-------------------------------|
@@ -27,11 +28,7 @@ Allow downtime also makes it possible to circumvent the time rate limit or shrin
 
 ~> **WARNING:** Due to restrictions from cloud providers, it's only possible to resize the disk every 8 hours. Unless the `allow_downtime=true` is set, then the disk will be swapped for a new.
 
-<br>
-
-Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/).
-
-Only available for dedicated subscription plans.
+Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/) and only available for dedicated subscription plans.
 
 ## Example Usage
 
@@ -53,7 +50,6 @@ resource "cloudamqp_instance" "instance" {
   name   = "Instance"
   plan   = "bunny-1"
   region = "amazon-web-services::us-west-2"
-  rmq_version = "3.10.1"
 }
 
 # Resize disk with 25 extra GB
@@ -92,14 +88,12 @@ resource "cloudamqp_instance" "instance" {
   name   = "Instance"
   plan   = "bunny-1"
   region = "amazon-web-services::us-west-2"
-  rmq_version = "3.10.1"
 }
 
 # Resize disk with 25 extra GB, without downtime
 resource "cloudamqp_extra_disk_size" "resize_disk" {
   instance_id = cloudamqp_instance.instance.id
   extra_disk_size = 25
-  allow_downtime = false
 }
 
 # Optional, refresh nodes info after disk resize by adding dependency
@@ -132,14 +126,12 @@ resource "cloudamqp_instance" "instance" {
   name   = "Instance"
   plan   = "bunny-1"
   region = "google-compute-engine::us-central1"
-  rmq_version = "3.10.1"
 }
 
 # Resize disk with 25 extra GB, without downtime
 resource "cloudamqp_extra_disk_size" "resize_disk" {
   instance_id = cloudamqp_instance.instance.id
   extra_disk_size = 25
-  allow_downtime = false
 }
 
 # Optional, refresh nodes info after disk resize by adding dependency
@@ -172,7 +164,6 @@ resource "cloudamqp_instance" "instance" {
   name   = "Instance"
   plan   = "bunny-1"
   region = "azure-arm::centralus"
-  rmq_version = "3.10.1"
 }
 
 # Resize disk with 25 extra GB, with downtime
@@ -199,8 +190,12 @@ data "cloudamqp_nodes" "nodes" {
 Any changes to the arguments will destroy and recreate this resource.
 
 * `instance_id`       - (ForceNew/Required) The CloudAMQP instance ID.
-* `extra_disk_size`   - (ForceNew/Required) Extra disk size in GB. Supported values: 25, 50, 100, 250, 500, 1000, 2000
-* `allow_downtime`    - (ForceNew/Required) When resizing the disk, allow downtime to do so. (Only Available from v1.25.0).
+* `extra_disk_size`   - (ForceNew/Required) Extra disk size in GB. Supported values: 0, 25, 50, 100, 250, 500, 1000, 2000
+* `allow_downtime`    - (Optional) When resizing the disk, allow cluster downtime if necessary. Default set to false.
+* `sleep`       - (Optional) Configurable sleep time in seconds between retries for resizing the disk. Default set to 30 seconds.
+* `timeout`     - (Optional) Configurable timeout time in seconds for resizing the disk. Default set to 1800 seconds.
+
+***Note:*** `allow_downtime` Only available from v1.25.0 and required when hosting in *Azure*.
 
 ## Attributes reference
 
