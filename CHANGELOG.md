@@ -1,3 +1,13 @@
+## 1.24.2 (Mar 30, 2023)
+
+NOTES:
+
+* Fix issues introduced in previous version 1.24.1
+
+BUG FIXES:
+
+* Stackdriver optional arugments assignments ([#198](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/198))
+
 ## 1.24.1 (Mar 14, 2023)
 
 BUG FIXES:
