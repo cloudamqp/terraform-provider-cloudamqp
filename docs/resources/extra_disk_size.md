@@ -191,11 +191,11 @@ Any changes to the arguments will destroy and recreate this resource.
 
 * `instance_id`       - (ForceNew/Required) The CloudAMQP instance ID.
 * `extra_disk_size`   - (ForceNew/Required) Extra disk size in GB. Supported values: 0, 25, 50, 100, 250, 500, 1000, 2000
-* `allow_downtime`    - (Optional) When resizing the disk, allow cluster downtime if necessary. Default set to false.
+* `allow_downtime`    - (Optional) When resizing the disk, allow cluster downtime if necessary. Default set to false. Required when hosting in *Azure*.
 * `sleep`       - (Optional) Configurable sleep time in seconds between retries for resizing the disk. Default set to 30 seconds.
 * `timeout`     - (Optional) Configurable timeout time in seconds for resizing the disk. Default set to 1800 seconds.
 
-***Note:*** `allow_downtime` Only available from v1.25.0 and required when hosting in *Azure*.
+***Note:*** `allow_downtime`, `sleep`, `timeout` only available from v1.25.0.
 
 ## Attributes reference
 
