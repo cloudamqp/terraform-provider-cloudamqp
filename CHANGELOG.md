@@ -7,7 +7,7 @@ NOTES:
 
 FEATURES:
 
-* Resize disk with for more platforms and using new optional argument allow_downtime ([#194]()https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/194)
+* Resize disk with for more platforms and using new optional argument allow_downtime ([#194](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/194))
 
 ## 1.24.2 (Mar 30, 2023)
 
