@@ -1,3 +1,14 @@
+## 1.25.0 (Apr 03, 2023)
+
+NOTES:
+
+* Resize disk with extra disk resource supports more platforms (GCE, Azure)
+* Updated the API wrapper (go-api) dependecy with newer version (1.11.1)
+
+FEATURES:
+
+* Resize disk with for more platforms and using new optional argument allow_downtime ([#194]()https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/194)
+
 ## 1.24.2 (Mar 30, 2023)
 
 NOTES:
