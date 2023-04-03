@@ -17,7 +17,7 @@ NOTES:
 
 BUG FIXES:
 
-* Stackdriver optional arugments assignments ([#198](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/198))
+* Stackdriver optional arguments assignments ([#198](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/198))
 
 ## 1.24.1 (Mar 14, 2023)
 
