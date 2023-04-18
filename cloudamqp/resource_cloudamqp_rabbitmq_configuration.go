@@ -131,6 +131,13 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 					"Does not affect the file logger. Requires a RabbitMQ restart to be applied.",
 				ValidateFunc: validateLogLevel(),
 			},
+			"cluster_partition_handling": {
+				Type:         schema.TypeString,
+				Computed:     true,
+				Optional:     true,
+				Description:  "Set how the cluster should handle network partition.",
+				ValidateFunc: validation.StringInSlice([]string{"autoheal", "pause_minority"}, true),
+			},
 			"sleep": {
 				Type:        schema.TypeInt,
 				Optional:    true,
@@ -256,7 +263,8 @@ func validateRabbitMqConfigurationJSONField(key string) bool {
 		"rabbit.vm_memory_high_watermark",
 		"rabbit.queue_index_embed_msgs_below",
 		"rabbit.max_message_size",
-		"rabbit.log.exchange.level":
+		"rabbit.log.exchange.level",
+		"rabbit.cluster_partition_handling":
 		return true
 	}
 	return false
@@ -284,5 +292,6 @@ func rabbitMqConfigurationWriteAttributeKeys() []string {
 		"queue_index_embed_msgs_below",
 		"max_message_size",
 		"log_exchange_level",
+		"cluster_partition_handling",
 	}
 }
