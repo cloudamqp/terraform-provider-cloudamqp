@@ -27,10 +27,9 @@ func resourceInstance() *schema.Resource {
 				Description: "Name of the instance",
 			},
 			"plan": {
-				Type:         schema.TypeString,
-				Required:     true,
-				Description:  "Name of the plan, see documentation for valid plans",
-				ValidateFunc: validatePlanName(),
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Name of the plan, see documentation for valid plans",
 			},
 			"region": {
 				Type:        schema.TypeString,
@@ -128,6 +127,20 @@ func resourceInstance() *schema.Resource {
 				oldPlanType, _ := getPlanType(old.(string))
 				newPlanType, _ := getPlanType(new.(string))
 				return !(oldPlanType == newPlanType)
+			}),
+			customdiff.ValidateChange("plan", func(old, new, meta interface{}) error {
+				if old == new {
+					return nil
+				}
+				api := meta.(*api.API)
+				return api.ValidatePlan(new.(string))
+			}),
+			customdiff.ValidateChange("region", func(old, new, meta interface{}) error {
+				if old == new {
+					return nil
+				}
+				api := meta.(*api.API)
+				return api.ValidateRegion(new.(string))
 			}),
 		),
 	}
