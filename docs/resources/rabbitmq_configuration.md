@@ -127,9 +127,9 @@ All attributes reference are computed
 | queue_index_embed_msgs_below | int | 4096 | 1 | 10485760 | bytes | Applied immediately for new queues, requires restart for existing queues |  |
 | max_message_size | int | 134217728 | 1 | 536870912 | bytes | Only effects new channels |  |
 | log_exchange_level | string | error | - | - |  | RabbitMQ restart required | debug, info, warning, error, critical |
-| cluster_partition_handling | string | see below | - | - |  | Applied immediately | autoheal, pause_minority |
+| cluster_partition_handling | string | see below | - | - |  | Applied immediately | autoheal, pause_minority, ignore |
 
-  *Note: Recommended settings for cluster_partition_handling: `pause_minority` on multi node cluster (3 or more nodes), otherwise `autoheal`*
+  *Note: Recommended setting for cluster_partition_handling: `autoheal` for cluster with 1-2 nodes, `pause_minority` for cluster with 3 or more nodes. While `ignore` setting is not recommended.*
 
 ## Dependency
 

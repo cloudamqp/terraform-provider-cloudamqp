@@ -136,7 +136,7 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 				Computed:     true,
 				Optional:     true,
 				Description:  "Set how the cluster should handle network partition.",
-				ValidateFunc: validation.StringInSlice([]string{"autoheal", "pause_minority"}, true),
+				ValidateFunc: validation.StringInSlice([]string{"autoheal", "pause_minority", "ignore"}, true),
 			},
 			"sleep": {
 				Type:        schema.TypeInt,
