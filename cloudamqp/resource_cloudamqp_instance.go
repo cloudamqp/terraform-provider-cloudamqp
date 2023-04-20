@@ -2,13 +2,10 @@ package cloudamqp
 
 import (
 	"fmt"
-	"regexp"
-	"strconv"
 
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 func resourceInstance() *schema.Resource {
@@ -280,47 +277,11 @@ func validateInstanceSchemaAttribute(key string) bool {
 		"tags",
 		"vhost",
 		"no_default_alarms",
-		"ready":
+		"ready",
+		"backend":
 		return true
 	}
 	return false
-}
-
-func getPlanType(plan string) (string, error) {
-	switch plan {
-	case "lemur", "tiger", "lemming":
-		return "shared", nil
-	// Legacy plans
-	case "bunny", "rabbit", "panda", "ape", "hippo", "lion",
-		// 2020 plans
-		"squirrel-1",
-		"hare-1", "hare-3",
-		"bunny-1", "bunny-3",
-		"rabbit-1", "rabbit-3", "rabbit-5",
-		"panda-1", "panda-3", "panda-5",
-		"ape-1", "ape-3", "ape-5",
-		"hippo-1", "hippo-3", "hippo-5",
-		"lion-1", "lion-3", "lion-5",
-		"rhino-1":
-		return "dedicated", nil
-	}
-	return "", fmt.Errorf("couldn't find a matching plan type for: %s", plan)
-}
-
-func validatePlanName() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
-		"lemur", "tiger", "lemming",
-		"bunny", "rabbit", "panda", "ape", "hippo", "lion",
-		"squirrel-1",
-		"hare-1", "hare-3",
-		"bunny-1", "bunny-3",
-		"rabbit-1", "rabbit-3", "rabbit-5",
-		"panda-1", "panda-3", "panda-5",
-		"ape-1", "ape-3", "ape-5",
-		"hippo-1", "hippo-3", "hippo-5",
-		"lion-1", "lion-3", "lion-5",
-		"rhino-1",
-	}, true)
 }
 
 func isSharedPlan(plan string) bool {
@@ -328,34 +289,20 @@ func isSharedPlan(plan string) bool {
 	case
 		"lemur",
 		"tiger",
-		"lemming":
+		"lemming",
+		"ermine":
 		return true
 	}
 	return false
 }
 
-func is2020Plan(plan string) bool {
+func isLegacyPlan(plan string) bool {
 	switch plan {
 	case
-		"squirrel-1",
-		"hare-1", "hare-3",
-		"bunny-1", "bunny-3",
-		"rabbit-1", "rabbit-3", "rabbit-5",
-		"panda-1", "panda-3", "panda-5",
-		"ape-1", "ape-3", "ape-5",
-		"hippo-1", "hippo-3", "hippo-5",
-		"lion-1", "lion-3", "lion-5",
-		"rhino-1":
+		"bunny", "rabbit", "panda", "ape", "hippo", "lion":
 		return true
 	}
 	return false
-}
-
-func numberOfNodes(plan string) int {
-	r := regexp.MustCompile("[135]")
-	match := r.FindString(plan)
-	nodes, _ := strconv.Atoi(match)
-	return nodes
 }
 
 func instanceCreateAttributeKeys() []string {
