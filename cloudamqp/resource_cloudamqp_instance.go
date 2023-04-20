@@ -165,23 +165,18 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 			params[k] = false
 		}
 
-		if k == "nodes" {
+		// Remove keys from params
+		switch k {
+		case "nodes":
 			plan := d.Get("plan").(string)
-			if is2020Plan(plan) {
-				nodes := numberOfNodes(plan)
-				params[k] = nodes
-			} else if isSharedPlan(plan) {
+			if isSharedPlan(plan) || !isLegacyPlan(plan) {
 				delete(params, k)
 			}
-		}
-
-		if k == "vpc_id" {
+		case "vpc_id":
 			if d.Get(k).(int) == 0 {
 				delete(params, k)
 			}
-		}
-
-		if k == "vpc_subnet" {
+		case "vpc_subnet":
 			if d.Get(k) == "" {
 				delete(params, k)
 			}
@@ -209,16 +204,6 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {
 				err = d.Set("vpc_id", v.(map[string]interface{})["id"])
-			} else if k == "nodes" {
-				plan := d.Get("plan").(string)
-				if is2020Plan(plan) {
-					nodes := numberOfNodes(plan)
-					err = d.Set(k, nodes)
-				} else if isSharedPlan(plan) {
-					continue
-				} else {
-					err = d.Set(k, v)
-				}
 			} else {
 				err = d.Set(k, v)
 			}
@@ -264,10 +249,7 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 		}
 		if k == "nodes" {
 			plan := d.Get("plan").(string)
-			if is2020Plan(plan) {
-				nodes := numberOfNodes(plan)
-				params[k] = nodes
-			} else if isSharedPlan(plan) {
+			if isSharedPlan(plan) || !isLegacyPlan(plan) {
 				delete(params, k)
 			}
 		}

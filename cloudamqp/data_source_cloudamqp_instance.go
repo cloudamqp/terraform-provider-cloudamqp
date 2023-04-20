@@ -128,14 +128,6 @@ func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 			if k == "vpc" {
 				err = d.Set("vpc_id", v.(map[string]interface{})["id"])
 				err = d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
-			} else if k == "nodes" {
-				plan := d.Get("plan").(string)
-				if is2020Plan(plan) {
-					nodes := numberOfNodes(plan)
-					err = d.Set(k, nodes)
-				} else {
-					err = d.Set(k, v)
-				}
 			} else {
 				err = d.Set(k, v)
 			}
