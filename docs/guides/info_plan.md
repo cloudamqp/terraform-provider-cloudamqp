@@ -8,13 +8,16 @@ description: |-
 
 # Subscription plans
 
-Table below shows subscription plans for CloudAMQP. `Lemur`is free of charge, for full price list see [cloudamqp](https://www.cloudamqp.com/plans.html). `Lemur`and `Tiger` are shared instances and share underlying hardware with other instances. They are also limited to which CloudAMQP provider resources that can be used. Further information on availability on each resource page.
+Tables below shows general subscription plans for CloudAMQP for either `RabbitMQ` or `LavinMQ`, for full price list see [cloudamqp](https://www.cloudamqp.com/plans.html).
+
+## Plans using RabbitMQ
+
+`Lemur` and `Tiger` are shared instances and share underlying hardware with other instances. They are also limited to which CloudAMQP provider resources that can be used. Further information on availability on each resource page.
 
 Name | Plan | Type | Nodes
 ---- | ---- | ---- | ----
 Little lemur    | lemur   | shared
 Tough Tiger     | tiger   | shared
-Lemming (Beta)  | lemming | shared
 Sassy Squirrel  | squirrel-1    | dedicated | 1
 Big Bunny       | bunny-1,3     | dedicated | 1,3
 Roaring Rabbit  | rabbit-1,3,5  | dedicated | 1,3,5
@@ -24,7 +27,38 @@ Heavy Hippo     | hippo-1,3,5   | dedicated | 1,3,5
 Loud Lion       | lion-1,3,5    | dedicated | 1,3,5
 Raging Rhino    | rhino-1       | dedicated | 1
 
+*Information can differ from your actually valid plans, e.g. your team have been given preview access to unreleased plans. The complete list can be retrieved with your team API access key.*
+
+```shell
+curl -u :xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx \
+  https://customer.cloudamqp.com/api/plans?backend=rabbitmq | json_pp
+```
+
+## Plans using LavinMQ
+
+`Lemming`and `Ermine` are shared instances and share underlying hardware with other instances. They are also limited to which CloudAMQP provider resources that can be used. Further information on availability on each resource page.
+
+Name | Plan | Type | Nodes
+---- | ---- | ---- | ----
+Loyal Lemming       | lemming  | shared
+Elegant Ermine      | ermine   | shared
+Passionate Puffin   | puffin-1    | dedicated | 1
+Playful Penguin     | penguin-1   | dedicated | 1
+Lively Lynx         | lynx-1      | dedicated | 1
+Wild Wolverine      | wolverine-1 | dedicated | 1
+Remarkable Reindeer | reindeer-1  | dedicated | 1
+Brave Bear          | bear-1      | dedicated | 1
+Outstanding Orca    | orca-1      | dedicated | 1
+
+*Information can differ from your actually valid plans, e.g. your team have been given preview access to unreleased plans. The complete list can be retrieved with your team API access key.*
+
+```shell
+curl -u :xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx \
+  https://customer.cloudamqp.com/api/plans?backend=lavinmq | json_pp
+```
+
 <br>
+
 # Legacy subscription plans
 
 Table below shows deprecated subscription plans for CloudAMQP. Existing plans will still work, but there will not be possible to create new ones.

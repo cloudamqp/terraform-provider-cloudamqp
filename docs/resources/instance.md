@@ -7,9 +7,9 @@ description: |-
 
 # cloudamqp_instance
 
-This resource allows you to create and manage a CloudAMQP instance running Rabbit MQ and deploy to multiple cloud platforms provider and over multiple regions, see [Instance regions](../instance_region.html) for more information.
+This resource allows you to create and manage a CloudAMQP instance running either ***RabbitMQ*** or ***LavinMQ*** and can be deployed to multiple cloud platforms provider and regions, see [Instance regions](../instance_region.html) for more information.
 
-Once the instance is created it will be assigned a unique identifier. All other resource and data sources created for this instance needs to reference the instance identifier.
+Once the instance is created it will be assigned a unique identifier. All other resources and data sources created for this instance needs to reference this unique instance identifier.
 
 Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html).
 
@@ -23,21 +23,28 @@ Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html).
   </summary>
 
 ```hcl
-# Minimum free lemur instance
+# Minimum free lemur instance running RabbitMQ
 resource "cloudamqp_instance" "lemur_instance" {
-  name = "terraform-free-instance"
-  plan = "lemur"
-  region = "amazon-web-services::us-west-1"
+  name    = "cloudamqp-free-instance"
+  plan    = "lemur"
+  region  = "amazon-web-services::us-west-1"
+  tags    = ["rabbitmq"]
 }
 
-# New dedicated bunny instance
+# Minimum free lemming instance running LavinMQ
+resource "cloudamqp_instance" "lemming_instance" {
+  name    = "cloudamqp-free-instance"
+  plan    = "lemming"
+  region  = "amazon-web-services::us-west-1"
+  tags    = ["lavinmq"]
+}
+
+# New dedicated bunny instance running RabbitMQ
 resource "cloudamqp_instance" "instance" {
-  name              = "terraform-cloudamqp-instance"
-  plan              = "bunny-1"
-  region            = "amazon-web-services::us-west-1"
-  tags              = ["terraform"]
-  rmq_version       = "3.8.3"
-  no_default_alarms = true
+  name    = "terraform-cloudamqp-instance"
+  plan    = "bunny-1"
+  region  = "amazon-web-services::us-west-1"
+  tags    = ["terraform"]
 }
 ```
 </details>
@@ -52,10 +59,9 @@ resource "cloudamqp_instance" "instance" {
 ```hcl
 resource "cloudamqp_instance" "instance" {
   name                = "terraform-cloudamqp-instance"
-  plan                = "squirrel-1"
+  plan                = "bunny-1"
   region              = "amazon-web-services::us-west-1"
   tags                = ["terraform"]
-  rmq_version         = "3.9.14"
   vpc_subnet          = "10.56.72.0/24"
 }
 ```
@@ -72,10 +78,9 @@ resource "cloudamqp_instance" "instance" {
 # Dedicated instance that also creates VPC
 resource "cloudamqp_instance" "instance_01" {
   name                = "terraform-cloudamqp-instance-01"
-  plan                = "squirrel-1"
+  plan                = "bunny-1"
   region              = "amazon-web-services::us-west-1"
   tags                = ["terraform"]
-  rmq_version         = "3.9.14"
   vpc_subnet          = "10.56.72.0/24"
 }
 ```
@@ -96,10 +101,9 @@ resource "cloudamqp_vpc" "vpc" {
 # Add vpc_id and keep_associated_vpc attributes
 resource "cloudamqp_instance" "instance_01" {
   name                = "terraform-cloudamqp-instance-01"
-  plan                = "squirrel-1"
+  plan                = "bunny-1"
   region              = "amazon-web-services::us-west-1"
   tags                = ["terraform"]
-  rmq_version         = "3.9.14"
   vpc_id              = cloudamqp_vpc.vpc.id
   keep_associated_vpc = true
 }
@@ -125,10 +129,9 @@ resource "cloudamqp_vpc" "vpc" {
 # First instance added to managed VPC
 resource "cloudamqp_instance" "instance_01" {
   name                = "terraform-cloudamqp-instance-01"
-  plan                = "squirrel-1"
+  plan                = "bunny-1"
   region              = "amazon-web-services::us-west-1"
   tags                = ["terraform"]
-  rmq_version         = "3.9.14"
   vpc_id              = cloudamqp_vpc.vpc.id
   keep_associated_vpc = true
 }
@@ -136,10 +139,9 @@ resource "cloudamqp_instance" "instance_01" {
 # Second instance added to managed VPC
 resource "cloudamqp_instance" "instance_02" {
   name                = "terraform-cloudamqp-instance-02"
-  plan                = "squirrel-1"
+  plan                = "bunny-1"
   region              = "amazon-web-services::us-west-1"
   tags                = ["terraform"]
-  rmq_version         = "3.9.14"
   vpc_id              = cloudamqp_vpc.vpc.id
   keep_associated_vpc = true
 }
@@ -158,7 +160,7 @@ The following arguments are supported:
 
  ***Note: Changing region will force the instance to be destroyed and a new created in the new region. All data will be lost and a new name assigned.***
 
-* `nodes`       - (Computed/Optional) Number of nodes, 1, 3 or 5 depending on plan used.
+* `nodes`       - (Computed/Optional) Number of nodes, 1, 3 or 5 depending on plan used. Only needed for legacy plans, will otherwise be computed.
 
  ***Deprecated: Legacy subscriptions plan can still change this to scale up or down the instance. New subscriptions plans use the plan to determine number of nodes. In order to change number of nodes the `plan` needs to be updated.***
 
@@ -188,6 +190,8 @@ All attributes reference are computed
 * `host`    - The external hostname for the CloudAMQP instance.
 * `host_internal` - The internal hostname for the CloudAMQP instance.
 * `vhost`   - The virtual host used by Rabbit MQ.
+* `dedicated` - Information if the CloudAMQP instance is shared or dedicated.
+* `backend` - Information if the CloudAMQP instance runs either RabbitMQ or LavinMQ.
 
 ## Import
 

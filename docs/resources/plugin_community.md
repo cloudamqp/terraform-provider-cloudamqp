@@ -9,7 +9,7 @@ description: |-
 
 This resource allows you to install or uninstall community plugins. Once installed the plugin will be available in `cloudamqp_plugin`.
 
-Only available for dedicated subscription plans.
+Only available for dedicated subscription plans running ***RabbitMQ***.
 
 ~> CloudAMQP Terraform provider [v1.11.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.11.0) there is support for multiple retries when requesting information about community plugins. This was introduced to avoid `ReadPluginCommunity error 400: Timeout talking to backend`.
 

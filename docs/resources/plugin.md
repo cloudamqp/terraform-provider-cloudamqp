@@ -9,7 +9,7 @@ description: |-
 
 This resource allows you to enable or disable Rabbit MQ plugins.
 
-Only available for dedicated subscription plans.
+Only available for dedicated subscription plans running ***RabbitMQ***.
 
 ~> CloudAMQP Terraform provider [v1.10.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.10.0) there is support for multiple retries when requesting information about plugins. This was introduced to avoid `ReadPlugin error 400: Timeout talking to backend`.
 
