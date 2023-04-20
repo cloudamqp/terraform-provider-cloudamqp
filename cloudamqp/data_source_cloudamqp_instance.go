@@ -138,6 +138,12 @@ func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
+	if v, ok := d.Get("nodes").(int); ok && v > 0 {
+		d.Set("dedicated", true)
+	} else {
+		d.Set("dedicated", false)
+	}
+
 	if err = d.Set("host", data["hostname_external"].(string)); err != nil {
 		return fmt.Errorf("error setting host for resource %s: %s", d.Id(), err)
 	}
@@ -148,12 +154,6 @@ func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 
 	if data["no_default_alarms"] == nil {
 		d.Set("no_default_alarms", false)
-	}
-
-	planType, _ := getPlanType(d.Get("plan").(string))
-	dedicated := planType == "dedicated"
-	if err = d.Set("dedicated", dedicated); err != nil {
-		return fmt.Errorf("error setting dedicated for resource %s: %s", d.Id(), err)
 	}
 
 	data = api.UrlInformation(data["url"].(string))
