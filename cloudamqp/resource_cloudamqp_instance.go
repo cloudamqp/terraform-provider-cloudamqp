@@ -120,6 +120,11 @@ func resourceInstance() *schema.Resource {
 				Default:     false,
 				Description: "Keep associated VPC when deleting instance",
 			},
+			"backend": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Software backend used, determined by subscription plan",
+			},
 		},
 		CustomizeDiff: customdiff.All(
 			customdiff.ForceNewIfChange("plan", func(old, new, meta interface{}) bool {

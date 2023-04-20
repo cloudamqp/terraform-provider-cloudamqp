@@ -105,6 +105,11 @@ func dataSourceInstance() *schema.Resource {
 				Computed:    true,
 				Description: "If default alarms set or not for the instance",
 			},
+			"backend": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Software backend used, determined by subscription plan",
+			},
 		},
 	}
 }
