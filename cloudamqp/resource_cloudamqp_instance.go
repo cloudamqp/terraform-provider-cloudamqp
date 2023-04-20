@@ -124,8 +124,8 @@ func resourceInstance() *schema.Resource {
 		CustomizeDiff: customdiff.All(
 			customdiff.ForceNewIfChange("plan", func(old, new, meta interface{}) bool {
 				// Recreate instance if changing plan type (from dedicated to shared or vice versa)
-				oldPlanType, _ := getPlanType(old.(string))
-				newPlanType, _ := getPlanType(new.(string))
+				api := meta.(*api.API)
+				oldPlanType, newPlanType := api.PlanTypes(old.(string), new.(string))
 				return !(oldPlanType == newPlanType)
 			}),
 			customdiff.ValidateChange("plan", func(old, new, meta interface{}) error {
