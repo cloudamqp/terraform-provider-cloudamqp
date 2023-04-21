@@ -21,10 +21,6 @@ amazon-web-services::us-west-1
 amazon-web-services::eu-central-1
 amazon-web-services::ap-east-1
 
-# Example of Azure regions
-azure::south-central-us
-azure::west-europe
-
 # Example of Azure-arm regions
 azure-arm::australiacentral
 azure-arm::southeastasia
@@ -38,16 +34,4 @@ google-compute-engine::asia-east1
 # Example of Digital Ocean regions
 digital-ocean::nyc3
 digital-ocean::sgp1
-
-# Example of Rackspace regions
-rackspace::iad
-rackspace::ord
-
-# Example of Softlayer regions
-softlayer::ams01
-softlayer::dal05
-
-# Example of Alibaba regions
-alibaba::cn-beijing
-alibaba::ap-southeast-1
 ```
