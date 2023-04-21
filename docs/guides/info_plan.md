@@ -10,6 +10,13 @@ description: |-
 
 Tables below shows general subscription plans for CloudAMQP for either `RabbitMQ` or `LavinMQ`, for full price list see [cloudamqp](https://www.cloudamqp.com/plans.html).
 
+*Information can differ from your actually valid plans, e.g. your team have been given preview access to unreleased plans. The up to date collection of available plans can be retrieved with your team API access key.*
+
+```shell
+curl -u :xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx \
+  https://customer.cloudamqp.com/api/plans
+```
+
 ## Plans using RabbitMQ
 
 `Lemur` and `Tiger` are shared instances and share underlying hardware with other instances. They are also limited to which CloudAMQP provider resources that can be used. Further information on availability on each resource page.
@@ -27,11 +34,10 @@ Heavy Hippo     | hippo-1,3,5   | dedicated | 1,3,5
 Loud Lion       | lion-1,3,5    | dedicated | 1,3,5
 Raging Rhino    | rhino-1       | dedicated | 1
 
-*Information can differ from your actually valid plans, e.g. your team have been given preview access to unreleased plans. The complete list can be retrieved with your team API access key.*
-
 ```shell
+# Filter out available plans for RabbitMQ
 curl -u :xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx \
-  https://customer.cloudamqp.com/api/plans?backend=rabbitmq | json_pp
+  https://customer.cloudamqp.com/api/plans?backend=rabbitmq
 ```
 
 ## Plans using LavinMQ
@@ -50,11 +56,10 @@ Remarkable Reindeer | reindeer-1  | dedicated | 1
 Brave Bear          | bear-1      | dedicated | 1
 Outstanding Orca    | orca-1      | dedicated | 1
 
-*Information can differ from your actually valid plans, e.g. your team have been given preview access to unreleased plans. The complete list can be retrieved with your team API access key.*
-
 ```shell
+# Filter out available plans for LavinMQ
 curl -u :xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx \
-  https://customer.cloudamqp.com/api/plans?backend=lavinmq | json_pp
+  https://customer.cloudamqp.com/api/plans?backend=lavinmq
 ```
 
 <br>

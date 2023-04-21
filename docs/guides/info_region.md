@@ -13,8 +13,13 @@ CloudAMQP support hosting by multiple cloud platform providers and over multiple
 *The complete list can also be retrieved with your team API access key.*
 
 ```shell
+# List all supported platform providers and regions
 curl -u :xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx \
-  https://customer.cloudamqp.com/api/regions | json_pp
+  https://customer.cloudamqp.com/api/regions
+
+# Filter regions by platform provider
+curl -u :xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx \
+  https://customer.cloudamqp.com/api/regions?provider=amazon-web-services
 ```
 
 Format used on instance regions are as follow `{provider}::{region}`
