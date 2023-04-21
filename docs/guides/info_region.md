@@ -10,17 +10,7 @@ description: |-
 
 CloudAMQP support hosting by multiple cloud platform providers and over multiple regions. Below a few examples of supported platforms and regions. For fully updated list see [CloudAMQP plans](https://www.cloudamqp.com/plans.html) and scroll to the bottom and extend `List all available regions`. Platforms and regions with shared servers are also listed, for AWS we try to have at least one shared server supported for each region.
 
-*The complete list can also be retrieved with your team API access key.*
-
-```shell
-# List all supported platform providers and regions
-curl -u :xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx \
-  https://customer.cloudamqp.com/api/regions
-
-# Filter regions by platform provider
-curl -u :xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx \
-  https://customer.cloudamqp.com/api/regions?provider=amazon-web-services
-```
+*To retrieve an up to date list check out [cloudamqp-docs](https://docs.cloudamqp.com/#regions)*
 
 Format used on instance regions are as follow `{provider}::{region}`
 
