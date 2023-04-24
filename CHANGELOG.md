@@ -1,3 +1,9 @@
+## 1.x.x (Unreleased)
+
+IMPROVEMENTS:
+
+* Added support to configure cluster_partition_handling ([#200](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/200))
+
 ## 1.25.0 (Apr 03, 2023)
 
 NOTES:
