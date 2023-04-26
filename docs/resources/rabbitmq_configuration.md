@@ -31,6 +31,7 @@ resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
   max_message_size = 134217728
   queue_index_embed_msgs_below = 4096
   vm_memory_high_watermark = 0.81
+  cluster_partition_handling = "autoheal"
 }
 ```
 </details>
@@ -54,6 +55,7 @@ resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
   max_message_size = 134217728
   queue_index_embed_msgs_below = 4096
   vm_memory_high_watermark = 0.81
+  cluster_partition_handling = "autoheal"
 }
 
 data "cloudamqp_nodes" "list_nodes" {
@@ -103,6 +105,7 @@ The following arguments are supported:
 * `log_exchange_level`            - (Computed/Optional) Log level for the logger used for log integrations and the CloudAMQP Console log view.
 
   ***Note: Requires a restart of RabbitMQ to be applied.***
+* `cluster_partition_handling`    - (Computed/Optional) Set how the cluster should handle network partition.
 * `sleep` - (Optional) Configurable sleep time in seconds between retries for RabbitMQ configuration. Default set to 60 seconds.
 * `timeout` - (Optional) - Configurable timeout time in seconds for RabbitMQ configuration. Default set to 3600 seconds.
 
@@ -124,6 +127,9 @@ All attributes reference are computed
 | queue_index_embed_msgs_below | int | 4096 | 1 | 10485760 | bytes | Applied immediately for new queues, requires restart for existing queues |  |
 | max_message_size | int | 134217728 | 1 | 536870912 | bytes | Only effects new channels |  |
 | log_exchange_level | string | error | - | - |  | RabbitMQ restart required | debug, info, warning, error, critical |
+| cluster_partition_handling | string | see below | - | - |  | Applied immediately | autoheal, pause_minority, ignore |
+
+  *Note: Recommended setting for cluster_partition_handling: `autoheal` for cluster with 1-2 nodes, `pause_minority` for cluster with 3 or more nodes. While `ignore` setting is not recommended.*
 
 ## Dependency
 
