@@ -105,6 +105,11 @@ func dataSourceInstance() *schema.Resource {
 				Computed:    true,
 				Description: "If default alarms set or not for the instance",
 			},
+			"backend": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Software backend used, determined by subscription plan",
+			},
 		},
 	}
 }
@@ -123,14 +128,6 @@ func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 			if k == "vpc" {
 				err = d.Set("vpc_id", v.(map[string]interface{})["id"])
 				err = d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
-			} else if k == "nodes" {
-				plan := d.Get("plan").(string)
-				if is2020Plan(plan) {
-					nodes := numberOfNodes(plan)
-					err = d.Set(k, nodes)
-				} else {
-					err = d.Set(k, v)
-				}
 			} else {
 				err = d.Set(k, v)
 			}
@@ -139,6 +136,12 @@ func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
+	}
+
+	if v, ok := d.Get("nodes").(int); ok && v > 0 {
+		d.Set("dedicated", true)
+	} else {
+		d.Set("dedicated", false)
 	}
 
 	if err = d.Set("host", data["hostname_external"].(string)); err != nil {
@@ -151,12 +154,6 @@ func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 
 	if data["no_default_alarms"] == nil {
 		d.Set("no_default_alarms", false)
-	}
-
-	planType, _ := getPlanType(d.Get("plan").(string))
-	dedicated := planType == "dedicated"
-	if err = d.Set("dedicated", dedicated); err != nil {
-		return fmt.Errorf("error setting dedicated for resource %s: %s", d.Id(), err)
 	}
 
 	data = api.UrlInformation(data["url"].(string))

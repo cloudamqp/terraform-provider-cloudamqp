@@ -39,3 +39,5 @@ All attributes reference are computed
 * `host`        - The external hostname for the CloudAMQP instance.
 * `host_internal` - The internal hostname for the CloudAMQP instance.
 * `vhost`       - The virtual host configured in Rabbit MQ.
+* `dedicated`   - Information if the CloudAMQP instance is shared or dedicated.
+* `backend`     - Information if the CloudAMQP instance runs either RabbitMQ or LavinMQ.

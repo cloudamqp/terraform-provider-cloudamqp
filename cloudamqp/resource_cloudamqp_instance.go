@@ -2,13 +2,10 @@ package cloudamqp
 
 import (
 	"fmt"
-	"regexp"
-	"strconv"
 
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 func resourceInstance() *schema.Resource {
@@ -27,10 +24,9 @@ func resourceInstance() *schema.Resource {
 				Description: "Name of the instance",
 			},
 			"plan": {
-				Type:         schema.TypeString,
-				Required:     true,
-				Description:  "Name of the plan, see documentation for valid plans",
-				ValidateFunc: validatePlanName(),
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Name of the plan, see documentation for valid plans",
 			},
 			"region": {
 				Type:        schema.TypeString,
@@ -121,13 +117,32 @@ func resourceInstance() *schema.Resource {
 				Default:     false,
 				Description: "Keep associated VPC when deleting instance",
 			},
+			"backend": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Software backend used, determined by subscription plan",
+			},
 		},
 		CustomizeDiff: customdiff.All(
 			customdiff.ForceNewIfChange("plan", func(old, new, meta interface{}) bool {
 				// Recreate instance if changing plan type (from dedicated to shared or vice versa)
-				oldPlanType, _ := getPlanType(old.(string))
-				newPlanType, _ := getPlanType(new.(string))
+				api := meta.(*api.API)
+				oldPlanType, newPlanType := api.PlanTypes(old.(string), new.(string))
 				return !(oldPlanType == newPlanType)
+			}),
+			customdiff.ValidateChange("plan", func(old, new, meta interface{}) error {
+				if old == new {
+					return nil
+				}
+				api := meta.(*api.API)
+				return api.ValidatePlan(new.(string))
+			}),
+			customdiff.ValidateChange("region", func(old, new, meta interface{}) error {
+				if old == new {
+					return nil
+				}
+				api := meta.(*api.API)
+				return api.ValidateRegion(new.(string))
 			}),
 		),
 	}
@@ -147,23 +162,18 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 			params[k] = false
 		}
 
-		if k == "nodes" {
+		// Remove keys from params
+		switch k {
+		case "nodes":
 			plan := d.Get("plan").(string)
-			if is2020Plan(plan) {
-				nodes := numberOfNodes(plan)
-				params[k] = nodes
-			} else if isSharedPlan(plan) {
+			if isSharedPlan(plan) || !isLegacyPlan(plan) {
 				delete(params, k)
 			}
-		}
-
-		if k == "vpc_id" {
+		case "vpc_id":
 			if d.Get(k).(int) == 0 {
 				delete(params, k)
 			}
-		}
-
-		if k == "vpc_subnet" {
+		case "vpc_subnet":
 			if d.Get(k) == "" {
 				delete(params, k)
 			}
@@ -191,16 +201,6 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {
 				err = d.Set("vpc_id", v.(map[string]interface{})["id"])
-			} else if k == "nodes" {
-				plan := d.Get("plan").(string)
-				if is2020Plan(plan) {
-					nodes := numberOfNodes(plan)
-					err = d.Set(k, nodes)
-				} else if isSharedPlan(plan) {
-					continue
-				} else {
-					err = d.Set(k, v)
-				}
 			} else {
 				err = d.Set(k, v)
 			}
@@ -211,18 +211,18 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
+	if v, ok := d.Get("nodes").(int); ok && v > 0 {
+		d.Set("dedicated", true)
+	} else {
+		d.Set("dedicated", false)
+	}
+
 	if err = d.Set("host", data["hostname_external"].(string)); err != nil {
 		return fmt.Errorf("error setting host for resource %s: %s", d.Id(), err)
 	}
 
 	if err = d.Set("host_internal", data["hostname_internal"].(string)); err != nil {
 		return fmt.Errorf("error setting host for resource %s: %s", d.Id(), err)
-	}
-
-	planType, _ := getPlanType(d.Get("plan").(string))
-	dedicated := planType == "dedicated"
-	if err = d.Set("dedicated", dedicated); err != nil {
-		return fmt.Errorf("error setting dedicated for resource %s: %s", d.Id(), err)
 	}
 
 	data = api.UrlInformation(data["url"].(string))
@@ -246,10 +246,7 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 		}
 		if k == "nodes" {
 			plan := d.Get("plan").(string)
-			if is2020Plan(plan) {
-				nodes := numberOfNodes(plan)
-				params[k] = nodes
-			} else if isSharedPlan(plan) {
+			if isSharedPlan(plan) || !isLegacyPlan(plan) {
 				delete(params, k)
 			}
 		}
@@ -280,47 +277,11 @@ func validateInstanceSchemaAttribute(key string) bool {
 		"tags",
 		"vhost",
 		"no_default_alarms",
-		"ready":
+		"ready",
+		"backend":
 		return true
 	}
 	return false
-}
-
-func getPlanType(plan string) (string, error) {
-	switch plan {
-	case "lemur", "tiger", "lemming":
-		return "shared", nil
-	// Legacy plans
-	case "bunny", "rabbit", "panda", "ape", "hippo", "lion",
-		// 2020 plans
-		"squirrel-1",
-		"hare-1", "hare-3",
-		"bunny-1", "bunny-3",
-		"rabbit-1", "rabbit-3", "rabbit-5",
-		"panda-1", "panda-3", "panda-5",
-		"ape-1", "ape-3", "ape-5",
-		"hippo-1", "hippo-3", "hippo-5",
-		"lion-1", "lion-3", "lion-5",
-		"rhino-1":
-		return "dedicated", nil
-	}
-	return "", fmt.Errorf("couldn't find a matching plan type for: %s", plan)
-}
-
-func validatePlanName() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
-		"lemur", "tiger", "lemming",
-		"bunny", "rabbit", "panda", "ape", "hippo", "lion",
-		"squirrel-1",
-		"hare-1", "hare-3",
-		"bunny-1", "bunny-3",
-		"rabbit-1", "rabbit-3", "rabbit-5",
-		"panda-1", "panda-3", "panda-5",
-		"ape-1", "ape-3", "ape-5",
-		"hippo-1", "hippo-3", "hippo-5",
-		"lion-1", "lion-3", "lion-5",
-		"rhino-1",
-	}, true)
 }
 
 func isSharedPlan(plan string) bool {
@@ -328,34 +289,20 @@ func isSharedPlan(plan string) bool {
 	case
 		"lemur",
 		"tiger",
-		"lemming":
+		"lemming",
+		"ermine":
 		return true
 	}
 	return false
 }
 
-func is2020Plan(plan string) bool {
+func isLegacyPlan(plan string) bool {
 	switch plan {
 	case
-		"squirrel-1",
-		"hare-1", "hare-3",
-		"bunny-1", "bunny-3",
-		"rabbit-1", "rabbit-3", "rabbit-5",
-		"panda-1", "panda-3", "panda-5",
-		"ape-1", "ape-3", "ape-5",
-		"hippo-1", "hippo-3", "hippo-5",
-		"lion-1", "lion-3", "lion-5",
-		"rhino-1":
+		"bunny", "rabbit", "panda", "ape", "hippo", "lion":
 		return true
 	}
 	return false
-}
-
-func numberOfNodes(plan string) int {
-	r := regexp.MustCompile("[135]")
-	match := r.FindString(plan)
-	nodes, _ := strconv.Atoi(match)
-	return nodes
 }
 
 func instanceCreateAttributeKeys() []string {

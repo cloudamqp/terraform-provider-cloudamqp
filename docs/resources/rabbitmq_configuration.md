@@ -9,7 +9,7 @@ description: |-
 
 This resource allows you update RabbitMQ config.
 
-Only available for dedicated subscription plans.
+Only available for dedicated subscription plans running ***RabbitMQ***.
 
 ## Example Usage
 

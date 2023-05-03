@@ -56,7 +56,7 @@ The `rules` block consists of:
 * `services`    - (Required) Pre-defined service ports, see table below
 * `description` - (Optional) Description name of the rule. e.g. Default.
 
-Pre-defined services:
+Pre-defined services for RabbitMQ:
 
 | Service name | Port  |
 |--------------|-------|
@@ -69,6 +69,14 @@ Pre-defined services:
 | STOMPS       | 61614 |
 | STREAM       | 5552  |
 | STREAM_SSL   | 5551  |
+
+Pre-defined services for LavinMQ:
+
+| Service name | Port  |
+|--------------|-------|
+| AMQP         | 5672  |
+| AMQPS        | 5671  |
+| HTTPS        | 443   |
 
 ## Attributes Reference
 
