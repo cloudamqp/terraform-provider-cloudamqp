@@ -9,7 +9,7 @@ description: |-
 
 The CloudAMQP provider is used to interact with CloudAMQP organization resources.
 
-The provider allows you to manage your CloudAMQP instances and features. Create, configure and deploy Rabbit MQ to different cloud platforms. The provider needs to be configured with the proper API key before it can be used.
+The provider allows you to manage your CloudAMQP instances and features. Create, configure and deploy [**RabbitMQ**](https://www.rabbitmq.com/) or [**LavinMQ**](https://lavinmq.com/) to different cloud platforms. The provider needs to be configured with the proper API key before it can be used.
 
 Use the navigation to the left to read about the available resources.
 
