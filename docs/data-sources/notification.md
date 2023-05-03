@@ -31,6 +31,7 @@ All attributes reference are computed
 * `id`    - The identifier for this resource.
 * `type`  - The type of the recipient.
 * `value` - The notification endpoint, where to send the notification.
+* `options`- Options argument (e.g. `rk` used for VictorOps routing key).
 
 ## Dependency
 

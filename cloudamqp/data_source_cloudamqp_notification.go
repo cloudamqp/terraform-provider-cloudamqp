@@ -40,6 +40,14 @@ func dataSourceNotification() *schema.Resource {
 				Optional:    true,
 				Description: "Optional display name of the recipient",
 			},
+			"options": {
+				Type:        schema.TypeMap,
+				Optional:    true,
+				Description: "Optional key-value pair options parameters",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
 		},
 	}
 }
