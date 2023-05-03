@@ -1,5 +1,9 @@
 ## 1.x.x (Unreleased)
 
+FEATURES:
+
+* Use the API backend to validate plans and regions ([#201](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/201))
+
 IMPROVEMENTS:
 
 * Added support to configure cluster_partition_handling ([#200](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/200))
