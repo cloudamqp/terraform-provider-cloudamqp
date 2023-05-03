@@ -1,4 +1,4 @@
-## 1.x.x (Unreleased)
+## 1.26.0 (May 03, 2023)
 
 NOTES:
 
