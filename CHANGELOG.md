@@ -1,5 +1,10 @@
 ## 1.x.x (Unreleased)
 
+NOTES:
+
+* Updated Go version with newer version (1.20)
+* Updated the API wrapper (go-api) dependecy with newer version (1.12.0)
+
 FEATURES:
 
 * Use the API backend to validate plans and regions ([#201](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/201))
