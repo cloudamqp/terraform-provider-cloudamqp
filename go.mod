@@ -1,8 +1,8 @@
 module github.com/cloudamqp/terraform-provider-cloudamqp
 
-go 1.17
+go 1.20
 
-require github.com/84codes/go-api v1.11.1
+require github.com/84codes/go-api v1.12.0
 
 require github.com/hashicorp/terraform-plugin-sdk v1.17.2
 
