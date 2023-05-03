@@ -13,6 +13,10 @@ IMPROVEMENTS:
 
 * Added support to configure cluster_partition_handling ([#200](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/200))
 
+BUG FIXES:
+
+* Added missing options attribute for notification data source ([#199](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/199))
+
 ## 1.25.0 (Apr 03, 2023)
 
 NOTES:
