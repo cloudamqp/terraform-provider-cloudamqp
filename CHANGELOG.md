@@ -1,3 +1,13 @@
+## 1.26.1 (Unreleased)
+
+NOTES:
+
+* Updated the API wrapper (go-api) dependecy with newer version (1.12.1)
+
+BUG FIXES:
+
+* Fix underlying issue with validation error response
+
 ## 1.26.0 (May 03, 2023)
 
 NOTES:
