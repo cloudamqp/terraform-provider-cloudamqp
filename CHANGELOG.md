@@ -1,4 +1,4 @@
-## 1.26.1 (Unreleased)
+## 1.26.1 (May 05, 2023)
 
 NOTES:
 
@@ -6,7 +6,7 @@ NOTES:
 
 BUG FIXES:
 
-* Fix underlying issue with validation error response
+* Fixed underlying issue with validation error response
 
 ## 1.26.0 (May 03, 2023)
 
