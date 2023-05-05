@@ -29,7 +29,8 @@ func (api *API) ValidatePlan(name string) error {
 	}
 
 	if response.StatusCode != 200 {
-		return fmt.Errorf("%s", failed["message"].(string))
+		return fmt.Errorf("Validate subscription plan. Status code: %d, message: %v",
+			response.StatusCode, failed)
 	}
 
 	for _, plan := range data {
@@ -41,7 +42,7 @@ func (api *API) ValidatePlan(name string) error {
 }
 
 // PlanTypes: Fetch if old/new plans are shared/dedicated
-func (api *API) PlanTypes(old, new string) (string, string) {
+func (api *API) PlanTypes(old, new string) (string, string, error) {
 	var (
 		data        []Plan
 		failed      map[string]interface{}
@@ -52,13 +53,12 @@ func (api *API) PlanTypes(old, new string) (string, string) {
 
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
-		fmt.Errorf("Error: %v", err)
-		return "", ""
+		return "", "", err
 	}
 
 	if response.StatusCode != 200 {
-		fmt.Errorf("%s", failed["message"].(string))
-		return "", ""
+		return "", "", fmt.Errorf("Plan types. "+
+			"Status code: %d, message: %v", response.StatusCode, failed)
 	}
 
 	for _, plan := range data {
@@ -68,7 +68,7 @@ func (api *API) PlanTypes(old, new string) (string, string) {
 			newPlanType = planType(plan.Shared)
 		}
 	}
-	return oldPlanType, newPlanType
+	return oldPlanType, newPlanType, nil
 }
 
 func planType(shared bool) string {
@@ -94,7 +94,8 @@ func (api *API) ValidateRegion(region string) error {
 	}
 
 	if response.StatusCode != 200 {
-		return fmt.Errorf("%s", failed["message"].(string))
+		return fmt.Errorf("Validate region. Status code: %d, message: %v",
+			response.StatusCode, failed)
 	}
 
 	for _, v := range data {
