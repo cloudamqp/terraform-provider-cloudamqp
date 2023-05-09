@@ -170,7 +170,7 @@ func (api *API) DeleteFirewallSettings(instanceID, sleep, timeout int) ([]map[st
 		return nil, err
 	}
 	if response.StatusCode != 204 {
-		return nil, fmt.Errorf("DeleteNotification failed, status: %v, message: %s", response.StatusCode, failed)
+		return nil, fmt.Errorf("DeleteFirewallSettings failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
 	err = api.waitUntilFirewallConfigured(instanceID, 1, sleep, timeout)
