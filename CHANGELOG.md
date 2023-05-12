@@ -1,3 +1,13 @@
+## 1.26.2 (May 12, 2023)
+
+NOTES:
+
+* Updated the API wrapper (go-api) dependecy with newer version (1.12.2)
+
+IMPROVEMENTS:
+
+* Indirect improvements with retry when deleting firewall settings
+
 ## 1.26.1 (May 05, 2023)
 
 NOTES:
