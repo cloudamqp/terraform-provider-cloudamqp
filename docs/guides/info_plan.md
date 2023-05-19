@@ -22,6 +22,7 @@ Little lemur    | lemur         | rabbitmq  | shared
 Tough Tiger     | tiger         | rabbitmq  | shared
 Sassy Squirrel  | squirrel-1    | rabbitmq  | dedicated | 1
 Big Bunny       | bunny-1,3     | rabbitmq  | dedicated | 1,3
+Happy Hare      | hare-1,3      | rabbitmq  | dedicated | 1,3
 Roaring Rabbit  | rabbit-1,3,5  | rabbitmq  | dedicated | 1,3,5
 Power Panda     | panda-1,3,5   | rabbitmq  | dedicated | 1,3,5
 Awesome Ape     | ape-1,3,5     | rabbitmq  | dedicated | 1,3,5
