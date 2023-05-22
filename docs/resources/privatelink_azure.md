@@ -5,27 +5,44 @@ description: |-
   Enable PrivateLink for a CloudAMQP instance hosted in Azure.
 ---
 
-# cloudamqp_privatelink_aws
+# cloudamqp_privatelink_azure
 
 Enable PrivateLink for a CloudAMQP instance hosted in Azure. If no existing VPC available when enable PrivateLink, a new VPC will be created with subnet `10.52.72.0/24`.
 
-More information about [CloudAMQP Privatelink](https://www.cloudamqp.com/docs/cloudamqp-privatelink.html#azure-privatelink).
+~> **NOTE:** Once the PrivateLink is enabled our backend will automatically create a firewall rule for this.
+<details>
+ <summary>
+    <i>Default PrivateLink firewall rule</i>
+  </summary>
+```hcl
+rules {
+  Description = "PrivateLink setup"
+  ip          = "10.56.72.0/24"
+  ports       = []
+  services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL", "STOMP", "STOMPS", "MQTT", "MQTTS"]
+}
+```
+</details>
+
+Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html) and more information about [CloudAMQP Privatelink](https://www.cloudamqp.com/docs/cloudamqp-privatelink.html#azure-privatelink).
 
 Only available for dedicated subscription plans.
 
-Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html).
-
 ## Example Usage
 
-CloudAMQP instance without existing VPC
+<details>
+  <summary>
+    <b>
+      <i>CloudAMQP instance without existing VPC</i>
+    </b>
+  </summary>
 
 ```hcl
 resource "cloudamqp_instance" "instance" {
   name   = "Instance 01"
-  plan   = "squirrel-1"
+  plan   = "bunny-1"
   region = "azure-arm::westus"
-  tags   = ["test"]
-  rmq_version = "3.10.8"
+  tags   = []
 }
 
 resource "cloudamqp_privatelink_azure" "privatelink" {
@@ -35,23 +52,28 @@ resource "cloudamqp_privatelink_azure" "privatelink" {
   ]
 }
 ```
+</details>
 
-CloudAMQP instance already in an existing VPC.
+<details>
+  <summary>
+    <b>
+      <i>CloudAMQP instance in an existing VPC</i>
+    </b>
+  </summary>
 
 ```hcl
 resource "cloudamqp_vpc" "vpc" {
   name = "Standalone VPC"
   region = "azure-arm::westus"
   subnet = "10.56.72.0/24"
-  tags = ["test"]
+  tags = []
 }
 
 resource "cloudamqp_instance" "instance" {
   name   = "Instance 01"
-  plan   = "squirrel-1"
+  plan   = "bunny-1"
   region = "azure-arm::westus"
-  tags   = ["test"]
-  rmq_version = "3.10.8"
+  tags   = []
   vpc_id = cloudamqp_vpc.vpc.id
   keep_associated_vpc = true
 }
@@ -63,6 +85,65 @@ resource "cloudamqp_privatelink_azure" "privatelink" {
   ]
 }
 ```
+</details>
+
+
+<details>
+  <summary>
+    <b>
+      <i>CloudAMQP instance in an existing VPC with managed firewall rules</i>
+    </b>
+  </summary>
+
+Chain firewall to privatelink resources to make sure the firewall rules are applied after privatelink have been enabled.
+
+```hcl
+resource "cloudamqp_vpc" "vpc" {
+  name = "Standalone VPC"
+  region = "azure-arm::westus"
+  subnet = "10.56.72.0/24"
+  tags = []
+}
+
+resource "cloudamqp_instance" "instance" {
+  name   = "Instance 01"
+  plan   = "bunny-1"
+  region = "azure-arm::westus"
+  tags   = []
+  vpc_id = cloudamqp_vpc.vpc.id
+  keep_associated_vpc = true
+}
+
+resource "cloudamqp_privatelink_azure" "privatelink" {
+  instance_id = cloudamqp_instance.instance.id
+  approved_subscriptions = [
+    "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+  ]
+}
+
+resource "cloudamqp_security_firewall" "firewall_settings" {
+  instance_id = cloudamqp_instance.instance.id
+
+  rules {
+    Description = "PrivateLink setup"
+    ip          = cloudamqp_vpc.vpc.subnet
+    ports       = []
+    services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL"]
+  }
+
+  rules {
+    description = "MGMT interface"
+    ip = "0.0.0.0/0"
+    ports = []
+    services = ["HTTPS"]
+  }
+
+  depends_on = [
+    cloudamqp_privatelink_azure.privatelink
+   ]
+}
+```
+</details>
 
 ## Argument Reference
 
