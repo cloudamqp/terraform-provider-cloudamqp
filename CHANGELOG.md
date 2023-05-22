@@ -1,3 +1,9 @@
+## 1.x.x (Unreleased)
+
+IMPROVEMENTS:
+
+* Add missing plan to the docs ([#206](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/206))
+
 ## 1.26.2 (May 12, 2023)
 
 NOTES:
@@ -91,7 +97,7 @@ IMPROVEMENTS:
 
 IMPROVEMENTS:
 
-* Updated subscription plan validation
+* Updated subscription plan validation with new plans `hare-1` and `hare-3`.
 
 ## 1.22.0 (Jan 09, 2023)
 
