@@ -330,22 +330,28 @@ resource "cloudamqp_vpc_peering" "vpc_accept_peering" {
   timeout = 600
 }
 
-# Firewall rules
+# AWS - VPC subnet for peering requester
+data "aws_vpc" "requester_vpc" {
+  id = data.aws_subnet.subnet.vpc_id
+}
+
+# CloudAMQP - Managed firewall rules
 resource "cloudamqp_security_firewall" "firewall_settings" {
   instance_id = cloudamqp_instance.instance.id
 
   # Default VPC peering rule
   rules {
-    ip          =  data.aws_instance.aws_instance.subnet_id
+    ip          =  data.aws_vpc.requester_vpc.cidr_block
     ports       = [15672]
     services    = ["AMQP","AMQPS", "STREAM", "STREAM_SSL"]
     description = "VPC peering for <NETWORK>"
   }
 
   rules {
-    ip          = "192.168.0.0/24"
-    ports       = [4567, 4568]
-    services    = ["AMQP","AMQPS", "HTTPS"]
+    ip          = "0.0.0.0/0"
+    ports       = []
+    services    = ["HTTPS"]
+    description = "MGMT interface"
   }
 
   depends_on = [
