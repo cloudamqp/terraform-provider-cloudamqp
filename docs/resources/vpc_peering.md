@@ -9,9 +9,24 @@ description: |-
 
 This resouce allows you to accepting VPC peering request from an AWS requester. This is only available for CloudAMQP instance hosted in AWS.
 
-Only available for dedicated subscription plans.
+~> **Note:** Creating a VPC peering will trigger a firewall change that automatically add rule for the peered subnet.
+<details>
+ <summary>
+    <i>Default VPC peering firewall rule</i>
+  </summary>
+```hcl
+rules {
+  Description = "VPC peer request"
+  ip          = "<VPC peered subnet>"
+  ports       = []
+  services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL", "STOMP", "STOMPS", "MQTT", "MQTTS"]
+}
+```
+</details>
 
 Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html).
+
+Only available for dedicated subscription plans.
 
 ## Example Usage
 
@@ -36,7 +51,6 @@ resource "cloudamqp_instance" "instance" {
   plan   = "bunny-1"
   region = "amazon-web-services::us-east-1"
   tags   = ["terraform"]
-  rmq_version = "3.9.14"
   vpc_subnet = "10.40.72.0/24"
 }
 
@@ -94,6 +108,10 @@ resource "aws_route" "accepter_route" {
   route_table_id = data.aws_route_table.route_table.route_table_id
   destination_cidr_block = cloudamqp_instance.instance.vpc_subnet
   vpc_peering_connection_id = aws_vpc_peering_connection.aws_vpc_peering.id
+
+  depends_on = [
+    cloudamqp_vpc_peering.vpc_accept_peering
+  ]
 }
 ```
 </details>
@@ -116,7 +134,7 @@ resource "cloudamqp_vpc" "vpc" {
   name = "<VPC name>"
   region = "amazon-web-services::us-east-1"
   subnet = "10.56.72.0/24"
-  tags = []
+  tags = ["terraform"]
 }
 
 # CloudAMQP - new instance, need to be created with a vpc
@@ -124,10 +142,9 @@ resource "cloudamqp_instance" "instance" {
   name   = "terraform-vpc-accepter"
   plan   = "bunny-1"
   region = "amazon-web-services::us-east-1"
-  nodes  = 1
   tags   = ["terraform"]
-  rmq_version = "3.9.14"
   vpc_id = cloudamqp_vpc.vpc.id
+  keep_associated_vpc = true
 }
 
 # CloudAMQP - Extract vpc information
@@ -190,6 +207,10 @@ resource "aws_route" "accepter_route" {
   route_table_id = data.aws_route_table.route_table.route_table_id
   destination_cidr_block = cloudamqp_instance.instance.vpc_subnet
   vpc_peering_connection_id = aws_vpc_peering_connection.aws_vpc_peering.id
+
+  depends_on = [
+    cloudamqp_vpc_peering.vpc_accept_peering
+  ]
 }
 ```
  </details>
@@ -228,3 +249,108 @@ This resource depends on CloudAMQP managed VPC identifier, `cloudamqp_vpc.vpc.id
 ## Import
 
 Not possible to import this resource.
+
+## Create VPC Peering with additional firewall rules
+
+To create a VPC peering configuration with additional firewall rules, it's required to chain the [cloudamqp_security_firewall](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall)
+resource to avoid parallel conflicting resource calls. This is done by adding dependency in the firewall resource to the VPC peering resource (`cloudamqp_vpc_peering.vpc_accept_peering`).
+
+Furthermore, since all firewall rules are overwritten, the otherwise automatically added rules for the VPC peering also needs to be added.
+
+See example below.
+
+## Example Usage with additional firewall rules
+
+<details>
+  <summary>
+    <b>
+      <i>VPC peering pre v1.16.0</i>
+    </b>
+  </summary>
+
+```hcl
+# AWS - retrieve subnet
+data "aws_subnet" "subnet" {
+  provider = aws
+  id = data.aws_instance.aws_instance.subnet_id
+}
+
+# CloudAMQP - accept the peering request
+resource "cloudamqp_vpc_peering" "vpc_accept_peering" {
+  instance_id = cloudamqp_instance.instance.id
+  peering_id = aws_vpc_peering_connection.aws_vpc_peering.id
+}
+
+# Firewall rules
+resource "cloudamqp_security_firewall" "firewall_settings" {
+  instance_id = cloudamqp_instance.instance.id
+
+  # Default VPC peering rule
+  rules {
+    ip          =  data.aws_instance.aws_instance.subnet_id
+    ports       = [15672]
+    services    = ["AMQP","AMQPS", "STREAM", "STREAM_SSL"]
+    description = "VPC peering for <NETWORK>"
+  }
+
+  rules {
+    ip          = "192.168.0.0/24"
+    ports       = [4567, 4568]
+    services    = ["AMQP","AMQPS", "HTTPS"]
+  }
+
+  depends_on = [
+    cloudamqp_vpc_peering.vpc_accept_peering
+  ]
+}
+```
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>VPC peering post v1.16.0 (Managed VPC)</i>
+    </b>
+  </summary>
+
+```hcl
+# AWS - retrieve subnet
+data "aws_subnet" "subnet" {
+  provider = aws
+  id = data.aws_instance.aws_instance.subnet_id
+}
+
+# CloudAMQP - accept the peering request
+resource "cloudamqp_vpc_peering" "vpc_accept_peering" {
+  vpc_id = cloudamqp_vpc.vpc.id
+  # vpc_id prefered over instance_id
+  # instance_id = cloudamqp_instance.instance.id
+  peering_id = aws_vpc_peering_connection.aws_vpc_peering.id
+  sleep = 30
+  timeout = 600
+}
+
+# Firewall rules
+resource "cloudamqp_security_firewall" "firewall_settings" {
+  instance_id = cloudamqp_instance.instance.id
+
+  # Default VPC peering rule
+  rules {
+    ip          =  data.aws_instance.aws_instance.subnet_id
+    ports       = [15672]
+    services    = ["AMQP","AMQPS", "STREAM", "STREAM_SSL"]
+    description = "VPC peering for <NETWORK>"
+  }
+
+  rules {
+    ip          = "192.168.0.0/24"
+    ports       = [4567, 4568]
+    services    = ["AMQP","AMQPS", "HTTPS"]
+  }
+
+  depends_on = [
+    cloudamqp_vpc_peering.vpc_accept_peering
+  ]
+}
+```
+</details>
