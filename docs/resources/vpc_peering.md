@@ -9,7 +9,7 @@ description: |-
 
 This resouce allows you to accepting VPC peering request from an AWS requester. This is only available for CloudAMQP instance hosted in AWS.
 
-~> **Note:** Creating a VPC peering will trigger a firewall change that automatically add rule for the peered subnet.
+~> **Note:** Creating a VPC peering will automatically add firewall rules for the peered subnet.
 <details>
  <summary>
     <i>Default VPC peering firewall rule</i>
@@ -253,7 +253,7 @@ Not possible to import this resource.
 ## Create VPC Peering with additional firewall rules
 
 To create a VPC peering configuration with additional firewall rules, it's required to chain the [cloudamqp_security_firewall](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall)
-resource to avoid parallel conflicting resource calls. This is done by adding dependency in the firewall resource to the VPC peering resource (`cloudamqp_vpc_peering.vpc_accept_peering`).
+resource to avoid parallel conflicting resource calls. You can do this by making the firewall resource depend on the VPC peering resource (`cloudamqp_vpc_peering.vpc_accept_peering`).
 
 Furthermore, since all firewall rules are overwritten, the otherwise automatically added rules for the VPC peering also needs to be added.
 

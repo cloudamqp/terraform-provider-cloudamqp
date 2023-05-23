@@ -9,7 +9,7 @@ description: |-
 
 This resouce creates a VPC peering configuration for the CloudAMQP instance. The configuration will connect to another VPC network hosted on Google Cloud Platform (GCP). See the [GCP documentation](https://cloud.google.com/vpc/docs/using-vpc-peering) for more information on how to create the VPC peering configuration.
 
-~> **Note:** Creating a VPC peering will trigger a firewall change that automatically add rule for the peered subnet.
+~> **Note:** Creating a VPC peering will automatically add firewall rules for the peered subnet.
 <details>
  <summary>
     <i>Default VPC peering firewall rule</i>
