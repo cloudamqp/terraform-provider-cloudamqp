@@ -9,9 +9,24 @@ description: |-
 
 This resouce creates a VPC peering configuration for the CloudAMQP instance. The configuration will connect to another VPC network hosted on Google Cloud Platform (GCP). See the [GCP documentation](https://cloud.google.com/vpc/docs/using-vpc-peering) for more information on how to create the VPC peering configuration.
 
-Only available for dedicated subscription plans.
+~> **Note:** Creating a VPC peering will automatically add firewall rules for the peered subnet.
+<details>
+ <summary>
+    <i>Default VPC peering firewall rule</i>
+  </summary>
+```hcl
+rules {
+  Description = "VPC peer request"
+  ip          = "<VPC peered subnet>"
+  ports       = []
+  services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL", "STOMP", "STOMPS", "MQTT", "MQTTS"]
+}
+```
+</details>
 
 Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html).
+
+Only available for dedicated subscription plans.
 
 ## Example Usage
 
@@ -34,12 +49,11 @@ resource "cloudamqp_instance" "instance" {
   plan   = "bunny-1"
   region = "google-compute-engine::europe-north1"
   tags   = ["terraform"]
-  rmq_version = "3.9.14"
   vpc_subnet = "10.40.72.0/24"
 }
 
 # VPC information
-data "cloudamqp_vpc_gcp info" "vpc_info" {
+data "cloudamqp_vpc_gcp_info" "vpc_info" {
   instance_id = cloudamqp_instance.instance.id
 }
 
@@ -78,28 +92,25 @@ resource "cloudamqp_instance" "instance" {
   plan   = "bunny-1"
   region = "google-compute-engine::europe-north1"
   tags   = ["terraform"]
-  rmq_version = "3.9.14"
   vpc_id = cloudamqp_vpc.vpc.id
 }
 
 # VPC information
-data "cloudamqp_vpc_gcp info" "vpc_info" {
+data "cloudamqp_vpc_gcp_info" "vpc_info" {
   vpc_id = cloudamqp_vpc.vpc.info
-  # vpc_id prefered over instance_id
+  # or
   # instance_id = cloudamqp_instance.instance.id
 }
 
 # VPC peering configuration
 resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
   vpc_id = cloudamqp_vpc.vpc.id
-  # vpc_id prefered over instance_id
+  # or
   # instance_id = cloudamqp_instance.instance.id
   peer_network_uri = "https://www.googleapis.com/compute/v1/projects/<PROJECT-NAME>/global/networks/<NETWORK-NAME>"
 }
 ```
 </details>
-
-*Note: Creating a VPC peering configuration will trigger a firewall change to automatically add rules for the peered subnet.*
 
 ## Argument Reference
 
@@ -162,10 +173,10 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 }
 
 # Firewall rules
-
 resource "cloudamqp_security_firewall" "firewall_settings" {
   instance_id = cloudamqp_instance.instance.id
 
+  # Default VPC peering rule
   rules {
     ip          =  var.peer_subnet
     ports       = [15672]
@@ -206,6 +217,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 resource "cloudamqp_security_firewall" "firewall_settings" {
   instance_id = cloudamqp_instance.instance.id
 
+  # Default VPC peering rule
   rules {
     ip          =  var.peer_subnet
     ports       = [15672]
@@ -214,9 +226,10 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   }
 
   rules {
-    ip          = "192.168.0.0/24"
-    ports       = [4567, 4568]
-    services    = ["AMQP","AMQPS", "HTTPS"]
+    ip          = "0.0.0.0/0"
+    ports       = []
+    services    = ["HTTPS"]
+    description = "MGMT interface"
   }
 
   depends_on = [

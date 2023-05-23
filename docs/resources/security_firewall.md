@@ -7,7 +7,9 @@ description: |-
 
 # cloudamqp_security_firewall
 
-This resource allows you to configure and manage firewall rules for the CloudAMQP instance. Beware that all rules need to be present, since all older configurations will be overwritten.
+This resource allows you to configure and manage firewall rules for the CloudAMQP instance.
+
+~> **WARNING:** Firewall rules applied with this resource will replace any existing firewall rules. Make sure all wanted rules are present to not lose them.
 
 Only available for dedicated subscription plans.
 
