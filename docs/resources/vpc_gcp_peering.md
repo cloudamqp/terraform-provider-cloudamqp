@@ -173,7 +173,6 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 }
 
 # Firewall rules
-
 resource "cloudamqp_security_firewall" "firewall_settings" {
   instance_id = cloudamqp_instance.instance.id
 
@@ -227,9 +226,10 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   }
 
   rules {
-    ip          = "192.168.0.0/24"
-    ports       = [4567, 4568]
-    services    = ["AMQP","AMQPS", "HTTPS"]
+    ip          = "0.0.0.0/0"
+    ports       = []
+    services    = ["HTTPS"]
+    description = "MGMT interface"
   }
 
   depends_on = [
