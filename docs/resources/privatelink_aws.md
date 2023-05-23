@@ -9,7 +9,7 @@ description: |-
 
 Enable PrivateLink for a CloudAMQP instance hosted in AWS. If no existing VPC available when enable PrivateLink, a new VPC will be created with subnet `10.52.72.0/24`.
 
-~> **NOTE:** Once the PrivateLink is enabled our backend will automatically create a firewall rule for this.
+~> **Note:** Enable PrivateLink will trigger a firewall change that automatically add rule for the peered subnet.
 <details>
  <summary>
     <i>Default PrivateLink firewall rule</i>
@@ -17,7 +17,7 @@ Enable PrivateLink for a CloudAMQP instance hosted in AWS. If no existing VPC av
 ```hcl
 rules {
   Description = "PrivateLink setup"
-  ip          = "10.56.72.0/24"
+  ip          = "<VPC Subnet>"
   ports       = []
   services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL", "STOMP", "STOMPS", "MQTT", "MQTTS"]
 }
@@ -87,63 +87,6 @@ resource "cloudamqp_privatelink_aws" "privatelink" {
 ```
 </details>
 
-<details>
-  <summary>
-    <b>
-      <i>CloudAMQP instance in an existing VPC with managed firewall rules</i>
-    </b>
-  </summary>
-
-Chain firewall to privatelink resources to make sure the firewall rules are applied after privatelink have been enabled.
-
-```hcl
-resource "cloudamqp_vpc" "vpc" {
-  name = "Standalone VPC"
-  region = "amazon-web-services::us-west-1"
-  subnet = "10.56.72.0/24"
-  tags = []
-}
-
-resource "cloudamqp_instance" "instance" {
-  name   = "Instance 01"
-  plan   = "bunny-1"
-  region = "amazon-web-services::us-west-1"
-  tags   = []
-  vpc_id = cloudamqp_vpc.vpc.id
-  keep_associated_vpc = true
-}
-
-resource "cloudamqp_privatelink_aws" "privatelink" {
-  instance_id = cloudamqp_instance.instance.id
-  allowed_principals = [
-    "arn:aws:iam::aws-account-id:user/user-name"
-  ]
-}
-
-resource "cloudamqp_security_firewall" "firewall_settings" {
-  instance_id = cloudamqp_instance.instance.id
-
-  rules {
-    Description = "PrivateLink setup"
-    ip          = cloudamqp_vpc.vpc.subnet
-    ports       = []
-    services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL"]
-  }
-
-  rules {
-    description = "MGMT interface"
-    ip = "0.0.0.0/0"
-    ports = []
-    services = ["HTTPS"]
-  }
-
-  depends_on = [
-    cloudamqp_privatelink_aws.privatelink
-   ]
-}
-```
-</details>
-
 ## Argument Reference
 
 * `instance_id` - (Required) The CloudAMQP instance identifier.
@@ -174,3 +117,67 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 `cloudamqp_privatelink_aws` can be imported using CloudAMQP internal identifier.
 
 `terraform import cloudamqp_privatelink_aws.privatelink <id>`
+
+## Create PrivateLink with additional firewall rules
+
+To create a PrivateLink configuration with additional firewall rules, it's required to chain the [cloudamqp_security_firewall](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall)
+resource to avoid parallel conflicting resource calls. This is done by adding dependency in the firewall resource to the PrivateLink resource, `cloudamqp_privatelink_aws.privatelink`.
+
+Furthermore, since all firewall rules are overwritten, the otherwise automatically added rules for the PrivateLink also needs to be added.
+
+## Example usage with additional firewall rules
+
+<details>
+  <summary>
+    <b>
+      <i>CloudAMQP instance in an existing VPC with managed firewall rules</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_vpc" "vpc" {
+  name = "Standalone VPC"
+  region = "amazon-web-services::us-west-1"
+  subnet = "10.56.72.0/24"
+  tags = []
+}
+
+resource "cloudamqp_instance" "instance" {
+  name   = "Instance 01"
+  plan   = "bunny-1"
+  region = "amazon-web-services::us-west-1"
+  tags   = []
+  vpc_id = cloudamqp_vpc.vpc.id
+  keep_associated_vpc = true
+}
+
+resource "cloudamqp_privatelink_aws" "privatelink" {
+  instance_id = cloudamqp_instance.instance.id
+  allowed_principals = [
+    "arn:aws:iam::aws-account-id:user/user-name"
+  ]
+}
+
+resource "cloudamqp_security_firewall" "firewall_settings" {
+  instance_id = cloudamqp_instance.instance.id
+
+  rules {
+    Description = "Custom PrivateLink setup"
+    ip          = cloudamqp_vpc.vpc.subnet
+    ports       = []
+    services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL"]
+  }
+
+  rules {
+    description = "MGMT interface"
+    ip = "0.0.0.0/0"
+    ports = []
+    services = ["HTTPS"]
+  }
+
+  depends_on = [
+    cloudamqp_privatelink_aws.privatelink
+   ]
+}
+```
+</details>

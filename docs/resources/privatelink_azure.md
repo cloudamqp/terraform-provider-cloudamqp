@@ -9,7 +9,7 @@ description: |-
 
 Enable PrivateLink for a CloudAMQP instance hosted in Azure. If no existing VPC available when enable PrivateLink, a new VPC will be created with subnet `10.52.72.0/24`.
 
-~> **NOTE:** Once the PrivateLink is enabled our backend will automatically create a firewall rule for this.
+~> **Note:** Enable PrivateLink will trigger a firewall change that automatically add rule for the peered subnet.
 <details>
  <summary>
     <i>Default PrivateLink firewall rule</i>
@@ -17,7 +17,7 @@ Enable PrivateLink for a CloudAMQP instance hosted in Azure. If no existing VPC 
 ```hcl
 rules {
   Description = "PrivateLink setup"
-  ip          = "10.56.72.0/24"
+  ip          = "<VPC Subnet>"
   ports       = []
   services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL", "STOMP", "STOMPS", "MQTT", "MQTTS"]
 }
@@ -87,6 +87,43 @@ resource "cloudamqp_privatelink_azure" "privatelink" {
 ```
 </details>
 
+## Argument Reference
+
+* `instance_id` - (Required) The CloudAMQP instance identifier.
+* `approved_subscriptions` - (Required) Approved subscriptions to access the endpoint service. See format below.
+* `sleep` - (Optional) Configurable sleep time (seconds) when enable PrivateLink. Default set to 60 seconds.
+* `timeout` - (Optional) - Configurable timeout time (seconds) when enable PrivateLink. Default set to 3600 seconds.
+
+Approved subscriptions format: <br>
+`XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX`
+
+## Attributes Reference
+
+All attributes reference are computed
+
+* `id`  - The identifier for this resource.
+* `status`- PrivateLink status [enable, pending, disable]
+* `service_name` - Service name (alias) of the PrivateLink, needed when creating the endpoint.
+* `server_name` - Name of the server having the PrivateLink enabled.
+
+## Depedency
+
+This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+
+## Import
+
+`cloudamqp_privatelink_aws` can be imported using CloudAMQP internal identifier.
+
+`terraform import cloudamqp_privatelink_aws.privatelink <id>`
+
+## Create PrivateLink with additional firewall rules
+
+To create a PrivateLink configuration with additional firewall rules, it's required to chain the [cloudamqp_security_firewall](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall)
+resource to avoid parallel conflicting resource calls. This is done by adding dependency in the firewall resource to the PrivateLink resource, `cloudamqp_privatelink_azure.privatelink`.
+
+Furthermore, since all firewall rules are overwritten, the otherwise automatically added rules for the PrivateLink also needs to be added.
+
+## Example usage with additional firewall rules
 
 <details>
   <summary>
@@ -94,8 +131,6 @@ resource "cloudamqp_privatelink_azure" "privatelink" {
       <i>CloudAMQP instance in an existing VPC with managed firewall rules</i>
     </b>
   </summary>
-
-Chain firewall to privatelink resources to make sure the firewall rules are applied after privatelink have been enabled.
 
 ```hcl
 resource "cloudamqp_vpc" "vpc" {
@@ -125,7 +160,7 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   instance_id = cloudamqp_instance.instance.id
 
   rules {
-    Description = "PrivateLink setup"
+    Description = "Custom PrivateLink setup"
     ip          = cloudamqp_vpc.vpc.subnet
     ports       = []
     services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL"]
@@ -144,32 +179,3 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 }
 ```
 </details>
-
-## Argument Reference
-
-* `instance_id` - (Required) The CloudAMQP instance identifier.
-* `approved_subscriptions` - (Required) Approved subscriptions to access the endpoint service. See format below.
-* `sleep` - (Optional) Configurable sleep time (seconds) when enable PrivateLink. Default set to 60 seconds.
-* `timeout` - (Optional) - Configurable timeout time (seconds) when enable PrivateLink. Default set to 3600 seconds.
-
-Approved subscriptions format: <br>
-`XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX`
-
-## Attributes Reference
-
-All attributes reference are computed
-
-* `id`  - The identifier for this resource.
-* `status`- PrivateLink status [enable, pending, disable]
-* `service_name` - Service name (alias) of the PrivateLink, needed when creating the endpoint.
-* `server_name` - Name of the server having the PrivateLink enabled.
-
-## Depedency
-
-This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
-
-## Import
-
-`cloudamqp_privatelink_aws` can be imported using CloudAMQP internal identifier.
-
-`terraform import cloudamqp_privatelink_aws.privatelink <id>`
