@@ -101,11 +101,11 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 				Type:        schema.TypeInt,
 				Computed:    true,
 				Optional:    true,
-				Description: "Size in bytes below which to embed messages in the queue index.",
+				Description: "Size in bytes below which to embed messages in the queue index. 0 will turn off payload embedding in the queue index.",
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
-					if v < 1 || v > 10485760 {
-						errs = append(errs, fmt.Errorf("%q must be between 1 and 10485760 inclusive, got: %d", key, v))
+					if v < 0 || v > 10485760 {
+						errs = append(errs, fmt.Errorf("%q must be between 0 and 10485760 inclusive, got: %d", key, v))
 					}
 					return
 				},

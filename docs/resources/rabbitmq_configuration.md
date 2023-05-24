@@ -100,7 +100,7 @@ The following arguments are supported:
 * `channel_max`                   - (Computed/Optional) Set the maximum permissible number of channels per connection.
 * `consumer_timeout`              - (Computed/Optional) A consumer that has recevied a message and does not acknowledge that message within the timeout in milliseconds
 * `vm_memory_high_watermark`      - (Computed/Optional) When the server will enter memory based flow-control as relative to the maximum available memory.
-* `queue_index_embed_msgs_below`  - (Computed/Optional) Size in bytes below which to embed messages in the queue index.
+* `queue_index_embed_msgs_below`  - (Computed/Optional) Size in bytes below which to embed messages in the queue index. 0 will turn off payload embedding in the queue index.
 * `max_message_size`              - (Computed/Optional) The largest allowed message payload size in bytes.
 * `log_exchange_level`            - (Computed/Optional) Log level for the logger used for log integrations and the CloudAMQP Console log view.
 
@@ -124,7 +124,7 @@ All attributes reference are computed
 | channel_max | int | 128 | 0 | - |  | Only effects new connections |  |
 | consumer_timeout | int | 7200000 | 10000 | 86400000 | milliseconds | Only effects new channels | -1 in the provider corresponds to false (disable) in the RabbitMQ config |
 | vm_memory_high_watermark | float | 0.81 | 0.4 | 0.9 |  | Applied immediately |  |
-| queue_index_embed_msgs_below | int | 4096 | 1 | 10485760 | bytes | Applied immediately for new queues, requires restart for existing queues |  |
+| queue_index_embed_msgs_below | int | 4096 | 0 | 10485760 | bytes | Applied immediately for new queues, requires restart for existing queues |  |
 | max_message_size | int | 134217728 | 1 | 536870912 | bytes | Only effects new channels |  |
 | log_exchange_level | string | error | - | - |  | RabbitMQ restart required | debug, info, warning, error, critical |
 | cluster_partition_handling | string | see below | - | - |  | Applied immediately | autoheal, pause_minority, ignore |
