@@ -32,6 +32,7 @@ resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
   queue_index_embed_msgs_below = 4096
   vm_memory_high_watermark = 0.81
   cluster_partition_handling = "autoheal"
+  default_vhost = "/"
 }
 ```
 </details>
@@ -56,6 +57,7 @@ resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
   queue_index_embed_msgs_below = 4096
   vm_memory_high_watermark = 0.81
   cluster_partition_handling = "autoheal"
+  default_vhost = "/"
 }
 
 data "cloudamqp_nodes" "list_nodes" {
@@ -64,7 +66,7 @@ data "cloudamqp_nodes" "list_nodes" {
 
 resource "cloudamqp_node_actions" "node_action" {
   instance_id = cloudamqp_instance.instance.id
-  node_id = data.cloudamqp_nodes.list_nodes.nodes[0].node_id
+  node_name = data.cloudamqp_nodes.list_nodes.nodes[0].name
   action = "restart"
 
   depends_on = [
@@ -104,8 +106,11 @@ The following arguments are supported:
 * `max_message_size`              - (Computed/Optional) The largest allowed message payload size in bytes.
 * `log_exchange_level`            - (Computed/Optional) Log level for the logger used for log integrations and the CloudAMQP Console log view.
 
-  ***Note: Requires a restart of RabbitMQ to be applied.***
+  *Note: Requires a restart of RabbitMQ to be applied.*
 * `cluster_partition_handling`    - (Computed/Optional) Set how the cluster should handle network partition.
+* `default_vhost`            - (Computed/Optional) Virtual host to create when RabbitMQ creates a new database from scratch.
+
+  *Note: Requires a restart of RabbitMQ to be applied.*
 * `sleep` - (Optional) Configurable sleep time in seconds between retries for RabbitMQ configuration. Default set to 60 seconds.
 * `timeout` - (Optional) - Configurable timeout time in seconds for RabbitMQ configuration. Default set to 3600 seconds.
 
@@ -128,6 +133,7 @@ All attributes reference are computed
 | max_message_size | int | 134217728 | 1 | 536870912 | bytes | Only effects new channels |  |
 | log_exchange_level | string | error | - | - |  | RabbitMQ restart required | debug, info, warning, error, critical |
 | cluster_partition_handling | string | see below | - | - |  | Applied immediately | autoheal, pause_minority, ignore |
+| default_vhost | string | '/' | - | - | RabbitMQ restart required | |
 
   *Note: Recommended setting for cluster_partition_handling: `autoheal` for cluster with 1-2 nodes, `pause_minority` for cluster with 3 or more nodes. While `ignore` setting is not recommended.*
 
