@@ -5,7 +5,6 @@ IMPROVEMENTS:
 * Add missing `Happy Hare` plan to the docs ([#206](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/206))
 * Update firewall rules, PrivateLink and VPC Peering documentation ([#207](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/207))
 * Allow queue_index_embed_msgs_below to be set to 0 in RabbitMQ configuration.
-* Add default_vhost to RabbitMQ configuration.
 
 ## 1.26.2 (May 12, 2023)
 

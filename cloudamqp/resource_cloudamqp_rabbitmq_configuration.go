@@ -138,12 +138,6 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 				Description:  "Set how the cluster should handle network partition.",
 				ValidateFunc: validation.StringInSlice([]string{"autoheal", "pause_minority", "ignore"}, true),
 			},
-			"default_vhost": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Optional:    true,
-				Description: "Virtual host to create when RabbitMQ creates a new database from scratch.",
-			},
 			"sleep": {
 				Type:        schema.TypeInt,
 				Optional:    true,
@@ -221,10 +215,6 @@ func resourceRabbitMqConfigurationRead(d *schema.ResourceData, meta interface{})
 				}
 			} else if key == "log.exchange.level" {
 				key = "log_exchange_level"
-			} else if key == "default_vhost" {
-				if v == nil {
-					v = "/"
-				}
 			}
 			d.Set(key, v)
 		}
@@ -274,8 +264,7 @@ func validateRabbitMqConfigurationJSONField(key string) bool {
 		"rabbit.queue_index_embed_msgs_below",
 		"rabbit.max_message_size",
 		"rabbit.log.exchange.level",
-		"rabbit.cluster_partition_handling",
-		"rabbit.default_vhost":
+		"rabbit.cluster_partition_handling":
 		return true
 	}
 	return false
@@ -304,6 +293,5 @@ func rabbitMqConfigurationWriteAttributeKeys() []string {
 		"max_message_size",
 		"log_exchange_level",
 		"cluster_partition_handling",
-		"default_vhost",
 	}
 }
