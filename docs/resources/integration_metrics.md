@@ -20,6 +20,7 @@ Only available for dedicated subscription plans.
     </b>
   </summary>
 
+***Access key***
 ```hcl
 resource "cloudamqp_integration_metric" "cloudwatch" {
   instance_id = cloudamqp_instance.instance.id
@@ -37,6 +38,28 @@ resource "cloudamqp_integration_metric" "cloudwatch_v2" {
   region = var.aws_region
 }
 ```
+
+***Assume role***
+```hcl
+resource "cloudamqp_integration_metric" "cloudwatch" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "cloudwatch"
+  iam_role = var.aws_iam_role
+  iam_external_id = var.external_id
+  region = var.aws_region
+}
+
+resource "cloudamqp_integration_metric" "cloudwatch_v2" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "cloudwatch_v2"
+  iam_role = var.aws_iam_role
+  iam_external_id = var.external_id
+  region = var.aws_region
+}
+```
+
+* AWS IAM role: arn:aws:iam::ACCOUNT-ID:role/ROLE-NAME
+* External id: Create own external identifier that match the role created. E.g. "cloudamqp-abc123".
 </details>
 
 <details>
@@ -197,6 +220,8 @@ The following arguments are supported:
 * `region`            - (Optional) Region hosting the integration service.
 * `access_key_id`     - (Optional) AWS access key identifier.
 * `secret_access_key` - (Optional) AWS secret access key.
+* `iam_role`          - (Optional) The ARN of the role to be assumed when publishing metrics.
+* `iam_external_id`   - (Optional) External identifier that match the role you created.
 * `api_key`           - (Optional) The API key for the integration service.
 * `email`             - (Optional) The email address registred for the integration service.
 * `credentials`       - (Optional) Google Service Account private key credentials.
@@ -217,8 +242,10 @@ Valid names for third party log integration.
 
 | Name          | Description |
 |---------------|---------------------------------------------------------------|
-| cloudwatch    | Create an IAM with programmatic access. |
-| cloudwatch_v2 | Create an IAM with programmatic access. |
+| cloudwatch    | Access key: Create an IAM user with permission to `PutMetricData` |
+| cloudwatch_v2 | Access key: Create an IAM user with permission to `PutMetricData` |
+| cloudwatch    | Assume role: Create a IAM role with the permission to `PutMetricData` |
+| cloudwatch_v2 | Assume role: Create a IAM role with the permission to `PutMetricData` |
 | datadog       | Create a Datadog API key at app.datadoghq.com |
 | datadog_v2    | Create a Datadog API key at app.datadoghq.com |
 | librato       | Create a new API token (with record only permissions) here: https://metrics.librato.com/tokens |
@@ -235,8 +262,10 @@ Optional arguments for all integrations: *tags*, *queue_allowlist*, *vhost_allow
 
 | Name | Type | Required arguments |
 | ---- | ---- | ---- |
-| Cloudwatch             | cloudwatch     | region, access_key_id, secret_access_key |
-| Cloudwatch v2          | cloudwatch_v2  | region, access_key_id, secret_access_key |
+| Cloudwatch             | cloudwatch     | Access key: region, access_key_id, secret_access_key |
+| Cloudwatch v2          | cloudwatch_v2  | Access key: region, access_key_id, secret_access_key |
+| Cloudwatch             | cloudwatch     | Assume role: region, iam_role, iam_external_id |
+| Cloudwatch v2          | cloudwatch_v2  | Assume role: region, iam_role, iam_external_id |
 | Datadog                | datadog        | api_key, region |
 | Datadog v2             | datadog_v2     | api_key, region |
 | Librato                | librato        | email, api_key |
