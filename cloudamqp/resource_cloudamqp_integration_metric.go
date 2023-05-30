@@ -50,6 +50,16 @@ func resourceIntegrationMetric() *schema.Resource {
 				Sensitive:   true,
 				Description: "AWS secret key. (Cloudwatch)",
 			},
+			"iam_role": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The ARN of the role to be assumed when publishing metrics. (Cloudwatch)",
+			},
+			"iam_external_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "External identifier that match the role you created. (Cloudwatch)",
+			},
 			"api_key": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -305,6 +315,8 @@ func validateIntegrationMetricSchemaAttribute(key string) bool {
 	case "region",
 		"access_key_id",
 		"secret_access_key",
+		"iam_role",
+		"iam_external_id",
 		"tags",
 		"queue_regex",
 		"vhost_regex",
@@ -324,9 +336,9 @@ func validateIntegrationMetricSchemaAttribute(key string) bool {
 func integrationMetricKeys(intName string) []string {
 	switch intName {
 	case "cloudwatch":
-		return []string{"region", "access_key_id", "secret_access_key"}
+		return []string{"region", "access_key_id", "secret_access_key", "iam_role", "iam_external_id"}
 	case "cloudwatch_v2":
-		return []string{"region", "access_key_id", "secret_access_key"}
+		return []string{"region", "access_key_id", "secret_access_key", "iam_role", "iam_external_id"}
 	case "librato":
 		return []string{"email", "api_key"}
 	case "datadog":
