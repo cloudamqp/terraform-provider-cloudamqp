@@ -77,6 +77,36 @@ resource "cloudamqp_plugin" "rabbitmq_amqp1_0" {
 ```
 </details>
 
+<details>
+  <summary>
+    <b>
+      <i>Skip delete behaviour when running `terraform destroy` from v1.27.0
+    </b>
+  </summary>
+
+CloudAMQP Terraform provider [v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) support skipping delete behaviour for backend resources when running `terraform destroy`.
+
+```hcl
+# Configure the CloudAMQP Provider
+provider "cloudamqp" {
+  apikey          = var.cloudamqp_customer_api_key
+  skip_on_destroy = true
+}
+
+resource "cloudamqp_plugin" "rabbitmq_top" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "rabbitmq_top"
+  enabled = true
+}
+
+resource "cloudamqp_plugin" "rabbitmq_amqp1_0" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "rabbitmq_amqp1_0"
+  enabled = true
+}
+```
+</details>
+
 ## Argument Reference
 
 The following arguments are supported:
@@ -104,3 +134,10 @@ If multiple plugins should be enable, create dependencies between the plugin res
 `cloudamqp_plugin` can be imported using the name argument of the resource together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
 
 `terraform import cloudamqp_plugin.rabbitmq_management rabbitmq_management,<instance_id>`
+
+## Skip on destroy
+
+When running `terraform destroy` this resource will try disable the managed plugin  before deleting
+`cloudamqp_instance`. This is not necessary since the servers will be deleted.
+
+Set `skip_on_destroy` to ***true*** in the provider configuration to skip this.

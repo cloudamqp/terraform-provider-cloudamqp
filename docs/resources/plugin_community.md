@@ -25,6 +25,30 @@ resource "cloudamqp_plugin_community" "rabbitmq_delayed_message_exchange" {
 }
 ```
 
+<details>
+  <summary>
+    <b>
+      <i>Skip delete behaviour when running `terraform destroy` from v1.27.0
+    </b>
+  </summary>
+
+CloudAMQP Terraform provider [v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) support skipping delete behaviour for backend resources when running `terraform destroy`.
+
+```hcl
+# Configure the CloudAMQP Provider
+provider "cloudamqp" {
+  apikey          = var.cloudamqp_customer_api_key
+  skip_on_destroy = true
+}
+
+resource "cloudamqp_plugin_community" "rabbitmq_delayed_message_exchange" {
+  instance_id = cloudamqp_instance.instance_01.id
+  name = "rabbitmq_delayed_message_exchange"
+  enabled = true
+}
+```
+</details>
+
 ## Argument Reference
 
 The following arguments are supported:
@@ -48,3 +72,9 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 `cloudamqp_plugin` can be imported using the name argument of the resource together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
 
 `terraform import cloudamqp_plugin.<resource_name> <plugin_name>,<instance_id>`
+
+## Skip on destroy
+
+When running `terraform destroy`, this resource will try to uninstall the managed community plugin before deleting `cloudamqp_instance`. This is not necessary since the servers will be deleted.
+
+Set `skip_on_destroy` provider configuration to skip this.

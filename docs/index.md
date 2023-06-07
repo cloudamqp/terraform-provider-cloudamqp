@@ -18,7 +18,8 @@ Use the navigation to the left to read about the available resources.
 ```hcl
 # Configure the CloudAMQP Provider
 provider "cloudamqp" {
-  apikey        = var.cloudamqp_customer_api_key
+  apikey          = var.cloudamqp_customer_api_key
+  skip_on_destroy = true // Optional configuration, can be left out.
 }
 
 # Create a new cloudamqp instance
@@ -27,7 +28,6 @@ resource "cloudamqp_instance" "instance" {
   plan          = "bunny-1"
   region        = "amazon-web-services::us-west-1"
   tags          = [ "terraform" ]
-  rmq_version   = "3.8.3"
 }
 
 # New recipient to receieve notifications
@@ -85,3 +85,8 @@ The following arguments are supported in the `provider` block:
              It can be sourced from login in to your CloudAMQP account and go to API access or go
              directly to [API Keys](https://customer.cloudamqp.com/apikeys).
              The API key can also be read from the environment variable `CLOUDAMQP_APIKEY`.
+
+* `skip_on_destroy` (Optional) This argument can be set to skip delete behaviour for resources on
+                    `terraform destroy`. Each resource supporting this have a section on its respective page.
+                    The argument can also be read from the environment variable `CLOUDAMQP_SKIP_ON_DESTROY`,
+                    default set to false.
