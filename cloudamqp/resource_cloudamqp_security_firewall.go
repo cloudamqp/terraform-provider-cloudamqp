@@ -169,6 +169,10 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 }
 
 func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) error {
+	if skipOnDestroy == true {
+		return nil
+	}
+
 	api := meta.(*api.API)
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete instance id: %v", d.Get("instance_id"))
 	data, err := api.DeleteFirewallSettings(d.Get("instance_id").(int), d.Get("sleep").(int), d.Get("timeout").(int))

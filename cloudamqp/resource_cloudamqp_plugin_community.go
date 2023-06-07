@@ -118,6 +118,10 @@ func resourcePluginCommunityUpdate(d *schema.ResourceData, meta interface{}) err
 }
 
 func resourcePluginCommunityDelete(d *schema.ResourceData, meta interface{}) error {
+	if skipOnDestroy == true {
+		return nil
+	}
+
 	api := meta.(*api.API)
 	_, err := api.DisablePluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
 	return err
