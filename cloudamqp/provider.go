@@ -9,6 +9,7 @@ import (
 )
 
 var version string
+var skipOnDestroy bool
 
 func Provider(v string) *schema.Provider {
 	version = v
@@ -26,6 +27,12 @@ func Provider(v string) *schema.Provider {
 				DefaultFunc: schema.EnvDefaultFunc("CLOUDAMQP_BASEURL", "https://customer.cloudamqp.com"),
 				Optional:    true,
 				Description: "Base URL to CloudAMQP Customer website",
+			},
+			"skip_on_destroy": {
+				Type:        schema.TypeBool,
+				DefaultFunc: schema.EnvDefaultFunc("CLOUDAMQP_SKIP_ON_DESTROY", false),
+				Optional:    true,
+				Description: "Skip destroying backend resources on 'terraform destroy'",
 			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
@@ -69,6 +76,7 @@ func Provider(v string) *schema.Provider {
 }
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
+	skipOnDestroy = d.Get("skip_on_destroy").(bool)
 	useragent := fmt.Sprintf("terraform-provider-cloudamqp_v%s", version)
 	log.Printf("[DEBUG] cloudamqp::provider::configure useragent: %v", useragent)
 	return api.New(d.Get("baseurl").(string), d.Get("apikey").(string), useragent), nil
