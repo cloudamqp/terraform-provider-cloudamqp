@@ -87,6 +87,17 @@ The following arguments are supported in the `provider` block:
              The API key can also be read from the environment variable `CLOUDAMQP_APIKEY`.
 
 * `skip_on_destroy` (Optional) This argument can be set to skip delete behaviour for resources on
-                    `terraform destroy`. Each resource supporting this have a section on its respective page.
+                    `terraform destroy`. This will speed up the destroy action and are enabled for
+                    resources that don't need to be cleaned up when destroying `cloudamqp_instance`.
                     The argument can also be read from the environment variable `CLOUDAMQP_SKIP_ON_DESTROY`,
                     default set to false.
+
+___
+
+***List of resources supporting `skip_on_destroy`:***
+
+* cloudamqp_plugin
+* cloudamqp_plugin_community
+* cloudamqp_security_firewall
+
+More information can be found under `Skip on destroy` section on respective resource.
