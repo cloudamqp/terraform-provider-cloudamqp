@@ -3,6 +3,7 @@ package cloudamqp
 import (
 	"errors"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 
@@ -119,6 +120,7 @@ func resourcePluginCommunityUpdate(d *schema.ResourceData, meta interface{}) err
 
 func resourcePluginCommunityDelete(d *schema.ResourceData, meta interface{}) error {
 	if skipOnDestroy == true {
+		log.Printf("[DEBUG] cloudamqp::resource::plugin-community::delete skip calling backend.")
 		return nil
 	}
 
