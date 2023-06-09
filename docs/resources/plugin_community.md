@@ -19,32 +19,39 @@ Only available for dedicated subscription plans running ***RabbitMQ***.
 
 ```hcl
 resource "cloudamqp_plugin_community" "rabbitmq_delayed_message_exchange" {
-  instance_id = cloudamqp_instance.instance_01.id
-  name = "rabbitmq_delayed_message_exchange"
-  enabled = true
+  instance_id = cloudamqp_instance.instance.id
+  name        = "rabbitmq_delayed_message_exchange"
+  enabled     = true
 }
 ```
 
 <details>
   <summary>
     <b>
-      <i>Skip delete behaviour when running `terraform destroy` from v1.27.0
+      <i>Faster instance destroy when running `terraform destroy` from v1.27.0
     </b>
   </summary>
 
-CloudAMQP Terraform provider [v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) support skipping delete behaviour for backend resources when running `terraform destroy`.
+CloudAMQP Terraform provider [v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) enables faster `cloudamqp_instance` destroy when running `terraform destroy`.
 
 ```hcl
 # Configure the CloudAMQP Provider
 provider "cloudamqp" {
-  apikey          = var.cloudamqp_customer_api_key
-  skip_on_destroy = true
+  apikey = var.cloudamqp_customer_api_key
+  enable_faster_instance_destroy = true
+}
+
+resource "cloudamqp_instance" "instance" {
+  name    = "terraform-cloudamqp-instance"
+  plan    = "bunny-1"
+  region  = "amazon-web-services::us-west-1"
+  tags    = ["terraform"]
 }
 
 resource "cloudamqp_plugin_community" "rabbitmq_delayed_message_exchange" {
-  instance_id = cloudamqp_instance.instance_01.id
-  name = "rabbitmq_delayed_message_exchange"
-  enabled = true
+  instance_id = cloudamqp_instance.instance.id
+  name        = "rabbitmq_delayed_message_exchange"
+  enabled     = true
 }
 ```
 </details>
@@ -73,8 +80,8 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 `terraform import cloudamqp_plugin.<resource_name> <plugin_name>,<instance_id>`
 
-## Skip on destroy
+## Enable faster instance destroy
 
-When running `terraform destroy`, this resource will try to uninstall the managed community plugin before deleting `cloudamqp_instance`. This is not necessary since the servers will be deleted.
+When running `terraform destroy` this resource will try to uninstall the managed community plugin before deleting `cloudamqp_instance`. This is not necessary since the servers will be deleted.
 
-Set `skip_on_destroy` provider configuration to skip this.
+Set `enable_faster_instance_destroy` to ***true***  in the provider configuration to skip this.

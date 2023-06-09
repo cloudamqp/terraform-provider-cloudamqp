@@ -119,7 +119,7 @@ func resourcePluginCommunityUpdate(d *schema.ResourceData, meta interface{}) err
 }
 
 func resourcePluginCommunityDelete(d *schema.ResourceData, meta interface{}) error {
-	if skipOnDestroy == true {
+	if enableFasterInstanceDestroy == true {
 		log.Printf("[DEBUG] cloudamqp::resource::plugin-community::delete skip calling backend.")
 		return nil
 	}

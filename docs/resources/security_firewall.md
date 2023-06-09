@@ -43,17 +43,24 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 <details>
   <summary>
     <b>
-      <i>Skip delete behaviour when running `terraform destroy` from v1.27.0
+      <i>Faster instance destroy when running `terraform destroy` from v1.27.0
     </b>
   </summary>
 
-CloudAMQP Terraform provider [v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) support skipping delete behaviour for backend resources when running `terraform destroy`.
+CloudAMQP Terraform provider [v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) enables faster `cloudamqp_instance` destroy when running `terraform destroy`.
 
 ```hcl
 # Configure the CloudAMQP Provider
 provider "cloudamqp" {
-  apikey          = var.cloudamqp_customer_api_key
-  skip_on_destroy = true
+  apikey = var.cloudamqp_customer_api_key
+  enable_faster_instance_destroy = true
+}
+
+resource "cloudamqp_instance" "instance" {
+  name    = "terraform-cloudamqp-instance"
+  plan    = "bunny-1"
+  region  = "amazon-web-services::us-west-1"
+  tags    = ["terraform"]
 }
 
 resource "cloudamqp_security_firewall" "firewall_settings" {
@@ -132,12 +139,12 @@ If used together with [VPC GPC peering](https://registry.terraform.io/providers/
 
 `terraform import cloudamqp_security_firewall.firewall <instance_id>`
 
-## Skip on destroy
+## Enable faster instance destroy
 
 When running `terraform destroy` this resource will try configure the firewall with default rules before deleting
 `cloudamqp_instance`. This is not necessary since the servers will be deleted.
 
-Set `skip_on_destroy` to ***true*** in the provider configuration to skip this.
+Set `enable_faster_instance_destroy` to ***true*** in the provider configuration to skip this.
 
 ## Known issues
 

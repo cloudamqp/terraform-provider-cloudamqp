@@ -19,7 +19,7 @@ Use the navigation to the left to read about the available resources.
 # Configure the CloudAMQP Provider
 provider "cloudamqp" {
   apikey          = var.cloudamqp_customer_api_key
-  skip_on_destroy = true // Optional configuration, can be left out.
+  enable_faster_instance_destroy = true // Optional configuration, can be left out.
 }
 
 # Create a new cloudamqp instance
@@ -86,18 +86,18 @@ The following arguments are supported in the `provider` block:
              directly to [API Keys](https://customer.cloudamqp.com/apikeys).
              The API key can also be read from the environment variable `CLOUDAMQP_APIKEY`.
 
-* `skip_on_destroy` (Optional) This argument can be set to skip delete behaviour for resources on
-                    `terraform destroy`. This will speed up the destroy action and are enabled for
-                    resources that don't need to be cleaned up when destroying `cloudamqp_instance`.
-                    The argument can also be read from the environment variable `CLOUDAMQP_SKIP_ON_DESTROY`,
-                    default set to false.
+* `enable_faster_instance_destroy` - (Optional) This will speed up the destroy action for `cloudamqp_instance`
+                                      when running `terraform destroy`. It's done by skipping delete behaviour
+                                      for resources that don't need to be cleaned up when the servers are deleted.
+                                      The argument can also be read from the environment variable
+                                      `CLOUDAMQP_ENABLE_FASTER_INSTANCE_DESTROY`, default set to false.
 
 ___
 
-***List of resources supporting `skip_on_destroy`:***
+***List of resources affected by `enable_faster_instance_destroy`:***
 
 * cloudamqp_plugin
 * cloudamqp_plugin_community
 * cloudamqp_security_firewall
 
-More information can be found under `Skip on destroy` section on respective resource.
+More information can be found under `Enable faster instance destroy` section on respective resource.
