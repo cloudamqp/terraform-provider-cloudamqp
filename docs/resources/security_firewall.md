@@ -40,6 +40,47 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 }
 ```
 
+<details>
+  <summary>
+    <b>
+      <i>Faster instance destroy when running `terraform destroy` from v1.27.0
+    </b>
+  </summary>
+
+CloudAMQP Terraform provider [v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) enables faster `cloudamqp_instance` destroy when running `terraform destroy`.
+
+```hcl
+# Configure the CloudAMQP Provider
+provider "cloudamqp" {
+  apikey = var.cloudamqp_customer_api_key
+  enable_faster_instance_destroy = true
+}
+
+resource "cloudamqp_instance" "instance" {
+  name    = "terraform-cloudamqp-instance"
+  plan    = "bunny-1"
+  region  = "amazon-web-services::us-west-1"
+  tags    = ["terraform"]
+}
+
+resource "cloudamqp_security_firewall" "firewall_settings" {
+  instance_id = cloudamqp_instance.instance.id
+
+  rules {
+    ip          = "192.168.0.0/24"
+    ports       = [4567, 4568]
+    services    = ["AMQP","AMQPS", "HTTPS"]
+  }
+
+  rules {
+    ip          = "10.56.72.0/24"
+    ports       = []
+    services    = ["AMQP","AMQPS", "HTTPS"]
+  }
+}
+```
+</details>
+
 ## Argument Reference
 
 Top level argument reference
@@ -97,6 +138,13 @@ If used together with [VPC GPC peering](https://registry.terraform.io/providers/
 `cloudamqp_security_firewall` can be imported using CloudAMQP instance identifier.
 
 `terraform import cloudamqp_security_firewall.firewall <instance_id>`
+
+## Enable faster instance destroy
+
+When running `terraform destroy` this resource will try configure the firewall with default rules before deleting
+`cloudamqp_instance`. This is not necessary since the servers will be deleted.
+
+Set `enable_faster_instance_destroy` to ***true*** in the provider configuration to skip this.
 
 ## Known issues
 

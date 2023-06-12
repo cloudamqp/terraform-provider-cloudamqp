@@ -18,7 +18,8 @@ Use the navigation to the left to read about the available resources.
 ```hcl
 # Configure the CloudAMQP Provider
 provider "cloudamqp" {
-  apikey        = var.cloudamqp_customer_api_key
+  apikey          = var.cloudamqp_customer_api_key
+  enable_faster_instance_destroy = true // Optional configuration, can be left out.
 }
 
 # Create a new cloudamqp instance
@@ -27,7 +28,6 @@ resource "cloudamqp_instance" "instance" {
   plan          = "bunny-1"
   region        = "amazon-web-services::us-west-1"
   tags          = [ "terraform" ]
-  rmq_version   = "3.8.3"
 }
 
 # New recipient to receieve notifications
@@ -85,3 +85,19 @@ The following arguments are supported in the `provider` block:
              It can be sourced from login in to your CloudAMQP account and go to API access or go
              directly to [API Keys](https://customer.cloudamqp.com/apikeys).
              The API key can also be read from the environment variable `CLOUDAMQP_APIKEY`.
+
+* `enable_faster_instance_destroy` - (Optional) This will speed up the destroy action for `cloudamqp_instance`
+                                      when running `terraform destroy`. It's done by skipping delete behaviour
+                                      for resources that don't need to be cleaned up when the servers are deleted.
+                                      The argument can also be read from the environment variable
+                                      `CLOUDAMQP_ENABLE_FASTER_INSTANCE_DESTROY`, default set to false.
+
+___
+
+***List of resources affected by `enable_faster_instance_destroy`:***
+
+* cloudamqp_plugin
+* cloudamqp_plugin_community
+* cloudamqp_security_firewall
+
+More information can be found under `Enable faster instance destroy` section on respective resource.

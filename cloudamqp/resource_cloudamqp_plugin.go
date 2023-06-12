@@ -3,6 +3,7 @@ package cloudamqp
 import (
 	"errors"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 
@@ -106,6 +107,11 @@ func resourcePluginUpdate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourcePluginDelete(d *schema.ResourceData, meta interface{}) error {
+	if enableFasterInstanceDestroy == true {
+		log.Printf("[DEBUG] cloudamqp::resource::plugin::delete skip calling backend.")
+		return nil
+	}
+
 	api := meta.(*api.API)
 	return api.DeletePlugin(d.Get("instance_id").(int), d.Get("name").(string))
 }
