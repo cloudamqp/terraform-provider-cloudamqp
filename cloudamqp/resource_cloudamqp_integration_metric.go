@@ -50,6 +50,16 @@ func resourceIntegrationMetric() *schema.Resource {
 				Sensitive:   true,
 				Description: "AWS secret key. (Cloudwatch)",
 			},
+			"iam_role": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The ARN of the role to be assumed when publishing metrics. (Cloudwatch)",
+			},
+			"iam_external_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "External identifier that match the role you created. (Cloudwatch)",
+			},
 			"api_key": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -137,7 +147,7 @@ func resourceIntegrationMetricCreate(d *schema.ResourceData, meta interface{}) e
 		api        = meta.(*api.API)
 		intName    = strings.ToLower(d.Get("name").(string))
 		commonKeys = []string{"tags", "queue_allowlist", "vhost_allowlist"}
-		keys       = integrationMetricKeys(commonKeys, intName)
+		keys       = integrationMetricKeys(intName)
 		params     = make(map[string]interface{})
 	)
 
@@ -150,41 +160,36 @@ func resourceIntegrationMetricCreate(d *schema.ResourceData, meta interface{}) e
 		var jsonMap map[string]interface{}
 		json.Unmarshal([]byte(uDec), &jsonMap)
 		for _, k := range keys {
-			if contains(commonKeys, k) {
-				v := d.Get(k)
-				if v == "" || v == nil {
-					delete(params, k)
-					continue
-				} else if k == "queue_allowlist" {
-					k = "queue_regex"
-				} else if k == "vhost_allowlist" {
-					k = "vhost_regex"
-				}
-				params[k] = v
-			} else {
-				params[k] = jsonMap[k]
-			}
+			params[k] = jsonMap[k]
 		}
 	} else {
 		for _, k := range keys {
 			v := d.Get(k)
-			if contains(commonKeys, k) && v == "" {
-				delete(params, k)
+			if v == "" || v == nil {
 				continue
-			} else if k == "queue_allowlist" {
-				k = "queue_regex"
-			} else if k == "vhost_allowlist" {
-				k = "vhost_regex"
-			}
-
-			if v != nil {
+			} else {
 				params[k] = v
 			}
 		}
 	}
 
-	data, err := api.CreateIntegration(d.Get("instance_id").(int), "metrics", intName, params)
+	// Add commons keys if present
+	for _, k := range commonKeys {
+		v := d.Get(k)
+		if k == "queue_allowlist" {
+			k = "queue_regex"
+		} else if k == "vhost_allowlist" {
+			k = "vhost_regex"
+		}
 
+		if v == "" || v == nil {
+			continue
+		} else {
+			params[k] = v
+		}
+	}
+
+	data, err := api.CreateIntegration(d.Get("instance_id").(int), "metrics", intName, params)
 	if err != nil {
 		return err
 	}
@@ -237,7 +242,7 @@ func resourceIntegrationMetricUpdate(d *schema.ResourceData, meta interface{}) e
 		api        = meta.(*api.API)
 		intName    = strings.ToLower(d.Get("name").(string))
 		commonKeys = []string{"tags", "queue_allowlist", "vhost_allowlist"}
-		keys       = integrationMetricKeys(commonKeys, intName)
+		keys       = integrationMetricKeys(intName)
 		params     = make(map[string]interface{})
 	)
 
@@ -250,36 +255,32 @@ func resourceIntegrationMetricUpdate(d *schema.ResourceData, meta interface{}) e
 		var jsonMap map[string]interface{}
 		json.Unmarshal([]byte(uDec), &jsonMap)
 		for _, k := range keys {
-			if contains(commonKeys, k) {
-				v := d.Get(k)
-				if v == "" || v == nil {
-					delete(params, k)
-					continue
-				} else if k == "queue_allowlist" {
-					k = "queue_regex"
-				} else if k == "vhost_allowlist" {
-					k = "vhost_regex"
-				}
-				params[k] = v
-			} else {
-				params[k] = jsonMap[k]
-			}
+			params[k] = jsonMap[k]
 		}
 	} else {
 		for _, k := range keys {
 			v := d.Get(k)
-			if contains(commonKeys, k) && v == "" {
-				delete(params, k)
+			if v == "" || v == nil {
 				continue
-			} else if k == "queue_allowlist" {
-				k = "queue_regex"
-			} else if k == "vhost_allowlist" {
-				k = "vhost_regex"
-			}
-
-			if v != nil {
+			} else {
 				params[k] = v
 			}
+		}
+	}
+
+	// Add commons keys if present
+	for _, k := range commonKeys {
+		v := d.Get(k)
+		if k == "queue_allowlist" {
+			k = "queue_regex"
+		} else if k == "vhost_allowlist" {
+			k = "vhost_regex"
+		}
+
+		if v == "" || v == nil {
+			continue
+		} else {
+			params[k] = v
 		}
 	}
 
@@ -314,6 +315,8 @@ func validateIntegrationMetricSchemaAttribute(key string) bool {
 	case "region",
 		"access_key_id",
 		"secret_access_key",
+		"iam_role",
+		"iam_external_id",
 		"tags",
 		"queue_regex",
 		"vhost_regex",
@@ -330,35 +333,25 @@ func validateIntegrationMetricSchemaAttribute(key string) bool {
 	}
 }
 
-func integrationMetricKeys(commonKeys []string, intName string) []string {
-	keys := commonKeys
+func integrationMetricKeys(intName string) []string {
 	switch intName {
 	case "cloudwatch":
-		return append(keys, "region", "access_key_id", "secret_access_key")
+		return []string{"region", "access_key_id", "secret_access_key", "iam_role", "iam_external_id"}
 	case "cloudwatch_v2":
-		return append(keys, "region", "access_key_id", "secret_access_key")
+		return []string{"region", "access_key_id", "secret_access_key", "iam_role", "iam_external_id"}
 	case "librato":
-		return append(keys, "email", "api_key")
+		return []string{"email", "api_key"}
 	case "datadog":
-		return append(keys, "api_key", "region")
+		return []string{"api_key", "region"}
 	case "datadog_v2":
-		return append(keys, "api_key", "region")
+		return []string{"api_key", "region"}
 	case "newrelic":
-		return append(keys, "license_key")
+		return []string{"license_key"}
 	case "newrelic_v2":
-		return append(keys, "api_key", "region")
+		return []string{"api_key", "region"}
 	case "stackdriver":
-		return append(keys, "client_email", "private_key_id", "private_key", "project_id")
+		return []string{"client_email", "private_key_id", "private_key", "project_id"}
 	default:
-		return append(keys, "region", "access_keys", "secret_access_keys", "email", "api_key", "license_key")
+		return []string{"region", "access_keys", "secret_access_keys", "email", "api_key", "license_key"}
 	}
-}
-
-func contains(s []string, searchString string) bool {
-	for i := range s {
-		if searchString == s[i] {
-			return true
-		}
-	}
-	return false
 }
