@@ -1,4 +1,4 @@
-## 1.x.x (Unreleased)
+## 1.27.0 (Jun 12, 2023)
 
 NOTES:
 

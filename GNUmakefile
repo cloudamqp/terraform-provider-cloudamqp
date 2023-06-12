@@ -1,7 +1,7 @@
 TEST?=$$(go list ./... |grep -v 'vendor')
 GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 PKG_NAME=cloudamqp
-PROVIDER_VERSION = 1.26.2
+PROVIDER_VERSION = 1.27.0
 
 default: build
 
