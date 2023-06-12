@@ -1,5 +1,14 @@
 ## 1.x.x (Unreleased)
 
+NOTES:
+
+* New provider configuration option to enable faster instance destroy.
+
+FEATURES:
+
+* Add assume role authentication for CloudWatch metrics integration ([#208](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/208))
+* Enable faster instance destroy options in provider configuration ([#209](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/209))
+
 IMPROVEMENTS:
 
 * Add missing `Happy Hare` plan to the docs ([#206](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/206))
