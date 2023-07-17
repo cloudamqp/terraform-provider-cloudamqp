@@ -18,35 +18,21 @@ jobs:
   goreleaser:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v3
-      -
-        name: Unshallow
-        run: git fetch --prune --unshallow
-      -
-        name: Read go version
-        id: go-version
-        run: |
-          content=`cat ./.go-version`
-          echo "::set-output name=content::$content"
-      -
-        name: Set up Go
-        uses: actions/setup-go@v2
+      - uses: actions/checkout@v3
         with:
-          # TODO: Replace with go-version-from-file when it is supported
-          # https://github.com/actions/setup-go/pull/62
-          go-version: ${{ steps.go-version.outputs.content }}
-      -
-        name: Import GPG key
+          # Allow goreleaser to access older tag information.
+          fetch-depth: 0
+      - uses: actions/setup-go@v4
+        with:
+          go-version: .go-version
+      - name: Import GPG key
         id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@v5.0.0
+        uses: crazy-max/ghaction-import-gpg@72b6676b71ab476b77e676928516f6982eef7a41 # v5.3.0
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-      -
-        name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v2
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@336e29918d653399e599bfca99fadc1d7ffbc9f7 # v4.3.0
         with:
           version: latest
           args: release --rm-dist
