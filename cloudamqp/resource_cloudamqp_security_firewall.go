@@ -146,9 +146,16 @@ func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) erro
 }
 
 func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	var params []map[string]interface{}
-	localFirewalls := d.Get("rules").(*schema.Set).List()
+	var (
+		api            = meta.(*api.API)
+		params         []map[string]interface{}
+		localFirewalls = d.Get("rules").(*schema.Set).List()
+	)
+
+	if !d.HasChange("rules") {
+		return nil
+	}
+
 	for _, k := range localFirewalls {
 		params = append(params, k.(map[string]interface{}))
 	}
