@@ -223,12 +223,22 @@ func resourceRabbitMqConfigurationRead(d *schema.ResourceData, meta interface{})
 }
 
 func resourceRabbitMqConfigurationUpdate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	keys := rabbitMqConfigurationWriteAttributeKeys()
-	params := make(map[string]interface{})
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		keys       = rabbitMqConfigurationWriteAttributeKeys()
+		params     = make(map[string]interface{})
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
 	for _, k := range keys {
+		if !d.HasChange(k) {
+			continue
+		}
+
 		v := d.Get(k)
-		if v == nil {
+		if v == nil || v == "" {
 			continue
 		} else if k == "connection_max" {
 			if v == -1 {
@@ -243,10 +253,16 @@ func resourceRabbitMqConfigurationUpdate(d *schema.ResourceData, meta interface{
 		}
 		params["rabbit."+k] = v
 	}
-	err := api.UpdateRabbitMqConfiguration(d.Get("instance_id").(int), params, d.Get("sleep").(int), d.Get("timeout").(int))
-	if err != nil {
-		return err
+
+	log.Printf("[DEBUG] RabbitMQ configuration params: %v", params)
+	if len(params) > 0 {
+		err := api.UpdateRabbitMqConfiguration(instanceID, params, sleep, timeout)
+		if err != nil {
+			return err
+		}
 	}
+
+	d.SetId(strconv.Itoa(instanceID))
 	return resourceRabbitMqConfigurationRead(d, meta)
 }
 
