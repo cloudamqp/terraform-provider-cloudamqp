@@ -107,25 +107,31 @@ func resourceSecurityFirewall() *schema.Resource {
 }
 
 func resourceSecurityFirewallCreate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	var params []map[string]interface{}
-	localFirewalls := d.Get("rules").(*schema.Set).List()
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create localFirewalls: %v", localFirewalls)
+	var (
+		api            = meta.(*api.API)
+		instanceID     = d.Get("instance_id").(int)
+		localFirewalls = d.Get("rules").(*schema.Set).List()
+		replace        = d.Get("replace").(bool)
+		params         []map[string]interface{}
+		sleep          = d.Get("sleep").(int)
+		timeout        = d.Get("timeout").(int)
+		err            error
+	)
 
+	d.SetId(strconv.Itoa(instanceID))
 	for _, k := range localFirewalls {
 		params = append(params, k.(map[string]interface{}))
 	}
 
-	instanceID := d.Get("instance_id").(int)
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create instance id: %v", instanceID)
-	data, err := api.CreateFirewallSettings(instanceID, params, d.Get("sleep").(int), d.Get("timeout").(int))
+	if replace {
+		err = api.CreateFirewallSettings(instanceID, params, sleep, timeout)
+	} else {
+		err = api.PatchFirewallSettings(instanceID, params, sleep, timeout)
+	}
+
 	if err != nil {
 		return fmt.Errorf("error setting security firewall for resource %s: %s", d.Id(), err)
 	}
-	d.SetId(strconv.Itoa(instanceID))
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create id set: %v", d.Id())
-	d.Set("rules", data)
-
 	return nil
 }
 
