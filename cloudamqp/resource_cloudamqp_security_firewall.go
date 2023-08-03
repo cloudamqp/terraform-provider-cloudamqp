@@ -31,6 +31,12 @@ func resourceSecurityFirewall() *schema.Resource {
 				Required:    true,
 				Description: "Instance identifier",
 			},
+			"replace": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+				Description: "Replace all firewall rules or append/update",
+			},
 			"rules": {
 				Type:     schema.TypeSet,
 				Required: true,
@@ -124,19 +130,35 @@ func resourceSecurityFirewallCreate(d *schema.ResourceData, meta interface{}) er
 }
 
 func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	instanceID, _ := strconv.Atoi(d.Id())
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read instance id: %v", instanceID)
+	var (
+		api           = meta.(*api.API)
+		instanceID, _ = strconv.Atoi(d.Id()) // Needed for import
+		replace       = d.Get("replace").(bool)
+		rules         []map[string]interface{}
+	)
+
+	// Filter out rules that are present in localFirewalls... (d.Get("rules").(*schema.Set).List())
+	d.Set("instance_id", instanceID)
 	data, err := api.ReadFirewallSettings(instanceID)
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read data: %v", data)
 	if err != nil {
 		return err
 	}
-	d.Set("instance_id", instanceID)
-	rules := make([]map[string]interface{}, len(data))
-	for k, v := range data {
-		rules[k] = readRule(v)
+	log.Printf("[DEBUG] Read firewall rules: %v", data)
+
+	if replace {
+		for _, v := range data {
+			rules = append(rules, readRule(v))
+		}
+	} else {
+		// How to handle import?
+		// localRules := d.Get("rules").(*schema.Set).List()
+		for _, v := range data {
+			if d.Get("rules").(*schema.Set).Contains(v) {
+				rules = append(rules, readRule(v))
+			}
+		}
 	}
+
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read rules: %v", rules)
 	if err = d.Set("rules", rules); err != nil {
 		return fmt.Errorf("error setting rules for resource %s, %s", d.Id(), err)
