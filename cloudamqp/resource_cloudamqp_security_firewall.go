@@ -204,15 +204,36 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 }
 
 func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) error {
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+		replace    = d.Get("replace").(bool)
+	)
+
 	if enableFasterInstanceDestroy == true {
 		log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete skip calling backend.")
 		return nil
 	}
 
-	api := meta.(*api.API)
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete instance id: %v", d.Get("instance_id"))
-	data, err := api.DeleteFirewallSettings(d.Get("instance_id").(int), d.Get("sleep").(int), d.Get("timeout").(int))
-	d.Set("rules", data)
+	if replace {
+		data, err := api.DeleteFirewallSettings(instanceID, sleep, timeout)
+		d.Set("rules", data)
+		return err
+	}
+
+	var params []map[string]interface{}
+	localFirewalls := d.Get("rules").(*schema.Set).List()
+	log.Printf("[DEBUG] Delete firewall rules: %v", localFirewalls)
+	for _, k := range localFirewalls {
+		rule := k.(map[string]interface{})
+		rule["services"] = []string{}
+		rule["ports"] = []int{}
+		params = append(params, rule)
+	}
+	log.Printf("[DEBUG] Delete firewall params: %v", params)
+	err := api.PatchFirewallSettings(instanceID, params, sleep, timeout)
 	return err
 }
 
