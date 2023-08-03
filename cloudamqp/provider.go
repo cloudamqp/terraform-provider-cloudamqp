@@ -66,8 +66,6 @@ func Provider(v string) *schema.Provider {
 			"cloudamqp_privatelink_azure":           resourcePrivateLinkAzure(),
 			"cloudamqp_rabbitmq_configuration":      resourceRabbitMqConfiguration(),
 			"cloudamqp_security_firewall":           resourceSecurityFirewall(),
-			"cloudamqp_security_firewall_rule":      resourceSecurityFirewallRule(),
-			"cloudamqp_security_firewall_rules":     resourceSecurityFirewallRules(),
 			"cloudamqp_upgrade_rabbitmq":            resourceUpgradeRabbitMQ(),
 			"cloudamqp_vpc_gcp_peering":             resourceVpcGcpPeering(),
 			"cloudamqp_vpc_peering":                 resourceVpcPeering(),
