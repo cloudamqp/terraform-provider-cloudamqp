@@ -31,11 +31,11 @@ func resourceSecurityFirewall() *schema.Resource {
 				Required:    true,
 				Description: "Instance identifier",
 			},
-			"replace": {
+			"patch": {
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Default:     true,
-				Description: "Replace all firewall rules or append/update",
+				Default:     false,
+				Description: "Patch firewall rules instead of replacing them",
 			},
 			"rules": {
 				Type:     schema.TypeSet,
@@ -111,7 +111,7 @@ func resourceSecurityFirewallCreate(d *schema.ResourceData, meta interface{}) er
 		api            = meta.(*api.API)
 		instanceID     = d.Get("instance_id").(int)
 		localFirewalls = d.Get("rules").(*schema.Set).List()
-		replace        = d.Get("replace").(bool)
+		patch          = d.Get("patch").(bool)
 		params         []map[string]interface{}
 		sleep          = d.Get("sleep").(int)
 		timeout        = d.Get("timeout").(int)
@@ -123,10 +123,10 @@ func resourceSecurityFirewallCreate(d *schema.ResourceData, meta interface{}) er
 		params = append(params, k.(map[string]interface{}))
 	}
 
-	if replace {
-		err = api.CreateFirewallSettings(instanceID, params, sleep, timeout)
-	} else {
+	if patch {
 		err = api.PatchFirewallSettings(instanceID, params, sleep, timeout)
+	} else {
+		err = api.CreateFirewallSettings(instanceID, params, sleep, timeout)
 	}
 
 	if err != nil {
@@ -139,11 +139,10 @@ func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) erro
 	var (
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id()) // Needed for import
-		replace       = d.Get("replace").(bool)
+		patch         = d.Get("patch").(bool)
 		rules         []map[string]interface{}
 	)
 
-	// Filter out rules that are present in localFirewalls... (d.Get("rules").(*schema.Set).List())
 	d.Set("instance_id", instanceID)
 	data, err := api.ReadFirewallSettings(instanceID)
 	if err != nil {
@@ -151,17 +150,16 @@ func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) erro
 	}
 	log.Printf("[DEBUG] Read firewall rules: %v", data)
 
-	if replace {
-		for _, v := range data {
-			rules = append(rules, readRule(v))
-		}
-	} else {
+	if patch {
 		// How to handle import?
-		// localRules := d.Get("rules").(*schema.Set).List()
 		for _, v := range data {
 			if d.Get("rules").(*schema.Set).Contains(v) {
 				rules = append(rules, readRule(v))
 			}
+		}
+	} else {
+		for _, v := range data {
+			rules = append(rules, readRule(v))
 		}
 	}
 
@@ -177,7 +175,7 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
-		replace    = d.Get("replace").(bool)
+		patch      = d.Get("patch").(bool)
 		rules      []map[string]interface{}
 		sleep      = d.Get("sleep").(int)
 		timeout    = d.Get("timeout").(int)
@@ -187,7 +185,7 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 		return nil
 	}
 
-	if replace {
+	if !patch {
 		for _, k := range d.Get("rules").(*schema.Set).List() {
 			rules = append(rules, k.(map[string]interface{}))
 		}
@@ -195,6 +193,8 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 		return api.UpdateFirewallSettings(instanceID, rules, sleep, timeout)
 	}
 
+	// Patch rules: Determine the difference between old and new sets
+	// Check which rules that should be deleted and which should be updated
 	oldRules, newRules := d.GetChange("rules")
 	deleteRules := oldRules.(*schema.Set).Difference(newRules.(*schema.Set)).List()
 	log.Printf("[DEBUG] Update firewall, remove rules: %v", deleteRules)
@@ -221,7 +221,7 @@ func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) er
 		instanceID = d.Get("instance_id").(int)
 		sleep      = d.Get("sleep").(int)
 		timeout    = d.Get("timeout").(int)
-		replace    = d.Get("replace").(bool)
+		patch      = d.Get("patch").(bool)
 	)
 
 	if enableFasterInstanceDestroy == true {
@@ -229,12 +229,13 @@ func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) er
 		return nil
 	}
 
-	if replace {
+	if !patch {
 		data, err := api.DeleteFirewallSettings(instanceID, sleep, timeout)
 		d.Set("rules", data)
 		return err
 	}
 
+	// Set services and port to empty arrays, this will remove rules when patching.
 	var params []map[string]interface{}
 	localFirewalls := d.Get("rules").(*schema.Set).List()
 	log.Printf("[DEBUG] Delete firewall rules: %v", localFirewalls)
@@ -245,8 +246,7 @@ func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) er
 		params = append(params, rule)
 	}
 	log.Printf("[DEBUG] Delete firewall params: %v", params)
-	err := api.PatchFirewallSettings(instanceID, params, sleep, timeout)
-	return err
+	return api.PatchFirewallSettings(instanceID, params, sleep, timeout)
 }
 
 func readRule(data map[string]interface{}) map[string]interface{} {
