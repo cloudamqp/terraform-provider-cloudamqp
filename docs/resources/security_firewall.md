@@ -9,7 +9,7 @@ description: |-
 
 This resource allows you to configure and manage firewall rules for the CloudAMQP instance.
 
-~> **WARNING:** Firewall rules applied with this resource will replace any existing firewall rules. Make sure all wanted rules are present to not lose them. Unless the arugment patch is set to true.
+~> **WARNING** Firewall rules applied with this resource will replace any existing firewall rules. Make sure all wanted rules are present to not lose them. Unless the arugment patch is set to true.
 
 -> **NOTE** Using argument `patch = true`, only the given rules will be handled. Either created, updated or removed while leaving all other firewall rules intact.
 
@@ -22,21 +22,14 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   instance_id = cloudamqp_instance.instance.id
 
   rules {
-    ip          = "192.168.0.0/24"
-    ports       = [4567, 4568]
-    services    = ["AMQPS", "HTTPS"]
-  }
-
-  rules {
     ip          = "10.56.72.0/24"
     ports       = []
     services    = ["AMQPS", "HTTPS"]
   }
 
-  // Single IP address
   rules {
-    ip          = "192.168.1.10/32"
-    ports       = []
+    ip          = "10.1.0.0/16"
+    ports       = [4567]
     services    = ["AMQPS", "HTTPS"]
   }
 }
@@ -69,14 +62,14 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   instance_id = cloudamqp_instance.instance.id
 
   rules {
-    ip          = "192.168.0.0/24"
-    ports       = [4567, 4568]
+    ip          = "10.56.72.0/24"
+    ports       = []
     services    = ["AMQPS", "HTTPS"]
   }
 
   rules {
-    ip          = "10.56.72.0/24"
-    ports       = []
+    ip          = "10.1.0.0/16"
+    ports       = [4567]
     services    = ["AMQPS", "HTTPS"]
   }
 }
@@ -90,20 +83,37 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
     </b>
   </summary>
 
-The CloudAMQP Terraform provider [v1.28.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.28.0) adds new argument called `patch`. When patch set to true, instead of replacing all firewall rules, only the rules present in the resource will be handled.
+The CloudAMQP Terraform provider [v1.28.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.28.0) adds new argument called `patch`. When patch set to true, instead of replacing all firewall rules, only the rules present in the resource will be handled. Multiple patched resource can be used together.
+
+~> ***WARNING*** Cannot be used together with the original firewall resource. Since every time the patched resource makes changes, this will affect the original firewall resource.
 
 ```hcl
-// New resource only handling MGMT interface rule
-resource "cloudamqp_security_firewall" "patching_rules" {
+resource "cloudamqp_security_firewall" "mgmt_rule" {
   instance_id = cloudamqp_instance.instance.id
   patch = true
 
-// From previous example, adds a new rule that open up management interface.
   rules {
     ip          = "0.0.0.0/0"
     description = "MGMT interface"
     ports       = []
     services    = ["HTTPS"]
+  }
+}
+
+resource "cloudamqp_security_firewall" "extra_firewall_rules" {
+  instance_id = cloudamqp_instance.instance.id
+  patch = true
+
+  rules {
+    ip          = "10.1.0.0/16"
+    ports       = []
+    services    = ["AMQPS"]
+  }
+
+  rules {
+    ip          = "10.2.0.0/16"
+    ports       = []
+    services    = ["AMQPS"]
   }
 }
 ```
