@@ -19,7 +19,7 @@ func datasourceSecurityFirewall() *schema.Resource {
 				Description: "Instance identifier",
 			},
 			"rules": {
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -61,7 +61,7 @@ func datasourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) er
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
-		// rules      []map[string]interface{}
+		rules      []map[string]interface{}
 	)
 
 	data, err := api.ReadFirewallSettings(instanceID)
@@ -69,9 +69,8 @@ func datasourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) er
 		return err
 	}
 	d.SetId(strconv.Itoa(instanceID))
-	rules := make([]map[string]interface{}, len(data))
-	for k, v := range data {
-		rules[k] = readRule(v)
+	for _, v := range data {
+		rules = append(rules, readRule(v))
 	}
 	log.Printf("[DEBUG] data-cloudamqp-security-firewall appended rules: %v", rules)
 	if err = d.Set("rules", rules); err != nil {
