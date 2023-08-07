@@ -23,6 +23,7 @@ func resourceSecurityFirewall() *schema.Resource {
 		Update: resourceSecurityFirewallUpdate,
 		Delete: resourceSecurityFirewallDelete,
 		Importer: &schema.ResourceImporter{
+			// Can only import all rules
 			State: schema.ImportStatePassthrough,
 		},
 		Schema: map[string]*schema.Schema{
@@ -151,7 +152,6 @@ func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) erro
 	log.Printf("[DEBUG] Read firewall rules: %v", data)
 
 	if patch {
-		// How to handle import?
 		for _, v := range data {
 			if d.Get("rules").(*schema.Set).Contains(v) {
 				rules = append(rules, readRule(v))
@@ -185,6 +185,7 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 		return nil
 	}
 
+	// Replace all rules
 	if !patch {
 		for _, k := range d.Get("rules").(*schema.Set).List() {
 			rules = append(rules, k.(map[string]interface{}))
@@ -229,6 +230,7 @@ func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) er
 		return nil
 	}
 
+	// Remove firewall settings and set default 0.0.0.0/0 rule (found in go-api).
 	if !patch {
 		data, err := api.DeleteFirewallSettings(instanceID, sleep, timeout)
 		d.Set("rules", data)
