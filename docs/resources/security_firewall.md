@@ -9,7 +9,9 @@ description: |-
 
 This resource allows you to configure and manage firewall rules for the CloudAMQP instance.
 
-~> **WARNING:** Firewall rules applied with this resource will replace any existing firewall rules. Make sure all wanted rules are present to not lose them.
+~> **WARNING:** Firewall rules applied with this resource will replace any existing firewall rules. Make sure all wanted rules are present to not lose them. Unless the arugment patch is set to true.
+
+-> **NOTE** Using argument `patch = true`, only the given rules will be handled. Either created, updated or removed while leaving all other firewall rules intact.
 
 Only available for dedicated subscription plans.
 
@@ -22,20 +24,20 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   rules {
     ip          = "192.168.0.0/24"
     ports       = [4567, 4568]
-    services    = ["AMQP","AMQPS", "HTTPS"]
+    services    = ["AMQPS", "HTTPS"]
   }
 
   rules {
     ip          = "10.56.72.0/24"
     ports       = []
-    services    = ["AMQP","AMQPS", "HTTPS"]
+    services    = ["AMQPS", "HTTPS"]
   }
 
   // Single IP address
   rules {
     ip          = "192.168.1.10/32"
     ports       = []
-    services    = ["AMQP","AMQPS", "HTTPS"]
+    services    = ["AMQPS", "HTTPS"]
   }
 }
 ```
@@ -47,7 +49,7 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
     </b>
   </summary>
 
-CloudAMQP Terraform provider [v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) enables faster `cloudamqp_instance` destroy when running `terraform destroy`.
+The CloudAMQP Terraform provider [v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) enables faster `cloudamqp_instance` destroy when running `terraform destroy`.
 
 ```hcl
 # Configure the CloudAMQP Provider
@@ -69,13 +71,39 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   rules {
     ip          = "192.168.0.0/24"
     ports       = [4567, 4568]
-    services    = ["AMQP","AMQPS", "HTTPS"]
+    services    = ["AMQPS", "HTTPS"]
   }
 
   rules {
     ip          = "10.56.72.0/24"
     ports       = []
-    services    = ["AMQP","AMQPS", "HTTPS"]
+    services    = ["AMQPS", "HTTPS"]
+  }
+}
+```
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>Only patch one or more firewall rules, instead of replacing them all. From v1.28.0
+    </b>
+  </summary>
+
+The CloudAMQP Terraform provider [v1.28.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.28.0) adds new argument called `patch`. When patch set to true, instead of replacing all firewall rules, only the rules present in the resource will be handled.
+
+```hcl
+// New resource only handling MGMT interface rule
+resource "cloudamqp_security_firewall" "patching_rules" {
+  instance_id = cloudamqp_instance.instance.id
+  patch = true
+
+// From previous example, adds a new rule that open up management interface.
+  rules {
+    ip          = "0.0.0.0/0"
+    description = "MGMT interface"
+    ports       = []
+    services    = ["HTTPS"]
   }
 }
 ```
@@ -87,6 +115,7 @@ Top level argument reference
 
 * `instance_id` - (Required) The CloudAMQP instance ID.
 * `rules`       - (Required) An array of rules, minimum of 1 needs to be configured. Each `rules` block consists of the field documented below.
+* `patch`       - (Optional) Patch firewall rules instead of replacing all of them.
 * `sleep`       - (Optional) Configurable sleep time in seconds between retries for firewall configuration. Default set to 30 seconds.
 * `timeout`     - (Optional) Configurable timeout time in seconds for firewall configuration. Default set to 1800 seconds.
 
@@ -191,5 +220,5 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 }
 ```
 
-The provider from [v1.15.2](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.16.0) will start to warn about using this.
+The provider from [v1.15.2](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.15.2) will start to warn about using this.
  </details>
