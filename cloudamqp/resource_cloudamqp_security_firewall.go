@@ -248,7 +248,10 @@ func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) er
 		params = append(params, rule)
 	}
 	log.Printf("[DEBUG] Delete firewall params: %v", params)
-	return api.PatchFirewallSettings(instanceID, params, sleep, timeout)
+	if len(params) > 0 {
+		return api.PatchFirewallSettings(instanceID, params, sleep, timeout)
+	}
+	return nil
 }
 
 func readRule(data map[string]interface{}) map[string]interface{} {
