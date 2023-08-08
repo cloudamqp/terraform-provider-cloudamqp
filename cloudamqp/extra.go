@@ -8,7 +8,7 @@ import (
 
 func randomSleep(ms int, name string) {
 	rand.Seed(time.Now().UnixNano())
-	n := rand.Intn(5000)
+	n := rand.Intn(ms)
 	log.Printf("[DEBUG] %s sleep for %d ms...\n", name, n)
 	time.Sleep(time.Duration(n) * time.Millisecond)
 }
