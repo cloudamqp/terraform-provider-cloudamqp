@@ -1,3 +1,9 @@
+## 1.* (Unreleased)
+
+IMPROVEMENTS: 
+
+* Cleanup RabbitMQ configuration resource ([#215](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/215))
+
 ## 1.27.0 (Jun 12, 2023)
 
 NOTES:

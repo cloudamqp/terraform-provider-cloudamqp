@@ -13,7 +13,7 @@ import (
 
 func resourceRabbitMqConfiguration() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceRabbitMqConfigurationCreate,
+		Create: resourceRabbitMqConfigurationUpdate,
 		Read:   resourceRabbitMqConfigurationRead,
 		Update: resourceRabbitMqConfigurationUpdate,
 		Delete: resourceRabbitMqConfigurationDelete,
@@ -154,40 +154,15 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 	}
 }
 
-func resourceRabbitMqConfigurationCreate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	keys := rabbitMqConfigurationWriteAttributeKeys()
-	params := make(map[string]interface{})
-	for _, k := range keys {
-		v := d.Get(k)
-		if v == nil || v == 0 || v == 0.0 || v == "" {
-			continue
-		} else if k == "connection_max" {
-			if v == -1 {
-				v = "infinity"
-			}
-		} else if k == "consumer_timeout" {
-			if v == -1 {
-				v = "false"
-			}
-		} else if k == "log_exchange_level" {
-			k = "log.exchange.level"
-		}
-		params["rabbit."+k] = v
-	}
-	err := api.UpdateRabbitMqConfiguration(d.Get("instance_id").(int), params, d.Get("sleep").(int), d.Get("timeout").(int))
-	if err != nil {
-		return err
-	}
-	id := strconv.Itoa(d.Get("instance_id").(int))
-	d.SetId(id)
-	return resourceRabbitMqConfigurationRead(d, meta)
-}
-
 func resourceRabbitMqConfigurationRead(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	instanceID, _ := strconv.Atoi(d.Id())
-	data, err := api.ReadRabbitMqConfiguration(instanceID, d.Get("sleep").(int), d.Get("timeout").(int))
+	var (
+		api           = meta.(*api.API)
+		instanceID, _ = strconv.Atoi(d.Id())
+		sleep         = d.Get("sleep").(int)
+		timeout       = d.Get("timeout").(int)
+	)
+
+	data, err := api.ReadRabbitMqConfiguration(instanceID, sleep, timeout)
 	log.Printf("[DEBUG] cloudamqp::resource::rabbitmq_configuration::read data: %v", data)
 	if err != nil {
 		return err
@@ -196,22 +171,17 @@ func resourceRabbitMqConfigurationRead(d *schema.ResourceData, meta interface{})
 	d.Set("instance_id", instanceID)
 	for k, v := range data {
 		if validateRabbitMqConfigurationJSONField(k) {
+			if v == nil || v == "" {
+				continue
+			}
 			key := strings.ReplaceAll(k, "rabbit.", "")
 			if key == "connection_max" {
-				if v == "infinity" || v == nil {
+				if v == "infinity" {
 					v = -1
 				}
 			} else if key == "consumer_timeout" {
 				if v == "false" {
 					v = -1
-				}
-			} else if key == "queue_index_embed_msgs_below" {
-				if v == nil {
-					v = 4096
-				}
-			} else if key == "max_message_size" {
-				if v == nil {
-					v = 134217728
 				}
 			} else if key == "log.exchange.level" {
 				key = "log_exchange_level"
@@ -223,12 +193,22 @@ func resourceRabbitMqConfigurationRead(d *schema.ResourceData, meta interface{})
 }
 
 func resourceRabbitMqConfigurationUpdate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	keys := rabbitMqConfigurationWriteAttributeKeys()
-	params := make(map[string]interface{})
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		keys       = rabbitMqConfigurationWriteAttributeKeys()
+		params     = make(map[string]interface{})
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
 	for _, k := range keys {
+		if !d.HasChange(k) {
+			continue
+		}
+
 		v := d.Get(k)
-		if v == nil {
+		if v == nil || v == "" {
 			continue
 		} else if k == "connection_max" {
 			if v == -1 {
@@ -243,10 +223,16 @@ func resourceRabbitMqConfigurationUpdate(d *schema.ResourceData, meta interface{
 		}
 		params["rabbit."+k] = v
 	}
-	err := api.UpdateRabbitMqConfiguration(d.Get("instance_id").(int), params, d.Get("sleep").(int), d.Get("timeout").(int))
-	if err != nil {
-		return err
+
+	log.Printf("[DEBUG] RabbitMQ configuration params: %v", params)
+	if len(params) > 0 {
+		err := api.UpdateRabbitMqConfiguration(instanceID, params, sleep, timeout)
+		if err != nil {
+			return err
+		}
 	}
+
+	d.SetId(strconv.Itoa(instanceID))
 	return resourceRabbitMqConfigurationRead(d, meta)
 }
 
