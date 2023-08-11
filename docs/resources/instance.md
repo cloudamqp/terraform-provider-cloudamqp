@@ -150,6 +150,48 @@ resource "cloudamqp_instance" "instance_02" {
 Set attribute `keep_associated_vpc` to true, will keep managed VPC when deleting the instances.
 </details>
 
+<details>
+  <summary>
+    <b>
+      <i>Copy settings from a dedicated instance to a new dedicated instance</i>
+    </b>
+  </summary>
+
+```hcl
+# Managed VPC
+resource "cloudamqp_vpc" "vpc" {
+  name   = "<vpc-name>"
+  region = "amazon-web-services::us-east-1"
+  subnet = "10.56.72.0/24"
+  tags   = []
+}
+
+# First instance added to managed VPC
+resource "cloudamqp_instance" "instance_01" {
+  name                = "terraform-cloudamqp-instance-01"
+  plan                = "squirrel-1"
+  region              = "amazon-web-services::us-west-1"
+  tags                = ["terraform"]
+  vpc_id              = cloudamqp_vpc.vpc.id
+  keep_associated_vpc = true
+}
+
+# Copy first instance to a second instance
+resource "cloudamqp_instance" "instance_02" {
+  name                = "terraform-cloudamqp-instance-02"
+  plan                = "squirrel-1"
+  region              = "amazon-web-services::us-west-1"
+  tags                = ["terraform"]
+  vpc_id              = cloudamqp_vpc.vpc.id
+  keep_associated_vpc = true
+  copy_settings {
+    subscription_id = var.instance_id
+    settings = ["alarms", "config", "definitions", "firewall", "logs", "metrics", "plugins"]
+  }
+}
+```
+</details>
+
 ## Argument Reference
 
 The following arguments are supported:
@@ -179,6 +221,15 @@ The following arguments are supported:
 * `no_default_alarms`- (Computed/Optional) Set to true to discard creating default alarms when the instance is created. Can be left out, will then use default value = false.
 
 * `keep_associated_vpc` - (Optional) Keep associated VPC when deleting instance, default set to false.
+
+* `copy_settings` - (Optional) Copy settings from one CloudAMQP instance to a new. Consist of the block documented below.
+
+___
+
+The `copy_settings` block consists of:
+
+* `subscription_id`  - (Required) Instance identifier of the CloudAMQP instance to copy the settings from.
+* `settings`       - (Required) Array of one or more settings to be copied. Allowed values: [alarms, config, definitions, firewall, logs, metrics, plugins]
 
 ## Attributes Reference
 
