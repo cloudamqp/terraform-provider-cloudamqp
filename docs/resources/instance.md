@@ -157,39 +157,23 @@ Set attribute `keep_associated_vpc` to true, will keep managed VPC when deleting
     </b>
   </summary>
 
+copy_settings argument block declares both the settings and the instance to copy the settings from.
+* subscription_id: CloudAMQP instance identifier of an already existing instance. See [Import](./#import) section on how to retrieve the instance identifier.
+* settings: The settings to get copied to the new instance. Such as RabbitMQ config, definitions, etc.
+
 ```hcl
-# Managed VPC
-resource "cloudamqp_vpc" "vpc" {
-  name   = "<vpc-name>"
-  region = "amazon-web-services::us-east-1"
-  subnet = "10.56.72.0/24"
-  tags   = []
-}
-
-# First instance added to managed VPC
-resource "cloudamqp_instance" "instance_01" {
-  name                = "terraform-cloudamqp-instance-01"
-  plan                = "squirrel-1"
-  region              = "amazon-web-services::us-west-1"
-  tags                = ["terraform"]
-  vpc_id              = cloudamqp_vpc.vpc.id
-  keep_associated_vpc = true
-}
-
-# Copy first instance to a second instance
 resource "cloudamqp_instance" "instance_02" {
   name                = "terraform-cloudamqp-instance-02"
   plan                = "squirrel-1"
   region              = "amazon-web-services::us-west-1"
   tags                = ["terraform"]
-  vpc_id              = cloudamqp_vpc.vpc.id
-  keep_associated_vpc = true
   copy_settings {
     subscription_id = var.instance_id
     settings = ["alarms", "config", "definitions", "firewall", "logs", "metrics", "plugins"]
   }
 }
 ```
+
 </details>
 
 ## Argument Reference
@@ -222,7 +206,7 @@ The following arguments are supported:
 
 * `keep_associated_vpc` - (Optional) Keep associated VPC when deleting instance, default set to false.
 
-* `copy_settings` - (Optional) Copy settings from one CloudAMQP instance to a new. Consist of the block documented below.
+* `copy_settings` - (Optional) Copy settings from one CloudAMQP instance to a new. Consists of the block documented below.
 
 ___
 
