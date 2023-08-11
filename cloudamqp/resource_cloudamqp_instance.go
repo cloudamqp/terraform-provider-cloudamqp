@@ -135,12 +135,12 @@ func resourceInstance() *schema.Resource {
 						},
 						"settings": {
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Schema{
 								Type:         schema.TypeString,
 								ValidateFunc: validateCopySettings(),
 							},
-							Description: "Settings to be copied. [alarms, config, definitions, firewall, logs, metrics, plugins] ",
+							Description: "Settings to be copied. [alarms, config, definitions, firewall, logs, metrics, plugins]",
 						},
 					},
 				},
