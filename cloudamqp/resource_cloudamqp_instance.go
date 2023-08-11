@@ -271,6 +271,11 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	keys := []string{"name", "plan", "nodes", "tags"}
 	params := make(map[string]interface{})
+
+	if !d.HasChanges("name", "plan", "nodes", "tags") {
+		return nil
+	}
+
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
 			params[k] = d.Get(k)
