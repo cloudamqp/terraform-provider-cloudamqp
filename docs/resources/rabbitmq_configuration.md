@@ -129,7 +129,7 @@ All attributes reference are computed
 | log_exchange_level | string | error | - | - |  | RabbitMQ restart required | debug, info, warning, error, critical |
 | cluster_partition_handling | string | see below | - | - |  | Applied immediately | autoheal, pause_minority, ignore |
 
-  *Note: Recommended setting for cluster_partition_handling: `autoheal` for cluster with 1-2 nodes, `pause_minority` for cluster with 3 or more nodes. While `ignore` setting is not recommended.*
+  ***Note: Recommended setting for cluster_partition_handling: `autoheal` for cluster with 1-2 nodes, `pause_minority` for cluster with 3 or more nodes. While `ignore` setting is not recommended.***
 
 ## Dependency
 
@@ -140,3 +140,23 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 `cloudamqp_rabbitmq_configuration` can be imported using the CloudAMQP instance identifier.
 
 `terraform import cloudamqp_rabbitmq_configuration.config <instance_id>`
+
+## Known issues
+
+<details>
+  <summary>Cannot set heartbeat=0 when creating this resource</summary>
+
+The provider is built by older `Terraform Plugin SDK` which doesn't support nullable configuration values. Instead the values will be set to it's default value based on it's schema primitive type.
+
+* schema.TypeString = ""
+* schema.TypeInt = 0
+* schema.TypeFloat = 0.0
+* schema.TypeBool = false
+
+During initial create of this resource, we need to exclude all arguments that can take these default values.
+Argument such as `hearbeat`, `channel_max`, etc. cannot be set to its default value, 0 in these cases.
+Current workaround is to use the default value in the initial create run, then change to the wanted value in the re-run.
+
+Will be solved once we migrate the current provider to `Terraform Plugin Framework`.
+
+</details>

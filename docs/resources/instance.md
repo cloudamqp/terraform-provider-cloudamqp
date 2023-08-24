@@ -201,3 +201,59 @@ All attributes reference are computed
 
 To retrieve the identifier for a VPC, either use [CloudAMQP customer API](https://docs.cloudamqp.com/#list-instances).
 Or use the data source [`cloudamqp_account`](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/data-sources/account) to list all available instances for an account.
+
+## Upgrade and downgrade
+
+It's possible to upgrade or downgrade your subscription plan, this will either increase or decrease the underlying resource used for by the CloudAMQP instance. To do this, change the argument `plan` in the configuration and apply the changes. See available [plans](../guides/info_plan.md).
+
+<details>
+  <summary>
+    <b>
+      <i>Upgrade the subscription plan</i>
+    </b>
+  </summary>
+
+```hcl
+# Initial CloudAMQP instance configuration
+resource "cloudamqp_instance" "instance" {
+  name    = "instance"
+  plan    = "squirrel-1"
+  region  = "amazon-web-services::us-west-1"
+  tags    = ["terraform"]
+}
+
+# Upgraded CloudAMQP instance configuration
+resource "cloudamqp_instance" "instance" {
+  name    = "instance"
+  plan    = "bunny-1"
+  region  = "amazon-web-services::us-west-1"
+  tags    = ["terraform"]
+}
+```
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>Downgrade number of nodes from 3 to 1</i>
+    </b>
+  </summary>
+
+```hcl
+# Initial CloudAMQP instance configuration
+resource "cloudamqp_instance" "instance" {
+  name    = "instance"
+  plan    = "bunny-3"
+  region  = "amazon-web-services::us-west-1"
+  tags    = ["terraform"]
+}
+
+# Downgraded CloudAMQP instance configuration
+resource "cloudamqp_instance" "instance" {
+  name    = "instance"
+  plan    = "bunny-1"
+  region  = "amazon-web-services::us-west-1"
+  tags    = ["terraform"]
+}
+```
+</details>

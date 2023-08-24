@@ -94,6 +94,8 @@ Optional argument for all alarms: `tags, queue_regex, vhost_regex`
 | Server unreachable | server_unreachable  | - | &#10004;  | time_threshold |
 | Notice | notice | &#10004; | &#10004; | |
 
+~> Notice alarm is manadatory! Only one can exists and cannot be deleted. Setting `no_default_alarm` to true, will still create this alarm.
+
 ## Dependency
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
