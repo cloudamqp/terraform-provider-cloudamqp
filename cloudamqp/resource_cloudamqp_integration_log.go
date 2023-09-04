@@ -26,6 +26,7 @@ func resourceIntegrationLog() *schema.Resource {
 			"instance_id": {
 				Type:        schema.TypeInt,
 				Required:    true,
+				ForceNew:    true,
 				Description: "Instance identifier used to make proxy calls",
 			},
 			"name": {
