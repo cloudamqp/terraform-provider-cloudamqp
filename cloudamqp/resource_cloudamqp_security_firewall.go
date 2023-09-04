@@ -123,7 +123,6 @@ func resourceSecurityFirewallCreate(d *schema.ResourceData, meta interface{}) er
 	for _, k := range localFirewalls {
 		params = append(params, k.(map[string]interface{}))
 	}
-	randomSleep(5000, "firewall create")
 
 	if patch {
 		err = api.PatchFirewallSettings(instanceID, params, sleep, timeout)
@@ -186,7 +185,6 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 		return nil
 	}
 
-	randomSleep(5000, "firewall update")
 	// Replace all rules
 	if !patch {
 		for _, k := range d.Get("rules").(*schema.Set).List() {
@@ -232,7 +230,6 @@ func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) er
 		return nil
 	}
 
-	randomSleep(5000, "firewall delete")
 	// Remove firewall settings and set default 0.0.0.0/0 rule (found in go-api).
 	if !patch {
 		data, err := api.DeleteFirewallSettings(instanceID, sleep, timeout)
