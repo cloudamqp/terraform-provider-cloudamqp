@@ -25,6 +25,7 @@ func resourceAlarm() *schema.Resource {
 			"instance_id": {
 				Type:        schema.TypeInt,
 				Required:    true,
+				ForceNew:    true,
 				Description: "Instance identifier",
 			},
 			"type": {

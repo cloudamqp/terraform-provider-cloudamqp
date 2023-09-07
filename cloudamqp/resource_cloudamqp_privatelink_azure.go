@@ -23,6 +23,7 @@ func resourcePrivateLinkAzure() *schema.Resource {
 			"instance_id": {
 				Type:        schema.TypeInt,
 				Required:    true,
+				ForceNew:    true,
 				Description: "The CloudAMQP instance identifier",
 			},
 			"status": {
