@@ -3,6 +3,7 @@
 IMPROVEMENTS: 
 
 * Cleanup RabbitMQ configuration resource ([#215](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/215))
+* Add ForceNew to resources with cloudamqp_instance dependency ([#222](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/222))
 
 ## 1.27.0 (Jun 12, 2023)
 
