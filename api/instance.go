@@ -69,7 +69,7 @@ func (api *API) waitWithTimeoutUntilAllNodesConfigured(instanceID string, attemp
 	if err != nil {
 		return err
 	} else if attempt*sleep > timeout {
-		return fmt.Errorf("All nodes configured timeout reached after %d seconds", timeout)
+		return fmt.Errorf("all nodes configured timeout reached after %d seconds", timeout)
 	}
 
 	ready := true
@@ -113,7 +113,7 @@ func (api *API) numberOfNodes(instanceID string) (int, error) {
 	log.Printf("[DEBUG] go-api::instances::numberOfNodes data: %v", data)
 
 	if err != nil {
-		fmt.Errorf("[ERROR] go-api::instances::numberOfNodes error: %v", err)
+		fmt.Errorf("go-api::instances::numberOfNodes error: %v", err)
 		return -1, err
 	}
 	if response.StatusCode != 200 {

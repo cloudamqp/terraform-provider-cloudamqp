@@ -18,7 +18,7 @@ func (api *API) waitUntilFirewallConfigured(instanceID, attempt, sleep, timeout 
 		if err != nil {
 			return err
 		} else if attempt*sleep > timeout {
-			return fmt.Errorf("Wait until firewall configured failed, reached timeout of %d seconds", timeout)
+			return fmt.Errorf("wait until firewall configured failed, reached timeout of %d seconds", timeout)
 		}
 
 		switch response.StatusCode {
@@ -62,7 +62,7 @@ func (api *API) createFirewallSettingsWithRetry(instanceID int, params []map[str
 	if err != nil {
 		return attempt, err
 	} else if attempt*sleep > timeout {
-		return attempt, fmt.Errorf("Create firewall settings failed, reached timeout of %d seconds", timeout)
+		return attempt, fmt.Errorf("create firewall settings failed, reached timeout of %d seconds", timeout)
 	}
 
 	switch {
@@ -79,10 +79,10 @@ func (api *API) createFirewallSettingsWithRetry(instanceID int, params []map[str
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.createFirewallSettingsWithRetry(instanceID, params, attempt, sleep, timeout)
 		case failed["error_code"].(float64) == 40002:
-			return attempt, fmt.Errorf("Firewall rules validation failed due to: %s", failed["error"].(string))
+			return attempt, fmt.Errorf("firewall rules validation failed due to: %s", failed["error"].(string))
 		}
 	}
-	return attempt, fmt.Errorf("Create new firewall rules failed, status: %v, message: %s", response.StatusCode, failed)
+	return attempt, fmt.Errorf("create new firewall rules failed, status: %v, message: %s", response.StatusCode, failed)
 }
 
 func (api *API) ReadFirewallSettings(instanceID int) ([]map[string]interface{}, error) {
@@ -130,7 +130,7 @@ func (api *API) updateFirewallSettingsWithRetry(instanceID int, params []map[str
 	if err != nil {
 		return attempt, err
 	} else if attempt*sleep > timeout {
-		return attempt, fmt.Errorf("Update firewall settings failed, reached timeout of %d seconds", timeout)
+		return attempt, fmt.Errorf("update firewall settings failed, reached timeout of %d seconds", timeout)
 	}
 
 	switch response.StatusCode {
@@ -147,10 +147,10 @@ func (api *API) updateFirewallSettingsWithRetry(instanceID int, params []map[str
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.updateFirewallSettingsWithRetry(instanceID, params, attempt, sleep, timeout)
 		case failed["error_code"].(float64) == 40002:
-			return attempt, fmt.Errorf("Firewall rules validation failed due to: %s", failed["error"].(string))
+			return attempt, fmt.Errorf("firewall rules validation failed due to: %s", failed["error"].(string))
 		}
 	}
-	return attempt, fmt.Errorf("Update firewall rules failed, status: %v, message: %v",
+	return attempt, fmt.Errorf("update firewall rules failed, status: %v, message: %v",
 		response.StatusCode, failed)
 }
 
@@ -183,7 +183,7 @@ func (api *API) deleteFirewallSettingsWithRetry(instanceID, attempt, sleep, time
 	if err != nil {
 		return attempt, err
 	} else if attempt*sleep > timeout {
-		return attempt, fmt.Errorf("Delete firewall settings failed, reached timeout of %d seconds", timeout)
+		return attempt, fmt.Errorf("delete firewall settings failed, reached timeout of %d seconds", timeout)
 	}
 
 	switch response.StatusCode {
@@ -200,10 +200,10 @@ func (api *API) deleteFirewallSettingsWithRetry(instanceID, attempt, sleep, time
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.deleteFirewallSettingsWithRetry(instanceID, attempt, sleep, timeout)
 		case failed["error_code"].(float64) == 40002:
-			return attempt, fmt.Errorf("Firewall rules validation failed due to: %s", failed["error"].(string))
+			return attempt, fmt.Errorf("firewall rules validation failed due to: %s", failed["error"].(string))
 		}
 	}
-	return attempt, fmt.Errorf("Delete firewall rules failed, status: %v, message: %v",
+	return attempt, fmt.Errorf("delete firewall rules failed, status: %v, message: %v",
 		response.StatusCode, failed)
 }
 

@@ -40,7 +40,7 @@ func (api *API) RequestVpcGcpPeering(instanceID int, params map[string]interface
 		return nil, err
 	}
 	if response.StatusCode != 200 {
-		return nil, fmt.Errorf("Request VPC peering failed, status: %v, message: %s", response.StatusCode, failed)
+		return nil, fmt.Errorf("request VPC peering failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
 	log.Printf("[DEBUG] go-api::vpc_gcp_peering::request waiting for active state")

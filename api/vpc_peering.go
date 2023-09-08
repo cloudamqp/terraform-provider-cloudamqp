@@ -34,7 +34,7 @@ func (api *API) ReadVpcPeeringRequest(instanceID int, peeringID string) (map[str
 	if err != nil {
 		return nil, err
 	} else if response.StatusCode != 200 {
-		return nil, fmt.Errorf("ReadRequest failed, status: %v, message: %s", response.StatusCode, failed)
+		return nil, fmt.Errorf("readRequest failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
 	return data, nil
@@ -55,7 +55,7 @@ func (api *API) retryAcceptVpcPeering(path string, attempt, sleep, timeout int) 
 	if err != nil {
 		return nil, err
 	} else if attempt*sleep > timeout {
-		return nil, fmt.Errorf("Accept VPC peering failed, reached timeout of %d seconds", timeout)
+		return nil, fmt.Errorf("accept VPC peering failed, reached timeout of %d seconds", timeout)
 	}
 
 	switch response.StatusCode {
@@ -74,7 +74,7 @@ func (api *API) retryAcceptVpcPeering(path string, attempt, sleep, timeout int) 
 		}
 	}
 
-	return nil, fmt.Errorf("Accept VPC peering failed, status: %v, message: %s", response.StatusCode, failed)
+	return nil, fmt.Errorf("accept VPC peering failed, status: %v, message: %s", response.StatusCode, failed)
 }
 
 func (api *API) readVpcInfoWithRetry(path string, attempts, sleep int) (map[string]interface{}, error) {
@@ -100,11 +100,11 @@ func (api *API) readVpcInfoWithRetry(path string, attempts, sleep int) (map[stri
 				time.Sleep(time.Duration(sleep) * time.Second)
 				return api.readVpcInfoWithRetry(path, attempts, 2*sleep)
 			}
-			return nil, fmt.Errorf("ReadInfo failed, status: %v, message: %s", response.StatusCode, failed)
+			return nil, fmt.Errorf("readInfo failed, status: %v, message: %s", response.StatusCode, failed)
 		}
 	}
 
-	return nil, fmt.Errorf("ReadInfo failed, status: %v, message: %s", response.StatusCode, failed)
+	return nil, fmt.Errorf("readInfo failed, status: %v, message: %s", response.StatusCode, failed)
 }
 
 func (api *API) retryRemoveVpcPeering(path string, attempt, sleep, timeout int) error {
@@ -116,7 +116,7 @@ func (api *API) retryRemoveVpcPeering(path string, attempt, sleep, timeout int) 
 	if err != nil {
 		return err
 	} else if attempt*sleep > timeout {
-		return fmt.Errorf("Remove VPC peering failed, reached timeout of %d seconds", timeout)
+		return fmt.Errorf("remove VPC peering failed, reached timeout of %d seconds", timeout)
 	}
 
 	switch response.StatusCode {
@@ -135,7 +135,7 @@ func (api *API) retryRemoveVpcPeering(path string, attempt, sleep, timeout int) 
 		}
 	}
 
-	return fmt.Errorf("Remove VPC peering failed, status: %v, message: %s", response.StatusCode, failed)
+	return fmt.Errorf("remove VPC peering failed, status: %v, message: %s", response.StatusCode, failed)
 }
 
 func (api *API) waitForPeeringStatus(instanceID int, peeringID string, attempt, sleep, timeout int) (int, error) {
@@ -154,7 +154,7 @@ func (api *API) waitForPeeringStatusWithRetry(path, peeringID string, attempt, s
 	if err != nil {
 		return attempt, err
 	} else if attempt*sleep > timeout {
-		return attempt, fmt.Errorf("Accept VPC peering failed, reached timeout of %d seconds", timeout)
+		return attempt, fmt.Errorf("accept VPC peering failed, reached timeout of %d seconds", timeout)
 	}
 
 	switch response.StatusCode {
@@ -163,7 +163,7 @@ func (api *API) waitForPeeringStatusWithRetry(path, peeringID string, attempt, s
 		case "active", "pending-acceptance":
 			return attempt, nil
 		case "deleted":
-			return attempt, fmt.Errorf("Peering: %s has been deleted", peeringID)
+			return attempt, fmt.Errorf("peering: %s has been deleted", peeringID)
 		}
 	case 400:
 		switch {
@@ -178,5 +178,5 @@ func (api *API) waitForPeeringStatusWithRetry(path, peeringID string, attempt, s
 		}
 	}
 
-	return attempt, fmt.Errorf("Accept VPC peering failed, status: %v, message: %v", response.StatusCode, failed)
+	return attempt, fmt.Errorf("accept VPC peering failed, status: %v, message: %v", response.StatusCode, failed)
 }

@@ -19,7 +19,7 @@ func (api *API) CreateAwsEventBridge(instanceID int, params map[string]interface
 		return nil, err
 	}
 	if response.StatusCode != 201 {
-		return nil, fmt.Errorf("Failed to create AWS EventBridge, status: %v, message: %s",
+		return nil, fmt.Errorf("failed to create AWS EventBridge, status: %v, message: %s",
 			response.StatusCode, failed)
 	}
 	if id, ok := data["id"]; ok {
@@ -44,7 +44,7 @@ func (api *API) ReadAwsEventBridge(instanceID int, eventbridgeID string) (map[st
 		return nil, err
 	}
 	if response.StatusCode != 200 {
-		return nil, fmt.Errorf("Failed to read AWS EventBridge, status: %v, message: %s",
+		return nil, fmt.Errorf("failed to read AWS EventBridge, status: %v, message: %s",
 			response.StatusCode, failed)
 	}
 
@@ -63,7 +63,7 @@ func (api *API) ReadAwsEventBridges(instanceID int) (map[string]interface{}, err
 		return nil, err
 	}
 	if response.StatusCode != 200 {
-		return nil, fmt.Errorf("Failed to read AWS EventBridges, status: %v, message: %s",
+		return nil, fmt.Errorf("failed to read AWS EventBridges, status: %v, message: %s",
 			response.StatusCode, failed)
 	}
 
@@ -90,5 +90,5 @@ func (api *API) DeleteAwsEventBridge(instanceID int, eventbridgeID string) error
 		return nil
 	}
 
-	return fmt.Errorf("Failed to delete AWS EventBridge, status: %v, message: %s", response.StatusCode, failed)
+	return fmt.Errorf("failed to delete AWS EventBridge, status: %v, message: %s", response.StatusCode, failed)
 }

@@ -58,7 +58,7 @@ func (api *API) PostAction(instanceID int, nodeName string, action string) (map[
 		return nil, err
 	}
 	if response.StatusCode != 200 {
-		return nil, fmt.Errorf("Action failed, status: %v, message: %s", response.StatusCode, failed)
+		return nil, fmt.Errorf("action failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
 	return api.waitOnNodeAction(instanceID, nodeName, action)

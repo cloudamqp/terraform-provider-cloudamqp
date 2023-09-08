@@ -28,7 +28,7 @@ func (api *API) resizeDiskWithRetry(id string, params map[string]interface{}, at
 	if err != nil {
 		return nil, err
 	} else if attempt*sleep > timeout {
-		return nil, fmt.Errorf("Resize disk timeout reached after %d seconds", timeout)
+		return nil, fmt.Errorf("resize disk timeout reached after %d seconds", timeout)
 	}
 
 	switch response.StatusCode {
@@ -49,9 +49,9 @@ func (api *API) resizeDiskWithRetry(id string, params map[string]interface{}, at
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.resizeDiskWithRetry(id, params, attempt, sleep, timeout)
 		default:
-			return nil, fmt.Errorf("Resize disk failed: %s", failed["error"].(string))
+			return nil, fmt.Errorf("resize disk failed: %s", failed["error"].(string))
 		}
 	}
-	return nil, fmt.Errorf("Resize disk failed, status: %v, message: %s",
+	return nil, fmt.Errorf("resize disk failed, status: %v, message: %s",
 		response.StatusCode, failed["error"].(string))
 }

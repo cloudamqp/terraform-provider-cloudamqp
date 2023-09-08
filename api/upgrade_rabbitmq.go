@@ -35,7 +35,7 @@ func (api *API) UpgradeRabbitMQ(instanceID int) (string, error) {
 	if response.StatusCode == 200 {
 		return "Already at highest possible version", nil
 	} else if response.StatusCode != 202 {
-		return "", fmt.Errorf("Upgrade RabbitMQ failed, status: %v, message: %s", response.StatusCode, failed)
+		return "", fmt.Errorf("upgrade RabbitMQ failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
 	return api.waitUntilUpgraded(instanceID)

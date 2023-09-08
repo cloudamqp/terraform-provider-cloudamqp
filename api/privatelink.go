@@ -27,7 +27,7 @@ func (api *API) EnablePrivatelink(instanceID int, params map[string][]interface{
 	if response.StatusCode == 204 {
 		return api.waitForEnablePrivatelinkWithRetry(instanceID, 1, sleep, timeout)
 	} else {
-		return fmt.Errorf("Enable PrivateLink failed, status: %v, message: %s",
+		return fmt.Errorf("enable PrivateLink failed, status: %v, message: %s",
 			response.StatusCode, failed)
 	}
 }
@@ -48,7 +48,7 @@ func (api *API) ReadPrivatelink(instanceID int) (map[string]interface{}, error) 
 	if response.StatusCode == 200 {
 		return data, nil
 	} else {
-		return nil, fmt.Errorf("Read PrivateLink failed, status: %v, message: %s",
+		return nil, fmt.Errorf("read PrivateLink failed, status: %v, message: %s",
 			response.StatusCode, failed)
 	}
 }
@@ -68,7 +68,7 @@ func (api *API) UpdatePrivatelink(instanceID int, params map[string][]interface{
 	if response.StatusCode == 204 {
 		return nil
 	} else {
-		return fmt.Errorf("Update Privatelink failed, status: %v, message: %s",
+		return fmt.Errorf("update Privatelink failed, status: %v, message: %s",
 			response.StatusCode, failed)
 	}
 }
@@ -88,7 +88,7 @@ func (api *API) DisablePrivatelink(instanceID int) error {
 	if response.StatusCode == 204 {
 		return nil
 	} else {
-		return fmt.Errorf("Disable Privatelink failed, status: %v, message: %s",
+		return fmt.Errorf("disable Privatelink failed, status: %v, message: %s",
 			response.StatusCode, failed)
 	}
 }
@@ -105,7 +105,7 @@ func (api *API) waitForEnablePrivatelinkWithRetry(instanceID, attempt, sleep, ti
 	if err != nil {
 		return err
 	} else if attempt*sleep > timeout {
-		return fmt.Errorf("Enable PrivateLink failed, reached timeout of %d seconds", timeout)
+		return fmt.Errorf("enable PrivateLink failed, reached timeout of %d seconds", timeout)
 	}
 	log.Printf("[DEBUG] PrivateLink: waitForEnablePrivatelinkWithRetry data: %v", data)
 
@@ -123,7 +123,7 @@ func (api *API) waitForEnablePrivatelinkWithRetry(instanceID, attempt, sleep, ti
 		}
 	}
 
-	return fmt.Errorf("Wait for enable PrivateLink failed, status: %v, message: %s",
+	return fmt.Errorf("wait for enable PrivateLink failed, status: %v, message: %s",
 		response.StatusCode, failed)
 }
 
@@ -146,7 +146,7 @@ func (api *API) enableVPC(instanceID int) error {
 			log.Printf("[DEBUG] PrivateLink: VPC features enabled")
 			return nil
 		} else {
-			return fmt.Errorf("Enable VPC failed, status: %v, message: %s",
+			return fmt.Errorf("enable VPC failed, status: %v, message: %s",
 				response.StatusCode, failed)
 		}
 	}
