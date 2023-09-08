@@ -83,7 +83,7 @@ func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error
 		d.Set("instance_id", instanceID)
 	}
 	if d.Get("instance_id").(int) == 0 {
-		return errors.New("Missing instance identifier: {resource_id},{instance_id}")
+		return errors.New("missing instance identifier: {resource_id},{instance_id}")
 	}
 
 	api := meta.(*api.API)
@@ -120,7 +120,7 @@ func resourcePluginCommunityUpdate(d *schema.ResourceData, meta interface{}) err
 }
 
 func resourcePluginCommunityDelete(d *schema.ResourceData, meta interface{}) error {
-	if enableFasterInstanceDestroy == true {
+	if enableFasterInstanceDestroy {
 		log.Printf("[DEBUG] cloudamqp::resource::plugin-community::delete skip calling backend.")
 		return nil
 	}

@@ -170,7 +170,7 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 }
 
 func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) error {
-	if enableFasterInstanceDestroy == true {
+	if enableFasterInstanceDestroy {
 		log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete skip calling backend.")
 		return nil
 	}
