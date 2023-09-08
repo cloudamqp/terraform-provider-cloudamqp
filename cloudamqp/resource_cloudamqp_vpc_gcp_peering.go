@@ -30,6 +30,12 @@ func resourceVpcGcpPeering() *schema.Resource {
 				Required:    true,
 				Description: "VPC network uri",
 			},
+			"wait_on_peering_status": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Wait until peering status change to 'connected'",
+			},
 			"state": {
 				Type:        schema.TypeString,
 				Computed:    true,
@@ -50,24 +56,29 @@ func resourceVpcGcpPeering() *schema.Resource {
 }
 
 func resourceCreateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	keys := []string{"peer_network_uri"}
-	params := make(map[string]interface{})
+	var (
+		waitOnStatus = d.Get("wait_on_peering_status").(bool)
+		api          = meta.(*api.API)
+		keys         = []string{"peer_network_uri"}
+		params       = make(map[string]interface{})
+	)
+
 	for _, k := range keys {
 		if v := d.Get(k); v != nil && v != "" {
 			params[k] = v
 		}
 	}
 
-	log.Printf("[DEBUG] cloudamqp::vpc_gcp_peering::create instance_id: %v, vpc_id: %v", d.Get("instance_id"), d.Get("vpc_id"))
+	log.Printf("[DEBUG] cloudamqp::vpc_gcp_peering::create instance_id: %v, vpc_id: %v",
+		d.Get("instance_id"), d.Get("vpc_id"))
 	data := make(map[string]interface{})
 	err := errors.New("")
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
 		return errors.New("you need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
-		data, err = api.RequestVpcGcpPeering(d.Get("instance_id").(int), params)
+		data, err = api.RequestVpcGcpPeering(d.Get("instance_id").(int), params, waitOnStatus)
 	} else if d.Get("vpc_id") != nil {
-		data, err = api.RequestVpcGcpPeeringWithVpcId(d.Get("vpc_id").(string), params)
+		data, err = api.RequestVpcGcpPeeringWithVpcId(d.Get("vpc_id").(string), params, waitOnStatus)
 	}
 
 	if err != nil {
