@@ -21,6 +21,9 @@ func (api *API) waitUntilPluginChanged(instanceID int, pluginName string, enable
 		if err != nil {
 			return nil, err
 		}
+		if response["required"] != nil && response["required"] != false {
+			return response, nil
+		}
 		if response["enabled"] == enabled {
 			return response, nil
 		}
