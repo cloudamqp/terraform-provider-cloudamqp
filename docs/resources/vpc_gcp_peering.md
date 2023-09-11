@@ -152,7 +152,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 
 * `peer_network_uri`- (Required) Network uri of the VPC network to which you will peer with.
 
-* `wait_on_peering_status` - (Optional) Should the resource wait until the peering is connected.
+* `wait_on_peering_status` - (Optional) Makes the resource wait until the peering is connected.
 
  ***Note: Added as optional in version v1.28.0. Default set to false and will not wait until the peering is done from both VPCs***
 
