@@ -23,6 +23,7 @@ func resourcePrivateLinkAzure() *schema.Resource {
 			"instance_id": {
 				Type:        schema.TypeInt,
 				Required:    true,
+				ForceNew:    true,
 				Description: "The CloudAMQP instance identifier",
 			},
 			"status": {
@@ -66,7 +67,7 @@ func resourcePrivateLinkAzure() *schema.Resource {
 				for _, v := range value.([]interface{}) {
 					re := regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
 					if !re.MatchString(v.(string)) {
-						return fmt.Errorf("Invalid Subscription ID : %v", v)
+						return fmt.Errorf("invalid Subscription ID : %v", v)
 					}
 				}
 				return nil

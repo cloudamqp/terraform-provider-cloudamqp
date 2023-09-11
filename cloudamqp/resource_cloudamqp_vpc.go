@@ -38,7 +38,7 @@ func resourceVpc() *schema.Resource {
 					v := val.(string)
 					_, _, err := net.ParseCIDR(v)
 					if err != nil {
-						errs = append(errs, fmt.Errorf("Subnet: %v", err))
+						errs = append(errs, fmt.Errorf("subnet: %v", err))
 					}
 					return
 				},

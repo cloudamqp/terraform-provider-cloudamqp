@@ -24,6 +24,7 @@ func resourceNotification() *schema.Resource {
 			"instance_id": {
 				Type:        schema.TypeInt,
 				Required:    true,
+				ForceNew:    true,
 				Description: "Instance identifier",
 			},
 			"type": {
@@ -84,7 +85,7 @@ func resourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
 		d.Set("instance_id", instanceID)
 	}
 	if d.Get("instance_id").(int) == 0 {
-		return errors.New("Missing instance identifier: {resource_id},{instance_id}")
+		return errors.New("missing instance identifier: {resource_id},{instance_id}")
 	}
 
 	api := meta.(*api.API)

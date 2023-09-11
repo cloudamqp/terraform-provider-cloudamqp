@@ -40,7 +40,6 @@ func resourceNodeAction() *schema.Resource {
 
 func resourceNodeActionRequest(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	data := make(map[string]interface{})
 	nodeName := d.Get("node_name").(string)
 	data, err := api.PostAction(d.Get("instance_id").(int), nodeName, d.Get("action").(string))
 	if err != nil {
@@ -53,7 +52,6 @@ func resourceNodeActionRequest(d *schema.ResourceData, meta interface{}) error {
 
 func resourceNodeActionRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	data := make(map[string]interface{})
 	data, err := api.ReadNode(d.Get("instance_id").(int), d.Get("node_name").(string))
 	if err != nil {
 		return err

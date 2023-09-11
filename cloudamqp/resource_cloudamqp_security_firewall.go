@@ -30,6 +30,7 @@ func resourceSecurityFirewall() *schema.Resource {
 			"instance_id": {
 				Type:        schema.TypeInt,
 				Required:    true,
+				ForceNew:    true,
 				Description: "Instance identifier",
 			},
 			"patch": {
@@ -225,7 +226,7 @@ func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) er
 		patch      = d.Get("patch").(bool)
 	)
 
-	if enableFasterInstanceDestroy == true {
+	if enableFasterInstanceDestroy {
 		log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete skip calling backend.")
 		return nil
 	}

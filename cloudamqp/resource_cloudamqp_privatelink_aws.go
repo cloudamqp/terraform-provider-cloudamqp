@@ -23,6 +23,7 @@ func resourcePrivateLinkAws() *schema.Resource {
 			"instance_id": {
 				Type:        schema.TypeInt,
 				Required:    true,
+				ForceNew:    true,
 				Description: "The CloudAMQP instance identifier",
 			},
 			"status": {
@@ -69,7 +70,7 @@ func resourcePrivateLinkAws() *schema.Resource {
 				for _, v := range value.([]interface{}) {
 					re := regexp.MustCompile(`^arn:aws:iam::\d{12}:(root|user/.+|role/.+)$`)
 					if !re.MatchString(v.(string)) {
-						return fmt.Errorf("Invalid ARN : %v", v)
+						return fmt.Errorf("invalid ARN : %v", v)
 					}
 				}
 				return nil

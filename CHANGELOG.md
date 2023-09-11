@@ -1,8 +1,17 @@
-## 1.* (Unreleased)
+## 1.27.1 (Sep 08, 2023)
 
-IMPROVEMENTS: 
+NOTES:
+
+* Updated the API wrapper (go-api) dependecy with newer version (1.12.3)
+
+IMPROVEMENTS:
 
 * Cleanup RabbitMQ configuration resource ([#215](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/215))
+* Add ForceNew to resources with cloudamqp_instance dependency ([#222](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/222))
+
+BUG FIXES:
+
+* Indirect handle managed required plugins failing to be destroyed.
 
 ## 1.27.0 (Jun 12, 2023)
 
