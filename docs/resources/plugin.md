@@ -142,6 +142,16 @@ If multiple plugins should be enable, create dependencies between the plugin res
 
 `terraform import cloudamqp_plugin.rabbitmq_management rabbitmq_management,<instance_id>`
 
+## Required plugins
+
+Plugins that is not needed to be managed by the provider since they will always be enabled. We have made `rabbitmq_prometheus` required for all clusters since RabbitMQ version 3.10.0.
+
+| Name                      | Version |
+|---------------------------|---------|
+| rabbitmq_management       | all     |
+| rabbitmq_management_agent | all     |
+| rabbitmq_prometheus       | 3.10.0  |
+
 ## Enable faster instance destroy
 
 When running `terraform destroy` this resource will try to disable the managed plugin before deleting `cloudamqp_instance`. This is not necessary since the servers will be deleted.

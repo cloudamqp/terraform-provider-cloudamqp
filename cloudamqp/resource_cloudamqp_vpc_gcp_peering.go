@@ -63,7 +63,7 @@ func resourceCreateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 	data := make(map[string]interface{})
 	err := errors.New("")
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
-		return errors.New("You need to specify either instance_id or vpc_id")
+		return errors.New("you need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
 		data, err = api.RequestVpcGcpPeering(d.Get("instance_id").(int), params)
 	} else if d.Get("vpc_id") != nil {
@@ -89,7 +89,7 @@ func resourceReadVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
 	data := make(map[string]interface{})
 	err := errors.New("")
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
-		return errors.New("You need to specify either instance_id or vpc_id")
+		return errors.New("you need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
 		data, err = api.ReadVpcGcpPeering(d.Get("instance_id").(int), d.Id())
 	} else if d.Get("vpc_id") != nil {
@@ -102,7 +102,7 @@ func resourceReadVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	if data["rows"] == nil {
-		return errors.New("No peering data available")
+		return errors.New("no peering data available")
 	}
 
 	rows := data["rows"].([]interface{})
@@ -136,13 +136,13 @@ func resourceUpdateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 func resourceDeleteVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
-		return errors.New("You need to specify either instance_id or vpc_id")
+		return errors.New("you need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
 		return api.RemoveVpcGcpPeering(d.Get("instance_id").(int), d.Id())
 	} else if d.Get("vpc_id") != nil {
 		return api.RemoveVpcGcpPeeringWithVpcId(d.Get("vpc_id").(string), d.Id())
 	}
-	return errors.New("Failed to remove VPC peering")
+	return errors.New("failed to remove VPC peering")
 }
 
 func validateGcpPeeringSchemaAttribute(key string) bool {

@@ -97,7 +97,7 @@ func resourceAwsEventBridgeRead(d *schema.ResourceData, meta interface{}) error 
 		d.Set("instance_id", instanceID)
 	}
 	if d.Get("instance_id").(int) == 0 {
-		return fmt.Errorf("Missing instance identifier: {resource_id},{instance_id}")
+		return fmt.Errorf("missing instance identifier: {resource_id},{instance_id}")
 	}
 
 	var (

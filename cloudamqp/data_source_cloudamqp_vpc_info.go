@@ -53,7 +53,7 @@ func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
 	data := make(map[string]interface{})
 	err := errors.New("")
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
-		return errors.New("You need to specify either instance_id or vpc_id")
+		return errors.New("you need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
 		data, err = api.ReadVpcInfo(d.Get("instance_id").(int))
 	} else if d.Get("vpc_id") != nil {

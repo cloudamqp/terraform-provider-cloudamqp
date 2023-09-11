@@ -26,6 +26,7 @@ func resourceIntegrationMetric() *schema.Resource {
 			"instance_id": {
 				Type:        schema.TypeInt,
 				Required:    true,
+				ForceNew:    true,
 				Description: "Instance identifier",
 			},
 			"name": {
@@ -155,7 +156,7 @@ func resourceIntegrationMetricCreate(d *schema.ResourceData, meta interface{}) e
 	if intName == "stackdriver" && v != "" {
 		uDec, err := base64.URLEncoding.DecodeString(v.(string))
 		if err != nil {
-			return fmt.Errorf("Log integration failed, error decoding private_key: %s ", err.Error())
+			return fmt.Errorf("log integration failed, error decoding private_key: %s ", err.Error())
 		}
 		var jsonMap map[string]interface{}
 		json.Unmarshal([]byte(uDec), &jsonMap)
@@ -208,7 +209,7 @@ func resourceIntegrationMetricRead(d *schema.ResourceData, meta interface{}) err
 		d.Set("instance_id", instanceID)
 	}
 	if d.Get("instance_id").(int) == 0 {
-		return errors.New("Missing instance identifier: {resource_id},{instance_id}")
+		return errors.New("missing instance identifier: {resource_id},{instance_id}")
 	}
 
 	api := meta.(*api.API)
@@ -250,7 +251,7 @@ func resourceIntegrationMetricUpdate(d *schema.ResourceData, meta interface{}) e
 	if intName == "stackdriver" && v != "" {
 		uDec, err := base64.URLEncoding.DecodeString(v.(string))
 		if err != nil {
-			return fmt.Errorf("Log integration failed, error decoding private_key: %s ", err.Error())
+			return fmt.Errorf("log integration failed, error decoding private_key: %s ", err.Error())
 		}
 		var jsonMap map[string]interface{}
 		json.Unmarshal([]byte(uDec), &jsonMap)
