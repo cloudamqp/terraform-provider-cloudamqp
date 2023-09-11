@@ -18,8 +18,8 @@ This resouce creates a VPC peering configuration for the CloudAMQP instance. The
 rules {
   Description = "VPC peer request"
   ip          = "<VPC peered subnet>"
-  ports       = []
-  services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL", "STOMP", "STOMPS", "MQTT", "MQTTS"]
+  ports       = [15672]
+  services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL"]
 }
 ```
 </details>
@@ -112,6 +112,32 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 ```
 </details>
 
+<details>
+  <summary>
+    <b>
+      <i>VPC peering post v1.28.0, wait_on_peering_status </i>
+    </b>
+  </summary>
+
+Default peering request, no need to set `wait_on_peering_status`. It's default set to false and will not wait on peering status.
+```hcl
+resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
+  vpc_id = cloudamqp_vpc.vpc.id
+  peer_network_uri = "https://www.googleapis.com/compute/v1/projects/<PROJECT-NAME>/global/networks/<NETWORK-NAME>"
+}
+```
+
+Peering request and waiting for peering status.
+```hcl
+resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
+  vpc_id = cloudamqp_vpc.vpc.id
+  wait_on_peering_status = true
+  peer_network_uri = "https://www.googleapis.com/compute/v1/projects/<PROJECT-NAME>/global/networks/<NETWORK-NAME>"
+}
+```
+
+</details>
+
 ## Argument Reference
 
  *Note: this resource require either `instance_id` or `vpc_id` from v1.16.0*
@@ -125,6 +151,10 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
  ***Note: Added as optional in version v1.16.0, will be required in next major version (v2.0)***
 
 * `peer_network_uri`- (Required) Network uri of the VPC network to which you will peer with.
+
+* `wait_on_peering_status` - (Optional) Should the resource wait until the peering is connected.
+
+ ***Note: Added as optional in version v1.28.0. Default set to false and will not wait until the peering is done from both VPCs***
 
 ## Attributes Reference
 
