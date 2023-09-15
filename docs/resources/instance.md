@@ -150,32 +150,6 @@ resource "cloudamqp_instance" "instance_02" {
 Set attribute `keep_associated_vpc` to true, will keep managed VPC when deleting the instances.
 </details>
 
-<details>
-  <summary>
-    <b>
-      <i>Copy settings from a dedicated instance to a new dedicated instance</i>
-    </b>
-  </summary>
-
-copy_settings argument block declares both the settings and the instance to copy the settings from.
-* subscription_id: CloudAMQP instance identifier of an already existing instance. See [Import](./#import) section on how to retrieve the instance identifier.
-* settings: The settings to get copied to the new instance. Such as RabbitMQ config, definitions, etc.
-
-```hcl
-resource "cloudamqp_instance" "instance_02" {
-  name                = "terraform-cloudamqp-instance-02"
-  plan                = "squirrel-1"
-  region              = "amazon-web-services::us-west-1"
-  tags                = ["terraform"]
-  copy_settings {
-    subscription_id = var.instance_id
-    settings = ["alarms", "config", "definitions", "firewall", "logs", "metrics", "plugins"]
-  }
-}
-```
-
-</details>
-
 ## Argument Reference
 
 The following arguments are supported:
@@ -214,6 +188,8 @@ The `copy_settings` block consists of:
 
 * `subscription_id`  - (Required) Instance identifier of the CloudAMQP instance to copy the settings from.
 * `settings`       - (Required) Array of one or more settings to be copied. Allowed values: [alarms, config, definitions, firewall, logs, metrics, plugins]
+
+See more below, [copy settings](#copy-settings-to-a-new-dedicated-instance)
 
 ## Attributes Reference
 
@@ -289,6 +265,36 @@ resource "cloudamqp_instance" "instance" {
   plan    = "bunny-1"
   region  = "amazon-web-services::us-west-1"
   tags    = ["terraform"]
+}
+```
+</details>
+
+## Copy settings to a new dedicated instance
+
+With copy settings it's possible to create a new dedicated instance with settings such as alarms, config, etc. from another dedicated instance. This can be done by adding the `copy_settings` block to this resource and populate `subscription_id` with a CloudAMQP instance identifier from another already existing instance.
+
+Then add the settings to be copied over to the new dedicated instance. Settings that can be copied [alarms, config, definitions, firewall, logs, metrics, plugins]
+
+~> `rmq_version` argument is required when doing this action. Must match the RabbitMQ version of the dedicated instance to be copied from.
+
+<details>
+  <summary>
+    <b>
+      <i>Copy settings from a dedicated instance to a new dedicated instance</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_instance" "instance_02" {
+  name                = "terraform-cloudamqp-instance-02"
+  plan                = "squirrel-1"
+  region              = "amazon-web-services::us-west-1"
+  rmq_version         = "3.12.2"
+  tags                = ["terraform"]
+  copy_settings {
+    subscription_id = var.instance_id
+    settings = ["alarms", "config", "definitions", "firewall", "logs", "metrics", "plugins"]
+  }
 }
 ```
 </details>
