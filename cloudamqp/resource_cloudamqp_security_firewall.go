@@ -186,35 +186,35 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 		return nil
 	}
 
-	// Replace all rules
-	if !patch {
-		for _, k := range d.Get("rules").(*schema.Set).List() {
-			rules = append(rules, k.(map[string]interface{}))
+	if patch {
+		// Patch rules: Determine the difference between old and new sets
+		// Check which rules that should be deleted and which should be updated
+		oldRules, newRules := d.GetChange("rules")
+		deleteRules := oldRules.(*schema.Set).Difference(newRules.(*schema.Set)).List()
+		log.Printf("[DEBUG] Update firewall, remove rules: %v", deleteRules)
+		for _, v := range deleteRules {
+			rule := v.(map[string]interface{})
+			rule["services"] = []string{}
+			rule["ports"] = []int{}
+			rules = append(rules, rule)
 		}
-		log.Printf("[DEBUG] Firewall update instance id: %v, rules: %v", instanceID, rules)
-		return api.UpdateFirewallSettings(instanceID, rules, sleep, timeout)
+
+		updateRules := newRules.(*schema.Set).Difference(oldRules.(*schema.Set)).List()
+		log.Printf("[DEBUG] Update firewall, patch rules: %v", updateRules)
+		for _, v := range updateRules {
+			rules = append(rules, readRule(v.(map[string]interface{})))
+		}
+
+		log.Printf("[DEBUG] Update firewall, rules: %v", rules)
+		return api.PatchFirewallSettings(instanceID, rules, sleep, timeout)
 	}
 
-	// Patch rules: Determine the difference between old and new sets
-	// Check which rules that should be deleted and which should be updated
-	oldRules, newRules := d.GetChange("rules")
-	deleteRules := oldRules.(*schema.Set).Difference(newRules.(*schema.Set)).List()
-	log.Printf("[DEBUG] Update firewall, remove rules: %v", deleteRules)
-	for _, v := range deleteRules {
-		rule := v.(map[string]interface{})
-		rule["services"] = []string{}
-		rule["ports"] = []int{}
-		rules = append(rules, rule)
+	// Replace all rules
+	for _, k := range d.Get("rules").(*schema.Set).List() {
+		rules = append(rules, k.(map[string]interface{}))
 	}
-
-	updateRules := newRules.(*schema.Set).Difference(oldRules.(*schema.Set)).List()
-	log.Printf("[DEBUG] Update firewall, patch rules: %v", updateRules)
-	for _, v := range updateRules {
-		rules = append(rules, readRule(v.(map[string]interface{})))
-	}
-
-	log.Printf("[DEBUG] Update firewall, rules: %v", rules)
-	return api.PatchFirewallSettings(instanceID, rules, sleep, timeout)
+	log.Printf("[DEBUG] Firewall update instance id: %v, rules: %v", instanceID, rules)
+	return api.UpdateFirewallSettings(instanceID, rules, sleep, timeout)
 }
 
 func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) error {
@@ -231,28 +231,28 @@ func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) er
 		return nil
 	}
 
-	// Remove firewall settings and set default 0.0.0.0/0 rule (found in go-api).
-	if !patch {
-		data, err := api.DeleteFirewallSettings(instanceID, sleep, timeout)
-		d.Set("rules", data)
-		return err
+	if patch {
+		// Set services and port to empty arrays, this will remove rules when patching.
+		var params []map[string]interface{}
+		localFirewalls := d.Get("rules").(*schema.Set).List()
+		log.Printf("[DEBUG] Delete firewall rules: %v", localFirewalls)
+		for _, k := range localFirewalls {
+			rule := k.(map[string]interface{})
+			rule["services"] = []string{}
+			rule["ports"] = []int{}
+			params = append(params, rule)
+		}
+		log.Printf("[DEBUG] Delete firewall params: %v", params)
+		if len(params) > 0 {
+			return api.PatchFirewallSettings(instanceID, params, sleep, timeout)
+		}
+		return nil
 	}
 
-	// Set services and port to empty arrays, this will remove rules when patching.
-	var params []map[string]interface{}
-	localFirewalls := d.Get("rules").(*schema.Set).List()
-	log.Printf("[DEBUG] Delete firewall rules: %v", localFirewalls)
-	for _, k := range localFirewalls {
-		rule := k.(map[string]interface{})
-		rule["services"] = []string{}
-		rule["ports"] = []int{}
-		params = append(params, rule)
-	}
-	log.Printf("[DEBUG] Delete firewall params: %v", params)
-	if len(params) > 0 {
-		return api.PatchFirewallSettings(instanceID, params, sleep, timeout)
-	}
-	return nil
+	// Remove firewall settings and set default 0.0.0.0/0 rule (found in go-api).
+	data, err := api.DeleteFirewallSettings(instanceID, sleep, timeout)
+	d.Set("rules", data)
+	return err
 }
 
 func readRule(data map[string]interface{}) map[string]interface{} {
