@@ -1,8 +1,18 @@
+## 1.28.0 (Unreleased)
+
+NOTES:
+
+* Updated the API wrapper (go-api) dependency with newer version (1.22.4)
+
+FEATURES:
+
+* Configurable wait on GCP Peering status. ([#228]https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/228)
+
 ## 1.27.1 (Sep 08, 2023)
 
 NOTES:
 
-* Updated the API wrapper (go-api) dependecy with newer version (1.12.3)
+* Updated the API wrapper (go-api) dependency with newer version (1.12.3)
 
 IMPROVEMENTS:
 
@@ -11,7 +21,7 @@ IMPROVEMENTS:
 
 BUG FIXES:
 
-* Indirect handle managed required plugins failing to be destroyed.
+* Indirect handle managed required plugins failing to be destroyed. ([#227](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/227))
 
 ## 1.27.0 (Jun 12, 2023)
 
@@ -229,6 +239,7 @@ FEATURES:
 * Added support for resize disk ([#162](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/162))
 
 IMPROVEMENTS:
+
 * Updated nodes data source with original and additional disk sizes ([#162](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/162))
 
 ## 1.18.0 (Jun 08, 2022)
