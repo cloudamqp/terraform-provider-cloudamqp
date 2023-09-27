@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_instance
 
-This resource allows you to create and manage a CloudAMQP instance running either [**RabbitMQ**](https://www.rabbitmq.com/) or [**LavinMQ**](https://lavinmq.com/) and can be deployed to multiple cloud platforms provider and regions, see [Instance regions](../instance_region.html) for more information.
+This resource allows you to create and manage a CloudAMQP instance running either [**RabbitMQ**](https://www.rabbitmq.com/) or [**LavinMQ**](https://lavinmq.com/) and can be deployed to multiple cloud platforms provider and regions, see [instance regions](../guides/instance_region.md) for more information.
 
 Once the instance is created it will be assigned a unique identifier. All other resources and data sources created for this instance needs to reference this unique instance identifier.
 
@@ -87,7 +87,7 @@ resource "cloudamqp_instance" "instance_01" {
 
 Once the instance and the VPC are created, the VPC can be imported as managed VPC and added to the configuration file.
 Set attribute `vpc_id` to the managed VPC identifier. To keep the managed VPC when deleting the instance, set attribute `keep_associated_vpc` to true.
-For more information see guide [Managed VPC](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/guides/info_managed_vpc#dedicated-instance-and-vpc_subnet).
+For more information see guide [Managed VPC](../guides/info_managed_vpc#dedicated-instance-and-vpc_subnet).
 
 ```hcl
 # Imported managed VPC
@@ -156,7 +156,7 @@ The following arguments are supported:
 
 * `name`        - (Required) Name of the CloudAMQP instance.
 * `plan`        - (Required) The subscription plan. See available [plans](../guides/info_plan.md)
-* `region`      - (Required) The region to host the instance in. See [Instance regions](../guides/info_region.md)
+* `region`      - (Required) The region to host the instance in. See [instance regions](../guides/info_region.md)
 
  ***Note: Changing region will force the instance to be destroyed and a new created in the new region. All data will be lost and a new name assigned.***
 
@@ -211,7 +211,7 @@ All attributes reference are computed
 `terraform import cloudamqp_instance.instance <id>`
 
 To retrieve the identifier for a VPC, either use [CloudAMQP customer API](https://docs.cloudamqp.com/#list-instances).
-Or use the data source [`cloudamqp_account`](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/data-sources/account) to list all available instances for an account.
+Or use the data source [`cloudamqp_account`](./data-sources/account.md) to list all available instances for an account.
 
 ## Upgrade and downgrade
 
