@@ -6,6 +6,7 @@ import (
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 func resourceInstance() *schema.Resource {
@@ -122,6 +123,28 @@ func resourceInstance() *schema.Resource {
 				Computed:    true,
 				Description: "Software backend used, determined by subscription plan",
 			},
+			"copy_settings": {
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"subscription_id": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "Instance identifier of the CloudAMQP instance to copy settings from",
+						},
+						"settings": {
+							Type:     schema.TypeList,
+							Required: true,
+							Elem: &schema.Schema{
+								Type:         schema.TypeString,
+								ValidateFunc: validateCopySettings(),
+							},
+							Description: "Settings to be copied. [alarms, config, definitions, firewall, logs, metrics, plugins]",
+						},
+					},
+				},
+			},
 		},
 		CustomizeDiff: customdiff.All(
 			customdiff.ForceNewIfChange("plan", func(old, new, meta interface{}) bool {
@@ -176,6 +199,14 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 		case "vpc_subnet":
 			if d.Get(k) == "" {
 				delete(params, k)
+			}
+		case "copy_settings":
+			if d.Get(k).(*schema.Set).Len() == 0 {
+				delete(params, k)
+			} else {
+				for _, v := range d.Get(k).(*schema.Set).List() {
+					params[k] = v.(map[string]interface{})
+				}
 			}
 		}
 	}
@@ -240,6 +271,11 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
 	keys := []string{"name", "plan", "nodes", "tags"}
 	params := make(map[string]interface{})
+
+	if !d.HasChanges("name", "plan", "nodes", "tags") {
+		return nil
+	}
+
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
 			params[k] = d.Get(k)
@@ -316,5 +352,18 @@ func instanceCreateAttributeKeys() []string {
 		"vpc_id",
 		"vpc_subnet",
 		"no_default_alarms",
+		"copy_settings",
 	}
+}
+
+func validateCopySettings() schema.SchemaValidateFunc {
+	return validation.StringInSlice([]string{
+		"alarms",
+		"config",
+		"definitions",
+		"firewall",
+		"logs",
+		"metrics",
+		"plugins",
+	}, true)
 }
