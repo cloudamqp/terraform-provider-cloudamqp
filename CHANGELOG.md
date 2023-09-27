@@ -6,7 +6,8 @@ NOTES:
 
 FEATURES:
 
-* Configurable wait on GCP Peering status. ([#228]https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/228)
+* Copy settings from another instance when creating a new. ([#218](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/218))
+* Configurable wait on GCP Peering status. ([#228](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/228))
 
 ## 1.27.1 (Sep 08, 2023)
 
