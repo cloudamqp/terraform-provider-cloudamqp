@@ -24,6 +24,7 @@ func resourceAccountAction() *schema.Resource {
 			"action": {
 				Type:         schema.TypeString,
 				Required:     true,
+				ForceNew:     true,
 				Description:  "The action to perform on the node",
 				ValidateFunc: validateAccountAction(),
 			},
