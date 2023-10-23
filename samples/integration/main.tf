@@ -1,15 +1,20 @@
+terraform {
+  required_providers {
+    cloudamqp = {
+      source = "cloudamqp/cloudamqp"
+      version = "~>1.0"
+    }
+  }
+}
+
 provider "cloudamqp" {
   apikey = var.cloudamqp_customer_api_key
 }
 
 resource "cloudamqp_instance" "instance" {
   name 				= "terraform-integration-test"
-  nodes 			= 1
   plan  			= "bunny-1"
   region 			= "amazon-web-services::us-east-1"
-  rmq_version = "3.8.2"
-  tags 				= ["terraform"]
-  vpc_subnet = "192.168.0.1/24"
 }
 
 // LOG INTEGRATION

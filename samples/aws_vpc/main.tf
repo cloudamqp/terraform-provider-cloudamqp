@@ -1,37 +1,49 @@
-// =========
-// CLOUDAMQP
-// =========
+terraform {
+  required_providers {
+    cloudamqp = {
+      source = "cloudamqp/cloudamqp"
+      version = "~>1.0"
+    }
+    aws = {
+      source = "hashicorp/aws"
+      version = "~> 4.0"
+    }
+  }
+}
+
+// === CloudAMQP - provider configuration
 provider "cloudamqp" {
   apikey  = var.cloudamqp_customer_api_key
 }
 
-// === Instance resource ===
+// === CLOUDAMQP - Standalone VPC ===
+resource "cloudamqp_vpc" "vpc" {
+  name = "terraform-vpc-accepter-test"
+  region = "amazon-web-services::us-east-1"
+  subnet = "10.56.72.0/24"
+}
+
+// === CLOUDAMQP - Instance resource ===
 resource "cloudamqp_instance" "cloudamqp_instance" {
   name   = "terraform-vpc-accepter-test"
   plan   = "bunny-1"
   region = "amazon-web-services::us-east-1"
-  nodes = 1
-  tags   = ["test"]
-  rmq_version = "3.7.21"
-  vpc_subnet = "10.40.72.0/24"
+  vpc_id = cloudamqp_vpc.vpc.id
 }
 
-// === VPC data source ===
+// === CLOUDAMQP - VPC data source ===
 data "cloudamqp_vpc_info" "vpc_info" {
-  instance_id = cloudamqp_instance.cloudamqp_instance.id
+  vpc_id = cloudamqp_instance.vpc.id
 }
 
-// Requires terraform init, to initialize aws plugin.
-// ===
-// AWS
-// ===
+// AWS - provider configuration
 provider "aws" {
   region = var.aws_region
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
 }
 
-// === AWS instance resource ===
+// === AWS - instance resource ===
 data "aws_instance" "aws_instance" {
   provider = aws
 
