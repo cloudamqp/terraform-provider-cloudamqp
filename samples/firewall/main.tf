@@ -12,7 +12,7 @@ provider "cloudamqp" {
 }
 
 resource "cloudamqp_instance" "instance" {
-  name 				= "terraform-plugin-test"
+  name 				= "terraform-firewall-test"
   plan  			= "bunny-1"
   region 			= "amazon-web-services::us-east-1"
 }
