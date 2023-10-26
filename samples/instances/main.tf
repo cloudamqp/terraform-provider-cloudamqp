@@ -11,14 +11,14 @@ provider "cloudamqp" {
   apikey = var.cloudamqp_customer_api_key
 }
 
-// === Basic cloudamqp instance ===
+# === Basic cloudamqp instance ===
 resource "cloudamqp_instance" "instance_01" {
   name 				= "terraform-test-01"
   plan  			= "bunny-1"
   region 			= "amazon-web-services::us-east-1"
 }
 
-// === Basic cloudamqp instance with specific RabbitMQ version ===
+# === Basic cloudamqp instance with specific RabbitMQ version ===
 resource "cloudamqp_instance" "instance_02" {
   name 				= "terraform-test-02"
   plan  			= "bunny-1"
@@ -26,7 +26,7 @@ resource "cloudamqp_instance" "instance_02" {
   rmq_version = "3.12.6"
 }
 
-// === Standalone VPC and with multiple cloudamqp instances ===
+# === Standalone VPC and with multiple cloudamqp instances ===
 resource "cloudamqp_vpc" "vpc" {
   name        = "terraform-vpc"
   region 			= "amazon-web-services::us-east-1"
