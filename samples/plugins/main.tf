@@ -14,19 +14,19 @@ provider "cloudamqp" {
 }
 
 resource "cloudamqp_instance" "instance" {
-  name 				= "terraform-plugin-test"
-  plan  			= "bunny-1"
-  region 			= "amazon-web-services::us-east-1"
+  name    = "terraform-plugin-test"
+  plan    = "bunny-1"
+  region  = "amazon-web-services::us-east-1"
 }
 
 resource "cloudamqp_plugin" "mqtt_plugin" {
   instance_id = cloudamqp_instance.instance.id
-  name = "rabbitmq_web_mqtt"
-  enabled = true
+  name        = "rabbitmq_web_mqtt"
+  enabled     = true
 }
 
 resource "cloudamqp_plugin_community" "delayed_message_exchange" {
   instance_id = cloudamqp_instance.instance.id
-  name = "rabbitmq_delayed_message_exchange"
-  enabled = true
+  name        = "rabbitmq_delayed_message_exchange"
+  enabled     = true
 }

@@ -13,9 +13,9 @@ provider "cloudamqp" {
 
 // Instance
 resource "cloudamqp_instance" "instance" {
-  name   = "terraform-provider-test"
-  plan   = "bunny-1"
-  region = "amazon-web-services::us-east-1"
+  name              = "terraform-provider-test"
+  plan              = "bunny-1"
+  region            = "amazon-web-services::us-east-1"
   no_default_alarms = true
 }
 
@@ -24,7 +24,7 @@ resource "cloudamqp_instance" "instance" {
 // The default recipient can either be imported as a resource or loaded as a data source.
 data "cloudamqp_notification" "default_recipient" {
   instance_id = cloudamqp_instance.instance.id
-  name = "Default"
+  name        = "Default"
 }
 
 resource "cloudamqp_notification" "alarm_recipient" {
@@ -46,17 +46,17 @@ resource "cloudamqp_notification" "notification_recipient" {
 // attribute to true in the instance resource.
 data "cloudamqp_alarm" "default_cpu" {
   instance_id = cloudamqp_instance.instance.id
-  type 				= "cpu"
+  Type        = "cpu"
 }
 
 data "cloudamqp_alarm" "default_memory" {
   instance_id = cloudamqp_instance.instance.id
-  type 				= "memory"
+  Type        = "memory"
 }
 
 data "cloudamqp_alarm" "default_disk" {
   instance_id = cloudamqp_instance.instance.id
-  type 				= "disk"
+  Type        = "disk"
 }
 
 // New alarms

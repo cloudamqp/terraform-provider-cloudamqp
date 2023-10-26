@@ -14,9 +14,9 @@ provider "cloudamqp" {
 }
 
 resource "cloudamqp_instance" "instance" {
-  name 				= "terraform-firewall-test"
-  plan  			= "bunny-1"
-  region 			= "amazon-web-services::us-east-1"
+  name   = "terraform-firewall-test"
+  plan   = "bunny-1"
+  region = "amazon-web-services::us-east-1"
 }
 
 # Import default firewall settings
@@ -37,8 +37,8 @@ resource "cloudamqp_instance" "instance" {
 resource "cloudamqp_security_firewall" "firewall" {
   instance_id = cloudamqp_instance.instance.id
   rules {
-    ip = "192.168.0.0/0"
-    ports = [4567]
+    ip       = "192.168.0.0/0"
+    ports    = [4567]
     services = ["MQTTS", "STOMPS", "AMQPS", "HTTPS"]
   }
 }
