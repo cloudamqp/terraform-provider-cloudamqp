@@ -9,6 +9,8 @@ terraform {
 
 provider "cloudamqp" {
   apikey = var.cloudamqp_customer_api_key
+  # Use to skip teardown of firewall for faster overall 'terraform destroy'
+  # enable_faster_instance_destroy = true
 }
 
 resource "cloudamqp_instance" "instance" {

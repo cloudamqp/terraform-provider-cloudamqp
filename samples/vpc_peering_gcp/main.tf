@@ -42,6 +42,7 @@ output "network_uri" {
 resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
   vpc_id = cloudamqp_vpc.vpc.id
   peer_network_uri = var.gcp_network_uri
+  // Can be used to wait until peering is connected
   wait_on_peering_status = false
 }
 
