@@ -178,9 +178,6 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 	for _, k := range keys {
 		if v := d.Get(k); v != nil && v != "" {
 			params[k] = v
-		} else if k == "rmq_version" {
-			version, _ := api.DefaultRmqVersion()
-			params[k] = version["default_rmq_version"]
 		} else if k == "no_default_alarms" {
 			params[k] = false
 		}
