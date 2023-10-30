@@ -1,3 +1,13 @@
+## 1.x.y (Unreleased)
+
+FEATURES:
+
+* Add resource that invoke account actions. ([#231](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/231))
+
+IMPROVEMENTS:
+
+* Remove default RMQ version request when version left out. ([#237](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/237))
+
 ## 1.28.0 (Sep 27, 2023)
 
 NOTES:

@@ -50,6 +50,7 @@ func Provider(v string) *schema.Provider {
 			"cloudamqp_vpc_info":            dataSourceVpcInfo(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
+			"cloudamqp_account_action":              resourceAccountAction(),
 			"cloudamqp_alarm":                       resourceAlarm(),
 			"cloudamqp_custom_domain":               resourceCustomDomain(),
 			"cloudamqp_extra_disk_size":             resourceExtraDiskSize(),
