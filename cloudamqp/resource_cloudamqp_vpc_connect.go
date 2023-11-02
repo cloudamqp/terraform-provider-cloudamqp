@@ -30,29 +30,11 @@ func resourceVpcConnect() *schema.Resource {
 				Required:    true,
 				Description: "The region where the CloudAMQP instance is hosted",
 			},
-			"allowed_principals": {
-				Type: schema.TypeList,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
-				},
-				Optional:    true,
-				Description: "Allowed principals to access the endpoint service. [AWS]",
-			},
-			"allowed_projects": {
-				Type: schema.TypeList,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
-				},
-				Optional:    true,
-				Description: "Give access to GCP projects. [GCP]",
-			},
-			"approved_subscriptions": {
-				Type: schema.TypeList,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
-				},
+			"allowlist": {
+				Type:        schema.TypeList,
+				Elem:        &schema.Schema{Type: schema.TypeString},
 				Required:    true,
-				Description: "Approved subscriptions to access the endpoint service [Azure]",
+				Description: "List of allowed prinicpals, projects or subscriptions depending on IaaS provider",
 			},
 			"active_zones": {
 				Type: schema.TypeList,
@@ -70,12 +52,7 @@ func resourceVpcConnect() *schema.Resource {
 			"service_name": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "Service name of the PrivateLink. [AWS, GCP]",
-			},
-			"server_name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Name of the server having the PrivateLink enabled. [Azure]",
+				Description: "Service name (alias for Azure) of the PrivateLink.",
 			},
 			"sleep": {
 				Type:        schema.TypeInt,
@@ -98,6 +75,7 @@ func resourceVpcConnectCreate(d *schema.ResourceData, meta interface{}) error {
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 		region     = d.Get("region").(string)
+		allowlist  = d.Get("allowlist").([]interface{})
 		sleep      = d.Get("sleep").(int)
 		timeout    = d.Get("timeout").(int)
 		params     = make(map[string][]interface{})
@@ -105,11 +83,11 @@ func resourceVpcConnectCreate(d *schema.ResourceData, meta interface{}) error {
 
 	switch getPlatform(region) {
 	case "amazon":
-		params["allowed_prinicipals"] = d.Get("allowed_prinicipals").([]interface{})
+		params["allowed_prinicipals"] = allowlist
 	case "azure":
-		params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
+		params["approved_subscriptions"] = allowlist
 	case "google":
-		params["allowed_projects"] = d.Get("allowed_projects").([]interface{})
+		params["allowed_projects"] = allowlist
 	default:
 		return fmt.Errorf("invalid region")
 	}
@@ -136,7 +114,11 @@ func resourceVpcConnectRead(d *schema.ResourceData, meta interface{}) error {
 
 	for k, v := range data {
 		if validateVpcConnectSchemaAttribute(k) {
-			d.Set(k, v)
+			if k == "alias" {
+				d.Set("service_name", v)
+			} else {
+				d.Set(k, v)
+			}
 		}
 	}
 	return nil
@@ -147,16 +129,17 @@ func resourceVpcConnectUpdate(d *schema.ResourceData, meta interface{}) error {
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 		region     = d.Get("region").(string)
+		allowlist  = d.Get("allowlist").([]interface{})
 		params     = make(map[string][]interface{})
 	)
 
 	switch getPlatform(region) {
 	case "amazon":
-		params["allowed_prinicipals"] = d.Get("allowed_prinicipals").([]interface{})
+		params["allowed_prinicipals"] = allowlist
 	case "azure":
-		params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
+		params["approved_subscriptions"] = allowlist
 	case "google":
-		params["allowed_projects"] = d.Get("allowed_projects").([]interface{})
+		params["allowed_projects"] = allowlist
 	default:
 		return fmt.Errorf("invalid region")
 	}
@@ -189,7 +172,6 @@ func validateVpcConnectSchemaAttribute(key string) bool {
 		"allowed_projects",
 		"approved_subscriptions",
 		"service_name",
-		"server_name",
 		"status":
 		return true
 	}
