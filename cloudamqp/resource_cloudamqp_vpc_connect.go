@@ -8,12 +8,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
-func resourcePrivateServiceConnect() *schema.Resource {
+func resourceVpcConnect() *schema.Resource {
 	return &schema.Resource{
-		Create: resourcePrivateServiceConnectCreate,
-		Read:   resourcePrivateServiceConnectRead,
-		Update: resourcePrivateServiceConnectUpdate,
-		Delete: resourcePrivateServiceConnectDelete,
+		Create: resourceVpcConnectCreate,
+		Read:   resourceVpcConnectRead,
+		Update: resourceVpcConnectUpdate,
+		Delete: resourceVpcConnectDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
@@ -40,7 +40,7 @@ func resourcePrivateServiceConnect() *schema.Resource {
 					Type: schema.TypeString,
 				},
 				Required:    true,
-				Description: "Only allowed GCP projects can get access",
+				Description: "Only give access to allowed GCP projects",
 			},
 			"sleep": {
 				Type:        schema.TypeInt,
@@ -58,7 +58,7 @@ func resourcePrivateServiceConnect() *schema.Resource {
 	}
 }
 
-func resourcePrivateServiceConnectCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcConnectCreate(d *schema.ResourceData, meta interface{}) error {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -74,10 +74,10 @@ func resourcePrivateServiceConnectCreate(d *schema.ResourceData, meta interface{
 	}
 
 	d.SetId(fmt.Sprintf("%d", instanceID))
-	return resourcePrivateServiceConnectRead(d, meta)
+	return resourceVpcConnectRead(d, meta)
 }
 
-func resourcePrivateServiceConnectRead(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcConnectRead(d *schema.ResourceData, meta interface{}) error {
 	var (
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id()) // Uses d.Id() to allow import
@@ -89,14 +89,14 @@ func resourcePrivateServiceConnectRead(d *schema.ResourceData, meta interface{})
 	}
 
 	for k, v := range data {
-		if validatePrivateServiceConnectSchemaAttribute(k) {
+		if validateVpcConnectSchemaAttribute(k) {
 			d.Set(k, v)
 		}
 	}
 	return nil
 }
 
-func resourcePrivateServiceConnectUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcConnectUpdate(d *schema.ResourceData, meta interface{}) error {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -111,7 +111,7 @@ func resourcePrivateServiceConnectUpdate(d *schema.ResourceData, meta interface{
 	return nil
 }
 
-func resourcePrivateServiceConnectDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcConnectDelete(d *schema.ResourceData, meta interface{}) error {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -124,7 +124,7 @@ func resourcePrivateServiceConnectDelete(d *schema.ResourceData, meta interface{
 	return nil
 }
 
-func validatePrivateServiceConnectSchemaAttribute(key string) bool {
+func validateVpcConnectSchemaAttribute(key string) bool {
 	switch key {
 	case "status",
 		"service_name",
