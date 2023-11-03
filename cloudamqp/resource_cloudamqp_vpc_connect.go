@@ -42,7 +42,7 @@ func resourceVpcConnect() *schema.Resource {
 					Type: schema.TypeString,
 				},
 				Computed:    true,
-				Description: "Covering availability zones used when creating an Endpoint from other VPC. [AWS]",
+				Description: "Covering availability zones used when creating an endpoint from other VPC. [AWS]",
 			},
 			"status": {
 				Type:        schema.TypeString,

@@ -9,7 +9,7 @@ description: |-
 
 Enable PrivateLink for a CloudAMQP instance hosted in AWS. If no existing VPC available when enable PrivateLink, a new VPC will be created with subnet `10.52.72.0/24`.
 
-~> **Note:** Enabling PrivateLink will automatically add firewall rules for the peered subnet.
+-> **Note:** Enabling PrivateLink will automatically add firewall rules for the peered subnet.
 <details>
  <summary>
     <i>Default PrivateLink firewall rule</i>
@@ -27,6 +27,8 @@ rules {
 Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html) where you can also find more information about [CloudAMQP PrivateLink](https://www.cloudamqp.com/docs/cloudamqp-privatelink.html#aws-privatelink).
 
 Only available for dedicated subscription plans.
+
+~> **Warning:** This resource considered deprecated and will be removed in next major version (v2.0). Recommended to start using the new resource[`cloudamqp_vpc_connect`](./vpc_connect.md).
 
 ## Example Usage
 
@@ -92,7 +94,7 @@ resource "cloudamqp_privatelink_aws" "privatelink" {
 * `instance_id` - (Required) The CloudAMQP instance identifier.
 * `allowed_principals` - (Required) Allowed principals to access the endpoint service.
 * `sleep` - (Optional) Configurable sleep time (seconds) when enable PrivateLink. Default set to 60 seconds.
-* `timeout` - (Optional) - Configurable timeout time (seconds) when enable PrivateLink. Default set to 3600 seconds.
+* `timeout` - (Optional) Configurable timeout time (seconds) when enable PrivateLink. Default set to 3600 seconds.
 
 Allowed principals format: <br>
 `arn:aws:iam::aws-account-id:root` <br>
