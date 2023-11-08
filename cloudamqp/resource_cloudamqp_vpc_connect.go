@@ -34,7 +34,7 @@ func resourceVpcConnect() *schema.Resource {
 				Type:        schema.TypeList,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Required:    true,
-				Description: "List of allowed prinicpals, projects or subscriptions depending on IaaS provider",
+				Description: "List of allowed prinicpals, projects or subscriptions depending on platform provider",
 			},
 			"active_zones": {
 				Type: schema.TypeList,

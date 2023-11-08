@@ -9,8 +9,8 @@ description: |-
 # cloudamqp_vpc_connect
 
 This resource is a generic way to handle PrivateLink (AWS and Azure) and Private Service Connect (GCP).
-Clusters can be connected just as they were living inside a VPC. CloudAMQP creates an Endpoint
-Service to connect the VPC, creating a new network interface to communicate with the cluster.
+Communication between resources can be done just as they were living inside a VPC. CloudAMQP creates an Endpoint
+Service to connect the VPC and creating a new network interface to handle the communicate.
 
 If no existing VPC available when enable VPC connect, a new VPC will be created with subnet `10.52.72.0/24`.
 
@@ -20,7 +20,9 @@ More information can be found at: [CloudAMQP privatelink](https://www.cloudamqp.
 
 <details>
  <summary>
-    <i>Default PrivateLink firewall rule [AWS, Azure]</i>
+    <b>
+      <i>Default PrivateLink firewall rule [AWS, Azure]</i>
+    </b>
   </summary>
 ```hcl
 rules {
@@ -34,7 +36,9 @@ rules {
 
 <details>
  <summary>
-    <i>Default Private Service Connect firewall rule [GCP]</i>
+    <b>
+      <i>Default Private Service Connect firewall rule [GCP]</i>
+    </b>
   </summary>
 ```hcl
 rules {
