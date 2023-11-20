@@ -83,7 +83,7 @@ func resourceVpcConnectCreate(d *schema.ResourceData, meta interface{}) error {
 
 	switch getPlatform(region) {
 	case "amazon":
-		params["allowed_prinicipals"] = allowlist
+		params["allowed_principals"] = allowlist
 	case "azure":
 		params["approved_subscriptions"] = allowlist
 	case "google":
@@ -135,7 +135,7 @@ func resourceVpcConnectUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	switch getPlatform(region) {
 	case "amazon":
-		params["allowed_prinicipals"] = allowlist
+		params["allowed_principals"] = allowlist
 	case "azure":
 		params["approved_subscriptions"] = allowlist
 	case "google":
@@ -168,7 +168,7 @@ func validateVpcConnectSchemaAttribute(key string) bool {
 	switch key {
 	case "active_zones",
 		"alias",
-		"allowed_prinicipals",
+		"allowed_principals",
 		"allowed_projects",
 		"approved_subscriptions",
 		"service_name",
