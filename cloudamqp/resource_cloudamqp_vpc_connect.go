@@ -57,7 +57,7 @@ func resourceVpcConnect() *schema.Resource {
 			"sleep": {
 				Type:        schema.TypeInt,
 				Optional:    true,
-				Default:     60,
+				Default:     10,
 				Description: "Configurable sleep in seconds between retries when enable PrivateLink",
 			},
 			"timeout": {
