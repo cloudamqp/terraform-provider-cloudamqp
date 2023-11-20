@@ -112,6 +112,7 @@ func resourceVpcConnectRead(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
+	d.Set("active_zones", []string{})
 	for k, v := range data {
 		if validateVpcConnectSchemaAttribute(k) {
 			if k == "alias" {
