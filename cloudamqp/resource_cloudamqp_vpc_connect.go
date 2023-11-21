@@ -2,11 +2,20 @@ package cloudamqp
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 
 	"github.com/84codes/go-api/api"
+
+	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+)
+
+var (
+	AWS_ARN_VALIDATE_RE, _        = regexp.Compile(`\Aarn:aws:iam::\d{12}:(root|((user|role)(/[^/]+)?))\z`)
+	AZURE_SUBS_VALIDATE_RE, _     = regexp.Compile(`\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z`)
+	GCP_PROJECT_ID_VALIDATE_RE, _ = regexp.Compile(`\A[a-z][0-9a-z-]{4,28}[0-9a-z]\z`)
 )
 
 func resourceVpcConnect() *schema.Resource {
@@ -67,6 +76,20 @@ func resourceVpcConnect() *schema.Resource {
 				Description: "Configurable timeout in seconds when enable PrivateLink",
 			},
 		},
+		CustomizeDiff: customdiff.All(
+			customdiff.ValidateValue("allowlist", func(value, meta interface{}) error {
+				for _, v := range value.([]interface{}) {
+					if AWS_ARN_VALIDATE_RE.MatchString(v.(string)) ||
+						AZURE_SUBS_VALIDATE_RE.MatchString(v.(string)) ||
+						GCP_PROJECT_ID_VALIDATE_RE.MatchString(v.(string)) {
+						continue
+					} else {
+						return fmt.Errorf("invalid format for allowlist: %s", v.(string))
+					}
+				}
+				return nil
+			}),
+		),
 	}
 }
 
