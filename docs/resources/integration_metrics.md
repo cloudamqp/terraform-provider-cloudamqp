@@ -228,7 +228,7 @@ The following arguments are supported:
 * `project_id`        - (Optional/Computed) The project identifier.
 * `private_key`       - (Optional/Computed) The private access key.
 * `client_email`      - (Optional/Computed) The client email registered for the integration service.
-* `tags`              - (Optional) Tags. e.g. env=prod, region=europe.
+* `tags`              - (Optional) Tags. e.g. `env=prod,region=europe`.
 * `queue_allowlist`   - (Optional) Allowlist queues using regular expression. Leave empty to include all queues.
 * `vhost_allowlist`   - (Optional) Allowlist vhost using regular expression. Leave empty to include all vhosts.
 * `queue_whitelist`   - **Deprecated** Use queue_allowlist instead
