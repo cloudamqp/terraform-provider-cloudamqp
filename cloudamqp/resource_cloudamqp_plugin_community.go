@@ -105,10 +105,14 @@ func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error
 	// Support for importing resource
 	if strings.Contains(d.Id(), ",") {
 		s := strings.Split(d.Id(), ",")
-		d.SetId(s[0])
-		d.Set("name", s[0])
+		name = s[0]
+		d.SetId(name)
+		d.Set("name", name)
 		instanceID, _ = strconv.Atoi(s[1])
 		d.Set("instance_id", instanceID)
+		// Set default values for optional arguments
+		d.Set("sleep", 10)
+		d.Set("timeout", 1800)
 	}
 	if instanceID == 0 {
 		return errors.New("missing instance identifier: {resource_id},{instance_id}")
@@ -133,19 +137,14 @@ func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error
 func resourcePluginCommunityUpdate(d *schema.ResourceData, meta interface{}) error {
 	var (
 		api        = meta.(*api.API)
-		keys       = []string{"name", "enabled"}
-		params     map[string]interface{}
 		instanceID = d.Get("instance_id").(int)
+		name       = d.Get("name").(string)
+		enabled    = d.Get("enabled").(bool)
 		sleep      = d.Get("sleep").(int)
 		timeout    = d.Get("timeout").(int)
 	)
 
-	for _, k := range keys {
-		if v := d.Get(k); v != nil {
-			params[k] = v
-		}
-	}
-	_, err := api.UpdatePluginCommunity(instanceID, params, sleep, timeout)
+	_, err := api.UpdatePluginCommunity(instanceID, name, enabled, sleep, timeout)
 	if err != nil {
 		return err
 	}
