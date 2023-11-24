@@ -47,34 +47,61 @@ func resourcePlugin() *schema.Resource {
 				Computed:    true,
 				Description: "The version of the plugin",
 			},
+			"sleep": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     10,
+				Description: "Configurable sleep time in seconds between retries for plugins",
+			},
+			"timeout": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     1800,
+				Description: "Configurable timeout time in seconds for plugins",
+			},
 		},
 	}
 }
 
 func resourcePluginCreate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	_, err := api.EnablePlugin(d.Get("instance_id").(int), d.Get("name").(string))
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		name       = d.Get("name").(string)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
+	_, err := api.EnablePlugin(instanceID, name, sleep, timeout)
 	if err != nil {
 		return err
 	}
-	d.SetId(d.Get("name").(string))
+	d.SetId(name)
 	return resourcePluginRead(d, meta)
 }
 
 func resourcePluginRead(d *schema.ResourceData, meta interface{}) error {
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		name       = d.Get("name").(string)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
+	// Support for importing resources
 	if strings.Contains(d.Id(), ",") {
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
 		d.Set("name", s[0])
-		instanceID, _ := strconv.Atoi(s[1])
+		instanceID, _ = strconv.Atoi(s[1])
 		d.Set("instance_id", instanceID)
 	}
-	if d.Get("instance_id").(int) == 0 {
+	if instanceID == 0 {
 		return errors.New("missing instance identifier: {resource_id},{instance_id}")
 	}
 
-	api := meta.(*api.API)
-	data, err := api.ReadPlugin(d.Get("instance_id").(int), d.Get("name").(string))
+	data, err := api.ReadPlugin(instanceID, name, sleep, timeout)
 	if err != nil {
 		return err
 	}
@@ -91,16 +118,22 @@ func resourcePluginRead(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourcePluginUpdate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	keys := []string{"name", "enabled"}
-	params := make(map[string]interface{})
+	var (
+		api        = meta.(*api.API)
+		keys       = []string{"name", "enabled"}
+		params     map[string]interface{}
+		instanceID = d.Get("instance_id").(int)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
 			params[k] = v
 		}
 	}
 
-	_, err := api.UpdatePlugin(d.Get("instance_id").(int), params)
+	_, err := api.UpdatePlugin(instanceID, params, sleep, timeout)
 	if err != nil {
 		return fmt.Errorf("[Failed to update pluign: %v", err)
 	}
@@ -108,13 +141,20 @@ func resourcePluginUpdate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourcePluginDelete(d *schema.ResourceData, meta interface{}) error {
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		name       = d.Get("name").(string)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
 	if enableFasterInstanceDestroy {
 		log.Printf("[DEBUG] cloudamqp::resource::plugin::delete skip calling backend.")
 		return nil
 	}
 
-	api := meta.(*api.API)
-	return api.DeletePlugin(d.Get("instance_id").(int), d.Get("name").(string))
+	return api.DeletePlugin(instanceID, name, sleep, timeout)
 }
 
 func validatePluginSchemaAttribute(key string) bool {

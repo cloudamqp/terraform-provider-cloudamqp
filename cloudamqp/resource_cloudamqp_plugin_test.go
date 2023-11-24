@@ -62,7 +62,7 @@ func testAccCheckPluginEnabled(instanceName, resourceName string) resource.TestC
 		instanceID, _ := strconv.Atoi(rs.Primary.ID)
 
 		api := testAccProvider.Meta().(*api.API)
-		data, err := api.ReadPlugin(instanceID, pluginName)
+		data, err := api.ReadPlugin(instanceID, pluginName, 10, 1800)
 		if err != nil {
 			return fmt.Errorf("Error fetching item with resource %s. %s", resourceName, err)
 		}
@@ -96,7 +96,7 @@ func testAccCheckPluginDisable(instanceName, resourceName string) resource.TestC
 		}
 		instanceID, _ := strconv.Atoi(rs.Primary.ID)
 
-		data, err := api.ReadPlugin(instanceID, pluginName)
+		data, err := api.ReadPlugin(instanceID, pluginName, 10, 1800)
 		if err != nil {
 			return fmt.Errorf("Failed to retrieve plugin %v", err)
 		}
