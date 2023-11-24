@@ -89,7 +89,7 @@ func resourcePluginRead(d *schema.ResourceData, meta interface{}) error {
 		timeout    = d.Get("timeout").(int)
 	)
 
-	// Support for importing resources
+	// Support for importing resource
 	if strings.Contains(d.Id(), ",") {
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])

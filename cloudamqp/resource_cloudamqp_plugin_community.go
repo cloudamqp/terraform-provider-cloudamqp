@@ -64,17 +64,24 @@ func resourcePluginCommunity() *schema.Resource {
 }
 
 func resourcePluginCommunityCreate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	data, err := api.ReadPluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		name       = d.Get("name").(string)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
+	data, err := api.ReadPluginCommunity(instanceID, name, sleep, timeout)
 	if err != nil {
 		return err
 	}
 
-	_, err = api.EnablePluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
+	_, err = api.InstallPluginCommunity(instanceID, name, sleep, timeout)
 	if err != nil {
 		return err
 	}
-	d.SetId(d.Get("name").(string))
+	d.SetId(name)
 
 	for k, v := range data {
 		if validateCommunityPluginSchemaAttribute(k) {
@@ -87,19 +94,27 @@ func resourcePluginCommunityCreate(d *schema.ResourceData, meta interface{}) err
 }
 
 func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error {
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		name       = d.Get("name").(string)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
+	// Support for importing resource
 	if strings.Contains(d.Id(), ",") {
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
 		d.Set("name", s[0])
-		instanceID, _ := strconv.Atoi(s[1])
+		instanceID, _ = strconv.Atoi(s[1])
 		d.Set("instance_id", instanceID)
 	}
-	if d.Get("instance_id").(int) == 0 {
+	if instanceID == 0 {
 		return errors.New("missing instance identifier: {resource_id},{instance_id}")
 	}
 
-	api := meta.(*api.API)
-	data, err := api.ReadPluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
+	data, err := api.ReadPluginCommunity(instanceID, name, sleep, timeout)
 	if err != nil {
 		return err
 	}
@@ -116,15 +131,21 @@ func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error
 }
 
 func resourcePluginCommunityUpdate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	keys := []string{"name", "enabled"}
-	params := make(map[string]interface{})
+	var (
+		api        = meta.(*api.API)
+		keys       = []string{"name", "enabled"}
+		params     map[string]interface{}
+		instanceID = d.Get("instance_id").(int)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
 			params[k] = v
 		}
 	}
-	_, err := api.UpdatePluginCommunity(d.Get("instance_id").(int), params)
+	_, err := api.UpdatePluginCommunity(instanceID, params, sleep, timeout)
 	if err != nil {
 		return err
 	}
@@ -132,13 +153,20 @@ func resourcePluginCommunityUpdate(d *schema.ResourceData, meta interface{}) err
 }
 
 func resourcePluginCommunityDelete(d *schema.ResourceData, meta interface{}) error {
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		name       = d.Get("name").(string)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
 	if enableFasterInstanceDestroy {
 		log.Printf("[DEBUG] cloudamqp::resource::plugin-community::delete skip calling backend.")
 		return nil
 	}
 
-	api := meta.(*api.API)
-	_, err := api.DisablePluginCommunity(d.Get("instance_id").(int), d.Get("name").(string))
+	_, err := api.UninstallPluginCommunity(instanceID, name, sleep, timeout)
 	return err
 }
 
