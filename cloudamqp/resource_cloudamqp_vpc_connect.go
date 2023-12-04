@@ -115,7 +115,7 @@ func resourceVpcConnectCreate(d *schema.ResourceData, meta interface{}) error {
 		return fmt.Errorf("invalid region")
 	}
 
-	err := api.EnablePrivatelink(instanceID, params, sleep, timeout)
+	err := api.EnableVpcConnect(instanceID, params, sleep, timeout)
 	if err != nil {
 		return err
 	}
@@ -130,7 +130,7 @@ func resourceVpcConnectRead(d *schema.ResourceData, meta interface{}) error {
 		instanceID, _ = strconv.Atoi(d.Id()) // Uses d.Id() to allow import
 	)
 
-	data, err := api.ReadPrivatelink(instanceID)
+	data, err := api.ReadVpcConnect(instanceID)
 	if err != nil {
 		return err
 	}
@@ -168,7 +168,7 @@ func resourceVpcConnectUpdate(d *schema.ResourceData, meta interface{}) error {
 		return fmt.Errorf("invalid region")
 	}
 
-	err := api.UpdatePrivatelink(instanceID, params)
+	err := api.UpdateVpcConnect(instanceID, params)
 	if err != nil {
 		return err
 	}
@@ -181,7 +181,7 @@ func resourceVpcConnectDelete(d *schema.ResourceData, meta interface{}) error {
 		instanceID = d.Get("instance_id").(int)
 	)
 
-	err := api.DisablePrivatelink(instanceID)
+	err := api.DisableVpcConnect(instanceID)
 	if err != nil {
 		return err
 	}
