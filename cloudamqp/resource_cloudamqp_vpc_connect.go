@@ -39,11 +39,23 @@ func resourceVpcConnect() *schema.Resource {
 				Required:    true,
 				Description: "The region where the CloudAMQP instance is hosted",
 			},
-			"allowlist": {
+			"allowed_principals": {
 				Type:        schema.TypeList,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Required:    true,
-				Description: "List of allowed prinicpals, projects or subscriptions depending on platform provider",
+				Optional:    true,
+				Description: "List of allowed prinicpals used by AWS",
+			},
+			"approved_subscriptions": {
+				Type:        schema.TypeList,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Optional:    true,
+				Description: "List of approved subscriptions used by Azure",
+			},
+			"allowed_projects": {
+				Type:        schema.TypeList,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Optional:    true,
+				Description: "List of allowed projects used by GCP",
 			},
 			"active_zones": {
 				Type: schema.TypeList,
@@ -77,14 +89,32 @@ func resourceVpcConnect() *schema.Resource {
 			},
 		},
 		CustomizeDiff: customdiff.All(
-			customdiff.ValidateValue("allowlist", func(value, meta interface{}) error {
+			customdiff.ValidateValue("allowed_principals", func(value, meta interface{}) error {
 				for _, v := range value.([]interface{}) {
-					if AWS_ARN_VALIDATE_RE.MatchString(v.(string)) ||
-						AZURE_SUBS_VALIDATE_RE.MatchString(v.(string)) ||
-						GCP_PROJECT_ID_VALIDATE_RE.MatchString(v.(string)) {
+					if AWS_ARN_VALIDATE_RE.MatchString(v.(string)) {
 						continue
 					} else {
-						return fmt.Errorf("invalid format for allowlist: %s", v.(string))
+						return fmt.Errorf("invalid format for 'allowed_principals': %s", v.(string))
+					}
+				}
+				return nil
+			}),
+			customdiff.ValidateValue("approved_subscriptions", func(value, meta interface{}) error {
+				for _, v := range value.([]interface{}) {
+					if AZURE_SUBS_VALIDATE_RE.MatchString(v.(string)) {
+						continue
+					} else {
+						return fmt.Errorf("invalid format for 'approved_subscriptions': %s", v.(string))
+					}
+				}
+				return nil
+			}),
+			customdiff.ValidateValue("allowed_projects", func(value, meta interface{}) error {
+				for _, v := range value.([]interface{}) {
+					if GCP_PROJECT_ID_VALIDATE_RE.MatchString(v.(string)) {
+						continue
+					} else {
+						return fmt.Errorf("invalid format for 'allowed_projets': %s", v.(string))
 					}
 				}
 				return nil
@@ -98,7 +128,6 @@ func resourceVpcConnectCreate(d *schema.ResourceData, meta interface{}) error {
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 		region     = d.Get("region").(string)
-		allowlist  = d.Get("allowlist").([]interface{})
 		sleep      = d.Get("sleep").(int)
 		timeout    = d.Get("timeout").(int)
 		params     = make(map[string][]interface{})
@@ -106,11 +135,11 @@ func resourceVpcConnectCreate(d *schema.ResourceData, meta interface{}) error {
 
 	switch getPlatform(region) {
 	case "amazon":
-		params["allowed_principals"] = allowlist
+		params["allowed_principals"] = d.Get("allowed_principals").([]interface{})
 	case "azure":
-		params["approved_subscriptions"] = allowlist
+		params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
 	case "google":
-		params["allowed_projects"] = allowlist
+		params["allowed_projects"] = d.Get("allowed_projects").([]interface{})
 	default:
 		return fmt.Errorf("invalid region")
 	}
@@ -153,17 +182,16 @@ func resourceVpcConnectUpdate(d *schema.ResourceData, meta interface{}) error {
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 		region     = d.Get("region").(string)
-		allowlist  = d.Get("allowlist").([]interface{})
 		params     = make(map[string][]interface{})
 	)
 
 	switch getPlatform(region) {
 	case "amazon":
-		params["allowed_principals"] = allowlist
+		params["allowed_principals"] = d.Get("allowed_principals").([]interface{})
 	case "azure":
-		params["approved_subscriptions"] = allowlist
+		params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
 	case "google":
-		params["allowed_projects"] = allowlist
+		params["allowed_projects"] = d.Get("allowed_projects").([]interface{})
 	default:
 		return fmt.Errorf("invalid region")
 	}

@@ -83,7 +83,7 @@ resource "cloudamqp_instance" "instance" {
 resource "cloudamqp_vpc_connect" "vpc_connect" {
   instance_id = cloudamqp_instance.instance.id
   region = cloudamqp_instance.instance.region
-  allowlist = [
+  allowed_principals = [
     "arn:aws:iam::aws-account-id:user/user-name"
   ]
 }
@@ -117,7 +117,7 @@ resource "cloudamqp_instance" "instance" {
 resource "cloudamqp_vpc_connect" "vpc_connect" {
   instance_id = cloudamqp_instance.instance.id
   region = cloudamqp_instance.instance.region
-  allowlist = [
+  approved_subscriptions = [
     "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
   ]
 }
@@ -151,7 +151,7 @@ resource "cloudamqp_instance" "instance" {
 resource "cloudamqp_vpc_connect" "vpc_connect" {
   instance_id = cloudamqp_instance.instance.id
   region = cloudamqp_instance.instance.region
-  allowlist = [
+  allowed_projects = [
     "some-project-123456"
   ]
 }
@@ -162,8 +162,9 @@ resource "cloudamqp_vpc_connect" "vpc_connect" {
 
 * `instance_id` - (Required) The CloudAMQP instance identifier.
 * `region` - (Required) The region where the CloudAMQP instance is hosted.
-* `allowlist` - (Required) List of allowed principals, projects or subscriptions depending
-  on hosting platform provider. See below table.
+* `allowed_principals` - (Optional) List of allowed prinicpals used by AWS, see below table.
+* `approved_subscriptions` - (Optional) List of approved subscriptions used by Azure, see below table.
+* `allowed_projects` - (Optional) List of allowed projects used by GCP, see below table.
 * `sleep` - (Optional) Configurable sleep time (seconds) when enable Private Service Connect.
   Default set to 60 seconds.
 * `timeout` - (Optional) Configurable timeout time (seconds) when enable Private Service Connect.
@@ -171,7 +172,7 @@ resource "cloudamqp_vpc_connect" "vpc_connect" {
 
 ___
 
-The `allowlist` data depending on platform:
+The `allowed_principals`, `approved_subscriptions` or `allowed_projects` data depends on the provider platform:
 
 | Platform | Description         | Format                                                                                                                             |
 |----------|---------------------|------------------------------------------------------------------------------------------------------------------------------------|
