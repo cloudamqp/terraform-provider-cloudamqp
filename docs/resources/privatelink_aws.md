@@ -128,7 +128,7 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Create PrivateLink with additional firewall rules
 
-To create a PrivateLink configuration with additional firewall rules,it's required to chain the [cloudamqp_security_firewall](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall)
+To create a PrivateLink configuration with additional firewall rules, it's required to chain the [cloudamqp_security_firewall](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall)
 resource to avoid parallel conflicting resource calls. You can do this by making the firewall
 resource depend on the PrivateLink resource, `cloudamqp_privatelink_aws.privatelink`.
 
