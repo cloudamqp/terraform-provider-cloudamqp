@@ -15,7 +15,7 @@ func (api *API) EnablePrivatelink(instanceID int, params map[string][]interface{
 		path   = fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
 	)
 
-	if err := api.enableVPC(instanceID); err != nil {
+	if err := api.EnableVPC(instanceID); err != nil {
 		return err
 	}
 
@@ -125,32 +125,4 @@ func (api *API) waitForEnablePrivatelinkWithRetry(instanceID, attempt, sleep, ti
 
 	return fmt.Errorf("wait for enable PrivateLink failed, status: %v, message: %s",
 		response.StatusCode, failed)
-}
-
-// enableVPC: Enable VPC for an instance
-// Check if the instance already have a standalone VPC
-func (api *API) enableVPC(instanceID int) error {
-	var (
-		failed map[string]interface{}
-		path   = fmt.Sprintf("/api/instances/%d/vpc", instanceID)
-	)
-
-	data, _ := api.ReadInstance(fmt.Sprintf("%d", instanceID))
-	if data["vpc"] == nil {
-		response, err := api.sling.New().Put(path).Receive(nil, &failed)
-		if err != nil {
-			return err
-		}
-
-		if response.StatusCode == 200 {
-			log.Printf("[DEBUG] PrivateLink: VPC features enabled")
-			return nil
-		} else {
-			return fmt.Errorf("enable VPC failed, status: %v, message: %s",
-				response.StatusCode, failed)
-		}
-	}
-
-	log.Printf("[DEBUG] PrivateLink: VPC features already enabled")
-	return nil
 }
