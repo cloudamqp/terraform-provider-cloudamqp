@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"regexp"
@@ -10,53 +9,64 @@ import (
 )
 
 func (api *API) waitUntilReady(instanceID string) (map[string]interface{}, error) {
+	var (
+		data   map[string]interface{}
+		failed map[string]interface{}
+		path   = fmt.Sprintf("/api/instances/%s", instanceID)
+	)
+
 	log.Printf("[DEBUG] go-api::instance::waitUntilReady waiting")
-	data := make(map[string]interface{})
-	failed := make(map[string]interface{})
+
 	for {
 		time.Sleep(10 * time.Second)
-		response, err := api.sling.New().Path("/api/instances/").Get(instanceID).Receive(&data, &failed)
-
+		response, err := api.sling.New().Path(path).Receive(&data, &failed)
 		if err != nil {
 			return nil, err
 		}
-		if response.StatusCode != 200 {
-			return nil, fmt.Errorf("waitUntilReady failed, status: %v, message: %s", response.StatusCode, failed)
-		}
-		if data["ready"] == true {
-			data["id"] = instanceID
-			return data, nil
+
+		switch response.StatusCode {
+		case 200:
+			if data["ready"] == true {
+				data["id"] = instanceID
+				return data, nil
+			}
+		default:
+			return nil, fmt.Errorf("waitUntilReady failed, status: %v, message: %s",
+				response.StatusCode, failed)
 		}
 	}
 }
 
 func (api *API) waitUntilAllNodesReady(instanceID string) error {
-	var data []map[string]interface{}
-	failed := make(map[string]interface{})
+	var (
+		data   []map[string]interface{}
+		failed map[string]interface{}
+		path   = fmt.Sprintf("api/instances/%v/nodes", instanceID)
+	)
 
 	for {
 		time.Sleep(15 * time.Second)
-		path := fmt.Sprintf("api/instances/%v/nodes", instanceID)
 		_, err := api.sling.New().Path(path).Receive(&data, &failed)
 		if err != nil {
-			log.Printf("[ERROR] go-api::instance::waitUntilAllNodesReady error: %v", err)
 			return err
 		}
+
 		log.Printf("[DEBUG] go-api::instance::waitUntilAllNodesReady numberOfNodes: %v", len(data))
-		log.Printf("[DEBUG] go-api::instance::waitUntilAllNodesReady data: %v", data)
 		ready := true
 		for _, node := range data {
-			log.Printf("[DEBUG] go-api::instance::waitUntilAllNodesReady ready: %v, configured: %v", ready, node["configured"])
+			log.Printf("[DEBUG] go-api::instance::waitUntilAllNodesReady ready: %v, configured: %v",
+				ready, node["configured"])
 			ready = ready && node["configured"].(bool)
 		}
-		log.Printf("[DEBUG] go-api::instance::waitUntilAllNodesReady ready: %v", ready)
 		if ready {
 			return nil
 		}
 	}
 }
 
-func (api *API) waitWithTimeoutUntilAllNodesConfigured(instanceID string, attempt, sleep, timeout int) error {
+func (api *API) waitWithTimeoutUntilAllNodesConfigured(instanceID string, attempt, sleep,
+	timeout int) error {
+
 	var (
 		data   []map[string]interface{}
 		failed map[string]interface{}
@@ -74,7 +84,8 @@ func (api *API) waitWithTimeoutUntilAllNodesConfigured(instanceID string, attemp
 
 	ready := true
 	for _, node := range data {
-		log.Printf("[DEBUG] go-api::instance::waitWithTimeoutUntilAllNodesConfigured ready: %v, configured: %v", ready, node["configured"])
+		log.Printf("[DEBUG] go-api::instance::waitWithTimeoutUntilAllNodesConfigured ready: %v, configured: %v",
+			ready, node["configured"])
 		ready = ready && node["configured"].(bool)
 	}
 	log.Printf("[DEBUG] go-api::instance::waitWithTimeoutUntilAllNodesConfigured ready: %v", ready)
@@ -87,136 +98,157 @@ func (api *API) waitWithTimeoutUntilAllNodesConfigured(instanceID string, attemp
 }
 
 func (api *API) waitUntilDeletion(instanceID string) error {
+	var (
+		data   map[string]interface{}
+		failed map[string]interface{}
+		path   = fmt.Sprintf("/api/instances/%s", instanceID)
+	)
+
 	log.Printf("[DEBUG] go-api::instance::waitUntilDeletion waiting")
-	data := make(map[string]interface{})
-	failed := make(map[string]interface{})
 	for {
 		time.Sleep(10 * time.Second)
-		response, err := api.sling.New().Path("/api/instances/").Get(instanceID).Receive(&data, &failed)
-
+		response, err := api.sling.New().Path(path).Receive(&data, &failed)
 		if err != nil {
 			log.Printf("[DEBUG] go-api::instance::waitUntilDeletion error: %v", err)
 			return err
 		}
-		if response.StatusCode == 404 {
+
+		switch response.StatusCode {
+		case 404:
+			log.Print("[DEBUG] go-api::instance::waitUntilDeletion deleted")
+			return nil
+		case 410:
 			log.Print("[DEBUG] go-api::instance::waitUntilDeletion deleted")
 			return nil
 		}
 	}
 }
 
-func (api *API) numberOfNodes(instanceID string) (int, error) {
-	data := make(map[string]interface{})
-	failed := make(map[string]interface{})
-	path := fmt.Sprintf("api/instances/%v/nodes", instanceID)
-	response, err := api.sling.New().Path(path).Receive(&data, &failed)
-	log.Printf("[DEBUG] go-api::instances::numberOfNodes data: %v", data)
-
-	if err != nil {
-		fmt.Errorf("go-api::instances::numberOfNodes error: %v", err)
-		return -1, err
-	}
-	if response.StatusCode != 200 {
-		return -1, fmt.Errorf("go-api::instances::numberOfNodes failed, status: %v, message: %v", response.StatusCode, failed)
-	}
-
-	if data["nodes"] == nil {
-		log.Printf("[ERROR] go-api::instances::numberOfNodes is nil")
-		return -1, fmt.Errorf("go-api::instances::numberOfNodes is nil")
-	}
-	nodes, _ := strconv.Atoi(data["nodes"].(string))
-	return nodes, nil
-}
-
 func (api *API) CreateInstance(params map[string]interface{}) (map[string]interface{}, error) {
-	data := make(map[string]interface{})
-	failed := make(map[string]interface{})
+	var (
+		data   map[string]interface{}
+		failed map[string]interface{}
+	)
+
 	log.Printf("[DEBUG] go-api::instance::create params: %v", params)
 	response, err := api.sling.New().Post("/api/instances").BodyJSON(params).Receive(&data, &failed)
 	log.Printf("[DEBUG] go-api::instance::waitUntilReady data: %v", data)
-
 	if err != nil {
 		return nil, err
 	}
-	if response.StatusCode != 200 {
-		return nil, fmt.Errorf("CreateInstance failed, status: %v, message: %s", response.StatusCode, failed)
-	}
 
-	if id, ok := data["id"]; ok {
-		data["id"] = strconv.FormatFloat(id.(float64), 'f', 0, 64)
-		log.Printf("[DEBUG] go-api::instance::create id set: %v", data["id"])
-	} else {
-		msg := fmt.Sprintf("go-api::instance::create Invalid instance identifier: %v", data["id"])
-		log.Printf("[ERROR] %s", msg)
-		return nil, errors.New(msg)
+	switch response.StatusCode {
+	case 200:
+		if id, ok := data["id"]; ok {
+			data["id"] = strconv.FormatFloat(id.(float64), 'f', 0, 64)
+			log.Printf("[DEBUG] go-api::instance::create id set: %v", data["id"])
+		} else {
+			return nil, fmt.Errorf("go-api::instance::create Invalid instance identifier: %v", data["id"])
+		}
+		return api.waitUntilReady(data["id"].(string))
+	default:
+		return nil, fmt.Errorf("create instance failed, status: %v, message: %s",
+			response.StatusCode, failed)
 	}
-
-	return api.waitUntilReady(data["id"].(string))
 }
 
 func (api *API) ReadInstance(instanceID string) (map[string]interface{}, error) {
-	data := make(map[string]interface{})
-	failed := make(map[string]interface{})
-	log.Printf("[DEBUG] go-api::instance::read instance ID: %v", instanceID)
-	response, err := api.sling.New().Path("/api/instances/").Get(instanceID).Receive(&data, &failed)
-	log.Printf("[DEBUG] go-api::instance::read data: %v", data)
+	var (
+		data   map[string]interface{}
+		failed map[string]interface{}
+		path   = fmt.Sprintf("/api/instances/%s", instanceID)
+	)
 
+	log.Printf("[DEBUG] go-api::instance::read instance ID: %v", instanceID)
+	response, err := api.sling.New().Path(path).Receive(&data, &failed)
+	log.Printf("[DEBUG] go-api::instance::read data: %v", data)
 	if err != nil {
 		return nil, err
 	}
-	if response.StatusCode != 200 {
-		return nil, fmt.Errorf("ReadInstance failed, status: %v, message: %s", response.StatusCode, failed)
-	}
 
-	return data, nil
+	switch response.StatusCode {
+	case 200:
+		return data, nil
+	case 410:
+		log.Printf("[WARN] go-api::instance::read status: 410, message: The instance has been deleted")
+		return nil, nil
+	default:
+		return nil, fmt.Errorf("read instance failed, status: %v, message: %s",
+			response.StatusCode, failed)
+	}
 }
 
+// TODO: Rename to ListInstances
 func (api *API) ReadInstances() ([]map[string]interface{}, error) {
-	var data []map[string]interface{}
-	failed := make(map[string]interface{})
-	response, err := api.sling.New().Get("/api/instances").Receive(&data, &failed)
-	log.Printf("[DEBUG] go-api::instance::read data: %v", data)
+	var (
+		data   []map[string]interface{}
+		failed map[string]interface{}
+	)
 
+	response, err := api.sling.New().Get("/api/instances").Receive(&data, &failed)
+	log.Printf("[DEBUG] go-api::instance::list data: %v", data)
 	if err != nil {
 		return nil, err
 	}
-	if response.StatusCode != 200 {
-		return nil, fmt.Errorf("ReadInstances failed, status: %v, message: %s", response.StatusCode, failed)
-	}
 
-	return data, nil
+	switch response.StatusCode {
+	case 200:
+		return data, nil
+	case 410:
+		log.Printf("[WARN] go-api::instance::list status: 410, message: The instance has been deleted")
+		return nil, nil
+	default:
+		return nil, fmt.Errorf("list instances failed, status: %v, message: %s",
+			response.StatusCode, failed)
+	}
 }
 
 func (api *API) UpdateInstance(instanceID string, params map[string]interface{}) error {
-	failed := make(map[string]interface{})
-	log.Printf("[DEBUG] go-api::instance::update instance ID: %v, params: %v", instanceID, params)
-	path := fmt.Sprintf("api/instances/%v", instanceID)
-	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
+	var (
+		failed map[string]interface{}
+		path   = fmt.Sprintf("api/instances/%v", instanceID)
+	)
 
+	log.Printf("[DEBUG] go-api::instance::update instance ID: %v, params: %v", instanceID, params)
+	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 	if err != nil {
 		return err
 	}
-	if response.StatusCode != 200 {
-		return fmt.Errorf("UpdateInstance failed, status: %v, message: %s", response.StatusCode, failed)
-	}
 
-	return api.waitUntilAllNodesReady(instanceID)
+	switch response.StatusCode {
+	case 200:
+		return api.waitUntilAllNodesReady(instanceID)
+	case 410:
+		log.Printf("[WARN] go-api::instance::update status: 410, message: The instance has been deleted")
+		return nil
+	default:
+		return fmt.Errorf("update instance failed, status: %v, message: %s",
+			response.StatusCode, failed)
+	}
 }
 
 func (api *API) DeleteInstance(instanceID string, keep_vpc bool) error {
-	failed := make(map[string]interface{})
-	log.Printf("[DEBUG] go-api::instance::delete instance ID: %v", instanceID)
-	path := fmt.Sprintf("api/instances/%s?keep_vpc=%v", instanceID, keep_vpc)
-	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
+	var (
+		failed map[string]interface{}
+		path   = fmt.Sprintf("api/instances/%s?keep_vpc=%v", instanceID, keep_vpc)
+	)
 
+	log.Printf("[DEBUG] go-api::instance::delete instance ID: %v", instanceID)
+	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 	if err != nil {
 		return err
 	}
-	if response.StatusCode != 204 {
-		return fmt.Errorf("DeleteInstance failed, status: %v, message: %s", response.StatusCode, failed)
-	}
 
-	return api.waitUntilDeletion(instanceID)
+	switch response.StatusCode {
+	case 204:
+		return api.waitUntilDeletion(instanceID)
+	case 410:
+		log.Printf("[WARN] go-api::instance::delete status: 410, message: The instance has been deleted")
+		return nil
+	default:
+		return fmt.Errorf("delete instance failed, status: %v, message: %s",
+			response.StatusCode, failed)
+	}
 }
 
 func (api *API) UrlInformation(url string) map[string]interface{} {
