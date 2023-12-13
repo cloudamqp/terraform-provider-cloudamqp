@@ -7,7 +7,8 @@ FEATURES:
 
 IMPROVEMENTS:
 
-* Remove default RMQ version request when version left out. ([#237](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/237))
+* Remove default RMQ version request when version left out ([#237](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/237))
+* Update and clean up samples ([#235](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/235))
 
 ## 1.28.0 (Sep 27, 2023)
 
