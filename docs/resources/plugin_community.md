@@ -7,13 +7,10 @@ description: |-
 
 # cloudamqp_plugin_community
 
-This resource allows you to install or uninstall community plugins. Once installed the plugin will be available in `cloudamqp_plugin`.
+This resource allows you to install or uninstall community plugins. Once installed the plugin will
+be available in `cloudamqp_plugin`.
 
 Only available for dedicated subscription plans running ***RabbitMQ***.
-
-~> CloudAMQP Terraform provider [v1.11.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.11.0) there is support for multiple retries when requesting information about community plugins. This was introduced to avoid `ReadPluginCommunity error 400: Timeout talking to backend`.
-
-~> CloudAMQP Terraform provider [v1.19.2](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.19.2) support asynchronous request for plugin/community actions. Solve issues reported when enable multiple plugins.
 
 ## Example Usage
 
@@ -63,6 +60,10 @@ The following arguments are supported:
 * `instance_id` - (Required) The CloudAMQP instance ID.
 * `name`        - (Required) The name of the Rabbit MQ community plugin.
 * `enabled`     - (Required) Enable or disable the plugins.
+* `sleep` - (Optional) Configurable sleep time (seconds) for retries when requesting information
+about community plugins. Default set to 10 seconds.
+* `timeout` - (Optional) - Configurable timeout time (seconds) for retries when requesting
+information about community plugins. Default set to 1800 seconds.
 
 ## Attributes Reference
 
@@ -76,12 +77,32 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-`cloudamqp_plugin` can be imported using the name argument of the resource together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
+`cloudamqp_plugin` can be imported using the name argument of the resource together with CloudAMQP
+instance identifier. The name and identifier are CSV separated, see example below.
 
 `terraform import cloudamqp_plugin.<resource_name> <plugin_name>,<instance_id>`
 
 ## Enable faster instance destroy
 
-When running `terraform destroy` this resource will try to uninstall the managed community plugin before deleting `cloudamqp_instance`. This is not necessary since the servers will be deleted.
+When running `terraform destroy` this resource will try to uninstall the managed community plugin
+before deleting `cloudamqp_instance`. This is not necessary since the servers will be deleted.
 
 Set `enable_faster_instance_destroy` to ***true***  in the provider configuration to skip this.
+
+## Changelog
+
+List of changes made to this resource for different versions.
+
+[v1.29.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.0)
+configurable sleep and timeout for multiple retries when requesting information about community plugins.
+
+[v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) enables
+faster `cloudamqp_instance` destroy when running `terraform destroy`.
+
+[v1.19.2](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.19.2) support
+asynchronous request for plugin/community actions. Solve issues reported when installing multiple
+community plugins.
+
+[v1.11.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.11.0) there is
+support for multiple retries when requesting information about community plugins.
+This was introduced to avoid `ReadPluginCommunity error 400: Timeout talking to backend`.
