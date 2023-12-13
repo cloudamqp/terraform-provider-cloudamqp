@@ -14,7 +14,7 @@ output "aws_vpc_id" {
 
 // AWS peering connection output
 output "aws_peering_id" {
-  aws_vpc_peering_connection.aws_vpc_peering.id
+  value = aws_vpc_peering_connection.aws_vpc_peering.id
 }
 
 // AWS route table
