@@ -46,23 +46,24 @@ resource "cloudamqp_notification" "notification_recipient" {
 // attribute to true in the instance resource.
 data "cloudamqp_alarm" "default_cpu" {
   instance_id = cloudamqp_instance.instance.id
-  Type        = "cpu"
+  type        = "cpu"
 }
 
 data "cloudamqp_alarm" "default_memory" {
   instance_id = cloudamqp_instance.instance.id
-  Type        = "memory"
+  type        = "memory"
 }
 
 data "cloudamqp_alarm" "default_disk" {
   instance_id = cloudamqp_instance.instance.id
-  Type        = "disk"
+  type        = "disk"
 }
 
 // New alarms
 resource "cloudamqp_alarm" "cpu_alarm" {
   instance_id     = cloudamqp_instance.instance.id
   type            = "cpu"
+  enabled         = true
   value_threshold = 90
   time_threshold  = 600
   recipients      = [
@@ -71,9 +72,10 @@ resource "cloudamqp_alarm" "cpu_alarm" {
   ]
 }
 
-resource "cloudamqp_alarm" "alarm_02" {
+resource "cloudamqp_alarm" "memory_alarm" {
   instance_id     = cloudamqp_instance.instance.id
   type            = "memory"
+  enabled         = true
   value_threshold = 90
   time_threshold  = 600
   recipients      = [
@@ -85,6 +87,7 @@ resource "cloudamqp_alarm" "alarm_02" {
 resource "cloudamqp_alarm" "disk_alarm" {
   instance_id     = cloudamqp_instance.instance.id
   type            = "disk"
+  enabled         = true
   value_threshold = 10
   time_threshold  = 600
   recipients      = [cloudamqp_notification.alarm_recipient.id]
@@ -93,9 +96,9 @@ resource "cloudamqp_alarm" "disk_alarm" {
 resource "cloudamqp_alarm" "queue_alarm" {
   instance_id     = cloudamqp_instance.instance.id
   type            = "queue"
+  enabled         = true
   value_threshold = 120
   time_threshold  = 120
-  enabled         = true
   queue_regex     = ".*"
   vhost_regex     = ".*"
   message_type    = "total"
