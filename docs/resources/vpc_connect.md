@@ -24,6 +24,7 @@ More information can be found at: [CloudAMQP privatelink](https://www.cloudamqp.
       <i>Default PrivateLink firewall rule [AWS, Azure]</i>
     </b>
   </summary>
+
 ```hcl
 rules {
   Description = "PrivateLink setup"
@@ -32,6 +33,7 @@ rules {
   services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL", "STOMP", "STOMPS", "MQTT", "MQTTS"]
 }
 ```
+
 </details>
 
 <details>
@@ -40,6 +42,7 @@ rules {
       <i>Default Private Service Connect firewall rule [GCP]</i>
     </b>
   </summary>
+
 ```hcl
 rules {
   Description = "Private Service Connect"
@@ -48,6 +51,7 @@ rules {
   services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL", "STOMP", "STOMPS", "MQTT", "MQTTS"]
 }
 ```
+
 </details>
 
 Only available for dedicated subscription plans.
@@ -88,6 +92,7 @@ resource "cloudamqp_vpc_connect" "vpc_connect" {
   ]
 }
 ```
+
 </details>
 
 <details>
@@ -122,6 +127,7 @@ resource "cloudamqp_vpc_connect" "vpc_connect" {
   ]
 }
 ```
+
 </details>
 
 <details>
@@ -156,6 +162,7 @@ resource "cloudamqp_vpc_connect" "vpc_connect" {
   ]
 }
 ```
+
 </details>
 
 ## Argument Reference
