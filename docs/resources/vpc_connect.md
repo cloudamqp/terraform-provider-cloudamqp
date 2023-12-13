@@ -14,7 +14,7 @@ Service to connect the VPC and creating a new network interface to handle the co
 
 If no existing VPC available when enable VPC connect, a new VPC will be created with subnet `10.52.72.0/24`.
 
-More information can be found at: [CloudAMQP privatelink](https://www.cloudamqp.com/docs/cloudamqp-privatelink.html)
+More information can be found at: [CloudAMQP VPC Connect](https://www.cloudamqp.com/docs/cloudamqp-vpc-connect.html)
 
 -> **Note:** Enabling VPC Connect will automatically add a firewall rule.
 
@@ -57,8 +57,6 @@ rules {
 Only available for dedicated subscription plans.
 
 ## Example Usage
-
-If now managadable standalone VPC exists for the CloudAMQP instance. One will be avai
 
 <details>
   <summary>
@@ -173,9 +171,9 @@ resource "cloudamqp_vpc_connect" "vpc_connect" {
 * `approved_subscriptions` - (Optional) List of approved subscriptions used by Azure, see below table.
 * `allowed_projects` - (Optional) List of allowed projects used by GCP, see below table.
 * `sleep` - (Optional) Configurable sleep time (seconds) when enable Private Service Connect.
-  Default set to 60 seconds.
+  Default set to 10 seconds.
 * `timeout` - (Optional) Configurable timeout time (seconds) when enable Private Service Connect.
-  Default set to 3600 seconds.
+  Default set to 1800 seconds.
 
 ___
 
