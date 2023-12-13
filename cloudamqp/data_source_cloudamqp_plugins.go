@@ -39,6 +39,18 @@ func dataSourcePlugins() *schema.Resource {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
+						"sleep": {
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     10,
+							Description: "Configurable sleep time in seconds between retries for plugins",
+						},
+						"timeout": {
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Default:     1800,
+							Description: "Configurable timeout time in seconds for plugins",
+						},
 					},
 				},
 			},
@@ -47,10 +59,16 @@ func dataSourcePlugins() *schema.Resource {
 }
 
 func dataSourcePluginsRead(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	log.Printf("[DEBUG] cloudamqp::data_source::plugins::read instance id: %v", d.Get("instance_id"))
-	data, err := api.ReadPlugins(d.Get("instance_id").(int))
-	d.SetId(fmt.Sprintf("%v.plugins", d.Get("instance_id").(int)))
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
+	log.Printf("[DEBUG] cloudamqp::data_source::plugins::read instance id: %v", instanceID)
+	data, err := api.ListPlugins(instanceID, sleep, timeout)
+	d.SetId(fmt.Sprintf("%v.plugins", instanceID))
 	if err != nil {
 		return err
 	}

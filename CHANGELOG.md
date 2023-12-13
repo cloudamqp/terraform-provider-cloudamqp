@@ -3,6 +3,7 @@
 FEATURES:
 
 * Add resource that invoke account actions. ([#231](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/231))
+* Add configurable retries for plugin resources ([#241](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/241))
 
 IMPROVEMENTS:
 
