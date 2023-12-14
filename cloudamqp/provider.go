@@ -67,6 +67,7 @@ func Provider(v string) *schema.Provider {
 			"cloudamqp_rabbitmq_configuration":      resourceRabbitMqConfiguration(),
 			"cloudamqp_security_firewall":           resourceSecurityFirewall(),
 			"cloudamqp_upgrade_rabbitmq":            resourceUpgradeRabbitMQ(),
+			"cloudamqp_vpc_connect":                 resourceVpcConnect(),
 			"cloudamqp_vpc_gcp_peering":             resourceVpcGcpPeering(),
 			"cloudamqp_vpc_peering":                 resourceVpcPeering(),
 			"cloudamqp_vpc":                         resourceVpc(),

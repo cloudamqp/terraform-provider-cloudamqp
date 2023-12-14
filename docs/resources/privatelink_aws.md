@@ -7,9 +7,10 @@ description: |-
 
 # cloudamqp_privatelink_aws
 
-Enable PrivateLink for a CloudAMQP instance hosted in AWS. If no existing VPC available when enable PrivateLink, a new VPC will be created with subnet `10.52.72.0/24`.
+Enable PrivateLink for a CloudAMQP instance hosted in AWS. If no existing VPC available when enable
+PrivateLink, a new VPC will be created with subnet `10.52.72.0/24`.
 
-~> **Note:** Enabling PrivateLink will automatically add firewall rules for the peered subnet.
+-> **Note:** Enabling PrivateLink will automatically add firewall rules for the peered subnet.
 <details>
  <summary>
     <i>Default PrivateLink firewall rule</i>
@@ -24,9 +25,14 @@ rules {
 ```
 </details>
 
-Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html) where you can also find more information about [CloudAMQP PrivateLink](https://www.cloudamqp.com/docs/cloudamqp-privatelink.html#aws-privatelink).
+Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html)
+where you can also find more information about
+[CloudAMQP PrivateLink](https://www.cloudamqp.com/docs/cloudamqp-privatelink.html#aws-privatelink).
 
 Only available for dedicated subscription plans.
+
+~> **Warning:** This resource considered deprecated and will be removed in next major version (v2.0).
+Recommended to start using the new resource[`cloudamqp_vpc_connect`](./vpc_connect.md).
 
 ## Example Usage
 
@@ -91,8 +97,10 @@ resource "cloudamqp_privatelink_aws" "privatelink" {
 
 * `instance_id` - (Required) The CloudAMQP instance identifier.
 * `allowed_principals` - (Required) Allowed principals to access the endpoint service.
-* `sleep` - (Optional) Configurable sleep time (seconds) when enable PrivateLink. Default set to 60 seconds.
-* `timeout` - (Optional) - Configurable timeout time (seconds) when enable PrivateLink. Default set to 3600 seconds.
+* `sleep` - (Optional) Configurable sleep time (seconds) when enable PrivateLink.
+  Default set to 60 seconds.
+* `timeout` - (Optional) Configurable timeout time (seconds) when enable PrivateLink.
+  Default set to 3600 seconds.
 
 Allowed principals format: <br>
 `arn:aws:iam::aws-account-id:root` <br>
@@ -121,9 +129,11 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 ## Create PrivateLink with additional firewall rules
 
 To create a PrivateLink configuration with additional firewall rules, it's required to chain the [cloudamqp_security_firewall](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall)
-resource to avoid parallel conflicting resource calls. You can do this by making the firewall resource depend on the PrivateLink resource, `cloudamqp_privatelink_aws.privatelink`.
+resource to avoid parallel conflicting resource calls. You can do this by making the firewall
+resource depend on the PrivateLink resource, `cloudamqp_privatelink_aws.privatelink`.
 
-Furthermore, since all firewall rules are overwritten, the otherwise automatically added rules for the PrivateLink also needs to be added.
+Furthermore, since all firewall rules are overwritten, the otherwise automatically added rules for
+the PrivateLink also needs to be added.
 
 ## Example usage with additional firewall rules
 
