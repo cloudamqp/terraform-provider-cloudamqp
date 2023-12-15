@@ -52,13 +52,13 @@ func resourcePrivateLinkAzure() *schema.Resource {
 			"sleep": {
 				Type:        schema.TypeInt,
 				Optional:    true,
-				Default:     60,
+				Default:     10,
 				Description: "Configurable sleep in seconds between retries when enable PrivateLink",
 			},
 			"timeout": {
 				Type:        schema.TypeInt,
 				Optional:    true,
-				Default:     3600,
+				Default:     1800,
 				Description: "Configurable timeout in seconds when enable PrivateLink",
 			},
 		},
