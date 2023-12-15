@@ -99,9 +99,11 @@ func resourcePrivateLinkAzureRead(d *schema.ResourceData, meta interface{}) erro
 	var (
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id()) // Uses d.Id() to allow import
+		sleep         = d.Get("sleep").(int)
+		timeout       = d.Get("timeout").(int)
 	)
 
-	data, err := api.ReadPrivatelink(instanceID)
+	data, err := api.ReadPrivatelink(instanceID, sleep, timeout)
 	if err != nil {
 		return err
 	}
