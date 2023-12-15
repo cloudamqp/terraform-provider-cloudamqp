@@ -39,21 +39,41 @@ func dataSourceVpcGcpInfo() *schema.Resource {
 				Computed:    true,
 				Description: "VPC network uri",
 			},
+			"sleep": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     10,
+				Description: "Configurable sleep in seconds between retries when reading peering",
+			},
+			"timeout": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     1800,
+				Description: "Configurable timeout time (seconds) before retries times out",
+			},
 		},
 	}
 }
 
 func dataSourceVpcGcpInfoRead(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	data := make(map[string]interface{})
-	err := errors.New("")
-	log.Printf("[DEBUG] cloudamqp::data::vpc_gcp_info::request instance_id: %v, vpc_id: %v", d.Get("instance_id"), d.Get("vpc_id"))
-	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
+	var (
+		api         = meta.(*api.API)
+		data        = make(map[string]interface{})
+		err         = errors.New("")
+		instance_id = d.Get("instance_id").(int)
+		vpc_id      = d.Get("vpc_id").(string)
+		sleep       = d.Get("sleep").(int)
+		timeout     = d.Get("timeout").(int)
+	)
+
+	log.Printf("[DEBUG] cloudamqp::data::vpc_gcp_info::request instance_id: %v, vpc_id: %v",
+		instance_id, vpc_id)
+	if instance_id == 0 && vpc_id == "" {
 		return errors.New("you need to specify either instance_id or vpc_id")
-	} else if d.Get("instance_id") != 0 {
-		data, err = api.ReadVpcGcpInfo(d.Get("instance_id").(int))
+	} else if instance_id != 0 {
+		data, err = api.ReadVpcGcpInfo(instance_id, sleep, timeout)
 	} else if d.Get("vpc_id") != nil {
-		data, err = api.ReadVpcGcpInfoWithVpcId(d.Get("vpc_id").(string))
+		data, err = api.ReadVpcGcpInfoWithVpcId(vpc_id, sleep, timeout)
 	}
 
 	if err != nil {

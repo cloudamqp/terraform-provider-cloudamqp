@@ -51,6 +51,18 @@ func resourceVpcGcpPeering() *schema.Resource {
 				Computed:    true,
 				Description: "VPC peering auto created routes",
 			},
+			"sleep": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     10,
+				Description: "Configurable sleep in seconds between retries when requesting or reading peering",
+			},
+			"timeout": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     1800,
+				Description: "Configurable timeout time (seconds) before retries times out",
+			},
 		},
 	}
 }
@@ -65,6 +77,8 @@ func resourceCreateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 		waitOnStatus = d.Get("wait_on_peering_status").(bool)
 		data         map[string]interface{}
 		err          = errors.New("")
+		sleep        = d.Get("sleep").(int)
+		timeout      = d.Get("timeout").(int)
 	)
 
 	for _, k := range keys {
@@ -78,9 +92,9 @@ func resourceCreateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 	if instanceID == 0 && vpcID == "" {
 		return errors.New("you need to specify either instance_id or vpc_id")
 	} else if instanceID != 0 {
-		data, err = api.RequestVpcGcpPeering(instanceID, params, waitOnStatus)
+		data, err = api.RequestVpcGcpPeering(instanceID, params, waitOnStatus, sleep, timeout)
 	} else if vpcID != "" {
-		data, err = api.RequestVpcGcpPeeringWithVpcId(vpcID, params, waitOnStatus)
+		data, err = api.RequestVpcGcpPeeringWithVpcId(vpcID, params, waitOnStatus, sleep, timeout)
 	}
 
 	if err != nil {
@@ -98,17 +112,19 @@ func resourceCreateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 
 func resourceReadVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
 	var (
-		api  = meta.(*api.API)
-		data map[string]interface{}
-		err  = errors.New("")
+		api     = meta.(*api.API)
+		data    map[string]interface{}
+		err     = errors.New("")
+		sleep   = d.Get("sleep").(int)
+		timeout = d.Get("timeout").(int)
 	)
 
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
 		return errors.New("you need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
-		data, err = api.ReadVpcGcpPeering(d.Get("instance_id").(int), d.Id())
+		data, err = api.ReadVpcGcpPeering(d.Get("instance_id").(int), sleep, timeout)
 	} else if d.Get("vpc_id") != nil {
-		data, err = api.ReadVpcGcpPeeringWithVpcId(d.Get("vpc_id").(string), d.Id())
+		data, err = api.ReadVpcGcpPeeringWithVpcId(d.Get("vpc_id").(string), sleep, timeout)
 	}
 	log.Printf("[DEBUG] cloudamqp::vpc_gcp_peering::read data: %v", data)
 
