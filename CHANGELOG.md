@@ -1,5 +1,9 @@
 ## 1.29.0 (Unreleased)
 
+NOTES:
+
+* Updated the API wrapper (go-api) dependency with newer version (1.14.0)
+
 FEATURES:
 
 * Add resource that invoke account actions. ([#231](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/231))
@@ -13,12 +17,13 @@ IMPROVEMENTS:
 
 * Update and clean up samples ([#235](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/235))
 * Remove default RMQ version request when version left out ([#237](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/237))
+* Handle gone VPC resource
 
 ## 1.28.0 (Sep 27, 2023)
 
 NOTES:
 
-* Updated the API wrapper (go-api) dependency with newer version (1.22.4)
+* Updated the API wrapper (go-api) dependency with newer version (1.12.4)
 
 FEATURES:
 
