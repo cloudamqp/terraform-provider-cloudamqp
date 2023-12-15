@@ -23,6 +23,7 @@ rules {
   services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL"]
 }
 ```
+
 </details>
 
 Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html).
@@ -64,6 +65,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
   peer_network_uri = "https://www.googleapis.com/compute/v1/projects/<PROJECT-NAME>/global/networks/<NETWORK-NAME>"
 }
 ```
+
 </details>
 
 <details>
@@ -111,6 +113,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
   peer_network_uri = "https://www.googleapis.com/compute/v1/projects/<PROJECT-NAME>/global/networks/<NETWORK-NAME>"
 }
 ```
+
 </details>
 
 <details>
@@ -121,6 +124,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
   </summary>
 
 Default peering request, no need to set `wait_on_peering_status`. It's default set to false and will not wait on peering status.
+
 ```hcl
 resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
   vpc_id = cloudamqp_vpc.vpc.id
@@ -129,6 +133,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 ```
 
 Peering request and waiting for peering status.
+
 ```hcl
 resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
   vpc_id = cloudamqp_vpc.vpc.id
@@ -156,6 +161,9 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 * `wait_on_peering_status` - (Optional) Makes the resource wait until the peering is connected.
 
  ***Note: Added as optional in version v1.28.0. Default set to false and will not wait until the peering is done from both VPCs***
+
+* `sleep` - (Optional) Configurable sleep time (seconds) between retries when requesting or reading peering. Default set to 10 seconds.
+* `timeout` - (Optional) - Configurable timeout time (seconds) before retries times out. Default set to 1800 seconds.
 
 ## Attributes Reference
 
@@ -226,6 +234,7 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   ]
 }
 ```
+
 </details>
 
 <details>
@@ -268,4 +277,18 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   ]
 }
 ```
+
 </details>
+
+## Changelog
+
+List of changes made to this resource for different versions.
+
+[v1.29.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.0) configurable
+sleep and timeout for retries when requesting and reading peering.
+
+[v1.28.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.18.0)
+Added `wait_on_peering_status` as optional, set to wait until peering is finished.
+
+[v1.16.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.16.0)
+deprecated intance_id and use vpc_id instead
