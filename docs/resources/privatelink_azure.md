@@ -11,10 +11,12 @@ Enable PrivateLink for a CloudAMQP instance hosted in Azure. If no existing VPC 
 enable PrivateLink, a new VPC will be created with subnet `10.52.72.0/24`.
 
 -> **Note:** Enabling PrivateLink will automatically add firewall rules for the peered subnet.
+
 <details>
  <summary>
     <i>Default PrivateLink firewall rule</i>
   </summary>
+
 ```hcl
 rules {
   Description = "PrivateLink setup"
@@ -23,6 +25,7 @@ rules {
   services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL", "STOMP", "STOMPS", "MQTT", "MQTTS"]
 }
 ```
+
 </details>
 
 Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html) where you can also
@@ -91,6 +94,7 @@ resource "cloudamqp_privatelink_azure" "privatelink" {
   ]
 }
 ```
+
 </details>
 
 ## Argument Reference
@@ -99,9 +103,9 @@ resource "cloudamqp_privatelink_azure" "privatelink" {
 * `approved_subscriptions` - (Required) Approved subscriptions to access the endpoint service.
   See format below.
 * `sleep` - (Optional) Configurable sleep time (seconds) when enable PrivateLink.
-  Default set to 60 seconds.
+  Default set to 10 seconds.
 * `timeout` - (Optional) Configurable timeout time (seconds) when enable PrivateLink.
-  Default set to 3600 seconds.
+  Default set to 1800 seconds.
 
 Approved subscriptions format (GUID): <br>
 `XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX`
@@ -189,4 +193,12 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
    ]
 }
 ```
+
 </details>
+
+## Changelog
+
+List of changes made to this resource for different versions.
+
+[v1.29.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.0) added
+configurable retries when reading PrivateLink information.
