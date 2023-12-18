@@ -278,17 +278,3 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 ```
 
 </details>
-
-## Changelog
-
-List of changes made to this resource for different versions.
-
-[v1.29.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.0)
-Configurable sleep and timeout for retries when requesting and reading peering.
-
-[v1.28.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.18.0)
-Added `wait_on_peering_status` argument if the resource should wait until both VPCs have done its peering.
-
-[v1.16.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.16.0)
-Deprecated intance_id, set from required to optional. Will be removed in next major version (v2.0).
-Added vpc_id, set to optional. Will be required in next major version (v2.0).
