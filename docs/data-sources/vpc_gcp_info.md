@@ -23,6 +23,7 @@ data "cloudamqp_vpc_gcp_info" "vpc_info" {
   instance_id = cloudamqp_instance.instance.id
 }
 ```
+
 </details>
 
 <details>
@@ -39,6 +40,7 @@ data "cloudamqp_vpc_gcp_info" "vpc_info" {
   # instance_id = cloudamqp_instance.instance.id
 }
 ```
+
 </details>
 
 ## Argument reference
@@ -52,6 +54,9 @@ data "cloudamqp_vpc_gcp_info" "vpc_info" {
 * `vpc_id` - (Optional) The managed VPC identifier.
 
  ***Note: Added as optional in version v1.16.0 and will be required in next major version (v2.0)***
+
+* `sleep` - (Optional) Configurable sleep time (seconds) between retries when reading peering. Default set to 10 seconds.
+* `timeout` - (Optional) - Configurable timeout time (seconds) before retries times out. Default set to 1800 seconds.
 
 ## Attributes reference
 
