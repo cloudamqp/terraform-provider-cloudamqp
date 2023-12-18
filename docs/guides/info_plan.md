@@ -10,7 +10,7 @@ description: |-
 
 Tables below shows general subscription plans for CloudAMQP for either [**RabbitMQ**](https://www.rabbitmq.com/) or [**LavinMQ**](https://lavinmq.com/), for full price list see [cloudamqp](https://www.cloudamqp.com/plans.html).
 
-*Information can differ from your actually valid plans, e.g. your team have been given preview access to unreleased plans. To retrieve an up to date list check out [cloudamqp-docs](https://docs.cloudamqp.com/#plans)*
+-> Information can differ from your actually valid plans, e.g. your team have been given preview access to unreleased plans. To retrieve an up to date list check out [cloudamqp-docs](https://docs.cloudamqp.com/#plans)*
 
 ## Plans using RabbitMQ
 
