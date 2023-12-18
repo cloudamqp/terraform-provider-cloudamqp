@@ -15,6 +15,7 @@ PrivateLink, a new VPC will be created with subnet `10.52.72.0/24`.
  <summary>
     <i>Default PrivateLink firewall rule</i>
   </summary>
+
 ```hcl
 rules {
   Description = "PrivateLink setup"
@@ -23,6 +24,7 @@ rules {
   services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL", "STOMP", "STOMPS", "MQTT", "MQTTS"]
 }
 ```
+
 </details>
 
 Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html)
@@ -58,6 +60,7 @@ resource "cloudamqp_privatelink_aws" "privatelink" {
   ]
 }
 ```
+
 </details>
 
 <details>
@@ -91,6 +94,7 @@ resource "cloudamqp_privatelink_aws" "privatelink" {
   ]
 }
 ```
+
 </details>
 
 ## Argument Reference
@@ -98,9 +102,9 @@ resource "cloudamqp_privatelink_aws" "privatelink" {
 * `instance_id` - (Required) The CloudAMQP instance identifier.
 * `allowed_principals` - (Required) Allowed principals to access the endpoint service.
 * `sleep` - (Optional) Configurable sleep time (seconds) when enable PrivateLink.
-  Default set to 60 seconds.
+  Default set to 10 seconds. *Available from v1.29.0*
 * `timeout` - (Optional) Configurable timeout time (seconds) when enable PrivateLink.
-  Default set to 3600 seconds.
+  Default set to 1800 seconds. *Available from v1.29.0*
 
 Allowed principals format: <br>
 `arn:aws:iam::aws-account-id:root` <br>
@@ -190,4 +194,5 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
    ]
 }
 ```
+
 </details>

@@ -55,13 +55,13 @@ func resourcePrivateLinkAws() *schema.Resource {
 			"sleep": {
 				Type:        schema.TypeInt,
 				Optional:    true,
-				Default:     60,
+				Default:     10,
 				Description: "Configurable sleep in seconds between retries when enable PrivateLink",
 			},
 			"timeout": {
 				Type:        schema.TypeInt,
 				Optional:    true,
-				Default:     3600,
+				Default:     1800,
 				Description: "Configurable timeout in seconds when enable PrivateLink",
 			},
 		},
@@ -102,9 +102,11 @@ func resourcePrivateLinkAwsRead(d *schema.ResourceData, meta interface{}) error 
 	var (
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id()) // Uses d.Id() to allow import
+		sleep         = d.Get("sleep").(int)
+		timeout       = d.Get("timeout").(int)
 	)
 
-	data, err := api.ReadPrivatelink(instanceID)
+	data, err := api.ReadPrivatelink(instanceID, sleep, timeout)
 	if err != nil {
 		return err
 	}
