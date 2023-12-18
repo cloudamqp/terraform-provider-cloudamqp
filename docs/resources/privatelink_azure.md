@@ -103,9 +103,9 @@ resource "cloudamqp_privatelink_azure" "privatelink" {
 * `approved_subscriptions` - (Required) Approved subscriptions to access the endpoint service.
   See format below.
 * `sleep` - (Optional) Configurable sleep time (seconds) when enable PrivateLink.
-  Default set to 10 seconds.
+  Default set to 10 seconds. *Available from v1.29.0*
 * `timeout` - (Optional) Configurable timeout time (seconds) when enable PrivateLink.
-  Default set to 1800 seconds.
+  Default set to 1800 seconds. *Available from v1.29.0*
 
 Approved subscriptions format (GUID): <br>
 `XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX`
@@ -195,10 +195,3 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 ```
 
 </details>
-
-## Changelog
-
-List of changes made to this resource for different versions.
-
-[v1.29.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.0) added
-configurable retries when reading PrivateLink information.
