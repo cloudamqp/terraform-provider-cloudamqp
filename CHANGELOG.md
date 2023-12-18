@@ -2,7 +2,7 @@
 
 NOTES:
 
-* Updated the API wrapper (go-api) dependency with newer version (1.14.0)
+* Updated the API wrapper (go-api) dependency with newer version (1.15.0)
 
 FEATURES:
 
