@@ -9,8 +9,6 @@ description: |-
 
 Use this data source to retrieve information about installed and available plugins for the CloudAMQP instance.
 
-~> CloudAMQP Terraform provider [v1.10.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.10.0) there is support for multiple retries when requesting information about plugins. This was introduced to avoid `ReadPlugin error 400: Timeout talking to backend`.
-
 ## Example Usage
 
 ```hcl
@@ -29,6 +27,10 @@ All attributes reference are computed
 
 * `id`      - The identifier for this resource.
 * `plugins` - An array of plugins. Each `plugins` block consists of the fields documented below.
+* `sleep` - (Optional) Configurable sleep time (seconds) for retries when requesting information
+about plugins. Default set to 10 seconds. *Available from v1.29.0*
+* `timeout` - (Optional) - Configurable timeout time (seconds) for retries when requesting
+information about plugins. Default set to 1800 seconds. *Available from v1.29.0*
 
 ___
 

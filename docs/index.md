@@ -91,6 +91,7 @@ The following arguments are supported in the `provider` block:
                                       for resources that don't need to be cleaned up when the servers are deleted.
                                       The argument can also be read from the environment variable
                                       `CLOUDAMQP_ENABLE_FASTER_INSTANCE_DESTROY`, default set to false.
+                                      *Available from v1.27.0*
 
 ___
 

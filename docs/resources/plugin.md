@@ -108,6 +108,7 @@ resource "cloudamqp_plugin" "rabbitmq_amqp1_0" {
   enabled     = true
 }
 ```
+
 </details>
 
 ## Argument Reference
@@ -118,9 +119,9 @@ The following arguments are supported:
 * `name`        - (Required) The name of the Rabbit MQ plugin.
 * `enabled`     - (Required) Enable or disable the plugins.
 * `sleep` - (Optional) Configurable sleep time (seconds) for retries when requesting information
-about plugins. Default set to 10 seconds.
+about plugins. Default set to 10 seconds. *Available from v1.29.0*
 * `timeout` - (Optional) - Configurable timeout time (seconds) for retries when requesting
-information about plugins. Default set to 1800 seconds.
+information about plugins. Default set to 1800 seconds. *Available from v1.29.0*
 
 ## Attributes Reference
 
@@ -158,20 +159,3 @@ When running `terraform destroy` this resource will try to disable the managed p
 deleting `cloudamqp_instance`. This is not necessary since the servers will be deleted.
 
 Set `enable_faster_instance_destroy` to ***true*** in the provider configuration to skip this.
-
-## Changelog
-
-List of changes made to this resource for different versions.
-
-[v1.29.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.0) configurable
-sleep and timeout for multiple retries when requesting information about plugins.
-
-[v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) enables
-faster `cloudamqp_instance` destroy when running `terraform destroy`.
-
-[v1.19.2](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.19.2) support
-asynchronous request for plugin/community actions. Solve issues reported when enable multiple plugins.
-
-[v1.10.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.10.0) support
-for multiple retries when requesting information about plugins.
-This was introduced to avoid `ReadPlugin error 400: Timeout talking to backend`.
