@@ -12,12 +12,14 @@ FEATURES:
     - Handles AWS PrivateLink
     - Handles Azure PrivateLink
 * Add configurable retries for plugin resources ([#241](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/241))
+* Add configurable retry when reading PrivateLink information ([#246](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/246))
+* Add configurable retry for GCP VPC peering ([#247](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/247))
 
 IMPROVEMENTS:
 
 * Update and clean up samples ([#235](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/235))
 * Remove default RMQ version request when version left out ([#237](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/237))
-* Handle gone VPC resource
+* Handle gone VPC resource ([#238](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/238))
 
 ## 1.28.0 (Sep 27, 2023)
 
