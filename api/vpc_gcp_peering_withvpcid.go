@@ -5,131 +5,74 @@ package api
 import (
 	"fmt"
 	"log"
-	"strings"
-	"time"
 )
 
-func (api *API) waitForGcpPeeringStatusWithVpcId(vpcID, peerID string) error {
-	for {
-		time.Sleep(10 * time.Second)
-		data, err := api.ReadVpcGcpPeeringWithVpcId(vpcID, peerID)
-		if err != nil {
-			return err
-		}
-		rows := data["rows"].([]interface{})
-		if len(rows) > 0 {
-			for _, row := range rows {
-				tempRow := row.(map[string]interface{})
-				if tempRow["name"] != peerID {
-					continue
-				}
-				if tempRow["state"] == "ACTIVE" {
-					return nil
-				}
-			}
-		}
-	}
-}
-
+// RequestVpcGcpPeeringWithVpcId: requests a VPC peering from an instance.
 func (api *API) RequestVpcGcpPeeringWithVpcId(vpcID string, params map[string]interface{},
-	waitOnStatus bool) (map[string]interface{}, error) {
-	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
-		path   = fmt.Sprintf("api/vpcs/%s/vpc-peering", vpcID)
-	)
+	waitOnStatus bool, sleep, timeout int) (map[string]interface{}, error) {
 
-	log.Printf("[DEBUG] go-api::vpc_gcp_peering_withvpcid::request params: %v", params)
-	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
+	path := fmt.Sprintf("api/vpcs/%s/vpc-peering", vpcID)
+	attempt, data, err := api.requestVpcGcpPeeringWithRetry(path, params, waitOnStatus, 1, sleep, timeout)
 	if err != nil {
 		return nil, err
-	}
-	if response.StatusCode != 200 {
-		return nil, fmt.Errorf("request VPC peering failed, status: %v, message: %s", response.StatusCode, failed)
 	}
 
 	if waitOnStatus {
 		log.Printf("[DEBUG] go-api::vpc_gcp_peering_withvpcid::request waiting for active state")
-		api.waitForGcpPeeringStatusWithVpcId(vpcID, data["peering"].(string))
-	}
-	return data, nil
-}
-
-func (api *API) ReadVpcGcpPeeringWithVpcId(vpcID, peerID string) (map[string]interface{}, error) {
-	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
-		path   = fmt.Sprintf("/api/vpcs/%s/vpc-peering", vpcID)
-	)
-
-	log.Printf("[DEBUG] go-api::vpc_gcp_peering_withvpcid::read instance_id: %s, peer_id: %s", vpcID, peerID)
-	response, err := api.sling.New().Get(path).Receive(&data, &failed)
-	log.Printf("[DEBUG] go-api::vpc_gcp_peering_withvpcid::read data: %v", data)
-	if err != nil {
-		return nil, err
-	}
-	if response.StatusCode != 200 {
-		return nil, fmt.Errorf("ReadRequest failed, status: %v, message: %s", response.StatusCode, failed)
+		err = api.waitForGcpPeeringStatus(path, data["peering"].(string), attempt, sleep, timeout)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return data, nil
 }
 
-func (api *API) UpdateVpcGcpPeeringWithVpcId(vpcID, peerID string) (map[string]interface{}, error) {
-	return api.ReadVpcGcpPeeringWithVpcId(vpcID, peerID)
+// func (api *API) ReadVpcGcpPeering(instanceID, sleep, timeout int) (
+func (api *API) ReadVpcGcpPeeringWithVpcId(vpcID string, sleep, timeout int) (
+	map[string]interface{}, error) {
+
+	path := fmt.Sprintf("/api/vpcs/%s/vpc-peering", vpcID)
+	_, data, err := api.readVpcGcpPeeringWithRetry(path, 1, sleep, timeout)
+	return data, err
 }
 
+// UpdateVpcGcpPeeringWithVpcId: updates the VPC peering from the API
+func (api *API) UpdateVpcGcpPeeringWithVpcId(vpcID string, sleep, timeout int) (
+	map[string]interface{}, error) {
+
+	// NOP just read out the VPC peering
+	return api.ReadVpcGcpPeeringWithVpcId(vpcID, sleep, timeout)
+}
+
+// RemoveVpcGcpPeeringWithVpcId: removes the VPC peering from the API
 func (api *API) RemoveVpcGcpPeeringWithVpcId(vpcID, peerID string) error {
 	var (
 		failed map[string]interface{}
 		path   = fmt.Sprintf("/api/vpcs/%s/vpc-peering/%s", vpcID, peerID)
 	)
 
-	log.Printf("[DEBUG] go-api::vpc_gcp_peering_withvpcid::remove vpc id: %s, peering id: %s", vpcID, peerID)
+	log.Printf("[DEBUG] go-api::vpc_gcp_peering_withvpcid::remove vpc id: %s, peering id: %s",
+		vpcID, peerID)
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 	if err != nil {
 		return err
 	}
-	if response.StatusCode != 204 {
-		return fmt.Errorf("RemoveVpcPeering failed, status: %v, message: %s", response.StatusCode, failed)
+
+	switch response.StatusCode {
+	case 204:
+		return nil
+	default:
+		return fmt.Errorf("remove VPC peering failed, status: %v, message: %s",
+			response.StatusCode, failed)
 	}
-	return nil
 }
 
-func (api *API) ReadVpcGcpInfoWithVpcId(vpcID string) (map[string]interface{}, error) {
-	// Initiale values, 5 attempts and 20 second sleep
-	return api.readVpcGcpInfoWithRetryWithVpcId(vpcID, 5, 20)
-}
+// ReadVpcGcpInfoWithVpcId: reads the VPC info from the API
+func (api *API) ReadVpcGcpInfoWithVpcId(vpcID string, sleep, timeout int) (
+	map[string]interface{}, error) {
 
-func (api *API) readVpcGcpInfoWithRetryWithVpcId(vpcID string, attempts, sleep int) (map[string]interface{}, error) {
-	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
-		path   = fmt.Sprintf("/api/vpcs/%s/vpc-peering/info", vpcID)
-	)
-
-	log.Printf("[DEBUG] go-api::vpc_gcp_peering_withvpcid::info vpc id: %s", vpcID)
-	response, err := api.sling.New().Get(path).Receive(&data, &failed)
-	log.Printf("[DEBUG] go-api::vpc_gcp_peering_withvpcid::info data: %v", data)
-	if err != nil {
-		return nil, err
-	}
-
-	statusCode := response.StatusCode
-	log.Printf("[DEBUG] go-api::vpc_gcp_peering_withvpcid::info statusCode: %d", statusCode)
-	switch {
-	case statusCode == 400:
-		// Todo: Add error code to avoid using string comparison
-		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
-			if attempts--; attempts > 0 {
-				log.Printf("[INFO] go-api::vpc_gcp_peering_withvpcid::info Timeout talking to backend "+
-					"attempts left %d and retry in %d seconds", attempts, sleep)
-				time.Sleep(time.Duration(sleep) * time.Second)
-				return api.readVpcGcpInfoWithRetryWithVpcId(vpcID, attempts, 2*sleep)
-			} else {
-				return nil, fmt.Errorf("ReadInfo failed, status: %v, message: %s", response.StatusCode, failed)
-			}
-		}
-	}
-	return data, nil
+	path := fmt.Sprintf("/api/vpcs/%s/vpc-peering/info", vpcID)
+	_, data, err := api.readVpcGcpPeeringWithRetry(path, 1, sleep, timeout)
+	return data, err
 }
