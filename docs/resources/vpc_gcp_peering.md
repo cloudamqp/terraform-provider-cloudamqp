@@ -10,6 +10,7 @@ description: |-
 This resouce creates a VPC peering configuration for the CloudAMQP instance. The configuration will connect to another VPC network hosted on Google Cloud Platform (GCP). See the [GCP documentation](https://cloud.google.com/vpc/docs/using-vpc-peering) for more information on how to create the VPC peering configuration.
 
 ~> **Note:** Creating a VPC peering will automatically add firewall rules for the peered subnet.
+
 <details>
  <summary>
     <i>Default VPC peering firewall rule</i>
@@ -23,6 +24,7 @@ rules {
   services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL"]
 }
 ```
+
 </details>
 
 Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html).
@@ -64,6 +66,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
   peer_network_uri = "https://www.googleapis.com/compute/v1/projects/<PROJECT-NAME>/global/networks/<NETWORK-NAME>"
 }
 ```
+
 </details>
 
 <details>
@@ -111,6 +114,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
   peer_network_uri = "https://www.googleapis.com/compute/v1/projects/<PROJECT-NAME>/global/networks/<NETWORK-NAME>"
 }
 ```
+
 </details>
 
 <details>
@@ -121,6 +125,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
   </summary>
 
 Default peering request, no need to set `wait_on_peering_status`. It's default set to false and will not wait on peering status.
+
 ```hcl
 resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
   vpc_id = cloudamqp_vpc.vpc.id
@@ -129,6 +134,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 ```
 
 Peering request and waiting for peering status.
+
 ```hcl
 resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
   vpc_id = cloudamqp_vpc.vpc.id
@@ -143,19 +149,20 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 
  *Note: this resource require either `instance_id` or `vpc_id` from v1.16.0*
 
-* `instance_id` - (Optional) The CloudAMQP instance identifier.
+* `instance_id` - (Optional) The CloudAMQP instance identifier. *Deprecated from v1.16.0*
 
- ***Depreacted: Changed from required to optional in v1.16.0, will be removed in next major version (v2.0)***
-
-* `vpc_id` - (Optional) The managed VPC identifier.
-
- ***Note: Added as optional in version v1.16.0, will be required in next major version (v2.0)***
+* `vpc_id` - (Optional) The managed VPC identifier. *Available from v1.16.0*
 
 * `peer_network_uri`- (Required) Network uri of the VPC network to which you will peer with.
 
 * `wait_on_peering_status` - (Optional) Makes the resource wait until the peering is connected.
+Default set to false. *Available from v1.28.0*
 
- ***Note: Added as optional in version v1.28.0. Default set to false and will not wait until the peering is done from both VPCs***
+* `sleep` - (Optional) Configurable sleep time (seconds) between retries when requesting or reading
+peering. Default set to 10 seconds. *Available from v1.29.0*
+
+* `timeout` - (Optional) - Configurable timeout time (seconds) before retries times out. Default set
+to 1800 seconds. *Available from v1.29.0*
 
 ## Attributes Reference
 
@@ -226,6 +233,7 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   ]
 }
 ```
+
 </details>
 
 <details>
@@ -268,4 +276,5 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   ]
 }
 ```
+
 </details>
