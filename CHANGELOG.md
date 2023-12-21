@@ -1,3 +1,9 @@
+## 1.29.1 (Dec 21, 2023)
+
+BUG FIXES:
+
+* Fix PrivateLink/Private Service Connect import ([#250](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/250))
+
 ## 1.29.0 (Dec 18, 2023)
 
 NOTES:
