@@ -106,6 +106,17 @@ func resourcePrivateLinkAwsRead(d *schema.ResourceData, meta interface{}) error 
 		timeout       = d.Get("timeout").(int)
 	)
 
+	// Set arguments during import
+	if d.Get("instance_id").(int) == 0 {
+		d.Set("instance_id", instanceID)
+	}
+	if sleep == 0 && timeout == 0 {
+		sleep = 10
+		d.Set("sleep", 10)
+		timeout = 1800
+		d.Set("timeout", 1800)
+	}
+
 	data, err := api.ReadPrivatelink(instanceID, sleep, timeout)
 	if err != nil {
 		return err

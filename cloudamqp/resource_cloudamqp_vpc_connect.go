@@ -159,6 +159,15 @@ func resourceVpcConnectRead(d *schema.ResourceData, meta interface{}) error {
 		instanceID, _ = strconv.Atoi(d.Id()) // Uses d.Id() to allow import
 	)
 
+	// Set arguments during import
+	if d.Get("instance_id").(int) == 0 {
+		d.Set("instance_id", instanceID)
+	}
+	if d.Get("sleep").(int) == 0 && d.Get("timeout").(int) == 0 {
+		d.Set("sleep", 10)
+		d.Set("timeout", 3600)
+	}
+
 	data, err := api.ReadVpcConnect(instanceID)
 	if err != nil {
 		return err
