@@ -114,7 +114,7 @@ Approved subscriptions format (GUID): <br>
 
 All attributes reference are computed
 
-* `id`  - The identifier for this resource.
+* `id`  - The identifier for this resource. Will be same as `instance_id`
 * `status`- PrivateLink status [enable, pending, disable]
 * `service_name` - Service name (alias) of the PrivateLink, needed when creating the endpoint.
 * `server_name` - Name of the server having the PrivateLink enabled.
@@ -128,6 +128,8 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 `cloudamqp_privatelink_aws` can be imported using CloudAMQP internal identifier.
 
 `terraform import cloudamqp_privatelink_aws.privatelink <id>`
+
+The resource uses the same identifier as the CloudAMQP instance. To retrieve the identifier for an instance, either use [CloudAMQP customer API](https://docs.cloudamqp.com/#list-instances) or use the data source [`cloudamqp_account`](./data-sources/account.md).
 
 ## Create PrivateLink with additional firewall rules
 
@@ -175,7 +177,7 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   instance_id = cloudamqp_instance.instance.id
 
   rules {
-    Description = "Custom PrivateLink setup"
+    description = "Custom PrivateLink setup"
     ip          = cloudamqp_vpc.vpc.subnet
     ports       = []
     services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL"]

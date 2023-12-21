@@ -210,8 +210,7 @@ All attributes reference are computed
 
 `terraform import cloudamqp_instance.instance <id>`
 
-To retrieve the identifier for a VPC, either use [CloudAMQP customer API](https://docs.cloudamqp.com/#list-instances).
-Or use the data source [`cloudamqp_account`](./data-sources/account.md) to list all available instances for an account.
+To retrieve the identifier for an instance, either use [CloudAMQP customer API](https://docs.cloudamqp.com/#list-instances) or use the data source [`cloudamqp_account`](./data-sources/account.md) to list all available instances for an account.
 
 ## Upgrade and downgrade
 
