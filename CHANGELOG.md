@@ -1,3 +1,9 @@
+## 1.29.2 (Unreleased)
+
+IMPROVEMENTS:
+
+* Added support for the Coralogix log integration ([#253](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/253))
+
 ## 1.29.1 (Dec 21, 2023)
 
 BUG FIXES:
