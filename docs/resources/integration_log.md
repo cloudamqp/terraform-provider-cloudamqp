@@ -29,6 +29,7 @@ resource "cloudamqp_integration_log" "cloudwatch" {
   region = var.aws_region
 }
 ```
+
 </details>
 
 <details>
@@ -45,6 +46,7 @@ resource "cloudamqp_integration_log" "logentries" {
   token = var.logentries_token
 }
 ```
+
 </details>
 
 <details>
@@ -77,6 +79,7 @@ resource "cloudamqp_integration_log" "papertrail" {
   url = var.papertrail_url
 }
 ```
+
 </details>
 
 <details>
@@ -95,6 +98,7 @@ resource "cloudamqp_integration_log" "splunk" {
   source_type = "generic_single_line"
 }
 ```
+
 </details>
 
 <details>
@@ -113,6 +117,7 @@ resource "cloudamqp_integration_log" "datadog" {
   tags = var.datadog_tags
 }
 ```
+
 </details>
 
 <details>
@@ -155,6 +160,7 @@ resource "cloudamqp_integration_log" "stackdriver" {
   client_email = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).client_email
 }
 ```
+
 </details>
 
 <details>
@@ -205,6 +211,7 @@ resource "cloudamqp_integration_log" "stackdriver" {
   client_email = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).client_email
 }
 ```
+
 </details>
 
 <details>
@@ -222,6 +229,27 @@ resource "cloudamqp_integration_log" "scalyr" {
   host = var.scalyr_host
 }
 ```
+
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>Coralogix log integration</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_integration_log" "coralogix" {
+  instance_id = cloudamqp_instance.instance.id
+  name        = "coralogix"
+  private_key = var.coralogix_send_data_key
+  endpoint    = var.coralogix_endpoint
+  application = var.coralogix_application
+  subsystem   = cloudamqp_instance.instance.host
+}
+```
+
 </details>
 
 ## Argument Reference
@@ -243,6 +271,9 @@ The following arguments are supported:
 * `client_email`      - (Optional/Computed) The client email registered for the integration service.
 * `host`              - (Optional) The host for Scalyr integration. (app.scalyr.com, app.eu.scalyr.com)
 * `sourcetype`        - (Optional) Assign source type to the data exported, eg. generic_single_line. (Splunk)
+* `endpoint`          - (Optional) The syslog destination to send the logs to for Coralogix. See endpoint [documentations](https://coralogix.com/docs/coralogix-endpoints/).
+* `application`       - (Optional) The application name for Coralogix. See application [documentations](https://coralogix.com/docs/application-and-subsystem-names/)
+* `subsystem`         - (Optional) The subsystem name for Coralogix. See application [documentations](https://coralogix.com/docs/application-and-subsystem-names/)
 
 This is the full list of all arguments. Only a subset of arguments are used based on which type of integration used. See [Integration Type reference](#integration-type-reference) table below for more information.
 
@@ -270,6 +301,7 @@ Valid names for third party log integration.
 | datadog       | Create a Datadog API key at app.datadoghq.com |
 | stackdriver   | Create a service account and add 'monitor metrics writer' role from your Google Cloud Account |
 | scalyr        | Create a Log write token at https://app.scalyr.com/keys |
+| coralogix     | Create Send-Your-Data API key https://coralogix.com/docs/send-your-data-api-key/ |
 
 ## Integration Type reference
 
@@ -287,6 +319,7 @@ Required arguments for all integrations: name
 | Data Dog | datadog | region, api_keys, tags |
 | Stackdriver | stackdriver | credentials |
 | Scalyr | scalyr | token, host |
+| Coralogix | coralogix | private_key, endpoint, application, subsystem |
 
 ***Note:*** Stackdriver (v1.20.2 or earlier versions) required arguments  : project_id, private_key, client_email
 

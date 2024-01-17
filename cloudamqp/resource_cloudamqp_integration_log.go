@@ -90,7 +90,7 @@ func resourceIntegrationLog() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				Sensitive:   true,
-				Description: "The private key. (Stackdriver)",
+				Description: "The private API key used for authentication. (Stackdriver, Coralogix)",
 			},
 			"client_email": {
 				Type:        schema.TypeString,
@@ -121,6 +121,21 @@ func resourceIntegrationLog() *schema.Resource {
 				Optional:    true,
 				Sensitive:   true,
 				Description: "Base64Encoded credentials. (Stackdriver)",
+			},
+			"endpoint": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The syslog destination to send the logs to. (Coralogix)",
+			},
+			"application": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The 'Application Name'. (Coralogix)",
+			},
+			"subsystem": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The 'Subsystem Name'. (Coralogix)",
 			},
 		},
 	}
@@ -252,6 +267,7 @@ func validateIntegrationLogName() schema.SchemaValidateFunc {
 		"datadog",
 		"stackdriver",
 		"scalyr",
+		"coralogix",
 	}, true)
 }
 
@@ -277,7 +293,10 @@ func validateIntegrationLogsSchemaAttribute(key string) bool {
 		"private_key",
 		"private_key_id",
 		"host",
-		"sourcetype":
+		"sourcetype",
+		"endpoint",
+		"application",
+		"subsystem":
 		return true
 	}
 	return false
@@ -301,6 +320,8 @@ func integrationLogKeys(intName string) []string {
 		return []string{"client_email", "private_key_id", "private_key", "project_id"}
 	case "scalyr":
 		return []string{"token", "host"}
+	case "coralogix":
+		return []string{"private_key", "endpoint", "application", "subsystem"}
 	default:
 		return []string{"url", "host_port", "token", "region", "access_key_id", "secret_access_key"}
 	}
