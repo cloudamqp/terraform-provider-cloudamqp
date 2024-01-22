@@ -7,7 +7,8 @@ description: |-
 
 # cloudamqp_integration_log
 
-This resource allows you to create and manage third party log integrations for a CloudAMQP instance. Once configured, the logs produced will be forward to corresponding integration.
+This resource allows you to create and manage third party log integrations for a CloudAMQP instance.
+Once configured, the logs produced will be forward to corresponding integration.
 
 Only available for dedicated subscription plans.
 
@@ -252,11 +253,34 @@ resource "cloudamqp_integration_log" "coralogix" {
 
 </details>
 
+<details>
+  <summary>
+    <b>
+      <i>Azure monitor log integration</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_integration_log" "azure_monitor" {
+  instance_id = cloudamqp_instance.instance.id
+  name        = "azure_monitor"
+  tenant_id = var.azm_tentant_id
+  application_id = var.azm_application_id
+  application_secret = var.azm_application_secret
+  dce_uri = var.azm_dce_uri
+  table = var.azm_table
+  dcr_id = var.azm_dcr_id
+}
+```
+
+</details>
+
 ## Argument Reference
 
 The following arguments are supported:
 
-* `name`              - (Required) The name of the third party log integration. See
+* `name`              - (Required) The name of the third party log integration. See [Integration service reference](#integration-service-reference)
+
 * `url`               - (Optional) Endpoint to log integration.
 * `host_port`         - (Optional) Destination to send the logs.
 * `token`             - (Optional) Token used for authentication.
@@ -289,19 +313,20 @@ Cloudwatch argument reference and example. Create an IAM user with programmatic 
 
 ## Integration service reference
 
-Valid names for third party log integration.
+Valid names for third party log integration. TODO! Point to docs.cloudamqp.com?
 
 | Name       | Description |
 |------------|---------------------------------------------------------------|
+| azure_monitor | TODO! |
 | cloudwatchlog | Create a IAM with programmatic access. |
-| logentries | Create a Logentries token at https://logentries.com/app#/add-log/manual  |
-| loggly     | Create a Loggly token at https://your-company}.loggly.com/tokens |
-| papertrail | Create a Papertrail endpoint https://papertrailapp.com/systems/setup |
-| splunk     | Create a HTTP Event Collector token at `https://<your-splunk>.cloud.splunk.com/en-US/manager/search/http-eventcollector` |
-| datadog       | Create a Datadog API key at app.datadoghq.com |
-| stackdriver   | Create a service account and add 'monitor metrics writer' role from your Google Cloud Account |
-| scalyr        | Create a Log write token at https://app.scalyr.com/keys |
 | coralogix     | Create Send-Your-Data API key https://coralogix.com/docs/send-your-data-api-key/ |
+| datadog       | Create a Datadog API key at app.datadoghq.com |
+| logentries | Create a Logentries token at https://logentries.com/app#/add-log/manual  |
+| loggly     | Create a Loggly token at https://<your-company>.loggly.com/tokens |
+| papertrail | Create a Papertrail endpoint https://papertrailapp.com/systems/setup |
+| scalyr        | Create a Log write token at https://app.scalyr.com/keys |
+| splunk     | Create a HTTP Event Collector token at `https://<your-splunk>.cloud.splunk.com/en-US/manager/search/http-eventcollector` |
+| stackdriver   | Create a service account and add 'monitor metrics writer' role from your Google Cloud Account |
 
 ## Integration Type reference
 
@@ -311,15 +336,16 @@ Required arguments for all integrations: name
 
 | Name | Type | Required arguments |
 | ---- | ---- | ---- |
+| Azure monitor | azure_monitor | tenant_id, application_id, application_secret, dce_uri, table, dcr_id |
 | CloudWatch | cloudwatchlog | access_key_id, secret_access_key, region |
+| Coralogix | coralogix | private_key, endpoint, application, subsystem |
+| Data Dog | datadog | region, api_keys, tags |
 | Log Entries | logentries | token |
 | Loggly | loggly | token |
 | Papertrail | papertrail | url |
-| Splunk | splunk | token, host_port, sourcetype |
-| Data Dog | datadog | region, api_keys, tags |
-| Stackdriver | stackdriver | credentials |
 | Scalyr | scalyr | token, host |
-| Coralogix | coralogix | private_key, endpoint, application, subsystem |
+| Splunk | splunk | token, host_port, sourcetype |
+| Stackdriver | stackdriver | credentials |
 
 ***Note:*** Stackdriver (v1.20.2 or earlier versions) required arguments  : project_id, private_key, client_email
 
