@@ -7,11 +7,18 @@ description: |-
 
 # cloudamqp_notification
 
-This resource allows you to create and manage recipients to receive alarm notifications. There will always be a default recipient created upon instance creation. This recipient will use team email and receive notifications from default alarms.
+This resource allows you to create and manage recipients to receive alarm notifications. There will
+always be a default recipient created upon instance creation. This recipient will use team email and
+receive notifications from default alarms.
 
 Available for all subscription plans.
 
 ## Example Usage
+
+<details>
+  <summary>
+    <b>Email recipient</b>
+  </summary>
 
 ```hcl
 # New recipient to receieve notifications
@@ -21,7 +28,16 @@ resource "cloudamqp_notification" "email_recipient" {
   value       = "alarm@example.com"
   name        = "alarm"
 }
+```
 
+</details>
+
+<details>
+  <summary>
+    <b>Victorops recipient</b>
+  </summary>
+
+```hcl
 resource "cloudamqp_notification" "victorops_recipient" {
   instance_id = cloudamqp_instance.instance.id
   type        = "victorops"
@@ -31,7 +47,16 @@ resource "cloudamqp_notification" "victorops_recipient" {
     "rk" = "ROUTINGKEY"
   }
 }
+```
 
+</details>
+
+<details>
+  <summary>
+    <b>Pagerduty recipient</b>
+  </summary>
+
+```hcl
 resource "cloudamqp_notification" "pagerduty_recipient" {
   instance_id = cloudamqp_instance.instance.id
   type        = "pagerduty"
@@ -42,6 +67,24 @@ resource "cloudamqp_notification" "pagerduty_recipient" {
   }
 }
 ```
+
+</details>
+
+<details>
+  <summary>
+    <b>Signl4 recipient</b>
+  </summary>
+
+```hcl
+resource "cloudamqp_notification" "pagerduty_recipient" {
+  instance_id = cloudamqp_instance.instance.id
+  type        = "signl4"
+  value       = "<team-secret>"
+  name        = "Signl4"
+}
+```
+
+</details>
 
 ## Argument Reference
 
@@ -64,20 +107,25 @@ All attributes reference are computed
 Valid options for notification type.
 
 * email
-* webhook
-* pagerduty
-* victorops
 * opsgenie
 * opsgenie-eu
+* pagerduty
+* signl4
 * slack
 * teams
+* victorops
+* webhook
 
 ## Options parameter
 
-| Type      | Options  | Description                                                                                                                                                                                                                                                                      | Note                                                                                                                                    |
-|-----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| Victorops | rk       | Routing key to route alarm notification                                                                                                                                                                                                                                          | -                                                                                                                                        |
-| PagerDuty | dedupkey | Default the dedup key for PagerDuty is generated depending on what alarm has triggered, but here you can set what `dedup` key to use so even if the same alarm is triggered for different resources you only get one notification. Leave blank to use the generated dedup key. | If multiple alarms are triggered using this recipient, since they all share `dedup` key only the first alarm will be shown in PagerDuty |
+| Type      | Options  | Description | Note |
+|---|---|---|---|
+| Victorops | rk       | Routing key to route alarm notification | - |
+| PagerDuty | dedupkey | Default the dedup key for PagerDuty is generated depending on what alarm
+has triggered, but here you can set what `dedup` key to use so even if the same alarm is triggered
+for different resources you only get one notification. Leave blank to use the generated dedup key.
+| If multiple alarms are triggered using this recipient, since they all share `dedup` key only the
+first alarm will be shown in PagerDuty |
 
 ## Dependency
 
@@ -85,6 +133,8 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-`cloudamqp_notification` can be imported using CloudAMQP internal identifier of a recipient together (CSV separated) with the instance identifier. To retrieve the identifier of a recipient, use [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-notification-recipients)
+`cloudamqp_notification` can be imported using CloudAMQP internal identifier of a recipient together
+(CSV separated) with the instance identifier. To retrieve the identifier of a recipient, use
+[CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-notification-recipients)
 
 `terraform import cloudamqp_notification.recipient <id>,<instance_id>`
