@@ -21,31 +21,11 @@ Available for all subscription plans.
   </summary>
 
 ```hcl
-# New recipient to receieve notifications
 resource "cloudamqp_notification" "email_recipient" {
   instance_id = cloudamqp_instance.instance.id
   type        = "email"
   value       = "alarm@example.com"
   name        = "alarm"
-}
-```
-
-</details>
-
-<details>
-  <summary>
-    <b>Victorops recipient</b>
-  </summary>
-
-```hcl
-resource "cloudamqp_notification" "victorops_recipient" {
-  instance_id = cloudamqp_instance.instance.id
-  type        = "victorops"
-  value       = "<UUID>"
-  name        = "Victorops"
-  options     = {
-    "rk" = "ROUTINGKEY"
-  }
 }
 ```
 
@@ -76,11 +56,30 @@ resource "cloudamqp_notification" "pagerduty_recipient" {
   </summary>
 
 ```hcl
-resource "cloudamqp_notification" "pagerduty_recipient" {
+resource "cloudamqp_notification" "signl4_recipient" {
   instance_id = cloudamqp_instance.instance.id
   type        = "signl4"
   value       = "<team-secret>"
   name        = "Signl4"
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>Victorops recipient</b>
+  </summary>
+
+```hcl
+resource "cloudamqp_notification" "victorops_recipient" {
+  instance_id = cloudamqp_instance.instance.id
+  type        = "victorops"
+  value       = "<UUID>"
+  name        = "Victorops"
+  options     = {
+    "rk" = "ROUTINGKEY"
+  }
 }
 ```
 
