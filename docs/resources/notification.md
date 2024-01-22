@@ -33,6 +33,22 @@ resource "cloudamqp_notification" "email_recipient" {
 
 <details>
   <summary>
+    <b>OpsGenie recipient</b>
+  </summary>
+
+```hcl
+resource "cloudamqp_notification" "opsgenie_recipient" {
+  instance_id = cloudamqp_instance.instance.id
+  type        = "opsgenie" # or "opsgenie-eu"
+  value       = "<api-key>"
+  name        = "OpsGenie"
+}
+```
+
+</details>
+
+<details>
+  <summary>
     <b>Pagerduty recipient</b>
   </summary>
 
@@ -68,6 +84,22 @@ resource "cloudamqp_notification" "signl4_recipient" {
 
 <details>
   <summary>
+    <b>Teams recipient</b>
+  </summary>
+
+```hcl
+resource "cloudamqp_notification" "teams_recipient" {
+  instance_id = cloudamqp_instance.instance.id
+  type        = "teams"
+  value       = "<teams-webhook-url>"
+  name        = "Teams"
+}
+```
+
+</details>
+
+<details>
+  <summary>
     <b>Victorops recipient</b>
   </summary>
 
@@ -75,11 +107,27 @@ resource "cloudamqp_notification" "signl4_recipient" {
 resource "cloudamqp_notification" "victorops_recipient" {
   instance_id = cloudamqp_instance.instance.id
   type        = "victorops"
-  value       = "<UUID>"
+  value       = "<integration-key>"
   name        = "Victorops"
   options     = {
     "rk" = "ROUTINGKEY"
   }
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>Webhook recipient</b>
+  </summary>
+
+```hcl
+resource "cloudamqp_notification" "webhook_recipient" {
+  instance_id = cloudamqp_instance.instance.id
+  type        = "webhook"
+  value       = "<webhook-url>"
+  name        = "Webhook"
 }
 ```
 
