@@ -137,6 +137,37 @@ func resourceIntegrationLog() *schema.Resource {
 				Optional:    true,
 				Description: "The 'Subsystem Name'. (Coralogix)",
 			},
+			"tenant_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The tenant ID. (Azure Monitor)",
+			},
+			"application_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The application ID. (Azure Monitor)",
+			},
+			"application_secret": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Sensitive:   true,
+				Description: "The application secret. (Azure Monitor)",
+			},
+			"dce_uri": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The DCE URI. (Azure Monitor)",
+			},
+			"table": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The table name. (Azure Monitor)",
+			},
+			"dcr_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The DCR ID. (Azure Monitor)",
+			},
 		},
 	}
 }
@@ -259,15 +290,16 @@ func resourceIntegrationLogDelete(d *schema.ResourceData, meta interface{}) erro
 
 func validateIntegrationLogName() schema.SchemaValidateFunc {
 	return validation.StringInSlice([]string{
-		"papertrail",
-		"loggly",
-		"logentries",
-		"splunk",
+		"azure_monitor",
 		"cloudwatchlog",
-		"datadog",
-		"stackdriver",
-		"scalyr",
 		"coralogix",
+		"datadog",
+		"logentries",
+		"loggly",
+		"papertrail",
+		"scalyr",
+		"splunk",
+		"stackdriver",
 	}, true)
 }
 
@@ -280,23 +312,29 @@ func validateIntegrationLogScalyrHost() schema.SchemaValidateFunc {
 
 func validateIntegrationLogsSchemaAttribute(key string) bool {
 	switch key {
-	case "url",
-		"host_port",
-		"token",
-		"region",
-		"access_key_id",
-		"secret_access_key",
+	case "access_key_id",
 		"api_key",
-		"tags",
-		"project_id",
+		"application",
+		"application_id",
+		"application_secret",
 		"client_email",
+		"dce_uri",
+		"dcr_id",
+		"endpoint",
+		"host",
+		"host_port",
 		"private_key",
 		"private_key_id",
-		"host",
+		"project_id",
+		"region",
+		"secret_access_key",
 		"sourcetype",
-		"endpoint",
-		"application",
-		"subsystem":
+		"subsystem",
+		"table",
+		"tags",
+		"tenant_id",
+		"token",
+		"url":
 		return true
 	}
 	return false
@@ -304,24 +342,26 @@ func validateIntegrationLogsSchemaAttribute(key string) bool {
 
 func integrationLogKeys(intName string) []string {
 	switch intName {
-	case "papertrail":
-		return []string{"url"}
-	case "loggly":
-		return []string{"token"}
-	case "logentries":
-		return []string{"token"}
-	case "splunk":
-		return []string{"host_port", "token", "sourcetype"}
+	case "azure_monitor":
+		return []string{"tenant_id", "application_id", "application_secret", "dce_uri", "table", "dcr_id"}
 	case "cloudwatchlog":
 		return []string{"region", "access_key_id", "secret_access_key"}
-	case "datadog":
-		return []string{"region", "api_key", "tags"}
-	case "stackdriver":
-		return []string{"client_email", "private_key_id", "private_key", "project_id"}
-	case "scalyr":
-		return []string{"token", "host"}
 	case "coralogix":
 		return []string{"private_key", "endpoint", "application", "subsystem"}
+	case "datadog":
+		return []string{"region", "api_key", "tags"}
+	case "logentries":
+		return []string{"token"}
+	case "loggly":
+		return []string{"token"}
+	case "papertrail":
+		return []string{"url"}
+	case "scalyr":
+		return []string{"token", "host"}
+	case "splunk":
+		return []string{"host_port", "token", "sourcetype"}
+	case "stackdriver":
+		return []string{"client_email", "private_key_id", "private_key", "project_id"}
 	default:
 		return []string{"url", "host_port", "token", "region", "access_key_id", "secret_access_key"}
 	}
