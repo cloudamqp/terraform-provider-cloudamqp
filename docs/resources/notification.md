@@ -121,11 +121,7 @@ Valid options for notification type.
 | Type      | Options  | Description | Note |
 |---|---|---|---|
 | Victorops | rk       | Routing key to route alarm notification | - |
-| PagerDuty | dedupkey | Default the dedup key for PagerDuty is generated depending on what alarm
-has triggered, but here you can set what `dedup` key to use so even if the same alarm is triggered
-for different resources you only get one notification. Leave blank to use the generated dedup key.
-| If multiple alarms are triggered using this recipient, since they all share `dedup` key only the
-first alarm will be shown in PagerDuty |
+| PagerDuty | dedupkey | Default the dedup key for PagerDuty is generated depending on what alarm has triggered, but here you can set what `dedup` key to use so even if the same alarm is triggered for different resources you only get one notification. Leave blank to use the generated dedup key. | If multiple alarms are triggered using this recipient, since they all share `dedup` key only the first alarm will be shown in PagerDuty |
 
 ## Dependency
 
