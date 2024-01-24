@@ -279,7 +279,8 @@ resource "cloudamqp_integration_log" "stackdriver" {
 
 The following arguments are supported:
 
-* `name`              - (Required) The name of the third party log integration. See [Integration service reference](#integration-service-reference)
+* `name`              - (Required) The name of the third party log integration. See
+[Integration type reference](#integration-type-reference)
 
 * `url`               - (Optional) Endpoint to log integration.
 * `host_port`         - (Optional) Destination to send the logs.
@@ -295,46 +296,19 @@ The following arguments are supported:
 * `client_email`      - (Optional/Computed) The client email registered for the integration service.
 * `host`              - (Optional) The host for Scalyr integration. (app.scalyr.com, app.eu.scalyr.com)
 * `sourcetype`        - (Optional) Assign source type to the data exported, eg. generic_single_line. (Splunk)
-* `endpoint`          - (Optional) The syslog destination to send the logs to for Coralogix. See endpoint [documentations](https://coralogix.com/docs/coralogix-endpoints/).
-* `application`       - (Optional) The application name for Coralogix. See application [documentations](https://coralogix.com/docs/application-and-subsystem-names/)
-* `subsystem`         - (Optional) The subsystem name for Coralogix. See application [documentations](https://coralogix.com/docs/application-and-subsystem-names/)
+* `endpoint`          - (Optional) The syslog destination to send the logs to for Coralogix.
+* `application`       - (Optional) The application name for Coralogix.
+* `subsystem`         - (Optional) The subsystem name for Coralogix.
 
 This is the full list of all arguments. Only a subset of arguments are used based on which type of integration used. See [Integration Type reference](#integration-type-reference) table below for more information.
 
-## Argument Reference (cloudwatchlog)
-
-Cloudwatch argument reference and example. Create an IAM user with programmatic access and the following permissions:
-
-* CreateLogGroup
-* CreateLogStream
-* DescribeLogGroups
-* DescribeLogStreams
-* PutLogEvents
-
-## Integration service reference
-
-Valid names for third party log integration. TODO! Point to docs.cloudamqp.com?
-
-| Name       | Description |
-|------------|---------------------------------------------------------------|
-| azure_monitor | TODO! |
-| cloudwatchlog | Create a IAM with programmatic access. |
-| coralogix     | Create Send-Your-Data API key https://coralogix.com/docs/send-your-data-api-key/ |
-| datadog       | Create a Datadog API key at app.datadoghq.com |
-| logentries | Create a Logentries token at https://logentries.com/app#/add-log/manual  |
-| loggly     | Create a Loggly token at https://<your-company>.loggly.com/tokens |
-| papertrail | Create a Papertrail endpoint https://papertrailapp.com/systems/setup |
-| scalyr        | Create a Log write token at https://app.scalyr.com/keys |
-| splunk     | Create a HTTP Event Collector token at `https://<your-splunk>.cloud.splunk.com/en-US/manager/search/http-eventcollector` |
-| stackdriver   | Create a service account and add 'monitor metrics writer' role from your Google Cloud Account |
-
 ## Integration Type reference
 
-Valid arguments for third party log integrations.
+Valid arguments for third party log integrations. See more information at [docs.cloudamqp.com](https://docs.cloudamqp.com/cloudamqp_api.html#add-log-integration)
 
 Required arguments for all integrations: name
 
-| Name | Type | Required arguments |
+| Integration | name | Required arguments |
 | ---- | ---- | ---- |
 | Azure monitor | azure_monitor | tenant_id, application_id, application_secret, dce_uri, table, dcr_id |
 | CloudWatch | cloudwatchlog | access_key_id, secret_access_key, region |
