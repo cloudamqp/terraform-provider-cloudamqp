@@ -17,6 +17,28 @@ Only available for dedicated subscription plans.
 <details>
   <summary>
     <b>
+      <i>Azure monitor log integration</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_integration_log" "azure_monitor" {
+  instance_id = cloudamqp_instance.instance.id
+  name        = "azure_monitor"
+  tenant_id = var.azm_tentant_id
+  application_id = var.azm_application_id
+  application_secret = var.azm_application_secret
+  dce_uri = var.azm_dce_uri
+  table = var.azm_table
+  dcr_id = var.azm_dcr_id
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
       <i>Cloudwatch log integration</i>
     </b>
   </summary>
@@ -28,6 +50,45 @@ resource "cloudamqp_integration_log" "cloudwatch" {
   access_key_id = var.aws_access_key_id
   secret_access_key = var.aws_secret_access_key
   region = var.aws_region
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>Coralogix log integration</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_integration_log" "coralogix" {
+  instance_id = cloudamqp_instance.instance.id
+  name        = "coralogix"
+  private_key = var.coralogix_send_data_key
+  endpoint    = var.coralogix_endpoint
+  application = var.coralogix_application
+  subsystem   = cloudamqp_instance.instance.host
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>Datadog log integration</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_integration_log" "datadog" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "datadog"
+  region = var.datadog_region
+  api_key = var.datadog_api_key
+  tags = var.datadog_tags
 }
 ```
 
@@ -86,6 +147,22 @@ resource "cloudamqp_integration_log" "papertrail" {
 <details>
   <summary>
     <b>
+      <i>Scalyr log integration</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_integration_log" "scalyr" {
+  instance_id = cloudamqp_instance.instance.id
+  name = "scalyr"
+  token = var.scalyr_token
+  host = var.scalyr_host
+}
+```
+
+<details>
+  <summary>
+    <b>
       <i>Splunk log integration</i>
     </b>
   </summary>
@@ -102,29 +179,12 @@ resource "cloudamqp_integration_log" "splunk" {
 
 </details>
 
-<details>
-  <summary>
-    <b>
-      <i>Datadog log integration</i>
-    </b>
-  </summary>
-
-```hcl
-resource "cloudamqp_integration_log" "datadog" {
-  instance_id = cloudamqp_instance.instance.id
-  name = "datadog"
-  region = var.datadog_region
-  api_key = var.datadog_api_key
-  tags = var.datadog_tags
-}
-```
-
 </details>
 
 <details>
   <summary>
     <b>
-      <i>Stackdriver log integration (v1.20.2 or earlier versions)</i>
+      <i>Stackdriver log integration (v1.20.2 or older versions)</i>
     </b>
   </summary>
 
@@ -210,66 +270,6 @@ resource "cloudamqp_integration_log" "stackdriver" {
   project_id = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).project_id
   private_key = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).private_key
   client_email = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).client_email
-}
-```
-
-</details>
-
-<details>
-  <summary>
-    <b>
-      <i>Scalyr log integration</i>
-    </b>
-  </summary>
-
-```hcl
-resource "cloudamqp_integration_log" "scalyr" {
-  instance_id = cloudamqp_instance.instance.id
-  name = "scalyr"
-  token = var.scalyr_token
-  host = var.scalyr_host
-}
-```
-
-</details>
-
-<details>
-  <summary>
-    <b>
-      <i>Coralogix log integration</i>
-    </b>
-  </summary>
-
-```hcl
-resource "cloudamqp_integration_log" "coralogix" {
-  instance_id = cloudamqp_instance.instance.id
-  name        = "coralogix"
-  private_key = var.coralogix_send_data_key
-  endpoint    = var.coralogix_endpoint
-  application = var.coralogix_application
-  subsystem   = cloudamqp_instance.instance.host
-}
-```
-
-</details>
-
-<details>
-  <summary>
-    <b>
-      <i>Azure monitor log integration</i>
-    </b>
-  </summary>
-
-```hcl
-resource "cloudamqp_integration_log" "azure_monitor" {
-  instance_id = cloudamqp_instance.instance.id
-  name        = "azure_monitor"
-  tenant_id = var.azm_tentant_id
-  application_id = var.azm_application_id
-  application_secret = var.azm_application_secret
-  dce_uri = var.azm_dce_uri
-  table = var.azm_table
-  dcr_id = var.azm_dcr_id
 }
 ```
 
