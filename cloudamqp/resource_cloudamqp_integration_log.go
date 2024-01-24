@@ -156,7 +156,7 @@ func resourceIntegrationLog() *schema.Resource {
 			"dce_uri": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "The DCE URI. (Azure Monitor)",
+				Description: "The data collection endpoint. (Azure Monitor)",
 			},
 			"table": {
 				Type:        schema.TypeString,
@@ -166,7 +166,7 @@ func resourceIntegrationLog() *schema.Resource {
 			"dcr_id": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "The DCR ID. (Azure Monitor)",
+				Description: "ID of data collection rule that your DCE is linked to. (Azure Monitor)",
 			},
 		},
 	}
