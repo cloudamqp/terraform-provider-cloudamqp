@@ -284,21 +284,27 @@ The following arguments are supported:
 
 * `url`               - (Optional) Endpoint to log integration.
 * `host_port`         - (Optional) Destination to send the logs.
-* `token`             - (Optional) Token used for authentication.
+* `token`             - (Optional/Sensitive) Token used for authentication.
 * `region`            - (Optional) Region hosting the integration service.
-* `access_key_id`     - (Optional) AWS access key identifier.
-* `secret_access_key` - (Optional) AWS secret access key.
-* `api_key`           - (Optional) The API key.
-* `tags`              - (Optional) Tag the integration, e.g. env=prod, region=europe.
-* `credentials`       - (Optional) Google Service Account private key credentials.
+* `access_key_id`     - (Optional/Sensitive) AWS access key identifier.
+* `secret_access_key` - (Optional/Sensitive) AWS secret access key.
+* `api_key`           - (Optional/Sensitive) The API key.
+* `tags`              - (Optional) Tag the integration, e.g. env=prod,region=europe.
+* `credentials`       - (Optional/Sensitive) Google Service Account private key credentials.
 * `project_id`        - (Optional/Computed) The project identifier.
-* `private_key`       - (Optional/Computed) The private access key.
+* `private_key`       - (Optional/Computed/Sensitive) The private access key.
 * `client_email`      - (Optional/Computed) The client email registered for the integration service.
 * `host`              - (Optional) The host for Scalyr integration. (app.scalyr.com, app.eu.scalyr.com)
 * `sourcetype`        - (Optional) Assign source type to the data exported, eg. generic_single_line. (Splunk)
 * `endpoint`          - (Optional) The syslog destination to send the logs to for Coralogix.
 * `application`       - (Optional) The application name for Coralogix.
 * `subsystem`         - (Optional) The subsystem name for Coralogix.
+* `tenant_id`         - (Optional) The tenant identifier for Azure monitor.
+* `application_id`    - (Optional) The application identifier for Azure monitor.
+* `application_secret` - (Optional/Sensitive) The application secret for Azure monitor.
+* `dce_uri`           - (Optional) The data collection endpoint for Azure monitor.
+* `table`             - (Optional) The table name for Azure monitor.
+* `dcr_id`            - (Optional) ID of data collection rule that your DCE is linked to for Azure Monitor.
 
 This is the full list of all arguments. Only a subset of arguments are used based on which type of integration used. See [Integration Type reference](#integration-type-reference) table below for more information.
 
