@@ -7,9 +7,7 @@ description: |-
 
 # cloudamqp_notification
 
-This resource allows you to create and manage recipients to receive alarm notifications. There will
-always be a default recipient created upon instance creation. This recipient will use team email and
-receive notifications from default alarms.
+This resource allows you to create and manage recipients to receive alarm notifications. There will always be a default recipient created upon instance creation. This recipient will use team email and receive notifications from default alarms.
 
 Available for all subscription plans.
 
@@ -176,8 +174,6 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-`cloudamqp_notification` can be imported using CloudAMQP internal identifier of a recipient together
-(CSV separated) with the instance identifier. To retrieve the identifier of a recipient, use
-[CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-notification-recipients)
+`cloudamqp_notification` can be imported using CloudAMQP internal identifier of a recipient together (CSV separated) with the instance identifier. To retrieve the identifier of a recipient, use [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-notification-recipients)
 
 `terraform import cloudamqp_notification.recipient <id>,<instance_id>`
