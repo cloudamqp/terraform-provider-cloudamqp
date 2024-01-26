@@ -1,3 +1,9 @@
+## 1.29.3 (Unreleased)
+
+IMPROVEMENTS:
+
+* Add support for Azure monitor log integration ([#254](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/254))
+
 ## 1.29.2 (Jan 17, 2024)
 
 IMPROVEMENTS:
