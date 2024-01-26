@@ -28,9 +28,10 @@ func resourceNotification() *schema.Resource {
 				Description: "Instance identifier",
 			},
 			"type": {
-				Type:         schema.TypeString,
-				Required:     true,
-				Description:  "Type of the notification, valid options are: email, webhook, pagerduty, victorops, opsgenie, opsgenie-eu, slack, teams",
+				Type:     schema.TypeString,
+				Required: true,
+				Description: "Type of the notification, valid options are: email, opsgenie, opsgenie-eu," +
+					"pagerduty, slack, signl4, teams, victorops, webhook",
 				ValidateFunc: validateNotificationType(),
 			},
 			"value": {
@@ -134,13 +135,14 @@ func resourceNotificationDelete(d *schema.ResourceData, meta interface{}) error 
 func validateNotificationType() schema.SchemaValidateFunc {
 	return validation.StringInSlice([]string{
 		"email",
-		"webhook",
-		"pagerduty",
-		"victorops",
 		"opsgenie",
 		"opsgenie-eu",
+		"pagerduty",
+		"signl4",
 		"slack",
 		"teams",
+		"victorops",
+		"webhook",
 	}, true)
 }
 

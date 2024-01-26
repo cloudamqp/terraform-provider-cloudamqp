@@ -13,25 +13,44 @@ Available for all subscription plans.
 
 ## Example Usage
 
+<details>
+  <summary>
+    <b>Email recipient</b>
+  </summary>
+
 ```hcl
-# New recipient to receieve notifications
 resource "cloudamqp_notification" "email_recipient" {
   instance_id = cloudamqp_instance.instance.id
   type        = "email"
   value       = "alarm@example.com"
   name        = "alarm"
 }
+```
 
-resource "cloudamqp_notification" "victorops_recipient" {
+</details>
+
+<details>
+  <summary>
+    <b>OpsGenie recipient</b>
+  </summary>
+
+```hcl
+resource "cloudamqp_notification" "opsgenie_recipient" {
   instance_id = cloudamqp_instance.instance.id
-  type        = "victorops"
-  value       = "<UUID>"
-  name        = "Victorops"
-  options     = {
-    "rk" = "ROUTINGKEY"
-  }
+  type        = "opsgenie" # or "opsgenie-eu"
+  value       = "<api-key>"
+  name        = "OpsGenie"
 }
+```
 
+</details>
+
+<details>
+  <summary>
+    <b>Pagerduty recipient</b>
+  </summary>
+
+```hcl
 resource "cloudamqp_notification" "pagerduty_recipient" {
   instance_id = cloudamqp_instance.instance.id
   type        = "pagerduty"
@@ -42,6 +61,75 @@ resource "cloudamqp_notification" "pagerduty_recipient" {
   }
 }
 ```
+
+</details>
+
+<details>
+  <summary>
+    <b>Signl4 recipient</b>
+  </summary>
+
+```hcl
+resource "cloudamqp_notification" "signl4_recipient" {
+  instance_id = cloudamqp_instance.instance.id
+  type        = "signl4"
+  value       = "<team-secret>"
+  name        = "Signl4"
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>Teams recipient</b>
+  </summary>
+
+```hcl
+resource "cloudamqp_notification" "teams_recipient" {
+  instance_id = cloudamqp_instance.instance.id
+  type        = "teams"
+  value       = "<teams-webhook-url>"
+  name        = "Teams"
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>Victorops recipient</b>
+  </summary>
+
+```hcl
+resource "cloudamqp_notification" "victorops_recipient" {
+  instance_id = cloudamqp_instance.instance.id
+  type        = "victorops"
+  value       = "<integration-key>"
+  name        = "Victorops"
+  options     = {
+    "rk" = "ROUTINGKEY"
+  }
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>Webhook recipient</b>
+  </summary>
+
+```hcl
+resource "cloudamqp_notification" "webhook_recipient" {
+  instance_id = cloudamqp_instance.instance.id
+  type        = "webhook"
+  value       = "<webhook-url>"
+  name        = "Webhook"
+}
+```
+
+</details>
 
 ## Argument Reference
 
@@ -64,19 +152,20 @@ All attributes reference are computed
 Valid options for notification type.
 
 * email
-* webhook
-* pagerduty
-* victorops
 * opsgenie
 * opsgenie-eu
+* pagerduty
+* signl4
 * slack
 * teams
+* victorops
+* webhook
 
 ## Options parameter
 
-| Type      | Options  | Description                                                                                                                                                                                                                                                                      | Note                                                                                                                                    |
-|-----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| Victorops | rk       | Routing key to route alarm notification                                                                                                                                                                                                                                          | -                                                                                                                                        |
+| Type      | Options  | Description | Note |
+|---|---|---|---|
+| Victorops | rk       | Routing key to route alarm notification | - |
 | PagerDuty | dedupkey | Default the dedup key for PagerDuty is generated depending on what alarm has triggered, but here you can set what `dedup` key to use so even if the same alarm is triggered for different resources you only get one notification. Leave blank to use the generated dedup key. | If multiple alarms are triggered using this recipient, since they all share `dedup` key only the first alarm will be shown in PagerDuty |
 
 ## Dependency
