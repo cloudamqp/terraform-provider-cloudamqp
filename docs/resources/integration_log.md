@@ -333,7 +333,7 @@ Required arguments for all integrations: name
 
 All attributes reference are computed
 
-* `id`  - The identifier for this resource`
+* `id`  - The identifier for this resource
 
 ## Dependency
 
