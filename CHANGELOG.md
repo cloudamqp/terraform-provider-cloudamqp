@@ -1,4 +1,4 @@
-## 1.29.3 (Unreleased)
+## 1.29.3 (Jan 26, 2024)
 
 IMPROVEMENTS:
 
