@@ -3,6 +3,7 @@
 IMPROVEMENTS:
 
 * Add support for Azure monitor log integration ([#254](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/254))
+* Add support for signl4 alarms recipient ([#255](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/255))
 
 ## 1.29.2 (Jan 17, 2024)
 
