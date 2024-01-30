@@ -3,6 +3,7 @@ package cloudamqp
 import (
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -11,7 +12,7 @@ import (
 var version string
 var enableFasterInstanceDestroy bool
 
-func Provider(v string) *schema.Provider {
+func Provider(v string, client *http.Client) *schema.Provider {
 	version = v
 	log.Printf("Terraform-Provider-CloudAMQP Version: %s", version)
 	return &schema.Provider{
@@ -73,13 +74,15 @@ func Provider(v string) *schema.Provider {
 			"cloudamqp_vpc":                         resourceVpc(),
 			"cloudamqp_webhook":                     resourceWebhook(),
 		},
-		ConfigureFunc: providerConfigure,
+		ConfigureFunc: configureClient(client),
 	}
 }
 
-func providerConfigure(d *schema.ResourceData) (interface{}, error) {
-	enableFasterInstanceDestroy = d.Get("enable_faster_instance_destroy").(bool)
-	useragent := fmt.Sprintf("terraform-provider-cloudamqp_v%s", version)
-	log.Printf("[DEBUG] cloudamqp::provider::configure useragent: %v", useragent)
-	return api.New(d.Get("baseurl").(string), d.Get("apikey").(string), useragent), nil
+func configureClient(client *http.Client) schema.ConfigureFunc {
+	return func(d *schema.ResourceData) (interface{}, error) {
+		enableFasterInstanceDestroy = d.Get("enable_faster_instance_destroy").(bool)
+		useragent := fmt.Sprintf("terraform-provider-cloudamqp_v%s", version)
+		log.Printf("[DEBUG] cloudamqp::provider::configure useragent: %v", useragent)
+		return api.New(d.Get("baseurl").(string), d.Get("apikey").(string), useragent, client), nil
+	}
 }

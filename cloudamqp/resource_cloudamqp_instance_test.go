@@ -7,20 +7,22 @@ import (
 	"testing"
 
 	"github.com/84codes/go-api/api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
 // Basic instance test case. Creating dedicated AWS instance and do some minor updates.
 func TestAccInstance_Basics(t *testing.T) {
-	resourceName := "cloudamqp_instance.instance"
-	name := acctest.RandomWithPrefix("terraform")
-	newName := acctest.RandomWithPrefix("terraform")
-	region := "amazon-web-services::us-east-1"
-	plan := "bunny-1"
+	var (
+		resourceName = "cloudamqp_instance.instance"
+		name         = "terraform-before"
+		region       = "amazon-web-services::us-east-1"
+		plan         = "bunny-1"
 
-	resource.ParallelTest(t, resource.TestCase{
+		newName = "terraform-after"
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckInstanceDestroy(resourceName),
@@ -33,7 +35,6 @@ func TestAccInstance_Basics(t *testing.T) {
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
 					resource.TestCheckResourceAttr(resourceName, "plan", plan),
 					resource.TestCheckResourceAttr(resourceName, "region", region),
-					resource.TestCheckResourceAttr(resourceName, "rmq_version", "3.8.2"),
 					resource.TestCheckResourceAttr(resourceName, "tags.#", "1"),
 					resource.TestCheckResourceAttr(resourceName, "tags.0", "terraform"),
 				),
@@ -46,7 +47,6 @@ func TestAccInstance_Basics(t *testing.T) {
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
 					resource.TestCheckResourceAttr(resourceName, "plan", plan),
 					resource.TestCheckResourceAttr(resourceName, "region", region),
-					resource.TestCheckResourceAttr(resourceName, "rmq_version", "3.8.2"),
 					resource.TestCheckResourceAttr(resourceName, "tags.#", "1"),
 					resource.TestCheckResourceAttr(resourceName, "tags.0", "terraform"),
 				),
@@ -113,7 +113,6 @@ func testAccInstanceConfigBasic(name, region, plan string) string {
 			nodes 			= 1
 			plan 				= "%s"
 			region 			= "%s"
-			rmq_version = "3.8.2"
 			tags 				= ["terraform"]
 		}
 	`, name, plan, region)
