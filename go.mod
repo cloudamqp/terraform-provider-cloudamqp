@@ -4,7 +4,11 @@ go 1.20
 
 require github.com/84codes/go-api v1.15.0
 
-require github.com/hashicorp/terraform-plugin-sdk v1.17.2
+require (
+	github.com/dnaeon/go-vcr v1.2.0
+	github.com/hashicorp/terraform-plugin-sdk v1.17.2
+	gopkg.in/dnaeon/go-vcr.v3 v3.1.2
+)
 
 require (
 	cloud.google.com/go v0.110.0 // indirect
@@ -86,6 +90,8 @@ require (
 	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1 // indirect
 	google.golang.org/grpc v1.56.3 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
+	gopkg.in/yaml.v2 v2.3.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 // replace github.com/84codes/go-api => ../../84codes/go-api
