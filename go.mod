@@ -5,8 +5,8 @@ go 1.20
 require github.com/84codes/go-api v1.15.0
 
 require (
-	github.com/dnaeon/go-vcr v1.2.0
 	github.com/hashicorp/terraform-plugin-sdk v1.17.2
+	github.com/tidwall/gjson v1.17.0
 	gopkg.in/dnaeon/go-vcr.v3 v3.1.2
 )
 
@@ -73,6 +73,8 @@ require (
 	github.com/oklog/run v1.0.0 // indirect
 	github.com/posener/complete v1.2.1 // indirect
 	github.com/spf13/afero v1.2.2 // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect
 	github.com/vmihailenco/msgpack/v4 v4.3.12 // indirect
 	github.com/vmihailenco/tagparser v0.1.1 // indirect
@@ -90,8 +92,7 @@ require (
 	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1 // indirect
 	google.golang.org/grpc v1.56.3 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
-	gopkg.in/yaml.v2 v2.3.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-// replace github.com/84codes/go-api => ../../84codes/go-api
+replace github.com/84codes/go-api => ../../84codes/go-api
