@@ -79,6 +79,17 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 			ready := gjson.Get(i.Response.Body, "ready").Bool()
 			fmt.Println("SKIP: GET /api/instances/{id}", i.Request.URL, "ready:", ready)
 			i.DiscardOnSave = !ready
+		case i.Response.Code == 200 && i.Request.Method == "GET" && regexp.MustCompile(`/api/instances/\d+/nodes$`).MatchString(i.Request.URL):
+			// Filter polling for node configured state, only store successful response
+			configured := true
+			for _, c := range gjson.Get(i.Response.Body, "#.configured").Array() {
+				if !c.Bool() {
+					configured = false
+					break
+				}
+			}
+			fmt.Println("SKIP: GET /api/instances/{id}/nodes", i.Request.URL, "configured:", configured)
+			i.DiscardOnSave = !configured
 		}
 		return nil
 	}
