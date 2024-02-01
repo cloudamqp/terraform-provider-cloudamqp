@@ -47,14 +47,6 @@ func TestMain(m *testing.M) {
 	// see examples/okta_resource_set/basic.tf
 	os.Setenv("TF_VAR_hostname", fmt.Sprintf("%s.%s", os.Getenv("CLOUDAMQP_ORG_NAME"), os.Getenv("CLOUDAMQP_BASE_URL")))
 
-	// NOTE: Acceptance test sweepers are necessary to prevent dangling
-	// resources.
-	// NOTE: Don't run sweepers if we are playing back VCR as nothing should be
-	// going over the wire
-	if os.Getenv("CLOUDAMQP_VCR_TF_ACC") != "play" {
-		// ...
-	}
-
 	resource.TestMain(m)
 }
 
