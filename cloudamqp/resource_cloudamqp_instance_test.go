@@ -1,8 +1,6 @@
 package cloudamqp
 
 import (
-	"fmt"
-	"log"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
@@ -12,35 +10,47 @@ import (
 func TestAccInstance_Basics(t *testing.T) {
 	var (
 		resourceName = "cloudamqp_instance.instance"
-		name         = "terraform-before"
-		region       = "amazon-web-services::us-east-1"
-		plan         = "bunny-1"
-
-		newName = "terraform-after"
+		params       = map[string]any{
+			"InstanceName": "terraform-before",
+			"InstancePlan": "bunny-1",
+		}
+		params_updated = map[string]any{
+			"InstanceName": "terraform-after",
+			"InstancePlan": "bunny-1",
+		}
 	)
+
+	config, err := loadTemplatedConfig("cloudamqp_instance", "main.tf", params)
+	if err != nil {
+		t.Fatalf("failed to load configuration, err: %v", err)
+	}
+	config_update, err := loadTemplatedConfig("cloudamqp_instance", "main.tf", params_updated)
+	if err != nil {
+		t.Fatalf("failed to load configuration, err: %v", err)
+	}
 
 	cloudamqpResourceTest(t, resource.TestCase{
 		PreCheck:  func() { testAccPreCheck(t) },
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccInstanceConfigBasic(name, region, plan),
+				Config: config,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "name", name),
+					resource.TestCheckResourceAttr(resourceName, "name", params["InstanceName"].(string)),
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(resourceName, "plan", plan),
-					resource.TestCheckResourceAttr(resourceName, "region", region),
+					resource.TestCheckResourceAttr(resourceName, "plan", params["InstancePlan"].(string)),
+					resource.TestCheckResourceAttr(resourceName, "region", "amazon-web-services::us-east-1"),
 					resource.TestCheckResourceAttr(resourceName, "tags.#", "1"),
 					resource.TestCheckResourceAttr(resourceName, "tags.0", "terraform"),
 				),
 			},
 			{
-				Config: testAccInstanceConfigBasic(newName, region, plan),
+				Config: config_update,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "name", newName),
+					resource.TestCheckResourceAttr(resourceName, "name", params_updated["InstanceName"].(string)),
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(resourceName, "plan", plan),
-					resource.TestCheckResourceAttr(resourceName, "region", region),
+					resource.TestCheckResourceAttr(resourceName, "plan", params_updated["InstancePlan"].(string)),
+					resource.TestCheckResourceAttr(resourceName, "region", "amazon-web-services::us-east-1"),
 					resource.TestCheckResourceAttr(resourceName, "tags.#", "1"),
 					resource.TestCheckResourceAttr(resourceName, "tags.0", "terraform"),
 				),
@@ -52,32 +62,42 @@ func TestAccInstance_Basics(t *testing.T) {
 func TestAccInstance_PlanChange(t *testing.T) {
 	var (
 		resourceName = "cloudamqp_instance.instance"
-		name         = "Instance plan change"
-		plan         = "squirrel-1"
-		region       = "amazon-web-services::us-east-1"
-
-		newPlan = "bunny-1"
+		params       = map[string]any{
+			"InstanceName": "Instance plan change",
+			"InstancePlan": "squirrel-1",
+		}
+		params_updated = map[string]any{
+			"InstanceName": "Instance plan change",
+			"InstancePlan": "bunny-1",
+		}
 	)
+
+	config, err := loadTemplatedConfig("cloudamqp_instance", "main.tf", params)
+	if err != nil {
+		t.Fatalf("failed to load configuration, err: %v", err)
+	}
+	config_update, err := loadTemplatedConfig("cloudamqp_instance", "main.tf", params_updated)
+	if err != nil {
+		t.Fatalf("failed to load configuration, err: %v", err)
+	}
 
 	cloudamqpResourceTest(t, resource.TestCase{
 		PreCheck:  func() { testAccPreCheck(t) },
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccInstanceConfigBasic(name, region, plan),
+				Config: config,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "name", name),
+					resource.TestCheckResourceAttr(resourceName, "name", params["InstanceName"].(string)),
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(resourceName, "plan", plan),
-					resource.TestCheckResourceAttr(resourceName, "region", region),
+					resource.TestCheckResourceAttr(resourceName, "plan", params["InstancePlan"].(string)),
 				),
 			},
 			{
-				Config: testAccInstanceConfigBasic(name, region, newPlan),
+				Config: config_update,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(resourceName, "plan", newPlan),
-					resource.TestCheckResourceAttr(resourceName, "region", region),
+					resource.TestCheckResourceAttr(resourceName, "plan", params_updated["InstancePlan"].(string)),
 				),
 			},
 		},
@@ -87,30 +107,42 @@ func TestAccInstance_PlanChange(t *testing.T) {
 func TestAccInstance_Upgrade(t *testing.T) {
 	var (
 		resourceName = "cloudamqp_instance.instance"
-		name         = "Instance plan changes"
-		plan         = "bunny-1"
-		region       = "amazon-web-services::us-east-1"
-
-		upgradePlan = "bunny-3"
+		params       = map[string]any{
+			"InstanceName": "Instance plan changes",
+			"InstancePlan": "bunny-1",
+		}
+		params_updated = map[string]any{
+			"InstanceName": "Instance plan changes",
+			"InstancePlan": "bunny-3",
+		}
 	)
+
+	config, err := loadTemplatedConfig("cloudamqp_instance", "main.tf", params)
+	if err != nil {
+		t.Fatalf("failed to load configuration, err: %v", err)
+	}
+	config_update, err := loadTemplatedConfig("cloudamqp_instance", "main.tf", params_updated)
+	if err != nil {
+		t.Fatalf("failed to load configuration, err: %v", err)
+	}
 
 	cloudamqpResourceTest(t, resource.TestCase{
 		PreCheck:  func() { testAccPreCheck(t) },
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccInstanceConfigBasic(name, region, plan),
+				Config: config,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "name", "Instance plan changes"),
+					resource.TestCheckResourceAttr(resourceName, "name", params["InstanceName"].(string)),
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(resourceName, "plan", plan),
+					resource.TestCheckResourceAttr(resourceName, "plan", params["InstancePlan"].(string)),
 				),
 			},
 			{
-				Config: testAccInstanceConfigBasic(name, region, upgradePlan),
+				Config: config_update,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "nodes", "3"),
-					resource.TestCheckResourceAttr(resourceName, "plan", upgradePlan),
+					resource.TestCheckResourceAttr(resourceName, "plan", params_updated["InstancePlan"].(string)),
 				),
 			},
 		},
@@ -120,44 +152,44 @@ func TestAccInstance_Upgrade(t *testing.T) {
 func TestAccInstance_Downgrade(t *testing.T) {
 	var (
 		resourceName = "cloudamqp_instance.instance"
-		name         = "Instance plan changes"
-		plan         = "bunny-3"
-		region       = "amazon-web-services::us-east-1"
-
-		downgradePlan = "bunny-1"
+		params       = map[string]any{
+			"InstanceName": "Instance plan changes",
+			"InstancePlan": "bunny-3",
+		}
+		params_updated = map[string]any{
+			"InstanceName": "Instance plan changes",
+			"InstancePlan": "bunny-1",
+		}
 	)
+
+	config, err := loadTemplatedConfig("cloudamqp_instance", "main.tf", params)
+	if err != nil {
+		t.Fatalf("failed to load configuration, err: %v", err)
+	}
+	config_update, err := loadTemplatedConfig("cloudamqp_instance", "main.tf", params_updated)
+	if err != nil {
+		t.Fatalf("failed to load configuration, err: %v", err)
+	}
 
 	cloudamqpResourceTest(t, resource.TestCase{
 		PreCheck:  func() { testAccPreCheck(t) },
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccInstanceConfigBasic(name, region, plan),
+				Config: config,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "name", "Instance plan changes"),
+					resource.TestCheckResourceAttr(resourceName, "name", params["InstanceName"].(string)),
 					resource.TestCheckResourceAttr(resourceName, "nodes", "3"),
-					resource.TestCheckResourceAttr(resourceName, "plan", plan),
+					resource.TestCheckResourceAttr(resourceName, "plan", params["InstancePlan"].(string)),
 				),
 			},
 			{
-				Config: testAccInstanceConfigBasic(name, region, downgradePlan),
+				Config: config_update,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(resourceName, "plan", downgradePlan),
+					resource.TestCheckResourceAttr(resourceName, "plan", params_updated["InstancePlan"].(string)),
 				),
 			},
 		},
 	})
-}
-
-func testAccInstanceConfigBasic(name, region, plan string) string {
-	log.Printf("[DBEUG] resource_instance::testAccInstanceConfig_Basic name: %s, region: %s, plan: %s", name, region, plan)
-	return fmt.Sprintf(`
-		resource "cloudamqp_instance" "instance" {
-			name 				= "%s"
-			plan 				= "%s"
-			region 			= "%s"
-			tags 				= ["terraform"]
-		}
-	`, name, plan, region)
 }
