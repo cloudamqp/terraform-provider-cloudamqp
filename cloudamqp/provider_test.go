@@ -1,11 +1,14 @@
 package cloudamqp
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"regexp"
 	"testing"
+	"text/template"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -101,4 +104,31 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 	c.Providers = testAccProviders
 
 	resource.Test(t, c)
+}
+
+func loadConfiguration(resource, filename string) (string, error) {
+	path := fmt.Sprintf("../test/configurations/%s", resource)
+	file, err := os.Open(fmt.Sprintf("%s/%s", path, filename))
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+	var rawFile bytes.Buffer
+	_, err = io.Copy(&rawFile, file)
+	if err != nil {
+		return "", err
+	}
+	return rawFile.String(), nil
+}
+
+func loadTemplatedConfig(resource, filename string, params map[string]any) (string, error) {
+	config, err := loadConfiguration(resource, filename)
+	if err != nil {
+		return "", err
+	}
+
+	var templatedConfig bytes.Buffer
+	basicTemplate := template.Must(template.New("template").Parse(config))
+	basicTemplate.Execute(&templatedConfig, params)
+	return templatedConfig.String(), nil
 }
