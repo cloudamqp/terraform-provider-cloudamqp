@@ -122,14 +122,14 @@ func loadConfiguration(resource, filename string) (string, error) {
 	return rawFile.String(), nil
 }
 
-func loadTemplatedConfig(resource, filename string, params map[string]any) (string, error) {
-	config, err := loadConfiguration(resource, filename)
+func loadTemplatedConfig(t *testing.T, resource string, params map[string]any) string {
+	config, err := loadConfiguration(resource, "main.tf")
 	if err != nil {
-		return "", err
+		t.Fatalf("failed to load configuration, err: %v", err)
 	}
 
 	var templatedConfig bytes.Buffer
 	basicTemplate := template.Must(template.New("template").Parse(config))
 	basicTemplate.Execute(&templatedConfig, params)
-	return templatedConfig.String(), nil
+	return templatedConfig.String()
 }
