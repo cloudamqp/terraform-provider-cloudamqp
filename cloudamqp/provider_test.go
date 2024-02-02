@@ -50,8 +50,9 @@ func TestMain(m *testing.M) {
 
 func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 	r, err := recorder.NewWithOptions(&recorder.Options{
-		CassetteName: fmt.Sprintf("../test/fixtures/vcr/%s", t.Name()),
-		Mode:         mode,
+		CassetteName:       fmt.Sprintf("../test/fixtures/vcr/%s", t.Name()),
+		Mode:               mode,
+		SkipRequestLatency: true,
 	})
 	if err != nil {
 		t.Fatal(err)
