@@ -42,11 +42,6 @@ func TestMain(m *testing.M) {
 	if os.Getenv("CLOUDAMQP_RECORD") != "" {
 		mode = recorder.ModeRecordOnly
 	}
-
-	// TF_VAR_hostname allows the real hostname to be scripted into the config tests
-	// see examples/okta_resource_set/basic.tf
-	os.Setenv("TF_VAR_hostname", fmt.Sprintf("%s.%s", os.Getenv("CLOUDAMQP_ORG_NAME"), os.Getenv("CLOUDAMQP_BASE_URL")))
-
 	resource.TestMain(m)
 }
 
