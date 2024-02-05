@@ -44,6 +44,12 @@ func TestAccInstance_Basics(t *testing.T) {
 					resource.TestCheckResourceAttr(resourceName, "tags.0", "terraform"),
 				),
 			},
+			{
+				ResourceName:            resourceName,
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"keep_associated_vpc"},
+			},
 		},
 	})
 }
