@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"regexp"
 	"testing"
@@ -14,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"
 	"gopkg.in/dnaeon/go-vcr.v3/recorder"
 )
@@ -62,6 +64,8 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 	sanitizeHook := func(i *cassette.Interaction) error {
 		delete(i.Request.Headers, "Authorization")
 		delete(i.Response.Headers, "Set-Cookie")
+		i.Response.Body = sanitizeFields(i.Response.Body)
+		i.Response.Body = sanitizeURL(i.Response.Body)
 		return nil
 	}
 	r.AddHook(sanitizeHook, recorder.AfterCaptureHook)
@@ -132,4 +136,27 @@ func loadTemplatedConfig(t *testing.T, resource string, params map[string]any) s
 	basicTemplate := template.Must(template.New("template").Parse(config))
 	basicTemplate.Execute(&templatedConfig, params)
 	return templatedConfig.String()
+}
+
+func sanitizeFields(jsonBody string) string {
+	blockedFields := []string{"apikey", "password"}
+	for _, field := range blockedFields {
+		if gjson.Get(jsonBody, field).Exists() {
+			jsonBody, _ = sjson.Set(jsonBody, field, "***")
+		}
+	}
+	return jsonBody
+}
+
+func sanitizeURL(jsonBody string) string {
+	urlFields := []string{"url", "urls.external", "urls.internal"}
+	for _, urlField := range urlFields {
+		field := gjson.Get(jsonBody, urlField)
+		if field.Exists() {
+			u, _ := url.Parse(field.String())
+			sanitizedUrl := fmt.Sprintf("%s://%s:***@%s%s", u.Scheme, u.User.Username(), u.Host, u.Path)
+			jsonBody, _ = sjson.Set(jsonBody, urlField, sanitizedUrl)
+		}
+	}
+	return jsonBody
 }
