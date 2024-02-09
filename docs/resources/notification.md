@@ -7,7 +7,9 @@ description: |-
 
 # cloudamqp_notification
 
-This resource allows you to create and manage recipients to receive alarm notifications. There will always be a default recipient created upon instance creation. This recipient will use team email and receive notifications from default alarms.
+This resource allows you to create and manage recipients to receive alarm notifications. There will
+always be a default recipient created upon instance creation. This recipient will use team email and
+receive notifications from default alarms.
 
 Available for all subscription plans.
 
@@ -31,7 +33,7 @@ resource "cloudamqp_notification" "email_recipient" {
 
 <details>
   <summary>
-    <b>OpsGenie recipient</b>
+    <b>OpsGenie recipient with optional responders</b>
   </summary>
 
 ```hcl
@@ -40,6 +42,14 @@ resource "cloudamqp_notification" "opsgenie_recipient" {
   type        = "opsgenie" # or "opsgenie-eu"
   value       = "<api-key>"
   name        = "OpsGenie"
+  responders {
+    type = "team"
+    id   = "<team-uuid>"
+  }
+  responders {
+    type = "user"
+    name   = "<user>"
+  }
 }
 ```
 
@@ -47,7 +57,7 @@ resource "cloudamqp_notification" "opsgenie_recipient" {
 
 <details>
   <summary>
-    <b>Pagerduty recipient</b>
+    <b>Pagerduty recipient with optional dedup key</b>
   </summary>
 
 ```hcl
@@ -98,7 +108,7 @@ resource "cloudamqp_notification" "teams_recipient" {
 
 <details>
   <summary>
-    <b>Victorops recipient</b>
+    <b>Victorops recipient with optional routing key (rk)</b>
   </summary>
 
 ```hcl
@@ -140,6 +150,18 @@ The following arguments are supported:
 * `value`       - (Required) Integration/API key or endpoint to send the notification.
 * `name`        - (Optional) Display name of the recipient.
 * `options`     - (Optional) Options argument (e.g. `rk` used for VictorOps routing key).
+* `responders`  - (Optional) An array of reponders (only for OpsGenie). Each `responders` block
+consists of the field documented below.
+
+___
+
+The `responders` block consists of:
+
+* `type`  - (Required) Type of responder. [`team`, `user`, `escalation`, `schedule`]
+* `id`    - (Optional) Identifier in UUID format
+* `name`  - (Optional) Name of the responder
+
+When in use, also use id or name together with the required type.
 
 ## Attributes Reference
 
@@ -174,6 +196,8 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-`cloudamqp_notification` can be imported using CloudAMQP internal identifier of a recipient together (CSV separated) with the instance identifier. To retrieve the identifier of a recipient, use [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-notification-recipients)
+`cloudamqp_notification` can be imported using CloudAMQP internal identifier of a recipient together
+(CSV separated) with the instance identifier. To retrieve the identifier of a recipient, use
+[CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-notification-recipients)
 
 `terraform import cloudamqp_notification.recipient <id>,<instance_id>`
