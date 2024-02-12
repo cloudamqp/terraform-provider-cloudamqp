@@ -11,10 +11,10 @@ func TestAccInstance_Basics(t *testing.T) {
 	var (
 		resourceName = "cloudamqp_instance.instance"
 		params       = map[string]any{
-			"InstanceName": "terraform-before",
+			"InstanceName": "TestAccInstance_Basics-before",
 		}
-		params_updated = map[string]any{
-			"InstanceName": "terraform-after",
+		paramsUpdated = map[string]any{
+			"InstanceName": "TestAccInstance_Basics-after",
 		}
 	)
 
@@ -34,9 +34,9 @@ func TestAccInstance_Basics(t *testing.T) {
 				),
 			},
 			{
-				Config: loadTemplatedConfig(t, "cloudamqp_instance", params_updated),
+				Config: loadTemplatedConfig(t, "cloudamqp_instance", paramsUpdated),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "name", params_updated["InstanceName"].(string)),
+					resource.TestCheckResourceAttr(resourceName, "name", paramsUpdated["InstanceName"].(string)),
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
 					resource.TestCheckResourceAttr(resourceName, "plan", "bunny-1"),
 					resource.TestCheckResourceAttr(resourceName, "region", "amazon-web-services::us-east-1"),
@@ -58,11 +58,11 @@ func TestAccInstance_PlanChange(t *testing.T) {
 	var (
 		resourceName = "cloudamqp_instance.instance"
 		params       = map[string]any{
-			"InstanceName": "Instance plan change",
+			"InstanceName": "TestAccInstance_PlanChange",
 			"InstancePlan": "squirrel-1",
 		}
-		params_updated = map[string]any{
-			"InstanceName": "Instance plan change",
+		paramsUpdated = map[string]any{
+			"InstanceName": "TestAccInstance_PlanChange",
 			"InstancePlan": "bunny-1",
 		}
 	)
@@ -80,10 +80,10 @@ func TestAccInstance_PlanChange(t *testing.T) {
 				),
 			},
 			{
-				Config: loadTemplatedConfig(t, "cloudamqp_instance", params_updated),
+				Config: loadTemplatedConfig(t, "cloudamqp_instance", paramsUpdated),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(resourceName, "plan", params_updated["InstancePlan"].(string)),
+					resource.TestCheckResourceAttr(resourceName, "plan", paramsUpdated["InstancePlan"].(string)),
 				),
 			},
 		},
@@ -94,11 +94,11 @@ func TestAccInstance_Upgrade(t *testing.T) {
 	var (
 		resourceName = "cloudamqp_instance.instance"
 		params       = map[string]any{
-			"InstanceName": "Instance plan changes",
+			"InstanceName": "TestAccInstance_Upgrade",
 			"InstancePlan": "bunny-1",
 		}
-		params_updated = map[string]any{
-			"InstanceName": "Instance plan changes",
+		paramsUpdated = map[string]any{
+			"InstanceName": "TestAccInstance_Upgrade",
 			"InstancePlan": "bunny-3",
 		}
 	)
@@ -116,10 +116,10 @@ func TestAccInstance_Upgrade(t *testing.T) {
 				),
 			},
 			{
-				Config: loadTemplatedConfig(t, "cloudamqp_instance", params_updated),
+				Config: loadTemplatedConfig(t, "cloudamqp_instance", paramsUpdated),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "nodes", "3"),
-					resource.TestCheckResourceAttr(resourceName, "plan", params_updated["InstancePlan"].(string)),
+					resource.TestCheckResourceAttr(resourceName, "plan", paramsUpdated["InstancePlan"].(string)),
 				),
 			},
 		},
@@ -130,11 +130,11 @@ func TestAccInstance_Downgrade(t *testing.T) {
 	var (
 		resourceName = "cloudamqp_instance.instance"
 		params       = map[string]any{
-			"InstanceName": "Instance plan changes",
+			"InstanceName": "TestAccInstance_Downgrade",
 			"InstancePlan": "bunny-3",
 		}
-		params_updated = map[string]any{
-			"InstanceName": "Instance plan changes",
+		paramsUpdated = map[string]any{
+			"InstanceName": "TestAccInstance_Downgrade",
 			"InstancePlan": "bunny-1",
 		}
 	)
@@ -152,10 +152,10 @@ func TestAccInstance_Downgrade(t *testing.T) {
 				),
 			},
 			{
-				Config: loadTemplatedConfig(t, "cloudamqp_instance", params_updated),
+				Config: loadTemplatedConfig(t, "cloudamqp_instance", paramsUpdated),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(resourceName, "plan", params_updated["InstancePlan"].(string)),
+					resource.TestCheckResourceAttr(resourceName, "plan", paramsUpdated["InstancePlan"].(string)),
 				),
 			},
 		},
