@@ -48,7 +48,7 @@ resource "cloudamqp_notification" "opsgenie_recipient" {
   }
   responders {
     type = "user"
-    username   = "<user>"
+    username   = "<username>"
   }
 }
 ```
