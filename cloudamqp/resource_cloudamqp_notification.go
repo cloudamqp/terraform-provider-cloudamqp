@@ -74,6 +74,11 @@ func resourceNotification() *schema.Resource {
 							Optional:    true,
 							Description: "Responder name",
 						},
+						"username": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Responder username",
+						},
 					},
 				},
 				Description: "Responders for OpsGenie alarms",

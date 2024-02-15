@@ -48,7 +48,7 @@ resource "cloudamqp_notification" "opsgenie_recipient" {
   }
   responders {
     type = "user"
-    name   = "<user>"
+    username   = "<user>"
   }
 }
 ```
@@ -157,11 +157,13 @@ ___
 
 The `responders` block consists of:
 
-* `type`  - (Required) Type of responder. [`team`, `user`, `escalation`, `schedule`]
-* `id`    - (Optional) Identifier in UUID format
-* `name`  - (Optional) Name of the responder
+* `type`      - (Required) Type of responder. [`team`, `user`, `escalation`, `schedule`]
+* `id`        - (Optional) Identifier in UUID format
+* `name`      - (Optional) Name of the responder
+* `username`  - (Optional) Username of the responder
 
-When in use, also use id or name together with the required type.
+Responders of type `team`, `escalation` and `schedule` can use either id or name.
+While `user` can use either id or username.
 
 ## Attributes Reference
 
