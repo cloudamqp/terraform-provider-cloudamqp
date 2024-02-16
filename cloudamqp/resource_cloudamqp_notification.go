@@ -2,7 +2,7 @@ package cloudamqp
 
 import (
 	"errors"
-	"fmt"
+	"log"
 	"strconv"
 	"strings"
 
@@ -52,22 +52,64 @@ func resourceNotification() *schema.Resource {
 					Type: schema.TypeString,
 				},
 			},
+			"responders": {
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"type": {
+							Type:         schema.TypeString,
+							Required:     true,
+							Description:  "Responder type, valid options are: team, user, escalation, schedule",
+							ValidateFunc: validateOpsgenieRespondersType(),
+						},
+						"id": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: validation.IsUUID,
+							Description:  "Responder ID",
+						},
+						"name": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Responder name",
+						},
+						"username": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Responder username",
+						},
+					},
+				},
+				Description: "Responders for OpsGenie alarms",
+			},
 		},
 	}
 }
 
 func resourceNotificationCreate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	keys := []string{"type", "value", "name", "options"}
-	params := make(map[string]interface{})
+	var (
+		api    = meta.(*api.API)
+		keys   = []string{"type", "value", "name", "options", "responders"}
+		params = make(map[string]interface{})
+	)
+
 	for _, k := range keys {
-		if v := d.Get(k); v != nil {
-			params[k] = v
+		if v := d.Get(k); v != nil && v != "" {
+			switch k {
+			case "responders":
+				if len(v.(*schema.Set).List()) == 0 {
+					continue
+				}
+				params["options"] = opsGenieRespondersParameter(v.(*schema.Set).List())
+			default:
+				params[k] = v
+			}
 		}
 	}
 
+	log.Printf("[DEBUG] resourceNotificationCreate params %v", params)
 	data, err := api.CreateNotification(d.Get("instance_id").(int), params)
-
 	if err != nil {
 		return err
 	}
@@ -75,7 +117,7 @@ func resourceNotificationCreate(d *schema.ResourceData, meta interface{}) error 
 		d.SetId(data["id"].(string))
 	}
 
-	return resourceNotificationRead(d, meta)
+	return nil
 }
 
 func resourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
@@ -96,10 +138,24 @@ func resourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	for k, v := range data {
-		if validateRecipientAttribute(k) {
-			if err = d.Set(k, v); err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+		if !validateRecipientAttribute(k) {
+			continue
+		}
+		if v == nil || v == "" {
+			continue
+		}
+
+		switch k {
+		case "options":
+			for key, value := range data[k].(map[string]interface{}) {
+				if key == "responders" {
+					d.Set("responders", value.([]interface{}))
+				} else {
+					d.Set(k, v)
+				}
 			}
+		default:
+			d.Set(k, v)
 		}
 	}
 
@@ -107,29 +163,40 @@ func resourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceNotificationUpdate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	keys := []string{"type", "value", "name", "options"}
-	params := make(map[string]interface{})
-	params["id"] = d.Id()
+	var (
+		api         = meta.(*api.API)
+		keys        = []string{"type", "value", "name", "options", "responders"}
+		params      = make(map[string]interface{})
+		instanceID  = d.Get("instance_id").(int)
+		recipientID = d.Id()
+	)
+
 	for _, k := range keys {
-		if v := d.Get(k); v != nil {
-			params[k] = v
+		if v := d.Get(k); v != nil && v != "" {
+			switch k {
+			case "responders":
+				if len(v.(*schema.Set).List()) == 0 {
+					continue
+				}
+				params["options"] = opsGenieRespondersParameter(v.(*schema.Set).List())
+			default:
+				params[k] = v
+			}
 		}
 	}
 
-	err := api.UpdateNotification(d.Get("instance_id").(int), params)
-	if err != nil {
-		return err
-	}
-
-	return resourceNotificationRead(d, meta)
+	log.Printf("[DEBUG] resourceNotificationUpdate params %v", params)
+	return api.UpdateNotification(instanceID, recipientID, params)
 }
 
 func resourceNotificationDelete(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	params := make(map[string]interface{})
-	params["id"] = d.Id()
-	return api.DeleteNotification(d.Get("instance_id").(int), params)
+	var (
+		api         = meta.(*api.API)
+		instanceID  = d.Get("instance_id").(int)
+		recipientID = d.Id()
+	)
+
+	return api.DeleteNotification(instanceID, recipientID)
 }
 
 func validateNotificationType() schema.SchemaValidateFunc {
@@ -151,8 +218,34 @@ func validateRecipientAttribute(key string) bool {
 	case "type",
 		"value",
 		"name",
-		"options":
+		"options",
+		"responders":
 		return true
 	}
 	return false
+}
+
+func validateOpsgenieRespondersType() schema.SchemaValidateFunc {
+	return validation.StringInSlice([]string{
+		"escalation",
+		"schedule",
+		"team",
+		"user",
+	}, true)
+}
+
+func opsGenieRespondersParameter(responders []interface{}) map[string]interface{} {
+	responderParams := make(map[string]interface{})
+	params := make([]map[string]interface{}, len(responders))
+	for index, responder := range responders {
+		param := make(map[string]interface{})
+		for k, v := range responder.(map[string]interface{}) {
+			if v != nil && v != "" {
+				param[k] = v
+			}
+		}
+		params[index] = param
+	}
+	responderParams["responders"] = params
+	return responderParams
 }

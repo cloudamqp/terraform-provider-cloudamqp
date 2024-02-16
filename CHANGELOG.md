@@ -1,9 +1,15 @@
+## 1.29.4 (Feb 15, 2024)
+
+IMPROVEMENTS:
+
+* Added optional responders argument for OpsGenie recipient ([#258](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/258))
+
 ## 1.29.3 (Jan 26, 2024)
 
 IMPROVEMENTS:
 
-* Add support for Azure monitor log integration ([#254](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/254))
-* Add support for signl4 alarms recipient ([#255](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/255))
+* Added support for Azure monitor log integration ([#254](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/254))
+* Added support for signl4 alarms recipient ([#255](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/255))
 
 ## 1.29.2 (Jan 17, 2024)
 
@@ -15,7 +21,7 @@ IMPROVEMENTS:
 
 BUG FIXES:
 
-* Fix PrivateLink/Private Service Connect import ([#250](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/250))
+* Fixed PrivateLink/Private Service Connect import ([#250](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/250))
 
 ## 1.29.0 (Dec 18, 2023)
 
@@ -25,20 +31,20 @@ NOTES:
 
 FEATURES:
 
-* Add resource that invoke account actions. ([#231](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/231))
-* Add new generic resource for VPC Connect ([#240](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/240))
+* Added resource that invoke account actions. ([#231](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/231))
+* Added new generic resource for VPC Connect ([#240](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/240))
     - Enables GCP Private Service Connect
     - Handles AWS PrivateLink
     - Handles Azure PrivateLink
-* Add configurable retries for plugin resources ([#241](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/241))
-* Add configurable retry when reading PrivateLink information ([#246](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/246))
-* Add configurable retry for GCP VPC peering ([#247](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/247))
+* Added configurable retries for plugin resources ([#241](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/241))
+* Added configurable retry when reading PrivateLink information ([#246](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/246))
+* Added configurable retry for GCP VPC peering ([#247](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/247))
 
 IMPROVEMENTS:
 
-* Update and clean up samples ([#235](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/235))
-* Remove default RMQ version request when version left out ([#237](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/237))
-* Handle gone VPC resource ([#238](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/238))
+* Updated and clean up samples ([#235](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/235))
+* Removed default RMQ version request when version left out ([#237](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/237))
+* Handles gone VPC resource ([#238](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/238))
 
 ## 1.28.0 (Sep 27, 2023)
 
