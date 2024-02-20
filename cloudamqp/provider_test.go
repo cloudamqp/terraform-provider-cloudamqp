@@ -2,12 +2,14 @@ package cloudamqp
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
 	"regexp"
+	"strings"
 	"testing"
 	"text/template"
 
@@ -159,4 +161,18 @@ func sanitizeURL(jsonBody string) string {
 		}
 	}
 	return jsonBody
+}
+
+func CommaStringArray(data []string) string {
+	var result string
+	if len(data) > 0 {
+		result = "[\"" + strings.Join(data, "\",\"") + "\"]"
+	}
+	return result
+}
+
+func StructToString[T any](data T) string {
+	jsonBytes, err := json.Marshal(data)
+	fmt.Println(string(jsonBytes), err)
+	return string(jsonBytes)
 }
