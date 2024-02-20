@@ -1,0 +1,17 @@
+// Current Terraform Plugin SDK automatically creates state schema version 3 during acceptance test.
+// This doesn't support using index_key of string and instead requires int
+// e.g. cloudamqp_alarm.alarm["cpu_alarm"]. This is solved in Terraform Plugin SDK v2.
+// Keep this file but not use, until we can upgrade to min. Terraform Plugin SDK v2.
+
+locals {
+  plugins = {{.Plugins}}
+}
+
+resource "cloudamqp_plugin" "plugins" {
+  instance_id = {{.InstanceID}}
+   for_each    = {
+    for plugin in local.plugins : plugin.name => plugin
+  }
+  name        = each.value.name
+  enabled     = each.value.enabled
+}
