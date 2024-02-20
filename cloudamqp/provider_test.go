@@ -113,8 +113,8 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 	resource.Test(t, c)
 }
 
-func loadConfiguration(resource, filename string) (string, error) {
-	path := fmt.Sprintf("../test/configurations/%s", resource)
+func loadConfiguration(filename string) (string, error) {
+	path := "../test/configurations"
 	file, err := os.Open(fmt.Sprintf("%s/%s", path, filename))
 	if err != nil {
 		return "", err
@@ -128,11 +128,21 @@ func loadConfiguration(resource, filename string) (string, error) {
 	return rawFile.String(), nil
 }
 
-func loadTemplatedConfig(t *testing.T, resource string, params map[string]any) string {
-	config, err := loadConfiguration(resource, "main.tf")
-	if err != nil {
-		t.Fatalf("failed to load configuration, err: %v", err)
+func appendConfiguration(t *testing.T, fileNames []string) string {
+	configArray := make([]string, len(fileNames))
+	for index, filename := range fileNames {
+		file := fmt.Sprintf("%s.txt", filename)
+		tempConfig, err := loadConfiguration(file)
+		if err != nil {
+			t.Fatalf("failed to load configuration, err: %v", err)
+		}
+		configArray[index] = tempConfig
 	}
+	return strings.Join(configArray, "\n")
+}
+
+func loadTemplatedConfig(t *testing.T, fileNames []string, params map[string]string) string {
+	config := appendConfiguration(t, fileNames)
 
 	var templatedConfig bytes.Buffer
 	basicTemplate := template.Must(template.New("template").Parse(config))
