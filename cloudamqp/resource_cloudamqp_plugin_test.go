@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
 
@@ -34,7 +35,7 @@ func TestAccPlugin_Basic(t *testing.T) {
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: loadTemplatedConfig(t, fileNames, params),
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(resourceName, "name", "rabbitmq_mqtt"),
@@ -48,7 +49,7 @@ func TestAccPlugin_Basic(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: loadTemplatedConfig(t, fileNames, paramsUpdated),
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "name", "rabbitmq_mqtt"),
 					resource.TestCheckResourceAttr(resourceName, "enabled", "false"),

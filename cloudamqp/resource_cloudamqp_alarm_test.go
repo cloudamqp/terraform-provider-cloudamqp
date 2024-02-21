@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
@@ -50,7 +51,7 @@ func TestAccAlarm_Basic(t *testing.T) {
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: loadTemplatedConfig(t, fileNames, params),
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(recipientResourceName, "type", params["RecipientType"]),
@@ -71,7 +72,7 @@ func TestAccAlarm_Basic(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: loadTemplatedConfig(t, fileNames, paramsUpdated),
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "type", paramsUpdated["CPUAlarmType"]),
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "enabled", paramsUpdated["CPUAlarmEnabled"]),

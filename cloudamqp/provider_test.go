@@ -1,23 +1,17 @@
 package cloudamqp
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
-	"net/url"
 	"os"
 	"regexp"
-	"strings"
 	"testing"
-	"text/template"
 
+	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/sanitizer"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"
 	"gopkg.in/dnaeon/go-vcr.v3/recorder"
 )
@@ -66,8 +60,8 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 	sanitizeHook := func(i *cassette.Interaction) error {
 		delete(i.Request.Headers, "Authorization")
 		delete(i.Response.Headers, "Set-Cookie")
-		i.Response.Body = sanitizeFields(i.Response.Body)
-		i.Response.Body = sanitizeURL(i.Response.Body)
+		i.Response.Body = sanitizer.Fields(i.Response.Body)
+		i.Response.Body = sanitizer.URL(i.Response.Body)
 		return nil
 	}
 	r.AddHook(sanitizeHook, recorder.AfterCaptureHook)
@@ -111,78 +105,4 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 	c.Providers = testAccProviders
 
 	resource.Test(t, c)
-}
-
-func loadConfiguration(filename string) (string, error) {
-	path := "../test/configurations"
-	file, err := os.Open(fmt.Sprintf("%s/%s", path, filename))
-	if err != nil {
-		return "", err
-	}
-	defer file.Close()
-	var rawFile bytes.Buffer
-	_, err = io.Copy(&rawFile, file)
-	if err != nil {
-		return "", err
-	}
-	return rawFile.String(), nil
-}
-
-func appendConfiguration(t *testing.T, fileNames []string) string {
-	configArray := make([]string, len(fileNames))
-	for index, filename := range fileNames {
-		file := fmt.Sprintf("%s.txt", filename)
-		tempConfig, err := loadConfiguration(file)
-		if err != nil {
-			t.Fatalf("failed to load configuration, err: %v", err)
-		}
-		configArray[index] = tempConfig
-	}
-	return strings.Join(configArray, "\n")
-}
-
-func loadTemplatedConfig(t *testing.T, fileNames []string, params map[string]string) string {
-	config := appendConfiguration(t, fileNames)
-
-	var templatedConfig bytes.Buffer
-	basicTemplate := template.Must(template.New("template").Parse(config))
-	basicTemplate.Execute(&templatedConfig, params)
-	return templatedConfig.String()
-}
-
-func sanitizeFields(jsonBody string) string {
-	blockedFields := []string{"apikey", "password"}
-	for _, field := range blockedFields {
-		if gjson.Get(jsonBody, field).Exists() {
-			jsonBody, _ = sjson.Set(jsonBody, field, "***")
-		}
-	}
-	return jsonBody
-}
-
-func sanitizeURL(jsonBody string) string {
-	urlFields := []string{"url", "urls.external", "urls.internal"}
-	for _, urlField := range urlFields {
-		field := gjson.Get(jsonBody, urlField)
-		if field.Exists() {
-			u, _ := url.Parse(field.String())
-			sanitizedUrl := fmt.Sprintf("%s://%s:***@%s%s", u.Scheme, u.User.Username(), u.Host, u.Path)
-			jsonBody, _ = sjson.Set(jsonBody, urlField, sanitizedUrl)
-		}
-	}
-	return jsonBody
-}
-
-func CommaStringArray(data []string) string {
-	var result string
-	if len(data) > 0 {
-		result = "[\"" + strings.Join(data, "\",\"") + "\"]"
-	}
-	return result
-}
-
-func StructToString[T any](data T) string {
-	jsonBytes, err := json.Marshal(data)
-	fmt.Println(string(jsonBytes), err)
-	return string(jsonBytes)
 }

@@ -3,6 +3,8 @@ package cloudamqp
 import (
 	"testing"
 
+	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
+	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/converter"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
 
@@ -13,11 +15,11 @@ func TestAccInstance_Basic(t *testing.T) {
 		resourceName = "cloudamqp_instance.instance"
 		params       = map[string]string{
 			"InstanceName": "TestAccInstance_Basic-before",
-			"InstanceTags": CommaStringArray([]string{"terraform"}),
+			"InstanceTags": converter.CommaStringArray([]string{"terraform"}),
 		}
 		paramsUpdated = map[string]string{
 			"InstanceName": "TestAccInstance_Basic-after",
-			"InstanceTags": CommaStringArray([]string{"terraform", "acceptance-test"}),
+			"InstanceTags": converter.CommaStringArray([]string{"terraform", "acceptance-test"}),
 		}
 	)
 
@@ -26,7 +28,7 @@ func TestAccInstance_Basic(t *testing.T) {
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: loadTemplatedConfig(t, fileNames, params),
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
@@ -37,7 +39,7 @@ func TestAccInstance_Basic(t *testing.T) {
 				),
 			},
 			{
-				Config: loadTemplatedConfig(t, fileNames, paramsUpdated),
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "name", paramsUpdated["InstanceName"]),
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
@@ -78,7 +80,7 @@ func TestAccInstance_PlanChange(t *testing.T) {
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: loadTemplatedConfig(t, fileNames, params),
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
@@ -86,7 +88,7 @@ func TestAccInstance_PlanChange(t *testing.T) {
 				),
 			},
 			{
-				Config: loadTemplatedConfig(t, fileNames, paramsUpdated),
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
 					resource.TestCheckResourceAttr(resourceName, "plan", paramsUpdated["InstancePlan"]),
@@ -116,7 +118,7 @@ func TestAccInstance_Upgrade(t *testing.T) {
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: loadTemplatedConfig(t, fileNames, params),
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
@@ -124,7 +126,7 @@ func TestAccInstance_Upgrade(t *testing.T) {
 				),
 			},
 			{
-				Config: loadTemplatedConfig(t, fileNames, paramsUpdated),
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "nodes", "3"),
 					resource.TestCheckResourceAttr(resourceName, "plan", paramsUpdated["InstancePlan"]),
@@ -154,7 +156,7 @@ func TestAccInstance_Downgrade(t *testing.T) {
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: loadTemplatedConfig(t, fileNames, params),
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(resourceName, "nodes", "3"),
@@ -162,7 +164,7 @@ func TestAccInstance_Downgrade(t *testing.T) {
 				),
 			},
 			{
-				Config: loadTemplatedConfig(t, fileNames, paramsUpdated),
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
 					resource.TestCheckResourceAttr(resourceName, "plan", paramsUpdated["InstancePlan"]),
