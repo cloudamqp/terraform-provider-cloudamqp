@@ -10,7 +10,7 @@ locals {
 resource "cloudamqp_alarm" "alarms" {
   instance_id       = {{.InstanceID}}
 
-  for_each    = {
+  for_each          = {
     for alarm in local.alarms : alarm.name => alarm
   }
 

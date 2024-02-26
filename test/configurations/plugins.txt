@@ -9,7 +9,7 @@ locals {
 
 resource "cloudamqp_plugin" "plugins" {
   instance_id = {{.InstanceID}}
-   for_each    = {
+   for_each   = {
     for plugin in local.plugins : plugin.name => plugin
   }
   name        = each.value.name
