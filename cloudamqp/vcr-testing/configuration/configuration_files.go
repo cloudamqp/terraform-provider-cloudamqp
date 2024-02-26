@@ -16,6 +16,7 @@ func GetTemplatedConfig(t *testing.T, fileNames []string, params map[string]stri
 	var templatedConfig bytes.Buffer
 	basicTemplate := template.Must(template.New("template").Parse(config))
 	basicTemplate.Execute(&templatedConfig, params)
+	fmt.Println(templatedConfig.String())
 	return templatedConfig.String()
 }
 
