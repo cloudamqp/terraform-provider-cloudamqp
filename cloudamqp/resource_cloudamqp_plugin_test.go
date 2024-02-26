@@ -44,7 +44,7 @@ func TestAccPlugin_Basic(t *testing.T) {
 			},
 			{
 				ResourceName:      resourceName,
-				ImportStateIdFunc: testAccImportStateIdFunc(instanceName, resourceName),
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceName, resourceName),
 				ImportState:       true,
 				ImportStateVerify: true,
 			},

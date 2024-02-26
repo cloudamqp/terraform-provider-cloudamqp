@@ -67,7 +67,7 @@ func TestAccAlarm_Basic(t *testing.T) {
 			},
 			{
 				ResourceName:      cpuAlarmResourceName,
-				ImportStateIdFunc: testAccImportStateIdFunc(instanceResourceName, cpuAlarmResourceName),
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, cpuAlarmResourceName),
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
@@ -86,7 +86,7 @@ func TestAccAlarm_Basic(t *testing.T) {
 	})
 }
 
-func testAccImportStateIdFunc(instanceName, resourceName string) resource.ImportStateIdFunc {
+func testAccImportCombinedStateIdFunc(instanceName, resourceName string) resource.ImportStateIdFunc {
 	return func(state *terraform.State) (string, error) {
 		rs, ok := state.RootModule().Resources[instanceName]
 		if !ok {
