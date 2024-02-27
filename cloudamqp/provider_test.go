@@ -73,7 +73,8 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		}
 
 		switch {
-		case i.Response.Code == 200 && i.Request.Method == "GET" && regexp.MustCompile(`/api/instances/\d+$`).MatchString(i.Request.URL):
+		case i.Response.Code == 200 && i.Request.Method == "GET" &&
+			regexp.MustCompile(`/api/instances/\d+$`).MatchString(i.Request.URL):
 			// Filter polling for ready state, only store successful response
 			ready := gjson.Get(i.Response.Body, "ready").Bool()
 
@@ -81,7 +82,8 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 				fmt.Println("SKIP: GET /api/instances/{id}", i.Request.URL, "ready:", ready)
 				i.DiscardOnSave = true
 			}
-		case i.Response.Code == 200 && i.Request.Method == "GET" && regexp.MustCompile(`/api/instances/\d+/nodes$`).MatchString(i.Request.URL):
+		case i.Response.Code == 200 && i.Request.Method == "GET" &&
+			regexp.MustCompile(`/api/instances/\d+/nodes$`).MatchString(i.Request.URL):
 			// Filter polling for node configured state, only store successful response
 			configured := true
 			for _, c := range gjson.Get(i.Response.Body, "#.configured").Array() {
@@ -94,14 +96,16 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 				fmt.Println("SKIP: GET /api/instances/{id}/nodes", i.Request.URL, "configured:", configured)
 				i.DiscardOnSave = true
 			}
-		case i.Response.Code == 200 && i.Request.Method == "GET" && regexp.MustCompile(`/api/instances/\d+/vpc-connect$`).MatchString(i.Request.URL):
+		case i.Response.Code == 200 && i.Request.Method == "GET" &&
+			regexp.MustCompile(`/api/instances/\d+/vpc-connect$`).MatchString(i.Request.URL):
 			// Filter polling for vpc connect state, only store enabled response
 			status := gjson.Get(i.Response.Body, "status").String()
 			if status == "pending" {
 				fmt.Println("SKIP: GET /api/instances/{id}/vpc_connects", i.Request.URL, "status:", status)
 				i.DiscardOnSave = true
 			}
-		case i.Response.Code == 400 && i.Request.Method == "GET" && regexp.MustCompile(`/api/vpcs/\d+/vpc-peering/info$`).MatchString(i.Request.URL):
+		case i.Response.Code == 400 && i.Request.Method == "GET" &&
+			regexp.MustCompile(`/api/vpcs/\d+/vpc-peering/info$`).MatchString(i.Request.URL):
 			// Filter polling for VPC create state, only store successful response
 			errStr := gjson.Get(i.Response.Body, "error").String()
 			if errStr == "VPC currently unavailable" || errStr == "Timeout talking to backend" {

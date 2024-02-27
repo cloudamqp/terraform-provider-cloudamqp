@@ -10,6 +10,6 @@ resource "cloudamqp_instance" "instance" {
 	plan                = "{{or .InstancePlan `bunny-1`}}"
 	region              = "{{or .InstanceRegion `amazon-web-services::us-east-1`}}"
 	tags                = {{or .InstanceTags `["terraform"]`}}
-	vpc_id              = cloudamqp_vpc.vpc.id
+	vpc_id              = {{or .VpcID `cloudamqp_vpc.vpc.id`}}
   keep_associated_vpc = true
 }
