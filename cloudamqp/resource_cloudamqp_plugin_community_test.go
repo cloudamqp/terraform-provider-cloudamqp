@@ -41,7 +41,7 @@ func TestAccPluginCommunity_Basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
-				Check: resource.ComposeTestCheckFunc(
+				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(resourceName, "name", params["PluginCommunityName"]),
 					resource.TestCheckResourceAttr(resourceName, "enabled", params["PluginCommunityEnabled"]),
@@ -49,7 +49,7 @@ func TestAccPluginCommunity_Basic(t *testing.T) {
 			},
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
-				Check: resource.ComposeTestCheckFunc(
+				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "name", paramsUpdated["PluginCommunityName"]),
 					resource.TestCheckResourceAttr(resourceName, "enabled", paramsUpdated["PluginCommunityEnabled"]),
 				),

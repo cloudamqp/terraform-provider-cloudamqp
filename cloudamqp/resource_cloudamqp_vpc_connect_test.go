@@ -47,7 +47,7 @@ func TestAccVpcConnect_AWS_Basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
-				Check: resource.ComposeTestCheckFunc(
+				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(vpcName, "name", params["VpcName"]),
 					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(resourceName, "allowed_principals.#", "1"),
@@ -101,7 +101,7 @@ func TestAccVpcConnect_Azure_Basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
-				Check: resource.ComposeTestCheckFunc(
+				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(vpcName, "name", params["VpcName"]),
 					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(resourceName, "approved_subscriptions.#", "1"),
@@ -144,7 +144,7 @@ func TestAccVpcConnect_GCP_Basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
-				Check: resource.ComposeTestCheckFunc(
+				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(vpcName, "name", params["VpcName"]),
 					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(resourceName, "allowed_projects.#", "1"),

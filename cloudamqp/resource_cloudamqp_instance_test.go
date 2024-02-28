@@ -29,7 +29,7 @@ func TestAccInstance_Basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
-				Check: resource.ComposeTestCheckFunc(
+				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
 					resource.TestCheckResourceAttr(resourceName, "plan", "bunny-1"),
@@ -40,7 +40,7 @@ func TestAccInstance_Basic(t *testing.T) {
 			},
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
-				Check: resource.ComposeTestCheckFunc(
+				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "name", paramsUpdated["InstanceName"]),
 					resource.TestCheckResourceAttr(resourceName, "nodes", "1"),
 					resource.TestCheckResourceAttr(resourceName, "plan", "bunny-1"),

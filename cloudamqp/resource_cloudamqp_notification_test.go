@@ -38,7 +38,7 @@ func TestAccNotification_Basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
-				Check: resource.ComposeTestCheckFunc(
+				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(resourceName, "type", params["RecipientType"]),
 					resource.TestCheckResourceAttr(resourceName, "value", params["RecipientValue"]),
@@ -53,7 +53,7 @@ func TestAccNotification_Basic(t *testing.T) {
 			},
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
-				Check: resource.ComposeTestCheckFunc(
+				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "type", paramsUpdated["RecipientType"]),
 					resource.TestCheckResourceAttr(resourceName, "value", paramsUpdated["RecipientValue"]),
 					resource.TestCheckResourceAttr(resourceName, "name", paramsUpdated["RecipientName"]),

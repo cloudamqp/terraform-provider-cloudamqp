@@ -52,7 +52,7 @@ func TestAccAlarm_Basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
-				Check: resource.ComposeTestCheckFunc(
+				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(recipientResourceName, "type", params["RecipientType"]),
 					resource.TestCheckResourceAttr(recipientResourceName, "value", params["RecipientValue"]),
@@ -73,7 +73,7 @@ func TestAccAlarm_Basic(t *testing.T) {
 			},
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
-				Check: resource.ComposeTestCheckFunc(
+				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "type", paramsUpdated["CPUAlarmType"]),
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "enabled", paramsUpdated["CPUAlarmEnabled"]),
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "time_threshold", paramsUpdated["CPUAlarmTimeThreshold"]),
