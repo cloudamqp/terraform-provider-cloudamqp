@@ -115,23 +115,13 @@ func resourceSecurityFirewallCreate(d *schema.ResourceData, meta interface{}) er
 		params[index] = value.(map[string]interface{})
 	}
 
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create localfirewalls: %v", localFirewalls)
-
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create instanceID: %d, params: %v", instanceID, params)
 	_, err := api.CreateFirewallSettings(instanceID, params, sleep, timeout)
 	if err != nil {
 		return fmt.Errorf("error setting security firewall for resource %s: %s", d.Id(), err)
 	}
+
 	d.SetId(strconv.Itoa(instanceID))
-
-	// rules := make([]map[string]interface{}, len(data))
-	// for k, v := range data {
-	// 	rules[k] = readRule(v)
-	// }
-
-	// if err = d.Set("rules", rules); err != nil {
-	// 	return fmt.Errorf("error setting rules for resource %s, %s", d.Id(), err)
-	// }
 
 	return nil
 }
@@ -179,8 +169,8 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 		timeout        = d.Get("timeout").(int)
 	)
 
-	for _, k := range localFirewalls {
-		params = append(params, k.(map[string]interface{}))
+	for index, value := range localFirewalls {
+		params[index] = value.(map[string]interface{})
 	}
 
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::update instance id: %d, params: %v", instanceID, params)
@@ -189,14 +179,6 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 		return err
 	}
 
-	// rules := make([]map[string]interface{}, len(data))
-	// for k, v := range data {
-	// 	rules[k] = readRule(v)
-	// }
-
-	// if err = d.Set("rules", rules); err != nil {
-	// 	return fmt.Errorf("error setting rules for resource %s, %s", d.Id(), err)
-	// }
 	return nil
 }
 
@@ -207,6 +189,7 @@ func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) er
 		sleep      = d.Get("sleep").(int)
 		timeout    = d.Get("timeout").(int)
 	)
+
 	if enableFasterInstanceDestroy {
 		log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete skip calling backend.")
 		return nil
