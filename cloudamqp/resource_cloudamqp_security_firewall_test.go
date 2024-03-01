@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
-// TestAccFirewall_Basic: Create standalone VPC and instance, enable VPC Connect and import.
+// TestAccFirewall_Basic: Create standalone VPC and instance with firewall rule, import and update rules.
 func TestAccFirewall_Basic(t *testing.T) {
 	var (
 		fileNames    = []string{"vpc_and_instance", "firewall"}
