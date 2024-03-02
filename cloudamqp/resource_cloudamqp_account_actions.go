@@ -22,11 +22,11 @@ func resourceAccountAction() *schema.Resource {
 				Description: "Instance identifier",
 			},
 			"action": {
-				Type:         schema.TypeString,
-				Required:     true,
-				ForceNew:     true,
-				Description:  "The action to perform on the node",
-				ValidateFunc: validateAccountAction(),
+				Type:             schema.TypeString,
+				Required:         true,
+				ForceNew:         true,
+				Description:      "The action to perform on the node",
+				ValidateDiagFunc: validateAccountAction(),
 			},
 		},
 	}
@@ -62,9 +62,9 @@ func resourceAccountActionRemove(d *schema.ResourceData, meta interface{}) error
 	return nil
 }
 
-func validateAccountAction() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
+func validateAccountAction() schema.SchemaValidateDiagFunc {
+	return validation.ToDiagFunc(validation.StringInSlice([]string{
 		"rotate-password",
 		"rotate-apikey",
-	}, true)
+	}, true))
 }

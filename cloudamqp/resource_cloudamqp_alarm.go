@@ -29,10 +29,10 @@ func resourceAlarm() *schema.Resource {
 				Description: "Instance identifier",
 			},
 			"type": {
-				Type:         schema.TypeString,
-				Required:     true,
-				Description:  "Type of the alarm, valid options are: cpu, memory, disk_usage, queue_length, connection_count, consumers_count, net_split",
-				ValidateFunc: validateAlarmType(),
+				Type:             schema.TypeString,
+				Required:         true,
+				Description:      "Type of the alarm, valid options are: cpu, memory, disk_usage, queue_length, connection_count, consumers_count, net_split",
+				ValidateDiagFunc: validateAlarmType(),
 			},
 			"enabled": {
 				Type:        schema.TypeBool,
@@ -51,10 +51,10 @@ func resourceAlarm() *schema.Resource {
 				Description: "What value to trigger the alarm for",
 			},
 			"value_calculation": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Description:  "Disk value threshold calculation. Fixed or percentage of disk space remaining",
-				ValidateFunc: validateValueCalculation(),
+				Type:             schema.TypeString,
+				Optional:         true,
+				Description:      "Disk value threshold calculation. Fixed or percentage of disk space remaining",
+				ValidateDiagFunc: validateValueCalculation(),
 			},
 			"time_threshold": {
 				Type:        schema.TypeInt,
@@ -72,10 +72,10 @@ func resourceAlarm() *schema.Resource {
 				Description: "Regex for which queues to check",
 			},
 			"message_type": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Description:  "Message types (total, unacked, ready) of the queue to trigger the alarm",
-				ValidateFunc: validateMessageType(),
+				Type:             schema.TypeString,
+				Optional:         true,
+				Description:      "Message types (total, unacked, ready) of the queue to trigger the alarm",
+				ValidateDiagFunc: validateMessageType(),
 			},
 			"recipients": {
 				Type:     schema.TypeList,
@@ -199,8 +199,8 @@ func resourceAlarmDelete(d *schema.ResourceData, meta interface{}) error {
 	return api.DeleteAlarm(d.Get("instance_id").(int), params)
 }
 
-func validateAlarmType() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
+func validateAlarmType() schema.SchemaValidateDiagFunc {
+	return validation.ToDiagFunc(validation.StringInSlice([]string{
 		"cpu",
 		"memory",
 		"disk",
@@ -212,7 +212,7 @@ func validateAlarmType() schema.SchemaValidateFunc {
 		"ssh",
 		"notice",
 		"server_unreachable",
-	}, true)
+	}, true))
 }
 
 func validateAlarmSchemaAttribute(key string) bool {
@@ -232,19 +232,19 @@ func validateAlarmSchemaAttribute(key string) bool {
 	return false
 }
 
-func validateMessageType() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
+func validateMessageType() schema.SchemaValidateDiagFunc {
+	return validation.ToDiagFunc(validation.StringInSlice([]string{
 		"total",
 		"unacked",
 		"ready",
-	}, true)
+	}, true))
 }
 
-func validateValueCalculation() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
+func validateValueCalculation() schema.SchemaValidateDiagFunc {
+	return validation.ToDiagFunc(validation.StringInSlice([]string{
 		"fixed",
 		"percentage",
-	}, true)
+	}, true))
 }
 
 func alarmAttributeKeys() []string {

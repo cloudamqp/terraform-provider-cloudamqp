@@ -30,10 +30,10 @@ func resourceIntegrationMetric() *schema.Resource {
 				Description: "Instance identifier",
 			},
 			"name": {
-				Type:         schema.TypeString,
-				Required:     true,
-				Description:  "The name of metrics integration",
-				ValidateFunc: validateIntegrationMetricName(),
+				Type:             schema.TypeString,
+				Required:         true,
+				Description:      "The name of metrics integration",
+				ValidateDiagFunc: validateIntegrationMetricName(),
 			},
 			"region": {
 				Type:        schema.TypeString,
@@ -300,8 +300,8 @@ func resourceIntegrationMetricDelete(d *schema.ResourceData, meta interface{}) e
 	return api.DeleteIntegration(d.Get("instance_id").(int), "metrics", d.Id())
 }
 
-func validateIntegrationMetricName() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
+func validateIntegrationMetricName() schema.SchemaValidateDiagFunc {
+	return validation.ToDiagFunc(validation.StringInSlice([]string{
 		"cloudwatch",
 		"cloudwatch_v2",
 		"librato",
@@ -310,7 +310,7 @@ func validateIntegrationMetricName() schema.SchemaValidateFunc {
 		"newrelic",
 		"newrelic_v2",
 		"stackdriver",
-	}, true)
+	}, true))
 }
 
 func validateIntegrationMetricSchemaAttribute(key string) bool {

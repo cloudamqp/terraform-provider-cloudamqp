@@ -41,8 +41,8 @@ func resourceSecurityFirewall() *schema.Resource {
 							Type:     schema.TypeList,
 							Optional: true,
 							Elem: &schema.Schema{
-								Type:         schema.TypeString,
-								ValidateFunc: validateServices(),
+								Type:             schema.TypeString,
+								ValidateDiagFunc: validateServices(),
 							},
 							Description: "Pre-defined services 'AMQP', 'AMQPS', 'HTTPS', 'MQTT', 'MQTTS', 'STOMP', 'STOMPS', " +
 								"'STREAM', 'STREAM_SSL'",
@@ -211,8 +211,8 @@ func readRule(data map[string]interface{}) map[string]interface{} {
 	return rule
 }
 
-func validateServices() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
+func validateServices() schema.SchemaValidateDiagFunc {
+	return validation.ToDiagFunc(validation.StringInSlice([]string{
 		"AMQP",
 		"AMQPS",
 		"HTTPS",
@@ -222,7 +222,7 @@ func validateServices() schema.SchemaValidateFunc {
 		"STOMPS",
 		"STREAM",
 		"STREAM_SSL",
-	}, true)
+	}, true))
 }
 
 func servicePorts() []ServicePort {

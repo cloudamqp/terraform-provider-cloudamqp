@@ -30,10 +30,10 @@ func resourceIntegrationLog() *schema.Resource {
 				Description: "Instance identifier used to make proxy calls",
 			},
 			"name": {
-				Type:         schema.TypeString,
-				Required:     true,
-				Description:  "The name of log integration",
-				ValidateFunc: validateIntegrationLogName(),
+				Type:             schema.TypeString,
+				Required:         true,
+				Description:      "The name of log integration",
+				ValidateDiagFunc: validateIntegrationLogName(),
 			},
 			"url": {
 				Type:        schema.TypeString,
@@ -99,10 +99,10 @@ func resourceIntegrationLog() *schema.Resource {
 				Description: "The client email. (Stackdriver)",
 			},
 			"host": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Description:  "The host information. (Scalyr)",
-				ValidateFunc: validateIntegrationLogScalyrHost(),
+				Type:             schema.TypeString,
+				Optional:         true,
+				Description:      "The host information. (Scalyr)",
+				ValidateDiagFunc: validateIntegrationLogScalyrHost(),
 			},
 			"sourcetype": {
 				Type:        schema.TypeString,
@@ -288,8 +288,8 @@ func resourceIntegrationLogDelete(d *schema.ResourceData, meta interface{}) erro
 	return api.DeleteIntegration(d.Get("instance_id").(int), "logs", d.Id())
 }
 
-func validateIntegrationLogName() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
+func validateIntegrationLogName() schema.SchemaValidateDiagFunc {
+	return validation.ToDiagFunc(validation.StringInSlice([]string{
 		"azure_monitor",
 		"cloudwatchlog",
 		"coralogix",
@@ -300,14 +300,14 @@ func validateIntegrationLogName() schema.SchemaValidateFunc {
 		"scalyr",
 		"splunk",
 		"stackdriver",
-	}, true)
+	}, true))
 }
 
-func validateIntegrationLogScalyrHost() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
+func validateIntegrationLogScalyrHost() schema.SchemaValidateDiagFunc {
+	return validation.ToDiagFunc(validation.StringInSlice([]string{
 		"app.scalyr.com",
 		"app.eu.scalyr.com",
-	}, true)
+	}, true))
 }
 
 func validateIntegrationLogsSchemaAttribute(key string) bool {

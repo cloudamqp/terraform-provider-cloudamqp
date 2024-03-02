@@ -138,8 +138,8 @@ func resourceInstance() *schema.Resource {
 							Type:     schema.TypeList,
 							Required: true,
 							Elem: &schema.Schema{
-								Type:         schema.TypeString,
-								ValidateFunc: validateCopySettings(),
+								Type:             schema.TypeString,
+								ValidateDiagFunc: validateCopySettings(),
 							},
 							Description: "Settings to be copied. [alarms, config, definitions, firewall, logs, metrics, plugins]",
 						},
@@ -354,8 +354,8 @@ func instanceCreateAttributeKeys() []string {
 	}
 }
 
-func validateCopySettings() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
+func validateCopySettings() schema.SchemaValidateDiagFunc {
+	return validation.ToDiagFunc(validation.StringInSlice([]string{
 		"alarms",
 		"config",
 		"definitions",
@@ -363,5 +363,5 @@ func validateCopySettings() schema.SchemaValidateFunc {
 		"logs",
 		"metrics",
 		"plugins",
-	}, true)
+	}, true))
 }
