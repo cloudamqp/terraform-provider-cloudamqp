@@ -1,13 +1,14 @@
 package cloudamqp
 
 import (
+	"context"
 	"fmt"
 	"regexp"
 	"strconv"
 
 	"github.com/84codes/go-api/api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourcePrivateLinkAzure() *schema.Resource {
@@ -63,7 +64,7 @@ func resourcePrivateLinkAzure() *schema.Resource {
 			},
 		},
 		CustomizeDiff: customdiff.All(
-			customdiff.ValidateValue("approved_subscriptions", func(value, meta interface{}) error {
+			customdiff.ValidateValue("approved_subscriptions", func(ctx context.Context, value, meta interface{}) error {
 				for _, v := range value.([]interface{}) {
 					re := regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
 					if !re.MatchString(v.(string)) {

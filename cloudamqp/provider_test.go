@@ -9,9 +9,8 @@ import (
 	"testing"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/sanitizer"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/tidwall/gjson"
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"
 	"gopkg.in/dnaeon/go-vcr.v3/recorder"
@@ -19,7 +18,7 @@ import (
 
 var (
 	testAccProvider  *schema.Provider
-	testAccProviders map[string]terraform.ResourceProvider
+	testAccProviders map[string]*schema.Provider
 
 	mode = recorder.ModeReplayOnly
 )
@@ -158,7 +157,7 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 	})
 
 	testAccProvider = Provider("1.0", rec.GetDefaultClient())
-	testAccProviders = map[string]terraform.ResourceProvider{
+	testAccProviders = map[string]*schema.Provider{
 		"cloudamqp": testAccProvider,
 	}
 	c.Providers = testAccProviders

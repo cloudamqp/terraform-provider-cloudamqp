@@ -2,11 +2,11 @@ package cloudamqp
 
 import (
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"testing"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/converter"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
 
 // TestAccInstance_Basic: Creating dedicated AWS instance, do some minor updates, import and read
