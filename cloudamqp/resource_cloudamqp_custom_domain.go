@@ -16,7 +16,7 @@ func resourceCustomDomain() *schema.Resource {
 		Update: resourceCustomDomainUpdate,
 		Delete: resourceCustomDomainDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {

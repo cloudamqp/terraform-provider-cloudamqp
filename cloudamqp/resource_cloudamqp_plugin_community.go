@@ -18,7 +18,7 @@ func resourcePluginCommunity() *schema.Resource {
 		Update: resourcePluginCommunityUpdate,
 		Delete: resourcePluginCommunityDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {

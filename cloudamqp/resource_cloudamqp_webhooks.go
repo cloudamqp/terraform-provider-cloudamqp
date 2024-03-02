@@ -16,7 +16,7 @@ func resourceWebhook() *schema.Resource {
 		Read:   resourceWebhookRead,
 		Delete: resourceWebhookDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {

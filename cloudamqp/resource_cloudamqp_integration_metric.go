@@ -20,7 +20,7 @@ func resourceIntegrationMetric() *schema.Resource {
 		Update: resourceIntegrationMetricUpdate,
 		Delete: resourceIntegrationMetricDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {

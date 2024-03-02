@@ -16,7 +16,7 @@ func resourceVpc() *schema.Resource {
 		Update: resourceVpcUpdate,
 		Delete: resourceVpcDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {
