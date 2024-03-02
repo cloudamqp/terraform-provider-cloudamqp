@@ -18,7 +18,7 @@ func resourcePrivateLinkAzure() *schema.Resource {
 		Update: resourcePrivateLinkAzureUpdate,
 		Delete: resourcePrivateLinkAzureDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {

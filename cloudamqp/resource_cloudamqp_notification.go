@@ -18,7 +18,7 @@ func resourceNotification() *schema.Resource {
 		Update: resourceNotificationUpdate,
 		Delete: resourceNotificationDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {

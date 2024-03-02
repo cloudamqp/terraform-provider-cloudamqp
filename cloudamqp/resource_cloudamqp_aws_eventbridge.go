@@ -16,7 +16,7 @@ func resourceAwsEventBridge() *schema.Resource {
 		Read:   resourceAwsEventBridgeRead,
 		Delete: resourceAwsEventBridgeDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {

@@ -18,7 +18,7 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 		Update: resourceRabbitMqConfigurationUpdate,
 		Delete: resourceRabbitMqConfigurationDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {

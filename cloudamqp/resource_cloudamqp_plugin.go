@@ -18,7 +18,7 @@ func resourcePlugin() *schema.Resource {
 		Update: resourcePluginUpdate,
 		Delete: resourcePluginDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {

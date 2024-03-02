@@ -12,7 +12,7 @@ func dataSourceInstance() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceInstanceRead,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
