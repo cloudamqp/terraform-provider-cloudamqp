@@ -4,28 +4,27 @@ import (
 	"os"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 var testAccProvider *schema.Provider
-var testAccProviders map[string]terraform.ResourceProvider
+var testAccProviders map[string]*schema.Provider
 
 func init() {
-	testAccProvider = Provider()
-	testAccProviders = map[string]terraform.ResourceProvider{
+	testAccProvider = Provider("0.0.0")
+	testAccProviders = map[string]*schema.Provider{
 		"cloudamqp": testAccProvider,
 	}
 }
 
 func TestProvider(t *testing.T) {
-	if err := Provider().InternalValidate(); err != nil {
+	if err := Provider("0.0.0").InternalValidate(); err != nil {
 		t.Fatalf("err: %s", err)
 	}
 }
 
 func TestProvider_impl(t *testing.T) {
-	var _ terraform.ResourceProvider = Provider()
+	var _ = Provider("0.0.0")
 }
 
 func testAccPreCheck(t *testing.T) {
