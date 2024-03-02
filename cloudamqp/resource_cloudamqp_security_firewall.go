@@ -23,6 +23,7 @@ func resourceSecurityFirewall() *schema.Resource {
 		Update: resourceSecurityFirewallUpdate,
 		Delete: resourceSecurityFirewallDelete,
 		Importer: &schema.ResourceImporter{
+			// Can only import all rules
 			State: schema.ImportStatePassthrough,
 		},
 		Schema: map[string]*schema.Schema{
@@ -31,6 +32,12 @@ func resourceSecurityFirewall() *schema.Resource {
 				Required:    true,
 				ForceNew:    true,
 				Description: "Instance identifier",
+			},
+			"patch": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Patch firewall rules instead of replacing them",
 			},
 			"rules": {
 				Type:     schema.TypeSet,
@@ -102,42 +109,61 @@ func resourceSecurityFirewall() *schema.Resource {
 }
 
 func resourceSecurityFirewallCreate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	var params []map[string]interface{}
-	localFirewalls := d.Get("rules").(*schema.Set).List()
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create localFirewalls: %v", localFirewalls)
+	var (
+		api            = meta.(*api.API)
+		instanceID     = d.Get("instance_id").(int)
+		localFirewalls = d.Get("rules").(*schema.Set).List()
+		patch          = d.Get("patch").(bool)
+		params         []map[string]interface{}
+		sleep          = d.Get("sleep").(int)
+		timeout        = d.Get("timeout").(int)
+		err            error
+	)
 
+	d.SetId(strconv.Itoa(instanceID))
 	for _, k := range localFirewalls {
 		params = append(params, k.(map[string]interface{}))
 	}
 
-	instanceID := d.Get("instance_id").(int)
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create instance id: %v", instanceID)
-	data, err := api.CreateFirewallSettings(instanceID, params, d.Get("sleep").(int), d.Get("timeout").(int))
+	if patch {
+		err = api.PatchFirewallSettings(instanceID, params, sleep, timeout)
+	} else {
+		err = api.CreateFirewallSettings(instanceID, params, sleep, timeout)
+	}
+
 	if err != nil {
 		return fmt.Errorf("error setting security firewall for resource %s: %s", d.Id(), err)
 	}
-	d.SetId(strconv.Itoa(instanceID))
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create id set: %v", d.Id())
-	d.Set("rules", data)
-
 	return nil
 }
 
 func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	instanceID, _ := strconv.Atoi(d.Id())
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read instance id: %v", instanceID)
+	var (
+		api           = meta.(*api.API)
+		instanceID, _ = strconv.Atoi(d.Id()) // Needed for import
+		patch         = d.Get("patch").(bool)
+		rules         []map[string]interface{}
+	)
+
+	d.Set("instance_id", instanceID)
 	data, err := api.ReadFirewallSettings(instanceID)
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read data: %v", data)
 	if err != nil {
 		return err
 	}
-	d.Set("instance_id", instanceID)
-	rules := make([]map[string]interface{}, len(data))
-	for k, v := range data {
-		rules[k] = readRule(v)
+	log.Printf("[DEBUG] Read firewall rules: %v", data)
+
+	if patch {
+		for _, v := range data {
+			if d.Get("rules").(*schema.Set).Contains(v) {
+				rules = append(rules, readRule(v))
+			}
+		}
+	} else {
+		for _, v := range data {
+			rules = append(rules, readRule(v))
+		}
 	}
+
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read rules: %v", rules)
 	if err = d.Set("rules", rules); err != nil {
 		return fmt.Errorf("error setting rules for resource %s, %s", d.Id(), err)
@@ -147,37 +173,84 @@ func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) erro
 }
 
 func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	var params []map[string]interface{}
-	localFirewalls := d.Get("rules").(*schema.Set).List()
-	for _, k := range localFirewalls {
-		params = append(params, k.(map[string]interface{}))
-	}
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::update instance id: %v, params: %v", d.Get("instance_id"), params)
-	data, err := api.UpdateFirewallSettings(d.Get("instance_id").(int), params, d.Get("sleep").(int), d.Get("timeout").(int))
-	if err != nil {
-		return err
-	}
-	rules := make([]map[string]interface{}, len(data))
-	for k, v := range data {
-		rules[k] = readRule(v)
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		patch      = d.Get("patch").(bool)
+		rules      []map[string]interface{}
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
+	if !d.HasChange("rules") {
+		return nil
 	}
 
-	if err = d.Set("rules", rules); err != nil {
-		return fmt.Errorf("error setting rules for resource %s, %s", d.Id(), err)
+	if patch {
+		// Patch rules: Determine the difference between old and new sets
+		// Check which rules that should be deleted and which should be updated
+		oldRules, newRules := d.GetChange("rules")
+		deleteRules := oldRules.(*schema.Set).Difference(newRules.(*schema.Set)).List()
+		log.Printf("[DEBUG] Update firewall, remove rules: %v", deleteRules)
+		for _, v := range deleteRules {
+			rule := v.(map[string]interface{})
+			rule["services"] = []string{}
+			rule["ports"] = []int{}
+			rules = append(rules, rule)
+		}
+
+		updateRules := newRules.(*schema.Set).Difference(oldRules.(*schema.Set)).List()
+		log.Printf("[DEBUG] Update firewall, patch rules: %v", updateRules)
+		for _, v := range updateRules {
+			rules = append(rules, readRule(v.(map[string]interface{})))
+		}
+
+		log.Printf("[DEBUG] Update firewall, rules: %v", rules)
+		return api.PatchFirewallSettings(instanceID, rules, sleep, timeout)
 	}
-	return nil
+
+	// Replace all rules
+	for _, k := range d.Get("rules").(*schema.Set).List() {
+		rules = append(rules, k.(map[string]interface{}))
+	}
+	log.Printf("[DEBUG] Firewall update instance id: %v, rules: %v", instanceID, rules)
+	return api.UpdateFirewallSettings(instanceID, rules, sleep, timeout)
 }
 
 func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) error {
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+		patch      = d.Get("patch").(bool)
+	)
+
 	if enableFasterInstanceDestroy {
 		log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete skip calling backend.")
 		return nil
 	}
 
-	api := meta.(*api.API)
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete instance id: %v", d.Get("instance_id"))
-	data, err := api.DeleteFirewallSettings(d.Get("instance_id").(int), d.Get("sleep").(int), d.Get("timeout").(int))
+	if patch {
+		// Set services and port to empty arrays, this will remove rules when patching.
+		var params []map[string]interface{}
+		localFirewalls := d.Get("rules").(*schema.Set).List()
+		log.Printf("[DEBUG] Delete firewall rules: %v", localFirewalls)
+		for _, k := range localFirewalls {
+			rule := k.(map[string]interface{})
+			rule["services"] = []string{}
+			rule["ports"] = []int{}
+			params = append(params, rule)
+		}
+		log.Printf("[DEBUG] Delete firewall params: %v", params)
+		if len(params) > 0 {
+			return api.PatchFirewallSettings(instanceID, params, sleep, timeout)
+		}
+		return nil
+	}
+
+	// Remove firewall settings and set default 0.0.0.0/0 rule (found in go-api).
+	data, err := api.DeleteFirewallSettings(instanceID, sleep, timeout)
 	d.Set("rules", data)
 	return err
 }
