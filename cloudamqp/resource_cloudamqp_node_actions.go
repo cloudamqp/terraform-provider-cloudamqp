@@ -24,10 +24,10 @@ func resourceNodeAction() *schema.Resource {
 				Description: "The name of the node",
 			},
 			"action": {
-				Type:         schema.TypeString,
-				Required:     true,
-				Description:  "The action to perform on the node",
-				ValidateFunc: validateNodeAction(),
+				Type:             schema.TypeString,
+				Required:         true,
+				Description:      "The action to perform on the node",
+				ValidateDiagFunc: validateNodeAction(),
 			},
 			"running": {
 				Type:        schema.TypeBool,
@@ -64,12 +64,12 @@ func resourceNodeActionRemove(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func validateNodeAction() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
+func validateNodeAction() schema.SchemaValidateDiagFunc {
+	return validation.ToDiagFunc(validation.StringInSlice([]string{
 		"start",
 		"stop",
 		"restart",
 		"reboot",
 		"mgmt.restart",
-	}, true)
+	}, true))
 }

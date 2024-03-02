@@ -32,7 +32,7 @@ func resourceNotification() *schema.Resource {
 				Required: true,
 				Description: "Type of the notification, valid options are: email, opsgenie, opsgenie-eu," +
 					"pagerduty, slack, signl4, teams, victorops, webhook",
-				ValidateFunc: validateNotificationType(),
+				ValidateDiagFunc: validateNotificationType(),
 			},
 			"value": {
 				Type:        schema.TypeString,
@@ -58,10 +58,10 @@ func resourceNotification() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"type": {
-							Type:         schema.TypeString,
-							Required:     true,
-							Description:  "Responder type, valid options are: team, user, escalation, schedule",
-							ValidateFunc: validateOpsgenieRespondersType(),
+							Type:             schema.TypeString,
+							Required:         true,
+							Description:      "Responder type, valid options are: team, user, escalation, schedule",
+							ValidateDiagFunc: validateOpsgenieRespondersType(),
 						},
 						"id": {
 							Type:         schema.TypeString,
@@ -199,8 +199,8 @@ func resourceNotificationDelete(d *schema.ResourceData, meta interface{}) error 
 	return api.DeleteNotification(instanceID, recipientID)
 }
 
-func validateNotificationType() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
+func validateNotificationType() schema.SchemaValidateDiagFunc {
+	return validation.ToDiagFunc(validation.StringInSlice([]string{
 		"email",
 		"opsgenie",
 		"opsgenie-eu",
@@ -210,7 +210,7 @@ func validateNotificationType() schema.SchemaValidateFunc {
 		"teams",
 		"victorops",
 		"webhook",
-	}, true)
+	}, true))
 }
 
 func validateRecipientAttribute(key string) bool {
@@ -225,13 +225,13 @@ func validateRecipientAttribute(key string) bool {
 	return false
 }
 
-func validateOpsgenieRespondersType() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
+func validateOpsgenieRespondersType() schema.SchemaValidateDiagFunc {
+	return validation.ToDiagFunc(validation.StringInSlice([]string{
 		"escalation",
 		"schedule",
 		"team",
 		"user",
-	}, true)
+	}, true))
 }
 
 func opsGenieRespondersParameter(responders []interface{}) map[string]interface{} {
