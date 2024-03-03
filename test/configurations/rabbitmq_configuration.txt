@@ -1,0 +1,12 @@
+resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
+  instance_id = {{.InstanceID}}
+  channel_max = {{or .ChannelMax `0`}}
+  connection_max = {{or .ConnectionMax `-1`}}
+  consumer_timeout = {{or .ConsumerTimeout `7200000`}}
+  heartbeat = {{or .Heartbeat `120`}}
+  log_exchange_level = "{{or .LogExchangeLevel `error`}}"
+  max_message_size = {{or .MaxMessageSize `134217728`}}
+  queue_index_embed_msgs_below = {{or .QueueIndexEmbedMsgsBelow `4096`}}
+  vm_memory_high_watermark = {{or .VmMemoryHighWatermark `0.81`}}
+  cluster_partition_handling = "{{or .ClusterPartitionHandling `autoheal`}}"
+}

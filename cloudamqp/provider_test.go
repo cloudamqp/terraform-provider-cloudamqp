@@ -116,6 +116,13 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 			regexp.MustCompile(`api/instances/\d+/security/firewall/configured$`).MatchString(i.Request.URL):
 			fmt.Println("SKIP: GET /api/vpcs/{id}/security/firewall/configured", i.Request.URL)
 			i.DiscardOnSave = true
+		case i.Response.Code == 400 && i.Request.Method == "PUT" &&
+			regexp.MustCompile(`api/instances/\d+/config`).MatchString(i.Request.URL):
+			errStr := gjson.Get(i.Response.Body, "error").String()
+			if errStr == "Timeout talking to backend" {
+				fmt.Println("SKIP: PUT /api/instances/{id}/config", i.Request.URL, "error:", errStr)
+				i.DiscardOnSave = true
+			}
 		}
 		return nil
 	}
