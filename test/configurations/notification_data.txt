@@ -1,0 +1,4 @@
+data "cloudamqp_notification" "recipient" {
+  instance_id = {{.InstanceID}}
+  name = "{{.RecipientName}}"
+}

@@ -12,36 +12,39 @@ import (
 // TestAccAlarm_Basic: Create CPU alarm, import and change values.
 func TestAccAlarm_Basic(t *testing.T) {
 	var (
-		fileNames             = []string{"instance", "notification", "alarm"}
-		instanceResourceName  = "cloudamqp_instance.instance"
-		recipientResourceName = "cloudamqp_notification.recipient"
-		cpuAlarmResourceName  = "cloudamqp_alarm.cpu_alarm"
+		fileNames                 = []string{"instance", "notification", "alarm"}
+		instanceResourceName      = "cloudamqp_instance.instance"
+		recipientResourceName     = "cloudamqp_notification.recipient"
+		dataRecipientResourceName = "data.cloudamqp_notification.recipient"
+		cpuAlarmResourceName      = "cloudamqp_alarm.cpu_alarm"
+		dataCpuAlarmResourceName  = "data.cloudamqp_alarm.cpu_alarm"
 
 		params = map[string]string{
 			"InstanceName":             "TestAccAlarm_Basic",
 			"InstanceID":               fmt.Sprintf("%s.id", instanceResourceName),
+			"RecipientName":            "test",
 			"RecipientType":            "email",
 			"RecipientValue":           "test@example.com",
-			"RecipientName":            "test",
 			"CPUAlarmType":             "cpu",
 			"CPUAlarmEnabled":          "true",
 			"CPUAlarmTimeThreshold":    "600",
 			"CPUAlarmValueThreshold":   "90",
-			"CPUAlarmReminderInterval": "600",
+			"CPUAlarmReminderInterval": "0",
 			"CPUAlarmRecipients":       fmt.Sprintf("%s.id", recipientResourceName),
 		}
 
-		paramsUpdated = map[string]string{
+		fileNamesUpdated = []string{"instance", "notification", "notification_data", "alarm", "alarm_data"}
+		paramsUpdated    = map[string]string{
 			"InstanceName":             "TestAccAlarm_Basic",
 			"InstanceID":               fmt.Sprintf("%s.id", instanceResourceName),
+			"RecipientName":            "test",
 			"RecipientType":            "email",
 			"RecipientValue":           "test@example.com",
-			"RecipientName":            "test",
 			"CPUAlarmType":             "cpu",
 			"CPUAlarmEnabled":          "true",
 			"CPUAlarmTimeThreshold":    "450",
 			"CPUAlarmValueThreshold":   "50",
-			"CPUAlarmReminderInterval": "450",
+			"CPUAlarmReminderInterval": "0",
 			"CPUAlarmRecipients":       fmt.Sprintf("%s.id", recipientResourceName),
 		}
 	)
@@ -54,9 +57,9 @@ func TestAccAlarm_Basic(t *testing.T) {
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(recipientResourceName, "name", params["RecipientName"]),
 					resource.TestCheckResourceAttr(recipientResourceName, "type", params["RecipientType"]),
 					resource.TestCheckResourceAttr(recipientResourceName, "value", params["RecipientValue"]),
-					resource.TestCheckResourceAttr(recipientResourceName, "name", params["RecipientName"]),
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "type", params["CPUAlarmType"]),
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "enabled", params["CPUAlarmEnabled"]),
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "time_threshold", params["CPUAlarmTimeThreshold"]),
@@ -72,7 +75,7 @@ func TestAccAlarm_Basic(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
+				Config: configuration.GetTemplatedConfig(t, fileNamesUpdated, paramsUpdated),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "type", paramsUpdated["CPUAlarmType"]),
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "enabled", paramsUpdated["CPUAlarmEnabled"]),
@@ -80,6 +83,16 @@ func TestAccAlarm_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "value_threshold", paramsUpdated["CPUAlarmValueThreshold"]),
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "reminder_interval", paramsUpdated["CPUAlarmReminderInterval"]),
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "recipients.#", "1"),
+					// validate data sources
+					resource.TestCheckResourceAttr(dataRecipientResourceName, "name", params["RecipientName"]),
+					resource.TestCheckResourceAttr(dataRecipientResourceName, "type", params["RecipientType"]),
+					resource.TestCheckResourceAttr(dataRecipientResourceName, "value", params["RecipientValue"]),
+					resource.TestCheckResourceAttr(dataCpuAlarmResourceName, "type", params["CPUAlarmType"]),
+					resource.TestCheckResourceAttr(dataCpuAlarmResourceName, "enabled", params["CPUAlarmEnabled"]),
+					resource.TestCheckResourceAttr(dataCpuAlarmResourceName, "time_threshold", params["CPUAlarmTimeThreshold"]),
+					resource.TestCheckResourceAttr(dataCpuAlarmResourceName, "value_threshold", params["CPUAlarmValueThreshold"]),
+					resource.TestCheckResourceAttr(dataCpuAlarmResourceName, "reminder_interval", params["CPUAlarmReminderInterval"]),
+					resource.TestCheckResourceAttr(dataCpuAlarmResourceName, "recipients.#", "1"),
 				),
 			},
 		},
