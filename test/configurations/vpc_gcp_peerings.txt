@@ -1,0 +1,19 @@
+data "cloudamqp_vpc_gcp_info" "vpc_info_first" {
+  vpc_id = {{.VpcIDFirst}}
+}
+
+data "cloudamqp_vpc_gcp_info" "vpc_info_second" {
+  vpc_id = {{.VpcIDSecond}}
+}
+
+resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request_first" {
+  vpc_id = {{or .VpcIDFirst}}
+  peer_network_uri = {{.PeerNetworkUriSecond}}
+  wait_on_peering_status = true
+}
+
+resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request_second" {
+  vpc_id = {{.VpcIDSecond}}
+  peer_network_uri = {{.PeerNetworkUriFirst}}
+  wait_on_peering_status = true
+}
