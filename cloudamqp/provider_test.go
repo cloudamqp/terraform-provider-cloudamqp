@@ -95,6 +95,20 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 			if configured == false {
 				fmt.Println("SKIP: GET /api/instances/{id}/nodes", i.Request.URL, "configured:", configured)
 				i.DiscardOnSave = true
+				return nil
+			}
+			// Filter polling for node running state, only store successful response
+			running := true
+			for _, c := range gjson.Get(i.Response.Body, "#.running").Array() {
+				if !c.Bool() {
+					running = false
+					break
+				}
+			}
+			if running == false {
+				fmt.Println("SKIP: GET /api/instances/{id}/nodes", i.Request.URL, "running:", running)
+				i.DiscardOnSave = true
+				return nil
 			}
 		case i.Response.Code == 200 && i.Request.Method == "GET" &&
 			regexp.MustCompile(`/api/instances/\d+/vpc-connect$`).MatchString(i.Request.URL):
