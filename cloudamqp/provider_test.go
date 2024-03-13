@@ -60,6 +60,7 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 	sanitizeHook := func(i *cassette.Interaction) error {
 		delete(i.Request.Headers, "Authorization")
 		delete(i.Response.Headers, "Set-Cookie")
+		i.Request.Body = sanitizer.Fields(i.Request.Body)
 		i.Response.Body = sanitizer.Fields(i.Response.Body)
 		i.Response.Body = sanitizer.URL(i.Response.Body)
 		return nil

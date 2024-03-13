@@ -9,8 +9,7 @@ import (
 )
 
 func Fields(jsonBody string) string {
-	blockedFields := []string{"apikey", "password"}
-	for _, field := range blockedFields {
+	for _, field := range blockedFields() {
 		if gjson.Get(jsonBody, field).Exists() {
 			jsonBody, _ = sjson.Set(jsonBody, field, "***")
 		}
@@ -29,4 +28,29 @@ func URL(jsonBody string) string {
 		}
 	}
 	return jsonBody
+}
+
+func blockedFields() []string {
+	return []string{
+		"api_key",
+		"apikey",
+		"application_secret",
+		"credentials",
+		"license_key",
+		"password",
+		"private_key",
+		"private_key_id",
+		"secret_access_key",
+		"token",
+		"*.api_key",
+		"*.apikey",
+		"*.application_secret",
+		"*.credentials",
+		"*.license_key",
+		"*.password",
+		"*.private_key",
+		"*.private_key_id",
+		"*.secret_access_key",
+		"*.token",
+	}
 }

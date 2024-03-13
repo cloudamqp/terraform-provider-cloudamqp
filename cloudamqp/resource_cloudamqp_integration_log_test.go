@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
@@ -27,27 +28,27 @@ func TestAccIntegrationLog_Basic(t *testing.T) {
 			"InstanceName":              "TestAccIntegrationLog_Basic",
 			"InstanceID":                fmt.Sprintf("%s.id", instanceResourceName),
 			"InstanceHost":              fmt.Sprintf("%s.host", instanceResourceName),
-			"AzmTentantId":              "71e89a32-14f3-4458-b136-7395bb6d1969",     // Radnomized token
-			"AzmApplicationId":          "3e303e72-4024-494c-b5f6-f5ffbe8139de",     // Radnomized token
-			"AzmApplicationSecret":      "DA10F~FSqsdjnW3nHFWwXdeW1zdvqIQhdSTfVdes", // Radnomized token
+			"AzmTentantId":              "71e89a32-14f3-4458-b136-7395bb6d1969", // Radnomized token
+			"AzmApplicationId":          "3e303e72-4024-494c-b5f6-f5ffbe8139de", // Radnomized token
+			"AzmApplicationSecret":      os.Getenv("AZM_APPLICATION_SECRET"),
 			"AzmDcrId":                  "dcr-7cae904d070344d7ace2b8b33b743c84",
 			"AzmDceUri":                 "https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com",
 			"AzmTable":                  "cloudamqp_CL",
-			"CloudwatchAccessKeyId":     "AKIAI44QH8DHBEXAMPLE",                     // Example key id
-			"CloudwatchSecretAccessKey": "je7MtGbClwBFd2Zp9Utkdh3yCo8nvbEXAMPLEKEY", // Example secret key
+			"CloudwatchAccessKeyId":     os.Getenv("CLOUDWATCH_ACCESS_KEY_ID"),
+			"CloudwatchSecretAccessKey": os.Getenv("CLOUDWATCH_SECRET_ACCESS_KEY"),
 			"CloudwatchRegion":          "us-east-1",
-			"CoralogixSendDataKey":      "ca755454-823b-46e9-9f7e-996baa35249b", // Radnomized token
+			"CoralogixSendDataKey":      os.Getenv("CORALOGIX_SEND_DATA_KEY"),
 			"CoralogixEndpoint":         "syslog.cx498.coralogix.com:6514",
 			"CoralogixApplication":      "playground",
 			"DataDogRegion":             "us1",
-			"DataDogApiKey":             "4b08474cdead14fb57a1099ba2b32ee6", // Note: require real (temporary) key when recording.
+			"DataDogApiKey":             os.Getenv("DATADOG_APIKEY"),
 			"DataDogTags":               "env=test,region=us1",
-			"LogEntriesToken":           "10de0c0c-6a65-4070-9501-177d46a3f8f0", // Radnomized token
-			"LogglyToken":               "dec02f13-7b54-4874-b339-d80ecb02299b", // Randomized token
+			"LogEntriesToken":           os.Getenv("LOGENTIRES_TOKEN"),
+			"LogglyToken":               os.Getenv("LOGGLY_TOKEN"),
 			"PapertrailUrl":             "logs.papertrailapp.com:11111",
-			"ScalyrToken":               "3dUM/LLdkodksksDKK2lsjkd9kdkd/2djjdJdi8ejsld-", // Randomized token
+			"ScalyrToken":               os.Getenv("SCALYR_TOKEN"),
 			"ScalyrHost":                "app.scalyr.com",
-			"SplunkToken":               "53f96e41-857d-4fa0-a609-8bb7f2776737", // Randomized token
+			"SplunkToken":               os.Getenv("SPLUNK_TOKEN"),
 			"SplunkHostPort":            "logs.splunk.com:11111",
 		}
 	)
@@ -57,7 +58,8 @@ func TestAccIntegrationLog_Basic(t *testing.T) {
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				ExpectNonEmptyPlan: true,
+				Config:             configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(azmResourceName, "name", "azure_monitor"),
@@ -66,27 +68,21 @@ func TestAccIntegrationLog_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(azmResourceName, "dce_uri", params["AzmDceUri"]),
 					resource.TestCheckResourceAttr(azmResourceName, "tenant_id", params["AzmTentantId"]),
 					resource.TestCheckResourceAttr(azmResourceName, "application_id", params["AzmApplicationId"]),
-					resource.TestCheckResourceAttr(azmResourceName, "application_secret", params["AzmApplicationSecret"]),
 					resource.TestCheckResourceAttr(cloudwatchResourceName, "name", "cloudwatchlog"),
 					resource.TestCheckResourceAttr(cloudwatchResourceName, "access_key_id", params["CloudwatchAccessKeyId"]),
 					resource.TestCheckResourceAttr(cloudwatchResourceName, "region", params["CloudwatchRegion"]),
 					resource.TestCheckResourceAttr(coralogixResourceName, "name", "coralogix"),
-					resource.TestCheckResourceAttr(coralogixResourceName, "private_key", params["CoralogixSendDataKey"]),
 					resource.TestCheckResourceAttr(coralogixResourceName, "endpoint", params["CoralogixEndpoint"]),
 					resource.TestCheckResourceAttr(coralogixResourceName, "application", params["CoralogixApplication"]),
 					resource.TestCheckResourceAttr(dataDogResourceName, "name", "datadog"),
 					resource.TestCheckResourceAttr(dataDogResourceName, "region", params["DataDogRegion"]),
 					resource.TestCheckResourceAttr(logentriesResourceName, "name", "logentries"),
-					resource.TestCheckResourceAttr(logentriesResourceName, "token", params["LogEntriesToken"]),
 					resource.TestCheckResourceAttr(logglyResourceName, "name", "loggly"),
-					resource.TestCheckResourceAttr(logglyResourceName, "token", params["LogglyToken"]),
 					resource.TestCheckResourceAttr(papertrailResourceName, "name", "papertrail"),
 					resource.TestCheckResourceAttr(papertrailResourceName, "url", params["PapertrailUrl"]),
 					resource.TestCheckResourceAttr(scalyrResourceName, "name", "scalyr"),
-					resource.TestCheckResourceAttr(scalyrResourceName, "token", params["ScalyrToken"]),
 					resource.TestCheckResourceAttr(scalyrResourceName, "host", params["ScalyrHost"]),
 					resource.TestCheckResourceAttr(splunkResourceName, "name", "splunk"),
-					resource.TestCheckResourceAttr(splunkResourceName, "token", params["SplunkToken"]),
 					resource.TestCheckResourceAttr(splunkResourceName, "host_port", params["SplunkHostPort"]),
 				),
 			},

@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
@@ -21,17 +22,17 @@ func TestAccIntegrationMetric_Basic(t *testing.T) {
 		params = map[string]string{
 			"InstanceName":              "TestAccIntegrationMetric_Basic",
 			"InstanceID":                fmt.Sprintf("%s.id", instanceResourceName),
-			"CloudwatchAccessKeyId":     "AKIAI44QH8DHBEXAMPLE",                     // Example key id
-			"CloudwatchSecretAccessKey": "je7MtGbClwBFd2Zp9Utkdh3yCo8nvbEXAMPLEKEY", // Example secret key
+			"CloudwatchAccessKeyId":     os.Getenv("CLOUDWATCH_ACCESS_KEY_ID"),
+			"CloudwatchSecretAccessKey": os.Getenv("CLOUDWATCH_SECRET_ACCESS_KEY"),
 			"CloudwatchRegion":          "us-east-1",
 			"CloudwatchTags":            "env=test,region=us-east-1",
 			"DataDogRegion":             "us1",
-			"DataDogApiKey":             "1af4f17471e98bcee88b6d9d6ba1626f", // Note: require real (temporary) key when recording.
+			"DataDogApiKey":             os.Getenv("DATADOG_APIKEY"),
 			"DataDogTags":               "env=test,region=us1",
 			"LibratoEmail":              "test@example.com",
-			"LibratoApiKey":             "7b857ea2-b9d3-4268-955f-7e4b4abf877c", // Randomized token
+			"LibratoApiKey":             os.Getenv("LIBRATO_APIKEY"),
 			"LibratoTags":               "env=test",
-			"NewRelicApiKey":            "9985ba19-f566-48fa-b90a-628474004067", // Randomized token
+			"NewRelicApiKey":            os.Getenv("NEWRELIC_APIKEY"),
 			"NewRelicRegion":            "us",
 			"NewRelicTags":              "env=test,region=us1",
 		}
@@ -42,7 +43,8 @@ func TestAccIntegrationMetric_Basic(t *testing.T) {
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				ExpectNonEmptyPlan: true,
+				Config:             configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(cloudwatchResourceName, "name", "cloudwatch_v2"),
@@ -54,10 +56,8 @@ func TestAccIntegrationMetric_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(dataDogResourceName, "tags", params["DataDogTags"]),
 					resource.TestCheckResourceAttr(libratoResourceName, "name", "librato"),
 					resource.TestCheckResourceAttr(libratoResourceName, "email", params["LibratoEmail"]),
-					resource.TestCheckResourceAttr(libratoResourceName, "api_key", params["LibratoApiKey"]),
 					resource.TestCheckResourceAttr(libratoResourceName, "tags", params["LibratoTags"]),
 					resource.TestCheckResourceAttr(newrelicResourceName, "name", "newrelic_v2"),
-					resource.TestCheckResourceAttr(newrelicResourceName, "api_key", params["NewRelicApiKey"]),
 					resource.TestCheckResourceAttr(newrelicResourceName, "region", params["NewRelicRegion"]),
 					resource.TestCheckResourceAttr(newrelicResourceName, "tags", params["NewRelicTags"]),
 				),
