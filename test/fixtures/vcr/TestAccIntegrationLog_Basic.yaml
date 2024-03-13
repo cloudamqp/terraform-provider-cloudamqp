@@ -1,0 +1,3001 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/plans
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2654
+        uncompressed: false
+        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"bobsled","price":0,"backend":"datasled","shared":true},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"tiger::do-dedicated","price":19,"backend":null,"shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "2654"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 587c22bd-05cf-4929-ad61-8cefa0d53e77
+        status: 200 OK
+        code: 200
+        duration: 215.172209ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/regions
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 14003
+        uncompressed: false
+        body: '[{"provider":"amazon-web-services","region":"us-east-1","name":"Amazon Web Services - US-East-1 (Northern Virginia)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-2","name":"Amazon Web Services - US-West-2 (Oregon)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-east-2","name":"Amazon Web Services - US-East-2 (Ohio)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-1","name":"Amazon Web Services - US-West-1 (Northern California)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-north-1","name":"Amazon Web Services - EU-North-1 (Stockholm)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-1","name":"Amazon Web Services - EU-West-1 (Ireland)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-2","name":"Amazon Web Services - EU-West-2 (London)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-3","name":"Amazon Web Services - EU-West-3 (Paris)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-south-1","name":"Amazon Web Services - EU-South-1 (Milan)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-south-2","name":"Amazon Web Services - EU-South-2 (Spain)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-central-1","name":"Amazon Web Services - EU-Central-1 (Frankfurt)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-central-2","name":"Amazon Web Services - EU-Central-2 (Zurich)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ca-central-1","name":"Amazon Web Services - CA-Central-1 (Canada)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-1","name":"Amazon Web Services - AP-SouthEast-1 (Singapore)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-2","name":"Amazon Web Services - AP-SouthEast-2 (Sydney)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-3","name":"Amazon Web Services - AP-SouthEast-3 (Jakarta)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-4","name":"Amazon Web Services - AP-SouthEast-4 (Melbourne)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-northeast-1","name":"Amazon Web Services - AP-NorthEast-1 (Tokyo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-2","name":"Amazon Web Services - AP-NorthEast-2 (Seoul)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-3","name":"Amazon Web Services - AP-NorthEast-3 (Osaka)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-south-1","name":"Amazon Web Services - AP-South-1 (Mumbai)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-south-2","name":"Amazon Web Services - AP-South-2 (Hyderabad)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-east-1","name":"Amazon Web Services - AP-East-1 (Hong Kong)","has_shared_plans":true},{"provider":"amazon-web-services","region":"sa-east-1","name":"Amazon Web Services - SA-East-1 (São Paulo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-south-1","name":"Amazon Web Services - ME-South-1 (Bahrain)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-central-1","name":"Amazon Web Services - ME-Central-1 (UAE)","has_shared_plans":false},{"provider":"amazon-web-services","region":"af-south-1","name":"Amazon Web Services - AF-South-1 (Cape Town)","has_shared_plans":false},{"provider":"amazon-web-services","region":"il-central-1","name":"Amazon Web Services - IL-Central-1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-central1","name":"Google Compute Engine - us-central1 (Iowa)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east1","name":"Google Compute Engine - us-east1 (South Carolina)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east4","name":"Google Compute Engine - us-east4 (North Virginia)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east5","name":"Google Compute Engine - us-east5 (Columbus)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west1","name":"Google Compute Engine - us-west1 (Oregon)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west2","name":"Google Compute Engine - us-west2 (Los Angeles)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west3","name":"Google Compute Engine - us-west3 (Salt Lake City)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west4","name":"Google Compute Engine - us-west4 (Las Vegas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-south1","name":"Google Compute Engine - us-south1 (Dallas, Texas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-east1","name":"Google Compute Engine - southamerica-east1 (São Paulo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-west1","name":"Google Compute Engine - southamerica-west1 (Santiago)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north1","name":"Google Compute Engine - europe-north1 (Finland)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west1","name":"Google Compute Engine - europe-west1 (Belgium)","has_shared_plans":true},{"provider":"google-compute-engine","region":"europe-west2","name":"Google Compute Engine - europe-west2 (London)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west3","name":"Google Compute Engine - europe-west3 (Frankfurt)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west4","name":"Google Compute Engine - europe-west4 (Netherlands)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west6","name":"Google Compute Engine - europe-west6 (Zürich)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west8","name":"Google Compute Engine - europe-west8 (Milan)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west9","name":"Google Compute Engine - europe-west9 (Paris)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west10","name":"Google Compute Engine - europe-west10 (Berlin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west12","name":"Google Compute Engine - europe-west12 (Turin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-central2","name":"Google Compute Engine - europe-central2 (Warsaw)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-southwest1","name":"Google Compute Engine - europe-southwest1 (Madrid)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-west1","name":"Google Compute Engine - me-west1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central1","name":"Google Compute Engine - me-central1 (Doha)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central2","name":"Google Compute Engine - me-central2 (Dammam)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-east1","name":"Google Compute Engine - asia-east1 (Taiwan)","has_shared_plans":true},{"provider":"google-compute-engine","region":"asia-east2","name":"Google Compute Engine - asia-east2 (Hong Kong)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast1","name":"Google Compute Engine - asia-northeast1 (Tokyo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast2","name":"Google Compute Engine - asia-northeast2 (Osaka)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast3","name":"Google Compute Engine - asia-northeast3 (Seoul)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast1","name":"Google Compute Engine - asia-southeast1 (Singapore)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast2","name":"Google Compute Engine - asia-southeast2 (Jakarta)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south1","name":"Google Compute Engine - asia-south1 (Mumbai)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south2","name":"Google Compute Engine - asia-south2 (Delhi)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast1","name":"Google Compute Engine - australia-southeast1 (Sydney)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast2","name":"Google Compute Engine - australia-southeast2 (Melbourne)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast1","name":"Google Compute Engine - northamerica-northeast1 (Montréal, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast2","name":"Google Compute Engine - northamerica-northeast2 (Toronto, Canada)","has_shared_plans":false},{"provider":"digital-ocean","region":"nyc3","name":"DigitalOcean - New York 3","has_shared_plans":false},{"provider":"digital-ocean","region":"ams3","name":"DigitalOcean - Amsterdam 3","has_shared_plans":false},{"provider":"digital-ocean","region":"sgp1","name":"DigitalOcean - Singapore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"lon1","name":"DigitalOcean - London 1","has_shared_plans":false},{"provider":"digital-ocean","region":"fra1","name":"DigitalOcean - Frankfurt 1","has_shared_plans":false},{"provider":"digital-ocean","region":"tor1","name":"DigitalOcean - Toronto 1","has_shared_plans":false},{"provider":"digital-ocean","region":"sfo3","name":"DigitalOcean - San Francisco 3","has_shared_plans":false},{"provider":"digital-ocean","region":"blr1","name":"DigitalOcean - Bangalore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"syd1","name":"DigitalOcean - Sydney 1","has_shared_plans":false},{"provider":"azure-arm","region":"australiacentral","name":"Azure - Australia Central","has_shared_plans":false},{"provider":"azure-arm","region":"australiaeast","name":"Azure - Australia East","has_shared_plans":false},{"provider":"azure-arm","region":"australiasoutheast","name":"Azure - Australia Southeast","has_shared_plans":false},{"provider":"azure-arm","region":"brazilsouth","name":"Azure - Brazil South","has_shared_plans":false},{"provider":"azure-arm","region":"canadacentral","name":"Azure - Canada Central","has_shared_plans":false},{"provider":"azure-arm","region":"canadaeast","name":"Azure - Canada East","has_shared_plans":false},{"provider":"azure-arm","region":"centralindia","name":"Azure - Central India","has_shared_plans":false},{"provider":"azure-arm","region":"centralus","name":"Azure - Central US","has_shared_plans":false},{"provider":"azure-arm","region":"eastasia","name":"Azure - East Asia","has_shared_plans":false},{"provider":"azure-arm","region":"eastus","name":"Azure - East US","has_shared_plans":true},{"provider":"azure-arm","region":"eastus2","name":"Azure - East US 2","has_shared_plans":true},{"provider":"azure-arm","region":"francecentral","name":"Azure - France Central","has_shared_plans":false},{"provider":"azure-arm","region":"germanywestcentral","name":"Azure - Germany West Central","has_shared_plans":false},{"provider":"azure-arm","region":"italynorth","name":"Azure - Italy North","has_shared_plans":false},{"provider":"azure-arm","region":"japaneast","name":"Azure - Japan East","has_shared_plans":false},{"provider":"azure-arm","region":"japanwest","name":"Azure - Japan West","has_shared_plans":false},{"provider":"azure-arm","region":"koreacentral","name":"Azure - Korea Central","has_shared_plans":false},{"provider":"azure-arm","region":"koreasouth","name":"Azure - Korea South","has_shared_plans":false},{"provider":"azure-arm","region":"northcentralus","name":"Azure - North Central US","has_shared_plans":false},{"provider":"azure-arm","region":"northeurope","name":"Azure - North Europe","has_shared_plans":false},{"provider":"azure-arm","region":"norwayeast","name":"Azure - Norway East","has_shared_plans":false},{"provider":"azure-arm","region":"southafricanorth","name":"Azure - South Africa North","has_shared_plans":false},{"provider":"azure-arm","region":"southcentralus","name":"Azure - South Central US","has_shared_plans":false},{"provider":"azure-arm","region":"southeastasia","name":"Azure - Southeast Asia","has_shared_plans":false},{"provider":"azure-arm","region":"southindia","name":"Azure - South India","has_shared_plans":false},{"provider":"azure-arm","region":"switzerlandnorth","name":"Azure - Switzerland North","has_shared_plans":false},{"provider":"azure-arm","region":"swedencentral","name":"Azure - Sweden Central","has_shared_plans":true},{"provider":"azure-arm","region":"uaenorth","name":"Azure - UAE North","has_shared_plans":false},{"provider":"azure-arm","region":"uksouth","name":"Azure - UK South","has_shared_plans":false},{"provider":"azure-arm","region":"ukwest","name":"Azure - UK West","has_shared_plans":false},{"provider":"azure-arm","region":"westcentralus","name":"Azure - West Central US","has_shared_plans":false},{"provider":"azure-arm","region":"westeurope","name":"Azure - West Europe","has_shared_plans":true},{"provider":"azure-arm","region":"westus","name":"Azure - West US","has_shared_plans":true},{"provider":"azure-arm","region":"westus2","name":"Azure - West US 2","has_shared_plans":false},{"provider":"azure-arm","region":"westus3","name":"Azure - West US 3","has_shared_plans":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "14003"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 375645cf-45f3-4999-9eb2-6a3b8e8da95c
+        status: 200 OK
+        code: 200
+        duration: 10.664754ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/plans
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2654
+        uncompressed: false
+        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"bobsled","price":0,"backend":"datasled","shared":true},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"tiger::do-dedicated","price":19,"backend":null,"shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "2654"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f1bff1ba-a343-4d55-9cbc-dc8219186811
+        status: 200 OK
+        code: 200
+        duration: 146.331668ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/regions
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 14003
+        uncompressed: false
+        body: '[{"provider":"amazon-web-services","region":"us-east-1","name":"Amazon Web Services - US-East-1 (Northern Virginia)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-2","name":"Amazon Web Services - US-West-2 (Oregon)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-east-2","name":"Amazon Web Services - US-East-2 (Ohio)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-1","name":"Amazon Web Services - US-West-1 (Northern California)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-north-1","name":"Amazon Web Services - EU-North-1 (Stockholm)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-1","name":"Amazon Web Services - EU-West-1 (Ireland)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-2","name":"Amazon Web Services - EU-West-2 (London)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-3","name":"Amazon Web Services - EU-West-3 (Paris)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-south-1","name":"Amazon Web Services - EU-South-1 (Milan)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-south-2","name":"Amazon Web Services - EU-South-2 (Spain)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-central-1","name":"Amazon Web Services - EU-Central-1 (Frankfurt)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-central-2","name":"Amazon Web Services - EU-Central-2 (Zurich)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ca-central-1","name":"Amazon Web Services - CA-Central-1 (Canada)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-1","name":"Amazon Web Services - AP-SouthEast-1 (Singapore)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-2","name":"Amazon Web Services - AP-SouthEast-2 (Sydney)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-3","name":"Amazon Web Services - AP-SouthEast-3 (Jakarta)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-4","name":"Amazon Web Services - AP-SouthEast-4 (Melbourne)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-northeast-1","name":"Amazon Web Services - AP-NorthEast-1 (Tokyo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-2","name":"Amazon Web Services - AP-NorthEast-2 (Seoul)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-3","name":"Amazon Web Services - AP-NorthEast-3 (Osaka)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-south-1","name":"Amazon Web Services - AP-South-1 (Mumbai)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-south-2","name":"Amazon Web Services - AP-South-2 (Hyderabad)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-east-1","name":"Amazon Web Services - AP-East-1 (Hong Kong)","has_shared_plans":true},{"provider":"amazon-web-services","region":"sa-east-1","name":"Amazon Web Services - SA-East-1 (São Paulo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-south-1","name":"Amazon Web Services - ME-South-1 (Bahrain)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-central-1","name":"Amazon Web Services - ME-Central-1 (UAE)","has_shared_plans":false},{"provider":"amazon-web-services","region":"af-south-1","name":"Amazon Web Services - AF-South-1 (Cape Town)","has_shared_plans":false},{"provider":"amazon-web-services","region":"il-central-1","name":"Amazon Web Services - IL-Central-1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-central1","name":"Google Compute Engine - us-central1 (Iowa)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east1","name":"Google Compute Engine - us-east1 (South Carolina)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east4","name":"Google Compute Engine - us-east4 (North Virginia)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east5","name":"Google Compute Engine - us-east5 (Columbus)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west1","name":"Google Compute Engine - us-west1 (Oregon)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west2","name":"Google Compute Engine - us-west2 (Los Angeles)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west3","name":"Google Compute Engine - us-west3 (Salt Lake City)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west4","name":"Google Compute Engine - us-west4 (Las Vegas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-south1","name":"Google Compute Engine - us-south1 (Dallas, Texas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-east1","name":"Google Compute Engine - southamerica-east1 (São Paulo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-west1","name":"Google Compute Engine - southamerica-west1 (Santiago)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north1","name":"Google Compute Engine - europe-north1 (Finland)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west1","name":"Google Compute Engine - europe-west1 (Belgium)","has_shared_plans":true},{"provider":"google-compute-engine","region":"europe-west2","name":"Google Compute Engine - europe-west2 (London)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west3","name":"Google Compute Engine - europe-west3 (Frankfurt)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west4","name":"Google Compute Engine - europe-west4 (Netherlands)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west6","name":"Google Compute Engine - europe-west6 (Zürich)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west8","name":"Google Compute Engine - europe-west8 (Milan)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west9","name":"Google Compute Engine - europe-west9 (Paris)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west10","name":"Google Compute Engine - europe-west10 (Berlin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west12","name":"Google Compute Engine - europe-west12 (Turin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-central2","name":"Google Compute Engine - europe-central2 (Warsaw)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-southwest1","name":"Google Compute Engine - europe-southwest1 (Madrid)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-west1","name":"Google Compute Engine - me-west1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central1","name":"Google Compute Engine - me-central1 (Doha)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central2","name":"Google Compute Engine - me-central2 (Dammam)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-east1","name":"Google Compute Engine - asia-east1 (Taiwan)","has_shared_plans":true},{"provider":"google-compute-engine","region":"asia-east2","name":"Google Compute Engine - asia-east2 (Hong Kong)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast1","name":"Google Compute Engine - asia-northeast1 (Tokyo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast2","name":"Google Compute Engine - asia-northeast2 (Osaka)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast3","name":"Google Compute Engine - asia-northeast3 (Seoul)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast1","name":"Google Compute Engine - asia-southeast1 (Singapore)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast2","name":"Google Compute Engine - asia-southeast2 (Jakarta)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south1","name":"Google Compute Engine - asia-south1 (Mumbai)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south2","name":"Google Compute Engine - asia-south2 (Delhi)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast1","name":"Google Compute Engine - australia-southeast1 (Sydney)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast2","name":"Google Compute Engine - australia-southeast2 (Melbourne)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast1","name":"Google Compute Engine - northamerica-northeast1 (Montréal, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast2","name":"Google Compute Engine - northamerica-northeast2 (Toronto, Canada)","has_shared_plans":false},{"provider":"digital-ocean","region":"nyc3","name":"DigitalOcean - New York 3","has_shared_plans":false},{"provider":"digital-ocean","region":"ams3","name":"DigitalOcean - Amsterdam 3","has_shared_plans":false},{"provider":"digital-ocean","region":"sgp1","name":"DigitalOcean - Singapore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"lon1","name":"DigitalOcean - London 1","has_shared_plans":false},{"provider":"digital-ocean","region":"fra1","name":"DigitalOcean - Frankfurt 1","has_shared_plans":false},{"provider":"digital-ocean","region":"tor1","name":"DigitalOcean - Toronto 1","has_shared_plans":false},{"provider":"digital-ocean","region":"sfo3","name":"DigitalOcean - San Francisco 3","has_shared_plans":false},{"provider":"digital-ocean","region":"blr1","name":"DigitalOcean - Bangalore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"syd1","name":"DigitalOcean - Sydney 1","has_shared_plans":false},{"provider":"azure-arm","region":"australiacentral","name":"Azure - Australia Central","has_shared_plans":false},{"provider":"azure-arm","region":"australiaeast","name":"Azure - Australia East","has_shared_plans":false},{"provider":"azure-arm","region":"australiasoutheast","name":"Azure - Australia Southeast","has_shared_plans":false},{"provider":"azure-arm","region":"brazilsouth","name":"Azure - Brazil South","has_shared_plans":false},{"provider":"azure-arm","region":"canadacentral","name":"Azure - Canada Central","has_shared_plans":false},{"provider":"azure-arm","region":"canadaeast","name":"Azure - Canada East","has_shared_plans":false},{"provider":"azure-arm","region":"centralindia","name":"Azure - Central India","has_shared_plans":false},{"provider":"azure-arm","region":"centralus","name":"Azure - Central US","has_shared_plans":false},{"provider":"azure-arm","region":"eastasia","name":"Azure - East Asia","has_shared_plans":false},{"provider":"azure-arm","region":"eastus","name":"Azure - East US","has_shared_plans":true},{"provider":"azure-arm","region":"eastus2","name":"Azure - East US 2","has_shared_plans":true},{"provider":"azure-arm","region":"francecentral","name":"Azure - France Central","has_shared_plans":false},{"provider":"azure-arm","region":"germanywestcentral","name":"Azure - Germany West Central","has_shared_plans":false},{"provider":"azure-arm","region":"italynorth","name":"Azure - Italy North","has_shared_plans":false},{"provider":"azure-arm","region":"japaneast","name":"Azure - Japan East","has_shared_plans":false},{"provider":"azure-arm","region":"japanwest","name":"Azure - Japan West","has_shared_plans":false},{"provider":"azure-arm","region":"koreacentral","name":"Azure - Korea Central","has_shared_plans":false},{"provider":"azure-arm","region":"koreasouth","name":"Azure - Korea South","has_shared_plans":false},{"provider":"azure-arm","region":"northcentralus","name":"Azure - North Central US","has_shared_plans":false},{"provider":"azure-arm","region":"northeurope","name":"Azure - North Europe","has_shared_plans":false},{"provider":"azure-arm","region":"norwayeast","name":"Azure - Norway East","has_shared_plans":false},{"provider":"azure-arm","region":"southafricanorth","name":"Azure - South Africa North","has_shared_plans":false},{"provider":"azure-arm","region":"southcentralus","name":"Azure - South Central US","has_shared_plans":false},{"provider":"azure-arm","region":"southeastasia","name":"Azure - Southeast Asia","has_shared_plans":false},{"provider":"azure-arm","region":"southindia","name":"Azure - South India","has_shared_plans":false},{"provider":"azure-arm","region":"switzerlandnorth","name":"Azure - Switzerland North","has_shared_plans":false},{"provider":"azure-arm","region":"swedencentral","name":"Azure - Sweden Central","has_shared_plans":true},{"provider":"azure-arm","region":"uaenorth","name":"Azure - UAE North","has_shared_plans":false},{"provider":"azure-arm","region":"uksouth","name":"Azure - UK South","has_shared_plans":false},{"provider":"azure-arm","region":"ukwest","name":"Azure - UK West","has_shared_plans":false},{"provider":"azure-arm","region":"westcentralus","name":"Azure - West Central US","has_shared_plans":false},{"provider":"azure-arm","region":"westeurope","name":"Azure - West Europe","has_shared_plans":true},{"provider":"azure-arm","region":"westus","name":"Azure - West US","has_shared_plans":true},{"provider":"azure-arm","region":"westus2","name":"Azure - West US 2","has_shared_plans":false},{"provider":"azure-arm","region":"westus3","name":"Azure - West US 3","has_shared_plans":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "14003"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 9904bc98-bcbb-4fba-b5d3-da585ab17eb9
+        status: 200 OK
+        code: 200
+        duration: 9.757768ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 145
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"TestAccIntegrationLog_Basic","no_default_alarms":false,"plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 252
+        uncompressed: false
+        body: '{"id":1825,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"***","url":"amqps://djhauapw:***@dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com/djhauapw"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "252"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 0b5ccb30-81b6-4287-8f16-2d8b3fe11893
+        status: 200 OK
+        code: 200
+        duration: 478.972421ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 789
+        uncompressed: false
+        body: '{"id":1825,"name":"TestAccIntegrationLog_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","url":"amqps://djhauapw:***@dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com/djhauapw","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://djhauapw:***@dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com/djhauapw","internal":"amqp://djhauapw:***@dev-crisp-ivory-lemur.in.rmq2.dev.cloudamqp.com/djhauapw"},"rmq_version":"3.13.0","hostname_external":"dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com","hostname_internal":"dev-crisp-ivory-lemur.in.rmq2.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "789"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - cfd3e601-d9a0-4937-afae-33935dbe38e1
+        status: 200 OK
+        code: 200
+        duration: 79.855297ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 789
+        uncompressed: false
+        body: '{"id":1825,"name":"TestAccIntegrationLog_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","url":"amqps://djhauapw:***@dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com/djhauapw","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://djhauapw:***@dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com/djhauapw","internal":"amqp://djhauapw:***@dev-crisp-ivory-lemur.in.rmq2.dev.cloudamqp.com/djhauapw"},"rmq_version":"3.13.0","hostname_external":"dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com","hostname_internal":"dev-crisp-ivory-lemur.in.rmq2.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "789"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - b8f40bba-336c-4baa-8e4e-46c4e51f9e67
+        status: 200 OK
+        code: 200
+        duration: 60.881882ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 49
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"token":"dec02f13-7b54-4874-b339-d80ecb02299b"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/loggly
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 10
+        uncompressed: false
+        body: '{"id":151}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "10"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 144168e3-b4d6-4874-a187-4d8d23dec0a5
+        status: 201 Created
+        code: 201
+        duration: 153.264737ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 125
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"access_key_id":"AKIAI44QH8DHBEXAMPLE","region":"us-east-1","secret_access_key":"je7MtGbClwBFd2Zp9Utkdh3yCo8nvbEXAMPLEKEY"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/cloudwatchlog
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 10
+        uncompressed: false
+        body: '{"id":153}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "10"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 13ac5497-76bf-40ab-8941-2cf88965af45
+        status: 201 Created
+        code: 201
+        duration: 208.43736ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 120
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"host_port":"logs.splunk.com:11111","sourcetype":"generic_single_line","token":"53f96e41-857d-4fa0-a609-8bb7f2776737"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/splunk
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 10
+        uncompressed: false
+        body: '{"id":152}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "10"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 93acd2de-be2a-49b3-8932-f5549c20b7ab
+        status: 201 Created
+        code: 201
+        duration: 214.110364ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 49
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"token":"10de0c0c-6a65-4070-9501-177d46a3f8f0"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/logentries
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 10
+        uncompressed: false
+        body: '{"id":154}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "10"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - c94efc87-d679-48a3-8d1f-823d00684c87
+        status: 201 Created
+        code: 201
+        duration: 273.468927ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 82
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"host":"app.scalyr.com","token":"3dUM/LLdkodksksDKK2lsjkd9kdkd/2djjdJdi8ejsld-"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/scalyr
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 10
+        uncompressed: false
+        body: '{"id":156}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "10"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f43eecdc-ed6f-44e8-b1b4-4a94bd51bb28
+        status: 201 Created
+        code: 201
+        duration: 276.475494ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 186
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"application":"playground","endpoint":"syslog.cx498.coralogix.com:6514","private_key":"ca755454-823b-46e9-9f7e-996baa35249b","subsystem":"dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/coralogix
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 10
+        uncompressed: false
+        body: '{"id":155}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "10"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - b046812f-2cb5-44a8-b6ea-6deeb9f6b44f
+        status: 201 Created
+        code: 201
+        duration: 281.468245ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 39
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"url":"logs.papertrailapp.com:11111"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/papertrail
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 10
+        uncompressed: false
+        body: '{"id":157}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "10"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - dd7ae2cf-d1d7-471e-972e-91f4a23c1253
+        status: 201 Created
+        code: 201
+        duration: 289.806065ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 336
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"DA10F~FSqsdjnW3nHFWwXdeW1zdvqIQhdSTfVdes","dce_uri":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com","dcr_id":"dcr-7cae904d070344d7ace2b8b33b743c84","table":"cloudamqp_CL","tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/azure_monitor
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 10
+        uncompressed: false
+        body: '{"id":158}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "10"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - fd360b39-e8ab-4a70-83b6-4e180388b97b
+        status: 201 Created
+        code: 201
+        duration: 322.037605ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/151
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 190
+        uncompressed: false
+        body: '{"id":151,"type":"loggly","config":{"token":"dec02f13-7b54-4874-b339-d80ecb02299b"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "190"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 93422797-cb00-4fb9-b696-7ba44e0abd1c
+        status: 200 OK
+        code: 200
+        duration: 193.875841ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/152
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 261
+        uncompressed: false
+        body: '{"id":152,"type":"splunk","config":{"token":"53f96e41-857d-4fa0-a609-8bb7f2776737","host_port":"logs.splunk.com:11111","sourcetype":"generic_single_line"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "261"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 47430ccf-38d3-4869-b1a5-ae395bebf1b4
+        status: 200 OK
+        code: 200
+        duration: 179.525428ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/153
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 273
+        uncompressed: false
+        body: '{"id":153,"type":"cloudwatchlog","config":{"region":"us-east-1","access_key_id":"AKIAI44QH8DHBEXAMPLE","secret_access_key":"je7MtGbClwBFd2Zp9Utkdh3yCo8nvbEXAMPLEKEY"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "273"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 12b5f1e4-04c4-4eb8-83e1-355e730b8c6b
+        status: 200 OK
+        code: 200
+        duration: 188.191526ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/156
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 223
+        uncompressed: false
+        body: '{"id":156,"type":"scalyr","config":{"host":"app.scalyr.com","token":"3dUM/LLdkodksksDKK2lsjkd9kdkd/2djjdJdi8ejsld-"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "223"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 9000fc5c-0438-4565-80a4-6f9028802ad8
+        status: 200 OK
+        code: 200
+        duration: 141.606007ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/155
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 411
+        uncompressed: false
+        body: '{"id":155,"type":"coralogix","config":{"endpoint":"syslog.cx498.coralogix.com:6514","hostname":"dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com","component":"rabbitmq","subsystem":"dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com","application":"playground","private_key":"ca755454-823b-46e9-9f7e-996baa35249b"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "411"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 25dcfd8a-7dfa-44f2-9fe3-651c0b56e1b1
+        status: 200 OK
+        code: 200
+        duration: 141.703123ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/154
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 194
+        uncompressed: false
+        body: '{"id":154,"type":"logentries","config":{"token":"10de0c0c-6a65-4070-9501-177d46a3f8f0"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "194"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 3c21c351-c772-4218-902a-3fb0e3c7875c
+        status: 200 OK
+        code: 200
+        duration: 196.097276ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/157
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 184
+        uncompressed: false
+        body: '{"id":157,"type":"papertrail","config":{"url":"logs.papertrailapp.com:11111"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "184"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - d61d8e70-820e-450f-a093-e9ddffaca201
+        status: 200 OK
+        code: 200
+        duration: 183.13147ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/158
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 484
+        uncompressed: false
+        body: '{"id":158,"type":"azure_monitor","config":{"table":"cloudamqp_CL","dcr_id":"dcr-7cae904d070344d7ace2b8b33b743c84","dce_uri":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com","tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"DA10F~FSqsdjnW3nHFWwXdeW1zdvqIQhdSTfVdes"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "484"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - e957ab1d-1bf1-42e3-81c4-41ec942b3650
+        status: 200 OK
+        code: 200
+        duration: 159.575715ms
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 91
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"api_key":"4b08474cdead14fb57a1099ba2b32ee6","region":"us1","tags":"env=test,region=us1"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/datadog
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 10
+        uncompressed: false
+        body: '{"id":159}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "10"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 5023962e-b6f4-44c9-a199-5bae3dda639c
+        status: 201 Created
+        code: 201
+        duration: 788.183531ms
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/159
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 233
+        uncompressed: false
+        body: '{"id":159,"type":"datadog","config":{"tags":"env=test,region=us1","region":"us1","api_key":"4b08474cdead14fb57a1099ba2b32ee6"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:08 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "233"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - a4272cf2-ae39-4d6a-9d6a-d7708a92b348
+        status: 200 OK
+        code: 200
+        duration: 80.852677ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 789
+        uncompressed: false
+        body: '{"id":1825,"name":"TestAccIntegrationLog_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","url":"amqps://djhauapw:***@dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com/djhauapw","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://djhauapw:***@dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com/djhauapw","internal":"amqp://djhauapw:***@dev-crisp-ivory-lemur.in.rmq2.dev.cloudamqp.com/djhauapw"},"rmq_version":"3.13.0","hostname_external":"dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com","hostname_internal":"dev-crisp-ivory-lemur.in.rmq2.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "789"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 3ceebe4a-2ac8-4c50-acac-aef7fb38971f
+        status: 200 OK
+        code: 200
+        duration: 31.532802ms
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/156
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 223
+        uncompressed: false
+        body: '{"id":156,"type":"scalyr","config":{"host":"app.scalyr.com","token":"3dUM/LLdkodksksDKK2lsjkd9kdkd/2djjdJdi8ejsld-"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "223"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 4551d965-5cd1-461f-b62c-3498045bddb2
+        status: 200 OK
+        code: 200
+        duration: 94.012792ms
+    - id: 27
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/159
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 233
+        uncompressed: false
+        body: '{"id":159,"type":"datadog","config":{"tags":"env=test,region=us1","region":"us1","api_key":"4b08474cdead14fb57a1099ba2b32ee6"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:08 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "233"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - ee845dd5-278f-4d2a-9db8-1b2af8cd859b
+        status: 200 OK
+        code: 200
+        duration: 98.185014ms
+    - id: 28
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/158
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 484
+        uncompressed: false
+        body: '{"id":158,"type":"azure_monitor","config":{"table":"cloudamqp_CL","dcr_id":"dcr-7cae904d070344d7ace2b8b33b743c84","dce_uri":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com","tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"DA10F~FSqsdjnW3nHFWwXdeW1zdvqIQhdSTfVdes"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "484"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - c92990ae-92f6-4fc4-b501-ad1f2c3f1e8a
+        status: 200 OK
+        code: 200
+        duration: 128.130643ms
+    - id: 29
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/155
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 411
+        uncompressed: false
+        body: '{"id":155,"type":"coralogix","config":{"endpoint":"syslog.cx498.coralogix.com:6514","hostname":"dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com","component":"rabbitmq","subsystem":"dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com","application":"playground","private_key":"ca755454-823b-46e9-9f7e-996baa35249b"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "411"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 1e88fbe8-ed5b-44f0-b3a5-b7f280034973
+        status: 200 OK
+        code: 200
+        duration: 180.86631ms
+    - id: 30
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/151
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 190
+        uncompressed: false
+        body: '{"id":151,"type":"loggly","config":{"token":"dec02f13-7b54-4874-b339-d80ecb02299b"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "190"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - e836832a-aa72-474b-bd95-1587943d70f7
+        status: 200 OK
+        code: 200
+        duration: 181.362665ms
+    - id: 31
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/157
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 184
+        uncompressed: false
+        body: '{"id":157,"type":"papertrail","config":{"url":"logs.papertrailapp.com:11111"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "184"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 770780ff-7ae9-4e2d-b5f7-55062e8b5e23
+        status: 200 OK
+        code: 200
+        duration: 215.113573ms
+    - id: 32
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/152
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 261
+        uncompressed: false
+        body: '{"id":152,"type":"splunk","config":{"token":"53f96e41-857d-4fa0-a609-8bb7f2776737","host_port":"logs.splunk.com:11111","sourcetype":"generic_single_line"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "261"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 782a21f0-5e71-4d12-99bc-a92e808ef596
+        status: 200 OK
+        code: 200
+        duration: 222.513552ms
+    - id: 33
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/153
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 273
+        uncompressed: false
+        body: '{"id":153,"type":"cloudwatchlog","config":{"region":"us-east-1","access_key_id":"AKIAI44QH8DHBEXAMPLE","secret_access_key":"je7MtGbClwBFd2Zp9Utkdh3yCo8nvbEXAMPLEKEY"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "273"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - a6d97569-0621-4ad5-929e-40dbdf2bf885
+        status: 200 OK
+        code: 200
+        duration: 234.468125ms
+    - id: 34
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/154
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 194
+        uncompressed: false
+        body: '{"id":154,"type":"logentries","config":{"token":"10de0c0c-6a65-4070-9501-177d46a3f8f0"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "194"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - c7d7ba24-ec9e-4d24-b496-e995d89471c2
+        status: 200 OK
+        code: 200
+        duration: 233.633729ms
+    - id: 35
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/158
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 484
+        uncompressed: false
+        body: '{"id":158,"type":"azure_monitor","config":{"table":"cloudamqp_CL","dcr_id":"dcr-7cae904d070344d7ace2b8b33b743c84","dce_uri":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com","tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"DA10F~FSqsdjnW3nHFWwXdeW1zdvqIQhdSTfVdes"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "484"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8f772cff-5521-4c4f-83aa-282a875555f5
+        status: 200 OK
+        code: 200
+        duration: 55.303152ms
+    - id: 36
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/153
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 273
+        uncompressed: false
+        body: '{"id":153,"type":"cloudwatchlog","config":{"region":"us-east-1","access_key_id":"AKIAI44QH8DHBEXAMPLE","secret_access_key":"je7MtGbClwBFd2Zp9Utkdh3yCo8nvbEXAMPLEKEY"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "273"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 1b98778e-d5c4-4d62-a974-c977286b743e
+        status: 200 OK
+        code: 200
+        duration: 41.453896ms
+    - id: 37
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/155
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 411
+        uncompressed: false
+        body: '{"id":155,"type":"coralogix","config":{"endpoint":"syslog.cx498.coralogix.com:6514","hostname":"dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com","component":"rabbitmq","subsystem":"dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com","application":"playground","private_key":"ca755454-823b-46e9-9f7e-996baa35249b"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "411"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 3f748166-b07c-4ecb-bdbb-2b24f4a36fde
+        status: 200 OK
+        code: 200
+        duration: 36.886259ms
+    - id: 38
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/159
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 233
+        uncompressed: false
+        body: '{"id":159,"type":"datadog","config":{"tags":"env=test,region=us1","region":"us1","api_key":"4b08474cdead14fb57a1099ba2b32ee6"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:08 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "233"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 3f2bf138-8aa2-4cc0-8f87-f1ca41767c06
+        status: 200 OK
+        code: 200
+        duration: 37.628632ms
+    - id: 39
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/154
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 194
+        uncompressed: false
+        body: '{"id":154,"type":"logentries","config":{"token":"10de0c0c-6a65-4070-9501-177d46a3f8f0"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "194"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 1a018836-eaf1-4ed9-b498-5bb5b08828bb
+        status: 200 OK
+        code: 200
+        duration: 42.905702ms
+    - id: 40
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/151
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 190
+        uncompressed: false
+        body: '{"id":151,"type":"loggly","config":{"token":"dec02f13-7b54-4874-b339-d80ecb02299b"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "190"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f9b30c6f-fb8c-432d-96b8-655776aba1c8
+        status: 200 OK
+        code: 200
+        duration: 32.465514ms
+    - id: 41
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/157
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 184
+        uncompressed: false
+        body: '{"id":157,"type":"papertrail","config":{"url":"logs.papertrailapp.com:11111"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "184"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 0b9c457f-1fca-4142-84d7-145634c3f519
+        status: 200 OK
+        code: 200
+        duration: 40.63659ms
+    - id: 42
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/152
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 261
+        uncompressed: false
+        body: '{"id":152,"type":"splunk","config":{"token":"53f96e41-857d-4fa0-a609-8bb7f2776737","host_port":"logs.splunk.com:11111","sourcetype":"generic_single_line"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "261"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - ae048a0d-6a9b-4dc0-969e-15ba64379c29
+        status: 200 OK
+        code: 200
+        duration: 38.339129ms
+    - id: 43
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 789
+        uncompressed: false
+        body: '{"id":1825,"name":"TestAccIntegrationLog_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","url":"amqps://djhauapw:***@dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com/djhauapw","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://djhauapw:***@dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com/djhauapw","internal":"amqp://djhauapw:***@dev-crisp-ivory-lemur.in.rmq2.dev.cloudamqp.com/djhauapw"},"rmq_version":"3.13.0","hostname_external":"dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com","hostname_internal":"dev-crisp-ivory-lemur.in.rmq2.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "789"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - d9672a50-f1fc-453c-ba0c-97c73aefb032
+        status: 200 OK
+        code: 200
+        duration: 33.430474ms
+    - id: 44
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/154
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 194
+        uncompressed: false
+        body: '{"id":154,"type":"logentries","config":{"token":"10de0c0c-6a65-4070-9501-177d46a3f8f0"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "194"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 76c8e13b-1812-4c72-b259-44387ec2bd22
+        status: 200 OK
+        code: 200
+        duration: 95.168189ms
+    - id: 45
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/158
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 484
+        uncompressed: false
+        body: '{"id":158,"type":"azure_monitor","config":{"table":"cloudamqp_CL","dcr_id":"dcr-7cae904d070344d7ace2b8b33b743c84","dce_uri":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com","tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"DA10F~FSqsdjnW3nHFWwXdeW1zdvqIQhdSTfVdes"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "484"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - fbfaa37f-74bb-4278-ac6a-583b70f20068
+        status: 200 OK
+        code: 200
+        duration: 93.989392ms
+    - id: 46
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/152
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 261
+        uncompressed: false
+        body: '{"id":152,"type":"splunk","config":{"token":"53f96e41-857d-4fa0-a609-8bb7f2776737","host_port":"logs.splunk.com:11111","sourcetype":"generic_single_line"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "261"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - fe5135fb-a941-4122-a113-e0f8dcc18c2c
+        status: 200 OK
+        code: 200
+        duration: 136.872932ms
+    - id: 47
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/156
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 223
+        uncompressed: false
+        body: '{"id":156,"type":"scalyr","config":{"host":"app.scalyr.com","token":"3dUM/LLdkodksksDKK2lsjkd9kdkd/2djjdJdi8ejsld-"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "223"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8d7792dc-d495-444c-9575-efcaf7f978e1
+        status: 200 OK
+        code: 200
+        duration: 140.329661ms
+    - id: 48
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/151
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 190
+        uncompressed: false
+        body: '{"id":151,"type":"loggly","config":{"token":"dec02f13-7b54-4874-b339-d80ecb02299b"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "190"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - be222c9d-0a79-4451-b424-95e2d1c81074
+        status: 200 OK
+        code: 200
+        duration: 170.659433ms
+    - id: 49
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/157
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 184
+        uncompressed: false
+        body: '{"id":157,"type":"papertrail","config":{"url":"logs.papertrailapp.com:11111"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "184"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - bcd3fe87-f8a0-429d-99d8-39527bb71bcf
+        status: 200 OK
+        code: 200
+        duration: 183.986871ms
+    - id: 50
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/155
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 411
+        uncompressed: false
+        body: '{"id":155,"type":"coralogix","config":{"endpoint":"syslog.cx498.coralogix.com:6514","hostname":"dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com","component":"rabbitmq","subsystem":"dev-crisp-ivory-lemur.rmq2.dev.cloudamqp.com","application":"playground","private_key":"ca755454-823b-46e9-9f7e-996baa35249b"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "411"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 85c7003d-8b42-4a43-8c35-2445b82ce24d
+        status: 200 OK
+        code: 200
+        duration: 192.867115ms
+    - id: 51
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/159
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 233
+        uncompressed: false
+        body: '{"id":159,"type":"datadog","config":{"tags":"env=test,region=us1","region":"us1","api_key":"4b08474cdead14fb57a1099ba2b32ee6"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:08 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "233"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - dc168d3f-2465-440e-ae33-05cf9aa5f9fa
+        status: 200 OK
+        code: 200
+        duration: 217.587005ms
+    - id: 52
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/153
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 273
+        uncompressed: false
+        body: '{"id":153,"type":"cloudwatchlog","config":{"region":"us-east-1","access_key_id":"AKIAI44QH8DHBEXAMPLE","secret_access_key":"je7MtGbClwBFd2Zp9Utkdh3yCo8nvbEXAMPLEKEY"},"error":null,"account_id":"e6fe65f9-6ae1-4c91-9215-c2343ef71858","created_at":"2024-03-13 09:24:07 +0100"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "273"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - a0f4d2cb-2541-4dc2-a386-e2c2420e4944
+        status: 200 OK
+        code: 200
+        duration: 224.278087ms
+    - id: 53
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/154
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 217f1a6b-4061-45a8-a54d-b1cd3db6fc28
+        status: 204 No Content
+        code: 204
+        duration: 121.026797ms
+    - id: 54
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/156
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 25ff56b3-b73d-4ce7-a911-56d592ee474c
+        status: 204 No Content
+        code: 204
+        duration: 140.869928ms
+    - id: 55
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/151
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - baadba02-6fcf-47a0-b156-6976eb5796b1
+        status: 204 No Content
+        code: 204
+        duration: 195.39173ms
+    - id: 56
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/153
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 3d2832ad-2186-4fcf-9cd2-f5dde14609a2
+        status: 204 No Content
+        code: 204
+        duration: 205.929006ms
+    - id: 57
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/152
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 2f85e86a-8bff-43b1-836f-3c000fd4e255
+        status: 204 No Content
+        code: 204
+        duration: 248.146119ms
+    - id: 58
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/159
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 3ca789f1-20e4-449e-b506-4a61eea2e4f9
+        status: 204 No Content
+        code: 204
+        duration: 251.841924ms
+    - id: 59
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/157
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 04ffa42e-3b4e-40c5-86b5-635a687ddc4e
+        status: 204 No Content
+        code: 204
+        duration: 265.230919ms
+    - id: 60
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/155
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - c5626410-835d-4133-948b-f29d0d7c2fb8
+        status: 204 No Content
+        code: 204
+        duration: 267.212149ms
+    - id: 61
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825/integrations/logs/158
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 32f28deb-c31a-4669-9877-95fbbb4356ca
+        status: 204 No Content
+        code: 204
+        duration: 272.168507ms
+    - id: 62
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825?keep_vpc=false
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 5734aa1b-6187-43c3-84e3-54bfda995fb6
+        status: 204 No Content
+        code: 204
+        duration: 272.464943ms
+    - id: 63
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1825
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 22
+        uncompressed: false
+        body: '{"error":"Invalid ID"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "22"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 547f041e-e2e2-4685-b3cc-75279fae7191
+        status: 404 Not Found
+        code: 404
+        duration: 14.262693ms
