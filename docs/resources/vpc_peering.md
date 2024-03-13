@@ -14,6 +14,7 @@ This resouce allows you to accepting VPC peering request from an AWS requester. 
  <summary>
     <i>Default VPC peering firewall rule</i>
   </summary>
+
 ```hcl
 rules {
   Description = "VPC peer request"
