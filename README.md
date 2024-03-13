@@ -186,16 +186,19 @@ The provider can be tested with Terraform Acceptance Test together with [Go-VCR]
 all HTTP interactions to the API backend can be recorded or replayed and used while testing the provider.
 
 Record:
+
 ```sh
 CLOUDAMQP_RECORD=1 TF_ACC=1 dotenv -f .env go test ./cloudamqp/ -v -run {TestName}  -timeout 30m
 ```
 
 Replay single test:
+
 ```sh
 TF_ACC=1 dotenv -f .env go test ./cloudamqp/ -v -run {TestName}
 ```
 
 Replay all tests:
+
 ```sh
 TF_ACC=1 dotenv -f .env go test ./cloudamqp/ -v
 ```
