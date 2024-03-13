@@ -165,18 +165,14 @@ func resourceUpdateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 }
 
 func resourceDeleteVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
-	var (
-		api     = meta.(*api.API)
-		sleep   = d.Get("sleep").(int)
-		timeout = d.Get("timeout").(int)
-	)
+	api := meta.(*api.API)
 
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
 		return errors.New("you need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {
-		return api.RemoveVpcGcpPeering(d.Get("instance_id").(int), d.Id(), sleep, timeout)
+		return api.RemoveVpcGcpPeering(d.Get("instance_id").(int), d.Id())
 	} else if d.Get("vpc_id") != nil {
-		return api.RemoveVpcGcpPeeringWithVpcId(d.Get("vpc_id").(string), d.Id(), sleep, timeout)
+		return api.RemoveVpcGcpPeeringWithVpcId(d.Get("vpc_id").(string), d.Id())
 	}
 	return errors.New("failed to remove VPC peering")
 }

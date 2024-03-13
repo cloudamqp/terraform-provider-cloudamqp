@@ -137,14 +137,6 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 				fmt.Println("SKIP: PUT /api/instances/{id}/config", i.Request.URL, "error:", errStr)
 				i.DiscardOnSave = true
 			}
-		case i.Response.Code == 400 && i.Request.Method == "DELETE" &&
-			regexp.MustCompile(`api/vpcs/\d+/vpc-peering/.+$`).MatchString(i.Request.URL):
-			errCode := gjson.Get(i.Response.Body, "error_code").Int()
-			if errCode == 40001 {
-				fmt.Println("SKIP: DELETE /api/vpcs/{id}/vpc-peering/{peering_identifier}", i.Request.URL,
-					"error_code:", errCode)
-				i.DiscardOnSave = true
-			}
 		}
 		return nil
 	}
