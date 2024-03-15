@@ -176,7 +176,6 @@ func (api *API) waitUntilPluginChanged(instanceID int, pluginName string, enable
 	attempt, sleep, timeout int) (map[string]interface{}, error) {
 
 	for {
-		time.Sleep(time.Duration(sleep) * time.Second)
 		if attempt*sleep > timeout {
 			return nil, fmt.Errorf("wait until plugin changed reached timeout of %d seconds", timeout)
 		}
@@ -193,5 +192,6 @@ func (api *API) waitUntilPluginChanged(instanceID int, pluginName string, enable
 			return response, nil
 		}
 		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
 	}
 }

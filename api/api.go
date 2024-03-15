@@ -7,7 +7,8 @@ import (
 )
 
 type API struct {
-	sling *sling.Sling
+	sling  *sling.Sling
+	client *http.Client
 }
 
 func (api *API) DefaultRmqVersion() (map[string]interface{}, error) {
@@ -20,15 +21,16 @@ func (api *API) DefaultRmqVersion() (map[string]interface{}, error) {
 	return data, nil
 }
 
-func New(baseUrl, apiKey string, useragent string) *API {
+func New(baseUrl, apiKey string, useragent string, client *http.Client) *API {
 	if len(useragent) == 0 {
 		useragent = "84codes go-api"
 	}
 	return &API{
 		sling: sling.New().
-			Client(http.DefaultClient).
+			Client(client).
 			Base(baseUrl).
 			SetBasicAuth("", apiKey).
 			Set("User-Agent", useragent),
+		client: client,
 	}
 }

@@ -17,7 +17,6 @@ func (api *API) waitForGcpPeeringStatus(path, peerID string,
 	)
 
 	for {
-		time.Sleep(time.Duration(sleep) * time.Second)
 		if attempt*sleep > timeout {
 			return fmt.Errorf("wait until GCP VPC peering status reached timeout of %d seconds", timeout)
 		}
@@ -42,6 +41,7 @@ func (api *API) waitForGcpPeeringStatus(path, peerID string,
 		log.Printf("[INFO] go-api::vpc_gcp_peering::waitForGcpPeeringStatus Waiting for state = ACTIVE "+
 			"attempt %d until timeout: %d", attempt, (timeout - (attempt * sleep)))
 		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
 	}
 }
 
@@ -122,7 +122,7 @@ func (api *API) readVpcGcpPeeringWithRetry(path string, attempt, sleep, timeout 
 	if err != nil {
 		return attempt, nil, err
 	} else if attempt*sleep > timeout {
-		return attempt, nil, fmt.Errorf("read plugins reached timeout of %d seconds", timeout)
+		return attempt, nil, fmt.Errorf("read VPC peering reached timeout of %d seconds", timeout)
 	}
 
 	switch response.StatusCode {
@@ -137,7 +137,7 @@ func (api *API) readVpcGcpPeeringWithRetry(path string, attempt, sleep, timeout 
 			return api.readVpcGcpPeeringWithRetry(path, attempt, sleep, timeout)
 		}
 	}
-	return attempt, nil, fmt.Errorf("read plugin with retry failed, status: %v, message: %s",
+	return attempt, nil, fmt.Errorf("read VPC peering with retry failed, status: %v, message: %s",
 		response.StatusCode, failed)
 }
 

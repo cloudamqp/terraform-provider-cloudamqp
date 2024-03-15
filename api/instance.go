@@ -18,7 +18,6 @@ func (api *API) waitUntilReady(instanceID string) (map[string]interface{}, error
 	log.Printf("[DEBUG] go-api::instance::waitUntilReady waiting")
 
 	for {
-		time.Sleep(10 * time.Second)
 		response, err := api.sling.New().Path(path).Receive(&data, &failed)
 		if err != nil {
 			return nil, err
@@ -34,6 +33,7 @@ func (api *API) waitUntilReady(instanceID string) (map[string]interface{}, error
 			return nil, fmt.Errorf("waitUntilReady failed, status: %v, message: %s",
 				response.StatusCode, failed)
 		}
+		time.Sleep(10 * time.Second)
 	}
 }
 
@@ -45,7 +45,6 @@ func (api *API) waitUntilAllNodesReady(instanceID string) error {
 	)
 
 	for {
-		time.Sleep(15 * time.Second)
 		_, err := api.sling.New().Path(path).Receive(&data, &failed)
 		if err != nil {
 			return err
@@ -61,6 +60,7 @@ func (api *API) waitUntilAllNodesReady(instanceID string) error {
 		if ready {
 			return nil
 		}
+		time.Sleep(15 * time.Second)
 	}
 }
 
@@ -106,7 +106,6 @@ func (api *API) waitUntilDeletion(instanceID string) error {
 
 	log.Printf("[DEBUG] go-api::instance::waitUntilDeletion waiting")
 	for {
-		time.Sleep(10 * time.Second)
 		response, err := api.sling.New().Path(path).Receive(&data, &failed)
 		if err != nil {
 			log.Printf("[DEBUG] go-api::instance::waitUntilDeletion error: %v", err)
@@ -121,6 +120,7 @@ func (api *API) waitUntilDeletion(instanceID string) error {
 			log.Print("[DEBUG] go-api::instance::waitUntilDeletion deleted")
 			return nil
 		}
+		time.Sleep(10 * time.Second)
 	}
 }
 

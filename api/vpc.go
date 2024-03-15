@@ -16,7 +16,6 @@ func (api *API) waitUntilVpcReady(vpcID string) error {
 
 	log.Printf("[DEBUG] go-api::vpc::waitUntilVpcReady waiting")
 	for {
-		time.Sleep(10 * time.Second)
 		response, err := api.sling.New().Get(path).Receive(&data, &failed)
 		if err != nil {
 			return err
@@ -32,6 +31,7 @@ func (api *API) waitUntilVpcReady(vpcID string) error {
 			return fmt.Errorf("waitUntilReady failed, status: %v, message: %s",
 				response.StatusCode, failed)
 		}
+		time.Sleep(10 * time.Second)
 	}
 }
 

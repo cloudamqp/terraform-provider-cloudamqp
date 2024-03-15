@@ -28,7 +28,6 @@ func (api *API) RequestVpcGcpPeeringWithVpcId(vpcID string, params map[string]in
 	return data, nil
 }
 
-// func (api *API) ReadVpcGcpPeering(instanceID, sleep, timeout int) (
 func (api *API) ReadVpcGcpPeeringWithVpcId(vpcID string, sleep, timeout int) (
 	map[string]interface{}, error) {
 

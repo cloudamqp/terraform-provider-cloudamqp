@@ -151,7 +151,6 @@ func (api *API) waitUntilPluginUninstalled(instanceID int, pluginName string,
 	log.Printf("[DEBUG] go-api::plugin_community::waitUntilPluginUninstalled instance id: %v, name: %v",
 		instanceID, pluginName)
 	for {
-		time.Sleep(time.Duration(sleep) * time.Second)
 		if attempt*sleep > timeout {
 			return nil, fmt.Errorf("wait until plugin uninstalled reached timeout of %d seconds", timeout)
 		}
@@ -164,5 +163,6 @@ func (api *API) waitUntilPluginUninstalled(instanceID int, pluginName string,
 			return response, nil
 		}
 		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
 	}
 }

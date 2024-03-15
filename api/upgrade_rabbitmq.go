@@ -46,7 +46,6 @@ func (api *API) waitUntilUpgraded(instanceID int) (string, error) {
 	failed := make(map[string]interface{})
 
 	for {
-		time.Sleep(30 * time.Second)
 		path := fmt.Sprintf("api/instances/%v/nodes", instanceID)
 		_, err := api.sling.New().Path(path).Receive(&data, &failed)
 		if err != nil {
@@ -65,5 +64,6 @@ func (api *API) waitUntilUpgraded(instanceID int) (string, error) {
 		if ready {
 			return "", nil
 		}
+		time.Sleep(30 * time.Second)
 	}
 }

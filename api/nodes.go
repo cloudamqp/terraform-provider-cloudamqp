@@ -67,7 +67,6 @@ func (api *API) PostAction(instanceID int, nodeName string, action string) (map[
 func (api *API) waitOnNodeAction(instanceID int, nodeName string, action string) (map[string]interface{}, error) {
 	log.Printf("[DEBUG] go-api::nodes::waitOnNodeAction waiting")
 	for {
-		time.Sleep(20 * time.Second)
 		data, err := api.ReadNode(instanceID, nodeName)
 
 		if err != nil {
@@ -84,5 +83,6 @@ func (api *API) waitOnNodeAction(instanceID int, nodeName string, action string)
 				return data, nil
 			}
 		}
+		time.Sleep(20 * time.Second)
 	}
 }
