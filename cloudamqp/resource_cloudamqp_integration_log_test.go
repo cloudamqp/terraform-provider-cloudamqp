@@ -28,13 +28,13 @@ func TestAccIntegrationLog_Basic(t *testing.T) {
 			"InstanceName":              "TestAccIntegrationLog_Basic",
 			"InstanceID":                fmt.Sprintf("%s.id", instanceResourceName),
 			"InstanceHost":              fmt.Sprintf("%s.host", instanceResourceName),
-			"AzmTentantId":              "71e89a32-14f3-4458-b136-7395bb6d1969", // Radnomized token
-			"AzmApplicationId":          "3e303e72-4024-494c-b5f6-f5ffbe8139de", // Radnomized token
+			"AzmTentantId":              "71e89a32-14f3-4458-b136-7395bb6d1969", // Randomized token
+			"AzmApplicationId":          "3e303e72-4024-494c-b5f6-f5ffbe8139de", // Randomized token
 			"AzmApplicationSecret":      os.Getenv("AZM_APPLICATION_SECRET"),
 			"AzmDcrId":                  "dcr-7cae904d070344d7ace2b8b33b743c84",
 			"AzmDceUri":                 "https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com",
 			"AzmTable":                  "cloudamqp_CL",
-			"CloudwatchAccessKeyId":     os.Getenv("CLOUDWATCH_ACCESS_KEY_ID"),
+			"CloudwatchAccessKeyId":     "AKIAI44QH8DHBEXAMPLE", // Example Access key ID
 			"CloudwatchSecretAccessKey": os.Getenv("CLOUDWATCH_SECRET_ACCESS_KEY"),
 			"CloudwatchRegion":          "us-east-1",
 			"CoralogixSendDataKey":      os.Getenv("CORALOGIX_SEND_DATA_KEY"),
