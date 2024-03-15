@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/84codes/go-api/api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourcePluginCommunity() *schema.Resource {
@@ -18,7 +18,7 @@ func resourcePluginCommunity() *schema.Resource {
 		Update: resourcePluginCommunityUpdate,
 		Delete: resourcePluginCommunityDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
