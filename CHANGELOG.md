@@ -1,3 +1,10 @@
+## 1.x.y (Unreleased)
+
+IMPROVEMENTS:
+
+* Fixed link to instance regions guide from instances page ([#263](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/263))
+* Added information on how to use Message Broker HTTP API ([#264](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/264))
+
 ## 1.29.4 (Feb 15, 2024)
 
 IMPROVEMENTS:
