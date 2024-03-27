@@ -1,24 +1,24 @@
 ---
 layout: "cloudamqp"
-page_title: "HTTP API"
+page_title: "Message Broker HTTP API"
 subcategory: "info"
 description: |-
-  Example of using HTTP API to create user, vhost etc.
+  Example of using Message Broker HTTP API to create user, vhost etc.
 ---
 
-# HTTP API
+# Message Broker HTTP API
 
-This provider doesn't support using the HTTP API to create user, vhost etc. on the underlying
-RabbitMQ or LavinMQ instance.
+This provider doesn't support using the Message Broker HTTP API to create user, vhost etc. on the
+underlying RabbitMQ or LavinMQ instance.
 
-There are other provider here at the registry that are built for this. Example of the current
+There are other providers here at the registry that are built for this. Example of the current
 unofficial RabbitMQ provider with most downloads:
 https://registry.terraform.io/providers/cyrilgdn/rabbitmq/latest
 
 ## Example Usage
 
-This can be used together with the CloudAMQP provider to access the HTTP API to create
-user, vhost etc.
+This can be used together with the CloudAMQP provider to access the Message Broker HTTP API to
+create user, vhost etc.
 
 ```hcl
 data "cloudamqp_credentials" "credentials" {
