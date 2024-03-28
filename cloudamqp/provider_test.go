@@ -63,6 +63,7 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		i.Request.Body = sanitizer.Fields(i.Request.Body)
 		i.Response.Body = sanitizer.Fields(i.Response.Body)
 		i.Response.Body = sanitizer.URL(i.Response.Body)
+		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("CLOUDWATCH_ACCESS_KEY_ID"), "CLOUDWATCH_ACCESS_KEY_ID")
 		return nil
 	}
 	r.AddHook(sanitizeHook, recorder.AfterCaptureHook)

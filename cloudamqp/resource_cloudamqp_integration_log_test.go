@@ -34,7 +34,7 @@ func TestAccIntegrationLog_Basic(t *testing.T) {
 			"AzmDcrId":                  "dcr-7cae904d070344d7ace2b8b33b743c84",
 			"AzmDceUri":                 "https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com",
 			"AzmTable":                  "cloudamqp_CL",
-			"CloudwatchAccessKeyId":     "AKIAI44QH8DHBEXAMPLE", // Example Access key ID
+			"CloudwatchAccessKeyId":     os.Getenv("CLOUDWATCH_ACCESS_KEY_ID"),
 			"CloudwatchSecretAccessKey": os.Getenv("CLOUDWATCH_SECRET_ACCESS_KEY"),
 			"CloudwatchRegion":          "us-east-1",
 			"CoralogixSendDataKey":      os.Getenv("CORALOGIX_SEND_DATA_KEY"),
@@ -69,7 +69,7 @@ func TestAccIntegrationLog_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(azmResourceName, "tenant_id", params["AzmTentantId"]),
 					resource.TestCheckResourceAttr(azmResourceName, "application_id", params["AzmApplicationId"]),
 					resource.TestCheckResourceAttr(cloudwatchResourceName, "name", "cloudwatchlog"),
-					resource.TestCheckResourceAttr(cloudwatchResourceName, "access_key_id", params["CloudwatchAccessKeyId"]),
+					resource.TestCheckResourceAttr(cloudwatchResourceName, "access_key_id", "CLOUDWATCH_ACCESS_KEY_ID"),
 					resource.TestCheckResourceAttr(cloudwatchResourceName, "region", params["CloudwatchRegion"]),
 					resource.TestCheckResourceAttr(coralogixResourceName, "name", "coralogix"),
 					resource.TestCheckResourceAttr(coralogixResourceName, "endpoint", params["CoralogixEndpoint"]),

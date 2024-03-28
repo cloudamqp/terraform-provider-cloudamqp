@@ -545,7 +545,7 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"access_key_id":"AKIAI44QH8DHBEXAMPLE","region":"us-east-1","secret_access_key":"***"}
+            {"access_key_id":"CLOUDWATCH_ACCESS_KEY_ID","region":"us-east-1","secret_access_key":"***"}
         form: {}
         headers:
             Content-Type:
@@ -947,7 +947,7 @@ interactions:
         trailer: {}
         content_length: 273
         uncompressed: false
-        body: '{"id":189,"type":"cloudwatchlog","config":{"region":"us-east-1","access_key_id":"AKIAI44QH8DHBEXAMPLE","secret_access_key":"***"},"error":null,"account_id":"cb38a1f7-2694-4560-925d-e3f419fcd97e","created_at":"2024-03-15 14:45:08 +0100"}'
+        body: '{"id":189,"type":"cloudwatchlog","config":{"region":"us-east-1","access_key_id":"CLOUDWATCH_ACCESS_KEY_ID","secret_access_key":"***"},"error":null,"account_id":"cb38a1f7-2694-4560-925d-e3f419fcd97e","created_at":"2024-03-15 14:45:08 +0100"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -1608,7 +1608,7 @@ interactions:
         trailer: {}
         content_length: 273
         uncompressed: false
-        body: '{"id":189,"type":"cloudwatchlog","config":{"region":"us-east-1","access_key_id":"AKIAI44QH8DHBEXAMPLE","secret_access_key":"***"},"error":null,"account_id":"cb38a1f7-2694-4560-925d-e3f419fcd97e","created_at":"2024-03-15 14:45:08 +0100"}'
+        body: '{"id":189,"type":"cloudwatchlog","config":{"region":"us-east-1","access_key_id":"CLOUDWATCH_ACCESS_KEY_ID","secret_access_key":"***"},"error":null,"account_id":"cb38a1f7-2694-4560-925d-e3f419fcd97e","created_at":"2024-03-15 14:45:08 +0100"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -1749,7 +1749,7 @@ interactions:
         trailer: {}
         content_length: 273
         uncompressed: false
-        body: '{"id":189,"type":"cloudwatchlog","config":{"region":"us-east-1","access_key_id":"AKIAI44QH8DHBEXAMPLE","secret_access_key":"***"},"error":null,"account_id":"cb38a1f7-2694-4560-925d-e3f419fcd97e","created_at":"2024-03-15 14:45:08 +0100"}'
+        body: '{"id":189,"type":"cloudwatchlog","config":{"region":"us-east-1","access_key_id":"CLOUDWATCH_ACCESS_KEY_ID","secret_access_key":"***"},"error":null,"account_id":"cb38a1f7-2694-4560-925d-e3f419fcd97e","created_at":"2024-03-15 14:45:08 +0100"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -2454,7 +2454,7 @@ interactions:
         trailer: {}
         content_length: 273
         uncompressed: false
-        body: '{"id":189,"type":"cloudwatchlog","config":{"region":"us-east-1","access_key_id":"AKIAI44QH8DHBEXAMPLE","secret_access_key":"***"},"error":null,"account_id":"cb38a1f7-2694-4560-925d-e3f419fcd97e","created_at":"2024-03-15 14:45:08 +0100"}'
+        body: '{"id":189,"type":"cloudwatchlog","config":{"region":"us-east-1","access_key_id":"CLOUDWATCH_ACCESS_KEY_ID","secret_access_key":"***"},"error":null,"account_id":"cb38a1f7-2694-4560-925d-e3f419fcd97e","created_at":"2024-03-15 14:45:08 +0100"}'
         headers:
             Cache-Control:
                 - no-cache

@@ -3,6 +3,7 @@ package sanitizer
 import (
 	"fmt"
 	"net/url"
+	"strings"
 
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -15,6 +16,13 @@ func Fields(jsonBody string) string {
 		}
 	}
 	return jsonBody
+}
+
+func FilterSensitiveData(jsonBody, value, placeholder string) string {
+	if len(value) == 0 {
+		return jsonBody
+	}
+	return strings.ReplaceAll(jsonBody, value, placeholder)
 }
 
 func URL(jsonBody string) string {
