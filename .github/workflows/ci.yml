@@ -11,9 +11,18 @@ jobs:
         with:
           # Allow goreleaser to access older tag information.
           fetch-depth: 0
+
       - uses: actions/setup-go@v5
         with:
           go-version-file: .go-version
+
+      - name: Run tests
+        run: go test ./cloudamqp/ -v
+        env:
+          CLOUDAMQP_APIKEY: does-not-matter
+          CLOUDAMQP_BASEURL: http://localhost:9393
+          TF_ACC: 1
+
       - name: Build for single target with GoReleaser
         uses: goreleaser/goreleaser-action@7ec5c2b0c6cdda6e8bbb49444bc797dd33d74dd8 # v5.0.0
         with:

@@ -166,6 +166,7 @@ func resourceUpdateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 
 func resourceDeleteVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
+
 	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
 		return errors.New("you need to specify either instance_id or vpc_id")
 	} else if d.Get("instance_id") != 0 {

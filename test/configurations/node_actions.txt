@@ -1,0 +1,9 @@
+resource "cloudamqp_node_actions" "node_action" {
+  instance_id = {{.InstanceID}}
+  node_name = {{.NodeName}}
+  action = "{{.NodeAction}}"
+
+  depends_on = [
+    {{.NodeDependsOn}},
+  ]
+}

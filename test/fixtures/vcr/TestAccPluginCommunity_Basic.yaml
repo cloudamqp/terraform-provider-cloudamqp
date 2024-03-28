@@ -1,0 +1,1171 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/plans
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2654
+        uncompressed: false
+        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"bobsled","price":0,"backend":"datasled","shared":true},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"tiger::do-dedicated","price":19,"backend":null,"shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "2654"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 0f4c5ec4-d39d-4f58-b625-bda610fec95b
+        status: 200 OK
+        code: 200
+        duration: 849.933034ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/regions
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 14003
+        uncompressed: false
+        body: '[{"provider":"amazon-web-services","region":"us-east-1","name":"Amazon Web Services - US-East-1 (Northern Virginia)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-2","name":"Amazon Web Services - US-West-2 (Oregon)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-east-2","name":"Amazon Web Services - US-East-2 (Ohio)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-1","name":"Amazon Web Services - US-West-1 (Northern California)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-north-1","name":"Amazon Web Services - EU-North-1 (Stockholm)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-1","name":"Amazon Web Services - EU-West-1 (Ireland)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-2","name":"Amazon Web Services - EU-West-2 (London)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-3","name":"Amazon Web Services - EU-West-3 (Paris)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-south-1","name":"Amazon Web Services - EU-South-1 (Milan)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-south-2","name":"Amazon Web Services - EU-South-2 (Spain)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-central-1","name":"Amazon Web Services - EU-Central-1 (Frankfurt)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-central-2","name":"Amazon Web Services - EU-Central-2 (Zurich)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ca-central-1","name":"Amazon Web Services - CA-Central-1 (Canada)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-1","name":"Amazon Web Services - AP-SouthEast-1 (Singapore)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-2","name":"Amazon Web Services - AP-SouthEast-2 (Sydney)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-3","name":"Amazon Web Services - AP-SouthEast-3 (Jakarta)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-4","name":"Amazon Web Services - AP-SouthEast-4 (Melbourne)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-northeast-1","name":"Amazon Web Services - AP-NorthEast-1 (Tokyo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-2","name":"Amazon Web Services - AP-NorthEast-2 (Seoul)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-3","name":"Amazon Web Services - AP-NorthEast-3 (Osaka)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-south-1","name":"Amazon Web Services - AP-South-1 (Mumbai)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-south-2","name":"Amazon Web Services - AP-South-2 (Hyderabad)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-east-1","name":"Amazon Web Services - AP-East-1 (Hong Kong)","has_shared_plans":true},{"provider":"amazon-web-services","region":"sa-east-1","name":"Amazon Web Services - SA-East-1 (São Paulo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-south-1","name":"Amazon Web Services - ME-South-1 (Bahrain)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-central-1","name":"Amazon Web Services - ME-Central-1 (UAE)","has_shared_plans":false},{"provider":"amazon-web-services","region":"af-south-1","name":"Amazon Web Services - AF-South-1 (Cape Town)","has_shared_plans":false},{"provider":"amazon-web-services","region":"il-central-1","name":"Amazon Web Services - IL-Central-1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-central1","name":"Google Compute Engine - us-central1 (Iowa)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east1","name":"Google Compute Engine - us-east1 (South Carolina)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east4","name":"Google Compute Engine - us-east4 (North Virginia)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east5","name":"Google Compute Engine - us-east5 (Columbus)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west1","name":"Google Compute Engine - us-west1 (Oregon)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west2","name":"Google Compute Engine - us-west2 (Los Angeles)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west3","name":"Google Compute Engine - us-west3 (Salt Lake City)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west4","name":"Google Compute Engine - us-west4 (Las Vegas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-south1","name":"Google Compute Engine - us-south1 (Dallas, Texas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-east1","name":"Google Compute Engine - southamerica-east1 (São Paulo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-west1","name":"Google Compute Engine - southamerica-west1 (Santiago)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north1","name":"Google Compute Engine - europe-north1 (Finland)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west1","name":"Google Compute Engine - europe-west1 (Belgium)","has_shared_plans":true},{"provider":"google-compute-engine","region":"europe-west2","name":"Google Compute Engine - europe-west2 (London)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west3","name":"Google Compute Engine - europe-west3 (Frankfurt)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west4","name":"Google Compute Engine - europe-west4 (Netherlands)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west6","name":"Google Compute Engine - europe-west6 (Zürich)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west8","name":"Google Compute Engine - europe-west8 (Milan)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west9","name":"Google Compute Engine - europe-west9 (Paris)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west10","name":"Google Compute Engine - europe-west10 (Berlin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west12","name":"Google Compute Engine - europe-west12 (Turin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-central2","name":"Google Compute Engine - europe-central2 (Warsaw)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-southwest1","name":"Google Compute Engine - europe-southwest1 (Madrid)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-west1","name":"Google Compute Engine - me-west1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central1","name":"Google Compute Engine - me-central1 (Doha)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central2","name":"Google Compute Engine - me-central2 (Dammam)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-east1","name":"Google Compute Engine - asia-east1 (Taiwan)","has_shared_plans":true},{"provider":"google-compute-engine","region":"asia-east2","name":"Google Compute Engine - asia-east2 (Hong Kong)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast1","name":"Google Compute Engine - asia-northeast1 (Tokyo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast2","name":"Google Compute Engine - asia-northeast2 (Osaka)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast3","name":"Google Compute Engine - asia-northeast3 (Seoul)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast1","name":"Google Compute Engine - asia-southeast1 (Singapore)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast2","name":"Google Compute Engine - asia-southeast2 (Jakarta)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south1","name":"Google Compute Engine - asia-south1 (Mumbai)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south2","name":"Google Compute Engine - asia-south2 (Delhi)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast1","name":"Google Compute Engine - australia-southeast1 (Sydney)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast2","name":"Google Compute Engine - australia-southeast2 (Melbourne)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast1","name":"Google Compute Engine - northamerica-northeast1 (Montréal, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast2","name":"Google Compute Engine - northamerica-northeast2 (Toronto, Canada)","has_shared_plans":false},{"provider":"digital-ocean","region":"nyc3","name":"DigitalOcean - New York 3","has_shared_plans":false},{"provider":"digital-ocean","region":"ams3","name":"DigitalOcean - Amsterdam 3","has_shared_plans":false},{"provider":"digital-ocean","region":"sgp1","name":"DigitalOcean - Singapore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"lon1","name":"DigitalOcean - London 1","has_shared_plans":false},{"provider":"digital-ocean","region":"fra1","name":"DigitalOcean - Frankfurt 1","has_shared_plans":false},{"provider":"digital-ocean","region":"tor1","name":"DigitalOcean - Toronto 1","has_shared_plans":false},{"provider":"digital-ocean","region":"sfo3","name":"DigitalOcean - San Francisco 3","has_shared_plans":false},{"provider":"digital-ocean","region":"blr1","name":"DigitalOcean - Bangalore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"syd1","name":"DigitalOcean - Sydney 1","has_shared_plans":false},{"provider":"azure-arm","region":"australiacentral","name":"Azure - Australia Central","has_shared_plans":false},{"provider":"azure-arm","region":"australiaeast","name":"Azure - Australia East","has_shared_plans":false},{"provider":"azure-arm","region":"australiasoutheast","name":"Azure - Australia Southeast","has_shared_plans":false},{"provider":"azure-arm","region":"brazilsouth","name":"Azure - Brazil South","has_shared_plans":false},{"provider":"azure-arm","region":"canadacentral","name":"Azure - Canada Central","has_shared_plans":false},{"provider":"azure-arm","region":"canadaeast","name":"Azure - Canada East","has_shared_plans":false},{"provider":"azure-arm","region":"centralindia","name":"Azure - Central India","has_shared_plans":false},{"provider":"azure-arm","region":"centralus","name":"Azure - Central US","has_shared_plans":false},{"provider":"azure-arm","region":"eastasia","name":"Azure - East Asia","has_shared_plans":false},{"provider":"azure-arm","region":"eastus","name":"Azure - East US","has_shared_plans":true},{"provider":"azure-arm","region":"eastus2","name":"Azure - East US 2","has_shared_plans":true},{"provider":"azure-arm","region":"francecentral","name":"Azure - France Central","has_shared_plans":false},{"provider":"azure-arm","region":"germanywestcentral","name":"Azure - Germany West Central","has_shared_plans":false},{"provider":"azure-arm","region":"italynorth","name":"Azure - Italy North","has_shared_plans":false},{"provider":"azure-arm","region":"japaneast","name":"Azure - Japan East","has_shared_plans":false},{"provider":"azure-arm","region":"japanwest","name":"Azure - Japan West","has_shared_plans":false},{"provider":"azure-arm","region":"koreacentral","name":"Azure - Korea Central","has_shared_plans":false},{"provider":"azure-arm","region":"koreasouth","name":"Azure - Korea South","has_shared_plans":false},{"provider":"azure-arm","region":"northcentralus","name":"Azure - North Central US","has_shared_plans":false},{"provider":"azure-arm","region":"northeurope","name":"Azure - North Europe","has_shared_plans":false},{"provider":"azure-arm","region":"norwayeast","name":"Azure - Norway East","has_shared_plans":false},{"provider":"azure-arm","region":"southafricanorth","name":"Azure - South Africa North","has_shared_plans":false},{"provider":"azure-arm","region":"southcentralus","name":"Azure - South Central US","has_shared_plans":false},{"provider":"azure-arm","region":"southeastasia","name":"Azure - Southeast Asia","has_shared_plans":false},{"provider":"azure-arm","region":"southindia","name":"Azure - South India","has_shared_plans":false},{"provider":"azure-arm","region":"switzerlandnorth","name":"Azure - Switzerland North","has_shared_plans":false},{"provider":"azure-arm","region":"swedencentral","name":"Azure - Sweden Central","has_shared_plans":true},{"provider":"azure-arm","region":"uaenorth","name":"Azure - UAE North","has_shared_plans":false},{"provider":"azure-arm","region":"uksouth","name":"Azure - UK South","has_shared_plans":false},{"provider":"azure-arm","region":"ukwest","name":"Azure - UK West","has_shared_plans":false},{"provider":"azure-arm","region":"westcentralus","name":"Azure - West Central US","has_shared_plans":false},{"provider":"azure-arm","region":"westeurope","name":"Azure - West Europe","has_shared_plans":true},{"provider":"azure-arm","region":"westus","name":"Azure - West US","has_shared_plans":true},{"provider":"azure-arm","region":"westus2","name":"Azure - West US 2","has_shared_plans":false},{"provider":"azure-arm","region":"westus3","name":"Azure - West US 3","has_shared_plans":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "14003"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 0bc709f9-d177-463f-bf65-caf034cf03e8
+        status: 200 OK
+        code: 200
+        duration: 6.105631ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/plans
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2654
+        uncompressed: false
+        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"bobsled","price":0,"backend":"datasled","shared":true},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"tiger::do-dedicated","price":19,"backend":null,"shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "2654"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8ba3c305-4af8-4de8-9e1e-ed47ec209ae5
+        status: 200 OK
+        code: 200
+        duration: 456.08081ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/regions
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 14003
+        uncompressed: false
+        body: '[{"provider":"amazon-web-services","region":"us-east-1","name":"Amazon Web Services - US-East-1 (Northern Virginia)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-2","name":"Amazon Web Services - US-West-2 (Oregon)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-east-2","name":"Amazon Web Services - US-East-2 (Ohio)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-1","name":"Amazon Web Services - US-West-1 (Northern California)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-north-1","name":"Amazon Web Services - EU-North-1 (Stockholm)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-1","name":"Amazon Web Services - EU-West-1 (Ireland)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-2","name":"Amazon Web Services - EU-West-2 (London)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-3","name":"Amazon Web Services - EU-West-3 (Paris)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-south-1","name":"Amazon Web Services - EU-South-1 (Milan)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-south-2","name":"Amazon Web Services - EU-South-2 (Spain)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-central-1","name":"Amazon Web Services - EU-Central-1 (Frankfurt)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-central-2","name":"Amazon Web Services - EU-Central-2 (Zurich)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ca-central-1","name":"Amazon Web Services - CA-Central-1 (Canada)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-1","name":"Amazon Web Services - AP-SouthEast-1 (Singapore)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-2","name":"Amazon Web Services - AP-SouthEast-2 (Sydney)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-3","name":"Amazon Web Services - AP-SouthEast-3 (Jakarta)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-4","name":"Amazon Web Services - AP-SouthEast-4 (Melbourne)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-northeast-1","name":"Amazon Web Services - AP-NorthEast-1 (Tokyo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-2","name":"Amazon Web Services - AP-NorthEast-2 (Seoul)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-3","name":"Amazon Web Services - AP-NorthEast-3 (Osaka)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-south-1","name":"Amazon Web Services - AP-South-1 (Mumbai)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-south-2","name":"Amazon Web Services - AP-South-2 (Hyderabad)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-east-1","name":"Amazon Web Services - AP-East-1 (Hong Kong)","has_shared_plans":true},{"provider":"amazon-web-services","region":"sa-east-1","name":"Amazon Web Services - SA-East-1 (São Paulo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-south-1","name":"Amazon Web Services - ME-South-1 (Bahrain)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-central-1","name":"Amazon Web Services - ME-Central-1 (UAE)","has_shared_plans":false},{"provider":"amazon-web-services","region":"af-south-1","name":"Amazon Web Services - AF-South-1 (Cape Town)","has_shared_plans":false},{"provider":"amazon-web-services","region":"il-central-1","name":"Amazon Web Services - IL-Central-1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-central1","name":"Google Compute Engine - us-central1 (Iowa)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east1","name":"Google Compute Engine - us-east1 (South Carolina)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east4","name":"Google Compute Engine - us-east4 (North Virginia)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east5","name":"Google Compute Engine - us-east5 (Columbus)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west1","name":"Google Compute Engine - us-west1 (Oregon)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west2","name":"Google Compute Engine - us-west2 (Los Angeles)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west3","name":"Google Compute Engine - us-west3 (Salt Lake City)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west4","name":"Google Compute Engine - us-west4 (Las Vegas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-south1","name":"Google Compute Engine - us-south1 (Dallas, Texas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-east1","name":"Google Compute Engine - southamerica-east1 (São Paulo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-west1","name":"Google Compute Engine - southamerica-west1 (Santiago)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north1","name":"Google Compute Engine - europe-north1 (Finland)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west1","name":"Google Compute Engine - europe-west1 (Belgium)","has_shared_plans":true},{"provider":"google-compute-engine","region":"europe-west2","name":"Google Compute Engine - europe-west2 (London)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west3","name":"Google Compute Engine - europe-west3 (Frankfurt)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west4","name":"Google Compute Engine - europe-west4 (Netherlands)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west6","name":"Google Compute Engine - europe-west6 (Zürich)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west8","name":"Google Compute Engine - europe-west8 (Milan)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west9","name":"Google Compute Engine - europe-west9 (Paris)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west10","name":"Google Compute Engine - europe-west10 (Berlin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west12","name":"Google Compute Engine - europe-west12 (Turin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-central2","name":"Google Compute Engine - europe-central2 (Warsaw)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-southwest1","name":"Google Compute Engine - europe-southwest1 (Madrid)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-west1","name":"Google Compute Engine - me-west1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central1","name":"Google Compute Engine - me-central1 (Doha)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central2","name":"Google Compute Engine - me-central2 (Dammam)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-east1","name":"Google Compute Engine - asia-east1 (Taiwan)","has_shared_plans":true},{"provider":"google-compute-engine","region":"asia-east2","name":"Google Compute Engine - asia-east2 (Hong Kong)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast1","name":"Google Compute Engine - asia-northeast1 (Tokyo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast2","name":"Google Compute Engine - asia-northeast2 (Osaka)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast3","name":"Google Compute Engine - asia-northeast3 (Seoul)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast1","name":"Google Compute Engine - asia-southeast1 (Singapore)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast2","name":"Google Compute Engine - asia-southeast2 (Jakarta)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south1","name":"Google Compute Engine - asia-south1 (Mumbai)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south2","name":"Google Compute Engine - asia-south2 (Delhi)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast1","name":"Google Compute Engine - australia-southeast1 (Sydney)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast2","name":"Google Compute Engine - australia-southeast2 (Melbourne)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast1","name":"Google Compute Engine - northamerica-northeast1 (Montréal, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast2","name":"Google Compute Engine - northamerica-northeast2 (Toronto, Canada)","has_shared_plans":false},{"provider":"digital-ocean","region":"nyc3","name":"DigitalOcean - New York 3","has_shared_plans":false},{"provider":"digital-ocean","region":"ams3","name":"DigitalOcean - Amsterdam 3","has_shared_plans":false},{"provider":"digital-ocean","region":"sgp1","name":"DigitalOcean - Singapore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"lon1","name":"DigitalOcean - London 1","has_shared_plans":false},{"provider":"digital-ocean","region":"fra1","name":"DigitalOcean - Frankfurt 1","has_shared_plans":false},{"provider":"digital-ocean","region":"tor1","name":"DigitalOcean - Toronto 1","has_shared_plans":false},{"provider":"digital-ocean","region":"sfo3","name":"DigitalOcean - San Francisco 3","has_shared_plans":false},{"provider":"digital-ocean","region":"blr1","name":"DigitalOcean - Bangalore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"syd1","name":"DigitalOcean - Sydney 1","has_shared_plans":false},{"provider":"azure-arm","region":"australiacentral","name":"Azure - Australia Central","has_shared_plans":false},{"provider":"azure-arm","region":"australiaeast","name":"Azure - Australia East","has_shared_plans":false},{"provider":"azure-arm","region":"australiasoutheast","name":"Azure - Australia Southeast","has_shared_plans":false},{"provider":"azure-arm","region":"brazilsouth","name":"Azure - Brazil South","has_shared_plans":false},{"provider":"azure-arm","region":"canadacentral","name":"Azure - Canada Central","has_shared_plans":false},{"provider":"azure-arm","region":"canadaeast","name":"Azure - Canada East","has_shared_plans":false},{"provider":"azure-arm","region":"centralindia","name":"Azure - Central India","has_shared_plans":false},{"provider":"azure-arm","region":"centralus","name":"Azure - Central US","has_shared_plans":false},{"provider":"azure-arm","region":"eastasia","name":"Azure - East Asia","has_shared_plans":false},{"provider":"azure-arm","region":"eastus","name":"Azure - East US","has_shared_plans":true},{"provider":"azure-arm","region":"eastus2","name":"Azure - East US 2","has_shared_plans":true},{"provider":"azure-arm","region":"francecentral","name":"Azure - France Central","has_shared_plans":false},{"provider":"azure-arm","region":"germanywestcentral","name":"Azure - Germany West Central","has_shared_plans":false},{"provider":"azure-arm","region":"italynorth","name":"Azure - Italy North","has_shared_plans":false},{"provider":"azure-arm","region":"japaneast","name":"Azure - Japan East","has_shared_plans":false},{"provider":"azure-arm","region":"japanwest","name":"Azure - Japan West","has_shared_plans":false},{"provider":"azure-arm","region":"koreacentral","name":"Azure - Korea Central","has_shared_plans":false},{"provider":"azure-arm","region":"koreasouth","name":"Azure - Korea South","has_shared_plans":false},{"provider":"azure-arm","region":"northcentralus","name":"Azure - North Central US","has_shared_plans":false},{"provider":"azure-arm","region":"northeurope","name":"Azure - North Europe","has_shared_plans":false},{"provider":"azure-arm","region":"norwayeast","name":"Azure - Norway East","has_shared_plans":false},{"provider":"azure-arm","region":"southafricanorth","name":"Azure - South Africa North","has_shared_plans":false},{"provider":"azure-arm","region":"southcentralus","name":"Azure - South Central US","has_shared_plans":false},{"provider":"azure-arm","region":"southeastasia","name":"Azure - Southeast Asia","has_shared_plans":false},{"provider":"azure-arm","region":"southindia","name":"Azure - South India","has_shared_plans":false},{"provider":"azure-arm","region":"switzerlandnorth","name":"Azure - Switzerland North","has_shared_plans":false},{"provider":"azure-arm","region":"swedencentral","name":"Azure - Sweden Central","has_shared_plans":true},{"provider":"azure-arm","region":"uaenorth","name":"Azure - UAE North","has_shared_plans":false},{"provider":"azure-arm","region":"uksouth","name":"Azure - UK South","has_shared_plans":false},{"provider":"azure-arm","region":"ukwest","name":"Azure - UK West","has_shared_plans":false},{"provider":"azure-arm","region":"westcentralus","name":"Azure - West Central US","has_shared_plans":false},{"provider":"azure-arm","region":"westeurope","name":"Azure - West Europe","has_shared_plans":true},{"provider":"azure-arm","region":"westus","name":"Azure - West US","has_shared_plans":true},{"provider":"azure-arm","region":"westus2","name":"Azure - West US 2","has_shared_plans":false},{"provider":"azure-arm","region":"westus3","name":"Azure - West US 3","has_shared_plans":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "14003"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 28197493-8a49-463e-b797-f9a5335b86c3
+        status: 200 OK
+        code: 200
+        duration: 12.114222ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 170
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"TestAccPluginCommunity_Basic","no_default_alarms":false,"plan":"bunny-1","region":"amazon-web-services::us-east-1","rmq_version":"3.12.12","tags":["terraform"]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 253
+        uncompressed: false
+        body: '{"id":1745,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"***","url":"amqps://sssbvzld:***@dev-serious-azure-deer.rmq3.dev.cloudamqp.com/sssbvzld"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "253"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 289bc524-70ac-40be-93d2-acf793a9d36b
+        status: 200 OK
+        code: 200
+        duration: 931.459547ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 796
+        uncompressed: false
+        body: '{"id":1745,"name":"TestAccPluginCommunity_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"b5e669b7-aea1-4c03-bdff-ca4c7956252d","url":"amqps://sssbvzld:***@dev-serious-azure-deer.rmq3.dev.cloudamqp.com/sssbvzld","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"rmq_version":"3.12.12","urls":{"external":"amqps://sssbvzld:***@dev-serious-azure-deer.rmq3.dev.cloudamqp.com/sssbvzld","internal":"amqp://sssbvzld:***@dev-serious-azure-deer.in.rmq3.dev.cloudamqp.com/sssbvzld"},"hostname_external":"dev-serious-azure-deer.rmq3.dev.cloudamqp.com","hostname_internal":"dev-serious-azure-deer.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "796"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 94f8f15e-0238-487d-9434-ed6b83d897f5
+        status: 200 OK
+        code: 200
+        duration: 38.769746ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 796
+        uncompressed: false
+        body: '{"id":1745,"name":"TestAccPluginCommunity_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"b5e669b7-aea1-4c03-bdff-ca4c7956252d","url":"amqps://sssbvzld:***@dev-serious-azure-deer.rmq3.dev.cloudamqp.com/sssbvzld","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"rmq_version":"3.12.12","urls":{"external":"amqps://sssbvzld:***@dev-serious-azure-deer.rmq3.dev.cloudamqp.com/sssbvzld","internal":"amqp://sssbvzld:***@dev-serious-azure-deer.in.rmq3.dev.cloudamqp.com/sssbvzld"},"hostname_external":"dev-serious-azure-deer.rmq3.dev.cloudamqp.com","hostname_internal":"dev-serious-azure-deer.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "796"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - fbdfbca0-7778-4152-8087-fab088361e1d
+        status: 200 OK
+        code: 200
+        duration: 45.051251ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745/plugins/community
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 900
+        uncompressed: false
+        body: '[{"name":"rabbitmq_lvc_exchange","description":"The last value exchange acts like a direct exchange (binding keys are compared for equality with routing keys); but it also keeps track of the last value that was published with each routing key, and when a queue is bound, it automatically enqueues the last value for the binding key.","require":"3.6.0"},{"name":"rabbitmq_rtopic_exchange","description":"Adds a reverse topic exchange which lets you provide routing patterns at publishing time, instead of at binding time.","require":"3.3.0"},{"name":"rabbitmq_delayed_message_exchange","description":"A plugin that adds delayed-messaging (or scheduled-messaging) to RabbitMQ.","require":"3.4.0"},{"name":"rabbitmq_message_deduplication","description":"A plugin for filtering duplicate messages. Messages can be deduplicated when published into an exchange or enqueued to a queue.","require":"3.7.19"}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "900"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - fcde3e8b-6433-4091-b426-ced910ccc325
+        status: 200 OK
+        code: 200
+        duration: 6.343061514s
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 52
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"plugin_name":"rabbitmq_delayed_message_exchange"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745/plugins/community?async=true
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - b80191dc-20cb-46f3-bc20-26ceef0bb017
+        status: 204 No Content
+        code: 204
+        duration: 60.402043ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745/plugins
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 5571
+        uncompressed: false
+        body: '[{"name":"rabbitmq_amqp1_0","version":"3.12.12","description":"AMQP 1.0 support for RabbitMQ","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"3.12.12","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"3.12.12","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"3.12.12","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_oauth2","version":"3.12.12","description":"OAuth 2 and JWT-based AuthN and AuthZ backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"3.12.12","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"3.12.12","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_delayed_message_exchange","version":"3.12.0","description":"RabbitMQ Delayed Message Exchange","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"3.12.12","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"3.12.12","description":"RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"3.12.12","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"3.12.12","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"3.12.12","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"3.12.12","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"3.12.12","description":"RabbitMQ MQTT Adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"3.12.12","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"3.12.12","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"3.12.12","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"3.12.12","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"3.12.12","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"3.12.12","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"3.12.12","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"3.12.12","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"3.12.12","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"3.12.12","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"3.12.12","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_trust_store","version":"3.12.12","description":"Client X.509 certificates trust store","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"3.12.12","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"3.12.12","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"3.12.12","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "5571"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 01c6e4c0-8877-4e17-910f-650e8fbf230f
+        status: 200 OK
+        code: 200
+        duration: 3.974644818s
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 796
+        uncompressed: false
+        body: '{"id":1745,"name":"TestAccPluginCommunity_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"b5e669b7-aea1-4c03-bdff-ca4c7956252d","url":"amqps://sssbvzld:***@dev-serious-azure-deer.rmq3.dev.cloudamqp.com/sssbvzld","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"rmq_version":"3.12.12","urls":{"external":"amqps://sssbvzld:***@dev-serious-azure-deer.rmq3.dev.cloudamqp.com/sssbvzld","internal":"amqp://sssbvzld:***@dev-serious-azure-deer.in.rmq3.dev.cloudamqp.com/sssbvzld"},"hostname_external":"dev-serious-azure-deer.rmq3.dev.cloudamqp.com","hostname_internal":"dev-serious-azure-deer.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "796"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 45f731c1-65c5-41f3-9465-c1c39053beb0
+        status: 200 OK
+        code: 200
+        duration: 31.517466ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745/plugins/community
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 746
+        uncompressed: false
+        body: '[{"name":"rabbitmq_lvc_exchange","description":"The last value exchange acts like a direct exchange (binding keys are compared for equality with routing keys); but it also keeps track of the last value that was published with each routing key, and when a queue is bound, it automatically enqueues the last value for the binding key.","require":"3.6.0"},{"name":"rabbitmq_rtopic_exchange","description":"Adds a reverse topic exchange which lets you provide routing patterns at publishing time, instead of at binding time.","require":"3.3.0"},{"name":"rabbitmq_message_deduplication","description":"A plugin for filtering duplicate messages. Messages can be deduplicated when published into an exchange or enqueued to a queue.","require":"3.7.19"}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "746"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - de1e6309-af6a-4a91-a559-f86adb6c7616
+        status: 200 OK
+        code: 200
+        duration: 36.89384ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 796
+        uncompressed: false
+        body: '{"id":1745,"name":"TestAccPluginCommunity_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"b5e669b7-aea1-4c03-bdff-ca4c7956252d","url":"amqps://sssbvzld:***@dev-serious-azure-deer.rmq3.dev.cloudamqp.com/sssbvzld","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"rmq_version":"3.12.12","urls":{"external":"amqps://sssbvzld:***@dev-serious-azure-deer.rmq3.dev.cloudamqp.com/sssbvzld","internal":"amqp://sssbvzld:***@dev-serious-azure-deer.in.rmq3.dev.cloudamqp.com/sssbvzld"},"hostname_external":"dev-serious-azure-deer.rmq3.dev.cloudamqp.com","hostname_internal":"dev-serious-azure-deer.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "796"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8e374794-e88c-48fd-bbb4-62cc258255a6
+        status: 200 OK
+        code: 200
+        duration: 35.695315ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745/plugins/community
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 746
+        uncompressed: false
+        body: '[{"name":"rabbitmq_lvc_exchange","description":"The last value exchange acts like a direct exchange (binding keys are compared for equality with routing keys); but it also keeps track of the last value that was published with each routing key, and when a queue is bound, it automatically enqueues the last value for the binding key.","require":"3.6.0"},{"name":"rabbitmq_rtopic_exchange","description":"Adds a reverse topic exchange which lets you provide routing patterns at publishing time, instead of at binding time.","require":"3.3.0"},{"name":"rabbitmq_message_deduplication","description":"A plugin for filtering duplicate messages. Messages can be deduplicated when published into an exchange or enqueued to a queue.","require":"3.7.19"}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "746"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 697a0d5f-d60b-43be-8a2a-c50a0d644e3b
+        status: 200 OK
+        code: 200
+        duration: 35.037642ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 68
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"enabled":false,"plugin_name":"rabbitmq_delayed_message_exchange"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745/plugins/community?async=true
+        method: PUT
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 095a9e83-bae0-4829-af16-874076cb67ec
+        status: 204 No Content
+        code: 204
+        duration: 57.283072ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745/plugins
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 5572
+        uncompressed: false
+        body: '[{"name":"rabbitmq_amqp1_0","version":"3.12.12","description":"AMQP 1.0 support for RabbitMQ","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"3.12.12","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"3.12.12","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"3.12.12","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_oauth2","version":"3.12.12","description":"OAuth 2 and JWT-based AuthN and AuthZ backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"3.12.12","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"3.12.12","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_delayed_message_exchange","version":"3.12.0","description":"RabbitMQ Delayed Message Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"3.12.12","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"3.12.12","description":"RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"3.12.12","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"3.12.12","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"3.12.12","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"3.12.12","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"3.12.12","description":"RabbitMQ MQTT Adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"3.12.12","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"3.12.12","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"3.12.12","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"3.12.12","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"3.12.12","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"3.12.12","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"3.12.12","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"3.12.12","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"3.12.12","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"3.12.12","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"3.12.12","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_trust_store","version":"3.12.12","description":"Client X.509 certificates trust store","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"3.12.12","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"3.12.12","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"3.12.12","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "5572"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 14f65764-a1d3-4e2d-b6ce-bfea9a8bab8b
+        status: 200 OK
+        code: 200
+        duration: 3.390713154s
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745/plugins/community
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 746
+        uncompressed: false
+        body: '[{"name":"rabbitmq_lvc_exchange","description":"The last value exchange acts like a direct exchange (binding keys are compared for equality with routing keys); but it also keeps track of the last value that was published with each routing key, and when a queue is bound, it automatically enqueues the last value for the binding key.","require":"3.6.0"},{"name":"rabbitmq_rtopic_exchange","description":"Adds a reverse topic exchange which lets you provide routing patterns at publishing time, instead of at binding time.","require":"3.3.0"},{"name":"rabbitmq_message_deduplication","description":"A plugin for filtering duplicate messages. Messages can be deduplicated when published into an exchange or enqueued to a queue.","require":"3.7.19"}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "746"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8154740b-4b42-428b-9a02-f05cdb1804c8
+        status: 200 OK
+        code: 200
+        duration: 35.643823ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 796
+        uncompressed: false
+        body: '{"id":1745,"name":"TestAccPluginCommunity_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"b5e669b7-aea1-4c03-bdff-ca4c7956252d","url":"amqps://sssbvzld:***@dev-serious-azure-deer.rmq3.dev.cloudamqp.com/sssbvzld","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"rmq_version":"3.12.12","urls":{"external":"amqps://sssbvzld:***@dev-serious-azure-deer.rmq3.dev.cloudamqp.com/sssbvzld","internal":"amqp://sssbvzld:***@dev-serious-azure-deer.in.rmq3.dev.cloudamqp.com/sssbvzld"},"hostname_external":"dev-serious-azure-deer.rmq3.dev.cloudamqp.com","hostname_internal":"dev-serious-azure-deer.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "796"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - a900d604-4f24-484a-9eb6-72d3f2f29bd5
+        status: 200 OK
+        code: 200
+        duration: 38.500546ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745/plugins/community
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 746
+        uncompressed: false
+        body: '[{"name":"rabbitmq_lvc_exchange","description":"The last value exchange acts like a direct exchange (binding keys are compared for equality with routing keys); but it also keeps track of the last value that was published with each routing key, and when a queue is bound, it automatically enqueues the last value for the binding key.","require":"3.6.0"},{"name":"rabbitmq_rtopic_exchange","description":"Adds a reverse topic exchange which lets you provide routing patterns at publishing time, instead of at binding time.","require":"3.3.0"},{"name":"rabbitmq_message_deduplication","description":"A plugin for filtering duplicate messages. Messages can be deduplicated when published into an exchange or enqueued to a queue.","require":"3.7.19"}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "746"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 1e79a3e1-f45b-42cc-906a-b2f7ea3c2c53
+        status: 200 OK
+        code: 200
+        duration: 37.45812ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 796
+        uncompressed: false
+        body: '{"id":1745,"name":"TestAccPluginCommunity_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"b5e669b7-aea1-4c03-bdff-ca4c7956252d","url":"amqps://sssbvzld:***@dev-serious-azure-deer.rmq3.dev.cloudamqp.com/sssbvzld","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"rmq_version":"3.12.12","urls":{"external":"amqps://sssbvzld:***@dev-serious-azure-deer.rmq3.dev.cloudamqp.com/sssbvzld","internal":"amqp://sssbvzld:***@dev-serious-azure-deer.in.rmq3.dev.cloudamqp.com/sssbvzld"},"hostname_external":"dev-serious-azure-deer.rmq3.dev.cloudamqp.com","hostname_internal":"dev-serious-azure-deer.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "796"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - da3ddaf4-b22d-4b51-83b4-eb59ebd0fa56
+        status: 200 OK
+        code: 200
+        duration: 36.40967ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745/plugins/community
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 746
+        uncompressed: false
+        body: '[{"name":"rabbitmq_lvc_exchange","description":"The last value exchange acts like a direct exchange (binding keys are compared for equality with routing keys); but it also keeps track of the last value that was published with each routing key, and when a queue is bound, it automatically enqueues the last value for the binding key.","require":"3.6.0"},{"name":"rabbitmq_rtopic_exchange","description":"Adds a reverse topic exchange which lets you provide routing patterns at publishing time, instead of at binding time.","require":"3.3.0"},{"name":"rabbitmq_message_deduplication","description":"A plugin for filtering duplicate messages. Messages can be deduplicated when published into an exchange or enqueued to a queue.","require":"3.7.19"}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "746"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - a650605e-ee5f-4c98-9319-1b3296b14ca0
+        status: 200 OK
+        code: 200
+        duration: 35.079048ms
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745/plugins/community/rabbitmq_delayed_message_exchange?async=true
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 7f791d4f-2f1f-4a2b-98dc-71c2a85e2b51
+        status: 204 No Content
+        code: 204
+        duration: 52.90475ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745/plugins
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 5378
+        uncompressed: false
+        body: '[{"name":"rabbitmq_amqp1_0","version":"3.12.12","description":"AMQP 1.0 support for RabbitMQ","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"3.12.12","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"3.12.12","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"3.12.12","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_oauth2","version":"3.12.12","description":"OAuth 2 and JWT-based AuthN and AuthZ backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"3.12.12","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"3.12.12","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"3.12.12","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"3.12.12","description":"RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"3.12.12","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"3.12.12","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"3.12.12","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"3.12.12","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"3.12.12","description":"RabbitMQ MQTT Adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"3.12.12","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"3.12.12","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"3.12.12","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"3.12.12","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"3.12.12","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"3.12.12","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"3.12.12","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"3.12.12","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"3.12.12","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"3.12.12","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"3.12.12","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_trust_store","version":"3.12.12","description":"Client X.509 certificates trust store","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"3.12.12","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"3.12.12","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"3.12.12","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "5378"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 245d435d-1fff-4653-9aa0-3b6837c9e4e5
+        status: 200 OK
+        code: 200
+        duration: 3.285555333s
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745?keep_vpc=false
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - b43786a3-3b0a-43e2-9c47-e1447e0b01aa
+        status: 204 No Content
+        code: 204
+        duration: 327.543593ms
+    - id: 27
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1745
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 22
+        uncompressed: false
+        body: '{"error":"Invalid ID"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "22"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - de2fe949-cfb6-40e8-a40d-92ac81041ada
+        status: 404 Not Found
+        code: 404
+        duration: 18.726913ms

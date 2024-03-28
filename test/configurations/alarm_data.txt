@@ -1,0 +1,9 @@
+data "cloudamqp_alarm" "notice" {
+  instance_id = {{.InstanceID}}
+  type = "notice"
+}
+
+data "cloudamqp_alarm" "cpu_alarm" {
+  instance_id = {{.InstanceID}}
+  type = "cpu"
+}

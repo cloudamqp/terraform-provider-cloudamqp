@@ -64,6 +64,7 @@ func resourceIntegrationMetric() *schema.Resource {
 			"api_key": {
 				Type:        schema.TypeString,
 				Optional:    true,
+				Sensitive:   true,
 				Description: "The API key for the integration service. (Librato)",
 			},
 			"email": {
@@ -74,6 +75,7 @@ func resourceIntegrationMetric() *schema.Resource {
 			"license_key": {
 				Type:        schema.TypeString,
 				Optional:    true,
+				Sensitive:   true,
 				Description: "The license key registred for the integration service. (New Relic)",
 			},
 			"tags": {

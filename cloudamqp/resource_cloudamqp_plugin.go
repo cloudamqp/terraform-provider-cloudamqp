@@ -63,6 +63,11 @@ func resourcePlugin() *schema.Resource {
 	}
 }
 
+type Plugin struct {
+	Name    string `json:"name"`
+	Enabled bool   `json:"enabled"`
+}
+
 func resourcePluginCreate(d *schema.ResourceData, meta interface{}) error {
 	var (
 		api        = meta.(*api.API)

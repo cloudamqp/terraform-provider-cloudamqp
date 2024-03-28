@@ -1,0 +1,68 @@
+resource "cloudamqp_integration_log" "azure_monitor" {
+  instance_id        = {{.InstanceID}}
+  name               = "azure_monitor"
+  tenant_id          = "{{.AzmTentantId}}"
+  application_id     = "{{.AzmApplicationId}}"
+  application_secret = "{{.AzmApplicationSecret}}"
+  dce_uri            = "{{.AzmDceUri}}"
+  table              = "{{.AzmTable}}"
+  dcr_id             = "{{.AzmDcrId}}"
+}
+
+resource "cloudamqp_integration_log" "cloudwatch" {
+  instance_id       = {{.InstanceID}}
+  name              = "cloudwatchlog"
+  access_key_id     = "{{.CloudwatchAccessKeyId}}"
+  secret_access_key = "{{.CloudwatchSecretAccessKey}}"
+  region            = "{{.CloudwatchRegion}}"
+}
+
+resource "cloudamqp_integration_log" "coralogix" {
+  instance_id = {{.InstanceID}}
+  name        = "coralogix"
+  private_key = "{{.CoralogixSendDataKey}}"
+  endpoint    = "{{.CoralogixEndpoint}}"
+  application = "{{.CoralogixApplication}}"
+  subsystem   = {{.InstanceHost}}
+}
+
+resource "cloudamqp_integration_log" "datadog" {
+  instance_id = {{.InstanceID}}
+  name        = "datadog"
+  region      = "{{.DataDogRegion}}"
+  api_key     = "{{.DataDogApiKey}}"
+  tags        = "{{.DataDogTags}}"
+}
+
+resource "cloudamqp_integration_log" "logentries" {
+  instance_id = {{.InstanceID}}
+  name        = "logentries"
+  token       = "{{.LogEntriesToken}}"
+}
+
+resource "cloudamqp_integration_log" "loggly" {
+  instance_id = {{.InstanceID}}
+  name = "loggly"
+  token = "{{.LogglyToken}}"
+}
+
+resource "cloudamqp_integration_log" "papertrail" {
+  instance_id = {{.InstanceID}}
+  name        = "papertrail"
+  url         = "{{.PapertrailUrl}}"
+}
+
+resource "cloudamqp_integration_log" "scalyr" {
+  instance_id = {{.InstanceID}}
+  name        = "scalyr"
+  token       = "{{.ScalyrToken}}"
+  host        = "{{.ScalyrHost}}"
+}
+
+resource "cloudamqp_integration_log" "splunk" {
+  instance_id = {{.InstanceID}}
+  name        = "splunk"
+  token       = "{{.SplunkToken}}"
+  host_port   = "{{.SplunkHostPort}}"
+  sourcetype  = "generic_single_line"
+}

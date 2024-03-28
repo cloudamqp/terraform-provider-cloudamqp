@@ -1,0 +1,6 @@
+resource "cloudamqp_vpc" "vpc" {
+  name   = "{{or .VpcName `TestAccInstance`}}"
+  region = "{{or .VpcRegion `amazon-web-services::us-east-1`}}"
+  subnet = "{{or .VpcSubnet `10.56.72.0/24`}}"
+  tags   = {{or .VpcTags `["terraform"]`}}
+}

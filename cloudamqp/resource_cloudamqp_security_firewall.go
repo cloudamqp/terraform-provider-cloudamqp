@@ -102,42 +102,55 @@ func resourceSecurityFirewall() *schema.Resource {
 }
 
 func resourceSecurityFirewallCreate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	var params []map[string]interface{}
-	localFirewalls := d.Get("rules").(*schema.Set).List()
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create localFirewalls: %v", localFirewalls)
+	var (
+		api            = meta.(*api.API)
+		instanceID     = d.Get("instance_id").(int)
+		localFirewalls = d.Get("rules").(*schema.Set).List()
+		params         = make([]map[string]interface{}, len(localFirewalls))
+		sleep          = d.Get("sleep").(int)
+		timeout        = d.Get("timeout").(int)
+	)
 
-	for _, k := range localFirewalls {
-		params = append(params, k.(map[string]interface{}))
+	for index, value := range localFirewalls {
+		params[index] = value.(map[string]interface{})
 	}
 
-	instanceID := d.Get("instance_id").(int)
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create instance id: %v", instanceID)
-	data, err := api.CreateFirewallSettings(instanceID, params, d.Get("sleep").(int), d.Get("timeout").(int))
+	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create instanceID: %d, params: %v", instanceID, params)
+	_, err := api.CreateFirewallSettings(instanceID, params, sleep, timeout)
 	if err != nil {
 		return fmt.Errorf("error setting security firewall for resource %s: %s", d.Id(), err)
 	}
+
 	d.SetId(strconv.Itoa(instanceID))
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create id set: %v", d.Id())
-	d.Set("rules", data)
 
 	return nil
 }
 
 func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	instanceID, _ := strconv.Atoi(d.Id())
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read instance id: %v", instanceID)
+	var (
+		api           = meta.(*api.API)
+		instanceID, _ = strconv.Atoi(d.Id())
+	)
+
+	// Set arguments during import
+	if d.Get("instance_id").(int) == 0 {
+		d.Set("instance_id", instanceID)
+	}
+	if d.Get("sleep").(int) == 0 && d.Get("timeout").(int) == 0 {
+		d.Set("sleep", 30)
+		d.Set("timeout", 1800)
+	}
+
 	data, err := api.ReadFirewallSettings(instanceID)
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read data: %v", data)
 	if err != nil {
 		return err
 	}
-	d.Set("instance_id", instanceID)
+
 	rules := make([]map[string]interface{}, len(data))
 	for k, v := range data {
 		rules[k] = readRule(v)
 	}
+
 	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read rules: %v", rules)
 	if err = d.Set("rules", rules); err != nil {
 		return fmt.Errorf("error setting rules for resource %s, %s", d.Id(), err)
@@ -147,37 +160,43 @@ func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) erro
 }
 
 func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	var params []map[string]interface{}
-	localFirewalls := d.Get("rules").(*schema.Set).List()
-	for _, k := range localFirewalls {
-		params = append(params, k.(map[string]interface{}))
+	var (
+		api            = meta.(*api.API)
+		instanceID     = d.Get("instance_id").(int)
+		localFirewalls = d.Get("rules").(*schema.Set).List()
+		params         = make([]map[string]interface{}, len(localFirewalls))
+		sleep          = d.Get("sleep").(int)
+		timeout        = d.Get("timeout").(int)
+	)
+
+	for index, value := range localFirewalls {
+		params[index] = value.(map[string]interface{})
 	}
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::update instance id: %v, params: %v", d.Get("instance_id"), params)
-	data, err := api.UpdateFirewallSettings(d.Get("instance_id").(int), params, d.Get("sleep").(int), d.Get("timeout").(int))
+
+	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::update instance id: %d, params: %v", instanceID, params)
+	_, err := api.UpdateFirewallSettings(instanceID, params, sleep, timeout)
 	if err != nil {
 		return err
 	}
-	rules := make([]map[string]interface{}, len(data))
-	for k, v := range data {
-		rules[k] = readRule(v)
-	}
 
-	if err = d.Set("rules", rules); err != nil {
-		return fmt.Errorf("error setting rules for resource %s, %s", d.Id(), err)
-	}
 	return nil
 }
 
 func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) error {
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
 	if enableFasterInstanceDestroy {
 		log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete skip calling backend.")
 		return nil
 	}
 
-	api := meta.(*api.API)
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete instance id: %v", d.Get("instance_id"))
-	data, err := api.DeleteFirewallSettings(d.Get("instance_id").(int), d.Get("sleep").(int), d.Get("timeout").(int))
+	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete instance id: %d", instanceID)
+	data, err := api.DeleteFirewallSettings(instanceID, sleep, timeout)
 	d.Set("rules", data)
 	return err
 }
