@@ -114,8 +114,7 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 				d.SetId(alarm["id"].(string))
 				log.Printf("[DEBUG] cloudamqp::resource::alarm::create retrieved existing alarm id: %v", d.Id())
 				log.Printf("[DEBUG] cloudamqp::resource::alarm::create invoking existing alarm update")
-				resourceAlarmUpdate(d, meta)
-				return resourceAlarmRead(d, meta)
+				return resourceAlarmUpdate(d, meta)
 			}
 		}
 
