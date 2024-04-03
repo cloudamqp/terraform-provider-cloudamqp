@@ -48,6 +48,14 @@ func TestAccAlarm_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(resourceName, "enabled", "false"),
 				),
 			},
+			{
+				Config: testAccAlarmNotice(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckAlarmExist(instanceName, resourceName),
+					resource.TestCheckResourceAttr(resourceName, "enabled", "true"),
+					resource.TestCheckResourceAttr(resourceName, "reminder_interval", "0"),
+				),
+			},
 		},
 	})
 }
@@ -193,6 +201,32 @@ func testAccAlarmConfigDisable() string {
 			enabled 					= false
 			value_threshold 	= 25
 			time_threshold 		= 120
+			recipients = [data.cloudamqp_notification.default_recipient.id]
+		}
+		`
+}
+
+func testAccAlarmNotice() string {
+	return `
+		resource "cloudamqp_instance" "instance" {
+			name 				= "terraform-alarm-test"
+			nodes 			= 1
+			plan  			= "bunny-1"
+			region 			= "amazon-web-services::eu-north-1"
+			rmq_version = "3.8.2"
+			tags 				= ["terraform"]
+		}
+
+		data "cloudamqp_notification" "default_recipient" {
+			instance_id = cloudamqp_instance.instance.id
+			name 				= "Default"
+		}
+
+		resource "cloudamqp_alarm" "notice" {
+			instance_id 			= cloudamqp_instance.instance.id
+			type 							= "notice"
+			enabled 					= true
+			reminder_interval = 0
 			recipients = [data.cloudamqp_notification.default_recipient.id]
 		}
 		`

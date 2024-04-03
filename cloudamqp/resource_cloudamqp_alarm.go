@@ -100,15 +100,37 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 	}
 	log.Printf("[DEBUG] cloudamqp::resource::alarm::create params: %v", params)
 
-	data, err := api.CreateAlarm(d.Get("instance_id").(int), params)
-	log.Printf("[DEBUG] cloudamqp::resource::alarm::create data: %v", data)
+	if d.Get("type") == "notice" {
+		log.Printf("[DEBUG] cloudamqp::resource::alarm::create type is 'notice', skipping creation")
+		log.Printf("[DEBUG] cloudamqp::resource::alarm::create type is 'notice', getting existing notice alarm")
+		alarms, err := api.ReadAlarms(d.Get("instance_id").(int))
 
-	if err != nil {
-		return err
-	}
-	if data["id"] != nil {
-		d.SetId(data["id"].(string))
-		log.Printf("[DEBUG] cloudamqp::resource::alarm::create id set: %v", d.Id())
+		if err != nil {
+			return err
+		}
+
+		for _, alarm := range alarms {
+			if alarm["type"] == "notice" {
+				d.SetId(alarm["id"].(string))
+				log.Printf("[DEBUG] cloudamqp::resource::alarm::create retrieved existing alarm id: %v", d.Id())
+				log.Printf("[DEBUG] cloudamqp::resource::alarm::create invoking existing alarm update")
+				resourceAlarmUpdate(d, meta)
+				return resourceAlarmRead(d, meta)
+			}
+		}
+
+		return errors.New(fmt.Sprintf("Couldn't find notice alarm for instance_id %s", d.Get("instance_id")))
+	} else {
+		data, err := api.CreateAlarm(d.Get("instance_id").(int), params)
+		log.Printf("[DEBUG] cloudamqp::resource::alarm::create data: %v", data)
+
+		if err != nil {
+			return err
+		}
+		if data["id"] != nil {
+			d.SetId(data["id"].(string))
+			log.Printf("[DEBUG] cloudamqp::resource::alarm::create id set: %v", d.Id())
+		}
 	}
 
 	return resourceAlarmRead(d, meta)
