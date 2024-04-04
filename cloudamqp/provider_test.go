@@ -12,20 +12,20 @@ var testAccProvider *schema.Provider
 var testAccProviders map[string]terraform.ResourceProvider
 
 func init() {
-	testAccProvider = Provider()
+	testAccProvider = Provider("1.0")
 	testAccProviders = map[string]terraform.ResourceProvider{
 		"cloudamqp": testAccProvider,
 	}
 }
 
 func TestProvider(t *testing.T) {
-	if err := Provider().InternalValidate(); err != nil {
+	if err := Provider("1.0").InternalValidate(); err != nil {
 		t.Fatalf("err: %s", err)
 	}
 }
 
 func TestProvider_impl(t *testing.T) {
-	var _ terraform.ResourceProvider = Provider()
+	var _ terraform.ResourceProvider = Provider("1.0")
 }
 
 func testAccPreCheck(t *testing.T) {

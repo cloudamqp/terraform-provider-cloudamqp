@@ -3,6 +3,7 @@ package cloudamqp
 import (
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/84codes/go-api/api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -81,5 +82,5 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	enableFasterInstanceDestroy = d.Get("enable_faster_instance_destroy").(bool)
 	useragent := fmt.Sprintf("terraform-provider-cloudamqp_v%s", version)
 	log.Printf("[DEBUG] cloudamqp::provider::configure useragent: %v", useragent)
-	return api.New(d.Get("baseurl").(string), d.Get("apikey").(string), useragent), nil
+	return api.New(d.Get("baseurl").(string), d.Get("apikey").(string), useragent, http.DefaultClient), nil
 }
