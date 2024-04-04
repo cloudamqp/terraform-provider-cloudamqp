@@ -118,7 +118,7 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 			}
 		}
 
-		return errors.New(fmt.Sprintf("Couldn't find notice alarm for instance_id %s", d.Get("instance_id")))
+		return fmt.Errorf("Couldn't find notice alarm for instance_id %s", d.Get("instance_id"))
 	} else {
 		data, err := api.CreateAlarm(d.Get("instance_id").(int), params)
 		log.Printf("[DEBUG] cloudamqp::resource::alarm::create data: %v", data)
