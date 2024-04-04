@@ -188,6 +188,10 @@ func resourceAlarmUpdate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceAlarmDelete(d *schema.ResourceData, meta interface{}) error {
+	if d.Get("type") == "notice" {
+		log.Printf("[DEBUG] cloudamqp::resource::alarm::delete type is 'notice', skipping deletion, just remove it from state")
+		return nil
+	}
 	api := meta.(*api.API)
 	params := make(map[string]interface{})
 	params["id"] = d.Id()
