@@ -24,7 +24,7 @@ var (
 )
 
 func TestProvider(t *testing.T) {
-	if err := Provider("1.0").InternalValidate(); err != nil {
+	if err := Provider("1.0", http.DefaultClient).InternalValidate(); err != nil {
 		t.Fatalf("err: %s", err)
 	}
 }
