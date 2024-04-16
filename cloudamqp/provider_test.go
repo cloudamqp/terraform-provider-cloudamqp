@@ -58,10 +58,10 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 	defer r.Stop()
 
 	sanitizeHook := func(i *cassette.Interaction) error {
-		delete(i.Request.Headers, "Authorization")
-		delete(i.Response.Headers, "Set-Cookie")
 		i.Request.Body = sanitizer.Fields(i.Request.Body)
 		i.Response.Body = sanitizer.Fields(i.Response.Body)
+		i.Request.Headers["Authorization"] = []string{"REDACTED"}
+		i.Response.Headers["Set-Cookie"] = []string{"REDACTED"}
 		i.Response.Body = sanitizer.URL(i.Response.Body)
 		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("CLOUDWATCH_ACCESS_KEY_ID"), "CLOUDWATCH_ACCESS_KEY_ID")
 		return nil
