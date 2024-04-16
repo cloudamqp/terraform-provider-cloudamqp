@@ -1,6 +1,13 @@
-resource "cloudamqp_alarm" "cpu_alarm" {
+resource "cloudamqp_alarm" "notice" {
+  instance_id = {{.InstanceID}}
+  type        = "notice"
+  enabled     = true
+  recipients  = [{{.NoticeRecipients}}]
+}
+
+resource "cloudamqp_alarm" "cpu" {
   instance_id       = {{.InstanceID}}
-  type              = "{{.CPUAlarmType}}"
+  type              = "cpu"
   enabled           = {{.CPUAlarmEnabled}}
   time_threshold    = {{or .CPUAlarmTimeThreshold 600}}
   value_threshold   = {{or .CPUAlarmValueThreshold 95}}

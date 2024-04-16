@@ -1,4 +1,4 @@
-data "cloudamqp_notification" "recipient" {
+data "cloudamqp_notification" "default_recipient" {
   instance_id = {{.InstanceID}}
-  name = "{{.RecipientName}}"
+  name        = "Default"
 }
