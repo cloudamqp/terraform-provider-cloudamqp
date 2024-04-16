@@ -15,6 +15,13 @@ Available for all subscription plans, but `lemur`and `tiger`are limited to fewer
 
 ## Example Usage
 
+<details>
+  <summary>
+    <b>
+      <i>Basic example of CPU and memory alarm</i>
+    </b>
+  </summary>
+
 ```hcl
 # New recipient
 resource "cloudamqp_notification" "recipient_01" {
@@ -46,6 +53,37 @@ resource "cloudamqp_alarm" "memory_alarm" {
   recipients        = [cloudamqp_notification.recipient_01.id]
 }
 ```
+
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>Manage notice alarm, available from [v1.29.5](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.5)</i>
+    </b>
+  </summary>
+
+Only one notice alarm can exists and cannot be created, instead the alarm resource will be updated.
+
+```hcl
+# New recipient
+resource "cloudamqp_notification" "recipient_01" {
+  instance_id = cloudamqp_instance.instance.id
+  type        = "email"
+  value       = "alarm@example.com"
+  name        = "alarm"
+}
+
+# Update existing notice alarm
+resource "cloudamqp_alarm" "notice" {
+  instance_id       = cloudamqp_instance.instance.id
+  type              = "notice"
+  enabled           = true
+  recipients        = [cloudamqp_notification.recipient_01.id]
+}
+```
+
+</details>
 
 ## Argument Reference
 
@@ -94,7 +132,7 @@ Optional argument for all alarms: `tags, queue_regex, vhost_regex`
 | Server unreachable | server_unreachable  | - | &#10004;  | time_threshold |
 | Notice | notice | &#10004; | &#10004; | |
 
-~> Notice alarm is manadatory! Only one can exists and cannot be deleted. Setting `no_default_alarm` to true, will still create this alarm.
+~> Notice alarm is manadatory! Only one can exists and cannot be deleted. Setting `no_default_alarm` to true, will still create this alarm. See updated changes to [notice alarm](#notice-alarm) below.
 
 ## Dependency
 
@@ -105,3 +143,13 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 `cloudamqp_alarm` can be imported using CloudAMQP internal identifier of the alarm together (CSV separated) with the instance identifier. To retrieve the alarm identifier, use [CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-alarms)
 
 `terraform import cloudamqp_alarm.alarm <id>,<instance_id>`
+
+## Notice alarm
+
+There is a limitation for notice alarm in the API backend. This alarm is mandatory, multiple
+alarms cannot exists or be deleted.
+
+From provider version [v1.29.5](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.5)
+it's possible to manage the notice alarm and no longer needs to be imported. Just create the
+alarm resource as usually and it will be updated with given recipients. If the alarm is deleted
+it will only be removed from the state file, but will still be enabled in the backend.

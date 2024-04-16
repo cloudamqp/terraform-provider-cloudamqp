@@ -95,6 +95,14 @@ func TestAccAlarm_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(dataCpuAlarmResourceName, "recipients.#", "1"),
 				),
 			},
+			{
+				Config: testAccAlarmNotice(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckAlarmExist(instanceName, resourceName),
+					resource.TestCheckResourceAttr(resourceName, "enabled", "true"),
+					resource.TestCheckResourceAttr(resourceName, "reminder_interval", "0"),
+				),
+			},
 		},
 	})
 }
