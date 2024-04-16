@@ -58,12 +58,22 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 	defer r.Stop()
 
 	sanitizeHook := func(i *cassette.Interaction) error {
-		i.Request.Body = sanitizer.Fields(i.Request.Body)
-		i.Response.Body = sanitizer.Fields(i.Response.Body)
 		i.Request.Headers["Authorization"] = []string{"REDACTED"}
 		i.Response.Headers["Set-Cookie"] = []string{"REDACTED"}
+		// Sanitize URLs containing passwords
 		i.Response.Body = sanitizer.URL(i.Response.Body)
+		// Filter sensitive data API keys, secrects and tokens
+		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("AZM_APPLICATION_SECRET"), "AZM_APPLICATION_SECRET")
 		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("CLOUDWATCH_ACCESS_KEY_ID"), "CLOUDWATCH_ACCESS_KEY_ID")
+		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("CLOUDWATCH_SECRET_ACCESS_KEY"), "CLOUDWATCH_SECRET_ACCESS_KEY")
+		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("CORALOGIX_SEND_DATA_KEY"), "CORALOGIX_SEND_DATA_KEY")
+		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("DATADOG_APIKEY"), "DATADOG_APIKEY")
+		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("LIBRATO_APIKEY"), "LIBRATO_APIKEY")
+		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("LOGENTIRES_TOKEN"), "LOGENTIRES_TOKEN")
+		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("LOGGLY_TOKEN"), "LOGGLY_TOKEN")
+		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("NEWRELIC_APIKEY"), "NEWRELIC_APIKEY")
+		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("SCALYR_TOKEN"), "SCALYR_TOKEN")
+		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("SPLUNK_TOKEN"), "SPLUNK_TOKEN")
 		return nil
 	}
 	r.AddHook(sanitizeHook, recorder.AfterCaptureHook)
