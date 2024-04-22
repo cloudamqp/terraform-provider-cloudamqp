@@ -15,21 +15,21 @@ import (
 // TestAccFirewall_Basic: Create standalone VPC and instance with firewall rule, import and update rules.
 func TestAccFirewall_Basic(t *testing.T) {
 	var (
-		fileNames    = []string{"vpc_and_instance", "firewall"}
-		vpcName      = "cloudamqp_vpc.vpc"
-		instanceName = "cloudamqp_instance.instance"
-		resourceName = "cloudamqp_security_firewall.firewall_settings"
+		fileNames            = []string{"vpc_and_instance", "firewall"}
+		vpcResourceName      = "cloudamqp_vpc.vpc"
+		instanceResourceName = "cloudamqp_instance.instance"
+		firewallResourceName = "cloudamqp_security_firewall.firewall_settings"
 
 		params = map[string]string{
 			"VpcName":      "TestAccFirewall_Basic",
 			"InstanceName": "TestAccFirewall_Basic",
-			"InstanceID":   fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
 		}
 
 		paramsUpdated = map[string]string{
 			"VpcName":             "TestAccFirewall_Basic",
 			"InstanceName":        "TestAccFirewall_Basic",
-			"InstanceID":          fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":          fmt.Sprintf("%s.id", instanceResourceName),
 			"FirewallIP":          "10.56.72.0/24",
 			"FirewallDescription": "VPC Subnet",
 			"FirewallServices":    converter.CommaStringArray([]string{"AMQPS"}),
@@ -43,10 +43,10 @@ func TestAccFirewall_Basic(t *testing.T) {
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(vpcName, "name", params["VpcName"]),
-					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(resourceName, "rules.#", "1"),
-					testAccCheckFirewallResourcceAttr(resourceName, map[string]string{
+					resource.TestCheckResourceAttr(vpcResourceName, "name", params["VpcName"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(firewallResourceName, "rules.#", "1"),
+					testAccCheckFirewallResourcceAttr(firewallResourceName, map[string]string{
 						"rules.%s.ip":          "0.0.0.0/0",
 						"rules.%s.description": "Default",
 						"rules.%s.ports.#":     "0",
@@ -57,18 +57,18 @@ func TestAccFirewall_Basic(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:      resourceName,
-				ImportStateIdFunc: testAccImportStateIdFunc(resourceName),
+				ResourceName:      firewallResourceName,
+				ImportStateIdFunc: testAccImportStateIdFunc(firewallResourceName),
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(vpcName, "name", params["VpcName"]),
-					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(resourceName, "rules.#", "1"),
-					testAccCheckFirewallResourcceAttr(resourceName, map[string]string{
+					resource.TestCheckResourceAttr(vpcResourceName, "name", params["VpcName"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(firewallResourceName, "rules.#", "1"),
+					testAccCheckFirewallResourcceAttr(firewallResourceName, map[string]string{
 						"rules.%s.ip":          "10.56.72.0/24",
 						"rules.%s.description": "VPC Subnet",
 						"rules.%s.ports.#":     "0",
@@ -81,11 +81,11 @@ func TestAccFirewall_Basic(t *testing.T) {
 	})
 }
 
-func testAccCheckFirewallResourcceAttr(resourceName string, params map[string]string) resource.TestCheckFunc {
+func testAccCheckFirewallResourcceAttr(firewallResourceName string, params map[string]string) resource.TestCheckFunc {
 	return func(state *terraform.State) error {
-		rs, ok := state.RootModule().Resources[resourceName]
+		rs, ok := state.RootModule().Resources[firewallResourceName]
 		if !ok {
-			return fmt.Errorf("Resource: %s not found", resourceName)
+			return fmt.Errorf("Resource: %s not found", firewallResourceName)
 		}
 
 		fmt.Println(params)
