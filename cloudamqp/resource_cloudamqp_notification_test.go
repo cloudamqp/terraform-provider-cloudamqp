@@ -11,13 +11,13 @@ import (
 // TestAccNotification_Basic: Create CPU alarm, import and change values.
 func TestAccNotification_Basic(t *testing.T) {
 	var (
-		fileNames    = []string{"instance", "notification"}
-		instanceName = "cloudamqp_instance.instance"
-		resourceName = "cloudamqp_notification.recipient"
+		fileNames                = []string{"instance", "notification"}
+		instanceResourceName     = "cloudamqp_instance.instance"
+		notificationResourceName = "cloudamqp_notification.recipient"
 
 		params = map[string]string{
 			"InstanceName":   "TestAccNotification_Basic",
-			"InstanceID":     fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"RecipientType":  "email",
 			"RecipientValue": "notification@example.com",
 			"RecipientName":  "notification",
@@ -25,7 +25,7 @@ func TestAccNotification_Basic(t *testing.T) {
 
 		paramsUpdated = map[string]string{
 			"InstanceName":   "TestAccNotification_Basic",
-			"InstanceID":     fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"RecipientType":  "email",
 			"RecipientValue": "test@example.com",
 			"RecipientName":  "test",
@@ -39,24 +39,24 @@ func TestAccNotification_Basic(t *testing.T) {
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(resourceName, "type", params["RecipientType"]),
-					resource.TestCheckResourceAttr(resourceName, "value", params["RecipientValue"]),
-					resource.TestCheckResourceAttr(resourceName, "name", params["RecipientName"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(notificationResourceName, "type", params["RecipientType"]),
+					resource.TestCheckResourceAttr(notificationResourceName, "value", params["RecipientValue"]),
+					resource.TestCheckResourceAttr(notificationResourceName, "name", params["RecipientName"]),
 				),
 			},
 			{
-				ResourceName:      resourceName,
-				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceName, resourceName),
+				ResourceName:      notificationResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, notificationResourceName),
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "type", paramsUpdated["RecipientType"]),
-					resource.TestCheckResourceAttr(resourceName, "value", paramsUpdated["RecipientValue"]),
-					resource.TestCheckResourceAttr(resourceName, "name", paramsUpdated["RecipientName"]),
+					resource.TestCheckResourceAttr(notificationResourceName, "type", paramsUpdated["RecipientType"]),
+					resource.TestCheckResourceAttr(notificationResourceName, "value", paramsUpdated["RecipientValue"]),
+					resource.TestCheckResourceAttr(notificationResourceName, "name", paramsUpdated["RecipientName"]),
 				),
 			},
 		},
