@@ -12,7 +12,7 @@ import (
 // TestAccAlarm_Basic: Create CPU alarm, import and change values.
 func TestAccAlarm_Basic(t *testing.T) {
 	var (
-		fileNames                    = []string{"instance", "notification", "notification_data", "alarm"}
+		fileNames                    = []string{"instance", "notification", "data_source/notification_default", "alarm"}
 		instanceResourceName         = "cloudamqp_instance.instance"
 		defaultRecipientResourceName = "data.cloudamqp_notification.default_recipient"
 		recipientResourceName        = "cloudamqp_notification.recipient"
@@ -21,12 +21,11 @@ func TestAccAlarm_Basic(t *testing.T) {
 		dataCpuAlarmResourceName     = "data.cloudamqp_alarm.cpu"
 
 		params = map[string]string{
-			"InstanceName":         "TestAccAlarm_Basic",
-			"InstanceID":           fmt.Sprintf("%s.id", instanceResourceName),
-			"DefaultRecipientName": "Default",
-			"RecipientName":        "test",
-			"RecipientType":        "email",
-			"RecipientValue":       "test@example.com",
+			"InstanceName":   "TestAccAlarm_Basic",
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"RecipientName":  "test",
+			"RecipientType":  "email",
+			"RecipientValue": "test@example.com",
 			"NoticeRecipients": fmt.Sprintf("%s, %s",
 				fmt.Sprintf("%s.id", defaultRecipientResourceName),
 				fmt.Sprintf("%s.id", recipientResourceName),
