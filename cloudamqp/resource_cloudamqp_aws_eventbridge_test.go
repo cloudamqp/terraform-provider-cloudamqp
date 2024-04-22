@@ -11,13 +11,13 @@ import (
 // TestAccIntegrationAwsEventbridge_Basic: Enabled AWS eventbridge integration and import.
 func TestAccIntegrationAwsEventbridge_Basic(t *testing.T) {
 	var (
-		fileNames    = []string{"instance", "integration_aws_eventbridge"}
-		instanceName = "cloudamqp_instance.instance"
-		resourceName = "cloudamqp_integration_aws_eventbridge.aws_eventbridge"
+		fileNames               = []string{"instance", "integration_aws_eventbridge"}
+		instanceResourceName    = "cloudamqp_instance.instance"
+		eventbridgeResourceName = "cloudamqp_integration_aws_eventbridge.aws_eventbridge"
 
 		params = map[string]string{
 			"InstanceName":            "TestAccIntegrationAwsEventbridge_Basic",
-			"InstanceID":              fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":              fmt.Sprintf("%s.id", instanceResourceName),
 			"AwsEventbridgeVhost":     "myvhost",
 			"AwsEventbridgeQueue":     "myqueue",
 			"AwsEventbridgeAccountID": "012345678910",
@@ -32,17 +32,17 @@ func TestAccIntegrationAwsEventbridge_Basic(t *testing.T) {
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(resourceName, "vhost", params["AwsEventbridgeVhost"]),
-					resource.TestCheckResourceAttr(resourceName, "queue", params["AwsEventbridgeQueue"]),
-					resource.TestCheckResourceAttr(resourceName, "aws_account_id", params["AwsEventbridgeAccountID"]),
-					resource.TestCheckResourceAttr(resourceName, "aws_region", params["AwsEventbridgeRegion"]),
-					resource.TestCheckResourceAttr(resourceName, "with_headers", "true"),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(eventbridgeResourceName, "vhost", params["AwsEventbridgeVhost"]),
+					resource.TestCheckResourceAttr(eventbridgeResourceName, "queue", params["AwsEventbridgeQueue"]),
+					resource.TestCheckResourceAttr(eventbridgeResourceName, "aws_account_id", params["AwsEventbridgeAccountID"]),
+					resource.TestCheckResourceAttr(eventbridgeResourceName, "aws_region", params["AwsEventbridgeRegion"]),
+					resource.TestCheckResourceAttr(eventbridgeResourceName, "with_headers", "true"),
 				),
 			},
 			{
-				ResourceName:      resourceName,
-				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceName, resourceName),
+				ResourceName:      eventbridgeResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, eventbridgeResourceName),
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
