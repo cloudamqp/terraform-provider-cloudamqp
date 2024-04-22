@@ -11,13 +11,13 @@ import (
 // TestAccExtraDiskSize_AWS_Basic: Add extra disk size to an instance hosted in AWS.
 func TestAccExtraDiskSize_AWS_Basic(t *testing.T) {
 	var (
-		fileNames     = []string{"instance", "extra_disk"}
-		instanceName  = "cloudamqp_instance.instance"
-		dataNodesName = "data.cloudamqp_nodes.nodes"
+		fileNames             = []string{"instance", "extra_disk_size"}
+		instanceResourceName  = "cloudamqp_instance.instance"
+		dataNodesResourceName = "data.cloudamqp_nodes.nodes"
 
 		params = map[string]string{
 			"InstanceName":   "TestAccExtraDiskSize_AWS_Basic",
-			"InstanceID":     fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstanceRegion": "amazon-web-services::us-east-1",
 			"ExtraDiskSize":  "25",
 			"AllowDowntime":  "false",
@@ -32,10 +32,10 @@ func TestAccExtraDiskSize_AWS_Basic(t *testing.T) {
 				ExpectNonEmptyPlan: true,
 				Config:             configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(dataNodesName, "nodes.#", "1"),
-					resource.TestCheckResourceAttr(dataNodesName, "nodes.0.disk_size", "10"),
-					resource.TestCheckResourceAttr(dataNodesName, "nodes.0.additional_disk_size", "25"),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.#", "1"),
+					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.0.disk_size", "10"),
+					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.0.additional_disk_size", "25"),
 				),
 			},
 		},
@@ -45,13 +45,13 @@ func TestAccExtraDiskSize_AWS_Basic(t *testing.T) {
 // TestAccExtraDiskSize_GCE_Basic: Add extra disk size to an instance hosted in Google.
 func TestAccExtraDiskSize_GCE_Basic(t *testing.T) {
 	var (
-		fileNames     = []string{"instance", "extra_disk"}
-		instanceName  = "cloudamqp_instance.instance"
-		dataNodesName = "data.cloudamqp_nodes.nodes"
+		fileNames             = []string{"instance", "extra_disk_size"}
+		instanceResourceName  = "cloudamqp_instance.instance"
+		dataNodesResourceName = "data.cloudamqp_nodes.nodes"
 
 		params = map[string]string{
 			"InstanceName":   "TestAccExtraDiskSize_GCE_Basic",
-			"InstanceID":     fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstanceRegion": "google-compute-engine::us-east1",
 			"ExtraDiskSize":  "25",
 			"AllowDowntime":  "false",
@@ -66,10 +66,10 @@ func TestAccExtraDiskSize_GCE_Basic(t *testing.T) {
 				ExpectNonEmptyPlan: true,
 				Config:             configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(dataNodesName, "nodes.#", "1"),
-					resource.TestCheckResourceAttr(dataNodesName, "nodes.0.disk_size", "20"),
-					resource.TestCheckResourceAttr(dataNodesName, "nodes.0.additional_disk_size", "25"),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.#", "1"),
+					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.0.disk_size", "20"),
+					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.0.additional_disk_size", "25"),
 				),
 			},
 		},
@@ -79,13 +79,13 @@ func TestAccExtraDiskSize_GCE_Basic(t *testing.T) {
 // TestAccExtraDiskSize_Azure_Basic: Add extra disk size to an instance hosted in Azure.
 func TestAccExtraDiskSize_Azure_Basic(t *testing.T) {
 	var (
-		fileNames     = []string{"instance", "extra_disk"}
-		instanceName  = "cloudamqp_instance.instance"
-		dataNodesName = "data.cloudamqp_nodes.nodes"
+		fileNames             = []string{"instance", "extra_disk_size"}
+		instanceResourceName  = "cloudamqp_instance.instance"
+		dataNodesResourceName = "data.cloudamqp_nodes.nodes"
 
 		params = map[string]string{
 			"InstanceName":   "TestAccExtraDiskSize_Azure_Basic",
-			"InstanceID":     fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstanceRegion": "azure-arm::eastus",
 			"ExtraDiskSize":  "25",
 			"AllowDowntime":  "true",
@@ -100,10 +100,10 @@ func TestAccExtraDiskSize_Azure_Basic(t *testing.T) {
 				ExpectNonEmptyPlan: true,
 				Config:             configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(dataNodesName, "nodes.#", "1"),
-					resource.TestCheckResourceAttr(dataNodesName, "nodes.0.disk_size", "8"),
-					resource.TestCheckResourceAttr(dataNodesName, "nodes.0.additional_disk_size", "25"),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.#", "1"),
+					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.0.disk_size", "8"),
+					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.0.additional_disk_size", "25"),
 				),
 			},
 		},

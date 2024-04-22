@@ -15,6 +15,8 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
         url: http://localhost:9393/api/plans
@@ -41,13 +43,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 513b1bac-47ad-41c1-8379-c96e6cdd4ee7
+                - 651179bc-aaab-40c4-a38a-9dd14ed5937c
         status: 200 OK
         code: 200
-        duration: 241.299823ms
+        duration: 217.911036ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -62,6 +66,8 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
         url: http://localhost:9393/api/regions
@@ -74,7 +80,7 @@ interactions:
         trailer: {}
         content_length: 14003
         uncompressed: false
-        body: '[{"provider":"amazon-web-services","region":"eu-north-1","name":"Amazon Web Services - EU-North-1 (Stockholm)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-2","name":"Amazon Web Services - US-West-2 (Oregon)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-east-2","name":"Amazon Web Services - US-East-2 (Ohio)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-1","name":"Amazon Web Services - US-West-1 (Northern California)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-1","name":"Amazon Web Services - EU-West-1 (Ireland)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-2","name":"Amazon Web Services - EU-West-2 (London)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-3","name":"Amazon Web Services - EU-West-3 (Paris)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-south-1","name":"Amazon Web Services - EU-South-1 (Milan)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-south-2","name":"Amazon Web Services - EU-South-2 (Spain)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-central-1","name":"Amazon Web Services - EU-Central-1 (Frankfurt)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-central-2","name":"Amazon Web Services - EU-Central-2 (Zurich)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ca-central-1","name":"Amazon Web Services - CA-Central-1 (Canada)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-1","name":"Amazon Web Services - AP-SouthEast-1 (Singapore)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-2","name":"Amazon Web Services - AP-SouthEast-2 (Sydney)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-3","name":"Amazon Web Services - AP-SouthEast-3 (Jakarta)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-4","name":"Amazon Web Services - AP-SouthEast-4 (Melbourne)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-northeast-1","name":"Amazon Web Services - AP-NorthEast-1 (Tokyo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-2","name":"Amazon Web Services - AP-NorthEast-2 (Seoul)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-3","name":"Amazon Web Services - AP-NorthEast-3 (Osaka)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-south-1","name":"Amazon Web Services - AP-South-1 (Mumbai)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-south-2","name":"Amazon Web Services - AP-South-2 (Hyderabad)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-east-1","name":"Amazon Web Services - AP-East-1 (Hong Kong)","has_shared_plans":true},{"provider":"amazon-web-services","region":"sa-east-1","name":"Amazon Web Services - SA-East-1 (São Paulo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-south-1","name":"Amazon Web Services - ME-South-1 (Bahrain)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-central-1","name":"Amazon Web Services - ME-Central-1 (UAE)","has_shared_plans":false},{"provider":"amazon-web-services","region":"af-south-1","name":"Amazon Web Services - AF-South-1 (Cape Town)","has_shared_plans":false},{"provider":"amazon-web-services","region":"us-east-1","name":"Amazon Web Services - US-East-1 (Northern Virginia)","has_shared_plans":true},{"provider":"amazon-web-services","region":"il-central-1","name":"Amazon Web Services - IL-Central-1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast2","name":"Google Compute Engine - northamerica-northeast2 (Toronto, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east1","name":"Google Compute Engine - us-east1 (South Carolina)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east4","name":"Google Compute Engine - us-east4 (North Virginia)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east5","name":"Google Compute Engine - us-east5 (Columbus)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west1","name":"Google Compute Engine - us-west1 (Oregon)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west2","name":"Google Compute Engine - us-west2 (Los Angeles)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west3","name":"Google Compute Engine - us-west3 (Salt Lake City)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west4","name":"Google Compute Engine - us-west4 (Las Vegas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-south1","name":"Google Compute Engine - us-south1 (Dallas, Texas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-east1","name":"Google Compute Engine - southamerica-east1 (São Paulo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-west1","name":"Google Compute Engine - southamerica-west1 (Santiago)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north1","name":"Google Compute Engine - europe-north1 (Finland)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west1","name":"Google Compute Engine - europe-west1 (Belgium)","has_shared_plans":true},{"provider":"google-compute-engine","region":"europe-west2","name":"Google Compute Engine - europe-west2 (London)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west3","name":"Google Compute Engine - europe-west3 (Frankfurt)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west4","name":"Google Compute Engine - europe-west4 (Netherlands)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west6","name":"Google Compute Engine - europe-west6 (Zürich)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west8","name":"Google Compute Engine - europe-west8 (Milan)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west9","name":"Google Compute Engine - europe-west9 (Paris)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west10","name":"Google Compute Engine - europe-west10 (Berlin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west12","name":"Google Compute Engine - europe-west12 (Turin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-central2","name":"Google Compute Engine - europe-central2 (Warsaw)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-southwest1","name":"Google Compute Engine - europe-southwest1 (Madrid)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-west1","name":"Google Compute Engine - me-west1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central1","name":"Google Compute Engine - me-central1 (Doha)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central2","name":"Google Compute Engine - me-central2 (Dammam)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-east1","name":"Google Compute Engine - asia-east1 (Taiwan)","has_shared_plans":true},{"provider":"google-compute-engine","region":"asia-east2","name":"Google Compute Engine - asia-east2 (Hong Kong)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast1","name":"Google Compute Engine - asia-northeast1 (Tokyo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast2","name":"Google Compute Engine - asia-northeast2 (Osaka)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast3","name":"Google Compute Engine - asia-northeast3 (Seoul)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast1","name":"Google Compute Engine - asia-southeast1 (Singapore)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast2","name":"Google Compute Engine - asia-southeast2 (Jakarta)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south1","name":"Google Compute Engine - asia-south1 (Mumbai)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south2","name":"Google Compute Engine - asia-south2 (Delhi)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast1","name":"Google Compute Engine - australia-southeast1 (Sydney)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast2","name":"Google Compute Engine - australia-southeast2 (Melbourne)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast1","name":"Google Compute Engine - northamerica-northeast1 (Montréal, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-central1","name":"Google Compute Engine - us-central1 (Iowa)","has_shared_plans":true},{"provider":"digital-ocean","region":"syd1","name":"DigitalOcean - Sydney 1","has_shared_plans":false},{"provider":"digital-ocean","region":"ams3","name":"DigitalOcean - Amsterdam 3","has_shared_plans":false},{"provider":"digital-ocean","region":"sgp1","name":"DigitalOcean - Singapore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"lon1","name":"DigitalOcean - London 1","has_shared_plans":false},{"provider":"digital-ocean","region":"fra1","name":"DigitalOcean - Frankfurt 1","has_shared_plans":false},{"provider":"digital-ocean","region":"tor1","name":"DigitalOcean - Toronto 1","has_shared_plans":false},{"provider":"digital-ocean","region":"sfo3","name":"DigitalOcean - San Francisco 3","has_shared_plans":false},{"provider":"digital-ocean","region":"blr1","name":"DigitalOcean - Bangalore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"nyc3","name":"DigitalOcean - New York 3","has_shared_plans":false},{"provider":"azure-arm","region":"westus3","name":"Azure - West US 3","has_shared_plans":false},{"provider":"azure-arm","region":"australiaeast","name":"Azure - Australia East","has_shared_plans":false},{"provider":"azure-arm","region":"australiasoutheast","name":"Azure - Australia Southeast","has_shared_plans":false},{"provider":"azure-arm","region":"brazilsouth","name":"Azure - Brazil South","has_shared_plans":false},{"provider":"azure-arm","region":"canadacentral","name":"Azure - Canada Central","has_shared_plans":false},{"provider":"azure-arm","region":"canadaeast","name":"Azure - Canada East","has_shared_plans":false},{"provider":"azure-arm","region":"centralindia","name":"Azure - Central India","has_shared_plans":false},{"provider":"azure-arm","region":"centralus","name":"Azure - Central US","has_shared_plans":false},{"provider":"azure-arm","region":"eastasia","name":"Azure - East Asia","has_shared_plans":false},{"provider":"azure-arm","region":"eastus","name":"Azure - East US","has_shared_plans":true},{"provider":"azure-arm","region":"eastus2","name":"Azure - East US 2","has_shared_plans":true},{"provider":"azure-arm","region":"francecentral","name":"Azure - France Central","has_shared_plans":false},{"provider":"azure-arm","region":"germanywestcentral","name":"Azure - Germany West Central","has_shared_plans":false},{"provider":"azure-arm","region":"italynorth","name":"Azure - Italy North","has_shared_plans":false},{"provider":"azure-arm","region":"japaneast","name":"Azure - Japan East","has_shared_plans":false},{"provider":"azure-arm","region":"japanwest","name":"Azure - Japan West","has_shared_plans":false},{"provider":"azure-arm","region":"koreacentral","name":"Azure - Korea Central","has_shared_plans":false},{"provider":"azure-arm","region":"koreasouth","name":"Azure - Korea South","has_shared_plans":false},{"provider":"azure-arm","region":"northcentralus","name":"Azure - North Central US","has_shared_plans":false},{"provider":"azure-arm","region":"northeurope","name":"Azure - North Europe","has_shared_plans":false},{"provider":"azure-arm","region":"norwayeast","name":"Azure - Norway East","has_shared_plans":false},{"provider":"azure-arm","region":"southafricanorth","name":"Azure - South Africa North","has_shared_plans":false},{"provider":"azure-arm","region":"southcentralus","name":"Azure - South Central US","has_shared_plans":false},{"provider":"azure-arm","region":"southeastasia","name":"Azure - Southeast Asia","has_shared_plans":false},{"provider":"azure-arm","region":"southindia","name":"Azure - South India","has_shared_plans":false},{"provider":"azure-arm","region":"switzerlandnorth","name":"Azure - Switzerland North","has_shared_plans":false},{"provider":"azure-arm","region":"swedencentral","name":"Azure - Sweden Central","has_shared_plans":true},{"provider":"azure-arm","region":"uaenorth","name":"Azure - UAE North","has_shared_plans":false},{"provider":"azure-arm","region":"uksouth","name":"Azure - UK South","has_shared_plans":false},{"provider":"azure-arm","region":"ukwest","name":"Azure - UK West","has_shared_plans":false},{"provider":"azure-arm","region":"westcentralus","name":"Azure - West Central US","has_shared_plans":false},{"provider":"azure-arm","region":"westeurope","name":"Azure - West Europe","has_shared_plans":true},{"provider":"azure-arm","region":"westus","name":"Azure - West US","has_shared_plans":true},{"provider":"azure-arm","region":"westus2","name":"Azure - West US 2","has_shared_plans":false},{"provider":"azure-arm","region":"australiacentral","name":"Azure - Australia Central","has_shared_plans":false}]'
+        body: '[{"provider":"amazon-web-services","region":"us-east-1","name":"Amazon Web Services - US-East-1 (Northern Virginia)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-2","name":"Amazon Web Services - US-West-2 (Oregon)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-east-2","name":"Amazon Web Services - US-East-2 (Ohio)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-1","name":"Amazon Web Services - US-West-1 (Northern California)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-north-1","name":"Amazon Web Services - EU-North-1 (Stockholm)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-1","name":"Amazon Web Services - EU-West-1 (Ireland)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-2","name":"Amazon Web Services - EU-West-2 (London)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-3","name":"Amazon Web Services - EU-West-3 (Paris)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-south-1","name":"Amazon Web Services - EU-South-1 (Milan)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-south-2","name":"Amazon Web Services - EU-South-2 (Spain)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-central-1","name":"Amazon Web Services - EU-Central-1 (Frankfurt)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-central-2","name":"Amazon Web Services - EU-Central-2 (Zurich)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ca-central-1","name":"Amazon Web Services - CA-Central-1 (Canada)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-1","name":"Amazon Web Services - AP-SouthEast-1 (Singapore)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-2","name":"Amazon Web Services - AP-SouthEast-2 (Sydney)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-3","name":"Amazon Web Services - AP-SouthEast-3 (Jakarta)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-4","name":"Amazon Web Services - AP-SouthEast-4 (Melbourne)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-northeast-1","name":"Amazon Web Services - AP-NorthEast-1 (Tokyo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-2","name":"Amazon Web Services - AP-NorthEast-2 (Seoul)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-3","name":"Amazon Web Services - AP-NorthEast-3 (Osaka)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-south-1","name":"Amazon Web Services - AP-South-1 (Mumbai)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-south-2","name":"Amazon Web Services - AP-South-2 (Hyderabad)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-east-1","name":"Amazon Web Services - AP-East-1 (Hong Kong)","has_shared_plans":true},{"provider":"amazon-web-services","region":"sa-east-1","name":"Amazon Web Services - SA-East-1 (São Paulo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-south-1","name":"Amazon Web Services - ME-South-1 (Bahrain)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-central-1","name":"Amazon Web Services - ME-Central-1 (UAE)","has_shared_plans":false},{"provider":"amazon-web-services","region":"af-south-1","name":"Amazon Web Services - AF-South-1 (Cape Town)","has_shared_plans":false},{"provider":"amazon-web-services","region":"il-central-1","name":"Amazon Web Services - IL-Central-1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-central1","name":"Google Compute Engine - us-central1 (Iowa)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east1","name":"Google Compute Engine - us-east1 (South Carolina)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east4","name":"Google Compute Engine - us-east4 (North Virginia)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east5","name":"Google Compute Engine - us-east5 (Columbus)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west1","name":"Google Compute Engine - us-west1 (Oregon)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west2","name":"Google Compute Engine - us-west2 (Los Angeles)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west3","name":"Google Compute Engine - us-west3 (Salt Lake City)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west4","name":"Google Compute Engine - us-west4 (Las Vegas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-south1","name":"Google Compute Engine - us-south1 (Dallas, Texas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-east1","name":"Google Compute Engine - southamerica-east1 (São Paulo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-west1","name":"Google Compute Engine - southamerica-west1 (Santiago)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north1","name":"Google Compute Engine - europe-north1 (Finland)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west1","name":"Google Compute Engine - europe-west1 (Belgium)","has_shared_plans":true},{"provider":"google-compute-engine","region":"europe-west2","name":"Google Compute Engine - europe-west2 (London)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west3","name":"Google Compute Engine - europe-west3 (Frankfurt)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west4","name":"Google Compute Engine - europe-west4 (Netherlands)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west6","name":"Google Compute Engine - europe-west6 (Zürich)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west8","name":"Google Compute Engine - europe-west8 (Milan)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west9","name":"Google Compute Engine - europe-west9 (Paris)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west10","name":"Google Compute Engine - europe-west10 (Berlin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west12","name":"Google Compute Engine - europe-west12 (Turin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-central2","name":"Google Compute Engine - europe-central2 (Warsaw)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-southwest1","name":"Google Compute Engine - europe-southwest1 (Madrid)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-west1","name":"Google Compute Engine - me-west1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central1","name":"Google Compute Engine - me-central1 (Doha)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central2","name":"Google Compute Engine - me-central2 (Dammam)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-east1","name":"Google Compute Engine - asia-east1 (Taiwan)","has_shared_plans":true},{"provider":"google-compute-engine","region":"asia-east2","name":"Google Compute Engine - asia-east2 (Hong Kong)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast1","name":"Google Compute Engine - asia-northeast1 (Tokyo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast2","name":"Google Compute Engine - asia-northeast2 (Osaka)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast3","name":"Google Compute Engine - asia-northeast3 (Seoul)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast1","name":"Google Compute Engine - asia-southeast1 (Singapore)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast2","name":"Google Compute Engine - asia-southeast2 (Jakarta)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south1","name":"Google Compute Engine - asia-south1 (Mumbai)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south2","name":"Google Compute Engine - asia-south2 (Delhi)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast1","name":"Google Compute Engine - australia-southeast1 (Sydney)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast2","name":"Google Compute Engine - australia-southeast2 (Melbourne)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast1","name":"Google Compute Engine - northamerica-northeast1 (Montréal, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast2","name":"Google Compute Engine - northamerica-northeast2 (Toronto, Canada)","has_shared_plans":false},{"provider":"digital-ocean","region":"nyc3","name":"DigitalOcean - New York 3","has_shared_plans":false},{"provider":"digital-ocean","region":"ams3","name":"DigitalOcean - Amsterdam 3","has_shared_plans":false},{"provider":"digital-ocean","region":"sgp1","name":"DigitalOcean - Singapore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"lon1","name":"DigitalOcean - London 1","has_shared_plans":false},{"provider":"digital-ocean","region":"fra1","name":"DigitalOcean - Frankfurt 1","has_shared_plans":false},{"provider":"digital-ocean","region":"tor1","name":"DigitalOcean - Toronto 1","has_shared_plans":false},{"provider":"digital-ocean","region":"sfo3","name":"DigitalOcean - San Francisco 3","has_shared_plans":false},{"provider":"digital-ocean","region":"blr1","name":"DigitalOcean - Bangalore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"syd1","name":"DigitalOcean - Sydney 1","has_shared_plans":false},{"provider":"azure-arm","region":"australiacentral","name":"Azure - Australia Central","has_shared_plans":false},{"provider":"azure-arm","region":"australiaeast","name":"Azure - Australia East","has_shared_plans":false},{"provider":"azure-arm","region":"australiasoutheast","name":"Azure - Australia Southeast","has_shared_plans":false},{"provider":"azure-arm","region":"brazilsouth","name":"Azure - Brazil South","has_shared_plans":false},{"provider":"azure-arm","region":"canadacentral","name":"Azure - Canada Central","has_shared_plans":false},{"provider":"azure-arm","region":"canadaeast","name":"Azure - Canada East","has_shared_plans":false},{"provider":"azure-arm","region":"centralindia","name":"Azure - Central India","has_shared_plans":false},{"provider":"azure-arm","region":"centralus","name":"Azure - Central US","has_shared_plans":false},{"provider":"azure-arm","region":"eastasia","name":"Azure - East Asia","has_shared_plans":false},{"provider":"azure-arm","region":"eastus","name":"Azure - East US","has_shared_plans":true},{"provider":"azure-arm","region":"eastus2","name":"Azure - East US 2","has_shared_plans":true},{"provider":"azure-arm","region":"francecentral","name":"Azure - France Central","has_shared_plans":false},{"provider":"azure-arm","region":"germanywestcentral","name":"Azure - Germany West Central","has_shared_plans":false},{"provider":"azure-arm","region":"italynorth","name":"Azure - Italy North","has_shared_plans":false},{"provider":"azure-arm","region":"japaneast","name":"Azure - Japan East","has_shared_plans":false},{"provider":"azure-arm","region":"japanwest","name":"Azure - Japan West","has_shared_plans":false},{"provider":"azure-arm","region":"koreacentral","name":"Azure - Korea Central","has_shared_plans":false},{"provider":"azure-arm","region":"koreasouth","name":"Azure - Korea South","has_shared_plans":false},{"provider":"azure-arm","region":"northcentralus","name":"Azure - North Central US","has_shared_plans":false},{"provider":"azure-arm","region":"northeurope","name":"Azure - North Europe","has_shared_plans":false},{"provider":"azure-arm","region":"norwayeast","name":"Azure - Norway East","has_shared_plans":false},{"provider":"azure-arm","region":"southafricanorth","name":"Azure - South Africa North","has_shared_plans":false},{"provider":"azure-arm","region":"southcentralus","name":"Azure - South Central US","has_shared_plans":false},{"provider":"azure-arm","region":"southeastasia","name":"Azure - Southeast Asia","has_shared_plans":false},{"provider":"azure-arm","region":"southindia","name":"Azure - South India","has_shared_plans":false},{"provider":"azure-arm","region":"switzerlandnorth","name":"Azure - Switzerland North","has_shared_plans":false},{"provider":"azure-arm","region":"swedencentral","name":"Azure - Sweden Central","has_shared_plans":true},{"provider":"azure-arm","region":"uaenorth","name":"Azure - UAE North","has_shared_plans":false},{"provider":"azure-arm","region":"uksouth","name":"Azure - UK South","has_shared_plans":false},{"provider":"azure-arm","region":"ukwest","name":"Azure - UK West","has_shared_plans":false},{"provider":"azure-arm","region":"westcentralus","name":"Azure - West Central US","has_shared_plans":false},{"provider":"azure-arm","region":"westeurope","name":"Azure - West Europe","has_shared_plans":true},{"provider":"azure-arm","region":"westus","name":"Azure - West US","has_shared_plans":true},{"provider":"azure-arm","region":"westus2","name":"Azure - West US 2","has_shared_plans":false},{"provider":"azure-arm","region":"westus3","name":"Azure - West US 3","has_shared_plans":false}]'
         headers:
             Cache-Control:
                 - no-cache
@@ -88,13 +94,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 36c67b16-7f46-4f55-85f1-7eef2d8ec0ba
+                - a4958917-2e3a-4c27-b5d5-81b112d85331
         status: 200 OK
         code: 200
-        duration: 5.133712ms
+        duration: 10.203258ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -109,6 +117,8 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
         url: http://localhost:9393/api/plans
@@ -135,13 +145,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 93d8211d-a5ab-4748-9d65-3357123b3999
+                - 61337b5b-00f6-4892-a0ff-fca1f8ebdee6
         status: 200 OK
         code: 200
-        duration: 138.487661ms
+        duration: 56.807162ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -156,6 +168,8 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
         url: http://localhost:9393/api/regions
@@ -168,7 +182,7 @@ interactions:
         trailer: {}
         content_length: 14003
         uncompressed: false
-        body: '[{"provider":"amazon-web-services","region":"eu-north-1","name":"Amazon Web Services - EU-North-1 (Stockholm)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-2","name":"Amazon Web Services - US-West-2 (Oregon)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-east-2","name":"Amazon Web Services - US-East-2 (Ohio)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-1","name":"Amazon Web Services - US-West-1 (Northern California)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-1","name":"Amazon Web Services - EU-West-1 (Ireland)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-2","name":"Amazon Web Services - EU-West-2 (London)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-3","name":"Amazon Web Services - EU-West-3 (Paris)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-south-1","name":"Amazon Web Services - EU-South-1 (Milan)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-south-2","name":"Amazon Web Services - EU-South-2 (Spain)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-central-1","name":"Amazon Web Services - EU-Central-1 (Frankfurt)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-central-2","name":"Amazon Web Services - EU-Central-2 (Zurich)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ca-central-1","name":"Amazon Web Services - CA-Central-1 (Canada)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-1","name":"Amazon Web Services - AP-SouthEast-1 (Singapore)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-2","name":"Amazon Web Services - AP-SouthEast-2 (Sydney)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-3","name":"Amazon Web Services - AP-SouthEast-3 (Jakarta)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-4","name":"Amazon Web Services - AP-SouthEast-4 (Melbourne)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-northeast-1","name":"Amazon Web Services - AP-NorthEast-1 (Tokyo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-2","name":"Amazon Web Services - AP-NorthEast-2 (Seoul)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-3","name":"Amazon Web Services - AP-NorthEast-3 (Osaka)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-south-1","name":"Amazon Web Services - AP-South-1 (Mumbai)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-south-2","name":"Amazon Web Services - AP-South-2 (Hyderabad)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-east-1","name":"Amazon Web Services - AP-East-1 (Hong Kong)","has_shared_plans":true},{"provider":"amazon-web-services","region":"sa-east-1","name":"Amazon Web Services - SA-East-1 (São Paulo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-south-1","name":"Amazon Web Services - ME-South-1 (Bahrain)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-central-1","name":"Amazon Web Services - ME-Central-1 (UAE)","has_shared_plans":false},{"provider":"amazon-web-services","region":"af-south-1","name":"Amazon Web Services - AF-South-1 (Cape Town)","has_shared_plans":false},{"provider":"amazon-web-services","region":"us-east-1","name":"Amazon Web Services - US-East-1 (Northern Virginia)","has_shared_plans":true},{"provider":"amazon-web-services","region":"il-central-1","name":"Amazon Web Services - IL-Central-1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast2","name":"Google Compute Engine - northamerica-northeast2 (Toronto, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east1","name":"Google Compute Engine - us-east1 (South Carolina)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east4","name":"Google Compute Engine - us-east4 (North Virginia)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east5","name":"Google Compute Engine - us-east5 (Columbus)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west1","name":"Google Compute Engine - us-west1 (Oregon)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west2","name":"Google Compute Engine - us-west2 (Los Angeles)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west3","name":"Google Compute Engine - us-west3 (Salt Lake City)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west4","name":"Google Compute Engine - us-west4 (Las Vegas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-south1","name":"Google Compute Engine - us-south1 (Dallas, Texas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-east1","name":"Google Compute Engine - southamerica-east1 (São Paulo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-west1","name":"Google Compute Engine - southamerica-west1 (Santiago)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north1","name":"Google Compute Engine - europe-north1 (Finland)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west1","name":"Google Compute Engine - europe-west1 (Belgium)","has_shared_plans":true},{"provider":"google-compute-engine","region":"europe-west2","name":"Google Compute Engine - europe-west2 (London)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west3","name":"Google Compute Engine - europe-west3 (Frankfurt)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west4","name":"Google Compute Engine - europe-west4 (Netherlands)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west6","name":"Google Compute Engine - europe-west6 (Zürich)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west8","name":"Google Compute Engine - europe-west8 (Milan)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west9","name":"Google Compute Engine - europe-west9 (Paris)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west10","name":"Google Compute Engine - europe-west10 (Berlin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west12","name":"Google Compute Engine - europe-west12 (Turin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-central2","name":"Google Compute Engine - europe-central2 (Warsaw)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-southwest1","name":"Google Compute Engine - europe-southwest1 (Madrid)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-west1","name":"Google Compute Engine - me-west1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central1","name":"Google Compute Engine - me-central1 (Doha)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central2","name":"Google Compute Engine - me-central2 (Dammam)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-east1","name":"Google Compute Engine - asia-east1 (Taiwan)","has_shared_plans":true},{"provider":"google-compute-engine","region":"asia-east2","name":"Google Compute Engine - asia-east2 (Hong Kong)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast1","name":"Google Compute Engine - asia-northeast1 (Tokyo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast2","name":"Google Compute Engine - asia-northeast2 (Osaka)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast3","name":"Google Compute Engine - asia-northeast3 (Seoul)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast1","name":"Google Compute Engine - asia-southeast1 (Singapore)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast2","name":"Google Compute Engine - asia-southeast2 (Jakarta)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south1","name":"Google Compute Engine - asia-south1 (Mumbai)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south2","name":"Google Compute Engine - asia-south2 (Delhi)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast1","name":"Google Compute Engine - australia-southeast1 (Sydney)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast2","name":"Google Compute Engine - australia-southeast2 (Melbourne)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast1","name":"Google Compute Engine - northamerica-northeast1 (Montréal, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-central1","name":"Google Compute Engine - us-central1 (Iowa)","has_shared_plans":true},{"provider":"digital-ocean","region":"syd1","name":"DigitalOcean - Sydney 1","has_shared_plans":false},{"provider":"digital-ocean","region":"ams3","name":"DigitalOcean - Amsterdam 3","has_shared_plans":false},{"provider":"digital-ocean","region":"sgp1","name":"DigitalOcean - Singapore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"lon1","name":"DigitalOcean - London 1","has_shared_plans":false},{"provider":"digital-ocean","region":"fra1","name":"DigitalOcean - Frankfurt 1","has_shared_plans":false},{"provider":"digital-ocean","region":"tor1","name":"DigitalOcean - Toronto 1","has_shared_plans":false},{"provider":"digital-ocean","region":"sfo3","name":"DigitalOcean - San Francisco 3","has_shared_plans":false},{"provider":"digital-ocean","region":"blr1","name":"DigitalOcean - Bangalore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"nyc3","name":"DigitalOcean - New York 3","has_shared_plans":false},{"provider":"azure-arm","region":"westus3","name":"Azure - West US 3","has_shared_plans":false},{"provider":"azure-arm","region":"australiaeast","name":"Azure - Australia East","has_shared_plans":false},{"provider":"azure-arm","region":"australiasoutheast","name":"Azure - Australia Southeast","has_shared_plans":false},{"provider":"azure-arm","region":"brazilsouth","name":"Azure - Brazil South","has_shared_plans":false},{"provider":"azure-arm","region":"canadacentral","name":"Azure - Canada Central","has_shared_plans":false},{"provider":"azure-arm","region":"canadaeast","name":"Azure - Canada East","has_shared_plans":false},{"provider":"azure-arm","region":"centralindia","name":"Azure - Central India","has_shared_plans":false},{"provider":"azure-arm","region":"centralus","name":"Azure - Central US","has_shared_plans":false},{"provider":"azure-arm","region":"eastasia","name":"Azure - East Asia","has_shared_plans":false},{"provider":"azure-arm","region":"eastus","name":"Azure - East US","has_shared_plans":true},{"provider":"azure-arm","region":"eastus2","name":"Azure - East US 2","has_shared_plans":true},{"provider":"azure-arm","region":"francecentral","name":"Azure - France Central","has_shared_plans":false},{"provider":"azure-arm","region":"germanywestcentral","name":"Azure - Germany West Central","has_shared_plans":false},{"provider":"azure-arm","region":"italynorth","name":"Azure - Italy North","has_shared_plans":false},{"provider":"azure-arm","region":"japaneast","name":"Azure - Japan East","has_shared_plans":false},{"provider":"azure-arm","region":"japanwest","name":"Azure - Japan West","has_shared_plans":false},{"provider":"azure-arm","region":"koreacentral","name":"Azure - Korea Central","has_shared_plans":false},{"provider":"azure-arm","region":"koreasouth","name":"Azure - Korea South","has_shared_plans":false},{"provider":"azure-arm","region":"northcentralus","name":"Azure - North Central US","has_shared_plans":false},{"provider":"azure-arm","region":"northeurope","name":"Azure - North Europe","has_shared_plans":false},{"provider":"azure-arm","region":"norwayeast","name":"Azure - Norway East","has_shared_plans":false},{"provider":"azure-arm","region":"southafricanorth","name":"Azure - South Africa North","has_shared_plans":false},{"provider":"azure-arm","region":"southcentralus","name":"Azure - South Central US","has_shared_plans":false},{"provider":"azure-arm","region":"southeastasia","name":"Azure - Southeast Asia","has_shared_plans":false},{"provider":"azure-arm","region":"southindia","name":"Azure - South India","has_shared_plans":false},{"provider":"azure-arm","region":"switzerlandnorth","name":"Azure - Switzerland North","has_shared_plans":false},{"provider":"azure-arm","region":"swedencentral","name":"Azure - Sweden Central","has_shared_plans":true},{"provider":"azure-arm","region":"uaenorth","name":"Azure - UAE North","has_shared_plans":false},{"provider":"azure-arm","region":"uksouth","name":"Azure - UK South","has_shared_plans":false},{"provider":"azure-arm","region":"ukwest","name":"Azure - UK West","has_shared_plans":false},{"provider":"azure-arm","region":"westcentralus","name":"Azure - West Central US","has_shared_plans":false},{"provider":"azure-arm","region":"westeurope","name":"Azure - West Europe","has_shared_plans":true},{"provider":"azure-arm","region":"westus","name":"Azure - West US","has_shared_plans":true},{"provider":"azure-arm","region":"westus2","name":"Azure - West US 2","has_shared_plans":false},{"provider":"azure-arm","region":"australiacentral","name":"Azure - Australia Central","has_shared_plans":false}]'
+        body: '[{"provider":"amazon-web-services","region":"us-east-1","name":"Amazon Web Services - US-East-1 (Northern Virginia)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-2","name":"Amazon Web Services - US-West-2 (Oregon)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-east-2","name":"Amazon Web Services - US-East-2 (Ohio)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-1","name":"Amazon Web Services - US-West-1 (Northern California)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-north-1","name":"Amazon Web Services - EU-North-1 (Stockholm)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-1","name":"Amazon Web Services - EU-West-1 (Ireland)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-2","name":"Amazon Web Services - EU-West-2 (London)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-3","name":"Amazon Web Services - EU-West-3 (Paris)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-south-1","name":"Amazon Web Services - EU-South-1 (Milan)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-south-2","name":"Amazon Web Services - EU-South-2 (Spain)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-central-1","name":"Amazon Web Services - EU-Central-1 (Frankfurt)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-central-2","name":"Amazon Web Services - EU-Central-2 (Zurich)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ca-central-1","name":"Amazon Web Services - CA-Central-1 (Canada)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-1","name":"Amazon Web Services - AP-SouthEast-1 (Singapore)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-2","name":"Amazon Web Services - AP-SouthEast-2 (Sydney)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-3","name":"Amazon Web Services - AP-SouthEast-3 (Jakarta)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-4","name":"Amazon Web Services - AP-SouthEast-4 (Melbourne)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-northeast-1","name":"Amazon Web Services - AP-NorthEast-1 (Tokyo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-2","name":"Amazon Web Services - AP-NorthEast-2 (Seoul)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-3","name":"Amazon Web Services - AP-NorthEast-3 (Osaka)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-south-1","name":"Amazon Web Services - AP-South-1 (Mumbai)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-south-2","name":"Amazon Web Services - AP-South-2 (Hyderabad)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-east-1","name":"Amazon Web Services - AP-East-1 (Hong Kong)","has_shared_plans":true},{"provider":"amazon-web-services","region":"sa-east-1","name":"Amazon Web Services - SA-East-1 (São Paulo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-south-1","name":"Amazon Web Services - ME-South-1 (Bahrain)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-central-1","name":"Amazon Web Services - ME-Central-1 (UAE)","has_shared_plans":false},{"provider":"amazon-web-services","region":"af-south-1","name":"Amazon Web Services - AF-South-1 (Cape Town)","has_shared_plans":false},{"provider":"amazon-web-services","region":"il-central-1","name":"Amazon Web Services - IL-Central-1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-central1","name":"Google Compute Engine - us-central1 (Iowa)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east1","name":"Google Compute Engine - us-east1 (South Carolina)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east4","name":"Google Compute Engine - us-east4 (North Virginia)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east5","name":"Google Compute Engine - us-east5 (Columbus)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west1","name":"Google Compute Engine - us-west1 (Oregon)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west2","name":"Google Compute Engine - us-west2 (Los Angeles)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west3","name":"Google Compute Engine - us-west3 (Salt Lake City)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west4","name":"Google Compute Engine - us-west4 (Las Vegas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-south1","name":"Google Compute Engine - us-south1 (Dallas, Texas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-east1","name":"Google Compute Engine - southamerica-east1 (São Paulo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-west1","name":"Google Compute Engine - southamerica-west1 (Santiago)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north1","name":"Google Compute Engine - europe-north1 (Finland)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west1","name":"Google Compute Engine - europe-west1 (Belgium)","has_shared_plans":true},{"provider":"google-compute-engine","region":"europe-west2","name":"Google Compute Engine - europe-west2 (London)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west3","name":"Google Compute Engine - europe-west3 (Frankfurt)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west4","name":"Google Compute Engine - europe-west4 (Netherlands)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west6","name":"Google Compute Engine - europe-west6 (Zürich)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west8","name":"Google Compute Engine - europe-west8 (Milan)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west9","name":"Google Compute Engine - europe-west9 (Paris)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west10","name":"Google Compute Engine - europe-west10 (Berlin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west12","name":"Google Compute Engine - europe-west12 (Turin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-central2","name":"Google Compute Engine - europe-central2 (Warsaw)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-southwest1","name":"Google Compute Engine - europe-southwest1 (Madrid)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-west1","name":"Google Compute Engine - me-west1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central1","name":"Google Compute Engine - me-central1 (Doha)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central2","name":"Google Compute Engine - me-central2 (Dammam)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-east1","name":"Google Compute Engine - asia-east1 (Taiwan)","has_shared_plans":true},{"provider":"google-compute-engine","region":"asia-east2","name":"Google Compute Engine - asia-east2 (Hong Kong)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast1","name":"Google Compute Engine - asia-northeast1 (Tokyo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast2","name":"Google Compute Engine - asia-northeast2 (Osaka)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast3","name":"Google Compute Engine - asia-northeast3 (Seoul)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast1","name":"Google Compute Engine - asia-southeast1 (Singapore)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast2","name":"Google Compute Engine - asia-southeast2 (Jakarta)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south1","name":"Google Compute Engine - asia-south1 (Mumbai)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south2","name":"Google Compute Engine - asia-south2 (Delhi)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast1","name":"Google Compute Engine - australia-southeast1 (Sydney)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast2","name":"Google Compute Engine - australia-southeast2 (Melbourne)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast1","name":"Google Compute Engine - northamerica-northeast1 (Montréal, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast2","name":"Google Compute Engine - northamerica-northeast2 (Toronto, Canada)","has_shared_plans":false},{"provider":"digital-ocean","region":"nyc3","name":"DigitalOcean - New York 3","has_shared_plans":false},{"provider":"digital-ocean","region":"ams3","name":"DigitalOcean - Amsterdam 3","has_shared_plans":false},{"provider":"digital-ocean","region":"sgp1","name":"DigitalOcean - Singapore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"lon1","name":"DigitalOcean - London 1","has_shared_plans":false},{"provider":"digital-ocean","region":"fra1","name":"DigitalOcean - Frankfurt 1","has_shared_plans":false},{"provider":"digital-ocean","region":"tor1","name":"DigitalOcean - Toronto 1","has_shared_plans":false},{"provider":"digital-ocean","region":"sfo3","name":"DigitalOcean - San Francisco 3","has_shared_plans":false},{"provider":"digital-ocean","region":"blr1","name":"DigitalOcean - Bangalore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"syd1","name":"DigitalOcean - Sydney 1","has_shared_plans":false},{"provider":"azure-arm","region":"australiacentral","name":"Azure - Australia Central","has_shared_plans":false},{"provider":"azure-arm","region":"australiaeast","name":"Azure - Australia East","has_shared_plans":false},{"provider":"azure-arm","region":"australiasoutheast","name":"Azure - Australia Southeast","has_shared_plans":false},{"provider":"azure-arm","region":"brazilsouth","name":"Azure - Brazil South","has_shared_plans":false},{"provider":"azure-arm","region":"canadacentral","name":"Azure - Canada Central","has_shared_plans":false},{"provider":"azure-arm","region":"canadaeast","name":"Azure - Canada East","has_shared_plans":false},{"provider":"azure-arm","region":"centralindia","name":"Azure - Central India","has_shared_plans":false},{"provider":"azure-arm","region":"centralus","name":"Azure - Central US","has_shared_plans":false},{"provider":"azure-arm","region":"eastasia","name":"Azure - East Asia","has_shared_plans":false},{"provider":"azure-arm","region":"eastus","name":"Azure - East US","has_shared_plans":true},{"provider":"azure-arm","region":"eastus2","name":"Azure - East US 2","has_shared_plans":true},{"provider":"azure-arm","region":"francecentral","name":"Azure - France Central","has_shared_plans":false},{"provider":"azure-arm","region":"germanywestcentral","name":"Azure - Germany West Central","has_shared_plans":false},{"provider":"azure-arm","region":"italynorth","name":"Azure - Italy North","has_shared_plans":false},{"provider":"azure-arm","region":"japaneast","name":"Azure - Japan East","has_shared_plans":false},{"provider":"azure-arm","region":"japanwest","name":"Azure - Japan West","has_shared_plans":false},{"provider":"azure-arm","region":"koreacentral","name":"Azure - Korea Central","has_shared_plans":false},{"provider":"azure-arm","region":"koreasouth","name":"Azure - Korea South","has_shared_plans":false},{"provider":"azure-arm","region":"northcentralus","name":"Azure - North Central US","has_shared_plans":false},{"provider":"azure-arm","region":"northeurope","name":"Azure - North Europe","has_shared_plans":false},{"provider":"azure-arm","region":"norwayeast","name":"Azure - Norway East","has_shared_plans":false},{"provider":"azure-arm","region":"southafricanorth","name":"Azure - South Africa North","has_shared_plans":false},{"provider":"azure-arm","region":"southcentralus","name":"Azure - South Central US","has_shared_plans":false},{"provider":"azure-arm","region":"southeastasia","name":"Azure - Southeast Asia","has_shared_plans":false},{"provider":"azure-arm","region":"southindia","name":"Azure - South India","has_shared_plans":false},{"provider":"azure-arm","region":"switzerlandnorth","name":"Azure - Switzerland North","has_shared_plans":false},{"provider":"azure-arm","region":"swedencentral","name":"Azure - Sweden Central","has_shared_plans":true},{"provider":"azure-arm","region":"uaenorth","name":"Azure - UAE North","has_shared_plans":false},{"provider":"azure-arm","region":"uksouth","name":"Azure - UK South","has_shared_plans":false},{"provider":"azure-arm","region":"ukwest","name":"Azure - UK West","has_shared_plans":false},{"provider":"azure-arm","region":"westcentralus","name":"Azure - West Central US","has_shared_plans":false},{"provider":"azure-arm","region":"westeurope","name":"Azure - West Europe","has_shared_plans":true},{"provider":"azure-arm","region":"westus","name":"Azure - West US","has_shared_plans":true},{"provider":"azure-arm","region":"westus2","name":"Azure - West US 2","has_shared_plans":false},{"provider":"azure-arm","region":"westus3","name":"Azure - West US 3","has_shared_plans":false}]'
         headers:
             Cache-Control:
                 - no-cache
@@ -182,13 +196,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 1f14528a-bc99-473f-b327-b742b0c9f757
+                - c8ddc456-0e57-4866-bd6b-13b9d86d3e1f
         status: 200 OK
         code: 200
-        duration: 4.670381ms
+        duration: 7.774241ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -204,6 +220,8 @@ interactions:
             {"name":"TestAccExtraDiskSize_Azure_Basic","no_default_alarms":false,"plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"]}
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             Content-Type:
                 - application/json
             User-Agent:
@@ -216,14 +234,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 253
+        content_length: 252
         uncompressed: false
-        body: '{"id":1838,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"***","url":"amqps://gcyzhsyt:***@dev-strong-wheat-koala.rmq2.dev.cloudamqp.com/gcyzhsyt"}'
+        body: '{"id":1906,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"ab2efa52-f5e9-4715-83fd-4a32b090e5a6","url":"amqps://kcwslmeo:***@dev-burly-olden-shark.rmq6.dev.cloudamqp.com/kcwslmeo"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "253"
+                - "252"
             Content-Type:
                 - application/json
             Nel:
@@ -232,13 +250,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 04cb5d06-2035-46a2-b77d-05df8e18f8b8
+                - f0433140-0ee2-4e19-b07d-88adc6292508
         status: 200 OK
         code: 200
-        duration: 462.559893ms
+        duration: 551.562932ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -253,9 +273,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1838
+        url: http://localhost:9393/api/instances/1906
         method: GET
       response:
         proto: HTTP/1.1
@@ -263,14 +285,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 786
+        content_length: 781
         uncompressed: false
-        body: '{"id":1838,"name":"TestAccExtraDiskSize_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"43a4a5de-8f97-446d-ab6b-79a3f87b184e","url":"amqps://gcyzhsyt:***@dev-strong-wheat-koala.rmq2.dev.cloudamqp.com/gcyzhsyt","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://gcyzhsyt:***@dev-strong-wheat-koala.rmq2.dev.cloudamqp.com/gcyzhsyt","internal":"amqp://gcyzhsyt:***@dev-strong-wheat-koala.in.rmq2.dev.cloudamqp.com/gcyzhsyt"},"rmq_version":"3.13.0","hostname_external":"dev-strong-wheat-koala.rmq2.dev.cloudamqp.com","hostname_internal":"dev-strong-wheat-koala.in.rmq2.dev.cloudamqp.com"}'
+        body: '{"id":1906,"name":"TestAccExtraDiskSize_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"d43e3ba0-e1a2-4067-b64e-63ab79c36ec1","url":"amqps://kcwslmeo:***@dev-burly-olden-shark.rmq6.dev.cloudamqp.com/kcwslmeo","ready":true,"apikey":"ab2efa52-f5e9-4715-83fd-4a32b090e5a6","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://kcwslmeo:***@dev-burly-olden-shark.rmq6.dev.cloudamqp.com/kcwslmeo","internal":"amqp://kcwslmeo:***@dev-burly-olden-shark.in.rmq6.dev.cloudamqp.com/kcwslmeo"},"rmq_version":"3.13.1","hostname_external":"dev-burly-olden-shark.rmq6.dev.cloudamqp.com","hostname_internal":"dev-burly-olden-shark.in.rmq6.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "786"
+                - "781"
             Content-Type:
                 - application/json
             Nel:
@@ -279,13 +301,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 8dcb6295-a91b-43b5-8e79-a2ccda37a16a
+                - 6f2431ea-9297-4c14-b56f-79ec7336ae57
         status: 200 OK
         code: 200
-        duration: 43.994579ms
+        duration: 107.01379ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -300,9 +324,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1838
+        url: http://localhost:9393/api/instances/1906
         method: GET
       response:
         proto: HTTP/1.1
@@ -310,14 +336,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 786
+        content_length: 781
         uncompressed: false
-        body: '{"id":1838,"name":"TestAccExtraDiskSize_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"43a4a5de-8f97-446d-ab6b-79a3f87b184e","url":"amqps://gcyzhsyt:***@dev-strong-wheat-koala.rmq2.dev.cloudamqp.com/gcyzhsyt","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://gcyzhsyt:***@dev-strong-wheat-koala.rmq2.dev.cloudamqp.com/gcyzhsyt","internal":"amqp://gcyzhsyt:***@dev-strong-wheat-koala.in.rmq2.dev.cloudamqp.com/gcyzhsyt"},"rmq_version":"3.13.0","hostname_external":"dev-strong-wheat-koala.rmq2.dev.cloudamqp.com","hostname_internal":"dev-strong-wheat-koala.in.rmq2.dev.cloudamqp.com"}'
+        body: '{"id":1906,"name":"TestAccExtraDiskSize_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"d43e3ba0-e1a2-4067-b64e-63ab79c36ec1","url":"amqps://kcwslmeo:***@dev-burly-olden-shark.rmq6.dev.cloudamqp.com/kcwslmeo","ready":true,"apikey":"ab2efa52-f5e9-4715-83fd-4a32b090e5a6","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://kcwslmeo:***@dev-burly-olden-shark.rmq6.dev.cloudamqp.com/kcwslmeo","internal":"amqp://kcwslmeo:***@dev-burly-olden-shark.in.rmq6.dev.cloudamqp.com/kcwslmeo"},"rmq_version":"3.13.1","hostname_external":"dev-burly-olden-shark.rmq6.dev.cloudamqp.com","hostname_internal":"dev-burly-olden-shark.in.rmq6.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "786"
+                - "781"
             Content-Type:
                 - application/json
             Nel:
@@ -326,13 +352,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - c641f8f8-9ad4-4c2e-a79b-767f8883d9f1
+                - cb2c750c-bb24-4508-80fa-98acd4bd05ac
         status: 200 OK
         code: 200
-        duration: 41.82069ms
+        duration: 115.261151ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -348,11 +376,13 @@ interactions:
             {"allow_downtime":true,"extra_disk_size":25}
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             Content-Type:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1838/disk
+        url: http://localhost:9393/api/instances/1906/disk
         method: PUT
       response:
         proto: HTTP/1.1
@@ -376,13 +406,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - dbd0ebe2-d5ac-4abf-9544-03c5a6c20a91
+                - 5ebc9e0a-e239-4c5b-b329-53dcff6984eb
         status: 200 OK
         code: 200
-        duration: 10.067266822s
+        duration: 12.26443977s
     - id: 8
       request:
         proto: HTTP/1.1
@@ -397,9 +429,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1838/nodes
+        url: http://localhost:9393/api/instances/1906/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -407,14 +441,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 240
+        content_length: 238
         uncompressed: false
-        body: '[{"hostname":"dev-strong-wheat-koala-01.rmq2.dev.cloudamqp.com","configured":true,"name":"dev-strong-wheat-koala-01","running":true,"rabbitmq_version":"3.13.0","erlang_version":"26.1.2","hipe":false,"disk_size":8,"additional_disk_size":25}]'
+        body: '[{"hostname":"dev-burly-olden-shark-01.rmq6.dev.cloudamqp.com","configured":true,"name":"dev-burly-olden-shark-01","running":true,"rabbitmq_version":"3.13.1","erlang_version":"26.1.2","hipe":false,"disk_size":8,"additional_disk_size":25}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "240"
+                - "238"
             Content-Type:
                 - application/json
             Nel:
@@ -423,13 +457,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 9d75fbff-5812-4961-b30b-8fa56dc8e699
+                - f2a231c4-1080-488f-a9d6-5003f1c80e7f
         status: 200 OK
         code: 200
-        duration: 41.770742ms
+        duration: 384.663997ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -444,9 +480,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1838/nodes
+        url: http://localhost:9393/api/instances/1906/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -454,14 +492,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 240
+        content_length: 238
         uncompressed: false
-        body: '[{"hostname":"dev-strong-wheat-koala-01.rmq2.dev.cloudamqp.com","configured":true,"name":"dev-strong-wheat-koala-01","running":true,"rabbitmq_version":"3.13.0","erlang_version":"26.1.2","hipe":false,"disk_size":8,"additional_disk_size":25}]'
+        body: '[{"hostname":"dev-burly-olden-shark-01.rmq6.dev.cloudamqp.com","configured":true,"name":"dev-burly-olden-shark-01","running":true,"rabbitmq_version":"3.13.1","erlang_version":"26.1.2","hipe":false,"disk_size":8,"additional_disk_size":25}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "240"
+                - "238"
             Content-Type:
                 - application/json
             Nel:
@@ -470,13 +508,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 88aaaec1-1a76-47ab-ab44-f72ca611a347
+                - 2d3c2264-7629-42fc-9169-149d12a5b62f
         status: 200 OK
         code: 200
-        duration: 32.449091ms
+        duration: 263.972663ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -491,9 +531,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1838/nodes
+        url: http://localhost:9393/api/instances/1906/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -501,14 +543,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 240
+        content_length: 238
         uncompressed: false
-        body: '[{"hostname":"dev-strong-wheat-koala-01.rmq2.dev.cloudamqp.com","configured":true,"name":"dev-strong-wheat-koala-01","running":true,"rabbitmq_version":"3.13.0","erlang_version":"26.1.2","hipe":false,"disk_size":8,"additional_disk_size":25}]'
+        body: '[{"hostname":"dev-burly-olden-shark-01.rmq6.dev.cloudamqp.com","configured":true,"name":"dev-burly-olden-shark-01","running":true,"rabbitmq_version":"3.13.1","erlang_version":"26.1.2","hipe":false,"disk_size":8,"additional_disk_size":25}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "240"
+                - "238"
             Content-Type:
                 - application/json
             Nel:
@@ -517,13 +559,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - a1d81425-98f9-4b6c-9144-cab1b03f1889
+                - f537f5cb-7a77-4f7c-99fd-12ff0897fc32
         status: 200 OK
         code: 200
-        duration: 34.914921ms
+        duration: 125.27428ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -538,9 +582,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1838
+        url: http://localhost:9393/api/instances/1906
         method: GET
       response:
         proto: HTTP/1.1
@@ -548,14 +594,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 786
+        content_length: 781
         uncompressed: false
-        body: '{"id":1838,"name":"TestAccExtraDiskSize_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"43a4a5de-8f97-446d-ab6b-79a3f87b184e","url":"amqps://gcyzhsyt:***@dev-strong-wheat-koala.rmq2.dev.cloudamqp.com/gcyzhsyt","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://gcyzhsyt:***@dev-strong-wheat-koala.rmq2.dev.cloudamqp.com/gcyzhsyt","internal":"amqp://gcyzhsyt:***@dev-strong-wheat-koala.in.rmq2.dev.cloudamqp.com/gcyzhsyt"},"rmq_version":"3.13.0","hostname_external":"dev-strong-wheat-koala.rmq2.dev.cloudamqp.com","hostname_internal":"dev-strong-wheat-koala.in.rmq2.dev.cloudamqp.com"}'
+        body: '{"id":1906,"name":"TestAccExtraDiskSize_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"d43e3ba0-e1a2-4067-b64e-63ab79c36ec1","url":"amqps://kcwslmeo:***@dev-burly-olden-shark.rmq6.dev.cloudamqp.com/kcwslmeo","ready":true,"apikey":"ab2efa52-f5e9-4715-83fd-4a32b090e5a6","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://kcwslmeo:***@dev-burly-olden-shark.rmq6.dev.cloudamqp.com/kcwslmeo","internal":"amqp://kcwslmeo:***@dev-burly-olden-shark.in.rmq6.dev.cloudamqp.com/kcwslmeo"},"rmq_version":"3.13.1","hostname_external":"dev-burly-olden-shark.rmq6.dev.cloudamqp.com","hostname_internal":"dev-burly-olden-shark.in.rmq6.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "786"
+                - "781"
             Content-Type:
                 - application/json
             Nel:
@@ -564,13 +610,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - fb9e51c2-10b1-4085-ac6d-916e808b9a18
+                - 6606c859-e10f-4ef6-9f3e-91f5d72e1f71
         status: 200 OK
         code: 200
-        duration: 61.463452ms
+        duration: 368.629342ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -585,9 +633,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1838/nodes
+        url: http://localhost:9393/api/instances/1906/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -595,14 +645,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 240
+        content_length: 238
         uncompressed: false
-        body: '[{"hostname":"dev-strong-wheat-koala-01.rmq2.dev.cloudamqp.com","configured":true,"name":"dev-strong-wheat-koala-01","running":true,"rabbitmq_version":"3.13.0","erlang_version":"26.1.2","hipe":false,"disk_size":8,"additional_disk_size":25}]'
+        body: '[{"hostname":"dev-burly-olden-shark-01.rmq6.dev.cloudamqp.com","configured":true,"name":"dev-burly-olden-shark-01","running":true,"rabbitmq_version":"3.13.1","erlang_version":"26.1.2","hipe":false,"disk_size":8,"additional_disk_size":25}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "240"
+                - "238"
             Content-Type:
                 - application/json
             Nel:
@@ -611,13 +661,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 3ec584da-2047-4c0d-8aba-a02bf3314815
+                - 8d768d28-6fa4-47a5-b40a-b487a8dfbbd0
         status: 200 OK
         code: 200
-        duration: 61.172655ms
+        duration: 337.15836ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -632,9 +684,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1838
+        url: http://localhost:9393/api/instances/1906
         method: GET
       response:
         proto: HTTP/1.1
@@ -642,14 +696,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 786
+        content_length: 781
         uncompressed: false
-        body: '{"id":1838,"name":"TestAccExtraDiskSize_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"43a4a5de-8f97-446d-ab6b-79a3f87b184e","url":"amqps://gcyzhsyt:***@dev-strong-wheat-koala.rmq2.dev.cloudamqp.com/gcyzhsyt","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://gcyzhsyt:***@dev-strong-wheat-koala.rmq2.dev.cloudamqp.com/gcyzhsyt","internal":"amqp://gcyzhsyt:***@dev-strong-wheat-koala.in.rmq2.dev.cloudamqp.com/gcyzhsyt"},"rmq_version":"3.13.0","hostname_external":"dev-strong-wheat-koala.rmq2.dev.cloudamqp.com","hostname_internal":"dev-strong-wheat-koala.in.rmq2.dev.cloudamqp.com"}'
+        body: '{"id":1906,"name":"TestAccExtraDiskSize_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"d43e3ba0-e1a2-4067-b64e-63ab79c36ec1","url":"amqps://kcwslmeo:***@dev-burly-olden-shark.rmq6.dev.cloudamqp.com/kcwslmeo","ready":true,"apikey":"ab2efa52-f5e9-4715-83fd-4a32b090e5a6","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://kcwslmeo:***@dev-burly-olden-shark.rmq6.dev.cloudamqp.com/kcwslmeo","internal":"amqp://kcwslmeo:***@dev-burly-olden-shark.in.rmq6.dev.cloudamqp.com/kcwslmeo"},"rmq_version":"3.13.1","hostname_external":"dev-burly-olden-shark.rmq6.dev.cloudamqp.com","hostname_internal":"dev-burly-olden-shark.in.rmq6.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "786"
+                - "781"
             Content-Type:
                 - application/json
             Nel:
@@ -658,13 +712,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 27e3ec40-fe9c-4a5b-b146-1a335bbe7a38
+                - 3f0c0e1b-0ed6-481a-97af-205f1c442323
         status: 200 OK
         code: 200
-        duration: 54.89445ms
+        duration: 105.075941ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -679,9 +735,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1838/nodes
+        url: http://localhost:9393/api/instances/1906/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -689,14 +747,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 240
+        content_length: 238
         uncompressed: false
-        body: '[{"hostname":"dev-strong-wheat-koala-01.rmq2.dev.cloudamqp.com","configured":true,"name":"dev-strong-wheat-koala-01","running":true,"rabbitmq_version":"3.13.0","erlang_version":"26.1.2","hipe":false,"disk_size":8,"additional_disk_size":25}]'
+        body: '[{"hostname":"dev-burly-olden-shark-01.rmq6.dev.cloudamqp.com","configured":true,"name":"dev-burly-olden-shark-01","running":true,"rabbitmq_version":"3.13.1","erlang_version":"26.1.2","hipe":false,"disk_size":8,"additional_disk_size":25}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "240"
+                - "238"
             Content-Type:
                 - application/json
             Nel:
@@ -705,13 +763,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - df3c0918-f2ec-4199-b8b8-0767a9c6b18e
+                - 4f5c0a22-4742-4801-b170-4ea1e6d027f9
         status: 200 OK
         code: 200
-        duration: 47.527477ms
+        duration: 90.845972ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -726,9 +786,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1838?keep_vpc=false
+        url: http://localhost:9393/api/instances/1906?keep_vpc=false
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -748,13 +810,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 20123cb6-397e-4a19-9549-f99479a0cd0d
+                - f7970ea5-f4f0-44fd-941a-93f70a150a5f
         status: 204 No Content
         code: 204
-        duration: 369.915914ms
+        duration: 428.81136ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -769,9 +833,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1838
+        url: http://localhost:9393/api/instances/1906
         method: GET
       response:
         proto: HTTP/1.1
@@ -795,10 +861,12 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 794ce54a-e000-4532-ae92-eeafcaa70efe
+                - d40c51ea-4a33-41a4-839b-76072f4d19fe
         status: 404 Not Found
         code: 404
-        duration: 15.528489ms
+        duration: 57.154238ms
