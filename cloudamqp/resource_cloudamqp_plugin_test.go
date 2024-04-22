@@ -11,20 +11,20 @@ import (
 // TestAccPlugin_Basic: Enabled plugin, import and disable it.
 func TestAccPlugin_Basic(t *testing.T) {
 	var (
-		fileNames    = []string{"instance", "plugin"}
-		instanceName = "cloudamqp_instance.instance"
-		resourceName = "cloudamqp_plugin.rabbitmq_mqtt"
+		fileNames            = []string{"instance", "plugin"}
+		instanceResourceName = "cloudamqp_instance.instance"
+		pluginResourceName   = "cloudamqp_plugin.rabbitmq_mqtt"
 
 		params = map[string]string{
 			"InstanceName":  "TestAccPlugin_Basic",
-			"InstanceID":    fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"PluginName":    "rabbitmq_mqtt",
 			"PluginEnabled": "true",
 		}
 
 		paramsUpdated = map[string]string{
 			"InstanceName":  "TestAccPlugin_Basic",
-			"InstanceID":    fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"PluginName":    "rabbitmq_mqtt",
 			"PluginEnabled": "false",
 		}
@@ -37,22 +37,22 @@ func TestAccPlugin_Basic(t *testing.T) {
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(resourceName, "name", "rabbitmq_mqtt"),
-					resource.TestCheckResourceAttr(resourceName, "enabled", "true"),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(pluginResourceName, "name", "rabbitmq_mqtt"),
+					resource.TestCheckResourceAttr(pluginResourceName, "enabled", "true"),
 				),
 			},
 			{
-				ResourceName:      resourceName,
-				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceName, resourceName),
+				ResourceName:      pluginResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, pluginResourceName),
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "name", "rabbitmq_mqtt"),
-					resource.TestCheckResourceAttr(resourceName, "enabled", "false"),
+					resource.TestCheckResourceAttr(pluginResourceName, "name", "rabbitmq_mqtt"),
+					resource.TestCheckResourceAttr(pluginResourceName, "enabled", "false"),
 				),
 			},
 		},

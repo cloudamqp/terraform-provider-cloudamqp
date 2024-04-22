@@ -16,20 +16,20 @@ import (
 // TestAccPluginCommunity_Basic: Install community plugin and check then disable it.
 func TestAccPluginCommunity_Basic(t *testing.T) {
 	var (
-		fileNames    = []string{"instance", "plugin_community"}
-		instanceName = "cloudamqp_instance.instance"
-		resourceName = "cloudamqp_plugin_community.rabbitmq_delayed_message_exchange"
+		fileNames                   = []string{"instance", "plugin_community"}
+		instanceResourceName        = "cloudamqp_instance.instance"
+		communityPluginResourceName = "cloudamqp_plugin_community.rabbitmq_delayed_message_exchange"
 
 		params = map[string]string{
 			"InstanceName":           "TestAccPluginCommunity_Basic",
-			"InstanceID":             fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
 			"PluginCommunityName":    "rabbitmq_delayed_message_exchange",
 			"PluginCommunityEnabled": "true",
 		}
 
 		paramsUpdated = map[string]string{
 			"InstanceName":           "TestAccPluginCommunity_Basic",
-			"InstanceID":             fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
 			"PluginCommunityName":    "rabbitmq_delayed_message_exchange",
 			"PluginCommunityEnabled": "false",
 		}
@@ -42,16 +42,16 @@ func TestAccPluginCommunity_Basic(t *testing.T) {
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(resourceName, "name", params["PluginCommunityName"]),
-					resource.TestCheckResourceAttr(resourceName, "enabled", params["PluginCommunityEnabled"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(communityPluginResourceName, "name", params["PluginCommunityName"]),
+					resource.TestCheckResourceAttr(communityPluginResourceName, "enabled", params["PluginCommunityEnabled"]),
 				),
 			},
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "name", paramsUpdated["PluginCommunityName"]),
-					resource.TestCheckResourceAttr(resourceName, "enabled", paramsUpdated["PluginCommunityEnabled"]),
+					resource.TestCheckResourceAttr(communityPluginResourceName, "name", paramsUpdated["PluginCommunityName"]),
+					resource.TestCheckResourceAttr(communityPluginResourceName, "enabled", paramsUpdated["PluginCommunityEnabled"]),
 				),
 			},
 		},
