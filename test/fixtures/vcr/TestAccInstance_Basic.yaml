@@ -15,6 +15,8 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
         url: http://localhost:9393/api/plans
@@ -41,13 +43,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 38eec9fe-9751-4c57-aee0-6c8e24956514
+                - d4306551-aaa6-4bb9-9eb4-9404a6a8e2b4
         status: 200 OK
         code: 200
-        duration: 891.338002ms
+        duration: 24.438839ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -62,6 +66,8 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
         url: http://localhost:9393/api/regions
@@ -88,13 +94,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - a98f7229-0547-4a4a-8c79-4b1284cdea3e
+                - 4c246412-bc3e-4af4-83b5-f8937e2daaec
         status: 200 OK
         code: 200
-        duration: 6.829009ms
+        duration: 4.093934ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -109,6 +117,8 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
         url: http://localhost:9393/api/plans
@@ -135,13 +145,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - bb881f9b-3f39-44cf-8c70-440e930b2143
+                - df5da5ba-7599-46dd-8058-219dabb9461e
         status: 200 OK
         code: 200
-        duration: 189.994926ms
+        duration: 24.970745ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -156,6 +168,8 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
         url: http://localhost:9393/api/regions
@@ -182,19 +196,21 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - e2c8df82-f7c2-4335-bc0e-157eac2cc9f6
+                - a88dc109-0233-4861-84c9-8cc9e78b3c1c
         status: 200 OK
         code: 200
-        duration: 3.908918ms
+        duration: 4.229254ms
     - id: 4
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 147
+        content_length: 146
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
@@ -204,6 +220,8 @@ interactions:
             {"name":"TestAccInstance_Basic-before","no_default_alarms":false,"plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"]}
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             Content-Type:
                 - application/json
             User-Agent:
@@ -218,7 +236,7 @@ interactions:
         trailer: {}
         content_length: 252
         uncompressed: false
-        body: '{"id":1707,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"***","url":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp"}'
+        body: '{"id":1899,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"190cd7f9-fe93-4b8f-8433-c55e3de571f6","url":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -232,13 +250,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 318d3813-2bf6-4b94-b44e-022e5c067d44
+                - 2b491a84-239e-41c3-a59f-10045757bf99
         status: 200 OK
         code: 200
-        duration: 1.0788185s
+        duration: 312.855684ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -253,9 +273,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1707
+        url: http://localhost:9393/api/instances/1899
         method: GET
       response:
         proto: HTTP/1.1
@@ -263,14 +285,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 796
+        content_length: 790
         uncompressed: false
-        body: '{"id":1707,"name":"TestAccInstance_Basic-before","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"30dbcaa6-19be-4260-92d8-3294f48b431f","url":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","internal":"amqp://hveierrp:***@dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com/hveierrp"},"rmq_version":"3.13.0-rc.4","hostname_external":"dev-casual-red-wombat.rmq3.dev.cloudamqp.com","hostname_internal":"dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com"}'
+        body: '{"id":1899,"name":"TestAccInstance_Basic-before","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"3614471f-c902-43b1-928c-82fe38704d3f","url":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","ready":true,"apikey":"190cd7f9-fe93-4b8f-8433-c55e3de571f6","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","internal":"amqp://rwsemrvs:***@dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com/rwsemrvs"},"rmq_version":"3.13.1","hostname_external":"dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com","hostname_internal":"dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "796"
+                - "790"
             Content-Type:
                 - application/json
             Nel:
@@ -279,13 +301,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 23542603-94ba-4e33-a834-760181a5cb9b
+                - fad6941a-b725-401b-ab33-2adb1b4b5fc0
         status: 200 OK
         code: 200
-        duration: 49.429867ms
+        duration: 55.90684ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -300,9 +324,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1707
+        url: http://localhost:9393/api/instances/1899
         method: GET
       response:
         proto: HTTP/1.1
@@ -310,14 +336,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 796
+        content_length: 790
         uncompressed: false
-        body: '{"id":1707,"name":"TestAccInstance_Basic-before","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"30dbcaa6-19be-4260-92d8-3294f48b431f","url":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","internal":"amqp://hveierrp:***@dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com/hveierrp"},"rmq_version":"3.13.0-rc.4","hostname_external":"dev-casual-red-wombat.rmq3.dev.cloudamqp.com","hostname_internal":"dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com"}'
+        body: '{"id":1899,"name":"TestAccInstance_Basic-before","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"3614471f-c902-43b1-928c-82fe38704d3f","url":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","ready":true,"apikey":"190cd7f9-fe93-4b8f-8433-c55e3de571f6","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","internal":"amqp://rwsemrvs:***@dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com/rwsemrvs"},"rmq_version":"3.13.1","hostname_external":"dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com","hostname_internal":"dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "796"
+                - "790"
             Content-Type:
                 - application/json
             Nel:
@@ -326,13 +352,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 4d507ab4-114d-45c7-8dd8-ade3f32afb0d
+                - 28d6119f-9257-4982-bffa-d733f031f923
         status: 200 OK
         code: 200
-        duration: 39.503565ms
+        duration: 47.31415ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -347,9 +375,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1707
+        url: http://localhost:9393/api/instances/1899/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -357,14 +387,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 796
+        content_length: 238
         uncompressed: false
-        body: '{"id":1707,"name":"TestAccInstance_Basic-before","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"30dbcaa6-19be-4260-92d8-3294f48b431f","url":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","internal":"amqp://hveierrp:***@dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com/hveierrp"},"rmq_version":"3.13.0-rc.4","hostname_external":"dev-casual-red-wombat.rmq3.dev.cloudamqp.com","hostname_internal":"dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com"}'
+        body: '[{"hostname":"dev-hip-gray-bullfrog-01.rmq3.dev.cloudamqp.com","configured":true,"name":"dev-hip-gray-bullfrog-01","running":true,"rabbitmq_version":"3.13.1","erlang_version":"26.1.2","hipe":false,"disk_size":10,"additional_disk_size":0}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "796"
+                - "238"
             Content-Type:
                 - application/json
             Nel:
@@ -373,13 +403,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 399ee50e-5c0f-4669-93d9-1c641b01a31d
+                - 1e0088f0-8082-4664-b8b8-f49c36325a48
         status: 200 OK
         code: 200
-        duration: 41.716962ms
+        duration: 40.224008ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -394,9 +426,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1707
+        url: http://localhost:9393/api/instances/1899
         method: GET
       response:
         proto: HTTP/1.1
@@ -404,14 +438,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 796
+        content_length: 790
         uncompressed: false
-        body: '{"id":1707,"name":"TestAccInstance_Basic-before","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"30dbcaa6-19be-4260-92d8-3294f48b431f","url":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","internal":"amqp://hveierrp:***@dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com/hveierrp"},"rmq_version":"3.13.0-rc.4","hostname_external":"dev-casual-red-wombat.rmq3.dev.cloudamqp.com","hostname_internal":"dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com"}'
+        body: '{"id":1899,"name":"TestAccInstance_Basic-before","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"3614471f-c902-43b1-928c-82fe38704d3f","url":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","ready":true,"apikey":"190cd7f9-fe93-4b8f-8433-c55e3de571f6","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","internal":"amqp://rwsemrvs:***@dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com/rwsemrvs"},"rmq_version":"3.13.1","hostname_external":"dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com","hostname_internal":"dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "796"
+                - "790"
             Content-Type:
                 - application/json
             Nel:
@@ -420,19 +454,174 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 2db5b789-061c-4db6-97ac-25c15e9504be
+                - bec00458-cda5-4042-bf0b-f3a317737803
         status: 200 OK
         code: 200
-        duration: 33.40689ms
+        duration: 50.728447ms
     - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 96
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1899/nodes
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 238
+        uncompressed: false
+        body: '[{"hostname":"dev-hip-gray-bullfrog-01.rmq3.dev.cloudamqp.com","configured":true,"name":"dev-hip-gray-bullfrog-01","running":true,"rabbitmq_version":"3.13.1","erlang_version":"26.1.2","hipe":false,"disk_size":10,"additional_disk_size":0}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "238"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8a225632-8295-41c8-9d1f-537dd01e4d66
+        status: 200 OK
+        code: 200
+        duration: 42.3794ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1899
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 790
+        uncompressed: false
+        body: '{"id":1899,"name":"TestAccInstance_Basic-before","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"3614471f-c902-43b1-928c-82fe38704d3f","url":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","ready":true,"apikey":"190cd7f9-fe93-4b8f-8433-c55e3de571f6","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","internal":"amqp://rwsemrvs:***@dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com/rwsemrvs"},"rmq_version":"3.13.1","hostname_external":"dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com","hostname_internal":"dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "790"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8d405a97-8b32-428c-87ca-01648dbe6fc9
+        status: 200 OK
+        code: 200
+        duration: 37.440979ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1899/nodes
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 238
+        uncompressed: false
+        body: '[{"hostname":"dev-hip-gray-bullfrog-01.rmq3.dev.cloudamqp.com","configured":true,"name":"dev-hip-gray-bullfrog-01","running":true,"rabbitmq_version":"3.13.1","erlang_version":"26.1.2","hipe":false,"disk_size":10,"additional_disk_size":0}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "238"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - d99979bd-b839-4e80-99ec-c877766cb46d
+        status: 200 OK
+        code: 200
+        duration: 40.765968ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 95
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
@@ -442,11 +631,13 @@ interactions:
             {"name":"TestAccInstance_Basic-after","plan":"bunny-1","tags":["terraform","acceptance-test"]}
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             Content-Type:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1707
+        url: http://localhost:9393/api/instances/1899
         method: PUT
       response:
         proto: HTTP/1.1
@@ -470,154 +661,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 57206428-98d8-42f1-b238-988f4a721b6e
+                - 51159367-8a4b-441f-ac5f-6df2253b35b9
         status: 200 OK
         code: 200
-        duration: 160.370737ms
-    - id: 10
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1707/nodes
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 243
-        uncompressed: false
-        body: '[{"hostname":"dev-casual-red-wombat-01.rmq3.dev.cloudamqp.com","configured":true,"name":"dev-casual-red-wombat-01","running":true,"rabbitmq_version":"3.13.0-rc.4","erlang_version":"26.1.2","hipe":false,"disk_size":10,"additional_disk_size":0}]'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "243"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 87256e2b-081f-414d-9c0a-f112fe091844
-        status: 200 OK
-        code: 200
-        duration: 77.079687ms
-    - id: 11
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1707
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 813
-        uncompressed: false
-        body: '{"id":1707,"name":"TestAccInstance_Basic-after","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform","acceptance-test"],"providerid":"30dbcaa6-19be-4260-92d8-3294f48b431f","url":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","internal":"amqp://hveierrp:***@dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com/hveierrp"},"rmq_version":"3.13.0-rc.4","hostname_external":"dev-casual-red-wombat.rmq3.dev.cloudamqp.com","hostname_internal":"dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com"}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "813"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 9130e248-95e6-4636-a3ae-e84e8a28a131
-        status: 200 OK
-        code: 200
-        duration: 58.479459ms
-    - id: 12
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1707
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 813
-        uncompressed: false
-        body: '{"id":1707,"name":"TestAccInstance_Basic-after","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform","acceptance-test"],"providerid":"30dbcaa6-19be-4260-92d8-3294f48b431f","url":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","internal":"amqp://hveierrp:***@dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com/hveierrp"},"rmq_version":"3.13.0-rc.4","hostname_external":"dev-casual-red-wombat.rmq3.dev.cloudamqp.com","hostname_internal":"dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com"}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "813"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - b32cb3a5-3828-431e-8bb9-d08811567226
-        status: 200 OK
-        code: 200
-        duration: 62.75883ms
+        duration: 140.252243ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -632,9 +684,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1707
+        url: http://localhost:9393/api/instances/1899/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -642,14 +696,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 813
+        content_length: 238
         uncompressed: false
-        body: '{"id":1707,"name":"TestAccInstance_Basic-after","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform","acceptance-test"],"providerid":"30dbcaa6-19be-4260-92d8-3294f48b431f","url":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","internal":"amqp://hveierrp:***@dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com/hveierrp"},"rmq_version":"3.13.0-rc.4","hostname_external":"dev-casual-red-wombat.rmq3.dev.cloudamqp.com","hostname_internal":"dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com"}'
+        body: '[{"hostname":"dev-hip-gray-bullfrog-01.rmq3.dev.cloudamqp.com","configured":true,"name":"dev-hip-gray-bullfrog-01","running":true,"rabbitmq_version":"3.13.1","erlang_version":"26.1.2","hipe":false,"disk_size":10,"additional_disk_size":0}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "813"
+                - "238"
             Content-Type:
                 - application/json
             Nel:
@@ -658,13 +712,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 7f31a810-5a13-4f09-a955-c87e5b0e823a
+                - c7983174-478a-4ec5-9226-71e7086ab258
         status: 200 OK
         code: 200
-        duration: 47.165498ms
+        duration: 52.845869ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -679,9 +735,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1707
+        url: http://localhost:9393/api/instances/1899
         method: GET
       response:
         proto: HTTP/1.1
@@ -689,14 +747,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 813
+        content_length: 807
         uncompressed: false
-        body: '{"id":1707,"name":"TestAccInstance_Basic-after","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform","acceptance-test"],"providerid":"30dbcaa6-19be-4260-92d8-3294f48b431f","url":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","ready":true,"apikey":"***","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://hveierrp:***@dev-casual-red-wombat.rmq3.dev.cloudamqp.com/hveierrp","internal":"amqp://hveierrp:***@dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com/hveierrp"},"rmq_version":"3.13.0-rc.4","hostname_external":"dev-casual-red-wombat.rmq3.dev.cloudamqp.com","hostname_internal":"dev-casual-red-wombat.in.rmq3.dev.cloudamqp.com"}'
+        body: '{"id":1899,"name":"TestAccInstance_Basic-after","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform","acceptance-test"],"providerid":"3614471f-c902-43b1-928c-82fe38704d3f","url":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","ready":true,"apikey":"190cd7f9-fe93-4b8f-8433-c55e3de571f6","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","internal":"amqp://rwsemrvs:***@dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com/rwsemrvs"},"rmq_version":"3.13.1","hostname_external":"dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com","hostname_internal":"dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "813"
+                - "807"
             Content-Type:
                 - application/json
             Nel:
@@ -705,13 +763,15 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - c2304b73-3261-4851-95ef-b174d04b5cf9
+                - bebe4c10-81ed-451e-bcd1-bb7329fa827b
         status: 200 OK
         code: 200
-        duration: 95.776539ms
+        duration: 32.847279ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -726,9 +786,266 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1707?keep_vpc=false
+        url: http://localhost:9393/api/instances/1899/nodes
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 238
+        uncompressed: false
+        body: '[{"hostname":"dev-hip-gray-bullfrog-01.rmq3.dev.cloudamqp.com","configured":true,"name":"dev-hip-gray-bullfrog-01","running":true,"rabbitmq_version":"3.13.1","erlang_version":"26.1.2","hipe":false,"disk_size":10,"additional_disk_size":0}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "238"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - eddf3177-5288-4231-ad4c-1708276f4ce9
+        status: 200 OK
+        code: 200
+        duration: 49.64698ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1899
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 807
+        uncompressed: false
+        body: '{"id":1899,"name":"TestAccInstance_Basic-after","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform","acceptance-test"],"providerid":"3614471f-c902-43b1-928c-82fe38704d3f","url":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","ready":true,"apikey":"190cd7f9-fe93-4b8f-8433-c55e3de571f6","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","internal":"amqp://rwsemrvs:***@dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com/rwsemrvs"},"rmq_version":"3.13.1","hostname_external":"dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com","hostname_internal":"dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "807"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8e374b9f-26d8-45b0-a3a8-1c00e3cde513
+        status: 200 OK
+        code: 200
+        duration: 45.694996ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1899/nodes
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 238
+        uncompressed: false
+        body: '[{"hostname":"dev-hip-gray-bullfrog-01.rmq3.dev.cloudamqp.com","configured":true,"name":"dev-hip-gray-bullfrog-01","running":true,"rabbitmq_version":"3.13.1","erlang_version":"26.1.2","hipe":false,"disk_size":10,"additional_disk_size":0}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "238"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - b8ca6264-4413-47c0-ba71-d595b74b9a66
+        status: 200 OK
+        code: 200
+        duration: 43.488358ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1899
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 807
+        uncompressed: false
+        body: '{"id":1899,"name":"TestAccInstance_Basic-after","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform","acceptance-test"],"providerid":"3614471f-c902-43b1-928c-82fe38704d3f","url":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","ready":true,"apikey":"190cd7f9-fe93-4b8f-8433-c55e3de571f6","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","internal":"amqp://rwsemrvs:***@dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com/rwsemrvs"},"rmq_version":"3.13.1","hostname_external":"dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com","hostname_internal":"dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "807"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - d233443a-842e-430a-9c1e-8f85ee890589
+        status: 200 OK
+        code: 200
+        duration: 45.572996ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1899
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 807
+        uncompressed: false
+        body: '{"id":1899,"name":"TestAccInstance_Basic-after","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform","acceptance-test"],"providerid":"3614471f-c902-43b1-928c-82fe38704d3f","url":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","ready":true,"apikey":"190cd7f9-fe93-4b8f-8433-c55e3de571f6","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://rwsemrvs:***@dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com/rwsemrvs","internal":"amqp://rwsemrvs:***@dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com/rwsemrvs"},"rmq_version":"3.13.1","hostname_external":"dev-hip-gray-bullfrog.rmq3.dev.cloudamqp.com","hostname_internal":"dev-hip-gray-bullfrog.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "807"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 67dff93c-10bb-4637-b735-ad10e8db63fe
+        status: 200 OK
+        code: 200
+        duration: 46.338196ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1899?keep_vpc=false
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -748,14 +1065,16 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 60617e84-2122-4bbf-a627-051bd751a62e
+                - 73c8caff-fffa-42ce-858c-13680123d565
         status: 204 No Content
         code: 204
-        duration: 232.442507ms
-    - id: 16
+        duration: 242.448049ms
+    - id: 21
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -769,9 +1088,11 @@ interactions:
         body: ""
         form: {}
         headers:
+            Authorization:
+                - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1707
+        url: http://localhost:9393/api/instances/1899
         method: GET
       response:
         proto: HTTP/1.1
@@ -795,10 +1116,12 @@ interactions:
                 - strict-origin-when-cross-origin
             Report-To:
                 - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 4bd7643a-8a51-4808-a867-ff64037d3a15
+                - 1b9953f2-ce4e-46da-90a0-7758d70e1255
         status: 404 Not Found
         code: 404
-        duration: 12.634311ms
+        duration: 17.753324ms

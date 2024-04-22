@@ -13,17 +13,20 @@ import (
 // nodes data source.
 func TestAccInstance_Basic(t *testing.T) {
 	var (
-		fileNames    = []string{"instance"}
-		instanceName = "cloudamqp_instance.instance"
+		fileNames             = []string{"instance", "data_source/nodes"}
+		instanceResourceName  = "cloudamqp_instance.instance"
+		dataNodesResourceName = "data.cloudamqp_nodes.nodes"
 
 		params = map[string]string{
 			"InstanceName": "TestAccInstance_Basic-before",
 			"InstanceTags": converter.CommaStringArray([]string{"terraform"}),
+			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
 		}
 
 		paramsUpdated = map[string]string{
 			"InstanceName": "TestAccInstance_Basic-after",
 			"InstanceTags": converter.CommaStringArray([]string{"terraform", "acceptance-test"}),
+			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
 		}
 	)
 
@@ -34,28 +37,34 @@ func TestAccInstance_Basic(t *testing.T) {
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(instanceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(instanceName, "plan", "bunny-1"),
-					resource.TestCheckResourceAttr(instanceName, "region", "amazon-web-services::us-east-1"),
-					resource.TestCheckResourceAttr(instanceName, "tags.#", "1"),
-					resource.TestCheckResourceAttr(instanceName, "tags.0", "terraform"),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "plan", "bunny-1"),
+					resource.TestCheckResourceAttr(instanceResourceName, "region", "amazon-web-services::us-east-1"),
+					resource.TestCheckResourceAttr(instanceResourceName, "tags.#", "1"),
+					resource.TestCheckResourceAttr(instanceResourceName, "tags.0", "terraform"),
+					resource.TestCheckResourceAttr(instanceResourceName, "nodes", "1"),
+					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.#", "1"),
+					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.0.configured", "true"),
+					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.0.running", "true"),
 				),
 			},
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "name", paramsUpdated["InstanceName"]),
-					resource.TestCheckResourceAttr(instanceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(instanceName, "plan", "bunny-1"),
-					resource.TestCheckResourceAttr(instanceName, "region", "amazon-web-services::us-east-1"),
-					resource.TestCheckResourceAttr(instanceName, "tags.#", "2"),
-					resource.TestCheckResourceAttr(instanceName, "tags.0", "terraform"),
-					resource.TestCheckResourceAttr(instanceName, "tags.1", "acceptance-test"),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdated["InstanceName"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "plan", "bunny-1"),
+					resource.TestCheckResourceAttr(instanceResourceName, "region", "amazon-web-services::us-east-1"),
+					resource.TestCheckResourceAttr(instanceResourceName, "tags.#", "2"),
+					resource.TestCheckResourceAttr(instanceResourceName, "tags.0", "terraform"),
+					resource.TestCheckResourceAttr(instanceResourceName, "tags.1", "acceptance-test"),
+					resource.TestCheckResourceAttr(instanceResourceName, "nodes", "1"),
+					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.#", "1"),
+					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.0.configured", "true"),
+					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.0.running", "true"),
 				),
 			},
 			{
-				ResourceName:            instanceName,
+				ResourceName:            instanceResourceName,
 				ImportState:             true,
 				ImportStateVerify:       true,
 				ImportStateVerifyIgnore: []string{"keep_associated_vpc"},
@@ -67,8 +76,8 @@ func TestAccInstance_Basic(t *testing.T) {
 // TestAccInstance_PlanChange: Creating dedicated AWS instance, change plan and verify.
 func TestAccInstance_PlanChange(t *testing.T) {
 	var (
-		fileNames    = []string{"instance"}
-		instanceName = "cloudamqp_instance.instance"
+		fileNames            = []string{"instance"}
+		instanceResourceName = "cloudamqp_instance.instance"
 
 		params = map[string]string{
 			"InstanceName": "TestAccInstance_PlanChange",
@@ -88,16 +97,16 @@ func TestAccInstance_PlanChange(t *testing.T) {
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(instanceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(instanceName, "plan", params["InstancePlan"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "nodes", "1"),
+					resource.TestCheckResourceAttr(instanceResourceName, "plan", params["InstancePlan"]),
 				),
 			},
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(instanceName, "plan", paramsUpdated["InstancePlan"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "nodes", "1"),
+					resource.TestCheckResourceAttr(instanceResourceName, "plan", paramsUpdated["InstancePlan"]),
 				),
 			},
 		},
@@ -107,20 +116,20 @@ func TestAccInstance_PlanChange(t *testing.T) {
 // TestAccInstance_Upgrade: Creating dedicated AWS instance, upgrade plan and verify.
 func TestAccInstance_Upgrade(t *testing.T) {
 	var (
-		fileNames           = []string{"instance", "nodes_data"}
-		instanceName        = "cloudamqp_instance.instance"
-		dataSourceNodesName = "data.cloudamqp_nodes.nodes"
+		fileNames            = []string{"instance", "data_source/nodes"}
+		instanceResourceName = "cloudamqp_instance.instance"
+		dataSourceNodesName  = "data.cloudamqp_nodes.nodes"
 
 		params = map[string]string{
 			"InstanceName": "TestAccInstance_Upgrade",
 			"InstancePlan": "bunny-1",
-			"InstanceID":   fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
 		}
 
 		paramsUpdated = map[string]string{
 			"InstanceName": "TestAccInstance_Upgrade",
 			"InstancePlan": "bunny-3",
-			"InstanceID":   fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
 		}
 	)
 
@@ -131,9 +140,9 @@ func TestAccInstance_Upgrade(t *testing.T) {
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(instanceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(instanceName, "plan", params["InstancePlan"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "nodes", "1"),
+					resource.TestCheckResourceAttr(instanceResourceName, "plan", params["InstancePlan"]),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.#", "1"),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.running", "true"),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.configured", "true"),
@@ -142,8 +151,8 @@ func TestAccInstance_Upgrade(t *testing.T) {
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "nodes", "3"),
-					resource.TestCheckResourceAttr(instanceName, "plan", paramsUpdated["InstancePlan"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "nodes", "3"),
+					resource.TestCheckResourceAttr(instanceResourceName, "plan", paramsUpdated["InstancePlan"]),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.#", "3"),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.running", "true"),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.configured", "true"),
@@ -160,20 +169,20 @@ func TestAccInstance_Upgrade(t *testing.T) {
 // TestAccInstance_Downgrade: Creating dedicated AWS instance, downgrade plan and verify.
 func TestAccInstance_Downgrade(t *testing.T) {
 	var (
-		fileNames           = []string{"instance", "nodes_data"}
-		instanceName        = "cloudamqp_instance.instance"
-		dataSourceNodesName = "data.cloudamqp_nodes.nodes"
+		fileNames            = []string{"instance", "data_source/nodes"}
+		instanceResourceName = "cloudamqp_instance.instance"
+		dataSourceNodesName  = "data.cloudamqp_nodes.nodes"
 
 		params = map[string]string{
 			"InstanceName": "TestAccInstance_Downgrade",
 			"InstancePlan": "bunny-3",
-			"InstanceID":   fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
 		}
 
 		paramsUpdated = map[string]string{
 			"InstanceName": "TestAccInstance_Downgrade",
 			"InstancePlan": "bunny-1",
-			"InstanceID":   fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
 		}
 	)
 
@@ -184,9 +193,9 @@ func TestAccInstance_Downgrade(t *testing.T) {
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(instanceName, "nodes", "3"),
-					resource.TestCheckResourceAttr(instanceName, "plan", params["InstancePlan"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "nodes", "3"),
+					resource.TestCheckResourceAttr(instanceResourceName, "plan", params["InstancePlan"]),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.#", "3"),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.running", "true"),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.configured", "true"),
@@ -199,8 +208,8 @@ func TestAccInstance_Downgrade(t *testing.T) {
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(instanceName, "plan", paramsUpdated["InstancePlan"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "nodes", "1"),
+					resource.TestCheckResourceAttr(instanceResourceName, "plan", paramsUpdated["InstancePlan"]),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.#", "1"),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.running", "true"),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.configured", "true"),
