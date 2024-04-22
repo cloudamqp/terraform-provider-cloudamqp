@@ -1,0 +1,4 @@
+data "cloudamqp_alarm" "{{.AlarmResourceName}}" {
+  instance_id = {{.InstanceID}}
+  type = "{{.AlarmType}}"
+}
