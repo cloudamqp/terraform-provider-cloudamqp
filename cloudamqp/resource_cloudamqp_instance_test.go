@@ -13,9 +13,9 @@ import (
 // nodes data source.
 func TestAccInstance_Basic(t *testing.T) {
 	var (
-		fileNames             = []string{"instance", "data_source/nodes"}
-		instanceResourceName  = "cloudamqp_instance.instance"
-		dataNodesResourceName = "data.cloudamqp_nodes.nodes"
+		fileNames            = []string{"instance", "data_source/nodes"}
+		instanceResourceName = "cloudamqp_instance.instance"
+		dataSourceNodesName  = "data.cloudamqp_nodes.nodes"
 
 		params = map[string]string{
 			"InstanceName": "TestAccInstance_Basic-before",
@@ -43,9 +43,9 @@ func TestAccInstance_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(instanceResourceName, "tags.#", "1"),
 					resource.TestCheckResourceAttr(instanceResourceName, "tags.0", "terraform"),
 					resource.TestCheckResourceAttr(instanceResourceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.#", "1"),
-					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.0.configured", "true"),
-					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.0.running", "true"),
+					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.#", "1"),
+					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.configured", "true"),
+					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.running", "true"),
 				),
 			},
 			{
@@ -58,9 +58,9 @@ func TestAccInstance_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(instanceResourceName, "tags.0", "terraform"),
 					resource.TestCheckResourceAttr(instanceResourceName, "tags.1", "acceptance-test"),
 					resource.TestCheckResourceAttr(instanceResourceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.#", "1"),
-					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.0.configured", "true"),
-					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.0.running", "true"),
+					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.#", "1"),
+					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.configured", "true"),
+					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.running", "true"),
 				),
 			},
 			{
