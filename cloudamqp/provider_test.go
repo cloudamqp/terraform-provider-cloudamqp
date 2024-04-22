@@ -62,7 +62,19 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		i.Response.Headers["Set-Cookie"] = []string{"REDACTED"}
 		// Sanitize URLs containing passwords
 		i.Response.Body = sanitizer.URL(i.Response.Body)
-		// Filter sensitive data API keys, secrects and tokens
+		// Filter sensitive data API keys, secrects and tokens from request body
+		i.Request.Body = sanitizer.FilterSensitiveData(i.Request.Body, os.Getenv("AZM_APPLICATION_SECRET"), "AZM_APPLICATION_SECRET")
+		i.Request.Body = sanitizer.FilterSensitiveData(i.Request.Body, os.Getenv("CLOUDWATCH_ACCESS_KEY_ID"), "CLOUDWATCH_ACCESS_KEY_ID")
+		i.Request.Body = sanitizer.FilterSensitiveData(i.Request.Body, os.Getenv("CLOUDWATCH_SECRET_ACCESS_KEY"), "CLOUDWATCH_SECRET_ACCESS_KEY")
+		i.Request.Body = sanitizer.FilterSensitiveData(i.Request.Body, os.Getenv("CORALOGIX_SEND_DATA_KEY"), "CORALOGIX_SEND_DATA_KEY")
+		i.Request.Body = sanitizer.FilterSensitiveData(i.Request.Body, os.Getenv("DATADOG_APIKEY"), "DATADOG_APIKEY")
+		i.Request.Body = sanitizer.FilterSensitiveData(i.Request.Body, os.Getenv("LIBRATO_APIKEY"), "LIBRATO_APIKEY")
+		i.Request.Body = sanitizer.FilterSensitiveData(i.Request.Body, os.Getenv("LOGENTIRES_TOKEN"), "LOGENTIRES_TOKEN")
+		i.Request.Body = sanitizer.FilterSensitiveData(i.Request.Body, os.Getenv("LOGGLY_TOKEN"), "LOGGLY_TOKEN")
+		i.Request.Body = sanitizer.FilterSensitiveData(i.Request.Body, os.Getenv("NEWRELIC_APIKEY"), "NEWRELIC_APIKEY")
+		i.Request.Body = sanitizer.FilterSensitiveData(i.Request.Body, os.Getenv("SCALYR_TOKEN"), "SCALYR_TOKEN")
+		i.Request.Body = sanitizer.FilterSensitiveData(i.Request.Body, os.Getenv("SPLUNK_TOKEN"), "SPLUNK_TOKEN")
+		// Filter sensitive data API keys, secrects and tokens from response body
 		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("AZM_APPLICATION_SECRET"), "AZM_APPLICATION_SECRET")
 		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("CLOUDWATCH_ACCESS_KEY_ID"), "CLOUDWATCH_ACCESS_KEY_ID")
 		i.Response.Body = sanitizer.FilterSensitiveData(i.Response.Body, os.Getenv("CLOUDWATCH_SECRET_ACCESS_KEY"), "CLOUDWATCH_SECRET_ACCESS_KEY")
