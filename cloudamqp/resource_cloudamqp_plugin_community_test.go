@@ -8,11 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
 
-// TODO: Wait until we fully support 3.13 with community plugin.
-// Otherwise we earlier loaded RC/beta version if present when letting backend choose version.
-// (only for emails ending with 84codes). Now we have enabled 3.13.0 since it's out.
-// But no community plugin added yet.
-
 // TestAccPluginCommunity_Basic: Install community plugin and check then disable it.
 func TestAccPluginCommunity_Basic(t *testing.T) {
 	var (
