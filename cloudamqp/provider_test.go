@@ -3,6 +3,7 @@ package cloudamqp
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"regexp"
 	"testing"
@@ -30,12 +31,17 @@ func TestProvider(t *testing.T) {
 }
 
 func testAccPreCheck(t *testing.T) {
-	if v := os.Getenv("CLOUDAMQP_APIKEY"); v == "" {
-		t.Fatal("apikey must be set for acceptence test.")
-	}
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		if v := os.Getenv("CLOUDAMQP_APIKEY"); v == "" {
+			t.Fatal("apikey must be set for acceptence test.")
+		}
 
-	if v := os.Getenv("CLOUDAMQP_BASEURL"); v == "" {
-		t.Fatal("baseurl must be set for acceptence test")
+		if v := os.Getenv("CLOUDAMQP_BASEURL"); v == "" {
+			t.Fatal("baseurl must be set for acceptence test")
+		}
+	} else {
+		os.Setenv("CLOUDAMQP_APIKEY", "not-used")
+		os.Setenv("CLOUDAMQP_BASEURL", "not-used")
 	}
 }
 
@@ -67,6 +73,7 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		i.Response.Body = sanitizeSensistiveData(i.Response.Body)
 		return nil
 	}
+	rec.SetMatcher(requestURIMatcher)
 	rec.AddHook(sanitizeHook, recorder.AfterCaptureHook)
 
 	shouldSaveHook := func(i *cassette.Interaction) error {
@@ -157,6 +164,17 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 	c.Providers = testAccProviders
 
 	resource.Test(t, c)
+}
+
+func requestURIMatcher(request *http.Request, interaction cassette.Request) bool {
+	interactionURI, err := url.Parse(interaction.URL)
+	if err != nil {
+		panic(err)
+	}
+
+	// https://pkg.go.dev/net/url#URL.RequestURI
+	// only match on path?query URL parts
+	return request.Method == interaction.Method && request.URL.RequestURI() == interactionURI.RequestURI()
 }
 
 func sanitizeSensistiveData(body string) string {

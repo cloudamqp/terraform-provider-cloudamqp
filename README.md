@@ -194,13 +194,13 @@ CLOUDAMQP_RECORD=1 TF_ACC=1 dotenv -f .env go test ./cloudamqp/ -v -run {TestNam
 Replay single test:
 
 ```sh
-TF_ACC=1 dotenv -f .env go test ./cloudamqp/ -v -run {TestName}
+TF_ACC=1 go test ./cloudamqp/ -v -run {TestName}
 ```
 
 Replay all tests:
 
 ```sh
-TF_ACC=1 dotenv -f .env go test ./cloudamqp/ -v
+TF_ACC=1 go test ./cloudamqp/ -v
 ```
 
 Default timeout is 10 min when running the test, this can be changed with -timeout flag. 

@@ -19,8 +19,6 @@ jobs:
       - name: Run tests
         run: go test ./cloudamqp/ -v
         env:
-          CLOUDAMQP_APIKEY: does-not-matter
-          CLOUDAMQP_BASEURL: http://localhost:9393
           TF_ACC: 1
 
       - name: Build for single target with GoReleaser
