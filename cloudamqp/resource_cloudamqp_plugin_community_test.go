@@ -8,6 +8,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
 
+// Playing the test benefits from having sleep set to default (10 s) while recording.
+// While using lower sleep (1 s) for replaying the test. This will speed up the test.
+
 // TestAccPluginCommunity_Basic: Install community plugin and check then disable it.
 func TestAccPluginCommunity_Basic(t *testing.T) {
 	var (
@@ -20,6 +23,7 @@ func TestAccPluginCommunity_Basic(t *testing.T) {
 			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
 			"PluginCommunityName":    "rabbitmq_delayed_message_exchange",
 			"PluginCommunityEnabled": "true",
+			"PluginCommunitySleep":   "1",
 		}
 
 		paramsUpdated = map[string]string{
@@ -27,6 +31,7 @@ func TestAccPluginCommunity_Basic(t *testing.T) {
 			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
 			"PluginCommunityName":    "rabbitmq_delayed_message_exchange",
 			"PluginCommunityEnabled": "false",
+			"PluginCommunitySleep":   "1",
 		}
 	)
 

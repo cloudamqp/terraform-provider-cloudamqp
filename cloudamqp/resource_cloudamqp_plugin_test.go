@@ -8,6 +8,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
 
+// Playing the test benefits from having sleep set to default (10 s) while recording.
+// While using lower sleep (1 s) for replaying the test. This will speed up the test.
+
 // TestAccPlugin_Basic: Enabled plugin, import and disable it.
 func TestAccPlugin_Basic(t *testing.T) {
 	var (
@@ -20,6 +23,7 @@ func TestAccPlugin_Basic(t *testing.T) {
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"PluginName":    "rabbitmq_mqtt",
 			"PluginEnabled": "true",
+			"PluginSleep":   "1",
 		}
 
 		paramsUpdated = map[string]string{
@@ -27,6 +31,7 @@ func TestAccPlugin_Basic(t *testing.T) {
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"PluginName":    "rabbitmq_mqtt",
 			"PluginEnabled": "false",
+			"PluginSleep":   "1",
 		}
 	)
 
@@ -43,10 +48,11 @@ func TestAccPlugin_Basic(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:      pluginResourceName,
-				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, pluginResourceName),
-				ImportState:       true,
-				ImportStateVerify: true,
+				ResourceName:            pluginResourceName,
+				ImportStateIdFunc:       testAccImportCombinedStateIdFunc(instanceResourceName, pluginResourceName),
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"sleep"},
 			},
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
