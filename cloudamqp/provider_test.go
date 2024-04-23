@@ -47,7 +47,7 @@ func TestMain(m *testing.M) {
 }
 
 func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
-	r, err := recorder.NewWithOptions(&recorder.Options{
+	rec, err := recorder.NewWithOptions(&recorder.Options{
 		CassetteName:       fmt.Sprintf("../test/fixtures/vcr/%s", t.Name()),
 		Mode:               mode,
 		SkipRequestLatency: true,
@@ -55,7 +55,7 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer r.Stop()
+	defer rec.Stop()
 
 	sanitizeHook := func(i *cassette.Interaction) error {
 		i.Request.Headers["Authorization"] = []string{"REDACTED"}
@@ -67,7 +67,7 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		i.Response.Body = sanitizeSensistiveData(i.Response.Body)
 		return nil
 	}
-	r.AddHook(sanitizeHook, recorder.AfterCaptureHook)
+	rec.AddHook(sanitizeHook, recorder.AfterCaptureHook)
 
 	shouldSaveHook := func(i *cassette.Interaction) error {
 		if t.Failed() {
@@ -143,13 +143,13 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		}
 		return nil
 	}
-	r.AddHook(shouldSaveHook, recorder.BeforeSaveHook)
+	rec.AddHook(shouldSaveHook, recorder.BeforeSaveHook)
 
-	r.AddPassthrough(func(req *http.Request) bool {
+	rec.AddPassthrough(func(req *http.Request) bool {
 		return req.URL.Path == "/login"
 	})
 
-	testAccProvider = Provider("1.0", r.GetDefaultClient())
+	testAccProvider = Provider("1.0", rec.GetDefaultClient())
 	testAccProviders = map[string]terraform.ResourceProvider{
 		"cloudamqp": testAccProvider,
 	}
