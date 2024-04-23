@@ -1,4 +1,0 @@
-data "cloudamqp_alarm" "cpu" {
-  instance_id = {{.InstanceID}}
-  type = "cpu"
-}

@@ -1,3 +1,0 @@
-data "cloudamqp_nodes" "nodes" {
-  instance_id = {{.InstanceID}}
-}
