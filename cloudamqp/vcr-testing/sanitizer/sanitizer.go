@@ -9,15 +9,6 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-func Fields(jsonBody string) string {
-	for _, field := range blockedFields() {
-		if gjson.Get(jsonBody, field).Exists() {
-			jsonBody, _ = sjson.Set(jsonBody, field, "***")
-		}
-	}
-	return jsonBody
-}
-
 func FilterSensitiveData(jsonBody, value, placeholder string) string {
 	if len(value) == 0 {
 		return jsonBody
@@ -36,29 +27,4 @@ func URL(jsonBody string) string {
 		}
 	}
 	return jsonBody
-}
-
-func blockedFields() []string {
-	return []string{
-		"api_key",
-		"apikey",
-		"application_secret",
-		"credentials",
-		"license_key",
-		"password",
-		"private_key",
-		"private_key_id",
-		"secret_access_key",
-		"token",
-		"*.api_key",
-		"*.apikey",
-		"*.application_secret",
-		"*.credentials",
-		"*.license_key",
-		"*.password",
-		"*.private_key",
-		"*.private_key_id",
-		"*.secret_access_key",
-		"*.token",
-	}
 }
