@@ -11,13 +11,13 @@ import (
 // TestAccWebhook_Basic: Creating dedicated AWS instance, enable webhook integration and import.
 func TestAccWebhook_Basic(t *testing.T) {
 	var (
-		fileNames    = []string{"instance", "webhook"}
-		instanceName = "cloudamqp_instance.instance"
-		resourceName = "cloudamqp_webhook.webhook_queue"
+		fileNames            = []string{"instance", "webhook"}
+		instanceResourceName = "cloudamqp_instance.instance"
+		webhookResourceName  = "cloudamqp_webhook.webhook_queue"
 
 		params = map[string]string{
 			"InstanceName": "TestAccWebhook_Basic",
-			"InstanceID":   fmt.Sprintf("%s.id", instanceName),
+			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
 		}
 	)
 
@@ -28,17 +28,17 @@ func TestAccWebhook_Basic(t *testing.T) {
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(resourceName, "vhost", "myvhost"),
-					resource.TestCheckResourceAttr(resourceName, "queue", "myqueue"),
-					resource.TestCheckResourceAttr(resourceName, "webhook_uri", "https://example.com/webhook?key=secret"),
-					resource.TestCheckResourceAttr(resourceName, "retry_interval", "0"),
-					resource.TestCheckResourceAttr(resourceName, "concurrency", "5"),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(webhookResourceName, "vhost", "myvhost"),
+					resource.TestCheckResourceAttr(webhookResourceName, "queue", "myqueue"),
+					resource.TestCheckResourceAttr(webhookResourceName, "webhook_uri", "https://example.com/webhook?key=secret"),
+					resource.TestCheckResourceAttr(webhookResourceName, "retry_interval", "0"),
+					resource.TestCheckResourceAttr(webhookResourceName, "concurrency", "5"),
 				),
 			},
 			{
-				ResourceName:      resourceName,
-				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceName, resourceName),
+				ResourceName:      webhookResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, webhookResourceName),
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
