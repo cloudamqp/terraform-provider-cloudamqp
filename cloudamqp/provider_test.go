@@ -125,7 +125,8 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 			regexp.MustCompile(`/api/vpcs/\d+/vpc-peering/info$`).MatchString(i.Request.URL):
 			// Filter polling for VPC create state, only store successful response
 			errStr := gjson.Get(i.Response.Body, "error").String()
-			if errStr == "VPC currently unavailable" || errStr == "Timeout talking to backend" {
+			if errStr == "VPC currently unavailable" || errStr == "Timeout talking to backend" ||
+				errStr == "Failed to list VPC peering connections" {
 				fmt.Println("SKIP: GET /api/vpcs/{id}/vpc-peering/info", i.Request.URL, "error:", errStr)
 				i.DiscardOnSave = true
 			}

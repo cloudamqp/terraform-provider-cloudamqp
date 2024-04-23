@@ -48,10 +48,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 505c4366-ffbe-4909-8b60-fa34a3498b24
+                - 25645af9-54c7-4e45-b377-c3203cb3aaa1
         status: 200 OK
         code: 200
-        duration: 53.564783ms
+        duration: 165.032348ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -99,10 +99,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - efc5e315-af32-4d6e-a8ee-c9534d96801c
+                - 0222ea4a-6012-49d9-a580-2b78cb2520dd
         status: 200 OK
         code: 200
-        duration: 26.127949ms
+        duration: 47.1041ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -134,7 +134,7 @@ interactions:
         trailer: {}
         content_length: 83
         uncompressed: false
-        body: '{"id":1924,"message":"VPC created","apikey":"20327e6b-d6a8-49ff-b818-1444247c42a2"}'
+        body: '{"id":1936,"message":"VPC created","apikey":"b390f1f6-989b-4026-a43b-876071ff6c10"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -153,10 +153,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - d773a630-c79b-48d8-bd17-cde7d4c75b80
+                - a8b9e1b1-171e-40e4-9007-e6c28f83d54f
         status: 200 OK
         code: 200
-        duration: 340.2512ms
+        duration: 832.068504ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -175,7 +175,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1924/vpc-peering/info
+        url: http://localhost:9393/api/vpcs/1936/vpc-peering/info
         method: GET
       response:
         proto: HTTP/1.1
@@ -183,14 +183,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 50
+        content_length: 217
         uncompressed: false
-        body: '{"error":"Failed to list VPC peering connections"}'
+        body: '{"name":"vpc-ofawllm8_eastus","subnet":"10.56.0.0/16","network":"/subscriptions/439cc67d-50e9-4bbc-a9ee-2543bf762e06/resourceGroups/vpc-ofawllm8_eastus/providers/Microsoft.Network/virtualNetworks/vpc-ofawllm8_eastus"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "50"
+                - "217"
             Content-Type:
                 - application/json
             Nel:
@@ -204,10 +204,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - f34af6be-e48a-430d-a490-d9a7a59c86e6
-        status: 400 Bad Request
-        code: 400
-        duration: 2.983457071s
+                - b0498f8c-63f4-4997-bc8a-c547e0db3522
+        status: 200 OK
+        code: 200
+        duration: 1.750334626s
     - id: 4
       request:
         proto: HTTP/1.1
@@ -226,58 +226,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1924/vpc-peering/info
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 217
-        uncompressed: false
-        body: '{"name":"vpc-vd69rvsf_eastus","subnet":"10.56.0.0/16","network":"/subscriptions/439cc67d-50e9-4bbc-a9ee-2543bf762e06/resourceGroups/vpc-vd69rvsf_eastus/providers/Microsoft.Network/virtualNetworks/vpc-vd69rvsf_eastus"}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "217"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 18cd94ed-d968-4682-bc7f-ca59f9f25099
-        status: 200 OK
-        code: 200
-        duration: 1.659330793s
-    - id: 5
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1924
+        url: http://localhost:9393/api/vpcs/1936
         method: GET
       response:
         proto: HTTP/1.1
@@ -287,7 +236,7 @@ interactions:
         trailer: {}
         content_length: 205
         uncompressed: false
-        body: '{"id":1924,"name":"TestAccVpcConnect_Azure_Basic","plan":"vpc","subnet":"10.56.72.0/24","region":"azure-arm::eastus","tags":["terraform"],"providerid":"f81c924a-38bb-4bbe-a110-e06054f2e2ba","instances":[]}'
+        body: '{"id":1936,"name":"TestAccVpcConnect_Azure_Basic","plan":"vpc","subnet":"10.56.72.0/24","region":"azure-arm::eastus","tags":["terraform"],"providerid":"4cc389a3-86c7-4348-b503-e97e7cee2284","instances":[]}'
         headers:
             Cache-Control:
                 - no-cache
@@ -306,11 +255,11 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - fabd3f40-5a94-4771-9265-5ee1a87b03ed
+                - 0dd14a49-5dfc-433e-bce0-583ce891cf5b
         status: 200 OK
         code: 200
-        duration: 59.788786ms
-    - id: 6
+        duration: 132.505655ms
+    - id: 5
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -328,7 +277,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1924/vpc-peering/info
+        url: http://localhost:9393/api/vpcs/1936/vpc-peering/info
         method: GET
       response:
         proto: HTTP/1.1
@@ -338,7 +287,7 @@ interactions:
         trailer: {}
         content_length: 217
         uncompressed: false
-        body: '{"name":"vpc-vd69rvsf_eastus","subnet":"10.56.0.0/16","network":"/subscriptions/439cc67d-50e9-4bbc-a9ee-2543bf762e06/resourceGroups/vpc-vd69rvsf_eastus/providers/Microsoft.Network/virtualNetworks/vpc-vd69rvsf_eastus"}'
+        body: '{"name":"vpc-ofawllm8_eastus","subnet":"10.56.0.0/16","network":"/subscriptions/439cc67d-50e9-4bbc-a9ee-2543bf762e06/resourceGroups/vpc-ofawllm8_eastus/providers/Microsoft.Network/virtualNetworks/vpc-ofawllm8_eastus"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -357,11 +306,11 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - a8b798a8-1d6f-430a-b62c-0fc44d241701
+                - 83dee202-4d6b-4fac-93a8-b460505e3fc1
         status: 200 OK
         code: 200
-        duration: 1.908317531s
-    - id: 7
+        duration: 1.832779243s
+    - id: 6
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -408,11 +357,11 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - fc10a6a7-89c7-41d1-bff0-b8c2a3af4a0c
+                - 1ee7deb4-228b-4be3-9e94-a277c29837c9
         status: 200 OK
         code: 200
-        duration: 78.997299ms
-    - id: 8
+        duration: 81.541463ms
+    - id: 7
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -459,11 +408,11 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 0908b5e4-1749-4f92-a43d-9e82913c0053
+                - 3764a6b9-2be8-49c0-8e26-bdaf983f077e
         status: 200 OK
         code: 200
-        duration: 6.575616ms
-    - id: 9
+        duration: 34.211228ms
+    - id: 8
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -475,7 +424,7 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"TestAccVpcConnect_Azure_Basic","no_default_alarms":false,"plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"vpc_id":1924}
+            {"name":"TestAccVpcConnect_Azure_Basic","no_default_alarms":false,"plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"vpc_id":1936}
         form: {}
         headers:
             Authorization:
@@ -492,14 +441,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 256
+        content_length: 255
         uncompressed: false
-        body: '{"id":1925,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"9e320a6c-4684-420a-8634-c63a0bd5c1ba","url":"amqp://whdthvqs:***@dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com/whdthvqs"}'
+        body: '{"id":1937,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"2d9279d5-5694-415a-ba92-1da12c9ce20a","url":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "256"
+                - "255"
             Content-Type:
                 - application/json
             Nel:
@@ -513,10 +462,61 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 19f6e712-f3c0-491a-abf6-d4305bf6447e
+                - 88185aac-a15e-400e-9ed1-075fe70447a9
         status: 200 OK
         code: 200
-        duration: 407.745197ms
+        duration: 642.576926ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1937
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 828
+        uncompressed: false
+        body: '{"id":1937,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"90445d46-be81-4bc5-975c-ac204d5b8dc3","url":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb","ready":true,"apikey":"2d9279d5-5694-415a-ba92-1da12c9ce20a","backend":"rabbitmq","nodes":1,"vpc":{"id":1936,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://ygnmtagb:***@dev-glad-beige-opossum.rmq2.dev.cloudamqp.com/ygnmtagb","internal":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb"},"rmq_version":"3.13.1","hostname_external":"dev-glad-beige-opossum.rmq2.dev.cloudamqp.com","hostname_internal":"dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "828"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 72baaa60-023e-4169-801f-9687eaf1066f
+        status: 200 OK
+        code: 200
+        duration: 134.118111ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -535,7 +535,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1925
+        url: http://localhost:9393/api/instances/1937
         method: GET
       response:
         proto: HTTP/1.1
@@ -543,14 +543,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 833
+        content_length: 828
         uncompressed: false
-        body: '{"id":1925,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"bff74125-989a-4985-be9b-66a0514df4f5","url":"amqp://whdthvqs:***@dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com/whdthvqs","ready":true,"apikey":"9e320a6c-4684-420a-8634-c63a0bd5c1ba","backend":"rabbitmq","nodes":1,"vpc":{"id":1924,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://whdthvqs:***@dev-cheerful-orange-gnu.rmq6.dev.cloudamqp.com/whdthvqs","internal":"amqp://whdthvqs:***@dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com/whdthvqs"},"rmq_version":"3.13.1","hostname_external":"dev-cheerful-orange-gnu.rmq6.dev.cloudamqp.com","hostname_internal":"dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com"}'
+        body: '{"id":1937,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"90445d46-be81-4bc5-975c-ac204d5b8dc3","url":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb","ready":true,"apikey":"2d9279d5-5694-415a-ba92-1da12c9ce20a","backend":"rabbitmq","nodes":1,"vpc":{"id":1936,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://ygnmtagb:***@dev-glad-beige-opossum.rmq2.dev.cloudamqp.com/ygnmtagb","internal":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb"},"rmq_version":"3.13.1","hostname_external":"dev-glad-beige-opossum.rmq2.dev.cloudamqp.com","hostname_internal":"dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "833"
+                - "828"
             Content-Type:
                 - application/json
             Nel:
@@ -564,10 +564,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 8682539a-718c-40aa-b156-2d1b49be7cf8
+                - f988a853-3660-4ee1-8ed5-d84822ff9203
         status: 200 OK
         code: 200
-        duration: 143.670652ms
+        duration: 152.217069ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -586,7 +586,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1925
+        url: http://localhost:9393/api/instances/1937
         method: GET
       response:
         proto: HTTP/1.1
@@ -594,14 +594,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 833
+        content_length: 828
         uncompressed: false
-        body: '{"id":1925,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"bff74125-989a-4985-be9b-66a0514df4f5","url":"amqp://whdthvqs:***@dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com/whdthvqs","ready":true,"apikey":"9e320a6c-4684-420a-8634-c63a0bd5c1ba","backend":"rabbitmq","nodes":1,"vpc":{"id":1924,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://whdthvqs:***@dev-cheerful-orange-gnu.rmq6.dev.cloudamqp.com/whdthvqs","internal":"amqp://whdthvqs:***@dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com/whdthvqs"},"rmq_version":"3.13.1","hostname_external":"dev-cheerful-orange-gnu.rmq6.dev.cloudamqp.com","hostname_internal":"dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com"}'
+        body: '{"id":1937,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"90445d46-be81-4bc5-975c-ac204d5b8dc3","url":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb","ready":true,"apikey":"2d9279d5-5694-415a-ba92-1da12c9ce20a","backend":"rabbitmq","nodes":1,"vpc":{"id":1936,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://ygnmtagb:***@dev-glad-beige-opossum.rmq2.dev.cloudamqp.com/ygnmtagb","internal":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb"},"rmq_version":"3.13.1","hostname_external":"dev-glad-beige-opossum.rmq2.dev.cloudamqp.com","hostname_internal":"dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "833"
+                - "828"
             Content-Type:
                 - application/json
             Nel:
@@ -615,62 +615,11 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 85defb11-c61e-4714-a35d-6792ab673a02
+                - a4c3eac8-8294-4bb3-af23-1abeaf7c9d7c
         status: 200 OK
         code: 200
-        duration: 203.654092ms
+        duration: 94.49203ms
     - id: 12
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1925
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 833
-        uncompressed: false
-        body: '{"id":1925,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"bff74125-989a-4985-be9b-66a0514df4f5","url":"amqp://whdthvqs:***@dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com/whdthvqs","ready":true,"apikey":"9e320a6c-4684-420a-8634-c63a0bd5c1ba","backend":"rabbitmq","nodes":1,"vpc":{"id":1924,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://whdthvqs:***@dev-cheerful-orange-gnu.rmq6.dev.cloudamqp.com/whdthvqs","internal":"amqp://whdthvqs:***@dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com/whdthvqs"},"rmq_version":"3.13.1","hostname_external":"dev-cheerful-orange-gnu.rmq6.dev.cloudamqp.com","hostname_internal":"dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com"}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "833"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 8abbc15a-7a50-44b5-a5ca-0d8c6b322b6d
-        status: 200 OK
-        code: 200
-        duration: 184.739635ms
-    - id: 13
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -691,7 +640,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1925/vpc-connect
+        url: http://localhost:9393/api/instances/1937/vpc-connect
         method: POST
       response:
         proto: HTTP/1.1
@@ -716,10 +665,61 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 195bb4f1-cd20-4148-b12e-fc7ffc3da9ac
+                - acf902c6-002c-4013-beaa-f47d338ec5da
         status: 204 No Content
         code: 204
-        duration: 185.405877ms
+        duration: 196.478847ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1937/vpc-connect
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 268
+        uncompressed: false
+        body: '{"updated_at":"2024-04-23 12:35:08 +0200","status":"enabled","server_name":"dev-glad-beige-opossum","alias":"dev-glad-beige-opossum.e7396cd6-de74-4734-9ad0-4e0da3bb7bdb.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "268"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f94128f5-ac95-4966-9f5e-c867218f22d5
+        status: 200 OK
+        code: 200
+        duration: 59.114494ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -738,7 +738,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1925/vpc-connect
+        url: http://localhost:9393/api/instances/1937/vpc-connect
         method: GET
       response:
         proto: HTTP/1.1
@@ -746,14 +746,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 270
+        content_length: 268
         uncompressed: false
-        body: '{"updated_at":"2024-04-22 17:23:21 +0200","status":"enabled","server_name":"dev-cheerful-orange-gnu","alias":"dev-cheerful-orange-gnu.858cccda-7d08-48cf-bffa-183e101541b8.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
+        body: '{"updated_at":"2024-04-23 12:35:08 +0200","status":"enabled","server_name":"dev-glad-beige-opossum","alias":"dev-glad-beige-opossum.e7396cd6-de74-4734-9ad0-4e0da3bb7bdb.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "270"
+                - "268"
             Content-Type:
                 - application/json
             Nel:
@@ -767,10 +767,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 77109eb8-b315-4873-aa7f-03b475fa52ac
+                - 062737de-e0a5-4bf5-8da4-7e5fcb34cfc7
         status: 200 OK
         code: 200
-        duration: 153.077756ms
+        duration: 46.707401ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -789,7 +789,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1925/vpc-connect
+        url: http://localhost:9393/api/vpcs/1936
         method: GET
       response:
         proto: HTTP/1.1
@@ -797,14 +797,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 270
+        content_length: 209
         uncompressed: false
-        body: '{"updated_at":"2024-04-22 17:23:21 +0200","status":"enabled","server_name":"dev-cheerful-orange-gnu","alias":"dev-cheerful-orange-gnu.858cccda-7d08-48cf-bffa-183e101541b8.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
+        body: '{"id":1936,"name":"TestAccVpcConnect_Azure_Basic","plan":"vpc","subnet":"10.56.72.0/24","region":"azure-arm::eastus","tags":["terraform"],"providerid":"4cc389a3-86c7-4348-b503-e97e7cee2284","instances":[1937]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "270"
+                - "209"
             Content-Type:
                 - application/json
             Nel:
@@ -818,10 +818,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 9d7e0c39-00ae-49d9-8b33-f5317a904608
+                - 71c1373a-d420-47b8-b3e8-e4b371f8306e
         status: 200 OK
         code: 200
-        duration: 260.913253ms
+        duration: 61.56144ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -840,7 +840,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1924
+        url: http://localhost:9393/api/vpcs/1936/vpc-peering/info
         method: GET
       response:
         proto: HTTP/1.1
@@ -848,14 +848,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 209
+        content_length: 217
         uncompressed: false
-        body: '{"id":1924,"name":"TestAccVpcConnect_Azure_Basic","plan":"vpc","subnet":"10.56.72.0/24","region":"azure-arm::eastus","tags":["terraform"],"providerid":"f81c924a-38bb-4bbe-a110-e06054f2e2ba","instances":[1925]}'
+        body: '{"name":"vpc-ofawllm8_eastus","subnet":"10.56.0.0/16","network":"/subscriptions/439cc67d-50e9-4bbc-a9ee-2543bf762e06/resourceGroups/vpc-ofawllm8_eastus/providers/Microsoft.Network/virtualNetworks/vpc-ofawllm8_eastus"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "209"
+                - "217"
             Content-Type:
                 - application/json
             Nel:
@@ -869,10 +869,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - df83bec6-32c9-49a9-8772-50bfbe54a729
+                - ede7551a-4ad7-4501-ab00-a361f2cc41e6
         status: 200 OK
         code: 200
-        duration: 138.163073ms
+        duration: 1.48814195s
     - id: 17
       request:
         proto: HTTP/1.1
@@ -891,7 +891,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1924/vpc-peering/info
+        url: http://localhost:9393/api/instances/1937
         method: GET
       response:
         proto: HTTP/1.1
@@ -899,14 +899,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 217
+        content_length: 828
         uncompressed: false
-        body: '{"name":"vpc-vd69rvsf_eastus","subnet":"10.56.0.0/16","network":"/subscriptions/439cc67d-50e9-4bbc-a9ee-2543bf762e06/resourceGroups/vpc-vd69rvsf_eastus/providers/Microsoft.Network/virtualNetworks/vpc-vd69rvsf_eastus"}'
+        body: '{"id":1937,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"90445d46-be81-4bc5-975c-ac204d5b8dc3","url":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb","ready":true,"apikey":"2d9279d5-5694-415a-ba92-1da12c9ce20a","backend":"rabbitmq","nodes":1,"vpc":{"id":1936,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://ygnmtagb:***@dev-glad-beige-opossum.rmq2.dev.cloudamqp.com/ygnmtagb","internal":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb"},"rmq_version":"3.13.1","hostname_external":"dev-glad-beige-opossum.rmq2.dev.cloudamqp.com","hostname_internal":"dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "217"
+                - "828"
             Content-Type:
                 - application/json
             Nel:
@@ -920,10 +920,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - db7d887d-87ee-403a-8c99-6703accaf1fe
+                - 07b6b7fa-1616-4a44-a5a7-f82bbd08be8c
         status: 200 OK
         code: 200
-        duration: 1.774698785s
+        duration: 41.894642ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -942,7 +942,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1925
+        url: http://localhost:9393/api/instances/1937/vpc-connect
         method: GET
       response:
         proto: HTTP/1.1
@@ -950,14 +950,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 833
+        content_length: 268
         uncompressed: false
-        body: '{"id":1925,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"bff74125-989a-4985-be9b-66a0514df4f5","url":"amqp://whdthvqs:***@dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com/whdthvqs","ready":true,"apikey":"9e320a6c-4684-420a-8634-c63a0bd5c1ba","backend":"rabbitmq","nodes":1,"vpc":{"id":1924,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://whdthvqs:***@dev-cheerful-orange-gnu.rmq6.dev.cloudamqp.com/whdthvqs","internal":"amqp://whdthvqs:***@dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com/whdthvqs"},"rmq_version":"3.13.1","hostname_external":"dev-cheerful-orange-gnu.rmq6.dev.cloudamqp.com","hostname_internal":"dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com"}'
+        body: '{"updated_at":"2024-04-23 12:35:08 +0200","status":"enabled","server_name":"dev-glad-beige-opossum","alias":"dev-glad-beige-opossum.e7396cd6-de74-4734-9ad0-4e0da3bb7bdb.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "833"
+                - "268"
             Content-Type:
                 - application/json
             Nel:
@@ -971,10 +971,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 1d9a4ef4-0c73-4d97-99df-ce4e7aae0952
+                - a21f1a80-8ce8-48ac-ba84-957efce4a2e1
         status: 200 OK
         code: 200
-        duration: 183.776709ms
+        duration: 61.934773ms
     - id: 19
       request:
         proto: HTTP/1.1
@@ -993,7 +993,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1925/vpc-connect
+        url: http://localhost:9393/api/instances/1937/vpc-connect
         method: GET
       response:
         proto: HTTP/1.1
@@ -1001,14 +1001,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 270
+        content_length: 268
         uncompressed: false
-        body: '{"updated_at":"2024-04-22 17:23:21 +0200","status":"enabled","server_name":"dev-cheerful-orange-gnu","alias":"dev-cheerful-orange-gnu.858cccda-7d08-48cf-bffa-183e101541b8.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
+        body: '{"updated_at":"2024-04-23 12:35:08 +0200","status":"enabled","server_name":"dev-glad-beige-opossum","alias":"dev-glad-beige-opossum.e7396cd6-de74-4734-9ad0-4e0da3bb7bdb.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "270"
+                - "268"
             Content-Type:
                 - application/json
             Nel:
@@ -1022,10 +1022,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 2c15c1ac-0801-48da-8065-71fdd3eb1af0
+                - d6be58f9-7c6b-44c9-8ae5-749ab8bc3591
         status: 200 OK
         code: 200
-        duration: 207.376633ms
+        duration: 44.060227ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -1044,58 +1044,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1925/vpc-connect
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 270
-        uncompressed: false
-        body: '{"updated_at":"2024-04-22 17:23:21 +0200","status":"enabled","server_name":"dev-cheerful-orange-gnu","alias":"dev-cheerful-orange-gnu.858cccda-7d08-48cf-bffa-183e101541b8.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "270"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 7b44b7d0-cbad-40aa-8f85-d4b6fa6b82e8
-        status: 200 OK
-        code: 200
-        duration: 144.345378ms
-    - id: 21
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1924
+        url: http://localhost:9393/api/vpcs/1936
         method: GET
       response:
         proto: HTTP/1.1
@@ -1105,7 +1054,7 @@ interactions:
         trailer: {}
         content_length: 209
         uncompressed: false
-        body: '{"id":1924,"name":"TestAccVpcConnect_Azure_Basic","plan":"vpc","subnet":"10.56.72.0/24","region":"azure-arm::eastus","tags":["terraform"],"providerid":"f81c924a-38bb-4bbe-a110-e06054f2e2ba","instances":[1925]}'
+        body: '{"id":1936,"name":"TestAccVpcConnect_Azure_Basic","plan":"vpc","subnet":"10.56.72.0/24","region":"azure-arm::eastus","tags":["terraform"],"providerid":"4cc389a3-86c7-4348-b503-e97e7cee2284","instances":[1937]}'
         headers:
             Cache-Control:
                 - no-cache
@@ -1124,11 +1073,11 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 2c90cd78-5b42-4206-a5d8-c308f4fcf683
+                - 939d36c7-4038-44ba-ad24-19530f1aa968
         status: 200 OK
         code: 200
-        duration: 258.454814ms
-    - id: 22
+        duration: 92.241871ms
+    - id: 21
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1146,7 +1095,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1924/vpc-peering/info
+        url: http://localhost:9393/api/vpcs/1936/vpc-peering/info
         method: GET
       response:
         proto: HTTP/1.1
@@ -1156,7 +1105,7 @@ interactions:
         trailer: {}
         content_length: 217
         uncompressed: false
-        body: '{"name":"vpc-vd69rvsf_eastus","subnet":"10.56.0.0/16","network":"/subscriptions/439cc67d-50e9-4bbc-a9ee-2543bf762e06/resourceGroups/vpc-vd69rvsf_eastus/providers/Microsoft.Network/virtualNetworks/vpc-vd69rvsf_eastus"}'
+        body: '{"name":"vpc-ofawllm8_eastus","subnet":"10.56.0.0/16","network":"/subscriptions/439cc67d-50e9-4bbc-a9ee-2543bf762e06/resourceGroups/vpc-ofawllm8_eastus/providers/Microsoft.Network/virtualNetworks/vpc-ofawllm8_eastus"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -1175,10 +1124,61 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 34ba9d9a-bd1b-48ee-9252-214a6604b900
+                - 5490074b-affe-4c6d-981d-c930d54ba27c
         status: 200 OK
         code: 200
-        duration: 1.726906636s
+        duration: 1.277737966s
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1937
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 828
+        uncompressed: false
+        body: '{"id":1937,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"90445d46-be81-4bc5-975c-ac204d5b8dc3","url":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb","ready":true,"apikey":"2d9279d5-5694-415a-ba92-1da12c9ce20a","backend":"rabbitmq","nodes":1,"vpc":{"id":1936,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://ygnmtagb:***@dev-glad-beige-opossum.rmq2.dev.cloudamqp.com/ygnmtagb","internal":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb"},"rmq_version":"3.13.1","hostname_external":"dev-glad-beige-opossum.rmq2.dev.cloudamqp.com","hostname_internal":"dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "828"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - c846c319-2087-40e9-be02-873aeb9f3a8d
+        status: 200 OK
+        code: 200
+        duration: 73.340584ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -1197,7 +1197,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1925
+        url: http://localhost:9393/api/instances/1937/vpc-connect
         method: GET
       response:
         proto: HTTP/1.1
@@ -1205,14 +1205,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 833
+        content_length: 268
         uncompressed: false
-        body: '{"id":1925,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"bff74125-989a-4985-be9b-66a0514df4f5","url":"amqp://whdthvqs:***@dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com/whdthvqs","ready":true,"apikey":"9e320a6c-4684-420a-8634-c63a0bd5c1ba","backend":"rabbitmq","nodes":1,"vpc":{"id":1924,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://whdthvqs:***@dev-cheerful-orange-gnu.rmq6.dev.cloudamqp.com/whdthvqs","internal":"amqp://whdthvqs:***@dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com/whdthvqs"},"rmq_version":"3.13.1","hostname_external":"dev-cheerful-orange-gnu.rmq6.dev.cloudamqp.com","hostname_internal":"dev-cheerful-orange-gnu.in.rmq6.dev.cloudamqp.com"}'
+        body: '{"updated_at":"2024-04-23 12:35:08 +0200","status":"enabled","server_name":"dev-glad-beige-opossum","alias":"dev-glad-beige-opossum.e7396cd6-de74-4734-9ad0-4e0da3bb7bdb.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "833"
+                - "268"
             Content-Type:
                 - application/json
             Nel:
@@ -1226,10 +1226,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 72a02794-6df7-446b-aa1f-9c27498bb34b
+                - 341ec8b6-dc19-414c-bd82-be6fbab56131
         status: 200 OK
         code: 200
-        duration: 134.344313ms
+        duration: 60.639258ms
     - id: 24
       request:
         proto: HTTP/1.1
@@ -1248,24 +1248,20 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1925/vpc-connect
-        method: GET
+        url: http://localhost:9393/api/instances/1937/vpc-connect
+        method: DELETE
       response:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 270
+        content_length: 0
         uncompressed: false
-        body: '{"updated_at":"2024-04-22 17:23:21 +0200","status":"enabled","server_name":"dev-cheerful-orange-gnu","alias":"dev-cheerful-orange-gnu.858cccda-7d08-48cf-bffa-183e101541b8.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
+        body: ""
         headers:
             Cache-Control:
                 - no-cache
-            Content-Length:
-                - "270"
-            Content-Type:
-                - application/json
             Nel:
                 - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
@@ -1277,10 +1273,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 49501e54-0007-4ee6-b6cc-a6e284ca2dad
-        status: 200 OK
-        code: 200
-        duration: 145.112655ms
+                - 64646bed-20e4-4747-a239-eaa2c3b228e5
+        status: 204 No Content
+        code: 204
+        duration: 114.286218ms
     - id: 25
       request:
         proto: HTTP/1.1
@@ -1299,7 +1295,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1925/vpc-connect
+        url: http://localhost:9393/api/instances/1937?keep_vpc=true
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -1324,10 +1320,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - cd4452ee-4111-45e1-97fd-c9efff45733d
+                - 1a69a3a5-078a-4e15-aa72-f4adcda10605
         status: 204 No Content
         code: 204
-        duration: 220.566666ms
+        duration: 287.573247ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -1346,54 +1342,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1925?keep_vpc=true
-        method: DELETE
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
-        headers:
-            Cache-Control:
-                - no-cache
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 693a425f-ae1d-4d46-a83d-5b0b71ccaefc
-        status: 204 No Content
-        code: 204
-        duration: 640.127494ms
-    - id: 27
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1925
+        url: http://localhost:9393/api/instances/1937
         method: GET
       response:
         proto: HTTP/1.1
@@ -1422,11 +1371,11 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 361f33b1-a4c2-4bd5-971b-a9abacc0e750
+                - c661b9a9-3a22-45a9-a0ba-4fa62777a6e7
         status: 404 Not Found
         code: 404
-        duration: 49.027677ms
-    - id: 28
+        duration: 15.11097ms
+    - id: 27
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1444,7 +1393,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1924
+        url: http://localhost:9393/api/vpcs/1936
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -1469,7 +1418,7 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 7fe79662-3854-47d5-8a05-5e16501974d7
+                - 56f6b16f-966e-4fc5-b5ba-890a39806fef
         status: 204 No Content
         code: 204
-        duration: 401.764008ms
+        duration: 167.13858ms
