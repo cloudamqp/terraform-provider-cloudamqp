@@ -37,7 +37,7 @@ func TestAccAlarm_Basic(t *testing.T) {
 			"CPUAlarmRecipients":       fmt.Sprintf("%s.id", recipientResourceName),
 		}
 
-		fileNamesUpdated = []string{"instance", "notification", "notification_data", "alarm", "alarm_data"}
+		fileNamesUpdated = []string{"instance", "notification", "data_source/notification_default", "alarm", "data_source/alarm"}
 		paramsUpdated    = map[string]string{
 			"InstanceName":             "TestAccAlarm_Basic",
 			"InstanceID":               fmt.Sprintf("%s.id", instanceResourceName),
@@ -45,7 +45,8 @@ func TestAccAlarm_Basic(t *testing.T) {
 			"RecipientType":            "email",
 			"RecipientValue":           "test@example.com",
 			"NoticeRecipients":         fmt.Sprintf("%s.id", dataSourceNotificationName),
-			"CPUAlarmType":             "cpu",
+			"AlarmType":                "cpu",
+			"AlarmResourceName":        "cpu",
 			"CPUAlarmEnabled":          "true",
 			"CPUAlarmTimeThreshold":    "450",
 			"CPUAlarmValueThreshold":   "50",
