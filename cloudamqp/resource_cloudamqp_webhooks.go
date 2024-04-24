@@ -14,6 +14,7 @@ func resourceWebhook() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceWebhookCreate,
 		Read:   resourceWebhookRead,
+		Update: resourceWebhookUpdate,
 		Delete: resourceWebhookDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
@@ -28,57 +29,77 @@ func resourceWebhook() *schema.Resource {
 			"vhost": {
 				Type:        schema.TypeString,
 				Required:    true,
-				ForceNew:    true,
 				Description: "The name of the virtual host",
 			},
 			"queue": {
 				Type:        schema.TypeString,
 				Required:    true,
-				ForceNew:    true,
 				Description: "The queue that should be forwarded, must be a durable queue!",
 			},
 			"webhook_uri": {
 				Type:        schema.TypeString,
 				Required:    true,
-				ForceNew:    true,
 				Description: "A POST request will be made for each message in the queue to this endpoint",
 			},
 			"retry_interval": {
 				Type:        schema.TypeInt,
 				Required:    true,
-				ForceNew:    true,
 				Description: "How often push of a message will retry if the previous call fails. In seconds",
 			},
 			"concurrency": {
 				Type:        schema.TypeInt,
 				Required:    true,
-				ForceNew:    true,
 				Description: "How many times the request will be made if previous call fails",
+			},
+			"sleep": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     10,
+				Description: "Configurable sleep time in seconds between retries for webhook",
+			},
+			"timeout": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     1800,
+				Description: "Configurable timeout time in seconds for webhook",
 			},
 		},
 	}
 }
 
 func resourceWebhookCreate(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	keys := []string{"vhost", "queue", "webhook_uri", "retry_interval", "concurrency"}
-	params := make(map[string]interface{})
+	var (
+		api        = meta.(*api.API)
+		keys       = []string{"vhost", "queue", "webhook_uri", "retry_interval", "concurrency"}
+		params     = make(map[string]interface{})
+		instanceID = d.Get("instance_id").(int)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
 			params[k] = v
 		}
 	}
 
-	data, err := api.CreateWebhook(d.Get("instance_id").(int), params)
+	data, err := api.CreateWebhook(instanceID, params, sleep, timeout)
 	if err != nil {
 		return err
 	}
 
 	d.SetId(data["id"].(string))
-	return resourceWebhookRead(d, meta)
+	return nil
 }
 
 func resourceWebhookRead(d *schema.ResourceData, meta interface{}) error {
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
 	if strings.Contains(d.Id(), ",") {
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
@@ -90,9 +111,7 @@ func resourceWebhookRead(d *schema.ResourceData, meta interface{}) error {
 		return errors.New("missing instance identifier: {resource_id},{instance_id}")
 	}
 
-	api := meta.(*api.API)
-	data, err := api.ReadWebhook(d.Get("instance_id").(int), d.Id())
-
+	data, err := api.ReadWebhook(instanceID, d.Id(), sleep, timeout)
 	if err != nil {
 		return err
 	}
@@ -110,9 +129,34 @@ func resourceWebhookRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
+func resourceWebhookUpdate(d *schema.ResourceData, meta interface{}) error {
+	var (
+		api        = meta.(*api.API)
+		keys       = []string{"vhost", "queue", "webhook_uri", "retry_interval", "concurrency"}
+		params     = make(map[string]interface{})
+		instanceID = d.Get("instance_id").(int)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
+	for _, k := range keys {
+		if v := d.Get(k); v != nil {
+			params[k] = v
+		}
+	}
+
+	return api.UpdateWebhook(instanceID, d.Id(), params, sleep, timeout)
+}
+
 func resourceWebhookDelete(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	return api.DeleteWebhook(d.Get("instance_id").(int), d.Id())
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+	)
+
+	return api.DeleteWebhook(instanceID, d.Id(), sleep, timeout)
 }
 
 func validateWebhookSchemaAttribute(key string) bool {
