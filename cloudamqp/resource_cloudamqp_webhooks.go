@@ -41,11 +41,6 @@ func resourceWebhook() *schema.Resource {
 				Required:    true,
 				Description: "A POST request will be made for each message in the queue to this endpoint",
 			},
-			"retry_interval": {
-				Type:        schema.TypeInt,
-				Required:    true,
-				Description: "How often push of a message will retry if the previous call fails. In seconds",
-			},
 			"concurrency": {
 				Type:        schema.TypeInt,
 				Required:    true,
@@ -70,7 +65,7 @@ func resourceWebhook() *schema.Resource {
 func resourceWebhookCreate(d *schema.ResourceData, meta interface{}) error {
 	var (
 		api        = meta.(*api.API)
-		keys       = []string{"vhost", "queue", "webhook_uri", "retry_interval", "concurrency"}
+		keys       = []string{"vhost", "queue", "webhook_uri", "concurrency"}
 		params     = make(map[string]interface{})
 		instanceID = d.Get("instance_id").(int)
 		sleep      = d.Get("sleep").(int)
@@ -132,7 +127,7 @@ func resourceWebhookRead(d *schema.ResourceData, meta interface{}) error {
 func resourceWebhookUpdate(d *schema.ResourceData, meta interface{}) error {
 	var (
 		api        = meta.(*api.API)
-		keys       = []string{"vhost", "queue", "webhook_uri", "retry_interval", "concurrency"}
+		keys       = []string{"vhost", "queue", "webhook_uri", "concurrency"}
 		params     = make(map[string]interface{})
 		instanceID = d.Get("instance_id").(int)
 		sleep      = d.Get("sleep").(int)
@@ -164,7 +159,6 @@ func validateWebhookSchemaAttribute(key string) bool {
 	case "vhost",
 		"queue",
 		"webhook_uri",
-		"retry_interval",
 		"concurrency":
 		return true
 	}
