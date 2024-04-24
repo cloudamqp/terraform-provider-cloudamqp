@@ -23,7 +23,7 @@ func (api *API) ValidatePlan(name string) error {
 		path   = "api/plans"
 	)
 
-	response, err := api.sling.New().Client(api.client).Get(path).Receive(&data, &failed)
+	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
 		return err
 	}
@@ -88,7 +88,7 @@ func (api *API) ValidateRegion(region string) error {
 		platform string
 	)
 
-	response, err := api.sling.New().Client(api.client).Get(path).Receive(&data, &failed)
+	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
 		return err
 	}
