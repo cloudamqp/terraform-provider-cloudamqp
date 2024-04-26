@@ -18,6 +18,7 @@ func TestAccWebhook_Basic(t *testing.T) {
 		params = map[string]string{
 			"InstanceName": "TestAccWebhook_Basic",
 			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
+			"WebhookVhost": fmt.Sprintf("%s.vhost", instanceResourceName),
 		}
 	)
 
@@ -29,10 +30,8 @@ func TestAccWebhook_Basic(t *testing.T) {
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(webhookResourceName, "vhost", "myvhost"),
 					resource.TestCheckResourceAttr(webhookResourceName, "queue", "myqueue"),
 					resource.TestCheckResourceAttr(webhookResourceName, "webhook_uri", "https://example.com/webhook?key=secret"),
-					resource.TestCheckResourceAttr(webhookResourceName, "retry_interval", "0"),
 					resource.TestCheckResourceAttr(webhookResourceName, "concurrency", "5"),
 				),
 			},

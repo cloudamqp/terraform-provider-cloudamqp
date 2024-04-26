@@ -345,7 +345,7 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"concurrency":5,"queue":"myqueue","retry_interval":0,"vhost":"myvhost","webhook_uri":"https://example.com/webhook?key=secret"}
+            {"concurrency":5,"queue":"myqueue","vhost":"zpufxsgk","webhook_uri":"https://example.com/webhook?key=secret"}
         form: {}
         headers:
             Content-Type:
@@ -409,7 +409,7 @@ interactions:
         trailer: {}
         content_length: 156
         uncompressed: false
-        body: '{"id":8,"webhook_uri":"https://example.com/webhook?key=secret","queue":"myqueue","last_status":null,"retry_interval":null,"concurrency":5,"vhost":"myvhost"}'
+        body: '{"id":8,"webhook_uri":"https://example.com/webhook?key=secret","queue":"myqueue","last_status":null,"concurrency":5,"vhost":"zpufxsgk"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -503,7 +503,7 @@ interactions:
         trailer: {}
         content_length: 156
         uncompressed: false
-        body: '{"id":8,"webhook_uri":"https://example.com/webhook?key=secret","queue":"myqueue","last_status":null,"retry_interval":null,"concurrency":5,"vhost":"myvhost"}'
+        body: '{"id":8,"webhook_uri":"https://example.com/webhook?key=secret","queue":"myqueue","last_status":null,"concurrency":5,"vhost":"zpufxsgk"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -550,7 +550,7 @@ interactions:
         trailer: {}
         content_length: 156
         uncompressed: false
-        body: '{"id":8,"webhook_uri":"https://example.com/webhook?key=secret","queue":"myqueue","last_status":null,"retry_interval":null,"concurrency":5,"vhost":"myvhost"}'
+        body: '{"id":8,"webhook_uri":"https://example.com/webhook?key=secret","queue":"myqueue","last_status":null,"concurrency":5,"vhost":"zpufxsgk"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -644,7 +644,7 @@ interactions:
         trailer: {}
         content_length: 156
         uncompressed: false
-        body: '{"id":8,"webhook_uri":"https://example.com/webhook?key=secret","queue":"myqueue","last_status":null,"retry_interval":null,"concurrency":5,"vhost":"myvhost"}'
+        body: '{"id":8,"webhook_uri":"https://example.com/webhook?key=secret","queue":"myqueue","last_status":null,"concurrency":5,"vhost":"zpufxsgk"}'
         headers:
             Cache-Control:
                 - no-cache
