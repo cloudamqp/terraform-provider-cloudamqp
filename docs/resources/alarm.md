@@ -59,7 +59,8 @@ resource "cloudamqp_alarm" "memory_alarm" {
 <details>
   <summary>
     <b>
-      <i>Manage notice alarm, available from [v1.29.5](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.5)</i>
+      <i>Manage notice alarm, available from </i>
+      <a href="https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.5">v1.29.5</a>
     </b>
   </summary>
 

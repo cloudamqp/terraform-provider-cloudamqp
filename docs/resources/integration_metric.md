@@ -21,6 +21,7 @@ Only available for dedicated subscription plans.
   </summary>
 
 ***Access key***
+
 ```hcl
 resource "cloudamqp_integration_metric" "cloudwatch" {
   instance_id = cloudamqp_instance.instance.id
@@ -40,6 +41,7 @@ resource "cloudamqp_integration_metric" "cloudwatch_v2" {
 ```
 
 ***Assume role***
+
 ```hcl
 resource "cloudamqp_integration_metric" "cloudwatch" {
   instance_id = cloudamqp_instance.instance.id
@@ -60,6 +62,7 @@ resource "cloudamqp_integration_metric" "cloudwatch_v2" {
 
 * AWS IAM role: arn:aws:iam::ACCOUNT-ID:role/ROLE-NAME
 * External id: Create own external identifier that match the role created. E.g. "cloudamqp-abc123".
+
 </details>
 
 <details>
@@ -84,6 +87,7 @@ resource "cloudamqp_integration_metric" "datadog_v2" {
   region = var.datadog_region
 }
 ```
+
 </details>
 
 <details>
@@ -101,6 +105,7 @@ resource "cloudamqp_integration_metric" "librato" {
   api_key = var.librato_api_key
 }
 ```
+
 </details>
 
 <details>
@@ -118,6 +123,7 @@ resource "cloudamqp_integration_metric" "newrelic" {
   region = var.newrelic_region
 }
 ```
+
 </details>
 
 <details>
@@ -160,6 +166,7 @@ resource "cloudamqp_integration_metric" "stackdriver" {
   client_email = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).client_email
 }
 ```
+
 </details>
 
 <details>
@@ -210,6 +217,7 @@ resource "cloudamqp_integration_metric" "stackdriver" {
   client_email = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).client_email
 }
 ```
+
 </details>
 
 ## Argument references

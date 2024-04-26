@@ -28,6 +28,7 @@ resource "cloudamqp_node_actions" "node_action" {
   action = "restart"
 }
 ```
+
 </details>
 
 Using data source `cloudamqp_nodes` to restart RabbitMQ on all nodes.</br>
@@ -71,6 +72,7 @@ resource "cloudamqp_node_actions" "restart_03" {
 }
 
 ```
+
 </details>
 
 <details>
@@ -121,6 +123,7 @@ resource "cloudamqp_node_actions" "restart_03" {
 }
 
 ```
+
 </details>
 
 ## Argument Reference

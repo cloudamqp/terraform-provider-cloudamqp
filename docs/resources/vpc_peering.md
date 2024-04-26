@@ -36,7 +36,7 @@ One way to manage the vpc peering is to combine CloudAMQP Terraform provider wit
 <details>
   <summary>
     <b>
-      <i>AWS VPC peering pre v1.16.0</i>
+      <i>AWS VPC peering before v1.16.0</i>
     </b>
   </summary>
 
@@ -120,7 +120,7 @@ resource "aws_route" "accepter_route" {
 <details>
   <summary>
     <b>
-      <i>AWS VPC peering post v1.16.0 (Managed VPC)</i>
+      <i>AWS VPC peering from v1.16.0 (Managed VPC)</i>
     </b>
   </summary>
 
@@ -214,6 +214,7 @@ resource "aws_route" "accepter_route" {
   ]
 }
 ```
+
  </details>
 
 ## Argument Reference
@@ -241,10 +242,10 @@ All attributes reference are computed
 
 ## Depedency
 
-*Pre v1.16.0*
+*Before v1.16.0*
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
-*Post v1.16.0*
+*From v1.16.0*
 This resource depends on CloudAMQP managed VPC identifier, `cloudamqp_vpc.vpc.id` or instance identifier, `cloudamqp_instance.instance.id`.
 
 ## Import
@@ -265,7 +266,7 @@ See example below.
 <details>
   <summary>
     <b>
-      <i>VPC peering pre v1.16.0</i>
+      <i>VPC peering before v1.16.0</i>
     </b>
   </summary>
 
@@ -305,12 +306,13 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   ]
 }
 ```
+
 </details>
 
 <details>
   <summary>
     <b>
-      <i>VPC peering post v1.16.0 (Managed VPC)</i>
+      <i>VPC peering from v1.16.0 (Managed VPC)</i>
     </b>
   </summary>
 
@@ -360,4 +362,5 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   ]
 }
 ```
+
 </details>

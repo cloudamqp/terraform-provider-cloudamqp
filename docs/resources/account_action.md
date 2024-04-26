@@ -7,9 +7,10 @@ description: |-
 
 # cloudamqp_account_action
 
-This resource allows you to invoke an account action. Current supported actions are 
- * Rotate password for RabbitMQ/LavinMQ user
- * Rotate API key for the CloudAMQP instance
+This resource allows you to invoke an account action. Current supported actions are
+
+* Rotate password for RabbitMQ/LavinMQ user
+* Rotate API key for the CloudAMQP instance
 
 ## Example Usage
 
@@ -45,4 +46,3 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 ## Import
 
 Not possible to import this resource.
-
