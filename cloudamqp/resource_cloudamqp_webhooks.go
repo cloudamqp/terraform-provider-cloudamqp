@@ -99,8 +99,11 @@ func resourceWebhookRead(d *schema.ResourceData, meta interface{}) error {
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
 		d.Set("name", s[0])
-		instanceID, _ := strconv.Atoi(s[1])
+		instanceID, _ = strconv.Atoi(s[1])
 		d.Set("instance_id", instanceID)
+		// Set default values for optional arguments
+		d.Set("sleep", 10)
+		d.Set("timeout", 1800)
 	}
 	if d.Get("instance_id").(int) == 0 {
 		return errors.New("missing instance identifier: {resource_id},{instance_id}")
