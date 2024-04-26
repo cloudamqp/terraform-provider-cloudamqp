@@ -140,6 +140,7 @@ func resourceWebhookUpdate(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
+	params["webhook_id"] = d.Id()
 	return api.UpdateWebhook(instanceID, d.Id(), params, sleep, timeout)
 }
 
