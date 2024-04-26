@@ -16,7 +16,8 @@ Only available for dedicated subscription plans.
 <details>
  <summary>
     <b>
-      <i>Enable webhook from v1.30.0</i>
+      <i>Enable webhook after </i>
+      <a href="https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.30.0">v1.30.0</a>
     </b>
   </summary>
 
