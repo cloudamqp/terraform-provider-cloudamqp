@@ -1,3 +1,14 @@
+## 1.30.0 (Unreleased)
+
+NOTES:
+
+* Updated the API wrapper (go-api) dependency with newer version (1.16.2)
+
+IMRPOVEMENTS:
+
+* Added support for updating webhook resource ([#268](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/268))
+* Added configurable retries for webhook resource ([#268](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/268))
+
 ## 1.29.5 (Apr 04, 2024)
 
 IMPROVEMENTS:

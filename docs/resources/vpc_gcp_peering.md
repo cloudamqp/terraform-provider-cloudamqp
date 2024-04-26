@@ -36,7 +36,7 @@ Only available for dedicated subscription plans.
 <details>
   <summary>
     <b>
-      <i>VPC peering pre v1.16.0</i>
+      <i>VPC peering before v1.16.0</i>
     </b>
   </summary>
 
@@ -72,7 +72,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 <details>
   <summary>
     <b>
-      <i>VPC peering post v1.16.0 (Managed VPC)</i>
+      <i>VPC peering from v1.16.0 (Managed VPC)</i>
     </b>
   </summary>
 
@@ -120,7 +120,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 <details>
   <summary>
     <b>
-      <i>VPC peering post v1.28.0, wait_on_peering_status </i>
+      <i>VPC peering from v1.28.0, wait_on_peering_status </i>
     </b>
   </summary>
 
@@ -175,10 +175,10 @@ All attributes reference are computed
 
 ## Depedency
 
-*Pre v1.16.0*
+*Before v1.16.0*
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
-*Post v1.16.0*
+*From v1.16.0*
 This resource depends on CloudAMQP managed VPC identifier, `cloudamqp_vpc.vpc.id` or instance identifier, `cloudamqp_instance.instance.id`.
 
 ## Import
@@ -199,7 +199,7 @@ See example below.
 <details>
   <summary>
     <b>
-      <i>VPC peering pre v1.16.0</i>
+      <i>VPC peering before v1.16.0</i>
     </b>
   </summary>
 
@@ -239,7 +239,7 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 <details>
   <summary>
     <b>
-      <i>VPC peering post v1.16.0 (Managed VPC)</i>
+      <i>VPC peering from v1.16.0 (Managed VPC)</i>
     </b>
   </summary>
 

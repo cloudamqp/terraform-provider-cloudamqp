@@ -47,12 +47,13 @@ resource "cloudamqp_instance" "instance" {
   tags    = ["terraform"]
 }
 ```
+
 </details>
 
 <details>
   <summary>
     <b>
-      <i>Dedicated instance using attribute vpc_subnet to create VPC, pre v1.16.0</i>
+      <i>Dedicated instance using attribute vpc_subnet to create VPC, before v1.16.0</i>
     </b>
   </summary>
 
@@ -65,12 +66,13 @@ resource "cloudamqp_instance" "instance" {
   vpc_subnet          = "10.56.72.0/24"
 }
 ```
+
 </details>
 
 <details>
   <summary>
     <b>
-      <i>Dedicated instance using attribute vpc_subnet to create VPC and then import managed VPC, post v1.16.0 (Managed VPC)</i>
+      <i>Dedicated instance using attribute vpc_subnet to create VPC and then import managed VPC, from v1.16.0 (Managed VPC)</i>
     </b>
   </summary>
 
@@ -108,12 +110,13 @@ resource "cloudamqp_instance" "instance_01" {
   keep_associated_vpc = true
 }
 ```
+
 </details>
 
 <details>
   <summary>
     <b>
-      <i>Dedicated instances and managed VPC, post v1.16.0 (Managed VPC)</i>
+      <i>Dedicated instances and managed VPC, from v1.16.0 (Managed VPC)</i>
     </b>
   </summary>
 
@@ -148,6 +151,7 @@ resource "cloudamqp_instance" "instance_02" {
 ```
 
 Set attribute `keep_associated_vpc` to true, will keep managed VPC when deleting the instances.
+
 </details>
 
 ## Argument Reference
@@ -240,6 +244,7 @@ resource "cloudamqp_instance" "instance" {
   tags    = ["terraform"]
 }
 ```
+
 </details>
 
 <details>
@@ -266,6 +271,7 @@ resource "cloudamqp_instance" "instance" {
   tags    = ["terraform"]
 }
 ```
+
 </details>
 
 ## Copy settings to a new dedicated instance
@@ -296,4 +302,5 @@ resource "cloudamqp_instance" "instance_02" {
   }
 }
 ```
+
 </details>

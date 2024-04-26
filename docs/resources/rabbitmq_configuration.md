@@ -34,6 +34,7 @@ resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
   cluster_partition_handling = "autoheal"
 }
 ```
+
 </details>
 
 <details>
@@ -42,7 +43,6 @@ resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
       <i>Change log level and combine `cloudamqp_node_actions` for RabbitMQ restart</i>
     </b>
   </summary>
-
 
 ```hcl
 resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
@@ -72,6 +72,7 @@ resource "cloudamqp_node_actions" "node_action" {
   ]
 }
 ```
+
 </details>
 
 <details>
@@ -81,13 +82,13 @@ resource "cloudamqp_node_actions" "node_action" {
     </b>
   </summary>
 
-
 ```hcl
 resource "cloudamqp_rabbitmq_configuration" "rabbit_config" {
   instance_id = cloudamqp_instance.instance.id
   log_exchange_level = "info"
 }
 ```
+
 </details>
 
 ## Argument Reference

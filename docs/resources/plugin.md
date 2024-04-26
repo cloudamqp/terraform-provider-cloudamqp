@@ -24,7 +24,7 @@ resource "cloudamqp_plugin" "rabbitmq_top" {
 <details>
   <summary>
     <b>
-      <i>Enable multiple plugins v1.19.1 and older versions
+      <i>Enable multiple plugins v1.19.1 and older versions</i>
     </b>
   </summary>
 
@@ -47,12 +47,14 @@ resource "cloudamqp_plugin" "rabbitmq_amqp1_0" {
   ]
 }
 ```
+
 </details>
 
 <details>
   <summary>
     <b>
-      <i>Enable multiple plugins from v1.19.2
+      <i>Enable multiple plugins from </i>
+      <a href="https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.19.2">v1.19.2</a>
     </b>
   </summary>
 
@@ -71,12 +73,14 @@ resource "cloudamqp_plugin" "rabbitmq_amqp1_0" {
   enabled     = true
 }
 ```
+
 </details>
 
 <details>
   <summary>
     <b>
-      <i>Faster instance destroy when running `terraform destroy` from v1.27.0
+      <i>Faster instance destroy when running `terraform destroy` from </i>
+      <a href="https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0">v1.27.0</a>
     </b>
   </summary>
 

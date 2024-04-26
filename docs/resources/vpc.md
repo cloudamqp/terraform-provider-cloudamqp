@@ -17,7 +17,6 @@ Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html).
 
 ## Example Usage
 
-
 ```hcl
 # Configure CloudAMQP provider
 provider "cloudamqp" {
