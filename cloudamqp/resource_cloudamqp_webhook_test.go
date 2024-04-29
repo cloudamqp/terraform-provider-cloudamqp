@@ -16,9 +16,21 @@ func TestAccWebhook_Basic(t *testing.T) {
 		webhookResourceName  = "cloudamqp_webhook.webhook_queue"
 
 		params = map[string]string{
-			"InstanceName": "TestAccWebhook_Basic",
-			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
-			"WebhookVhost": fmt.Sprintf("%s.vhost", instanceResourceName),
+			"InstanceName":       "TestAccWebhook_Basic",
+			"InstanceID":         fmt.Sprintf("%s.id", instanceResourceName),
+			"WebhookVhost":       fmt.Sprintf("%s.vhost", instanceResourceName),
+			"WeebhookQueue":      "myqueue",
+			"WebhookURI":         "https://example.com/webhook?key=secret",
+			"WebhookConcurrency": "1",
+		}
+
+		paramsUpdated = map[string]string{
+			"InstanceName":       "TestAccWebhook_Basic",
+			"InstanceID":         fmt.Sprintf("%s.id", instanceResourceName),
+			"WebhookVhost":       fmt.Sprintf("%s.vhost", instanceResourceName),
+			"WeebhookQueue":      "myqueue_02",
+			"WebhookURI":         "https://example.com/webhook?key=secret",
+			"WebhookConcurrency": "1",
 		}
 	)
 
@@ -30,9 +42,9 @@ func TestAccWebhook_Basic(t *testing.T) {
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(webhookResourceName, "queue", "myqueue"),
-					resource.TestCheckResourceAttr(webhookResourceName, "webhook_uri", "https://example.com/webhook?key=secret"),
-					resource.TestCheckResourceAttr(webhookResourceName, "concurrency", "5"),
+					resource.TestCheckResourceAttr(webhookResourceName, "queue", params["WeebhookQueue"]),
+					resource.TestCheckResourceAttr(webhookResourceName, "webhook_uri", params["WebhookURI"]),
+					resource.TestCheckResourceAttr(webhookResourceName, "concurrency", params["WebhookConcurrency"]),
 				),
 			},
 			{
@@ -40,6 +52,15 @@ func TestAccWebhook_Basic(t *testing.T) {
 				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, webhookResourceName),
 				ImportState:       true,
 				ImportStateVerify: true,
+			},
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdated["InstanceName"]),
+					resource.TestCheckResourceAttr(webhookResourceName, "queue", paramsUpdated["WeebhookQueue"]),
+					resource.TestCheckResourceAttr(webhookResourceName, "webhook_uri", paramsUpdated["WebhookURI"]),
+					resource.TestCheckResourceAttr(webhookResourceName, "concurrency", paramsUpdated["WebhookConcurrency"]),
+				),
 			},
 		},
 	})

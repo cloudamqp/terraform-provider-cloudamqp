@@ -1,7 +1,7 @@
 resource "cloudamqp_webhook" "webhook_queue" {
   instance_id    = {{.InstanceID}}
   vhost          = {{.WebhookVhost}}
-  queue          = "{{or .WeebhookQueue `myqueue`}}"
-  webhook_uri    = "{{or .WebhookURI `https://example.com/webhook?key=secret`}}"
-  concurrency    = {{or .WebhookConcurrency `5`}}
+  queue          = "{{.WeebhookQueue}}"
+  webhook_uri    = "{{.WebhookURI}}"
+  concurrency    = {{.WebhookConcurrency}}
 }
