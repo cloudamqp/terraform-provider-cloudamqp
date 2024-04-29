@@ -19,7 +19,7 @@ func TestAccWebhook_Basic(t *testing.T) {
 			"InstanceName":       "TestAccWebhook_Basic",
 			"InstanceID":         fmt.Sprintf("%s.id", instanceResourceName),
 			"WebhookVhost":       fmt.Sprintf("%s.vhost", instanceResourceName),
-			"WeebhookQueue":      "myqueue",
+			"WebhookQueue":       "myqueue",
 			"WebhookURI":         "https://example.com/webhook?key=secret",
 			"WebhookConcurrency": "1",
 		}
@@ -28,7 +28,7 @@ func TestAccWebhook_Basic(t *testing.T) {
 			"InstanceName":       "TestAccWebhook_Basic",
 			"InstanceID":         fmt.Sprintf("%s.id", instanceResourceName),
 			"WebhookVhost":       fmt.Sprintf("%s.vhost", instanceResourceName),
-			"WeebhookQueue":      "myqueue_02",
+			"WebhookQueue":       "myqueue_02",
 			"WebhookURI":         "https://example.com/webhook?key=secret",
 			"WebhookConcurrency": "1",
 		}
@@ -42,7 +42,7 @@ func TestAccWebhook_Basic(t *testing.T) {
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(webhookResourceName, "queue", params["WeebhookQueue"]),
+					resource.TestCheckResourceAttr(webhookResourceName, "queue", params["WebhookQueue"]),
 					resource.TestCheckResourceAttr(webhookResourceName, "webhook_uri", params["WebhookURI"]),
 					resource.TestCheckResourceAttr(webhookResourceName, "concurrency", params["WebhookConcurrency"]),
 				),
@@ -57,7 +57,7 @@ func TestAccWebhook_Basic(t *testing.T) {
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdated["InstanceName"]),
-					resource.TestCheckResourceAttr(webhookResourceName, "queue", paramsUpdated["WeebhookQueue"]),
+					resource.TestCheckResourceAttr(webhookResourceName, "queue", paramsUpdated["WebhookQueue"]),
 					resource.TestCheckResourceAttr(webhookResourceName, "webhook_uri", paramsUpdated["WebhookURI"]),
 					resource.TestCheckResourceAttr(webhookResourceName, "concurrency", paramsUpdated["WebhookConcurrency"]),
 				),
