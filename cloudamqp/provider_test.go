@@ -17,8 +17,7 @@ import (
 )
 
 var (
-	testAccProvider  *schema.Provider
-	testAccProviders map[string]*schema.Provider
+	testAccProviderFactory map[string]func() (*schema.Provider, error)
 
 	mode = recorder.ModeReplayOnly
 )
@@ -156,11 +155,10 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		return req.URL.Path == "/login"
 	})
 
-	testAccProvider = Provider("1.0", rec.GetDefaultClient())
-	testAccProviders = map[string]*schema.Provider{
-		"cloudamqp": testAccProvider,
+	testAccProviderFactory = map[string]func() (*schema.Provider, error){
+		"cloudamqp": func() (*schema.Provider, error) { return Provider("1.0", rec.GetDefaultClient()), nil },
 	}
-	c.Providers = testAccProviders
+	c.ProviderFactories = testAccProviderFactory
 
 	resource.Test(t, c)
 }
