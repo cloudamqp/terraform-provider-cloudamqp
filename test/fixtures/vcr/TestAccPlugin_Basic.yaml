@@ -1,0 +1,1424 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/plans
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2654
+        uncompressed: false
+        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"bobsled","price":0,"backend":"datasled","shared":true},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"tiger::do-dedicated","price":19,"backend":null,"shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "2654"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f60215b3-755a-4779-9261-9a623e80b7ed
+        status: 200 OK
+        code: 200
+        duration: 66.120979ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/regions
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 14003
+        uncompressed: false
+        body: '[{"provider":"amazon-web-services","region":"us-east-1","name":"Amazon Web Services - US-East-1 (Northern Virginia)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-2","name":"Amazon Web Services - US-West-2 (Oregon)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-east-2","name":"Amazon Web Services - US-East-2 (Ohio)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-1","name":"Amazon Web Services - US-West-1 (Northern California)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-north-1","name":"Amazon Web Services - EU-North-1 (Stockholm)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-1","name":"Amazon Web Services - EU-West-1 (Ireland)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-2","name":"Amazon Web Services - EU-West-2 (London)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-3","name":"Amazon Web Services - EU-West-3 (Paris)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-south-1","name":"Amazon Web Services - EU-South-1 (Milan)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-south-2","name":"Amazon Web Services - EU-South-2 (Spain)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-central-1","name":"Amazon Web Services - EU-Central-1 (Frankfurt)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-central-2","name":"Amazon Web Services - EU-Central-2 (Zurich)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ca-central-1","name":"Amazon Web Services - CA-Central-1 (Canada)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-1","name":"Amazon Web Services - AP-SouthEast-1 (Singapore)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-2","name":"Amazon Web Services - AP-SouthEast-2 (Sydney)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-3","name":"Amazon Web Services - AP-SouthEast-3 (Jakarta)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-4","name":"Amazon Web Services - AP-SouthEast-4 (Melbourne)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-northeast-1","name":"Amazon Web Services - AP-NorthEast-1 (Tokyo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-2","name":"Amazon Web Services - AP-NorthEast-2 (Seoul)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-3","name":"Amazon Web Services - AP-NorthEast-3 (Osaka)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-south-1","name":"Amazon Web Services - AP-South-1 (Mumbai)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-south-2","name":"Amazon Web Services - AP-South-2 (Hyderabad)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-east-1","name":"Amazon Web Services - AP-East-1 (Hong Kong)","has_shared_plans":true},{"provider":"amazon-web-services","region":"sa-east-1","name":"Amazon Web Services - SA-East-1 (São Paulo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-south-1","name":"Amazon Web Services - ME-South-1 (Bahrain)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-central-1","name":"Amazon Web Services - ME-Central-1 (UAE)","has_shared_plans":false},{"provider":"amazon-web-services","region":"af-south-1","name":"Amazon Web Services - AF-South-1 (Cape Town)","has_shared_plans":false},{"provider":"amazon-web-services","region":"il-central-1","name":"Amazon Web Services - IL-Central-1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-central1","name":"Google Compute Engine - us-central1 (Iowa)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east1","name":"Google Compute Engine - us-east1 (South Carolina)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east4","name":"Google Compute Engine - us-east4 (North Virginia)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east5","name":"Google Compute Engine - us-east5 (Columbus)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west1","name":"Google Compute Engine - us-west1 (Oregon)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west2","name":"Google Compute Engine - us-west2 (Los Angeles)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west3","name":"Google Compute Engine - us-west3 (Salt Lake City)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west4","name":"Google Compute Engine - us-west4 (Las Vegas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-south1","name":"Google Compute Engine - us-south1 (Dallas, Texas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-east1","name":"Google Compute Engine - southamerica-east1 (São Paulo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-west1","name":"Google Compute Engine - southamerica-west1 (Santiago)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north1","name":"Google Compute Engine - europe-north1 (Finland)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west1","name":"Google Compute Engine - europe-west1 (Belgium)","has_shared_plans":true},{"provider":"google-compute-engine","region":"europe-west2","name":"Google Compute Engine - europe-west2 (London)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west3","name":"Google Compute Engine - europe-west3 (Frankfurt)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west4","name":"Google Compute Engine - europe-west4 (Netherlands)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west6","name":"Google Compute Engine - europe-west6 (Zürich)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west8","name":"Google Compute Engine - europe-west8 (Milan)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west9","name":"Google Compute Engine - europe-west9 (Paris)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west10","name":"Google Compute Engine - europe-west10 (Berlin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west12","name":"Google Compute Engine - europe-west12 (Turin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-central2","name":"Google Compute Engine - europe-central2 (Warsaw)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-southwest1","name":"Google Compute Engine - europe-southwest1 (Madrid)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-west1","name":"Google Compute Engine - me-west1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central1","name":"Google Compute Engine - me-central1 (Doha)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central2","name":"Google Compute Engine - me-central2 (Dammam)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-east1","name":"Google Compute Engine - asia-east1 (Taiwan)","has_shared_plans":true},{"provider":"google-compute-engine","region":"asia-east2","name":"Google Compute Engine - asia-east2 (Hong Kong)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast1","name":"Google Compute Engine - asia-northeast1 (Tokyo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast2","name":"Google Compute Engine - asia-northeast2 (Osaka)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast3","name":"Google Compute Engine - asia-northeast3 (Seoul)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast1","name":"Google Compute Engine - asia-southeast1 (Singapore)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast2","name":"Google Compute Engine - asia-southeast2 (Jakarta)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south1","name":"Google Compute Engine - asia-south1 (Mumbai)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south2","name":"Google Compute Engine - asia-south2 (Delhi)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast1","name":"Google Compute Engine - australia-southeast1 (Sydney)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast2","name":"Google Compute Engine - australia-southeast2 (Melbourne)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast1","name":"Google Compute Engine - northamerica-northeast1 (Montréal, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast2","name":"Google Compute Engine - northamerica-northeast2 (Toronto, Canada)","has_shared_plans":false},{"provider":"digital-ocean","region":"nyc3","name":"DigitalOcean - New York 3","has_shared_plans":false},{"provider":"digital-ocean","region":"ams3","name":"DigitalOcean - Amsterdam 3","has_shared_plans":false},{"provider":"digital-ocean","region":"sgp1","name":"DigitalOcean - Singapore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"lon1","name":"DigitalOcean - London 1","has_shared_plans":false},{"provider":"digital-ocean","region":"fra1","name":"DigitalOcean - Frankfurt 1","has_shared_plans":false},{"provider":"digital-ocean","region":"tor1","name":"DigitalOcean - Toronto 1","has_shared_plans":false},{"provider":"digital-ocean","region":"sfo3","name":"DigitalOcean - San Francisco 3","has_shared_plans":false},{"provider":"digital-ocean","region":"blr1","name":"DigitalOcean - Bangalore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"syd1","name":"DigitalOcean - Sydney 1","has_shared_plans":false},{"provider":"azure-arm","region":"australiacentral","name":"Azure - Australia Central","has_shared_plans":false},{"provider":"azure-arm","region":"australiaeast","name":"Azure - Australia East","has_shared_plans":false},{"provider":"azure-arm","region":"australiasoutheast","name":"Azure - Australia Southeast","has_shared_plans":false},{"provider":"azure-arm","region":"brazilsouth","name":"Azure - Brazil South","has_shared_plans":false},{"provider":"azure-arm","region":"canadacentral","name":"Azure - Canada Central","has_shared_plans":false},{"provider":"azure-arm","region":"canadaeast","name":"Azure - Canada East","has_shared_plans":false},{"provider":"azure-arm","region":"centralindia","name":"Azure - Central India","has_shared_plans":false},{"provider":"azure-arm","region":"centralus","name":"Azure - Central US","has_shared_plans":false},{"provider":"azure-arm","region":"eastasia","name":"Azure - East Asia","has_shared_plans":false},{"provider":"azure-arm","region":"eastus","name":"Azure - East US","has_shared_plans":true},{"provider":"azure-arm","region":"eastus2","name":"Azure - East US 2","has_shared_plans":true},{"provider":"azure-arm","region":"francecentral","name":"Azure - France Central","has_shared_plans":false},{"provider":"azure-arm","region":"germanywestcentral","name":"Azure - Germany West Central","has_shared_plans":false},{"provider":"azure-arm","region":"italynorth","name":"Azure - Italy North","has_shared_plans":false},{"provider":"azure-arm","region":"japaneast","name":"Azure - Japan East","has_shared_plans":false},{"provider":"azure-arm","region":"japanwest","name":"Azure - Japan West","has_shared_plans":false},{"provider":"azure-arm","region":"koreacentral","name":"Azure - Korea Central","has_shared_plans":false},{"provider":"azure-arm","region":"koreasouth","name":"Azure - Korea South","has_shared_plans":false},{"provider":"azure-arm","region":"northcentralus","name":"Azure - North Central US","has_shared_plans":false},{"provider":"azure-arm","region":"northeurope","name":"Azure - North Europe","has_shared_plans":false},{"provider":"azure-arm","region":"norwayeast","name":"Azure - Norway East","has_shared_plans":false},{"provider":"azure-arm","region":"southafricanorth","name":"Azure - South Africa North","has_shared_plans":false},{"provider":"azure-arm","region":"southcentralus","name":"Azure - South Central US","has_shared_plans":false},{"provider":"azure-arm","region":"southeastasia","name":"Azure - Southeast Asia","has_shared_plans":false},{"provider":"azure-arm","region":"southindia","name":"Azure - South India","has_shared_plans":false},{"provider":"azure-arm","region":"switzerlandnorth","name":"Azure - Switzerland North","has_shared_plans":false},{"provider":"azure-arm","region":"swedencentral","name":"Azure - Sweden Central","has_shared_plans":true},{"provider":"azure-arm","region":"uaenorth","name":"Azure - UAE North","has_shared_plans":false},{"provider":"azure-arm","region":"uksouth","name":"Azure - UK South","has_shared_plans":false},{"provider":"azure-arm","region":"ukwest","name":"Azure - UK West","has_shared_plans":false},{"provider":"azure-arm","region":"westcentralus","name":"Azure - West Central US","has_shared_plans":false},{"provider":"azure-arm","region":"westeurope","name":"Azure - West Europe","has_shared_plans":true},{"provider":"azure-arm","region":"westus","name":"Azure - West US","has_shared_plans":true},{"provider":"azure-arm","region":"westus2","name":"Azure - West US 2","has_shared_plans":false},{"provider":"azure-arm","region":"westus3","name":"Azure - West US 3","has_shared_plans":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "14003"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - a34bed1b-b5d6-4fda-ac80-ecd95e361612
+        status: 200 OK
+        code: 200
+        duration: 6.749423ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/plans
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2654
+        uncompressed: false
+        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"bobsled","price":0,"backend":"datasled","shared":true},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"tiger::do-dedicated","price":19,"backend":null,"shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "2654"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 073c4d6f-e1c7-4867-bb6c-686c0d2dd46c
+        status: 200 OK
+        code: 200
+        duration: 75.294832ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/regions
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 14003
+        uncompressed: false
+        body: '[{"provider":"amazon-web-services","region":"us-east-1","name":"Amazon Web Services - US-East-1 (Northern Virginia)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-2","name":"Amazon Web Services - US-West-2 (Oregon)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-east-2","name":"Amazon Web Services - US-East-2 (Ohio)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-1","name":"Amazon Web Services - US-West-1 (Northern California)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-north-1","name":"Amazon Web Services - EU-North-1 (Stockholm)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-1","name":"Amazon Web Services - EU-West-1 (Ireland)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-2","name":"Amazon Web Services - EU-West-2 (London)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-3","name":"Amazon Web Services - EU-West-3 (Paris)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-south-1","name":"Amazon Web Services - EU-South-1 (Milan)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-south-2","name":"Amazon Web Services - EU-South-2 (Spain)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-central-1","name":"Amazon Web Services - EU-Central-1 (Frankfurt)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-central-2","name":"Amazon Web Services - EU-Central-2 (Zurich)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ca-central-1","name":"Amazon Web Services - CA-Central-1 (Canada)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-1","name":"Amazon Web Services - AP-SouthEast-1 (Singapore)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-2","name":"Amazon Web Services - AP-SouthEast-2 (Sydney)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-3","name":"Amazon Web Services - AP-SouthEast-3 (Jakarta)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-4","name":"Amazon Web Services - AP-SouthEast-4 (Melbourne)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-northeast-1","name":"Amazon Web Services - AP-NorthEast-1 (Tokyo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-2","name":"Amazon Web Services - AP-NorthEast-2 (Seoul)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-3","name":"Amazon Web Services - AP-NorthEast-3 (Osaka)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-south-1","name":"Amazon Web Services - AP-South-1 (Mumbai)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-south-2","name":"Amazon Web Services - AP-South-2 (Hyderabad)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-east-1","name":"Amazon Web Services - AP-East-1 (Hong Kong)","has_shared_plans":true},{"provider":"amazon-web-services","region":"sa-east-1","name":"Amazon Web Services - SA-East-1 (São Paulo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-south-1","name":"Amazon Web Services - ME-South-1 (Bahrain)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-central-1","name":"Amazon Web Services - ME-Central-1 (UAE)","has_shared_plans":false},{"provider":"amazon-web-services","region":"af-south-1","name":"Amazon Web Services - AF-South-1 (Cape Town)","has_shared_plans":false},{"provider":"amazon-web-services","region":"il-central-1","name":"Amazon Web Services - IL-Central-1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-central1","name":"Google Compute Engine - us-central1 (Iowa)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east1","name":"Google Compute Engine - us-east1 (South Carolina)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east4","name":"Google Compute Engine - us-east4 (North Virginia)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east5","name":"Google Compute Engine - us-east5 (Columbus)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west1","name":"Google Compute Engine - us-west1 (Oregon)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west2","name":"Google Compute Engine - us-west2 (Los Angeles)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west3","name":"Google Compute Engine - us-west3 (Salt Lake City)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west4","name":"Google Compute Engine - us-west4 (Las Vegas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-south1","name":"Google Compute Engine - us-south1 (Dallas, Texas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-east1","name":"Google Compute Engine - southamerica-east1 (São Paulo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-west1","name":"Google Compute Engine - southamerica-west1 (Santiago)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north1","name":"Google Compute Engine - europe-north1 (Finland)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west1","name":"Google Compute Engine - europe-west1 (Belgium)","has_shared_plans":true},{"provider":"google-compute-engine","region":"europe-west2","name":"Google Compute Engine - europe-west2 (London)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west3","name":"Google Compute Engine - europe-west3 (Frankfurt)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west4","name":"Google Compute Engine - europe-west4 (Netherlands)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west6","name":"Google Compute Engine - europe-west6 (Zürich)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west8","name":"Google Compute Engine - europe-west8 (Milan)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west9","name":"Google Compute Engine - europe-west9 (Paris)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west10","name":"Google Compute Engine - europe-west10 (Berlin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west12","name":"Google Compute Engine - europe-west12 (Turin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-central2","name":"Google Compute Engine - europe-central2 (Warsaw)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-southwest1","name":"Google Compute Engine - europe-southwest1 (Madrid)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-west1","name":"Google Compute Engine - me-west1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central1","name":"Google Compute Engine - me-central1 (Doha)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central2","name":"Google Compute Engine - me-central2 (Dammam)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-east1","name":"Google Compute Engine - asia-east1 (Taiwan)","has_shared_plans":true},{"provider":"google-compute-engine","region":"asia-east2","name":"Google Compute Engine - asia-east2 (Hong Kong)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast1","name":"Google Compute Engine - asia-northeast1 (Tokyo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast2","name":"Google Compute Engine - asia-northeast2 (Osaka)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast3","name":"Google Compute Engine - asia-northeast3 (Seoul)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast1","name":"Google Compute Engine - asia-southeast1 (Singapore)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast2","name":"Google Compute Engine - asia-southeast2 (Jakarta)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south1","name":"Google Compute Engine - asia-south1 (Mumbai)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south2","name":"Google Compute Engine - asia-south2 (Delhi)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast1","name":"Google Compute Engine - australia-southeast1 (Sydney)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast2","name":"Google Compute Engine - australia-southeast2 (Melbourne)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast1","name":"Google Compute Engine - northamerica-northeast1 (Montréal, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast2","name":"Google Compute Engine - northamerica-northeast2 (Toronto, Canada)","has_shared_plans":false},{"provider":"digital-ocean","region":"nyc3","name":"DigitalOcean - New York 3","has_shared_plans":false},{"provider":"digital-ocean","region":"ams3","name":"DigitalOcean - Amsterdam 3","has_shared_plans":false},{"provider":"digital-ocean","region":"sgp1","name":"DigitalOcean - Singapore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"lon1","name":"DigitalOcean - London 1","has_shared_plans":false},{"provider":"digital-ocean","region":"fra1","name":"DigitalOcean - Frankfurt 1","has_shared_plans":false},{"provider":"digital-ocean","region":"tor1","name":"DigitalOcean - Toronto 1","has_shared_plans":false},{"provider":"digital-ocean","region":"sfo3","name":"DigitalOcean - San Francisco 3","has_shared_plans":false},{"provider":"digital-ocean","region":"blr1","name":"DigitalOcean - Bangalore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"syd1","name":"DigitalOcean - Sydney 1","has_shared_plans":false},{"provider":"azure-arm","region":"australiacentral","name":"Azure - Australia Central","has_shared_plans":false},{"provider":"azure-arm","region":"australiaeast","name":"Azure - Australia East","has_shared_plans":false},{"provider":"azure-arm","region":"australiasoutheast","name":"Azure - Australia Southeast","has_shared_plans":false},{"provider":"azure-arm","region":"brazilsouth","name":"Azure - Brazil South","has_shared_plans":false},{"provider":"azure-arm","region":"canadacentral","name":"Azure - Canada Central","has_shared_plans":false},{"provider":"azure-arm","region":"canadaeast","name":"Azure - Canada East","has_shared_plans":false},{"provider":"azure-arm","region":"centralindia","name":"Azure - Central India","has_shared_plans":false},{"provider":"azure-arm","region":"centralus","name":"Azure - Central US","has_shared_plans":false},{"provider":"azure-arm","region":"eastasia","name":"Azure - East Asia","has_shared_plans":false},{"provider":"azure-arm","region":"eastus","name":"Azure - East US","has_shared_plans":true},{"provider":"azure-arm","region":"eastus2","name":"Azure - East US 2","has_shared_plans":true},{"provider":"azure-arm","region":"francecentral","name":"Azure - France Central","has_shared_plans":false},{"provider":"azure-arm","region":"germanywestcentral","name":"Azure - Germany West Central","has_shared_plans":false},{"provider":"azure-arm","region":"italynorth","name":"Azure - Italy North","has_shared_plans":false},{"provider":"azure-arm","region":"japaneast","name":"Azure - Japan East","has_shared_plans":false},{"provider":"azure-arm","region":"japanwest","name":"Azure - Japan West","has_shared_plans":false},{"provider":"azure-arm","region":"koreacentral","name":"Azure - Korea Central","has_shared_plans":false},{"provider":"azure-arm","region":"koreasouth","name":"Azure - Korea South","has_shared_plans":false},{"provider":"azure-arm","region":"northcentralus","name":"Azure - North Central US","has_shared_plans":false},{"provider":"azure-arm","region":"northeurope","name":"Azure - North Europe","has_shared_plans":false},{"provider":"azure-arm","region":"norwayeast","name":"Azure - Norway East","has_shared_plans":false},{"provider":"azure-arm","region":"southafricanorth","name":"Azure - South Africa North","has_shared_plans":false},{"provider":"azure-arm","region":"southcentralus","name":"Azure - South Central US","has_shared_plans":false},{"provider":"azure-arm","region":"southeastasia","name":"Azure - Southeast Asia","has_shared_plans":false},{"provider":"azure-arm","region":"southindia","name":"Azure - South India","has_shared_plans":false},{"provider":"azure-arm","region":"switzerlandnorth","name":"Azure - Switzerland North","has_shared_plans":false},{"provider":"azure-arm","region":"swedencentral","name":"Azure - Sweden Central","has_shared_plans":true},{"provider":"azure-arm","region":"uaenorth","name":"Azure - UAE North","has_shared_plans":false},{"provider":"azure-arm","region":"uksouth","name":"Azure - UK South","has_shared_plans":false},{"provider":"azure-arm","region":"ukwest","name":"Azure - UK West","has_shared_plans":false},{"provider":"azure-arm","region":"westcentralus","name":"Azure - West Central US","has_shared_plans":false},{"provider":"azure-arm","region":"westeurope","name":"Azure - West Europe","has_shared_plans":true},{"provider":"azure-arm","region":"westus","name":"Azure - West US","has_shared_plans":true},{"provider":"azure-arm","region":"westus2","name":"Azure - West US 2","has_shared_plans":false},{"provider":"azure-arm","region":"westus3","name":"Azure - West US 3","has_shared_plans":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "14003"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 9a138af3-b755-455c-82f2-e80b6462e703
+        status: 200 OK
+        code: 200
+        duration: 5.788112ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 137
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"TestAccPlugin_Basic","no_default_alarms":false,"plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"]}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 252
+        uncompressed: false
+        body: '{"id":1917,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"5d3544c6-c692-4194-b95d-a54ef2c645df","url":"amqps://anffrada:***@dev-fat-pink-anteater.rmq6.dev.cloudamqp.com/anffrada"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "252"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 06d2fb10-08ba-4fc7-9a5e-56af5b826779
+        status: 200 OK
+        code: 200
+        duration: 551.667375ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 781
+        uncompressed: false
+        body: '{"id":1917,"name":"TestAccPlugin_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e2e3edca-fbdc-4aaa-9012-a91cf60c8500","url":"amqps://anffrada:***@dev-fat-pink-anteater.rmq6.dev.cloudamqp.com/anffrada","ready":true,"apikey":"5d3544c6-c692-4194-b95d-a54ef2c645df","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://anffrada:***@dev-fat-pink-anteater.rmq6.dev.cloudamqp.com/anffrada","internal":"amqp://anffrada:***@dev-fat-pink-anteater.in.rmq6.dev.cloudamqp.com/anffrada"},"rmq_version":"3.13.1","hostname_external":"dev-fat-pink-anteater.rmq6.dev.cloudamqp.com","hostname_internal":"dev-fat-pink-anteater.in.rmq6.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "781"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 274cc690-c6af-4647-bab2-66fe1ded8043
+        status: 200 OK
+        code: 200
+        duration: 134.310096ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 781
+        uncompressed: false
+        body: '{"id":1917,"name":"TestAccPlugin_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e2e3edca-fbdc-4aaa-9012-a91cf60c8500","url":"amqps://anffrada:***@dev-fat-pink-anteater.rmq6.dev.cloudamqp.com/anffrada","ready":true,"apikey":"5d3544c6-c692-4194-b95d-a54ef2c645df","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://anffrada:***@dev-fat-pink-anteater.rmq6.dev.cloudamqp.com/anffrada","internal":"amqp://anffrada:***@dev-fat-pink-anteater.in.rmq6.dev.cloudamqp.com/anffrada"},"rmq_version":"3.13.1","hostname_external":"dev-fat-pink-anteater.rmq6.dev.cloudamqp.com","hostname_internal":"dev-fat-pink-anteater.in.rmq6.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "781"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f260f2c0-63d4-4382-9257-b620cbd61a83
+        status: 200 OK
+        code: 200
+        duration: 121.259439ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 32
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"plugin_name":"rabbitmq_mqtt"}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917/plugins?async=true
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f1c01c91-f1e8-42ad-ab23-0ea297f20619
+        status: 204 No Content
+        code: 204
+        duration: 229.268915ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917/plugins
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 5769
+        uncompressed: false
+        body: '[{"name":"rabbitmq_amqp1_0","version":"(pending upgrade to 3.13.1)","description":"AMQP 1.0 support for RabbitMQ","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_oauth2","version":"(pending upgrade to 3.13.1)","description":"OAuth 2 and JWT-based AuthN and AuthZ backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"3.13.1","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"(pending upgrade to 3.13.1)","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"3.13.1","description":"RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"3.13.1","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"3.13.1","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"3.13.1","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT Adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"3.13.1","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"3.13.1","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"3.13.1","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_trust_store","version":"(pending upgrade to 3.13.1)","description":"Client X.509 certificates trust store","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"3.13.1","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "5769"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8c184122-684b-4de2-a7c5-621a6acd5c40
+        status: 200 OK
+        code: 200
+        duration: 7.216542145s
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917/plugins
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 5747
+        uncompressed: false
+        body: '[{"name":"rabbitmq_amqp1_0","version":"(pending upgrade to 3.13.1)","description":"AMQP 1.0 support for RabbitMQ","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_oauth2","version":"(pending upgrade to 3.13.1)","description":"OAuth 2 and JWT-based AuthN and AuthZ backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"3.13.1","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"(pending upgrade to 3.13.1)","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"3.13.1","description":"RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"3.13.1","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"3.13.1","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"3.13.1","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"3.13.1","description":"RabbitMQ MQTT Adapter","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"3.13.1","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"3.13.1","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"3.13.1","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_trust_store","version":"(pending upgrade to 3.13.1)","description":"Client X.509 certificates trust store","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"3.13.1","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "5747"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 3b86548e-0966-49b7-af77-3a6c6ba789f4
+        status: 200 OK
+        code: 200
+        duration: 2.426673283s
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917/plugins
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 5747
+        uncompressed: false
+        body: '[{"name":"rabbitmq_amqp1_0","version":"(pending upgrade to 3.13.1)","description":"AMQP 1.0 support for RabbitMQ","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_oauth2","version":"(pending upgrade to 3.13.1)","description":"OAuth 2 and JWT-based AuthN and AuthZ backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"3.13.1","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"(pending upgrade to 3.13.1)","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"3.13.1","description":"RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"3.13.1","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"3.13.1","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"3.13.1","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"3.13.1","description":"RabbitMQ MQTT Adapter","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"3.13.1","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"3.13.1","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"3.13.1","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_trust_store","version":"(pending upgrade to 3.13.1)","description":"Client X.509 certificates trust store","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"3.13.1","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "5747"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f86e2583-dcbe-496d-9a28-f0fc0dc43e13
+        status: 200 OK
+        code: 200
+        duration: 132.523257ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 781
+        uncompressed: false
+        body: '{"id":1917,"name":"TestAccPlugin_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e2e3edca-fbdc-4aaa-9012-a91cf60c8500","url":"amqps://anffrada:***@dev-fat-pink-anteater.rmq6.dev.cloudamqp.com/anffrada","ready":true,"apikey":"5d3544c6-c692-4194-b95d-a54ef2c645df","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://anffrada:***@dev-fat-pink-anteater.rmq6.dev.cloudamqp.com/anffrada","internal":"amqp://anffrada:***@dev-fat-pink-anteater.in.rmq6.dev.cloudamqp.com/anffrada"},"rmq_version":"3.13.1","hostname_external":"dev-fat-pink-anteater.rmq6.dev.cloudamqp.com","hostname_internal":"dev-fat-pink-anteater.in.rmq6.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "781"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 3d3a01df-df06-4e96-8f66-fe06353bdd34
+        status: 200 OK
+        code: 200
+        duration: 79.919939ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917/plugins
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 5747
+        uncompressed: false
+        body: '[{"name":"rabbitmq_amqp1_0","version":"(pending upgrade to 3.13.1)","description":"AMQP 1.0 support for RabbitMQ","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_oauth2","version":"(pending upgrade to 3.13.1)","description":"OAuth 2 and JWT-based AuthN and AuthZ backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"3.13.1","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"(pending upgrade to 3.13.1)","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"3.13.1","description":"RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"3.13.1","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"3.13.1","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"3.13.1","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"3.13.1","description":"RabbitMQ MQTT Adapter","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"3.13.1","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"3.13.1","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"3.13.1","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_trust_store","version":"(pending upgrade to 3.13.1)","description":"Client X.509 certificates trust store","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"3.13.1","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "5747"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - e3f93b88-9a1a-4494-828e-70dbbdb6ce2e
+        status: 200 OK
+        code: 200
+        duration: 171.880601ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917/plugins
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 5747
+        uncompressed: false
+        body: '[{"name":"rabbitmq_amqp1_0","version":"(pending upgrade to 3.13.1)","description":"AMQP 1.0 support for RabbitMQ","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_oauth2","version":"(pending upgrade to 3.13.1)","description":"OAuth 2 and JWT-based AuthN and AuthZ backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"3.13.1","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"(pending upgrade to 3.13.1)","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"3.13.1","description":"RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"3.13.1","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"3.13.1","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"3.13.1","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"3.13.1","description":"RabbitMQ MQTT Adapter","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"3.13.1","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"3.13.1","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"3.13.1","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_trust_store","version":"(pending upgrade to 3.13.1)","description":"Client X.509 certificates trust store","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"3.13.1","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "5747"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 03ab3ce1-bfa0-425d-b134-b106a19de37b
+        status: 200 OK
+        code: 200
+        duration: 145.148574ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 781
+        uncompressed: false
+        body: '{"id":1917,"name":"TestAccPlugin_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e2e3edca-fbdc-4aaa-9012-a91cf60c8500","url":"amqps://anffrada:***@dev-fat-pink-anteater.rmq6.dev.cloudamqp.com/anffrada","ready":true,"apikey":"5d3544c6-c692-4194-b95d-a54ef2c645df","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://anffrada:***@dev-fat-pink-anteater.rmq6.dev.cloudamqp.com/anffrada","internal":"amqp://anffrada:***@dev-fat-pink-anteater.in.rmq6.dev.cloudamqp.com/anffrada"},"rmq_version":"3.13.1","hostname_external":"dev-fat-pink-anteater.rmq6.dev.cloudamqp.com","hostname_internal":"dev-fat-pink-anteater.in.rmq6.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "781"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - aad94df4-04c1-42dd-b3bd-05d820c20d62
+        status: 200 OK
+        code: 200
+        duration: 101.295125ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917/plugins
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 5747
+        uncompressed: false
+        body: '[{"name":"rabbitmq_amqp1_0","version":"(pending upgrade to 3.13.1)","description":"AMQP 1.0 support for RabbitMQ","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_oauth2","version":"(pending upgrade to 3.13.1)","description":"OAuth 2 and JWT-based AuthN and AuthZ backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"3.13.1","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"(pending upgrade to 3.13.1)","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"3.13.1","description":"RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"3.13.1","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"3.13.1","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"3.13.1","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"3.13.1","description":"RabbitMQ MQTT Adapter","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"3.13.1","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"3.13.1","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"3.13.1","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_trust_store","version":"(pending upgrade to 3.13.1)","description":"Client X.509 certificates trust store","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"3.13.1","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "5747"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 62fb277b-e440-4ed4-9e9c-a5eaade7e1b2
+        status: 200 OK
+        code: 200
+        duration: 173.99157ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 48
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"enabled":false,"plugin_name":"rabbitmq_mqtt"}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917/plugins?async=true
+        method: PUT
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 7b3b7e00-5f43-43c8-bb61-aa7002f907fc
+        status: 204 No Content
+        code: 204
+        duration: 240.721685ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917/plugins
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 5747
+        uncompressed: false
+        body: '[{"name":"rabbitmq_amqp1_0","version":"(pending upgrade to 3.13.1)","description":"AMQP 1.0 support for RabbitMQ","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_oauth2","version":"(pending upgrade to 3.13.1)","description":"OAuth 2 and JWT-based AuthN and AuthZ backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"3.13.1","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"(pending upgrade to 3.13.1)","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"3.13.1","description":"RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"3.13.1","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"3.13.1","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"3.13.1","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"3.13.1","description":"RabbitMQ MQTT Adapter","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"3.13.1","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"3.13.1","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"3.13.1","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_trust_store","version":"(pending upgrade to 3.13.1)","description":"Client X.509 certificates trust store","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"3.13.1","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "5747"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - b6bee35c-75cc-443d-a9cf-7b7e63b1e8e5
+        status: 200 OK
+        code: 200
+        duration: 3.393115093s
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917/plugins
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 5769
+        uncompressed: false
+        body: '[{"name":"rabbitmq_amqp1_0","version":"(pending upgrade to 3.13.1)","description":"AMQP 1.0 support for RabbitMQ","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_oauth2","version":"(pending upgrade to 3.13.1)","description":"OAuth 2 and JWT-based AuthN and AuthZ backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"3.13.1","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"(pending upgrade to 3.13.1)","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"3.13.1","description":"RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"3.13.1","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"3.13.1","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"3.13.1","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT Adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"3.13.1","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"3.13.1","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"3.13.1","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_trust_store","version":"(pending upgrade to 3.13.1)","description":"Client X.509 certificates trust store","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"3.13.1","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "5769"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 4335e41f-63e2-433f-acd5-b483ac55075f
+        status: 200 OK
+        code: 200
+        duration: 2.508367089s
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917/plugins
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 5769
+        uncompressed: false
+        body: '[{"name":"rabbitmq_amqp1_0","version":"(pending upgrade to 3.13.1)","description":"AMQP 1.0 support for RabbitMQ","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_oauth2","version":"(pending upgrade to 3.13.1)","description":"OAuth 2 and JWT-based AuthN and AuthZ backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"3.13.1","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"(pending upgrade to 3.13.1)","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"3.13.1","description":"RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"3.13.1","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"3.13.1","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"3.13.1","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT Adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"3.13.1","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"3.13.1","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"3.13.1","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_trust_store","version":"(pending upgrade to 3.13.1)","description":"Client X.509 certificates trust store","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"3.13.1","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "5769"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 52932b56-4e66-4bc0-9854-0e09e4870eb3
+        status: 200 OK
+        code: 200
+        duration: 151.861766ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 781
+        uncompressed: false
+        body: '{"id":1917,"name":"TestAccPlugin_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e2e3edca-fbdc-4aaa-9012-a91cf60c8500","url":"amqps://anffrada:***@dev-fat-pink-anteater.rmq6.dev.cloudamqp.com/anffrada","ready":true,"apikey":"5d3544c6-c692-4194-b95d-a54ef2c645df","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://anffrada:***@dev-fat-pink-anteater.rmq6.dev.cloudamqp.com/anffrada","internal":"amqp://anffrada:***@dev-fat-pink-anteater.in.rmq6.dev.cloudamqp.com/anffrada"},"rmq_version":"3.13.1","hostname_external":"dev-fat-pink-anteater.rmq6.dev.cloudamqp.com","hostname_internal":"dev-fat-pink-anteater.in.rmq6.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "781"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - c37f1641-ab66-4429-840e-809e9777a090
+        status: 200 OK
+        code: 200
+        duration: 78.057901ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917/plugins
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 5769
+        uncompressed: false
+        body: '[{"name":"rabbitmq_amqp1_0","version":"(pending upgrade to 3.13.1)","description":"AMQP 1.0 support for RabbitMQ","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_oauth2","version":"(pending upgrade to 3.13.1)","description":"OAuth 2 and JWT-based AuthN and AuthZ backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"3.13.1","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"(pending upgrade to 3.13.1)","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"3.13.1","description":"RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"3.13.1","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"3.13.1","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"3.13.1","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT Adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"3.13.1","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"3.13.1","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"3.13.1","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_trust_store","version":"(pending upgrade to 3.13.1)","description":"Client X.509 certificates trust store","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"3.13.1","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "5769"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8410bdfe-56ea-45ef-85fb-6e93d6b92e6a
+        status: 200 OK
+        code: 200
+        duration: 97.542782ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 781
+        uncompressed: false
+        body: '{"id":1917,"name":"TestAccPlugin_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e2e3edca-fbdc-4aaa-9012-a91cf60c8500","url":"amqps://anffrada:***@dev-fat-pink-anteater.rmq6.dev.cloudamqp.com/anffrada","ready":true,"apikey":"5d3544c6-c692-4194-b95d-a54ef2c645df","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://anffrada:***@dev-fat-pink-anteater.rmq6.dev.cloudamqp.com/anffrada","internal":"amqp://anffrada:***@dev-fat-pink-anteater.in.rmq6.dev.cloudamqp.com/anffrada"},"rmq_version":"3.13.1","hostname_external":"dev-fat-pink-anteater.rmq6.dev.cloudamqp.com","hostname_internal":"dev-fat-pink-anteater.in.rmq6.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "781"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 18009d0e-bbf1-41c8-aa1f-aa6cbf617f28
+        status: 200 OK
+        code: 200
+        duration: 69.325661ms
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917/plugins
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 5769
+        uncompressed: false
+        body: '[{"name":"rabbitmq_amqp1_0","version":"(pending upgrade to 3.13.1)","description":"AMQP 1.0 support for RabbitMQ","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_oauth2","version":"(pending upgrade to 3.13.1)","description":"OAuth 2 and JWT-based AuthN and AuthZ backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"3.13.1","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"(pending upgrade to 3.13.1)","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"3.13.1","description":"RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"3.13.1","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"3.13.1","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"3.13.1","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT Adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"3.13.1","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"3.13.1","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"3.13.1","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_trust_store","version":"(pending upgrade to 3.13.1)","description":"Client X.509 certificates trust store","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"3.13.1","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "5769"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8e00be7c-0ac4-4b71-adae-1e93c80f71fa
+        status: 200 OK
+        code: 200
+        duration: 104.735996ms
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917/plugins/rabbitmq_mqtt?async=true
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 01959d97-7bbb-412e-8b3d-5a5febe43ea6
+        status: 204 No Content
+        code: 204
+        duration: 103.643106ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917/plugins
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 5769
+        uncompressed: false
+        body: '[{"name":"rabbitmq_amqp1_0","version":"(pending upgrade to 3.13.1)","description":"AMQP 1.0 support for RabbitMQ","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_oauth2","version":"(pending upgrade to 3.13.1)","description":"OAuth 2 and JWT-based AuthN and AuthZ backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"3.13.1","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"(pending upgrade to 3.13.1)","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"3.13.1","description":"RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"3.13.1","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"3.13.1","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"3.13.1","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT Adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"3.13.1","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"3.13.1","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"3.13.1","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_trust_store","version":"(pending upgrade to 3.13.1)","description":"Client X.509 certificates trust store","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"3.13.1","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"(pending upgrade to 3.13.1)","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "5769"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 7ac2f88a-3396-4dea-b891-aad8a250cfc5
+        status: 200 OK
+        code: 200
+        duration: 3.213628884s
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917?keep_vpc=false
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 6f45f6fc-5ce1-48dd-8930-fcd6a99305a7
+        status: 204 No Content
+        code: 204
+        duration: 630.756651ms
+    - id: 27
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1917
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 22
+        uncompressed: false
+        body: '{"error":"Invalid ID"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "22"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - ede96f9d-0295-40e2-ab8f-91c31f54b0e2
+        status: 404 Not Found
+        code: 404
+        duration: 12.944075ms

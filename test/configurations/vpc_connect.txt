@@ -1,0 +1,7 @@
+resource "cloudamqp_vpc_connect" "vpc_connect" {
+  instance_id            = {{or .InstanceID `cloudamqp_instance.instance.id`}}
+  region                 = "{{or .InstanceRegion `cloudamqp_instance.instance.region`}}"
+  allowed_principals     = {{or .VpcConnectAllowedPrincipals `[]`}}
+  approved_subscriptions = {{or .VpcConnectApprovedSubscriptions `[]`}}
+  allowed_projects       = {{or .VpcConnectAllowedProjects `[]`}}
+} 

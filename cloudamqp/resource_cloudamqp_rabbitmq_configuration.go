@@ -163,13 +163,21 @@ func resourceRabbitMqConfigurationRead(d *schema.ResourceData, meta interface{})
 		timeout       = d.Get("timeout").(int)
 	)
 
+	// Set arguments during import
+	if d.Get("instance_id").(int) == 0 {
+		d.Set("instance_id", instanceID)
+	}
+	if d.Get("sleep").(int) == 0 && d.Get("timeout").(int) == 0 {
+		d.Set("sleep", 60)
+		d.Set("timeout", 3600)
+	}
+
 	data, err := api.ReadRabbitMqConfiguration(instanceID, sleep, timeout)
 	log.Printf("[DEBUG] cloudamqp::resource::rabbitmq_configuration::read data: %v", data)
 	if err != nil {
 		return err
 	}
 
-	d.Set("instance_id", instanceID)
 	for k, v := range data {
 		if validateRabbitMqConfigurationJSONField(k) {
 			if v == nil || v == "" {

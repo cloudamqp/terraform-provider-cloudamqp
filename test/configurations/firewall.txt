@@ -1,0 +1,9 @@
+resource "cloudamqp_security_firewall" "firewall_settings" {
+  instance_id = {{.InstanceID}}
+  rules {
+    ip          = "{{or .FirewallIP `0.0.0.0/0`}}"
+    ports       = {{or .FirewallPort `[]`}}
+    services    = {{or .FirewallServices `["AMQPS", "HTTPS"]`}}
+    description = "{{or .FirewallDescription `Default`}}"
+  }
+}

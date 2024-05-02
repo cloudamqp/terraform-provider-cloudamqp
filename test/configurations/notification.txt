@@ -1,0 +1,6 @@
+resource "cloudamqp_notification" "recipient" {
+  instance_id = {{.InstanceID}}
+  type        = "{{.RecipientType}}"
+  value       = "{{.RecipientValue}}"
+  name        = "{{.RecipientName}}"
+}

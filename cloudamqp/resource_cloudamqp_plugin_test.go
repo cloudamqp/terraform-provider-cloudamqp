@@ -2,145 +2,65 @@ package cloudamqp
 
 import (
 	"fmt"
-	"log"
-	"strconv"
 	"testing"
 
-	"github.com/84codes/go-api/api"
+	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
-func TestAccPlugin_Basic(t *testing.T) {
-	instanceName := "cloudamqp_instance.instance"
-	resourceName := "cloudamqp_plugin.mqtt_plugin"
+// Playing the test benefits from having sleep set to default (10 s) while recording.
+// While using lower sleep (1 s) for replaying the test. This will speed up the test.
 
-	resource.ParallelTest(t, resource.TestCase{
+// TestAccPlugin_Basic: Enabled plugin, import and disable it.
+func TestAccPlugin_Basic(t *testing.T) {
+	var (
+		fileNames            = []string{"instance", "plugin"}
+		instanceResourceName = "cloudamqp_instance.instance"
+		pluginResourceName   = "cloudamqp_plugin.rabbitmq_mqtt"
+
+		params = map[string]string{
+			"InstanceName":  "TestAccPlugin_Basic",
+			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
+			"PluginName":    "rabbitmq_mqtt",
+			"PluginEnabled": "true",
+			"PluginSleep":   "1",
+		}
+
+		paramsUpdated = map[string]string{
+			"InstanceName":  "TestAccPlugin_Basic",
+			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
+			"PluginName":    "rabbitmq_mqtt",
+			"PluginEnabled": "false",
+			"PluginSleep":   "1",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
 		PreCheck:  func() { testAccPreCheck(t) },
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccPluginConfigBasic(),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckPluginEnabled(instanceName, resourceName),
-					resource.TestCheckResourceAttr(resourceName, "name", "rabbitmq_web_mqtt"),
-					resource.TestCheckResourceAttr(resourceName, "enabled", "true"),
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(pluginResourceName, "name", "rabbitmq_mqtt"),
+					resource.TestCheckResourceAttr(pluginResourceName, "enabled", "true"),
 				),
 			},
 			{
-				Config: testAccPluginConfigUpdate(),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckPluginDisable(instanceName, resourceName),
-					resource.TestCheckResourceAttr(resourceName, "name", "rabbitmq_web_mqtt"),
-					resource.TestCheckResourceAttr(resourceName, "enabled", "false"),
+				ResourceName:            pluginResourceName,
+				ImportStateIdFunc:       testAccImportCombinedStateIdFunc(instanceResourceName, pluginResourceName),
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"sleep"},
+			},
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(pluginResourceName, "name", "rabbitmq_mqtt"),
+					resource.TestCheckResourceAttr(pluginResourceName, "enabled", "false"),
 				),
 			},
 		},
 	})
-}
-
-func testAccCheckPluginEnabled(instanceName, resourceName string) resource.TestCheckFunc {
-	log.Printf("[DEBUG] resource::plugin::testAccCheckPluginExists resource: %s", resourceName)
-
-	return func(state *terraform.State) error {
-		rs, ok := state.RootModule().Resources[resourceName]
-		if !ok {
-			return fmt.Errorf("Resource: %s not found", resourceName)
-		}
-		if rs.Primary.Attributes["name"] == "" {
-			return fmt.Errorf("No id is set for plugin resource")
-		}
-		pluginName := rs.Primary.Attributes["name"]
-
-		rs, ok = state.RootModule().Resources[instanceName]
-		if !ok {
-			return fmt.Errorf("Instance resource not found")
-		}
-		if rs.Primary.ID == "" {
-			return fmt.Errorf("No id is set for instance resource")
-		}
-		instanceID, _ := strconv.Atoi(rs.Primary.ID)
-
-		api := testAccProvider.Meta().(*api.API)
-		data, err := api.ReadPlugin(instanceID, pluginName, 10, 1800)
-		if err != nil {
-			return fmt.Errorf("Error fetching item with resource %s. %s", resourceName, err)
-		}
-		if data["enabled"] == false {
-			return fmt.Errorf("Error resource: %s not enabled", resourceName)
-		}
-		return nil
-	}
-}
-
-func testAccCheckPluginDisable(instanceName, resourceName string) resource.TestCheckFunc {
-	return func(state *terraform.State) error {
-		log.Printf("[DEBUG] resource::plugins::testAccCheckPluginDisable")
-		api := testAccProvider.Meta().(*api.API)
-
-		rs, ok := state.RootModule().Resources[resourceName]
-		if !ok {
-			return fmt.Errorf("Resource %s not found", resourceName)
-		}
-		if rs.Primary.Attributes["name"] == "" {
-			return fmt.Errorf("No name is set for plugin resource")
-		}
-		pluginName := rs.Primary.Attributes["name"]
-
-		rs, ok = state.RootModule().Resources[instanceName]
-		if !ok {
-			return fmt.Errorf("Instance resource not found")
-		}
-		if rs.Primary.ID == "" {
-			return fmt.Errorf("No id is set for instance resource")
-		}
-		instanceID, _ := strconv.Atoi(rs.Primary.ID)
-
-		data, err := api.ReadPlugin(instanceID, pluginName, 10, 1800)
-		if err != nil {
-			return fmt.Errorf("Failed to retrieve plugin %v", err)
-		}
-		if data["enabled"] == true {
-			return fmt.Errorf("Error resource: %s not disabled", resourceName)
-		}
-		return nil
-	}
-}
-
-func testAccPluginConfigBasic() string {
-	return `
-		resource "cloudamqp_instance" "instance" {
-			name 				= "terraform-plugin-test"
-			nodes 			= 1
-			plan  			= "bunny-1"
-			region 			= "amazon-web-services::eu-north-1"
-			rmq_version = "3.8.2"
-			tags 				= ["terraform"]
-		}
-
-		resource "cloudamqp_plugin" "mqtt_plugin" {
-			instance_id = cloudamqp_instance.instance.id
-			name = "rabbitmq_web_mqtt"
-			enabled = true
-		}
-		`
-}
-
-func testAccPluginConfigUpdate() string {
-	return `
-		resource "cloudamqp_instance" "instance" {
-			name 				= "terraform-plugin-test"
-			nodes 			= 1
-			plan  			= "bunny-1"
-			region 			= "amazon-web-services::eu-north-1"
-			rmq_version = "3.8.2"
-			tags 				= ["terraform"]
-		}
-
-		resource "cloudamqp_plugin" "mqtt_plugin" {
-			instance_id = cloudamqp_instance.instance.id
-			name = "rabbitmq_web_mqtt"
-			enabled = false
-		}
-		`
 }

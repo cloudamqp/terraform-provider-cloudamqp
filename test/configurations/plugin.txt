@@ -1,0 +1,6 @@
+resource "cloudamqp_plugin" "{{.PluginName}}" {
+  instance_id = {{.InstanceID}}
+  name        = "{{.PluginName}}"
+  enabled     = {{.PluginEnabled}}
+  sleep       = {{or .PluginSleep `10`}}
+}

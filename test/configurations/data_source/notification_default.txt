@@ -1,0 +1,4 @@
+data "cloudamqp_notification" "default_recipient" {
+  instance_id = {{.InstanceID}}
+  name        = "Default"
+}

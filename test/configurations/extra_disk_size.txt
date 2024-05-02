@@ -1,0 +1,12 @@
+resource "cloudamqp_extra_disk_size" "resize_disk" {
+  instance_id = {{.InstanceID}}
+  extra_disk_size = {{.ExtraDiskSize}}
+  allow_downtime = {{.AllowDowntime}}
+}
+
+data "cloudamqp_nodes" "nodes" {
+  instance_id = {{.InstanceID}}
+  depends_on = [
+    cloudamqp_extra_disk_size.resize_disk,
+  ]
+}

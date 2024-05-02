@@ -2,232 +2,131 @@ package cloudamqp
 
 import (
 	"fmt"
-	"log"
-	"regexp"
-	"strconv"
 	"testing"
 
-	"github.com/84codes/go-api/api"
+	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
+// TestAccAlarm_Basic: Create CPU alarm, import and change values.
 func TestAccAlarm_Basic(t *testing.T) {
-	instanceName := "cloudamqp_instance.instance"
-	resourceName := "cloudamqp_alarm.connection_01"
+	var (
+		fileNames                  = []string{"instance", "notification", "data_source/notification_default", "alarm"}
+		instanceResourceName       = "cloudamqp_instance.instance"
+		dataSourceNotificationName = "data.cloudamqp_notification.default_recipient"
+		recipientResourceName      = "cloudamqp_notification.recipient"
+		noticeAlarmResourceName    = "cloudamqp_alarm.notice"
+		cpuAlarmResourceName       = "cloudamqp_alarm.cpu"
+		dataSourceCpuAlarmName     = "data.cloudamqp_alarm.cpu"
 
-	resource.ParallelTest(t, resource.TestCase{
-		PreCheck:     func() { testAccPreCheck(t) },
-		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckAlarmDestroy(instanceName, resourceName),
+		params = map[string]string{
+			"InstanceName":   "TestAccAlarm_Basic",
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"RecipientName":  "test",
+			"RecipientType":  "email",
+			"RecipientValue": "test@example.com",
+			"NoticeRecipients": fmt.Sprintf("%s, %s",
+				fmt.Sprintf("%s.id", dataSourceNotificationName),
+				fmt.Sprintf("%s.id", recipientResourceName),
+			),
+			"CPUAlarmEnabled":          "true",
+			"CPUAlarmTimeThreshold":    "600",
+			"CPUAlarmValueThreshold":   "90",
+			"CPUAlarmReminderInterval": "0",
+			"CPUAlarmRecipients":       fmt.Sprintf("%s.id", recipientResourceName),
+		}
+
+		fileNamesUpdated = []string{"instance", "notification", "data_source/notification_default", "alarm", "data_source/alarm"}
+		paramsUpdated    = map[string]string{
+			"InstanceName":             "TestAccAlarm_Basic",
+			"InstanceID":               fmt.Sprintf("%s.id", instanceResourceName),
+			"RecipientName":            "test",
+			"RecipientType":            "email",
+			"RecipientValue":           "test@example.com",
+			"NoticeRecipients":         fmt.Sprintf("%s.id", dataSourceNotificationName),
+			"AlarmType":                "cpu",
+			"AlarmResourceName":        "cpu",
+			"CPUAlarmEnabled":          "true",
+			"CPUAlarmTimeThreshold":    "450",
+			"CPUAlarmValueThreshold":   "50",
+			"CPUAlarmReminderInterval": "0",
+			"CPUAlarmRecipients":       fmt.Sprintf("%s.id", recipientResourceName),
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck:  func() { testAccPreCheck(t) },
+		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccAlarmConfigBasic(),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckAlarmExist(instanceName, resourceName),
-					resource.TestCheckResourceAttr(resourceName, "type", "connection"),
-					resource.TestCheckResourceAttr(resourceName, "enabled", "true"),
-					resource.TestCheckResourceAttr(resourceName, "value_threshold", "0"),
-					resource.TestCheckResourceAttr(resourceName, "time_threshold", "60"),
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(recipientResourceName, "name", params["RecipientName"]),
+					resource.TestCheckResourceAttr(recipientResourceName, "type", params["RecipientType"]),
+					resource.TestCheckResourceAttr(recipientResourceName, "value", params["RecipientValue"]),
+					resource.TestCheckResourceAttr(noticeAlarmResourceName, "type", "notice"),
+					resource.TestCheckResourceAttr(noticeAlarmResourceName, "recipients.#", "2"),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "type", "cpu"),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "enabled", params["CPUAlarmEnabled"]),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "time_threshold", params["CPUAlarmTimeThreshold"]),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "value_threshold", params["CPUAlarmValueThreshold"]),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "reminder_interval", params["CPUAlarmReminderInterval"]),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "recipients.#", "1"),
 				),
 			},
 			{
-				Config: testAccAlarmConfigUpdate(),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckAlarmExist(instanceName, resourceName),
-					resource.TestCheckResourceAttr(resourceName, "type", "connection"),
-					resource.TestCheckResourceAttr(resourceName, "enabled", "true"),
-					resource.TestCheckResourceAttr(resourceName, "value_threshold", "25"),
-					resource.TestCheckResourceAttr(resourceName, "time_threshold", "120"),
-				),
+				ResourceName:      cpuAlarmResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, cpuAlarmResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
 			},
 			{
-				Config: testAccAlarmConfigDisable(),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckAlarmExist(instanceName, resourceName),
-					resource.TestCheckResourceAttr(resourceName, "enabled", "false"),
-				),
-			},
-			{
-				Config: testAccAlarmNotice(),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckAlarmExist(instanceName, resourceName),
-					resource.TestCheckResourceAttr(resourceName, "enabled", "true"),
-					resource.TestCheckResourceAttr(resourceName, "reminder_interval", "0"),
+				Config: configuration.GetTemplatedConfig(t, fileNamesUpdated, paramsUpdated),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(noticeAlarmResourceName, "type", "notice"),
+					resource.TestCheckResourceAttr(noticeAlarmResourceName, "recipients.#", "1"),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "type", "cpu"),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "enabled", paramsUpdated["CPUAlarmEnabled"]),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "time_threshold", paramsUpdated["CPUAlarmTimeThreshold"]),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "value_threshold", paramsUpdated["CPUAlarmValueThreshold"]),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "reminder_interval", paramsUpdated["CPUAlarmReminderInterval"]),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "recipients.#", "1"),
+					// validate data sources
+					resource.TestCheckResourceAttr(dataSourceNotificationName, "name", "Default"),
+					resource.TestCheckResourceAttr(dataSourceNotificationName, "type", "email"),
+					resource.TestCheckResourceAttr(dataSourceCpuAlarmName, "type", "cpu"),
+					resource.TestCheckResourceAttr(dataSourceCpuAlarmName, "enabled", params["CPUAlarmEnabled"]),
+					resource.TestCheckResourceAttr(dataSourceCpuAlarmName, "time_threshold", params["CPUAlarmTimeThreshold"]),
+					resource.TestCheckResourceAttr(dataSourceCpuAlarmName, "value_threshold", params["CPUAlarmValueThreshold"]),
+					resource.TestCheckResourceAttr(dataSourceCpuAlarmName, "reminder_interval", params["CPUAlarmReminderInterval"]),
+					resource.TestCheckResourceAttr(dataSourceCpuAlarmName, "recipients.#", "1"),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckAlarmExist(instanceName, resourceName string) resource.TestCheckFunc {
-	log.Printf("[DEBUG] resource_alarm::testAccCheckAlarmExist resource: %s", resourceName)
-	return func(state *terraform.State) error {
-		rs, ok := state.RootModule().Resources[resourceName]
+func testAccImportCombinedStateIdFunc(instanceName, resourceName string) resource.ImportStateIdFunc {
+	return func(state *terraform.State) (string, error) {
+		rs, ok := state.RootModule().Resources[instanceName]
 		if !ok {
-			return fmt.Errorf("Resource: %s not found", resourceName)
+			return "", fmt.Errorf("Resource %s not found", instanceName)
 		}
 		if rs.Primary.ID == "" {
-			return fmt.Errorf("No Record ID is set")
+			return "", fmt.Errorf("No resource id set")
 		}
-		alarmID := rs.Primary.ID
+		instanceID := rs.Primary.ID
 
-		rs, ok = state.RootModule().Resources[instanceName]
+		rs, ok = state.RootModule().Resources[resourceName]
 		if !ok {
-			return fmt.Errorf("Instance resource not found")
+			return "", fmt.Errorf("Resource %s not found", resourceName)
 		}
 		if rs.Primary.ID == "" {
-			return fmt.Errorf("No Record ID is set for instance")
+			return "", fmt.Errorf("No resource id set")
 		}
-		instanceID, _ := strconv.Atoi(rs.Primary.ID)
-
-		api := testAccProvider.Meta().(*api.API)
-		_, err := api.ReadAlarm(instanceID, alarmID)
-		if err != nil {
-			return fmt.Errorf("Error fetching item with resource %s. %s", resourceName, err)
-		}
-		return nil
+		resourceID := rs.Primary.ID
+		return fmt.Sprintf("%s,%v", resourceID, instanceID), nil
 	}
-}
-
-func testAccCheckAlarmDestroy(instanceName, resourceName string) resource.TestCheckFunc {
-	log.Printf("[DEBUG] resource_alarm::testAccCheckAlarmDestroy resource: %s", resourceName)
-	return func(state *terraform.State) error {
-		rs, ok := state.RootModule().Resources[resourceName]
-		if !ok {
-			return fmt.Errorf("Resource: %s not found", resourceName)
-		}
-		if rs.Primary.ID == "" {
-			return fmt.Errorf("No record ID is set for the resource")
-		}
-		alarmID := rs.Primary.ID
-
-		rs, ok = state.RootModule().Resources[instanceName]
-		if !ok {
-			return fmt.Errorf("Instance resource not found")
-		}
-		if rs.Primary.ID == "" {
-			return fmt.Errorf("No record id is set for the instance")
-		}
-		instanceID, _ := strconv.Atoi(rs.Primary.ID)
-
-		api := testAccProvider.Meta().(*api.API)
-		_, err := api.ReadAlarm(instanceID, alarmID)
-		if err == nil {
-			return fmt.Errorf("Alert still exists")
-		}
-		notFoundErr := "Invalid ID"
-		expectedErr := regexp.MustCompile(notFoundErr)
-		if !expectedErr.Match([]byte(err.Error())) {
-			return fmt.Errorf("expected %s, got %s", notFoundErr, err)
-		}
-		return nil
-	}
-}
-
-func testAccAlarmConfigBasic() string {
-	return `
-		resource "cloudamqp_instance" "instance" {
-			name 				= "terraform-alarm-test"
-			nodes 			= 1
-			plan  			= "bunny-1"
-			region 			= "amazon-web-services::eu-north-1"
-			rmq_version = "3.8.2"
-			tags 				= ["terraform"]
-		}
-
-		data "cloudamqp_notification" "default_recipient" {
-			instance_id = cloudamqp_instance.instance.id
-			name 				= "Default"
-		}
-
-		resource "cloudamqp_alarm" "connection_01" {
-			instance_id 			= cloudamqp_instance.instance.id
-			type 							= "connection"
-			enabled						=  true
-			value_threshold 	= 0
-			time_threshold 		= 60
-			recipients = [data.cloudamqp_notification.default_recipient.id]
-		}
-		`
-}
-
-func testAccAlarmConfigUpdate() string {
-	return `
-		resource "cloudamqp_instance" "instance" {
-			name 				= "terraform-alarm-test"
-			nodes 			= 1
-			plan  			= "bunny-1"
-			region 			= "amazon-web-services::eu-north-1"
-			rmq_version = "3.8.2"
-			tags 				= ["terraform"]
-		}
-
-		data "cloudamqp_notification" "default_recipient" {
-			instance_id = cloudamqp_instance.instance.id
-			name 				= "Default"
-		}
-
-		resource "cloudamqp_alarm" "connection_01" {
-			instance_id 			= cloudamqp_instance.instance.id
-			type 							= "connection"
-			enabled 					= true
-			value_threshold 	= 25
-			time_threshold 		= 120
-			recipients = [data.cloudamqp_notification.default_recipient.id]
-		}
-		`
-}
-
-func testAccAlarmConfigDisable() string {
-	return `
-		resource "cloudamqp_instance" "instance" {
-			name 				= "terraform-alarm-test"
-			nodes 			= 1
-			plan  			= "bunny-1"
-			region 			= "amazon-web-services::eu-north-1"
-			rmq_version = "3.8.2"
-			tags 				= ["terraform"]
-		}
-
-		data "cloudamqp_notification" "default_recipient" {
-			instance_id = cloudamqp_instance.instance.id
-			name 				= "Default"
-		}
-
-		resource "cloudamqp_alarm" "connection_01" {
-			instance_id 			= cloudamqp_instance.instance.id
-			type 							= "connection"
-			enabled 					= false
-			value_threshold 	= 25
-			time_threshold 		= 120
-			recipients = [data.cloudamqp_notification.default_recipient.id]
-		}
-		`
-}
-
-func testAccAlarmNotice() string {
-	return `
-		resource "cloudamqp_instance" "instance" {
-			name 				= "terraform-alarm-test"
-			nodes 			= 1
-			plan  			= "bunny-1"
-			region 			= "amazon-web-services::eu-north-1"
-			rmq_version = "3.8.2"
-			tags 				= ["terraform"]
-		}
-
-		data "cloudamqp_notification" "default_recipient" {
-			instance_id = cloudamqp_instance.instance.id
-			name 				= "Default"
-		}
-
-		resource "cloudamqp_alarm" "notice" {
-			instance_id 			= cloudamqp_instance.instance.id
-			type 							= "notice"
-			enabled 					= true
-			reminder_interval = 0
-			recipients = [data.cloudamqp_notification.default_recipient.id]
-		}
-		`
 }

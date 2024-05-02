@@ -1,0 +1,7 @@
+resource "cloudamqp_webhook" "webhook_queue" {
+  instance_id    = {{.InstanceID}}
+  vhost          = {{.WebhookVhost}}
+  queue          = "{{.WebhookQueue}}"
+  webhook_uri    = "{{.WebhookURI}}"
+  concurrency    = {{.WebhookConcurrency}}
+}

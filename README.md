@@ -179,3 +179,29 @@ terraform import cloudamqp_alarm.alarm_01 65,80
 Support for setting up VPC peering connection between AWS instance and CloudAMQP. Requires that the AWS instance is used as the requester and CloudAMQP used as an accepter. More detailed description can be found here: [setup](https://docs.cloudamqp.com/cloudamqp_terraform.html#aws-vpc-setup)
 
 Together with at full example found under *sample/aws_vpc*.
+
+## Testing
+
+The provider can be tested with Terraform Acceptance Test together with [Go-VCR](https://github.com/dnaeon/go-vcr) package. When using the Go-VCR package
+all HTTP interactions to the API backend can be recorded or replayed and used while testing the provider.
+
+Record:
+
+```sh
+CLOUDAMQP_RECORD=1 TF_ACC=1 dotenv -f .env go test ./cloudamqp/ -v -run {TestName}  -timeout 30m
+```
+
+Replay single test:
+
+```sh
+TF_ACC=1 go test ./cloudamqp/ -v -run {TestName}
+```
+
+Replay all tests:
+
+```sh
+TF_ACC=1 go test ./cloudamqp/ -v
+```
+
+Default timeout is 10 min when running the test, this can be changed with -timeout flag. 
+If the test is cached, use -count 1 to force it to run.

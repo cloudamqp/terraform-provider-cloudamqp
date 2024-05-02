@@ -1,0 +1,6 @@
+resource "cloudamqp_plugin_community" "{{.PluginCommunityName}}" {
+  instance_id = {{.InstanceID}}
+  name        = "{{.PluginCommunityName}}"
+  enabled     = {{.PluginCommunityEnabled}}
+  sleep       = {{or .PluginCommunitySleep `10`}}
+}
