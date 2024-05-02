@@ -2,7 +2,12 @@
 
 NOTES:
 
+* Github CI workflow with Go VCR basic resource testing
 * Updated the API wrapper (go-api) dependency with newer version (1.16.2)
+
+Features:
+
+* Added Go VCR basic resource testing that extends acceptance test with stored fixtures ([#257](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/257))
 
 IMRPOVEMENTS:
 
