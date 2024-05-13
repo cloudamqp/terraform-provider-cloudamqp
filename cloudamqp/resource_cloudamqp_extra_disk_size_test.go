@@ -29,8 +29,7 @@ func TestAccExtraDiskSize_AWS_Basic(t *testing.T) {
 		ProviderFactories: testAccProviderFactory,
 		Steps: []resource.TestStep{
 			{
-				ExpectNonEmptyPlan: true,
-				Config:             configuration.GetTemplatedConfig(t, fileNames, params),
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.#", "1"),
@@ -63,8 +62,7 @@ func TestAccExtraDiskSize_GCE_Basic(t *testing.T) {
 		ProviderFactories: testAccProviderFactory,
 		Steps: []resource.TestStep{
 			{
-				ExpectNonEmptyPlan: true,
-				Config:             configuration.GetTemplatedConfig(t, fileNames, params),
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.#", "1"),
@@ -97,8 +95,7 @@ func TestAccExtraDiskSize_Azure_Basic(t *testing.T) {
 		ProviderFactories: testAccProviderFactory,
 		Steps: []resource.TestStep{
 			{
-				ExpectNonEmptyPlan: true,
-				Config:             configuration.GetTemplatedConfig(t, fileNames, params),
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(dataNodesResourceName, "nodes.#", "1"),

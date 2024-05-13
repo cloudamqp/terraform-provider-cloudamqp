@@ -98,7 +98,6 @@ func resourceWebhookRead(d *schema.ResourceData, meta interface{}) error {
 	if strings.Contains(d.Id(), ",") {
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
-		d.Set("name", s[0])
 		instanceID, _ = strconv.Atoi(s[1])
 		d.Set("instance_id", instanceID)
 		// Set default values for optional arguments
