@@ -1,13 +1,14 @@
 package cloudamqp
 
 import (
+	"context"
 	"fmt"
 	"regexp"
 	"strconv"
 
 	"github.com/84codes/go-api/api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourcePrivateLinkAws() *schema.Resource {
@@ -17,7 +18,7 @@ func resourcePrivateLinkAws() *schema.Resource {
 		Update: resourcePrivateLinkAwsUpdate,
 		Delete: resourcePrivateLinkAwsDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -66,7 +67,7 @@ func resourcePrivateLinkAws() *schema.Resource {
 			},
 		},
 		CustomizeDiff: customdiff.All(
-			customdiff.ValidateValue("allowed_principals", func(value, meta interface{}) error {
+			customdiff.ValidateValue("allowed_principals", func(ctx context.Context, value, meta interface{}) error {
 				for _, v := range value.([]interface{}) {
 					re := regexp.MustCompile(`^arn:aws:iam::\d{12}:(root|user/.+|role/.+)$`)
 					if !re.MatchString(v.(string)) {

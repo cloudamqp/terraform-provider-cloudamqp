@@ -7,8 +7,8 @@ import (
 	"strconv"
 
 	"github.com/84codes/go-api/api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 type ServicePort struct {
@@ -23,7 +23,7 @@ func resourceSecurityFirewall() *schema.Resource {
 		Update: resourceSecurityFirewallUpdate,
 		Delete: resourceSecurityFirewallDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -41,8 +41,8 @@ func resourceSecurityFirewall() *schema.Resource {
 							Type:     schema.TypeList,
 							Optional: true,
 							Elem: &schema.Schema{
-								Type:         schema.TypeString,
-								ValidateFunc: validateServices(),
+								Type:             schema.TypeString,
+								ValidateDiagFunc: validateServices(),
 							},
 							Description: "Pre-defined services 'AMQP', 'AMQPS', 'HTTPS', 'MQTT', 'MQTTS', 'STOMP', 'STOMPS', " +
 								"'STREAM', 'STREAM_SSL'",
@@ -211,8 +211,8 @@ func readRule(data map[string]interface{}) map[string]interface{} {
 	return rule
 }
 
-func validateServices() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
+func validateServices() schema.SchemaValidateDiagFunc {
+	return validation.ToDiagFunc(validation.StringInSlice([]string{
 		"AMQP",
 		"AMQPS",
 		"HTTPS",
@@ -222,7 +222,7 @@ func validateServices() schema.SchemaValidateFunc {
 		"STOMPS",
 		"STREAM",
 		"STREAM_SSL",
-	}, true)
+	}, true))
 }
 
 func servicePorts() []ServicePort {

@@ -9,17 +9,15 @@ import (
 	"testing"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/sanitizer"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/tidwall/gjson"
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"
 	"gopkg.in/dnaeon/go-vcr.v3/recorder"
 )
 
 var (
-	testAccProvider  *schema.Provider
-	testAccProviders map[string]terraform.ResourceProvider
+	testAccProviderFactory map[string]func() (*schema.Provider, error)
 
 	mode = recorder.ModeReplayOnly
 )
@@ -157,11 +155,10 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		return req.URL.Path == "/login"
 	})
 
-	testAccProvider = Provider("1.0", rec.GetDefaultClient())
-	testAccProviders = map[string]terraform.ResourceProvider{
-		"cloudamqp": testAccProvider,
+	testAccProviderFactory = map[string]func() (*schema.Provider, error){
+		"cloudamqp": func() (*schema.Provider, error) { return Provider("1.0", rec.GetDefaultClient()), nil },
 	}
-	c.Providers = testAccProviders
+	c.ProviderFactories = testAccProviderFactory
 
 	resource.Test(t, c)
 }

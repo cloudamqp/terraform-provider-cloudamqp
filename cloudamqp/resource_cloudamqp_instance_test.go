@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/converter"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
 
 // TestAccInstance_Basic: Creating dedicated AWS instance, do some minor updates, import and read
@@ -31,8 +32,8 @@ func TestAccInstance_Basic(t *testing.T) {
 	)
 
 	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck:  func() { testAccPreCheck(t) },
-		Providers: testAccProviders,
+		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories: testAccProviderFactory,
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
@@ -49,6 +50,12 @@ func TestAccInstance_Basic(t *testing.T) {
 				),
 			},
 			{
+				ResourceName:            instanceResourceName,
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"keep_associated_vpc"},
+			},
+			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdated["InstanceName"]),
@@ -61,52 +68,6 @@ func TestAccInstance_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.#", "1"),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.configured", "true"),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.running", "true"),
-				),
-			},
-			{
-				ResourceName:            instanceResourceName,
-				ImportState:             true,
-				ImportStateVerify:       true,
-				ImportStateVerifyIgnore: []string{"keep_associated_vpc"},
-			},
-		},
-	})
-}
-
-// TestAccInstance_PlanChange: Creating dedicated AWS instance, change plan and verify.
-func TestAccInstance_PlanChange(t *testing.T) {
-	var (
-		fileNames            = []string{"instance"}
-		instanceResourceName = "cloudamqp_instance.instance"
-
-		params = map[string]string{
-			"InstanceName": "TestAccInstance_PlanChange",
-			"InstancePlan": "squirrel-1",
-		}
-
-		paramsUpdated = map[string]string{
-			"InstanceName": "TestAccInstance_PlanChange",
-			"InstancePlan": "bunny-1",
-		}
-	)
-
-	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck:  func() { testAccPreCheck(t) },
-		Providers: testAccProviders,
-		Steps: []resource.TestStep{
-			{
-				Config: configuration.GetTemplatedConfig(t, fileNames, params),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(instanceResourceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(instanceResourceName, "plan", params["InstancePlan"]),
-				),
-			},
-			{
-				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceResourceName, "nodes", "1"),
-					resource.TestCheckResourceAttr(instanceResourceName, "plan", paramsUpdated["InstancePlan"]),
 				),
 			},
 		},
@@ -132,10 +93,9 @@ func TestAccInstance_Upgrade(t *testing.T) {
 			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
 		}
 	)
-
 	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck:  func() { testAccPreCheck(t) },
-		Providers: testAccProviders,
+		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories: testAccProviderFactory,
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
@@ -166,6 +126,46 @@ func TestAccInstance_Upgrade(t *testing.T) {
 	})
 }
 
+// TestAccInstance_PlanChange: Creating dedicated AWS instance, change plan and verify.
+func TestAccInstance_PlanChange(t *testing.T) {
+	var (
+		fileNames            = []string{"instance"}
+		instanceResourceName = "cloudamqp_instance.instance"
+
+		params = map[string]string{
+			"InstanceName": "TestAccInstance_PlanChange",
+			"InstancePlan": "squirrel-1",
+		}
+
+		paramsUpdated = map[string]string{
+			"InstanceName": "TestAccInstance_PlanChange",
+			"InstancePlan": "bunny-1",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories: testAccProviderFactory,
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "nodes", "1"),
+					resource.TestCheckResourceAttr(instanceResourceName, "plan", params["InstancePlan"]),
+				),
+			},
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "nodes", "1"),
+					resource.TestCheckResourceAttr(instanceResourceName, "plan", paramsUpdated["InstancePlan"]),
+				),
+			},
+		},
+	})
+}
+
 // TestAccInstance_Downgrade: Creating dedicated AWS instance, downgrade plan and verify.
 func TestAccInstance_Downgrade(t *testing.T) {
 	var (
@@ -187,8 +187,8 @@ func TestAccInstance_Downgrade(t *testing.T) {
 	)
 
 	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck:  func() { testAccPreCheck(t) },
-		Providers: testAccProviders,
+		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories: testAccProviderFactory,
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),

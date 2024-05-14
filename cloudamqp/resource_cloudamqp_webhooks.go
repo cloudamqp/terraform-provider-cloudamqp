@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/84codes/go-api/api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceWebhook() *schema.Resource {
@@ -17,7 +17,7 @@ func resourceWebhook() *schema.Resource {
 		Update: resourceWebhookUpdate,
 		Delete: resourceWebhookDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -98,7 +98,6 @@ func resourceWebhookRead(d *schema.ResourceData, meta interface{}) error {
 	if strings.Contains(d.Id(), ",") {
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
-		d.Set("name", s[0])
 		instanceID, _ = strconv.Atoi(s[1])
 		d.Set("instance_id", instanceID)
 		// Set default values for optional arguments

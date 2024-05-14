@@ -5,14 +5,14 @@ import (
 	"strconv"
 
 	"github.com/84codes/go-api/api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceAlarm() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceAlarmRead,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -26,10 +26,10 @@ func dataSourceAlarm() *schema.Resource {
 				Description: "Alarm identifier",
 			},
 			"type": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Description:  "Type of the alarm",
-				ValidateFunc: validateAlarmType(),
+				Type:             schema.TypeString,
+				Optional:         true,
+				Description:      "Type of the alarm",
+				ValidateDiagFunc: validateAlarmType(),
 			},
 			"enabled": {
 				Type:        schema.TypeBool,

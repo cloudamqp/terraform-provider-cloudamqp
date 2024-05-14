@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/84codes/go-api/api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceRabbitMqConfiguration() *schema.Resource {
@@ -18,7 +18,7 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 		Update: resourceRabbitMqConfigurationUpdate,
 		Delete: resourceRabbitMqConfigurationDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -130,7 +130,7 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 				Optional: true,
 				Description: "Log level for the logger used for log integrations and the CloudAMQP Console log view. " +
 					"Does not affect the file logger. Requires a RabbitMQ restart to be applied.",
-				ValidateFunc: validateLogLevel(),
+				ValidateDiagFunc: validateLogLevel(),
 			},
 			"cluster_partition_handling": {
 				Type:         schema.TypeString,
@@ -265,8 +265,8 @@ func validateRabbitMqConfigurationJSONField(key string) bool {
 	return false
 }
 
-func validateLogLevel() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
+func validateLogLevel() schema.SchemaValidateDiagFunc {
+	return validation.ToDiagFunc(validation.StringInSlice([]string{
 		"debug",
 		"info",
 		"warning",
@@ -274,7 +274,7 @@ func validateLogLevel() schema.SchemaValidateFunc {
 		"critical",
 		"critical",
 		"none",
-	}, true)
+	}, true))
 }
 
 func rabbitMqConfigurationWriteAttributeKeys() []string {

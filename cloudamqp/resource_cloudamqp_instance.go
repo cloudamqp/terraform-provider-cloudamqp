@@ -1,12 +1,13 @@
 package cloudamqp
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/84codes/go-api/api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceInstance() *schema.Resource {
@@ -16,7 +17,7 @@ func resourceInstance() *schema.Resource {
 		Update: resourceUpdate,
 		Delete: resourceDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -137,8 +138,8 @@ func resourceInstance() *schema.Resource {
 							Type:     schema.TypeList,
 							Required: true,
 							Elem: &schema.Schema{
-								Type:         schema.TypeString,
-								ValidateFunc: validateCopySettings(),
+								Type:             schema.TypeString,
+								ValidateDiagFunc: validateCopySettings(),
 							},
 							Description: "Settings to be copied. [alarms, config, definitions, firewall, logs, metrics, plugins]",
 						},
@@ -147,20 +148,20 @@ func resourceInstance() *schema.Resource {
 			},
 		},
 		CustomizeDiff: customdiff.All(
-			customdiff.ForceNewIfChange("plan", func(old, new, meta interface{}) bool {
+			customdiff.ForceNewIfChange("plan", func(ctx context.Context, old, new, meta interface{}) bool {
 				// Recreate instance if changing plan type (from dedicated to shared or vice versa)
 				oldPlanType := isSharedPlan(old.(string))
 				newPlanType := isSharedPlan(new.(string))
 				return !(oldPlanType == newPlanType)
 			}),
-			customdiff.ValidateChange("plan", func(old, new, meta interface{}) error {
+			customdiff.ValidateChange("plan", func(ctx context.Context, old, new, meta interface{}) error {
 				if old == new {
 					return nil
 				}
 				api := meta.(*api.API)
 				return api.ValidatePlan(new.(string))
 			}),
-			customdiff.ValidateChange("region", func(old, new, meta interface{}) error {
+			customdiff.ValidateChange("region", func(ctx context.Context, old, new, meta interface{}) error {
 				if old == new {
 					return nil
 				}
@@ -353,8 +354,8 @@ func instanceCreateAttributeKeys() []string {
 	}
 }
 
-func validateCopySettings() schema.SchemaValidateFunc {
-	return validation.StringInSlice([]string{
+func validateCopySettings() schema.SchemaValidateDiagFunc {
+	return validation.ToDiagFunc(validation.StringInSlice([]string{
 		"alarms",
 		"config",
 		"definitions",
@@ -362,5 +363,5 @@ func validateCopySettings() schema.SchemaValidateFunc {
 		"logs",
 		"metrics",
 		"plugins",
-	}, true)
+	}, true))
 }

@@ -1,6 +1,7 @@
 package cloudamqp
 
 import (
+	"context"
 	"fmt"
 	"regexp"
 	"strconv"
@@ -8,8 +9,8 @@ import (
 
 	"github.com/84codes/go-api/api"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 var (
@@ -25,7 +26,7 @@ func resourceVpcConnect() *schema.Resource {
 		Update: resourceVpcConnectUpdate,
 		Delete: resourceVpcConnectDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -89,7 +90,7 @@ func resourceVpcConnect() *schema.Resource {
 			},
 		},
 		CustomizeDiff: customdiff.All(
-			customdiff.ValidateValue("allowed_principals", func(value, meta interface{}) error {
+			customdiff.ValidateValue("allowed_principals", func(ctx context.Context, value, meta interface{}) error {
 				for _, v := range value.([]interface{}) {
 					if AWS_ARN_VALIDATE_RE.MatchString(v.(string)) {
 						continue
@@ -99,7 +100,7 @@ func resourceVpcConnect() *schema.Resource {
 				}
 				return nil
 			}),
-			customdiff.ValidateValue("approved_subscriptions", func(value, meta interface{}) error {
+			customdiff.ValidateValue("approved_subscriptions", func(ctx context.Context, value, meta interface{}) error {
 				for _, v := range value.([]interface{}) {
 					if AZURE_SUBS_VALIDATE_RE.MatchString(v.(string)) {
 						continue
@@ -109,7 +110,7 @@ func resourceVpcConnect() *schema.Resource {
 				}
 				return nil
 			}),
-			customdiff.ValidateValue("allowed_projects", func(value, meta interface{}) error {
+			customdiff.ValidateValue("allowed_projects", func(ctx context.Context, value, meta interface{}) error {
 				for _, v := range value.([]interface{}) {
 					if GCP_PROJECT_ID_VALIDATE_RE.MatchString(v.(string)) {
 						continue

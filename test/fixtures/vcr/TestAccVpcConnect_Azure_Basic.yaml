@@ -27,14 +27,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 2654
+        content_length: 3462
         uncompressed: false
-        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"bobsled","price":0,"backend":"datasled","shared":true},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"tiger::do-dedicated","price":19,"backend":null,"shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"puffin-2","price":98,"backend":"lavinmq","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"penguin-2","price":198,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"lynx-2","price":398,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"wolverine-2","price":998,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"reindeer-2","price":1998,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"bear-2","price":3998,"backend":"lavinmq","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"orca-2","price":5998,"backend":"lavinmq","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "2654"
+                - "3462"
             Content-Type:
                 - application/json
             Nel:
@@ -48,10 +48,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 25645af9-54c7-4e45-b377-c3203cb3aaa1
+                - 012aa61a-99f4-4f72-b5b4-6e86a774baee
         status: 200 OK
         code: 200
-        duration: 165.032348ms
+        duration: 34.562901ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -99,218 +99,11 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 0222ea4a-6012-49d9-a580-2b78cb2520dd
+                - 11256264-0212-4190-b7e7-2cc025941f04
         status: 200 OK
         code: 200
-        duration: 47.1041ms
+        duration: 4.052861ms
     - id: 2
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 116
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"name":"TestAccVpcConnect_Azure_Basic","region":"azure-arm::eastus","subnet":"10.56.72.0/24","tags":["terraform"]}
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            Content-Type:
-                - application/json
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs
-        method: POST
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 83
-        uncompressed: false
-        body: '{"id":1936,"message":"VPC created","apikey":"b390f1f6-989b-4026-a43b-876071ff6c10"}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "83"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - a8b9e1b1-171e-40e4-9007-e6c28f83d54f
-        status: 200 OK
-        code: 200
-        duration: 832.068504ms
-    - id: 3
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1936/vpc-peering/info
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 217
-        uncompressed: false
-        body: '{"name":"vpc-ofawllm8_eastus","subnet":"10.56.0.0/16","network":"/subscriptions/439cc67d-50e9-4bbc-a9ee-2543bf762e06/resourceGroups/vpc-ofawllm8_eastus/providers/Microsoft.Network/virtualNetworks/vpc-ofawllm8_eastus"}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "217"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - b0498f8c-63f4-4997-bc8a-c547e0db3522
-        status: 200 OK
-        code: 200
-        duration: 1.750334626s
-    - id: 4
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1936
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 205
-        uncompressed: false
-        body: '{"id":1936,"name":"TestAccVpcConnect_Azure_Basic","plan":"vpc","subnet":"10.56.72.0/24","region":"azure-arm::eastus","tags":["terraform"],"providerid":"4cc389a3-86c7-4348-b503-e97e7cee2284","instances":[]}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "205"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 0dd14a49-5dfc-433e-bce0-583ce891cf5b
-        status: 200 OK
-        code: 200
-        duration: 132.505655ms
-    - id: 5
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1936/vpc-peering/info
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 217
-        uncompressed: false
-        body: '{"name":"vpc-ofawllm8_eastus","subnet":"10.56.0.0/16","network":"/subscriptions/439cc67d-50e9-4bbc-a9ee-2543bf762e06/resourceGroups/vpc-ofawllm8_eastus/providers/Microsoft.Network/virtualNetworks/vpc-ofawllm8_eastus"}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "217"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 83dee202-4d6b-4fac-93a8-b460505e3fc1
-        status: 200 OK
-        code: 200
-        duration: 1.832779243s
-    - id: 6
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -336,14 +129,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 2654
+        content_length: 3462
         uncompressed: false
-        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"bobsled","price":0,"backend":"datasled","shared":true},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"tiger::do-dedicated","price":19,"backend":null,"shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"puffin-2","price":98,"backend":"lavinmq","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"penguin-2","price":198,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"lynx-2","price":398,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"wolverine-2","price":998,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"reindeer-2","price":1998,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"bear-2","price":3998,"backend":"lavinmq","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"orca-2","price":5998,"backend":"lavinmq","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "2654"
+                - "3462"
             Content-Type:
                 - application/json
             Nel:
@@ -357,11 +150,11 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 1ee7deb4-228b-4be3-9e94-a277c29837c9
+                - a3065562-4725-4da6-9e6f-af62d0fc2fbd
         status: 200 OK
         code: 200
-        duration: 81.541463ms
-    - id: 7
+        duration: 31.817774ms
+    - id: 3
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -408,23 +201,23 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 3764a6b9-2be8-49c0-8e26-bdaf983f077e
+                - 46d6a0e9-537c-419f-8417-5cdaecb2b6f6
         status: 200 OK
         code: 200
-        duration: 34.211228ms
-    - id: 8
+        duration: 3.670498ms
+    - id: 4
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 148
+        content_length: 116
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"TestAccVpcConnect_Azure_Basic","no_default_alarms":false,"plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"vpc_id":1936}
+            {"name":"TestAccVpcConnect_Azure_Basic","region":"azure-arm::eastus","subnet":"10.56.72.0/24","tags":["terraform"]}
         form: {}
         headers:
             Authorization:
@@ -433,7 +226,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances
+        url: http://localhost:9393/api/vpcs
         method: POST
       response:
         proto: HTTP/1.1
@@ -441,14 +234,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 255
+        content_length: 81
         uncompressed: false
-        body: '{"id":1937,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"2d9279d5-5694-415a-ba92-1da12c9ce20a","url":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb"}'
+        body: '{"id":38,"message":"VPC created","apikey":"065b68fc-df7e-4d3f-9d79-032ca3fc1610"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "255"
+                - "81"
             Content-Type:
                 - application/json
             Nel:
@@ -462,10 +255,214 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 88185aac-a15e-400e-9ed1-075fe70447a9
+                - ccbda9fd-bedf-41d6-9cef-bb51e8c21544
         status: 200 OK
         code: 200
-        duration: 642.576926ms
+        duration: 54.706172ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/38/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 217
+        uncompressed: false
+        body: '{"name":"vpc-f1qcvtk0_eastus","subnet":"10.56.0.0/16","network":"/subscriptions/439cc67d-50e9-4bbc-a9ee-2543bf762e06/resourceGroups/vpc-f1qcvtk0_eastus/providers/Microsoft.Network/virtualNetworks/vpc-f1qcvtk0_eastus"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "217"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - ae9af491-7f97-40f9-8253-3019e05cb677
+        status: 200 OK
+        code: 200
+        duration: 2.751522652s
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/38
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 203
+        uncompressed: false
+        body: '{"id":38,"name":"TestAccVpcConnect_Azure_Basic","plan":"vpc","subnet":"10.56.72.0/24","region":"azure-arm::eastus","tags":["terraform"],"providerid":"e641e99a-90bf-4e2a-ab94-f33ea4e535af","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "203"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 659d00b1-b315-4790-8234-acc485a684b3
+        status: 200 OK
+        code: 200
+        duration: 30.181424ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/38/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 217
+        uncompressed: false
+        body: '{"name":"vpc-f1qcvtk0_eastus","subnet":"10.56.0.0/16","network":"/subscriptions/439cc67d-50e9-4bbc-a9ee-2543bf762e06/resourceGroups/vpc-f1qcvtk0_eastus/providers/Microsoft.Network/virtualNetworks/vpc-f1qcvtk0_eastus"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "217"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - b7bf60f1-a740-4186-b6d3-f32a5f92431f
+        status: 200 OK
+        code: 200
+        duration: 1.773209511s
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/plans
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 3462
+        uncompressed: false
+        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"puffin-2","price":98,"backend":"lavinmq","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"penguin-2","price":198,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"lynx-2","price":398,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"wolverine-2","price":998,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"reindeer-2","price":1998,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"bear-2","price":3998,"backend":"lavinmq","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"orca-2","price":5998,"backend":"lavinmq","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "3462"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 2950520d-20db-45da-adfd-c49c5615b9b0
+        status: 200 OK
+        code: 200
+        duration: 34.800988ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -484,7 +481,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1937
+        url: http://localhost:9393/api/regions
         method: GET
       response:
         proto: HTTP/1.1
@@ -492,14 +489,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 828
+        content_length: 14003
         uncompressed: false
-        body: '{"id":1937,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"90445d46-be81-4bc5-975c-ac204d5b8dc3","url":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb","ready":true,"apikey":"2d9279d5-5694-415a-ba92-1da12c9ce20a","backend":"rabbitmq","nodes":1,"vpc":{"id":1936,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://ygnmtagb:***@dev-glad-beige-opossum.rmq2.dev.cloudamqp.com/ygnmtagb","internal":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb"},"rmq_version":"3.13.1","hostname_external":"dev-glad-beige-opossum.rmq2.dev.cloudamqp.com","hostname_internal":"dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com"}'
+        body: '[{"provider":"amazon-web-services","region":"us-east-1","name":"Amazon Web Services - US-East-1 (Northern Virginia)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-2","name":"Amazon Web Services - US-West-2 (Oregon)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-east-2","name":"Amazon Web Services - US-East-2 (Ohio)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-1","name":"Amazon Web Services - US-West-1 (Northern California)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-north-1","name":"Amazon Web Services - EU-North-1 (Stockholm)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-1","name":"Amazon Web Services - EU-West-1 (Ireland)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-2","name":"Amazon Web Services - EU-West-2 (London)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-3","name":"Amazon Web Services - EU-West-3 (Paris)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-south-1","name":"Amazon Web Services - EU-South-1 (Milan)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-south-2","name":"Amazon Web Services - EU-South-2 (Spain)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-central-1","name":"Amazon Web Services - EU-Central-1 (Frankfurt)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-central-2","name":"Amazon Web Services - EU-Central-2 (Zurich)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ca-central-1","name":"Amazon Web Services - CA-Central-1 (Canada)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-1","name":"Amazon Web Services - AP-SouthEast-1 (Singapore)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-2","name":"Amazon Web Services - AP-SouthEast-2 (Sydney)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-3","name":"Amazon Web Services - AP-SouthEast-3 (Jakarta)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-4","name":"Amazon Web Services - AP-SouthEast-4 (Melbourne)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-northeast-1","name":"Amazon Web Services - AP-NorthEast-1 (Tokyo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-2","name":"Amazon Web Services - AP-NorthEast-2 (Seoul)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-3","name":"Amazon Web Services - AP-NorthEast-3 (Osaka)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-south-1","name":"Amazon Web Services - AP-South-1 (Mumbai)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-south-2","name":"Amazon Web Services - AP-South-2 (Hyderabad)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-east-1","name":"Amazon Web Services - AP-East-1 (Hong Kong)","has_shared_plans":true},{"provider":"amazon-web-services","region":"sa-east-1","name":"Amazon Web Services - SA-East-1 (São Paulo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-south-1","name":"Amazon Web Services - ME-South-1 (Bahrain)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-central-1","name":"Amazon Web Services - ME-Central-1 (UAE)","has_shared_plans":false},{"provider":"amazon-web-services","region":"af-south-1","name":"Amazon Web Services - AF-South-1 (Cape Town)","has_shared_plans":false},{"provider":"amazon-web-services","region":"il-central-1","name":"Amazon Web Services - IL-Central-1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-central1","name":"Google Compute Engine - us-central1 (Iowa)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east1","name":"Google Compute Engine - us-east1 (South Carolina)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east4","name":"Google Compute Engine - us-east4 (North Virginia)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east5","name":"Google Compute Engine - us-east5 (Columbus)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west1","name":"Google Compute Engine - us-west1 (Oregon)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west2","name":"Google Compute Engine - us-west2 (Los Angeles)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west3","name":"Google Compute Engine - us-west3 (Salt Lake City)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west4","name":"Google Compute Engine - us-west4 (Las Vegas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-south1","name":"Google Compute Engine - us-south1 (Dallas, Texas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-east1","name":"Google Compute Engine - southamerica-east1 (São Paulo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-west1","name":"Google Compute Engine - southamerica-west1 (Santiago)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north1","name":"Google Compute Engine - europe-north1 (Finland)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west1","name":"Google Compute Engine - europe-west1 (Belgium)","has_shared_plans":true},{"provider":"google-compute-engine","region":"europe-west2","name":"Google Compute Engine - europe-west2 (London)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west3","name":"Google Compute Engine - europe-west3 (Frankfurt)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west4","name":"Google Compute Engine - europe-west4 (Netherlands)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west6","name":"Google Compute Engine - europe-west6 (Zürich)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west8","name":"Google Compute Engine - europe-west8 (Milan)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west9","name":"Google Compute Engine - europe-west9 (Paris)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west10","name":"Google Compute Engine - europe-west10 (Berlin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west12","name":"Google Compute Engine - europe-west12 (Turin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-central2","name":"Google Compute Engine - europe-central2 (Warsaw)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-southwest1","name":"Google Compute Engine - europe-southwest1 (Madrid)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-west1","name":"Google Compute Engine - me-west1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central1","name":"Google Compute Engine - me-central1 (Doha)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central2","name":"Google Compute Engine - me-central2 (Dammam)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-east1","name":"Google Compute Engine - asia-east1 (Taiwan)","has_shared_plans":true},{"provider":"google-compute-engine","region":"asia-east2","name":"Google Compute Engine - asia-east2 (Hong Kong)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast1","name":"Google Compute Engine - asia-northeast1 (Tokyo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast2","name":"Google Compute Engine - asia-northeast2 (Osaka)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast3","name":"Google Compute Engine - asia-northeast3 (Seoul)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast1","name":"Google Compute Engine - asia-southeast1 (Singapore)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast2","name":"Google Compute Engine - asia-southeast2 (Jakarta)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south1","name":"Google Compute Engine - asia-south1 (Mumbai)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south2","name":"Google Compute Engine - asia-south2 (Delhi)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast1","name":"Google Compute Engine - australia-southeast1 (Sydney)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast2","name":"Google Compute Engine - australia-southeast2 (Melbourne)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast1","name":"Google Compute Engine - northamerica-northeast1 (Montréal, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast2","name":"Google Compute Engine - northamerica-northeast2 (Toronto, Canada)","has_shared_plans":false},{"provider":"digital-ocean","region":"nyc3","name":"DigitalOcean - New York 3","has_shared_plans":false},{"provider":"digital-ocean","region":"ams3","name":"DigitalOcean - Amsterdam 3","has_shared_plans":false},{"provider":"digital-ocean","region":"sgp1","name":"DigitalOcean - Singapore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"lon1","name":"DigitalOcean - London 1","has_shared_plans":false},{"provider":"digital-ocean","region":"fra1","name":"DigitalOcean - Frankfurt 1","has_shared_plans":false},{"provider":"digital-ocean","region":"tor1","name":"DigitalOcean - Toronto 1","has_shared_plans":false},{"provider":"digital-ocean","region":"sfo3","name":"DigitalOcean - San Francisco 3","has_shared_plans":false},{"provider":"digital-ocean","region":"blr1","name":"DigitalOcean - Bangalore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"syd1","name":"DigitalOcean - Sydney 1","has_shared_plans":false},{"provider":"azure-arm","region":"australiacentral","name":"Azure - Australia Central","has_shared_plans":false},{"provider":"azure-arm","region":"australiaeast","name":"Azure - Australia East","has_shared_plans":false},{"provider":"azure-arm","region":"australiasoutheast","name":"Azure - Australia Southeast","has_shared_plans":false},{"provider":"azure-arm","region":"brazilsouth","name":"Azure - Brazil South","has_shared_plans":false},{"provider":"azure-arm","region":"canadacentral","name":"Azure - Canada Central","has_shared_plans":false},{"provider":"azure-arm","region":"canadaeast","name":"Azure - Canada East","has_shared_plans":false},{"provider":"azure-arm","region":"centralindia","name":"Azure - Central India","has_shared_plans":false},{"provider":"azure-arm","region":"centralus","name":"Azure - Central US","has_shared_plans":false},{"provider":"azure-arm","region":"eastasia","name":"Azure - East Asia","has_shared_plans":false},{"provider":"azure-arm","region":"eastus","name":"Azure - East US","has_shared_plans":true},{"provider":"azure-arm","region":"eastus2","name":"Azure - East US 2","has_shared_plans":true},{"provider":"azure-arm","region":"francecentral","name":"Azure - France Central","has_shared_plans":false},{"provider":"azure-arm","region":"germanywestcentral","name":"Azure - Germany West Central","has_shared_plans":false},{"provider":"azure-arm","region":"italynorth","name":"Azure - Italy North","has_shared_plans":false},{"provider":"azure-arm","region":"japaneast","name":"Azure - Japan East","has_shared_plans":false},{"provider":"azure-arm","region":"japanwest","name":"Azure - Japan West","has_shared_plans":false},{"provider":"azure-arm","region":"koreacentral","name":"Azure - Korea Central","has_shared_plans":false},{"provider":"azure-arm","region":"koreasouth","name":"Azure - Korea South","has_shared_plans":false},{"provider":"azure-arm","region":"northcentralus","name":"Azure - North Central US","has_shared_plans":false},{"provider":"azure-arm","region":"northeurope","name":"Azure - North Europe","has_shared_plans":false},{"provider":"azure-arm","region":"norwayeast","name":"Azure - Norway East","has_shared_plans":false},{"provider":"azure-arm","region":"southafricanorth","name":"Azure - South Africa North","has_shared_plans":false},{"provider":"azure-arm","region":"southcentralus","name":"Azure - South Central US","has_shared_plans":false},{"provider":"azure-arm","region":"southeastasia","name":"Azure - Southeast Asia","has_shared_plans":false},{"provider":"azure-arm","region":"southindia","name":"Azure - South India","has_shared_plans":false},{"provider":"azure-arm","region":"switzerlandnorth","name":"Azure - Switzerland North","has_shared_plans":false},{"provider":"azure-arm","region":"swedencentral","name":"Azure - Sweden Central","has_shared_plans":true},{"provider":"azure-arm","region":"uaenorth","name":"Azure - UAE North","has_shared_plans":false},{"provider":"azure-arm","region":"uksouth","name":"Azure - UK South","has_shared_plans":false},{"provider":"azure-arm","region":"ukwest","name":"Azure - UK West","has_shared_plans":false},{"provider":"azure-arm","region":"westcentralus","name":"Azure - West Central US","has_shared_plans":false},{"provider":"azure-arm","region":"westeurope","name":"Azure - West Europe","has_shared_plans":true},{"provider":"azure-arm","region":"westus","name":"Azure - West US","has_shared_plans":true},{"provider":"azure-arm","region":"westus2","name":"Azure - West US 2","has_shared_plans":false},{"provider":"azure-arm","region":"westus3","name":"Azure - West US 3","has_shared_plans":false}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "828"
+                - "14003"
             Content-Type:
                 - application/json
             Nel:
@@ -513,44 +510,47 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 72baaa60-023e-4169-801f-9687eaf1066f
+                - 2c248674-d02c-47a0-9282-844d056f2875
         status: 200 OK
         code: 200
-        duration: 134.118111ms
+        duration: 6.328279ms
     - id: 10
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 146
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"name":"TestAccVpcConnect_Azure_Basic","no_default_alarms":false,"plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"vpc_id":38}
         form: {}
         headers:
             Authorization:
                 - REDACTED
+            Content-Type:
+                - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1937
-        method: GET
+        url: http://localhost:9393/api/instances
+        method: POST
       response:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 828
+        content_length: 252
         uncompressed: false
-        body: '{"id":1937,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"90445d46-be81-4bc5-975c-ac204d5b8dc3","url":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb","ready":true,"apikey":"2d9279d5-5694-415a-ba92-1da12c9ce20a","backend":"rabbitmq","nodes":1,"vpc":{"id":1936,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://ygnmtagb:***@dev-glad-beige-opossum.rmq2.dev.cloudamqp.com/ygnmtagb","internal":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb"},"rmq_version":"3.13.1","hostname_external":"dev-glad-beige-opossum.rmq2.dev.cloudamqp.com","hostname_internal":"dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com"}'
+        body: '{"id":39,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"1ae0ff19-8f44-4df3-85d9-8e6f0b365ab9","url":"amqp://qevqeiol:***@dev-wooden-dark-dingo.in.rmq5.dev.cloudamqp.com/qevqeiol"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "828"
+                - "252"
             Content-Type:
                 - application/json
             Nel:
@@ -564,10 +564,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - f988a853-3660-4ee1-8ed5-d84822ff9203
+                - 69d60f8c-65d1-4bef-a353-7113ede33737
         status: 200 OK
         code: 200
-        duration: 152.217069ms
+        duration: 138.551936ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -586,7 +586,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1937
+        url: http://localhost:9393/api/instances/39
         method: GET
       response:
         proto: HTTP/1.1
@@ -594,14 +594,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 828
+        content_length: 819
         uncompressed: false
-        body: '{"id":1937,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"90445d46-be81-4bc5-975c-ac204d5b8dc3","url":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb","ready":true,"apikey":"2d9279d5-5694-415a-ba92-1da12c9ce20a","backend":"rabbitmq","nodes":1,"vpc":{"id":1936,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://ygnmtagb:***@dev-glad-beige-opossum.rmq2.dev.cloudamqp.com/ygnmtagb","internal":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb"},"rmq_version":"3.13.1","hostname_external":"dev-glad-beige-opossum.rmq2.dev.cloudamqp.com","hostname_internal":"dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com"}'
+        body: '{"id":39,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"ebb3036b-8fb0-4149-9a29-f447b647078e","url":"amqp://qevqeiol:***@dev-wooden-dark-dingo.in.rmq5.dev.cloudamqp.com/qevqeiol","ready":true,"apikey":"1ae0ff19-8f44-4df3-85d9-8e6f0b365ab9","backend":"rabbitmq","nodes":1,"vpc":{"id":38,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://qevqeiol:***@dev-wooden-dark-dingo.rmq5.dev.cloudamqp.com/qevqeiol","internal":"amqp://qevqeiol:***@dev-wooden-dark-dingo.in.rmq5.dev.cloudamqp.com/qevqeiol"},"rmq_version":"3.13.2","hostname_external":"dev-wooden-dark-dingo.rmq5.dev.cloudamqp.com","hostname_internal":"dev-wooden-dark-dingo.in.rmq5.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "828"
+                - "819"
             Content-Type:
                 - application/json
             Nel:
@@ -615,11 +615,113 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - a4c3eac8-8294-4bb3-af23-1abeaf7c9d7c
+                - a1e56bc3-54eb-4411-8b75-be659258b835
         status: 200 OK
         code: 200
-        duration: 94.49203ms
+        duration: 60.561008ms
     - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/39
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 819
+        uncompressed: false
+        body: '{"id":39,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"ebb3036b-8fb0-4149-9a29-f447b647078e","url":"amqp://qevqeiol:***@dev-wooden-dark-dingo.in.rmq5.dev.cloudamqp.com/qevqeiol","ready":true,"apikey":"1ae0ff19-8f44-4df3-85d9-8e6f0b365ab9","backend":"rabbitmq","nodes":1,"vpc":{"id":38,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://qevqeiol:***@dev-wooden-dark-dingo.rmq5.dev.cloudamqp.com/qevqeiol","internal":"amqp://qevqeiol:***@dev-wooden-dark-dingo.in.rmq5.dev.cloudamqp.com/qevqeiol"},"rmq_version":"3.13.2","hostname_external":"dev-wooden-dark-dingo.rmq5.dev.cloudamqp.com","hostname_internal":"dev-wooden-dark-dingo.in.rmq5.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "819"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f4ccd133-b50e-491f-b442-e070e1ab875b
+        status: 200 OK
+        code: 200
+        duration: 33.169372ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/39
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 819
+        uncompressed: false
+        body: '{"id":39,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"ebb3036b-8fb0-4149-9a29-f447b647078e","url":"amqp://qevqeiol:***@dev-wooden-dark-dingo.in.rmq5.dev.cloudamqp.com/qevqeiol","ready":true,"apikey":"1ae0ff19-8f44-4df3-85d9-8e6f0b365ab9","backend":"rabbitmq","nodes":1,"vpc":{"id":38,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://qevqeiol:***@dev-wooden-dark-dingo.rmq5.dev.cloudamqp.com/qevqeiol","internal":"amqp://qevqeiol:***@dev-wooden-dark-dingo.in.rmq5.dev.cloudamqp.com/qevqeiol"},"rmq_version":"3.13.2","hostname_external":"dev-wooden-dark-dingo.rmq5.dev.cloudamqp.com","hostname_internal":"dev-wooden-dark-dingo.in.rmq5.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "819"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - d814b6a9-fdcb-4bab-937b-46328c7bb5e0
+        status: 200 OK
+        code: 200
+        duration: 27.732864ms
+    - id: 14
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -640,7 +742,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1937/vpc-connect
+        url: http://localhost:9393/api/instances/39/vpc-connect
         method: POST
       response:
         proto: HTTP/1.1
@@ -665,112 +767,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - acf902c6-002c-4013-beaa-f47d338ec5da
+                - 559b5fdc-3cff-4d1e-9de8-0fccfa78786e
         status: 204 No Content
         code: 204
-        duration: 196.478847ms
-    - id: 13
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1937/vpc-connect
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 268
-        uncompressed: false
-        body: '{"updated_at":"2024-04-23 12:35:08 +0200","status":"enabled","server_name":"dev-glad-beige-opossum","alias":"dev-glad-beige-opossum.e7396cd6-de74-4734-9ad0-4e0da3bb7bdb.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "268"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - f94128f5-ac95-4966-9f5e-c867218f22d5
-        status: 200 OK
-        code: 200
-        duration: 59.114494ms
-    - id: 14
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1937/vpc-connect
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 268
-        uncompressed: false
-        body: '{"updated_at":"2024-04-23 12:35:08 +0200","status":"enabled","server_name":"dev-glad-beige-opossum","alias":"dev-glad-beige-opossum.e7396cd6-de74-4734-9ad0-4e0da3bb7bdb.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "268"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 062737de-e0a5-4bf5-8da4-7e5fcb34cfc7
-        status: 200 OK
-        code: 200
-        duration: 46.707401ms
+        duration: 66.572636ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -789,7 +789,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1936
+        url: http://localhost:9393/api/instances/39/vpc-connect
         method: GET
       response:
         proto: HTTP/1.1
@@ -797,14 +797,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 209
+        content_length: 266
         uncompressed: false
-        body: '{"id":1936,"name":"TestAccVpcConnect_Azure_Basic","plan":"vpc","subnet":"10.56.72.0/24","region":"azure-arm::eastus","tags":["terraform"],"providerid":"4cc389a3-86c7-4348-b503-e97e7cee2284","instances":[1937]}'
+        body: '{"updated_at":"2024-05-13 11:33:44 +0200","status":"enabled","server_name":"dev-wooden-dark-dingo","alias":"dev-wooden-dark-dingo.0450cb08-b203-445e-8bea-f0d779f71760.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "209"
+                - "266"
             Content-Type:
                 - application/json
             Nel:
@@ -818,10 +818,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 71c1373a-d420-47b8-b3e8-e4b371f8306e
+                - ff828469-0c34-4b36-9018-eeac95d8a344
         status: 200 OK
         code: 200
-        duration: 61.56144ms
+        duration: 53.751549ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -840,7 +840,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1936/vpc-peering/info
+        url: http://localhost:9393/api/instances/39/vpc-connect
         method: GET
       response:
         proto: HTTP/1.1
@@ -848,14 +848,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 217
+        content_length: 266
         uncompressed: false
-        body: '{"name":"vpc-ofawllm8_eastus","subnet":"10.56.0.0/16","network":"/subscriptions/439cc67d-50e9-4bbc-a9ee-2543bf762e06/resourceGroups/vpc-ofawllm8_eastus/providers/Microsoft.Network/virtualNetworks/vpc-ofawllm8_eastus"}'
+        body: '{"updated_at":"2024-05-13 11:33:44 +0200","status":"enabled","server_name":"dev-wooden-dark-dingo","alias":"dev-wooden-dark-dingo.0450cb08-b203-445e-8bea-f0d779f71760.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "217"
+                - "266"
             Content-Type:
                 - application/json
             Nel:
@@ -869,10 +869,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - ede7551a-4ad7-4501-ab00-a361f2cc41e6
+                - ee863edc-db9a-4044-a196-c4a68ba1d6be
         status: 200 OK
         code: 200
-        duration: 1.48814195s
+        duration: 36.671426ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -891,7 +891,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1937
+        url: http://localhost:9393/api/vpcs/38
         method: GET
       response:
         proto: HTTP/1.1
@@ -899,14 +899,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 828
+        content_length: 205
         uncompressed: false
-        body: '{"id":1937,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"90445d46-be81-4bc5-975c-ac204d5b8dc3","url":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb","ready":true,"apikey":"2d9279d5-5694-415a-ba92-1da12c9ce20a","backend":"rabbitmq","nodes":1,"vpc":{"id":1936,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://ygnmtagb:***@dev-glad-beige-opossum.rmq2.dev.cloudamqp.com/ygnmtagb","internal":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb"},"rmq_version":"3.13.1","hostname_external":"dev-glad-beige-opossum.rmq2.dev.cloudamqp.com","hostname_internal":"dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com"}'
+        body: '{"id":38,"name":"TestAccVpcConnect_Azure_Basic","plan":"vpc","subnet":"10.56.72.0/24","region":"azure-arm::eastus","tags":["terraform"],"providerid":"e641e99a-90bf-4e2a-ab94-f33ea4e535af","instances":[39]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "828"
+                - "205"
             Content-Type:
                 - application/json
             Nel:
@@ -920,10 +920,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 07b6b7fa-1616-4a44-a5a7-f82bbd08be8c
+                - 72fe6d7a-7017-49ee-9860-fb375da8d5bd
         status: 200 OK
         code: 200
-        duration: 41.894642ms
+        duration: 15.921144ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -942,160 +942,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1937/vpc-connect
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 268
-        uncompressed: false
-        body: '{"updated_at":"2024-04-23 12:35:08 +0200","status":"enabled","server_name":"dev-glad-beige-opossum","alias":"dev-glad-beige-opossum.e7396cd6-de74-4734-9ad0-4e0da3bb7bdb.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "268"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - a21f1a80-8ce8-48ac-ba84-957efce4a2e1
-        status: 200 OK
-        code: 200
-        duration: 61.934773ms
-    - id: 19
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1937/vpc-connect
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 268
-        uncompressed: false
-        body: '{"updated_at":"2024-04-23 12:35:08 +0200","status":"enabled","server_name":"dev-glad-beige-opossum","alias":"dev-glad-beige-opossum.e7396cd6-de74-4734-9ad0-4e0da3bb7bdb.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "268"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - d6be58f9-7c6b-44c9-8ae5-749ab8bc3591
-        status: 200 OK
-        code: 200
-        duration: 44.060227ms
-    - id: 20
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1936
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 209
-        uncompressed: false
-        body: '{"id":1936,"name":"TestAccVpcConnect_Azure_Basic","plan":"vpc","subnet":"10.56.72.0/24","region":"azure-arm::eastus","tags":["terraform"],"providerid":"4cc389a3-86c7-4348-b503-e97e7cee2284","instances":[1937]}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "209"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 939d36c7-4038-44ba-ad24-19530f1aa968
-        status: 200 OK
-        code: 200
-        duration: 92.241871ms
-    - id: 21
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1936/vpc-peering/info
+        url: http://localhost:9393/api/vpcs/38/vpc-peering/info
         method: GET
       response:
         proto: HTTP/1.1
@@ -1105,7 +952,7 @@ interactions:
         trailer: {}
         content_length: 217
         uncompressed: false
-        body: '{"name":"vpc-ofawllm8_eastus","subnet":"10.56.0.0/16","network":"/subscriptions/439cc67d-50e9-4bbc-a9ee-2543bf762e06/resourceGroups/vpc-ofawllm8_eastus/providers/Microsoft.Network/virtualNetworks/vpc-ofawllm8_eastus"}'
+        body: '{"name":"vpc-f1qcvtk0_eastus","subnet":"10.56.0.0/16","network":"/subscriptions/439cc67d-50e9-4bbc-a9ee-2543bf762e06/resourceGroups/vpc-f1qcvtk0_eastus/providers/Microsoft.Network/virtualNetworks/vpc-f1qcvtk0_eastus"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -1124,10 +971,163 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 5490074b-affe-4c6d-981d-c930d54ba27c
+                - ef64f768-3ac1-4747-a9c3-3dbc70204205
         status: 200 OK
         code: 200
-        duration: 1.277737966s
+        duration: 1.51663553s
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/39
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 819
+        uncompressed: false
+        body: '{"id":39,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"ebb3036b-8fb0-4149-9a29-f447b647078e","url":"amqp://qevqeiol:***@dev-wooden-dark-dingo.in.rmq5.dev.cloudamqp.com/qevqeiol","ready":true,"apikey":"1ae0ff19-8f44-4df3-85d9-8e6f0b365ab9","backend":"rabbitmq","nodes":1,"vpc":{"id":38,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://qevqeiol:***@dev-wooden-dark-dingo.rmq5.dev.cloudamqp.com/qevqeiol","internal":"amqp://qevqeiol:***@dev-wooden-dark-dingo.in.rmq5.dev.cloudamqp.com/qevqeiol"},"rmq_version":"3.13.2","hostname_external":"dev-wooden-dark-dingo.rmq5.dev.cloudamqp.com","hostname_internal":"dev-wooden-dark-dingo.in.rmq5.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "819"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - ab2b4653-81ca-4071-87ea-9f82e9492129
+        status: 200 OK
+        code: 200
+        duration: 33.752306ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/39/vpc-connect
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 266
+        uncompressed: false
+        body: '{"updated_at":"2024-05-13 11:33:44 +0200","status":"enabled","server_name":"dev-wooden-dark-dingo","alias":"dev-wooden-dark-dingo.0450cb08-b203-445e-8bea-f0d779f71760.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "266"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - e57c9170-ff7d-42b3-aa99-e2577e53e5ed
+        status: 200 OK
+        code: 200
+        duration: 26.077407ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/39/vpc-connect
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 266
+        uncompressed: false
+        body: '{"updated_at":"2024-05-13 11:33:44 +0200","status":"enabled","server_name":"dev-wooden-dark-dingo","alias":"dev-wooden-dark-dingo.0450cb08-b203-445e-8bea-f0d779f71760.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "266"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - ebdfd9b7-8635-4da1-b877-e4ec67ab29f8
+        status: 200 OK
+        code: 200
+        duration: 26.725296ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -1146,24 +1146,20 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1937
-        method: GET
+        url: http://localhost:9393/api/instances/39/vpc-connect
+        method: DELETE
       response:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 828
+        content_length: 0
         uncompressed: false
-        body: '{"id":1937,"name":"TestAccVpcConnect_Azure_Basic","plan":"bunny-1","region":"azure-arm::eastus","tags":["terraform"],"providerid":"90445d46-be81-4bc5-975c-ac204d5b8dc3","url":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb","ready":true,"apikey":"2d9279d5-5694-415a-ba92-1da12c9ce20a","backend":"rabbitmq","nodes":1,"vpc":{"id":1936,"subnet":"10.56.72.0/24"},"urls":{"external":"amqps://ygnmtagb:***@dev-glad-beige-opossum.rmq2.dev.cloudamqp.com/ygnmtagb","internal":"amqp://ygnmtagb:***@dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com/ygnmtagb"},"rmq_version":"3.13.1","hostname_external":"dev-glad-beige-opossum.rmq2.dev.cloudamqp.com","hostname_internal":"dev-glad-beige-opossum.in.rmq2.dev.cloudamqp.com"}'
+        body: ""
         headers:
             Cache-Control:
                 - no-cache
-            Content-Length:
-                - "828"
-            Content-Type:
-                - application/json
             Nel:
                 - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
@@ -1175,10 +1171,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - c846c319-2087-40e9-be02-873aeb9f3a8d
-        status: 200 OK
-        code: 200
-        duration: 73.340584ms
+                - d859d1f8-93db-4c31-a58e-063b655d82f3
+        status: 204 No Content
+        code: 204
+        duration: 57.950369ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -1197,24 +1193,20 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1937/vpc-connect
-        method: GET
+        url: http://localhost:9393/api/instances/39?keep_vpc=true
+        method: DELETE
       response:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 268
+        content_length: 0
         uncompressed: false
-        body: '{"updated_at":"2024-04-23 12:35:08 +0200","status":"enabled","server_name":"dev-glad-beige-opossum","alias":"dev-glad-beige-opossum.e7396cd6-de74-4734-9ad0-4e0da3bb7bdb.eastus.azure.privatelinkservice","approved_subscriptions":["56fab608-c846-4770-a493-e77f52c1ce41"]}'
+        body: ""
         headers:
             Cache-Control:
                 - no-cache
-            Content-Length:
-                - "268"
-            Content-Type:
-                - application/json
             Nel:
                 - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
@@ -1226,10 +1218,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 341ec8b6-dc19-414c-bd82-be6fbab56131
-        status: 200 OK
-        code: 200
-        duration: 60.639258ms
+                - a75ca268-0cd2-4910-8111-dfdf92a409af
+        status: 204 No Content
+        code: 204
+        duration: 81.07515ms
     - id: 24
       request:
         proto: HTTP/1.1
@@ -1248,101 +1240,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1937/vpc-connect
-        method: DELETE
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
-        headers:
-            Cache-Control:
-                - no-cache
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 64646bed-20e4-4747-a239-eaa2c3b228e5
-        status: 204 No Content
-        code: 204
-        duration: 114.286218ms
-    - id: 25
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1937?keep_vpc=true
-        method: DELETE
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
-        headers:
-            Cache-Control:
-                - no-cache
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 1a69a3a5-078a-4e15-aa72-f4adcda10605
-        status: 204 No Content
-        code: 204
-        duration: 287.573247ms
-    - id: 26
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1937
+        url: http://localhost:9393/api/instances/39
         method: GET
       response:
         proto: HTTP/1.1
@@ -1371,11 +1269,11 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - c661b9a9-3a22-45a9-a0ba-4fa62777a6e7
+                - 28a52f2c-1dce-4b1c-8a7e-46d388f041a0
         status: 404 Not Found
         code: 404
-        duration: 15.11097ms
-    - id: 27
+        duration: 11.313983ms
+    - id: 25
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1393,7 +1291,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/vpcs/1936
+        url: http://localhost:9393/api/vpcs/38
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -1418,7 +1316,7 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 56f6b16f-966e-4fc5-b5ba-890a39806fef
+                - f2ae0da6-5eaf-49ca-8d22-84bda4c1685f
         status: 204 No Content
         code: 204
-        duration: 167.13858ms
+        duration: 51.551403ms
