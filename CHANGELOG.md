@@ -4,6 +4,7 @@ NOTES:
 
 * Github CI workflow with Go VCR basic resource testing
 * Updated the API wrapper (go-api) dependency with newer version (1.16.2)
+* Update Terraform Plugin SDK to V2 ([#261](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/261))
 
 Features:
 
