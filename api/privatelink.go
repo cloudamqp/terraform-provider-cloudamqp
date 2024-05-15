@@ -31,7 +31,7 @@ func (api *API) EnablePrivatelink(instanceID int, params map[string][]interface{
 	case 204:
 		return api.waitForEnablePrivatelinkWithRetry(instanceID, 1, sleep, timeout)
 	default:
-		return fmt.Errorf("enable PrivateLink failed, status: %v, message: %s",
+		return fmt.Errorf("enable PrivateLink failed, status: %d, message: %s",
 			response.StatusCode, failed)
 	}
 }
@@ -62,7 +62,7 @@ func (api *API) readPrivateLinkWithRetry(instanceID, attempt, sleep, timeout int
 		return data, nil
 	case 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
-			log.Printf("[INFO] go-api::privatelink::read Timeout talking to backend "+
+			log.Printf("[INFO] api::privatelink#read Timeout talking to backend "+
 				"attempt: %d, until timeout: %d", attempt, (timeout - (attempt * sleep)))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
@@ -70,7 +70,7 @@ func (api *API) readPrivateLinkWithRetry(instanceID, attempt, sleep, timeout int
 		}
 	}
 
-	return nil, fmt.Errorf("read PrivateLink failed, status: %v, message: %s",
+	return nil, fmt.Errorf("read PrivateLink failed, status: %d, message: %s",
 		response.StatusCode, failed)
 }
 
@@ -90,7 +90,7 @@ func (api *API) UpdatePrivatelink(instanceID int, params map[string][]interface{
 	case 204:
 		return nil
 	default:
-		return fmt.Errorf("update Privatelink failed, status: %v, message: %s",
+		return fmt.Errorf("update Privatelink failed, status: %d, message: %s",
 			response.StatusCode, failed)
 	}
 }
@@ -111,7 +111,7 @@ func (api *API) DisablePrivatelink(instanceID int) error {
 	case 204:
 		return nil
 	default:
-		return fmt.Errorf("disable Privatelink failed, status: %v, message: %s",
+		return fmt.Errorf("disable Privatelink failed, status: %d, message: %s",
 			response.StatusCode, failed)
 	}
 }
@@ -130,15 +130,15 @@ func (api *API) waitForEnablePrivatelinkWithRetry(instanceID, attempt, sleep, ti
 	} else if attempt*sleep > timeout {
 		return fmt.Errorf("enable PrivateLink failed, reached timeout of %d seconds", timeout)
 	}
-	log.Printf("[DEBUG] PrivateLink: waitForEnablePrivatelinkWithRetry data: %v", data)
 
 	switch response.StatusCode {
 	case 200:
+		log.Printf("[DEBUG] PrivateLink: waitForEnablePrivatelinkWithRetry data: %v", data)
 		switch data["status"].(string) {
 		case "enabled":
 			return nil
 		case "pending":
-			log.Printf("[DEBUG] go-api::privatelink::enable not finished and will retry, "+
+			log.Printf("[DEBUG] api::privatelink#enable not finished and will retry, "+
 				"attempt: %d, until timeout: %d", attempt, (timeout - (attempt * sleep)))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
@@ -146,6 +146,6 @@ func (api *API) waitForEnablePrivatelinkWithRetry(instanceID, attempt, sleep, ti
 		}
 	}
 
-	return fmt.Errorf("wait for enable PrivateLink failed, status: %v, message: %s",
+	return fmt.Errorf("wait for enable PrivateLink failed, status: %d, message: %s",
 		response.StatusCode, failed)
 }

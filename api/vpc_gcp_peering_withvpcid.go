@@ -18,7 +18,7 @@ func (api *API) RequestVpcGcpPeeringWithVpcId(vpcID string, params map[string]in
 	}
 
 	if waitOnStatus {
-		log.Printf("[DEBUG] go-api::vpc_gcp_peering_withvpcid::request waiting for active state")
+		log.Printf("[DEBUG] api::vpc_gcp_peering_withvpcid#request waiting for active state")
 		err = api.waitForGcpPeeringStatus(path, data["peering"].(string), attempt, sleep, timeout)
 		if err != nil {
 			return nil, err
@@ -51,8 +51,7 @@ func (api *API) RemoveVpcGcpPeeringWithVpcId(vpcID, peerID string) error {
 		path   = fmt.Sprintf("/api/vpcs/%s/vpc-peering/%s", vpcID, peerID)
 	)
 
-	log.Printf("[DEBUG] go-api::vpc_gcp_peering_withvpcid::remove vpc id: %s, peering id: %s",
-		vpcID, peerID)
+	log.Printf("[DEBUG] api::vpc_gcp_peering_withvpcid#remove path: %s", path)
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 	if err != nil {
 		return err
@@ -62,7 +61,7 @@ func (api *API) RemoveVpcGcpPeeringWithVpcId(vpcID, peerID string) error {
 	case 204:
 		return nil
 	default:
-		return fmt.Errorf("remove VPC peering failed, status: %v, message: %s",
+		return fmt.Errorf("remove VPC peering failed, status: %d, message: %s",
 			response.StatusCode, failed)
 	}
 }

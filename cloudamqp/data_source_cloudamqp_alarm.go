@@ -119,7 +119,7 @@ func dataSourceAlarmIDRead(instanceID int, alarmID int, meta interface{}) (map[s
 
 func dataSourceAlarmTypeRead(instanceID int, alarmType string, meta interface{}) (map[string]interface{}, error) {
 	api := meta.(*api.API)
-	alarms, err := api.ReadAlarms(instanceID)
+	alarms, err := api.ListAlarms(instanceID)
 
 	if err != nil {
 		return nil, err
