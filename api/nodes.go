@@ -59,16 +59,16 @@ func (api *API) PostAction(instanceID int, nodeName string, action string) (
 		failed        map[string]any
 		actionAsRoute string
 		params        = make(map[string][]string)
-		path          = fmt.Sprintf("api/instances/%d/actions/%s", instanceID, actionAsRoute)
 	)
+
+	params["nodes"] = append(params["nodes"], nodeName)
 
 	if action == "mgmt.restart" {
 		actionAsRoute = "mgmt-restart"
 	} else {
 		actionAsRoute = action
 	}
-	params["nodes"] = append(params["nodes"], nodeName)
-
+	path := fmt.Sprintf("api/instances/%d/actions/%s", instanceID, actionAsRoute)
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
