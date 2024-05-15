@@ -9,19 +9,19 @@ import (
 )
 
 // CreateWebhook - create a webhook for a vhost and a specific qeueu
-func (api *API) CreateWebhook(instanceID int, params map[string]interface{},
-	sleep, timeout int) (map[string]interface{}, error) {
+func (api *API) CreateWebhook(instanceID int, params map[string]any,
+	sleep, timeout int) (map[string]any, error) {
 
 	return api.createWebhookWithRetry(instanceID, params, 1, sleep, timeout)
 }
 
 // createWebhookWithRetry: create webhook with retry if backend is busy.
-func (api *API) createWebhookWithRetry(instanceID int, params map[string]interface{},
-	attempt, sleep, timeout int) (map[string]interface{}, error) {
+func (api *API) createWebhookWithRetry(instanceID int, params map[string]any,
+	attempt, sleep, timeout int) (map[string]any, error) {
 
 	var (
-		data   = make(map[string]interface{})
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/webhooks", instanceID)
 	)
 
@@ -58,7 +58,7 @@ func (api *API) createWebhookWithRetry(instanceID int, params map[string]interfa
 
 // ReadWebhook - retrieves a specific webhook for an instance
 func (api *API) ReadWebhook(instanceID int, webhookID string, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	path := fmt.Sprintf("/api/instances/%d/webhooks/%s", instanceID, webhookID)
 	return api.readWebhookWithRetry(path, 1, sleep, timeout)
@@ -66,11 +66,11 @@ func (api *API) ReadWebhook(instanceID int, webhookID string, sleep, timeout int
 
 // readWebhookWithRetry: read webhook with retry if backend is busy.
 func (api *API) readWebhookWithRetry(path string, attempt, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 	)
 
 	log.Printf("[DEBUG] api::webhook#read path: %s", path)
@@ -100,10 +100,10 @@ func (api *API) readWebhookWithRetry(path string, attempt, sleep, timeout int) (
 }
 
 // ListWebhooks - list all webhooks for an instance.
-func (api *API) ListWebhooks(instanceID int) (map[string]interface{}, error) {
+func (api *API) ListWebhooks(instanceID int) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/webhooks", instanceID)
 	)
 
@@ -123,7 +123,7 @@ func (api *API) ListWebhooks(instanceID int) (map[string]interface{}, error) {
 }
 
 // UpdateWebhook - updates a specific webhook for an instance
-func (api *API) UpdateWebhook(instanceID int, webhookID string, params map[string]interface{},
+func (api *API) UpdateWebhook(instanceID int, webhookID string, params map[string]any,
 	sleep, timeout int) error {
 
 	path := fmt.Sprintf("/api/instances/%d/webhooks/%s", instanceID, webhookID)
@@ -131,12 +131,12 @@ func (api *API) UpdateWebhook(instanceID int, webhookID string, params map[strin
 }
 
 // updateWebhookWithRetry: update webhook with retry if backend is busy.
-func (api *API) updateWebhookWithRetry(path string, params map[string]interface{},
+func (api *API) updateWebhookWithRetry(path string, params map[string]any,
 	attempt, sleep, timeout int) error {
 
 	var (
-		data   = make(map[string]interface{})
-		failed map[string]interface{}
+		data   = make(map[string]any)
+		failed map[string]any
 	)
 
 	log.Printf("[DEBUG] api::webhook#update path: %s, params: %v", path, params)
@@ -174,7 +174,7 @@ func (api *API) DeleteWebhook(instanceID int, webhookID string, sleep, timeout i
 // deleteWebhookWithRetry: delete webhook with retry if backend is busy.
 func (api *API) deleteWebhookWithRetry(path string, attempt, sleep, timeout int) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 	)
 
 	log.Printf("[DEBUG] api::webhook#delete path: %s", path)

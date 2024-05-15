@@ -7,10 +7,10 @@ import (
 )
 
 // ReadVersions - Read versions RabbitMQ and Erlang can upgrade to
-func (api *API) ReadVersions(instanceID int) (map[string]interface{}, error) {
+func (api *API) ReadVersions(instanceID int) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("api/instances/%d/actions/new-rabbitmq-erlang-versions", instanceID)
 	)
 
@@ -32,8 +32,8 @@ func (api *API) ReadVersions(instanceID int) (map[string]interface{}, error) {
 // UpgradeRabbitMQ - Upgrade to latest possible versions for both RabbitMQ and Erlang.
 func (api *API) UpgradeRabbitMQ(instanceID int) (string, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("api/instances/%d/actions/upgrade-rabbitmq-erlang", instanceID)
 	)
 
@@ -59,8 +59,8 @@ func (api *API) UpgradeRabbitMQ(instanceID int) (string, error) {
 
 func (api *API) waitUntilUpgraded(instanceID int) (string, error) {
 	var (
-		data   []map[string]interface{}
-		failed map[string]interface{}
+		data   []map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("api/instances/%d/nodes", instanceID)
 	)
 

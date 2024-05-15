@@ -9,11 +9,11 @@ import (
 
 // EnablePlugin: enable a plugin on an instance.
 func (api *API) EnablePlugin(instanceID int, pluginName string, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	var (
-		failed map[string]interface{}
-		params = make(map[string]interface{})
+		failed map[string]any
+		params = make(map[string]any)
 		path   = fmt.Sprintf("/api/instances/%d/plugins?async=true", instanceID)
 	)
 
@@ -35,7 +35,7 @@ func (api *API) EnablePlugin(instanceID int, pluginName string, sleep, timeout i
 
 // ReadPlugin: reads a specific plugin from an instance.
 func (api *API) ReadPlugin(instanceID int, pluginName string, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	log.Printf("[DEBUG] api::plugin#read instance id: %d, name: %s", instanceID, pluginName)
 	data, err := api.ListPlugins(instanceID, sleep, timeout)
@@ -54,17 +54,17 @@ func (api *API) ReadPlugin(instanceID int, pluginName string, sleep, timeout int
 }
 
 // ListPlugins: list plugins from an instance.
-func (api *API) ListPlugins(instanceID, sleep, timeout int) ([]map[string]interface{}, error) {
+func (api *API) ListPlugins(instanceID, sleep, timeout int) ([]map[string]any, error) {
 	return api.listPluginsWithRetry(instanceID, 1, sleep, timeout)
 }
 
 // listPluginsWithRetry: list plugins from an instance, with retry if backend is busy.
 func (api *API) listPluginsWithRetry(instanceID, attempt, sleep, timeout int) (
-	[]map[string]interface{}, error) {
+	[]map[string]any, error) {
 
 	var (
-		data   []map[string]interface{}
-		failed map[string]interface{}
+		data   []map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/plugins", instanceID)
 	)
 
@@ -93,11 +93,11 @@ func (api *API) listPluginsWithRetry(instanceID, attempt, sleep, timeout int) (
 
 // UpdatePlugin: updates a plugin from an instance.
 func (api *API) UpdatePlugin(instanceID int, pluginName string, enabled bool, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	var (
-		failed map[string]interface{}
-		params = make(map[string]interface{})
+		failed map[string]any
+		params = make(map[string]any)
 		path   = fmt.Sprintf("/api/instances/%d/plugins?async=true", instanceID)
 	)
 
@@ -120,10 +120,10 @@ func (api *API) UpdatePlugin(instanceID int, pluginName string, enabled bool, sl
 
 // DisablePlugin: disables a plugin from an instance.
 func (api *API) DisablePlugin(instanceID int, pluginName string, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/plugins/%s?async=true", instanceID, pluginName)
 	)
 
@@ -145,7 +145,7 @@ func (api *API) DisablePlugin(instanceID int, pluginName string, sleep, timeout 
 // DeletePlugin: deletes a plugin from an instance.
 func (api *API) DeletePlugin(instanceID int, pluginName string, sleep, timeout int) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/plugins/%s?async=true", instanceID, pluginName)
 	)
 
@@ -167,7 +167,7 @@ func (api *API) DeletePlugin(instanceID int, pluginName string, sleep, timeout i
 
 // waitUntilPluginChanged: wait until plugin changed.
 func (api *API) waitUntilPluginChanged(instanceID int, pluginName string, enabled bool,
-	attempt, sleep, timeout int) (map[string]interface{}, error) {
+	attempt, sleep, timeout int) (map[string]any, error) {
 
 	for {
 		if attempt*sleep > timeout {

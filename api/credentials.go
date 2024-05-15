@@ -6,10 +6,10 @@ import (
 	"strconv"
 )
 
-func (api *API) ReadCredentials(id int) (map[string]interface{}, error) {
+func (api *API) ReadCredentials(id int) (map[string]any, error) {
 	var (
-		data       map[string]interface{}
-		failed     map[string]interface{}
+		data       map[string]any
+		failed     map[string]any
 		instanceID = strconv.Itoa(id)
 	)
 
@@ -27,8 +27,8 @@ func (api *API) ReadCredentials(id int) (map[string]interface{}, error) {
 	}
 }
 
-func extractInfo(url string) map[string]interface{} {
-	paramsMap := make(map[string]interface{})
+func extractInfo(url string) map[string]any {
+	paramsMap := make(map[string]any)
 	r := regexp.MustCompile(`^.*:\/\/(?P<username>(.*)):(?P<password>(.*))@`)
 	match := r.FindStringSubmatch(url)
 

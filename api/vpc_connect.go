@@ -13,7 +13,7 @@ func (api *API) EnableVpcConnect(instanceID int, params map[string][]interface{}
 	sleep, timeout int) error {
 
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/vpc-connect", instanceID)
 	)
 
@@ -36,10 +36,10 @@ func (api *API) EnableVpcConnect(instanceID int, params map[string][]interface{}
 }
 
 // ReadVpcConnect: Reads VPC Connect information
-func (api *API) ReadVpcConnect(instanceID int) (map[string]interface{}, error) {
+func (api *API) ReadVpcConnect(instanceID int) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/vpc-connect", instanceID)
 	)
 
@@ -60,7 +60,7 @@ func (api *API) ReadVpcConnect(instanceID int) (map[string]interface{}, error) {
 // UpdateVpcConnect: Update allowlist for the VPC Connect
 func (api *API) UpdateVpcConnect(instanceID int, params map[string][]interface{}) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/vpc-connect", instanceID)
 	)
 
@@ -81,7 +81,7 @@ func (api *API) UpdateVpcConnect(instanceID int, params map[string][]interface{}
 // DisableVpcConnect: Disable the VPC Connect feature
 func (api *API) DisableVpcConnect(instanceID int) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/vpc-connect", instanceID)
 	)
 
@@ -102,8 +102,8 @@ func (api *API) DisableVpcConnect(instanceID int) error {
 // waitForEnableVpcConnectWithRetry: Wait until status change from pending to enable
 func (api *API) waitForEnableVpcConnectWithRetry(instanceID, attempt, sleep, timeout int) error {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/vpc-connect", instanceID)
 	)
 
@@ -137,7 +137,7 @@ func (api *API) waitForEnableVpcConnectWithRetry(instanceID, attempt, sleep, tim
 // Check if the instance already have a standalone VPC
 func (api *API) EnableVPC(instanceID int) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/vpc", instanceID)
 	)
 

@@ -9,7 +9,7 @@ import (
 )
 
 func (api *API) AcceptVpcPeeringWithVpcId(vpcID, peeringID string, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	attempt, err := api.waitForPeeringStatusWithVpcID(vpcID, peeringID, 1, sleep, timeout)
 	if err != nil {
@@ -19,18 +19,18 @@ func (api *API) AcceptVpcPeeringWithVpcId(vpcID, peeringID string, sleep, timeou
 	return api.retryAcceptVpcPeering(path, attempt, sleep, timeout)
 }
 
-func (api *API) ReadVpcInfoWithVpcId(vpcID string) (map[string]interface{}, error) {
+func (api *API) ReadVpcInfoWithVpcId(vpcID string) (map[string]any, error) {
 	path := fmt.Sprintf("/api/vpcs/%s/vpc-peering/info", vpcID)
 	// Initiale values, 5 attempts and 20 second sleep
 	return api.readVpcInfoWithRetry(path, 5, 20)
 }
 
 func (api *API) ReadVpcPeeringRequestWithVpcId(vpcID, peeringID string) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/vpcs/%s/vpc-peering/request/%s", vpcID, peeringID)
 	)
 

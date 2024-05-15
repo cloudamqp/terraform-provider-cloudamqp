@@ -7,12 +7,10 @@ import (
 	"time"
 )
 
-func (api *API) CreateAlarm(instanceID int, params map[string]interface{}) (
-	map[string]interface{}, error) {
-
+func (api *API) CreateAlarm(instanceID int, params map[string]any) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms", instanceID)
 	)
 
@@ -37,10 +35,10 @@ func (api *API) CreateAlarm(instanceID int, params map[string]interface{}) (
 	}
 }
 
-func (api *API) ReadAlarm(instanceID int, alarmID string) (map[string]interface{}, error) {
+func (api *API) ReadAlarm(instanceID int, alarmID string) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/%s", instanceID, alarmID)
 	)
 
@@ -60,10 +58,10 @@ func (api *API) ReadAlarm(instanceID int, alarmID string) (map[string]interface{
 	}
 }
 
-func (api *API) ListAlarms(instanceID int) ([]map[string]interface{}, error) {
+func (api *API) ListAlarms(instanceID int) ([]map[string]any, error) {
 	var (
-		data   []map[string]interface{}
-		failed map[string]interface{}
+		data   []map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms", instanceID)
 	)
 
@@ -83,9 +81,9 @@ func (api *API) ListAlarms(instanceID int) ([]map[string]interface{}, error) {
 	}
 }
 
-func (api *API) UpdateAlarm(instanceID int, params map[string]interface{}) error {
+func (api *API) UpdateAlarm(instanceID int, params map[string]any) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/%s", instanceID, params["id"].(string))
 	)
 
@@ -105,7 +103,7 @@ func (api *API) UpdateAlarm(instanceID int, params map[string]interface{}) error
 
 func (api *API) DeleteAlarm(instanceID int, alarmID string) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/%s", instanceID, alarmID)
 	)
 
@@ -125,8 +123,8 @@ func (api *API) DeleteAlarm(instanceID int, alarmID string) error {
 
 func (api *API) waitUntilAlarmDeletion(instanceID int, alarmID string) error {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 	)
 
 	log.Printf("[DEBUG] api::alarms#waitUntilAlarmDeletion waiting")

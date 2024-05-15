@@ -6,10 +6,10 @@ import (
 	"strconv"
 )
 
-func (api *API) ListInstances() ([]map[string]interface{}, error) {
+func (api *API) ListInstances() ([]map[string]any, error) {
 	var (
-		data   []map[string]interface{}
-		failed map[string]interface{}
+		data   []map[string]any
+		failed map[string]any
 	)
 
 	response, err := api.sling.New().Path("api/instances").Receive(&data, &failed)
@@ -30,10 +30,10 @@ func (api *API) ListInstances() ([]map[string]interface{}, error) {
 	}
 }
 
-func (api *API) ListVpcs() ([]map[string]interface{}, error) {
+func (api *API) ListVpcs() ([]map[string]any, error) {
 	var (
-		data   []map[string]interface{}
-		failed map[string]interface{}
+		data   []map[string]any
+		failed map[string]any
 		path   = "/api/vpcs"
 	)
 
@@ -58,7 +58,7 @@ func (api *API) ListVpcs() ([]map[string]interface{}, error) {
 
 func (api *API) RotatePassword(instanceID int) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("api/instances/%d/account/rotate-password", instanceID)
 	)
 
@@ -80,7 +80,7 @@ func (api *API) RotatePassword(instanceID int) error {
 
 func (api *API) RotateApiKey(instanceID int) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("api/instances/%d/account/rotate-apikey", instanceID)
 	)
 

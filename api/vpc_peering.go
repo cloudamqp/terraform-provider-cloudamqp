@@ -8,7 +8,7 @@ import (
 )
 
 func (api *API) AcceptVpcPeering(instanceID int, peeringID string, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	attempt, err := api.waitForPeeringStatus(instanceID, peeringID, 1, sleep, timeout)
 	log.Printf("[DEBUG] api::vpc_peering#accept attempt: %d, sleep: %d, timeout: %d",
@@ -20,18 +20,18 @@ func (api *API) AcceptVpcPeering(instanceID int, peeringID string, sleep, timeou
 	return api.retryAcceptVpcPeering(path, attempt, sleep, timeout)
 }
 
-func (api *API) ReadVpcInfo(instanceID int) (map[string]interface{}, error) {
+func (api *API) ReadVpcInfo(instanceID int) (map[string]any, error) {
 	path := fmt.Sprintf("/api/instances/%d/vpc-peering/info", instanceID)
 	// Initiale values, 5 attempts and 20 second sleep
 	return api.readVpcInfoWithRetry(path, 5, 20)
 }
 
 func (api *API) ReadVpcPeeringRequest(instanceID int, peeringID string) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/vpc-peering/request/%s", instanceID, peeringID)
 	)
 
@@ -57,11 +57,11 @@ func (api *API) RemoveVpcPeering(instanceID int, peeringID string, sleep, timeou
 }
 
 func (api *API) retryAcceptVpcPeering(path string, attempt, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 	)
 
 	log.Printf("[DEBUG] api::vpc_peering#retryRemoveVpcPeering path: %s, "+
@@ -94,11 +94,11 @@ func (api *API) retryAcceptVpcPeering(path string, attempt, sleep, timeout int) 
 }
 
 func (api *API) readVpcInfoWithRetry(path string, attempts, sleep int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 	)
 
 	log.Printf("[DEBUG] api::vpc_peering#readVpcInfoWithRetry path: %s, "+
@@ -131,7 +131,7 @@ func (api *API) readVpcInfoWithRetry(path string, attempts, sleep int) (
 
 func (api *API) retryRemoveVpcPeering(path string, attempt, sleep, timeout int) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 	)
 
 	log.Printf("[DEBUG] api::vpc_peering#retryRemoveVpcPeering path: %s, "+
@@ -175,8 +175,8 @@ func (api *API) waitForPeeringStatusWithRetry(path, peeringID string, attempt, s
 	timeout int) (int, error) {
 
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 	)
 
 	log.Printf("[DEBUG] api::vpc_peering#waitForPeeringStatusWithRetry path: %s "+

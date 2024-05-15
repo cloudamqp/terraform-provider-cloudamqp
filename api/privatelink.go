@@ -10,11 +10,11 @@ import (
 // EnablePrivatelink: Enable PrivateLink and wait until finished.
 // Need to enable VPC for an instance, if no standalone VPC used.
 // Wait until finished with configureable sleep and timeout.
-func (api *API) EnablePrivatelink(instanceID int, params map[string][]interface{},
+func (api *API) EnablePrivatelink(instanceID int, params map[string][]any,
 	sleep, timeout int) error {
 
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
 	)
 
@@ -37,16 +37,16 @@ func (api *API) EnablePrivatelink(instanceID int, params map[string][]interface{
 }
 
 // ReadPrivatelink: Reads PrivateLink information
-func (api *API) ReadPrivatelink(instanceID, sleep, timeout int) (map[string]interface{}, error) {
+func (api *API) ReadPrivatelink(instanceID, sleep, timeout int) (map[string]any, error) {
 	return api.readPrivateLinkWithRetry(instanceID, 1, sleep, timeout)
 }
 
 func (api *API) readPrivateLinkWithRetry(instanceID, attempt, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
 	)
 
@@ -75,9 +75,9 @@ func (api *API) readPrivateLinkWithRetry(instanceID, attempt, sleep, timeout int
 }
 
 // UpdatePrivatelink: Update allowed principals or subscriptions
-func (api *API) UpdatePrivatelink(instanceID int, params map[string][]interface{}) error {
+func (api *API) UpdatePrivatelink(instanceID int, params map[string][]any) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
 	)
 
@@ -98,7 +98,7 @@ func (api *API) UpdatePrivatelink(instanceID int, params map[string][]interface{
 // DisablePrivatelink: Disable the PrivateLink feature
 func (api *API) DisablePrivatelink(instanceID int) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
 	)
 
@@ -119,8 +119,8 @@ func (api *API) DisablePrivatelink(instanceID int) error {
 // waitForEnablePrivatelinkWithRetry: Wait until status change from pending to enable
 func (api *API) waitForEnablePrivatelinkWithRetry(instanceID, attempt, sleep, timeout int) error {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
 	)
 

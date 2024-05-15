@@ -8,10 +8,10 @@ import (
 	"time"
 )
 
-func (api *API) waitUntilReady(instanceID string) (map[string]interface{}, error) {
+func (api *API) waitUntilReady(instanceID string) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%s", instanceID)
 	)
 
@@ -38,8 +38,8 @@ func (api *API) waitUntilReady(instanceID string) (map[string]interface{}, error
 
 func (api *API) waitUntilAllNodesReady(instanceID string) error {
 	var (
-		data   []map[string]interface{}
-		failed map[string]interface{}
+		data   []map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("api/instances/%v/nodes", instanceID)
 	)
 
@@ -67,13 +67,13 @@ func (api *API) waitWithTimeoutUntilAllNodesConfigured(instanceID string, attemp
 	timeout int) error {
 
 	var (
-		data   []map[string]interface{}
-		failed map[string]interface{}
+		data   []map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("api/instances/%v/nodes", instanceID)
 	)
+
 	log.Printf("[DEBUG] api::instance#waitWithTimeoutUntilAllNodesConfigured not yet ready, "+
 		"will try again, attempt: %d, until timeout: %d", attempt, (timeout - (attempt * sleep)))
-
 	_, err := api.sling.New().Path(path).Receive(&data, &failed)
 	if err != nil {
 		return err
@@ -98,8 +98,8 @@ func (api *API) waitWithTimeoutUntilAllNodesConfigured(instanceID string, attemp
 
 func (api *API) waitUntilDeletion(instanceID string) error {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%s", instanceID)
 	)
 
@@ -123,10 +123,10 @@ func (api *API) waitUntilDeletion(instanceID string) error {
 	}
 }
 
-func (api *API) CreateInstance(params map[string]interface{}) (map[string]interface{}, error) {
+func (api *API) CreateInstance(params map[string]any) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 	)
 
 	log.Printf("[DEBUG] api::instance#create params: %v", params)
@@ -151,10 +151,10 @@ func (api *API) CreateInstance(params map[string]interface{}) (map[string]interf
 	}
 }
 
-func (api *API) ReadInstance(instanceID string) (map[string]interface{}, error) {
+func (api *API) ReadInstance(instanceID string) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%s", instanceID)
 	)
 
@@ -177,9 +177,9 @@ func (api *API) ReadInstance(instanceID string) (map[string]interface{}, error) 
 	}
 }
 
-func (api *API) UpdateInstance(instanceID string, params map[string]interface{}) error {
+func (api *API) UpdateInstance(instanceID string, params map[string]any) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("api/instances/%v", instanceID)
 	)
 
@@ -203,7 +203,7 @@ func (api *API) UpdateInstance(instanceID string, params map[string]interface{})
 
 func (api *API) DeleteInstance(instanceID string, keep_vpc bool) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("api/instances/%s?keep_vpc=%v", instanceID, keep_vpc)
 	)
 
@@ -225,8 +225,8 @@ func (api *API) DeleteInstance(instanceID string, keep_vpc bool) error {
 	}
 }
 
-func (api *API) UrlInformation(url string) map[string]interface{} {
-	paramsMap := make(map[string]interface{})
+func (api *API) UrlInformation(url string) map[string]any {
+	paramsMap := make(map[string]any)
 	r := regexp.MustCompile(`^.*:\/\/(?P<username>(.*)):(?P<password>(.*))@(?P<host>(.*))\/(?P<vhost>(.*))`)
 	match := r.FindStringSubmatch(url)
 

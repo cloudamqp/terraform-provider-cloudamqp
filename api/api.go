@@ -11,10 +11,10 @@ type API struct {
 	client *http.Client
 }
 
-func (api *API) DefaultRmqVersion() (map[string]interface{}, error) {
+func (api *API) DefaultRmqVersion() (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 	)
 
 	_, err := api.sling.New().Get("/api/default_rabbitmq_version").Receive(&data, &failed)
