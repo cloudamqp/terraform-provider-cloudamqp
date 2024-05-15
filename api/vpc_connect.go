@@ -30,7 +30,7 @@ func (api *API) EnableVpcConnect(instanceID int, params map[string][]interface{}
 	case 204:
 		return api.waitForEnableVpcConnectWithRetry(instanceID, 1, sleep, timeout)
 	default:
-		return fmt.Errorf("enable VPC Connect failed, status: %v, message: %s",
+		return fmt.Errorf("enable VPC Connect failed, status: %d, message: %s",
 			response.StatusCode, failed)
 	}
 }
@@ -52,7 +52,7 @@ func (api *API) ReadVpcConnect(instanceID int) (map[string]interface{}, error) {
 	case 200:
 		return data, nil
 	default:
-		return nil, fmt.Errorf("read VPC Connect failed, status: %v, message: %s",
+		return nil, fmt.Errorf("read VPC Connect failed, status: %d, message: %s",
 			response.StatusCode, failed)
 	}
 }
@@ -73,7 +73,7 @@ func (api *API) UpdateVpcConnect(instanceID int, params map[string][]interface{}
 	case 204:
 		return nil
 	default:
-		return fmt.Errorf("update VPC connect failed, status: %v, message: %s",
+		return fmt.Errorf("update VPC connect failed, status: %d, message: %s",
 			response.StatusCode, failed)
 	}
 }
@@ -94,7 +94,7 @@ func (api *API) DisableVpcConnect(instanceID int) error {
 	case 204:
 		return nil
 	default:
-		return fmt.Errorf("disable VPC Connect failed, status: %v, message: %s",
+		return fmt.Errorf("disable VPC Connect failed, status: %d, message: %s",
 			response.StatusCode, failed)
 	}
 }
@@ -113,15 +113,15 @@ func (api *API) waitForEnableVpcConnectWithRetry(instanceID, attempt, sleep, tim
 	} else if attempt*sleep > timeout {
 		return fmt.Errorf("enable VPC Connect failed, reached timeout of %d seconds", timeout)
 	}
-	log.Printf("[DEBUG] VPC-Connect: waitForEnableVpcConnectWithRetry data: %v", data)
 
 	switch response.StatusCode {
 	case 200:
+		log.Printf("[DEBUG] VPC-Connect: waitForEnableVpcConnectWithRetry data: %v", data)
 		switch data["status"].(string) {
 		case "enabled":
 			return nil
 		case "pending":
-			log.Printf("[DEBUG] go-api::vpc-connect::enable not finished and will retry, "+
+			log.Printf("[DEBUG] api::vpc-connect#enable not finished and will retry, "+
 				"attempt: %d, until timeout: %d", attempt, (timeout - (attempt * sleep)))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
@@ -129,7 +129,7 @@ func (api *API) waitForEnableVpcConnectWithRetry(instanceID, attempt, sleep, tim
 		}
 	}
 
-	return fmt.Errorf("wait for enable VPC Connect failed, status: %v, message: %s",
+	return fmt.Errorf("wait for enable VPC Connect failed, status: %d, message: %s",
 		response.StatusCode, failed)
 }
 
@@ -153,7 +153,7 @@ func (api *API) EnableVPC(instanceID int) error {
 			log.Printf("[DEBUG] VPC-Connect: VPC features enabled")
 			return nil
 		default:
-			return fmt.Errorf("enable VPC failed, status: %v, message: %s",
+			return fmt.Errorf("enable VPC failed, status: %d, message: %s",
 				response.StatusCode, failed)
 		}
 	}

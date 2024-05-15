@@ -68,7 +68,7 @@ func dataSourceNodes() *schema.Resource {
 
 func dataSourceNodesRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	data, err := api.ReadNodes(d.Get("instance_id").(int))
+	data, err := api.ListNodes(d.Get("instance_id").(int))
 	if err != nil {
 		return err
 	}

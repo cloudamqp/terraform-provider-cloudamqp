@@ -6,7 +6,9 @@ import (
 	"time"
 )
 
-func (api *API) waitUntilCustomDomainConfigured(instanceID int, configured bool) (map[string]interface{}, error) {
+func (api *API) waitUntilCustomDomainConfigured(instanceID int, configured bool) (
+	map[string]interface{}, error) {
+
 	for {
 		response, err := api.ReadCustomDomain(instanceID)
 
@@ -18,53 +20,66 @@ func (api *API) waitUntilCustomDomainConfigured(instanceID int, configured bool)
 			return response, nil
 		}
 
-		log.Printf("[DEBUG] go-api::custom_domain#waitUntilCustomDomainConfigured: still waiting, response: %s", response)
+		log.Printf("[DEBUG] api::custom_domain#waitUntilCustomDomainConfigured: still waiting, "+
+			"response: %s", response)
 		time.Sleep(1 * time.Second)
 	}
 }
 
-func (api *API) CreateCustomDomain(instanceID int, hostname string) (map[string]interface{}, error) {
-	log.Printf("[DEBUG] go-api::custom_domain::create custom domain ID: %v, hostname: %v", instanceID, hostname)
+func (api *API) CreateCustomDomain(instanceID int, hostname string) (
+	map[string]interface{}, error) {
 
-	failed := make(map[string]interface{})
-	params := make(map[string]string)
+	var (
+		failed map[string]interface{}
+		params = make(map[string]string)
+		path   = fmt.Sprintf("/api/instances/%d/custom-domain", instanceID)
+	)
+
+	log.Printf("[DEBUG] api::custom_domain#create custom domain ID: %d, hostname: %s",
+		instanceID, hostname)
 	params["hostname"] = hostname
-	path := fmt.Sprintf("/api/instances/%d/custom-domain", instanceID)
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(nil, &failed)
-
 	if err != nil {
 		return nil, err
 	}
 
-	if response.StatusCode != 202 {
-		return nil, fmt.Errorf("CreateCustomDomain failed, status: %v, message: %s", response.StatusCode, failed)
+	switch response.StatusCode {
+	case 202:
+		return api.waitUntilCustomDomainConfigured(instanceID, true)
+	default:
+		return nil, fmt.Errorf("create custom domain failed, status: %d, message: %s",
+			response.StatusCode, failed)
 	}
-
-	return api.waitUntilCustomDomainConfigured(instanceID, true)
 }
 
 func (api *API) ReadCustomDomain(instanceID int) (map[string]interface{}, error) {
-	log.Printf("[DEBUG] go-api::custom_domain#read instanceID: %v", instanceID)
+	var (
+		data   map[string]interface{}
+		failed map[string]interface{}
+		path   = fmt.Sprintf("/api/instances/%d/custom-domain", instanceID)
+	)
 
-	failed := make(map[string]interface{})
-	data := make(map[string]interface{})
-	path := fmt.Sprintf("/api/instances/%d/custom-domain", instanceID)
+	log.Printf("[DEBUG] api::custom_domain#read instanceID: %d", instanceID)
 	response, err := api.sling.New().Path(path).Receive(&data, &failed)
-	log.Printf("[DEBUG] go-api::custom_domain::read data: %v", data)
-
 	if err != nil {
 		return nil, err
 	}
 
-	if response.StatusCode == 200 {
+	switch response.StatusCode {
+	case 200:
+		log.Printf("[DEBUG] go-api::custom_domain::read data: %v", data)
 		return data, nil
-	} else {
-		return nil, fmt.Errorf("ReadCustomDomain failed, status: %v, message: %s", response.StatusCode, failed)
+	default:
+		return nil, fmt.Errorf("read custom domain failed, status: %d, message: %s",
+			response.StatusCode, failed)
 	}
 }
 
-func (api *API) UpdateCustomDomain(instanceID int, hostname string) (map[string]interface{}, error) {
-	log.Printf("[DEBUG] go-api::custom_domain#update instanceID: %v", instanceID)
+func (api *API) UpdateCustomDomain(instanceID int, hostname string) (
+	map[string]interface{}, error) {
+
+	log.Printf("[DEBUG] go-api::custom_domain#update instanceID: %d, hostname: %s",
+		instanceID, hostname)
 
 	// delete and wait
 	_, err := api.DeleteCustomDomain(instanceID)
@@ -85,23 +100,26 @@ func (api *API) UpdateCustomDomain(instanceID int, hostname string) (map[string]
 }
 
 func (api *API) DeleteCustomDomain(instanceID int) (map[string]interface{}, error) {
+	var (
+		failed map[string]interface{}
+		path   = fmt.Sprintf("/api/instances/%d/custom-domain", instanceID)
+	)
+
 	log.Printf("[DEBUG] go-api::custom_domain#delete instanceID: %v", instanceID)
-
-	failed := make(map[string]interface{})
-	path := fmt.Sprintf("/api/instances/%d/custom-domain", instanceID)
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
-
 	if err != nil {
 		return nil, err
 	}
 
-	if response.StatusCode == 200 {
+	switch response.StatusCode {
+	case 200:
 		// no custom domain configured
 		return nil, nil
-	} else if response.StatusCode == 202 {
+	case 202:
 		// wait until the remove completed successfully
 		return api.waitUntilCustomDomainConfigured(instanceID, false)
-	} else {
-		return nil, fmt.Errorf("DeleteCustomDomain failed, status: %v, message: %s", response.StatusCode, failed)
+	default:
+		return nil, fmt.Errorf("delete custom domain failed, status: %d, message: %s",
+			response.StatusCode, failed)
 	}
 }

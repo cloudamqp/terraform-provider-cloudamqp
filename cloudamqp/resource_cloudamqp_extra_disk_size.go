@@ -98,7 +98,7 @@ func resourceExtraDiskSizeRead(d *schema.ResourceData, meta interface{}) error {
 		instanceID = d.Get("instance_id").(int)
 	)
 
-	data, err := api.ReadNodes(instanceID)
+	data, err := api.ListNodes(instanceID)
 	if err != nil {
 		return err
 	}
