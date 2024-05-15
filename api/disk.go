@@ -7,8 +7,8 @@ import (
 	"time"
 )
 
-func (api *API) ResizeDisk(instanceID int, params map[string]interface{}, sleep, timeout int) (
-	map[string]interface{}, error) {
+func (api *API) ResizeDisk(instanceID int, params map[string]any, sleep, timeout int) (
+	map[string]any, error) {
 
 	var (
 		id   = strconv.Itoa(instanceID)
@@ -19,12 +19,12 @@ func (api *API) ResizeDisk(instanceID int, params map[string]interface{}, sleep,
 	return api.resizeDiskWithRetry(id, params, 1, sleep, timeout)
 }
 
-func (api *API) resizeDiskWithRetry(id string, params map[string]interface{}, attempt, sleep,
-	timeout int) (map[string]interface{}, error) {
+func (api *API) resizeDiskWithRetry(id string, params map[string]any, attempt, sleep,
+	timeout int) (map[string]any, error) {
 
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("api/instances/%s/disk", id)
 	)
 

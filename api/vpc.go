@@ -9,8 +9,8 @@ import (
 
 func (api *API) waitUntilVpcReady(vpcID string) error {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("api/vpcs/%s/vpc-peering/info", vpcID)
 	)
 
@@ -35,10 +35,10 @@ func (api *API) waitUntilVpcReady(vpcID string) error {
 	}
 }
 
-func (api *API) readVpcName(vpcID string) (map[string]interface{}, error) {
+func (api *API) readVpcName(vpcID string) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("api/vpcs/%s/vpc-peering/info", vpcID)
 	)
 
@@ -56,10 +56,10 @@ func (api *API) readVpcName(vpcID string) (map[string]interface{}, error) {
 	}
 }
 
-func (api *API) CreateVpcInstance(params map[string]interface{}) (map[string]interface{}, error) {
+func (api *API) CreateVpcInstance(params map[string]any) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 	)
 
 	log.Printf("[DEBUG] api::vpc#create params: %v", params)
@@ -83,10 +83,10 @@ func (api *API) CreateVpcInstance(params map[string]interface{}) (map[string]int
 	}
 }
 
-func (api *API) ReadVpcInstance(vpcID string) (map[string]interface{}, error) {
+func (api *API) ReadVpcInstance(vpcID string) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/vpcs/%s", vpcID)
 	)
 
@@ -109,9 +109,9 @@ func (api *API) ReadVpcInstance(vpcID string) (map[string]interface{}, error) {
 	}
 }
 
-func (api *API) UpdateVpcInstance(vpcID string, params map[string]interface{}) error {
+func (api *API) UpdateVpcInstance(vpcID string, params map[string]any) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("api/vpcs/%s", vpcID)
 	)
 
@@ -134,7 +134,7 @@ func (api *API) UpdateVpcInstance(vpcID string, params map[string]interface{}) e
 
 func (api *API) DeleteVpcInstance(vpcID string) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("api/vpcs/%s", vpcID)
 	)
 

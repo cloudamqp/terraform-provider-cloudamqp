@@ -7,20 +7,19 @@ import (
 	"time"
 )
 
-func (api *API) ReadRabbitMqConfiguration(instanceID, sleep, timeout int) (
-	map[string]interface{}, error) {
-
+func (api *API) ReadRabbitMqConfiguration(instanceID, sleep, timeout int) (map[string]any, error) {
 	return api.readRabbitMqConfigurationWithRetry(instanceID, 1, sleep, timeout)
 }
 
 func (api *API) readRabbitMqConfigurationWithRetry(instanceID, attempt, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/config", instanceID)
 	)
+
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -51,17 +50,19 @@ func (api *API) readRabbitMqConfigurationWithRetry(instanceID, attempt, sleep, t
 		response.StatusCode, failed)
 }
 
-func (api *API) UpdateRabbitMqConfiguration(instanceID int, params map[string]interface{},
+func (api *API) UpdateRabbitMqConfiguration(instanceID int, params map[string]any,
 	sleep, timeout int) error {
 	return api.updateRabbitMqConfigurationWithRetry(instanceID, params, 1, sleep, timeout)
 }
 
-func (api *API) updateRabbitMqConfigurationWithRetry(instanceID int, params map[string]interface{},
+func (api *API) updateRabbitMqConfigurationWithRetry(instanceID int, params map[string]any,
 	attempt, sleep, timeout int) error {
+
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("api/instances/%d/config", instanceID)
 	)
+
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 	if err != nil {
 		return err

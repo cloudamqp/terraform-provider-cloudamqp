@@ -8,11 +8,11 @@ import (
 
 // CreateIntegration enables integration communication, either for logs or metrics.
 func (api *API) CreateIntegration(instanceID int, intType string, intName string,
-	params map[string]interface{}) (map[string]interface{}, error) {
+	params map[string]any) (map[string]any, error) {
 
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/integrations/%s/%s", instanceID, intType, intName)
 	)
 
@@ -40,12 +40,10 @@ func (api *API) CreateIntegration(instanceID int, intType string, intName string
 }
 
 // ReadIntegration retrieves a specific logs or metrics integration
-func (api *API) ReadIntegration(instanceID int, intType, intID string) (
-	map[string]interface{}, error) {
-
+func (api *API) ReadIntegration(instanceID int, intType, intID string) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/integrations/%s/%s", instanceID, intType, intID)
 	)
 
@@ -59,14 +57,14 @@ func (api *API) ReadIntegration(instanceID int, intType, intID string) (
 	case 200:
 		log.Printf("[DEBUG] api::integration#read data: %v", data)
 		// Convert API response body, config part, into single map
-		convertedData := make(map[string]interface{})
+		convertedData := make(map[string]any)
 		for k, v := range data {
 			if k == "id" {
 				convertedData[k] = v
 			} else if k == "type" {
 				convertedData[k] = v
 			} else if k == "config" {
-				for configK, configV := range data["config"].(map[string]interface{}) {
+				for configK, configV := range data["config"].(map[string]any) {
 					convertedData[configK] = configV
 				}
 			}
@@ -80,11 +78,9 @@ func (api *API) ReadIntegration(instanceID int, intType, intID string) (
 }
 
 // UpdateIntegration updated the integration with new information
-func (api *API) UpdateIntegration(instanceID int, intType, intID string,
-	params map[string]interface{}) error {
-
+func (api *API) UpdateIntegration(instanceID int, intType, intID string, params map[string]any) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/integrations/%s/%s", instanceID, intType, intID)
 	)
 
@@ -106,7 +102,7 @@ func (api *API) UpdateIntegration(instanceID int, intType, intID string,
 // DeleteIntegration removes log or metric integration.
 func (api *API) DeleteIntegration(instanceID int, intType, intID string) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/integrations/%s/%s", instanceID, intType, intID)
 	)
 

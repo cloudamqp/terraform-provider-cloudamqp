@@ -12,7 +12,7 @@ func (api *API) waitForGcpPeeringStatus(path, peerID string,
 	attempt, sleep, timeout int) error {
 
 	var (
-		data map[string]interface{}
+		data map[string]any
 		err  error
 	)
 
@@ -29,7 +29,7 @@ func (api *API) waitForGcpPeeringStatus(path, peerID string,
 		rows := data["rows"].([]interface{})
 		if len(rows) > 0 {
 			for _, row := range rows {
-				tempRow := row.(map[string]interface{})
+				tempRow := row.(map[string]any)
 				if tempRow["name"] != peerID {
 					continue
 				}
@@ -46,8 +46,8 @@ func (api *API) waitForGcpPeeringStatus(path, peerID string,
 }
 
 // RequestVpcGcpPeering: requests a VPC peering from an instance.
-func (api *API) RequestVpcGcpPeering(instanceID int, params map[string]interface{},
-	waitOnStatus bool, sleep, timeout int) (map[string]interface{}, error) {
+func (api *API) RequestVpcGcpPeering(instanceID int, params map[string]any,
+	waitOnStatus bool, sleep, timeout int) (map[string]any, error) {
 
 	path := fmt.Sprintf("api/instances/%v/vpc-peering", instanceID)
 	attempt, data, err := api.requestVpcGcpPeeringWithRetry(path, params, waitOnStatus, 1, sleep, timeout)
@@ -67,11 +67,11 @@ func (api *API) RequestVpcGcpPeering(instanceID int, params map[string]interface
 }
 
 // requestVpcGcpPeeringWithRetry: requests a VPC peering from a path with retry logic
-func (api *API) requestVpcGcpPeeringWithRetry(path string, params map[string]interface{},
-	waitOnStatus bool, attempt, sleep, timeout int) (int, map[string]interface{}, error) {
+func (api *API) requestVpcGcpPeeringWithRetry(path string, params map[string]any,
+	waitOnStatus bool, attempt, sleep, timeout int) (int, map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 	)
 
 	log.Printf("[DEBUG] api::vpc_gcp_peering#request path: %s, params: %v", path, params)
@@ -101,7 +101,7 @@ func (api *API) requestVpcGcpPeeringWithRetry(path string, params map[string]int
 
 // ReadVpcGcpPeering: reads the VPC peering from the API
 func (api *API) ReadVpcGcpPeering(instanceID, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	path := fmt.Sprintf("/api/instances/%v/vpc-peering", instanceID)
 	_, data, err := api.readVpcGcpPeeringWithRetry(path, 1, sleep, timeout)
@@ -110,11 +110,11 @@ func (api *API) ReadVpcGcpPeering(instanceID, sleep, timeout int) (
 
 // readVpcGcpPeeringWithRetry: reads the VPC peering from the API with retry logic
 func (api *API) readVpcGcpPeeringWithRetry(path string, attempt, sleep, timeout int) (
-	int, map[string]interface{}, error) {
+	int, map[string]any, error) {
 
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 	)
 
 	log.Printf("[DEBUG] api::vpc_gcp_peering#read path: %s", path)
@@ -143,7 +143,7 @@ func (api *API) readVpcGcpPeeringWithRetry(path string, attempt, sleep, timeout 
 
 // UpdateVpcGcpPeering: updates a VPC peering from an instance.
 func (api *API) UpdateVpcGcpPeering(instanceID int, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	// NOP just read out the VPC peering
 	return api.ReadVpcGcpPeering(instanceID, sleep, timeout)
@@ -152,7 +152,7 @@ func (api *API) UpdateVpcGcpPeering(instanceID int, sleep, timeout int) (
 // RemoveVpcGcpPeering: removes a VPC peering from an instance.
 func (api *API) RemoveVpcGcpPeering(instanceID int, peerID string) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/vpc-peering/%s", instanceID, peerID)
 	)
 
@@ -172,18 +172,18 @@ func (api *API) RemoveVpcGcpPeering(instanceID int, peerID string) error {
 }
 
 // ReadVpcGcpInfo: reads the VPC info from the API
-func (api *API) ReadVpcGcpInfo(instanceID, sleep, timeout int) (map[string]interface{}, error) {
+func (api *API) ReadVpcGcpInfo(instanceID, sleep, timeout int) (map[string]any, error) {
 	path := fmt.Sprintf("/api/instances/%d/vpc-peering/info", instanceID)
 	return api.readVpcGcpInfoWithRetry(path, 1, sleep, timeout)
 }
 
 // readVpcGcpInfoWithRetry: reads the VPC info from the API with retry logic
 func (api *API) readVpcGcpInfoWithRetry(path string, attempt, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 	)
 
 	log.Printf("[DEBUG] api::vpc_gcp_peering#info path: %s", path)

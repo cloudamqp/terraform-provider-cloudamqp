@@ -19,7 +19,7 @@ type Region struct {
 func (api *API) ValidatePlan(name string) error {
 	var (
 		data   []Plan
-		failed map[string]interface{}
+		failed map[string]any
 		path   = "api/plans"
 	)
 
@@ -46,7 +46,7 @@ func (api *API) ValidatePlan(name string) error {
 func (api *API) PlanTypes(old, new string) (string, string, error) {
 	var (
 		data        []Plan
-		failed      map[string]interface{}
+		failed      map[string]any
 		path        = "api/plans"
 		oldPlanType string
 		newPlanType string
@@ -85,7 +85,7 @@ func planType(shared bool) string {
 func (api *API) ValidateRegion(region string) error {
 	var (
 		data     []Region
-		failed   map[string]interface{}
+		failed   map[string]any
 		path     = "api/regions"
 		platform string
 	)

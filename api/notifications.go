@@ -6,12 +6,10 @@ import (
 	"strconv"
 )
 
-func (api *API) CreateNotification(instanceID int, params map[string]interface{}) (
-	map[string]interface{}, error) {
-
+func (api *API) CreateNotification(instanceID int, params map[string]any) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients", instanceID)
 	)
 
@@ -36,12 +34,10 @@ func (api *API) CreateNotification(instanceID int, params map[string]interface{}
 	}
 }
 
-func (api *API) ReadNotification(instanceID int, recipientID string) (
-	map[string]interface{}, error) {
-
+func (api *API) ReadNotification(instanceID int, recipientID string) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients/%s", instanceID, recipientID)
 	)
 
@@ -61,10 +57,10 @@ func (api *API) ReadNotification(instanceID int, recipientID string) (
 	}
 }
 
-func (api *API) ListNotifications(instanceID int) ([]map[string]interface{}, error) {
+func (api *API) ListNotifications(instanceID int) ([]map[string]any, error) {
 	var (
-		data   []map[string]interface{}
-		failed map[string]interface{}
+		data   []map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients", instanceID)
 	)
 
@@ -85,10 +81,10 @@ func (api *API) ListNotifications(instanceID int) ([]map[string]interface{}, err
 }
 
 func (api *API) UpdateNotification(instanceID int, recipientID string,
-	params map[string]interface{}) error {
+	params map[string]any) error {
 
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients/%s", instanceID, recipientID)
 	)
 
@@ -109,7 +105,7 @@ func (api *API) UpdateNotification(instanceID int, recipientID string,
 
 func (api *API) DeleteNotification(instanceID int, recipientID string) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients/%s", instanceID, recipientID)
 	)
 

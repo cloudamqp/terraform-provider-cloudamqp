@@ -6,12 +6,10 @@ import (
 	"strconv"
 )
 
-func (api *API) CreateAwsEventBridge(instanceID int, params map[string]interface{}) (
-	map[string]interface{}, error) {
-
+func (api *API) CreateAwsEventBridge(instanceID int, params map[string]any) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/eventbridges", instanceID)
 	)
 
@@ -36,12 +34,10 @@ func (api *API) CreateAwsEventBridge(instanceID int, params map[string]interface
 	}
 }
 
-func (api *API) ReadAwsEventBridge(instanceID int, eventbridgeID string) (
-	map[string]interface{}, error) {
-
+func (api *API) ReadAwsEventBridge(instanceID int, eventbridgeID string) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/eventbridges/%s", instanceID, eventbridgeID)
 	)
 
@@ -59,10 +55,10 @@ func (api *API) ReadAwsEventBridge(instanceID int, eventbridgeID string) (
 	}
 }
 
-func (api *API) ReadAwsEventBridges(instanceID int) (map[string]interface{}, error) {
+func (api *API) ReadAwsEventBridges(instanceID int) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/eventbridges", instanceID)
 	)
 
@@ -82,7 +78,7 @@ func (api *API) ReadAwsEventBridges(instanceID int) (map[string]interface{}, err
 
 func (api *API) DeleteAwsEventBridge(instanceID int, eventbridgeID string) error {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/eventbridges/%s", instanceID, eventbridgeID)
 	)
 

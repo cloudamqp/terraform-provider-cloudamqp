@@ -7,7 +7,7 @@ import (
 )
 
 func (api *API) waitUntilCustomDomainConfigured(instanceID int, configured bool) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	for {
 		response, err := api.ReadCustomDomain(instanceID)
@@ -26,11 +26,9 @@ func (api *API) waitUntilCustomDomainConfigured(instanceID int, configured bool)
 	}
 }
 
-func (api *API) CreateCustomDomain(instanceID int, hostname string) (
-	map[string]interface{}, error) {
-
+func (api *API) CreateCustomDomain(instanceID int, hostname string) (map[string]any, error) {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		params = make(map[string]string)
 		path   = fmt.Sprintf("/api/instances/%d/custom-domain", instanceID)
 	)
@@ -52,10 +50,10 @@ func (api *API) CreateCustomDomain(instanceID int, hostname string) (
 	}
 }
 
-func (api *API) ReadCustomDomain(instanceID int) (map[string]interface{}, error) {
+func (api *API) ReadCustomDomain(instanceID int) (map[string]any, error) {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/custom-domain", instanceID)
 	)
 
@@ -75,9 +73,7 @@ func (api *API) ReadCustomDomain(instanceID int) (map[string]interface{}, error)
 	}
 }
 
-func (api *API) UpdateCustomDomain(instanceID int, hostname string) (
-	map[string]interface{}, error) {
-
+func (api *API) UpdateCustomDomain(instanceID int, hostname string) (map[string]any, error) {
 	log.Printf("[DEBUG] go-api::custom_domain#update instanceID: %d, hostname: %s",
 		instanceID, hostname)
 
@@ -99,9 +95,9 @@ func (api *API) UpdateCustomDomain(instanceID int, hostname string) (
 	return api.waitUntilCustomDomainConfigured(instanceID, true)
 }
 
-func (api *API) DeleteCustomDomain(instanceID int) (map[string]interface{}, error) {
+func (api *API) DeleteCustomDomain(instanceID int) (map[string]any, error) {
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/custom-domain", instanceID)
 	)
 

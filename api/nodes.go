@@ -7,10 +7,10 @@ import (
 )
 
 // ListNodes - list all nodes of the cluster
-func (api *API) ListNodes(instanceID int) ([]map[string]interface{}, error) {
+func (api *API) ListNodes(instanceID int) ([]map[string]any, error) {
 	var (
-		data   []map[string]interface{}
-		failed map[string]interface{}
+		data   []map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("api/instances/%d/nodes", instanceID)
 	)
 
@@ -30,9 +30,9 @@ func (api *API) ListNodes(instanceID int) ([]map[string]interface{}, error) {
 }
 
 // ReadNode - read out node information of a single node
-func (api *API) ReadNode(instanceID int, nodeName string) (map[string]interface{}, error) {
+func (api *API) ReadNode(instanceID int, nodeName string) (map[string]any, error) {
 	var (
-		data map[string]interface{}
+		data map[string]any
 	)
 
 	log.Printf("[DEBUG] go-api::nodes#read_node instance id: %d node name: %s", instanceID, nodeName)
@@ -52,11 +52,11 @@ func (api *API) ReadNode(instanceID int, nodeName string) (map[string]interface{
 
 // PostAction - request an action for the node (e.g. start/stop/restart RabbitMQ)
 func (api *API) PostAction(instanceID int, nodeName string, action string) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	var (
-		data          map[string]interface{}
-		failed        map[string]interface{}
+		data          map[string]any
+		failed        map[string]any
 		actionAsRoute string
 		params        = make(map[string][]string)
 		path          = fmt.Sprintf("api/instances/%d/actions/%s", instanceID, actionAsRoute)
@@ -85,7 +85,7 @@ func (api *API) PostAction(instanceID int, nodeName string, action string) (
 }
 
 func (api *API) waitOnNodeAction(instanceID int, nodeName string, action string) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	log.Printf("[DEBUG] api::nodes#waitOnNodeAction waiting")
 	for {

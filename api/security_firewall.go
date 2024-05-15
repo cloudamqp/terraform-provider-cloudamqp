@@ -8,8 +8,8 @@ import (
 
 func (api *API) waitUntilFirewallConfigured(instanceID, attempt, sleep, timeout int) error {
 	var (
-		data   map[string]interface{}
-		failed map[string]interface{}
+		data   map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall/configured", instanceID)
 	)
 
@@ -39,8 +39,8 @@ func (api *API) waitUntilFirewallConfigured(instanceID, attempt, sleep, timeout 
 	}
 }
 
-func (api *API) CreateFirewallSettings(instanceID int, params []map[string]interface{}, sleep,
-	timeout int) ([]map[string]interface{}, error) {
+func (api *API) CreateFirewallSettings(instanceID int, params []map[string]any, sleep, timeout int) (
+	[]map[string]any, error) {
 
 	attempt, err := api.createFirewallSettingsWithRetry(instanceID, params, 1, sleep, timeout)
 	if err != nil {
@@ -55,10 +55,11 @@ func (api *API) CreateFirewallSettings(instanceID int, params []map[string]inter
 	return api.ReadFirewallSettings(instanceID)
 }
 
-func (api *API) createFirewallSettingsWithRetry(instanceID int, params []map[string]interface{},
+func (api *API) createFirewallSettingsWithRetry(instanceID int, params []map[string]any,
 	attempt, sleep, timeout int) (int, error) {
+
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	)
 
@@ -93,10 +94,10 @@ func (api *API) createFirewallSettingsWithRetry(instanceID int, params []map[str
 		response.StatusCode, failed)
 }
 
-func (api *API) ReadFirewallSettings(instanceID int) ([]map[string]interface{}, error) {
+func (api *API) ReadFirewallSettings(instanceID int) ([]map[string]any, error) {
 	var (
-		data   []map[string]interface{}
-		failed map[string]interface{}
+		data   []map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	)
 
@@ -115,8 +116,8 @@ func (api *API) ReadFirewallSettings(instanceID int) ([]map[string]interface{}, 
 	}
 }
 
-func (api *API) UpdateFirewallSettings(instanceID int, params []map[string]interface{},
-	sleep, timeout int) ([]map[string]interface{}, error) {
+func (api *API) UpdateFirewallSettings(instanceID int, params []map[string]any,
+	sleep, timeout int) ([]map[string]any, error) {
 
 	log.Printf("[DEBUG] api::security_firewall#update instance id: %d, params: %v, sleep: %d, "+
 		"timeout: %d", instanceID, params, sleep, timeout)
@@ -131,11 +132,11 @@ func (api *API) UpdateFirewallSettings(instanceID int, params []map[string]inter
 	return api.ReadFirewallSettings(instanceID)
 }
 
-func (api *API) updateFirewallSettingsWithRetry(instanceID int, params []map[string]interface{},
+func (api *API) updateFirewallSettingsWithRetry(instanceID int, params []map[string]any,
 	attempt, sleep, timeout int) (int, error) {
 
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	)
 
@@ -169,9 +170,7 @@ func (api *API) updateFirewallSettingsWithRetry(instanceID int, params []map[str
 		response.StatusCode, failed)
 }
 
-func (api *API) DeleteFirewallSettings(instanceID, sleep, timeout int) (
-	[]map[string]interface{}, error) {
-
+func (api *API) DeleteFirewallSettings(instanceID, sleep, timeout int) ([]map[string]any, error) {
 	log.Printf("[DEBUG] api::security_firewall#delete instance id: %d, sleep: %d, timeout: %d",
 		instanceID, sleep, timeout)
 	attempt, err := api.deleteFirewallSettingsWithRetry(instanceID, 1, sleep, timeout)
@@ -191,8 +190,8 @@ func (api *API) deleteFirewallSettingsWithRetry(instanceID, attempt, sleep, time
 	int, error) {
 
 	var (
-		params [1]map[string]interface{}
-		failed map[string]interface{}
+		params [1]map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	)
 
@@ -229,8 +228,8 @@ func (api *API) deleteFirewallSettingsWithRetry(instanceID, attempt, sleep, time
 		response.StatusCode, failed)
 }
 
-func DefaultFirewallSettings() map[string]interface{} {
-	defaultRule := map[string]interface{}{
+func DefaultFirewallSettings() map[string]any {
+	defaultRule := map[string]any{
 		"services": []string{"AMQP", "AMQPS", "STOMP", "STOMPS", "MQTT", "MQTTS", "HTTPS", "STREAM",
 			"STREAM_SSL"},
 		"ports":       []int{},

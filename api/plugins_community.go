@@ -9,11 +9,11 @@ import (
 
 // InstallPluginCommunity: install a community plugin on an instance.
 func (api *API) InstallPluginCommunity(instanceID int, pluginName string, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	var (
-		failed map[string]interface{}
-		params = make(map[string]interface{})
+		failed map[string]any
+		params = make(map[string]any)
 		path   = fmt.Sprintf("/api/instances/%d/plugins/community?async=true", instanceID)
 	)
 
@@ -35,7 +35,7 @@ func (api *API) InstallPluginCommunity(instanceID int, pluginName string, sleep,
 
 // ReadPluginCommunity: reads a specific community plugin from an instance.
 func (api *API) ReadPluginCommunity(instanceID int, pluginName string, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	log.Printf("[DEBUG] api::plugin_community#read instance ID: %v, name: %v", instanceID, pluginName)
 	data, err := api.ListPluginsCommunity(instanceID, sleep, timeout)
@@ -54,26 +54,23 @@ func (api *API) ReadPluginCommunity(instanceID int, pluginName string, sleep, ti
 }
 
 // ListPluginsCommunity: list all community plugins for an instance.
-func (api *API) ListPluginsCommunity(instanceID, sleep, timeout int) (
-	[]map[string]interface{}, error) {
-
+func (api *API) ListPluginsCommunity(instanceID, sleep, timeout int) ([]map[string]any, error) {
 	return api.listPluginsCommunityWithRetry(instanceID, 1, sleep, timeout)
 }
 
 // listPluginsCommunityWithRetry: list all community plugins for an instance,
 // with retry if the backend is busy.
 func (api *API) listPluginsCommunityWithRetry(instanceID, attempt, sleep, timeout int) (
-	[]map[string]interface{}, error) {
+	[]map[string]any, error) {
 
 	var (
-		data   []map[string]interface{}
-		failed map[string]interface{}
+		data   []map[string]any
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/plugins/community", instanceID)
 	)
 
 	log.Printf("[DEBUG] api::plugin_community#listPluginsCommunityWithRetry path: %s", path)
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
-
 	if err != nil {
 		return nil, err
 	} else if attempt*sleep > timeout {
@@ -100,11 +97,11 @@ func (api *API) listPluginsCommunityWithRetry(instanceID, attempt, sleep, timeou
 
 // UpdatePluginCommunity: updates a community plugin from an instance.
 func (api *API) UpdatePluginCommunity(instanceID int, pluginName string, enabled bool,
-	sleep, timeout int) (map[string]interface{}, error) {
+	sleep, timeout int) (map[string]any, error) {
 
 	var (
-		failed map[string]interface{}
-		params = make(map[string]interface{})
+		failed map[string]any
+		params = make(map[string]any)
 		path   = fmt.Sprintf("/api/instances/%d/plugins/community?async=true", instanceID)
 	)
 
@@ -127,10 +124,10 @@ func (api *API) UpdatePluginCommunity(instanceID int, pluginName string, enabled
 
 // UninstallPluginCommunity: uninstall a community plugin from an instance.
 func (api *API) UninstallPluginCommunity(instanceID int, pluginName string, sleep, timeout int) (
-	map[string]interface{}, error) {
+	map[string]any, error) {
 
 	var (
-		failed map[string]interface{}
+		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/plugins/community/%s?async=true", instanceID, pluginName)
 	)
 
@@ -151,7 +148,7 @@ func (api *API) UninstallPluginCommunity(instanceID int, pluginName string, slee
 
 // waitUntilPluginUninstalled: wait until a community plugin been uninstalled.
 func (api *API) waitUntilPluginUninstalled(instanceID int, pluginName string,
-	attempt, sleep, timeout int) (map[string]interface{}, error) {
+	attempt, sleep, timeout int) (map[string]any, error) {
 
 	log.Printf("[DEBUG] api::plugin_community#waitUntilPluginUninstalled instance id: %v, name: %v",
 		instanceID, pluginName)
