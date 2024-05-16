@@ -8,7 +8,7 @@ require github.com/84codes/go-api v1.16.2
 
 require (
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.33.0
-	github.com/tidwall/gjson v1.17.0
+	github.com/tidwall/gjson v1.17.1
 	github.com/tidwall/sjson v1.2.5
 	gopkg.in/dnaeon/go-vcr.v3 v3.2.0
 )
