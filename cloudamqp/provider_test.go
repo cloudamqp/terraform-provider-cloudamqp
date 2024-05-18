@@ -1,6 +1,7 @@
 package cloudamqp
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -9,16 +10,15 @@ import (
 	"testing"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/sanitizer"
+	"github.com/hashicorp/terraform-plugin-go/tfprotov5"
+	"github.com/hashicorp/terraform-plugin-mux/tf5muxserver"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/tidwall/gjson"
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"
 	"gopkg.in/dnaeon/go-vcr.v3/recorder"
 )
 
 var (
-	testAccProviderFactory map[string]func() (*schema.Provider, error)
-
 	mode = recorder.ModeReplayOnly
 )
 
@@ -155,10 +155,19 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		return req.URL.Path == "/login"
 	})
 
-	testAccProviderFactory = map[string]func() (*schema.Provider, error){
-		"cloudamqp": func() (*schema.Provider, error) { return Provider("1.0", rec.GetDefaultClient()), nil },
+	c.ProtoV5ProviderFactories = map[string]func() (tfprotov5.ProviderServer, error){
+		"cloudamqp": func() (tfprotov5.ProviderServer, error) {
+			ctx := context.Background()
+
+			muxServer, err := tf5muxserver.NewMuxServer(ctx, Provider("1.0", rec.GetDefaultClient()).GRPCProvider)
+
+			if err != nil {
+				return nil, err
+			}
+
+			return muxServer.ProviderServer(), nil
+		},
 	}
-	c.ProviderFactories = testAccProviderFactory
 
 	resource.Test(t, c)
 }
