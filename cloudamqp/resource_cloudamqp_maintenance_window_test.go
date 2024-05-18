@@ -53,8 +53,7 @@ func TestAccMaintenanceWindow_LavinMQ(t *testing.T) {
 	)
 
 	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck:          func() { testAccPreCheck(t) },
-		ProviderFactories: testAccProviderFactory,
+		PreCheck: func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNamesDayTime, paramsDayTime),
@@ -138,8 +137,7 @@ func TestAccMaintenanceWindow_RabbitMQ(t *testing.T) {
 	)
 
 	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck:          func() { testAccPreCheck(t) },
-		ProviderFactories: testAccProviderFactory,
+		PreCheck: func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNamesDayTime, paramsDayTime),

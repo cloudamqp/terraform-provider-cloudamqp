@@ -1,19 +1,32 @@
 package main
 
 import (
+	"context"
+	"log"
 	"net/http"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
+	"github.com/hashicorp/terraform-plugin-go/tfprotov5/tf5server"
+	"github.com/hashicorp/terraform-plugin-mux/tf5muxserver"
 )
 
 var version string
 
 func main() {
-	plugin.Serve(&plugin.ServeOpts{
-		ProviderFunc: func() *schema.Provider {
-			return cloudamqp.Provider(version, http.DefaultClient)
-		},
-	})
+	ctx := context.Background()
+
+	muxServer, err := tf5muxserver.NewMuxServer(ctx, cloudamqp.Provider(version, http.DefaultClient).GRPCProvider)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = tf5server.Serve(
+		"registry.terraform.io/cloudamqp/cloudamqp",
+		muxServer.ProviderServer,
+	)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }
