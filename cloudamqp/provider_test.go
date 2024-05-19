@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/sanitizer"
+	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov5"
 	"github.com/hashicorp/terraform-plugin-mux/tf5muxserver"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -159,7 +160,10 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		"cloudamqp": func() (tfprotov5.ProviderServer, error) {
 			ctx := context.Background()
 
-			muxServer, err := tf5muxserver.NewMuxServer(ctx, Provider("1.0", rec.GetDefaultClient()).GRPCProvider)
+			muxServer, err := tf5muxserver.NewMuxServer(ctx,
+				Provider("1.0", rec.GetDefaultClient()).GRPCProvider,
+				providerserver.NewProtocol5(New("1.0", rec.GetDefaultClient())),
+			)
 
 			if err != nil {
 				return nil, err
