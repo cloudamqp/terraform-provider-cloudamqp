@@ -6,6 +6,7 @@ toolchain go1.23.0
 
 require (
 	github.com/dghubble/sling v1.4.2
+	github.com/hashicorp/terraform-plugin-framework v1.14.1
 	github.com/hashicorp/terraform-plugin-go v0.26.0
 	github.com/hashicorp/terraform-plugin-mux v0.18.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.35.0
