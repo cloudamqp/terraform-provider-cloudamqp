@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/sanitizer"
+	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov5"
 	"github.com/hashicorp/terraform-plugin-mux/tf5muxserver"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -146,7 +147,7 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 				fmt.Println("SKIP: PUT /api/instances/{id}/config", i.Request.URL, "error:", errStr)
 				i.DiscardOnSave = true
 			}
-    case i.Response.Code == 200 && i.Request.Method == "GET" &&
+		case i.Response.Code == 200 && i.Request.Method == "GET" &&
 			regexp.MustCompile(`/api/vpcs/\d+/vpc-peering$`).MatchString(i.Request.URL):
 			// Filter polling for vpc peering state, only store active response
 			state := gjson.Get(i.Response.Body, "rows.0.state").String()
@@ -171,7 +172,10 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		"cloudamqp": func() (tfprotov5.ProviderServer, error) {
 			ctx := context.Background()
 
-			muxServer, err := tf5muxserver.NewMuxServer(ctx, Provider("1.0", rec.GetDefaultClient()).GRPCProvider)
+			muxServer, err := tf5muxserver.NewMuxServer(ctx,
+				Provider("1.0", rec.GetDefaultClient()).GRPCProvider,
+				providerserver.NewProtocol5(New("1.0", rec.GetDefaultClient())),
+			)
 
 			if err != nil {
 				return nil, err
