@@ -289,7 +289,7 @@ The following arguments are supported:
 * `access_key_id`     - (Optional/Sensitive) AWS access key identifier.
 * `secret_access_key` - (Optional/Sensitive) AWS secret access key.
 * `api_key`           - (Optional/Sensitive) The API key.
-* `tags`              - (Optional) Tags. e.g. `env=prod,region=europe,version=v1.0`. The "v" prefix is required for version.for version.
+* `tags`              - (Optional) Tags. e.g. `env=prod,region=europe,version=v1.0`. The "v" prefix is required for version.
 * `credentials`       - (Optional/Sensitive) Google Service Account private key credentials.
 * `project_id`        - (Optional/Computed) The project identifier.
 * `private_key`       - (Optional/Computed/Sensitive) The private access key.
