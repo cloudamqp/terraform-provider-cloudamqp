@@ -78,6 +78,7 @@ resource "cloudamqp_integration_metric" "datadog" {
   name = "datadog"
   api_key = var.datadog_api_key
   region = var.datadog_region
+  tags = "env=prod,region=us1,version=v1.0"
 }
 
 resource "cloudamqp_integration_metric" "datadog_v2" {
@@ -85,6 +86,7 @@ resource "cloudamqp_integration_metric" "datadog_v2" {
   name = "datadog_v2"
   api_key = var.datadog_api_key
   region = var.datadog_region
+  tags = "env=prod,region=us1,version=v1.0"
 }
 ```
 

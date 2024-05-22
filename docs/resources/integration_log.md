@@ -88,7 +88,7 @@ resource "cloudamqp_integration_log" "datadog" {
   name = "datadog"
   region = var.datadog_region
   api_key = var.datadog_api_key
-  tags = var.datadog_tags
+  tags = "env=prod,region=us1,version=v1.0"
 }
 ```
 
