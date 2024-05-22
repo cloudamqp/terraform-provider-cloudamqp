@@ -88,7 +88,7 @@ resource "cloudamqp_integration_log" "datadog" {
   name = "datadog"
   region = var.datadog_region
   api_key = var.datadog_api_key
-  tags = var.datadog_tags
+  tags = "env=prod,region=us1,version=v1.0"
 }
 ```
 
@@ -289,7 +289,10 @@ The following arguments are supported:
 * `access_key_id`     - (Optional/Sensitive) AWS access key identifier.
 * `secret_access_key` - (Optional/Sensitive) AWS secret access key.
 * `api_key`           - (Optional/Sensitive) The API key.
-* `tags`              - (Optional) Tag the integration, e.g. env=prod,region=europe.
+* `tags`              - (Optional) Tags. e.g. `env=prod,region=europe`.
+
+***Note: If tags are used with Datadog. The value part (prod, europe, ...) must start with a letter, read more about tags format in the [Datadog documentation](https://docs.datadoghq.com/getting_started/tagging/#define-tags)***
+
 * `credentials`       - (Optional/Sensitive) Google Service Account private key credentials.
 * `project_id`        - (Optional/Computed) The project identifier.
 * `private_key`       - (Optional/Computed/Sensitive) The private access key.

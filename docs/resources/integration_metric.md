@@ -78,6 +78,7 @@ resource "cloudamqp_integration_metric" "datadog" {
   name = "datadog"
   api_key = var.datadog_api_key
   region = var.datadog_region
+  tags = "env=prod,region=us1,version=v1.0"
 }
 
 resource "cloudamqp_integration_metric" "datadog_v2" {
@@ -85,6 +86,7 @@ resource "cloudamqp_integration_metric" "datadog_v2" {
   name = "datadog_v2"
   api_key = var.datadog_api_key
   region = var.datadog_region
+  tags = "env=prod,region=us1,version=v1.0"
 }
 ```
 
@@ -237,6 +239,9 @@ The following arguments are supported:
 * `private_key`       - (Optional/Computed) The private access key.
 * `client_email`      - (Optional/Computed) The client email registered for the integration service.
 * `tags`              - (Optional) Tags. e.g. `env=prod,region=europe`.
+
+***Note: If tags are used with Datadog. The value part (prod, europe, ...) must start with a letter, read more about tags format in the [Datadog documentation](https://docs.datadoghq.com/getting_started/tagging/#define-tags)***
+
 * `queue_allowlist`   - (Optional) Allowlist queues using regular expression. Leave empty to include all queues.
 * `vhost_allowlist`   - (Optional) Allowlist vhost using regular expression. Leave empty to include all vhosts.
 * `queue_whitelist`   - **Deprecated** Use queue_allowlist instead
