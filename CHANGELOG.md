@@ -14,6 +14,7 @@ IMRPOVEMENTS:
 
 * Added support for updating webhook resource ([#268](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/268))
 * Added configurable retries for webhook resource ([#268](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/268))
+* Updated integration resource docs for Datadog tags ([#277](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/277))
 
 ## 1.29.5 (Apr 04, 2024)
 
