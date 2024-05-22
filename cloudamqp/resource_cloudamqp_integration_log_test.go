@@ -42,7 +42,7 @@ func TestAccIntegrationLog_Basic(t *testing.T) {
 			"CoralogixApplication":      "playground",
 			"DataDogRegion":             "us1",
 			"DataDogApiKey":             os.Getenv("DATADOG_APIKEY"),
-			"DataDogTags":               "env=test,region=us1,version=v1.0",
+			"DataDogTags":               "env=test,region=us1",
 			"LogEntriesToken":           os.Getenv("LOGENTIRES_TOKEN"),
 			"LogglyToken":               os.Getenv("LOGGLY_TOKEN"),
 			"PapertrailUrl":             "logs.papertrailapp.com:11111",

@@ -28,7 +28,7 @@ func TestAccIntegrationMetric_Basic(t *testing.T) {
 			"CloudwatchTags":            "env=test,region=us-east-1",
 			"DataDogRegion":             "us1",
 			"DataDogApiKey":             os.Getenv("DATADOG_APIKEY"),
-			"DataDogTags":               "env=test,region=us1,version=v1.0",
+			"DataDogTags":               "env=test,region=us1",
 			"LibratoEmail":              "test@example.com",
 			"LibratoApiKey":             os.Getenv("LIBRATO_APIKEY"),
 			"LibratoTags":               "env=test",
