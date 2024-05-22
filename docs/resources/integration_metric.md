@@ -236,7 +236,10 @@ The following arguments are supported:
 * `project_id`        - (Optional/Computed) The project identifier.
 * `private_key`       - (Optional/Computed) The private access key.
 * `client_email`      - (Optional/Computed) The client email registered for the integration service.
-* `tags`              - (Optional) Tags. e.g. `env=prod,region=europe,version=v1.0`. The "v" prefix is required for version.
+* `tags`              - (Optional) Tags. e.g. `env=prod,region=europe`.
+
+***Note: If tags are used with Datadog. The value part (prod, europe, ...) must start with a letter, read more about tags format in the [Datadog documentation](https://docs.datadoghq.com/getting_started/tagging/#define-tags)***
+
 * `queue_allowlist`   - (Optional) Allowlist queues using regular expression. Leave empty to include all queues.
 * `vhost_allowlist`   - (Optional) Allowlist vhost using regular expression. Leave empty to include all vhosts.
 * `queue_whitelist`   - **Deprecated** Use queue_allowlist instead
