@@ -99,7 +99,11 @@ func (p *cloudamqpProvider) DataSources(_ context.Context) []func() datasource.D
 }
 
 func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resource {
-	return []func() resource.Resource{}
+	return []func() resource.Resource{
+		func() resource.Resource {
+			return &awsEventBridgeResource{}
+		},
+	}
 }
 
 func New(version string, client *http.Client) provider.Provider {
@@ -145,29 +149,28 @@ func Provider(v string, client *http.Client) *schemaSdk.Provider {
 			"cloudamqp_vpc_info":            dataSourceVpcInfo(),
 		},
 		ResourcesMap: map[string]*schemaSdk.Resource{
-			"cloudamqp_account_action":              resourceAccountAction(),
-			"cloudamqp_alarm":                       resourceAlarm(),
-			"cloudamqp_custom_domain":               resourceCustomDomain(),
-			"cloudamqp_extra_disk_size":             resourceExtraDiskSize(),
-			"cloudamqp_instance":                    resourceInstance(),
-			"cloudamqp_integration_aws_eventbridge": resourceAwsEventBridge(),
-			"cloudamqp_integration_log":             resourceIntegrationLog(),
-			"cloudamqp_integration_metric":          resourceIntegrationMetric(),
-			"cloudamqp_node_actions":                resourceNodeAction(),
-			"cloudamqp_notification":                resourceNotification(),
-			"cloudamqp_plugin_community":            resourcePluginCommunity(),
-			"cloudamqp_plugin":                      resourcePlugin(),
-			"cloudamqp_privatelink_aws":             resourcePrivateLinkAws(),
-			"cloudamqp_privatelink_azure":           resourcePrivateLinkAzure(),
-			"cloudamqp_rabbitmq_configuration":      resourceRabbitMqConfiguration(),
-			"cloudamqp_security_firewall":           resourceSecurityFirewall(),
-			"cloudamqp_upgrade_rabbitmq":            resourceUpgradeRabbitMQ(),
-			"cloudamqp_upgrade_lavinmq":             resourceUpgradeLavinMQ(),
-			"cloudamqp_vpc_connect":                 resourceVpcConnect(),
-			"cloudamqp_vpc_gcp_peering":             resourceVpcGcpPeering(),
-			"cloudamqp_vpc_peering":                 resourceVpcPeering(),
-			"cloudamqp_vpc":                         resourceVpc(),
-			"cloudamqp_webhook":                     resourceWebhook(),
+			"cloudamqp_account_action":         resourceAccountAction(),
+			"cloudamqp_alarm":                  resourceAlarm(),
+			"cloudamqp_custom_domain":          resourceCustomDomain(),
+			"cloudamqp_extra_disk_size":        resourceExtraDiskSize(),
+			"cloudamqp_instance":               resourceInstance(),
+			"cloudamqp_integration_log":        resourceIntegrationLog(),
+			"cloudamqp_integration_metric":     resourceIntegrationMetric(),
+			"cloudamqp_node_actions":           resourceNodeAction(),
+			"cloudamqp_notification":           resourceNotification(),
+			"cloudamqp_plugin_community":       resourcePluginCommunity(),
+			"cloudamqp_plugin":                 resourcePlugin(),
+			"cloudamqp_privatelink_aws":        resourcePrivateLinkAws(),
+			"cloudamqp_privatelink_azure":      resourcePrivateLinkAzure(),
+			"cloudamqp_rabbitmq_configuration": resourceRabbitMqConfiguration(),
+			"cloudamqp_security_firewall":      resourceSecurityFirewall(),
+			"cloudamqp_upgrade_rabbitmq":       resourceUpgradeRabbitMQ(),
+			"cloudamqp_upgrade_lavinmq":        resourceUpgradeLavinMQ(),
+			"cloudamqp_vpc_connect":            resourceVpcConnect(),
+			"cloudamqp_vpc_gcp_peering":        resourceVpcGcpPeering(),
+			"cloudamqp_vpc_peering":            resourceVpcPeering(),
+			"cloudamqp_vpc":                    resourceVpc(),
+			"cloudamqp_webhook":                resourceWebhook(),
 		},
 		ConfigureFunc: configureClient(client),
 	}
