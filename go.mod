@@ -4,9 +4,8 @@ go 1.21
 
 toolchain go1.22.2
 
-require github.com/84codes/go-api v1.16.2
-
 require (
+	github.com/dghubble/sling v1.4.2
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.33.0
 	github.com/tidwall/gjson v1.17.1
 	github.com/tidwall/sjson v1.2.5
@@ -67,5 +66,3 @@ require (
 	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-// replace github.com/84codes/go-api => ../../84codes/go-api
