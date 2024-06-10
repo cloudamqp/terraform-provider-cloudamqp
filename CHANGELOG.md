@@ -3,18 +3,21 @@
 NOTES:
 
 * Github CI workflow with Go VCR basic resource testing
-* Updated the API wrapper (go-api) dependency with newer version (1.16.2)
-* Update Terraform Plugin SDK to V2 ([#261](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/261))
+* Go-API client library imported into provider and removed external dependency
+* Terraform Plugin SDK v2
 
 Features:
 
 * Added Go VCR basic resource testing that extends acceptance test with stored fixtures ([#257](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/257))
+* Updated Terraform Plugin SDK to V2 ([#261](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/261))
 
 IMRPOVEMENTS:
 
 * Added support for updating webhook resource ([#268](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/268))
 * Added configurable retries for webhook resource ([#268](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/268))
 * Updated integration resource docs for Datadog tags ([#277](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/277))
+* Imported Go-API client library with history ([#282](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/282))
+* Posted Go-API import modifications ([#284](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/284))
 
 ## 1.29.5 (Apr 04, 2024)
 
