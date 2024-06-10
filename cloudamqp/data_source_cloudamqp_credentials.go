@@ -1,10 +1,10 @@
 package cloudamqp
 
 import (
-	"github.com/84codes/go-api/api"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-
 	"fmt"
+
+	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceCredentials() *schema.Resource {

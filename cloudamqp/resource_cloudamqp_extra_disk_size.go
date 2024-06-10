@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/84codes/go-api/api"
+	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -98,7 +98,7 @@ func resourceExtraDiskSizeRead(d *schema.ResourceData, meta interface{}) error {
 		instanceID = d.Get("instance_id").(int)
 	)
 
-	data, err := api.ReadNodes(instanceID)
+	data, err := api.ListNodes(instanceID)
 	if err != nil {
 		return err
 	}

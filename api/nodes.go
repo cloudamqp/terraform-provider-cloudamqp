@@ -6,30 +6,41 @@ import (
 	"time"
 )
 
-// ReadNodes - read out node information of the cluster
-func (api *API) ReadNodes(instanceID int) ([]map[string]interface{}, error) {
-	var data []map[string]interface{}
-	failed := make(map[string]interface{})
-	log.Printf("[DEBUG] go-api::nodes::read_nodes instance id: %d", instanceID)
-	path := fmt.Sprintf("api/instances/%d/nodes", instanceID)
+// ListNodes - list all nodes of the cluster
+func (api *API) ListNodes(instanceID int) ([]map[string]any, error) {
+	var (
+		data   []map[string]any
+		failed map[string]any
+		path   = fmt.Sprintf("api/instances/%d/nodes", instanceID)
+	)
+
+	log.Printf("[DEBUG] api::nodes#list_nodes path: %s", path)
 	response, err := api.sling.New().Path(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
 	}
-	if response.StatusCode != 200 {
-		return nil, fmt.Errorf("ReadNodes failed, status: %v, message: %s", response.StatusCode, failed)
+
+	switch response.StatusCode {
+	case 200:
+		return data, nil
+	default:
+		return nil, fmt.Errorf("list nodes failed, status: %d, message: %s",
+			response.StatusCode, failed)
 	}
-	return data, nil
 }
 
 // ReadNode - read out node information of a single node
-func (api *API) ReadNode(instanceID int, nodeName string) (map[string]interface{}, error) {
-	data := make(map[string]interface{})
-	log.Printf("[DEBUG] go-api::nodes::read_node instance id: %d node name: %s", instanceID, nodeName)
-	response, err := api.ReadNodes(instanceID)
+func (api *API) ReadNode(instanceID int, nodeName string) (map[string]any, error) {
+	var (
+		data map[string]any
+	)
+
+	log.Printf("[DEBUG] go-api::nodes#read_node instance id: %d node name: %s", instanceID, nodeName)
+	response, err := api.ListNodes(instanceID)
 	if err != nil {
 		return nil, err
 	}
+
 	for i := range response {
 		if response[i]["name"] == nodeName {
 			data = response[i]
@@ -40,32 +51,43 @@ func (api *API) ReadNode(instanceID int, nodeName string) (map[string]interface{
 }
 
 // PostAction - request an action for the node (e.g. start/stop/restart RabbitMQ)
-func (api *API) PostAction(instanceID int, nodeName string, action string) (map[string]interface{}, error) {
-	var actionAsRoute string
-	params := make(map[string][]string)
-	data := make(map[string]interface{})
-	failed := make(map[string]interface{})
+func (api *API) PostAction(instanceID int, nodeName string, action string) (
+	map[string]any, error) {
+
+	var (
+		data          map[string]any
+		failed        map[string]any
+		actionAsRoute string
+		params        = make(map[string][]string)
+	)
+
+	params["nodes"] = append(params["nodes"], nodeName)
+
 	if action == "mgmt.restart" {
 		actionAsRoute = "mgmt-restart"
 	} else {
 		actionAsRoute = action
 	}
-	params["nodes"] = append(params["nodes"], nodeName)
 	path := fmt.Sprintf("api/instances/%d/actions/%s", instanceID, actionAsRoute)
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
-
 	if err != nil {
 		return nil, err
 	}
-	if response.StatusCode != 200 {
-		return nil, fmt.Errorf("action failed, status: %v, message: %s", response.StatusCode, failed)
-	}
 
-	return api.waitOnNodeAction(instanceID, nodeName, action)
+	switch response.StatusCode {
+	case 200:
+		return api.waitOnNodeAction(instanceID, nodeName, action)
+	default:
+
+		return nil, fmt.Errorf("action %s failed, status: %d, message: %s",
+			action, response.StatusCode, failed)
+	}
 }
 
-func (api *API) waitOnNodeAction(instanceID int, nodeName string, action string) (map[string]interface{}, error) {
-	log.Printf("[DEBUG] go-api::nodes::waitOnNodeAction waiting")
+func (api *API) waitOnNodeAction(instanceID int, nodeName string, action string) (
+	map[string]any, error) {
+
+	log.Printf("[DEBUG] api::nodes#waitOnNodeAction waiting")
 	for {
 		data, err := api.ReadNode(instanceID, nodeName)
 

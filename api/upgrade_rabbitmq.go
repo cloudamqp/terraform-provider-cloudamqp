@@ -7,63 +7,80 @@ import (
 )
 
 // ReadVersions - Read versions RabbitMQ and Erlang can upgrade to
-func (api *API) ReadVersions(instanceID int) (map[string]interface{}, error) {
-	data := make(map[string]interface{})
-	failed := make(map[string]interface{})
-	log.Printf("[DEBUG] go-api::upgrade_rabbitmq::read_versions instance id: %d", instanceID)
-	path := fmt.Sprintf("api/instances/%d/actions/new-rabbitmq-erlang-versions", instanceID)
+func (api *API) ReadVersions(instanceID int) (map[string]any, error) {
+	var (
+		data   map[string]any
+		failed map[string]any
+		path   = fmt.Sprintf("api/instances/%d/actions/new-rabbitmq-erlang-versions", instanceID)
+	)
+
+	log.Printf("[DEBUG] api::upgrade_rabbitmq#read_versions path: %s", path)
 	response, err := api.sling.New().Path(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
 	}
-	if response.StatusCode != 200 {
-		return nil, fmt.Errorf("ReadVersions failed, status: %v, message: %s", response.StatusCode, failed)
+
+	switch response.StatusCode {
+	case 200:
+		return data, nil
+	default:
+		return nil, fmt.Errorf("ReadVersions failed, status: %d, message: %s",
+			response.StatusCode, failed)
 	}
-	return data, nil
 }
 
 // UpgradeRabbitMQ - Upgrade to latest possible versions for both RabbitMQ and Erlang.
 func (api *API) UpgradeRabbitMQ(instanceID int) (string, error) {
-	data := make(map[string]interface{})
-	failed := make(map[string]interface{})
-	path := fmt.Sprintf("api/instances/%d/actions/upgrade-rabbitmq-erlang", instanceID)
+	var (
+		data   map[string]any
+		failed map[string]any
+		path   = fmt.Sprintf("api/instances/%d/actions/upgrade-rabbitmq-erlang", instanceID)
+	)
+
+	log.Printf("[DEBUG] api::upgrade_rabbitmq#upgrade_rabbitmq path: %s", path)
 	response, err := api.sling.New().Post(path).Receive(&data, &failed)
-	log.Printf("[DEBUG] go-api::upgrade_rabbitmq::upgrade_rabbitmq_mq data: %v, status code: %v", data, response.StatusCode)
 	if err != nil {
 		return "", err
 	}
-	if response.StatusCode == 200 {
-		return "Already at highest possible version", nil
-	} else if response.StatusCode != 202 {
-		return "", fmt.Errorf("upgrade RabbitMQ failed, status: %v, message: %s", response.StatusCode, failed)
-	}
 
-	return api.waitUntilUpgraded(instanceID)
+	log.Printf("[DEBUG] api::upgrade_rabbitmq::upgrade_rabbitmq_mq data: %v, status code: %d",
+		data, response.StatusCode)
+
+	switch response.StatusCode {
+	case 200:
+		return "Already at highest possible version", nil
+	case 202:
+		return api.waitUntilUpgraded(instanceID)
+	default:
+		return "", fmt.Errorf("upgrade RabbitMQ failed, status: %d, message: %s",
+			response.StatusCode, failed)
+	}
 }
 
 func (api *API) waitUntilUpgraded(instanceID int) (string, error) {
-	var data []map[string]interface{}
-	failed := make(map[string]interface{})
+	var (
+		data   []map[string]any
+		failed map[string]any
+		path   = fmt.Sprintf("api/instances/%d/nodes", instanceID)
+	)
 
 	for {
-		path := fmt.Sprintf("api/instances/%v/nodes", instanceID)
 		_, err := api.sling.New().Path(path).Receive(&data, &failed)
 		if err != nil {
-			log.Printf("[ERROR] go-api::upgrade_rabbitmq::waitUntilUpgraded error: %v", err)
 			return "", err
 		}
-		log.Printf("[DEBUG] go-api::upgrade_rabbitmq::waitUntilUpgraded numberOfNodes: %v", len(data))
-		log.Printf("[DEBUG] go-api::upgrade_rabbitmq::waitUntilUpgraded data: %v", data)
+		log.Printf("[DEBUG] api::upgrade_rabbitmq#waitUntilUpgraded numberOfNodes: %d", len(data))
+		log.Printf("[DEBUG] api::upgrade_rabbitmq#waitUntilUpgraded data: %v", data)
 		ready := true
 		for _, node := range data {
-			log.Printf("[DEBUG] go-api::upgrade_rabbitmq::waitUntilUpgraded ready: %v, configured: %v",
+			log.Printf("[DEBUG] api::upgrade_rabbitmq#waitUntilUpgraded ready: %v, configured: %v",
 				ready, node["configured"])
 			ready = ready && node["configured"].(bool)
 		}
-		log.Printf("[DEBUG] go-api::upgrade_rabbitmq::waitUntilUpgraded ready: %v", ready)
+		log.Printf("[DEBUG] api::upgrade_rabbitmq#waitUntilUpgraded ready: %v", ready)
 		if ready {
 			return "", nil
 		}
-		time.Sleep(30 * time.Second)
+		time.Sleep(10 * time.Second)
 	}
 }

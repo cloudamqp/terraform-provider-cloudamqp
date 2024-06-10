@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/84codes/go-api/api"
+	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -86,7 +86,7 @@ func dataSourceNotificationIDRead(instanceID int, alarmID int, meta interface{})
 
 func dataSourceNotificationTypeRead(instanceID int, name string, meta interface{}) (map[string]interface{}, error) {
 	api := meta.(*api.API)
-	recipients, err := api.ReadNotifications(instanceID)
+	recipients, err := api.ListNotifications(instanceID)
 
 	if err != nil {
 		return nil, err

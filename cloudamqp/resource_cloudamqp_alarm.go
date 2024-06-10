@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/84codes/go-api/api"
+	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
@@ -98,12 +98,12 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 			params[k] = v
 		}
 	}
-	log.Printf("[DEBUG] cloudamqp::resource::alarm::create params: %v", params)
+	log.Printf("[DEBUG] cloudamqp::resource::alarm#create params: %v", params)
 
 	if d.Get("type") == "notice" {
-		log.Printf("[DEBUG] cloudamqp::resource::alarm::create type is 'notice', skipping creation")
-		log.Printf("[DEBUG] cloudamqp::resource::alarm::create type is 'notice', getting existing notice alarm")
-		alarms, err := api.ReadAlarms(d.Get("instance_id").(int))
+		log.Printf("[DEBUG] cloudamqp::resource::alarm#create type is 'notice', skipping creation")
+		log.Printf("[DEBUG] cloudamqp::resource::alarm#create type is 'notice', getting existing notice alarm")
+		alarms, err := api.ListAlarms(d.Get("instance_id").(int))
 
 		if err != nil {
 			return err
@@ -112,8 +112,8 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 		for _, alarm := range alarms {
 			if alarm["type"] == "notice" {
 				d.SetId(strconv.FormatFloat(alarm["id"].(float64), 'f', 0, 64))
-				log.Printf("[DEBUG] cloudamqp::resource::alarm::create retrieved existing alarm id: %v", d.Id())
-				log.Printf("[DEBUG] cloudamqp::resource::alarm::create invoking existing alarm update")
+				log.Printf("[DEBUG] cloudamqp::resource::alarm#create retrieved existing alarm id: %v", d.Id())
+				log.Printf("[DEBUG] cloudamqp::resource::alarm#create invoking existing alarm update")
 				return resourceAlarmUpdate(d, meta)
 			}
 		}
@@ -121,14 +121,14 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 		return fmt.Errorf("Couldn't find notice alarm for instance_id %s", d.Get("instance_id"))
 	} else {
 		data, err := api.CreateAlarm(d.Get("instance_id").(int), params)
-		log.Printf("[DEBUG] cloudamqp::resource::alarm::create data: %v", data)
+		log.Printf("[DEBUG] cloudamqp::resource::alarm#create data: %v", data)
 
 		if err != nil {
 			return err
 		}
 		if data["id"] != nil {
 			d.SetId(data["id"].(string))
-			log.Printf("[DEBUG] cloudamqp::resource::alarm::create id set: %v", d.Id())
+			log.Printf("[DEBUG] cloudamqp::resource::alarm#create id set: %v", d.Id())
 		}
 	}
 
@@ -196,7 +196,7 @@ func resourceAlarmDelete(d *schema.ResourceData, meta interface{}) error {
 	params := make(map[string]interface{})
 	params["id"] = d.Id()
 	log.Printf("[DEBUG] cloudamqp::resource::alarm::delete params: %v", params)
-	return api.DeleteAlarm(d.Get("instance_id").(int), params)
+	return api.DeleteAlarm(d.Get("instance_id").(int), d.Id())
 }
 
 func validateAlarmType() schema.SchemaValidateDiagFunc {

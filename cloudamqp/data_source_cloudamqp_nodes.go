@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/84codes/go-api/api"
+	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -68,7 +68,7 @@ func dataSourceNodes() *schema.Resource {
 
 func dataSourceNodesRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*api.API)
-	data, err := api.ReadNodes(d.Get("instance_id").(int))
+	data, err := api.ListNodes(d.Get("instance_id").(int))
 	if err != nil {
 		return err
 	}
