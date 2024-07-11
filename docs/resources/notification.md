@@ -200,6 +200,6 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 `cloudamqp_notification` can be imported using CloudAMQP internal identifier of a recipient together
 (CSV separated) with the instance identifier. To retrieve the identifier of a recipient, use
-[CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-notification-recipients)
+[CloudAMQP API](https://docs.cloudamqp.com/cloudamqp_api.html#list-recipients).
 
 `terraform import cloudamqp_notification.recipient <id>,<instance_id>`
