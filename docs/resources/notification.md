@@ -127,6 +127,22 @@ resource "cloudamqp_notification" "victorops_recipient" {
 
 <details>
   <summary>
+    <b>Slack recipient</b>
+  </summary>
+
+```hcl
+resource "cloudamqp_notification" "slack_recipient" {
+  instance_id = cloudamqp_instance.instance.id
+  type        = "slack"
+  value       = "<slack-webhook-url>"
+  name        = "Slack webhook recipient"
+}
+```
+
+</details>
+
+<details>
+  <summary>
     <b>Webhook recipient</b>
   </summary>
 
