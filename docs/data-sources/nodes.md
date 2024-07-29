@@ -41,6 +41,7 @@ The `nodes` block consist of
 * `configured`            - Is the node configured?
 * `disk_size`             - Subscription plan disk size
 * `additional_disk_size`  - Additional added disk size
+* `availability_zone`     - Availability zone the node is hosted in.
 
 ***Note:*** *Total disk size = disk_size + additional_disk_size*
 
