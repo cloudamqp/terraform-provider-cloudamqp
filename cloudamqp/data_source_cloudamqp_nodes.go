@@ -59,6 +59,10 @@ func dataSourceNodes() *schema.Resource {
 							Type:     schema.TypeInt,
 							Computed: true,
 						},
+						"internal_hostname": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
 					},
 				},
 			},
@@ -108,7 +112,8 @@ func validateNodesSchemaAttribute(key string) bool {
 		"configured",
 		"rmq_version",
 		"disk_size",
-		"additional_disk_size":
+		"additional_disk_size",
+		"internal_hostname":
 		return true
 	}
 	return false
