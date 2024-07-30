@@ -7,7 +7,7 @@ toolchain go1.22.2
 require (
 	github.com/dghubble/sling v1.4.2
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.33.0
-	github.com/tidwall/gjson v1.17.1
+	github.com/tidwall/gjson v1.17.3
 	github.com/tidwall/sjson v1.2.5
 	gopkg.in/dnaeon/go-vcr.v3 v3.2.0
 )
@@ -17,7 +17,6 @@ require (
 	github.com/agext/levenshtein v1.2.2 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/cloudflare/circl v1.3.7 // indirect
-	github.com/dghubble/sling v1.4.2 // indirect
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
