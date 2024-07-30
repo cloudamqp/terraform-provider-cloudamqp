@@ -33,6 +33,7 @@ ___
 The `nodes` block consist of
 
 * `hostname`              - External hostname assigned to the node.
+* `hostname_internal`     - Internal hostname assigned to the node.
 * `name`                  - Name of the node.
 * `running`               - Is the node running?
 * `rabbitmq_version`      - Currently configured Rabbit MQ version on the node.
