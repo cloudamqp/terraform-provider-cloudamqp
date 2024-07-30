@@ -1,3 +1,11 @@
+## 1.30.1 (Unreleased)
+
+IMPROVEMENTS:
+
+* Docs: Added notification example for Slack ([#287](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/287))
+* Added internal hostname information to nodes data source ([#289](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/289))
+* Added availability zone information to nodes data source ([#290](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/291))
+
 ## 1.30.0 (Jun 10, 2024)
 
 NOTES:
