@@ -1,4 +1,4 @@
-## 1.30.1 (Unreleased)
+## 1.30.1 (Jul 30, 2024)
 
 IMPROVEMENTS:
 
