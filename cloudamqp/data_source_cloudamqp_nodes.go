@@ -63,6 +63,10 @@ func dataSourceNodes() *schema.Resource {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
+            "availability_zone": {
+              Type:     schema.TypeString,
+							Computed: true,
+						},
 					},
 				},
 			},
@@ -113,7 +117,8 @@ func validateNodesSchemaAttribute(key string) bool {
 		"rmq_version",
 		"disk_size",
 		"additional_disk_size",
-		"hostname_internal":
+		"hostname_internal",
+    "availability_zone":
 		return true
 	}
 	return false
