@@ -1,0 +1,3 @@
+data "cloudamqp_upgradable_versions" "upgrade" {
+  instance_id = {{.InstanceID}}
+}
