@@ -1,3 +1,10 @@
+## 1.31.0 (Unreleased)
+
+FEATURES:
+
+* Added support to specify RabbitMQ version when upgrading ([#295](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/295))
+* Added support to use data source when upgrading RabbitMQ version ([#295](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/295))
+
 ## 1.30.1 (Jul 30, 2024)
 
 IMPROVEMENTS:
@@ -14,7 +21,7 @@ NOTES:
 * Go-API client library imported into provider and removed external dependency
 * Terraform Plugin SDK v2
 
-Features:
+FEATURES:
 
 * Added Go VCR basic resource testing that extends acceptance test with stored fixtures ([#257](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/257))
 * Updated Terraform Plugin SDK to V2 ([#261](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/261))
