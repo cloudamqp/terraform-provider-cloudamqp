@@ -1,0 +1,4 @@
+resource "cloudamqp_upgrade_rabbitmq" "upgrade" {
+  instance_id     = {{.InstanceID}}
+  new_version     = "{{.UpgradeRabbitMQNewVersion}}"
+}
