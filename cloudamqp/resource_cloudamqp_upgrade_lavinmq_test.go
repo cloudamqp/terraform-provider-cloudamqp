@@ -26,7 +26,7 @@ func TestAccUpgradeLavinMQ_Latest(t *testing.T) {
 			"InstanceRmqVersion": "1.3.0",
 		}
 
-		fileNamesUpgrade = []string{"instance_lavinmq", "data_source/nodes", "upgrade_lavinmq_latest"}
+		fileNamesUpgrade = []string{"instance_lavinmq", "data_source/nodes", "upgrade_lavinmq"}
 
 		paramsUpgrade01 = map[string]string{
 			"InstanceName":             "TestAccUpgradeLavinMQ_Latest",
@@ -102,7 +102,7 @@ func TestAccUpgradeLavinMQ_Specific(t *testing.T) {
 			"InstanceRmqVersion": "1.3.0",
 		}
 
-		fileNamesUpgrade = []string{"instance_lavinmq", "data_source/nodes", "upgrade_lavinmq_latest"}
+		fileNamesUpgrade = []string{"instance_lavinmq", "data_source/nodes", "upgrade_lavinmq"}
 
 		paramsUpgrade01 = map[string]string{
 			"InstanceName":             "TestAccUpgradeLavinMQ_Latest",
