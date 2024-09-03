@@ -22,12 +22,14 @@ func TestAccInstance_Basic(t *testing.T) {
 			"InstanceName": "TestAccInstance_Basic-before",
 			"InstanceTags": converter.CommaStringArray([]string{"terraform"}),
 			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan": "bunny-1",
 		}
 
 		paramsUpdated = map[string]string{
 			"InstanceName": "TestAccInstance_Basic-after",
 			"InstanceTags": converter.CommaStringArray([]string{"terraform", "acceptance-test"}),
 			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan": "bunny-1",
 		}
 	)
 

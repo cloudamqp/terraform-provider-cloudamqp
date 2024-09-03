@@ -21,6 +21,7 @@ func TestAccPlugin_Basic(t *testing.T) {
 		params = map[string]string{
 			"InstanceName":  "TestAccPlugin_Basic",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":  "bunny-1",
 			"PluginName":    "rabbitmq_mqtt",
 			"PluginEnabled": "true",
 			"PluginSleep":   "1",
@@ -29,6 +30,7 @@ func TestAccPlugin_Basic(t *testing.T) {
 		paramsUpdated = map[string]string{
 			"InstanceName":  "TestAccPlugin_Basic",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":  "bunny-1",
 			"PluginName":    "rabbitmq_mqtt",
 			"PluginEnabled": "false",
 			"PluginSleep":   "1",

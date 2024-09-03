@@ -23,6 +23,7 @@ func TestAccAlarm_Basic(t *testing.T) {
 		params = map[string]string{
 			"InstanceName":   "TestAccAlarm_Basic",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
 			"RecipientName":  "test",
 			"RecipientType":  "email",
 			"RecipientValue": "test@example.com",
@@ -41,6 +42,7 @@ func TestAccAlarm_Basic(t *testing.T) {
 		paramsUpdated    = map[string]string{
 			"InstanceName":             "TestAccAlarm_Basic",
 			"InstanceID":               fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":             "bunny-1",
 			"RecipientName":            "test",
 			"RecipientType":            "email",
 			"RecipientValue":           "test@example.com",

@@ -22,6 +22,7 @@ func TestAccIntegrationMetric_Basic(t *testing.T) {
 		params = map[string]string{
 			"InstanceName":              "TestAccIntegrationMetric_Basic",
 			"InstanceID":                fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":              "bunny-1",
 			"CloudwatchAccessKeyId":     os.Getenv("CLOUDWATCH_ACCESS_KEY_ID"),
 			"CloudwatchSecretAccessKey": os.Getenv("CLOUDWATCH_SECRET_ACCESS_KEY"),
 			"CloudwatchRegion":          "us-east-1",

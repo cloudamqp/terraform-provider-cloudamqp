@@ -18,6 +18,7 @@ func TestAccExtraDiskSize_AWS_Basic(t *testing.T) {
 		params = map[string]string{
 			"InstanceName":   "TestAccExtraDiskSize_AWS_Basic",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
 			"InstanceRegion": "amazon-web-services::us-east-1",
 			"ExtraDiskSize":  "25",
 			"AllowDowntime":  "false",
@@ -51,6 +52,7 @@ func TestAccExtraDiskSize_GCE_Basic(t *testing.T) {
 		params = map[string]string{
 			"InstanceName":   "TestAccExtraDiskSize_GCE_Basic",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
 			"InstanceRegion": "google-compute-engine::us-east1",
 			"ExtraDiskSize":  "25",
 			"AllowDowntime":  "false",
@@ -84,6 +86,7 @@ func TestAccExtraDiskSize_Azure_Basic(t *testing.T) {
 		params = map[string]string{
 			"InstanceName":   "TestAccExtraDiskSize_Azure_Basic",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
 			"InstanceRegion": "azure-arm::eastus",
 			"ExtraDiskSize":  "25",
 			"AllowDowntime":  "true",
