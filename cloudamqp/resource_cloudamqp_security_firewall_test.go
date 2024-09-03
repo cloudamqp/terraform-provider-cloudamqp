@@ -24,12 +24,14 @@ func TestAccFirewall_Basic(t *testing.T) {
 			"VpcName":      "TestAccFirewall_Basic",
 			"InstanceName": "TestAccFirewall_Basic",
 			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan": "bunny-1",
 		}
 
 		paramsUpdated = map[string]string{
 			"VpcName":             "TestAccFirewall_Basic",
 			"InstanceName":        "TestAccFirewall_Basic",
 			"InstanceID":          fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":        "bunny-1",
 			"FirewallIP":          "10.56.72.0/24",
 			"FirewallDescription": "VPC Subnet",
 			"FirewallServices":    converter.CommaStringArray([]string{"AMQPS"}),

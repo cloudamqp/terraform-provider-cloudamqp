@@ -23,6 +23,7 @@ func TestAccUpgradeRabbitMQ_Latest(t *testing.T) {
 			"InstanceName":       "TestAccUpgradeRabbitMQ_Latest",
 			"InstanceTags":       converter.CommaStringArray([]string{"terraform"}),
 			"InstanceID":         fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":       "bunny-1",
 			"InstanceRmqVersion": "3.12.2",
 		}
 
@@ -32,6 +33,7 @@ func TestAccUpgradeRabbitMQ_Latest(t *testing.T) {
 			"InstanceName":                  "TestAccUpgradeRabbitMQ_Latest",
 			"InstanceTags":                  converter.CommaStringArray([]string{"terraform"}),
 			"InstanceID":                    fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":                  "bunny-1",
 			"UpgradeRabbitMQCurrentVersion": "3.12.2",
 			"UpgradeRabbitMQNewVersion":     "3.12.13",
 		}
@@ -40,6 +42,7 @@ func TestAccUpgradeRabbitMQ_Latest(t *testing.T) {
 			"InstanceName":                  "TestAccUpgradeRabbitMQ_Latest",
 			"InstanceTags":                  converter.CommaStringArray([]string{"terraform"}),
 			"InstanceID":                    fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":                  "bunny-1",
 			"UpgradeRabbitMQCurrentVersion": "3.12.13",
 			"UpgradeRabbitMQNewVersion":     "3.13.2",
 		}
@@ -49,6 +52,7 @@ func TestAccUpgradeRabbitMQ_Latest(t *testing.T) {
 			"InstanceName": "TestAccUpgradeRabbitMQ_Latest",
 			"InstanceTags": converter.CommaStringArray([]string{"terraform"}),
 			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan": "bunny-1",
 		}
 	)
 
@@ -115,6 +119,7 @@ func TestAccUpgradeRabbitMQ_Specific(t *testing.T) {
 			"InstanceName":       "TestAccUpgradeRabbitMQ_Latest",
 			"InstanceTags":       converter.CommaStringArray([]string{"terraform"}),
 			"InstanceID":         fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":       "bunny-1",
 			"InstanceRmqVersion": "3.12.2",
 		}
 
@@ -124,6 +129,7 @@ func TestAccUpgradeRabbitMQ_Specific(t *testing.T) {
 			"InstanceName":              "TestAccUpgradeRabbitMQ_Latest",
 			"InstanceTags":              converter.CommaStringArray([]string{"terraform"}),
 			"InstanceID":                fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":              "bunny-1",
 			"UpgradeRabbitMQNewVersion": "3.12.13",
 		}
 
@@ -131,6 +137,7 @@ func TestAccUpgradeRabbitMQ_Specific(t *testing.T) {
 			"InstanceName":              "TestAccUpgradeRabbitMQ_Latest",
 			"InstanceTags":              converter.CommaStringArray([]string{"terraform"}),
 			"InstanceID":                fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":              "bunny-1",
 			"UpgradeRabbitMQNewVersion": "3.13.2",
 		}
 
@@ -138,6 +145,7 @@ func TestAccUpgradeRabbitMQ_Specific(t *testing.T) {
 		paramsCheck           = map[string]string{
 			"InstanceName": "TestAccUpgradeRabbitMQ_Latest",
 			"InstanceTags": converter.CommaStringArray([]string{"terraform"}),
+			"InstancePlan": "bunny-1",
 			"InstanceID":   fmt.Sprintf("%s.id", instanceResourceName),
 		}
 	)

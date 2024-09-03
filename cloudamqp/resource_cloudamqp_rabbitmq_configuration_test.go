@@ -18,6 +18,7 @@ func TestAccRabbitMqConfiguration_Basic(t *testing.T) {
 		params = map[string]string{
 			"InstanceName":    "TestAccRabbitMqConfiguration_Basic",
 			"InstanceID":      fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":    "bunny-1",
 			"ChannelMax":      "100",
 			"ConnectionMax":   "100",
 			"ConsumerTimeout": "720000",
@@ -60,6 +61,7 @@ func TestAccRabbitMqConfiguration_LogExhangeLevel(t *testing.T) {
 		params = map[string]string{
 			"InstanceName":     "TestAccRabbitMqConfiguration_Basic",
 			"InstanceID":       fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":     "bunny-1",
 			"LogExchangeLevel": "info",
 			"NodeName":         fmt.Sprintf("%s.nodes[0].name", dataSourceNodesName),
 			"NodeAction":       "restart",

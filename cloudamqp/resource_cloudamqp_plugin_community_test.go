@@ -21,6 +21,7 @@ func TestAccPluginCommunity_Basic(t *testing.T) {
 		params = map[string]string{
 			"InstanceName":           "TestAccPluginCommunity_Basic",
 			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
 			"PluginCommunityName":    "rabbitmq_delayed_message_exchange",
 			"PluginCommunityEnabled": "true",
 			"PluginCommunitySleep":   "1",
@@ -29,6 +30,7 @@ func TestAccPluginCommunity_Basic(t *testing.T) {
 		paramsUpdated = map[string]string{
 			"InstanceName":           "TestAccPluginCommunity_Basic",
 			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
 			"PluginCommunityName":    "rabbitmq_delayed_message_exchange",
 			"PluginCommunityEnabled": "false",
 			"PluginCommunitySleep":   "1",

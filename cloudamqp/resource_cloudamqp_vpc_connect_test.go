@@ -24,6 +24,7 @@ func TestAccVpcConnect_AWS_Basic(t *testing.T) {
 			"InstanceName":   "TestAccVpcConnect_AWS_Basic",
 			"InstanceRegion": "amazon-web-services::us-east-1",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
 			"VpcConnectAllowedPrincipals": converter.CommaStringArray([]string{
 				"arn:aws:iam::123456789012:root"}),
 		}
@@ -90,6 +91,7 @@ func TestAccVpcConnect_Azure_Basic(t *testing.T) {
 			"InstanceName":   "TestAccVpcConnect_Azure_Basic",
 			"InstanceRegion": "azure-arm::eastus",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
 			"VpcConnectApprovedSubscriptions": converter.CommaStringArray([]string{
 				"56fab608-c846-4770-a493-e77f52c1ce41"}),
 		}
@@ -133,6 +135,7 @@ func TestAccVpcConnect_GCP_Basic(t *testing.T) {
 			"InstanceName":   "TestAccVpcConnect_GCP_Basic",
 			"InstanceRegion": "google-compute-engine::us-west1",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
 			"VpcConnectAllowedProjects": converter.CommaStringArray([]string{
 				"playground-84codes"}),
 		}

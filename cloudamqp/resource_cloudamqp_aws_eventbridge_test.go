@@ -18,6 +18,7 @@ func TestAccIntegrationAwsEventbridge_Basic(t *testing.T) {
 		params = map[string]string{
 			"InstanceName":            "TestAccIntegrationAwsEventbridge_Basic",
 			"InstanceID":              fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":            "bunny-1",
 			"AwsEventbridgeVhost":     "myvhost",
 			"AwsEventbridgeQueue":     "myqueue",
 			"AwsEventbridgeAccountID": "012345678910",

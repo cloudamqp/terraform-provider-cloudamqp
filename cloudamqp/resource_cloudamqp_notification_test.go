@@ -18,6 +18,7 @@ func TestAccNotification_Basic(t *testing.T) {
 		params = map[string]string{
 			"InstanceName":   "TestAccNotification_Basic",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
 			"RecipientType":  "email",
 			"RecipientValue": "notification@example.com",
 			"RecipientName":  "notification",
@@ -26,6 +27,7 @@ func TestAccNotification_Basic(t *testing.T) {
 		paramsUpdated = map[string]string{
 			"InstanceName":   "TestAccNotification_Basic",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
 			"RecipientType":  "email",
 			"RecipientValue": "test@example.com",
 			"RecipientName":  "test",

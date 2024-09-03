@@ -18,6 +18,7 @@ func TestAccWebhook_Basic(t *testing.T) {
 		params = map[string]string{
 			"InstanceName":       "TestAccWebhook_Basic",
 			"InstanceID":         fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":       "bunny-1",
 			"WebhookVhost":       fmt.Sprintf("%s.vhost", instanceResourceName),
 			"WebhookQueue":       "myqueue",
 			"WebhookURI":         "https://example.com/webhook?key=secret",
@@ -27,6 +28,7 @@ func TestAccWebhook_Basic(t *testing.T) {
 		paramsUpdated = map[string]string{
 			"InstanceName":       "TestAccWebhook_Basic",
 			"InstanceID":         fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":       "bunny-1",
 			"WebhookVhost":       fmt.Sprintf("%s.vhost", instanceResourceName),
 			"WebhookQueue":       "myqueue_02",
 			"WebhookURI":         "https://example.com/webhook?key=secret",

@@ -27,6 +27,7 @@ func TestAccIntegrationLog_Basic(t *testing.T) {
 		params = map[string]string{
 			"InstanceName":              "TestAccIntegrationLog_Basic",
 			"InstanceID":                fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":              "bunny-1",
 			"InstanceHost":              fmt.Sprintf("%s.host", instanceResourceName),
 			"AzmTentantId":              "71e89a32-14f3-4458-b136-7395bb6d1969", // Randomized token
 			"AzmApplicationId":          "3e303e72-4024-494c-b5f6-f5ffbe8139de", // Randomized token
