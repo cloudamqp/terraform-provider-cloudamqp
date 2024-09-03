@@ -1,6 +1,6 @@
 resource "cloudamqp_instance" "instance" {
 	name   = "{{or .InstanceName `TestAccInstance`}}"
-	plan   = "{{or .InstancePlan `bunny-1`}}"
+	plan   = "{{.InstancePlan}}"
 	region = "{{or .InstanceRegion `amazon-web-services::us-east-1`}}"
 	tags   = {{or .InstanceTags `["terraform"]`}}
 	rmq_version = "{{.InstanceRmqVersion}}"
