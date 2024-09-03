@@ -1,3 +1,9 @@
+## Unreleased
+
+FEATURES:
+
+* Added support to upgrade LavinMQ instances ([#296](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/296))
+
 ## 1.31.0 (Aug 19, 2024)
 
 FEATURES:
