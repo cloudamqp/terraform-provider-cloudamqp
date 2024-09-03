@@ -48,10 +48,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 3101527a-cb61-4b2b-bea7-b07edac28699
+                - 9d2d8fe5-da70-4ba2-9924-e09422cceb2f
         status: 200 OK
         code: 200
-        duration: 45.507605ms
+        duration: 48.751632ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -99,10 +99,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 54e535a0-fec0-4b6d-ab7b-a1f0ce3d4412
+                - e15e4a13-8812-4428-9ef4-b4e3a6926076
         status: 200 OK
         code: 200
-        duration: 2.500368ms
+        duration: 4.821971ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -150,10 +150,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 98bb0738-7456-4884-a462-50cf0a09ca1a
+                - 029b7dfe-4571-4374-9153-f149ce41b29a
         status: 200 OK
         code: 200
-        duration: 44.848217ms
+        duration: 56.066927ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -201,10 +201,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - b023fc20-25fc-41d1-9c76-d1b291548a73
+                - 20fc2a6e-2567-4ea4-935a-b1fd5abd801d
         status: 200 OK
         code: 200
-        duration: 2.458368ms
+        duration: 3.181093ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -252,10 +252,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - aaf64da6-0ee6-4702-a59e-9cf02ab151ee
+                - bbe24361-2e9e-40b2-9e03-7eae5d408afb
         status: 200 OK
         code: 200
-        duration: 45.371048ms
+        duration: 47.599364ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -303,23 +303,23 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - e52f694c-5d55-4b56-b390-e561552e066d
+                - f43a24bb-5beb-4a0f-a262-497b4c5eb314
         status: 200 OK
         code: 200
-        duration: 2.272638ms
+        duration: 2.879467ms
     - id: 6
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 172
+        content_length: 165
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"TestAccUpgradeLavinMQ_Latest","no_default_alarms":false,"plan":"wolverine-1","region":"amazon-web-services::us-east-1","rmq_version":"1.3.0","tags":["terraform"]}
+            {"name":"TestAccUpgradeLavinMQ","no_default_alarms":false,"plan":"wolverine-1","region":"amazon-web-services::us-east-1","rmq_version":"1.3.1","tags":["terraform"]}
         form: {}
         headers:
             Authorization:
@@ -336,14 +336,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 246
+        content_length: 241
         uncompressed: false
-        body: '{"id":344,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"fcbba273-fa20-4214-9aff-119f76450fc4","url":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr"}'
+        body: '{"id":354,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"3964de4d-a3ba-421e-bfb0-bd8bfbc8ceff","url":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "246"
+                - "241"
             Content-Type:
                 - application/json
             Nel:
@@ -357,10 +357,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - d460beab-2532-4bc6-97dd-dd48c57b4ed0
+                - aee22e46-cc2e-4ba7-9ab5-1fd21387c39c
         status: 200 OK
         code: 200
-        duration: 51.943102ms
+        duration: 56.404981ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -379,7 +379,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344
+        url: http://localhost:9393/api/instances/354
         method: GET
       response:
         proto: HTTP/1.1
@@ -387,14 +387,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 766
+        content_length: 734
         uncompressed: false
-        body: '{"id":344,"name":"TestAccUpgradeLavinMQ_Latest","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"bcc2538a-72dd-4e9a-8e34-4480a41e2d7c","url":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","ready":true,"apikey":"fcbba273-fa20-4214-9aff-119f76450fc4","backend":"lavinmq","nodes":1,"rmq_version":"1.3.0","urls":{"external":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","internal":"amqp://tliggnwr:***@dev-raw-armadillo.in.lmq.dev.cloudamqp.com/tliggnwr"},"hostname_external":"dev-raw-armadillo.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-armadillo.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":354,"name":"TestAccUpgradeLavinMQ","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"1973ed02-0cdb-4d22-b64a-659f2a964580","url":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","ready":true,"apikey":"3964de4d-a3ba-421e-bfb0-bd8bfbc8ceff","backend":"lavinmq","nodes":1,"rmq_version":"1.3.1","urls":{"external":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","internal":"amqp://dobegezs:***@dev-raw-lark.in.lmq.dev.cloudamqp.com/dobegezs"},"hostname_external":"dev-raw-lark.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-lark.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "766"
+                - "734"
             Content-Type:
                 - application/json
             Nel:
@@ -408,10 +408,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - d795ae2d-3fd3-4af0-bce8-af1c38b4c116
+                - b25d288c-b374-44dc-b6aa-69d06431d336
         status: 200 OK
         code: 200
-        duration: 13.390477ms
+        duration: 11.306174ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -430,7 +430,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344
+        url: http://localhost:9393/api/instances/354
         method: GET
       response:
         proto: HTTP/1.1
@@ -438,14 +438,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 766
+        content_length: 734
         uncompressed: false
-        body: '{"id":344,"name":"TestAccUpgradeLavinMQ_Latest","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"bcc2538a-72dd-4e9a-8e34-4480a41e2d7c","url":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","ready":true,"apikey":"fcbba273-fa20-4214-9aff-119f76450fc4","backend":"lavinmq","nodes":1,"rmq_version":"1.3.0","urls":{"external":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","internal":"amqp://tliggnwr:***@dev-raw-armadillo.in.lmq.dev.cloudamqp.com/tliggnwr"},"hostname_external":"dev-raw-armadillo.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-armadillo.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":354,"name":"TestAccUpgradeLavinMQ","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"1973ed02-0cdb-4d22-b64a-659f2a964580","url":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","ready":true,"apikey":"3964de4d-a3ba-421e-bfb0-bd8bfbc8ceff","backend":"lavinmq","nodes":1,"rmq_version":"1.3.1","urls":{"external":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","internal":"amqp://dobegezs:***@dev-raw-lark.in.lmq.dev.cloudamqp.com/dobegezs"},"hostname_external":"dev-raw-lark.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-lark.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "766"
+                - "734"
             Content-Type:
                 - application/json
             Nel:
@@ -459,10 +459,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 5278abe7-28d5-43c6-aa19-980f83b508db
+                - 73c2b031-488b-4fd8-b1e4-6354a757e56d
         status: 200 OK
         code: 200
-        duration: 13.924375ms
+        duration: 12.851575ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -481,7 +481,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -489,14 +489,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 323
+        content_length: 308
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"1.3.0","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"1.3.1","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "323"
+                - "308"
             Content-Type:
                 - application/json
             Nel:
@@ -510,10 +510,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - d8e9f6ce-3198-44f4-a8b3-3cd2e4e2150e
+                - eac28648-76f9-443f-aa5f-db62c5f79f69
         status: 200 OK
         code: 200
-        duration: 11.766456ms
+        duration: 12.083887ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -532,7 +532,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -540,14 +540,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 323
+        content_length: 308
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"1.3.0","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"1.3.1","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "323"
+                - "308"
             Content-Type:
                 - application/json
             Nel:
@@ -561,10 +561,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - aa01083b-c572-4207-8e01-ff33f4b4eae1
+                - 86d96077-7d78-43f9-9bcb-91e08c5d5055
         status: 200 OK
         code: 200
-        duration: 10.773146ms
+        duration: 13.008715ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -583,7 +583,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344
+        url: http://localhost:9393/api/instances/354
         method: GET
       response:
         proto: HTTP/1.1
@@ -591,14 +591,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 766
+        content_length: 734
         uncompressed: false
-        body: '{"id":344,"name":"TestAccUpgradeLavinMQ_Latest","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"bcc2538a-72dd-4e9a-8e34-4480a41e2d7c","url":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","ready":true,"apikey":"fcbba273-fa20-4214-9aff-119f76450fc4","backend":"lavinmq","nodes":1,"rmq_version":"1.3.0","urls":{"external":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","internal":"amqp://tliggnwr:***@dev-raw-armadillo.in.lmq.dev.cloudamqp.com/tliggnwr"},"hostname_external":"dev-raw-armadillo.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-armadillo.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":354,"name":"TestAccUpgradeLavinMQ","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"1973ed02-0cdb-4d22-b64a-659f2a964580","url":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","ready":true,"apikey":"3964de4d-a3ba-421e-bfb0-bd8bfbc8ceff","backend":"lavinmq","nodes":1,"rmq_version":"1.3.1","urls":{"external":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","internal":"amqp://dobegezs:***@dev-raw-lark.in.lmq.dev.cloudamqp.com/dobegezs"},"hostname_external":"dev-raw-lark.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-lark.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "766"
+                - "734"
             Content-Type:
                 - application/json
             Nel:
@@ -612,10 +612,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - a88b3626-363b-415f-8d89-f39a90b732a0
+                - 082381c1-bbbd-4059-a00b-dd8bee9bb256
         status: 200 OK
         code: 200
-        duration: 11.976837ms
+        duration: 12.739598ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -634,7 +634,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -642,14 +642,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 323
+        content_length: 308
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"1.3.0","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"1.3.1","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "323"
+                - "308"
             Content-Type:
                 - application/json
             Nel:
@@ -663,10 +663,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 011ce270-b803-4255-b1e0-736eb7c8b2aa
+                - 6c46bb43-ee4b-49b0-adc7-a7a3d34fb023
         status: 200 OK
         code: 200
-        duration: 11.443271ms
+        duration: 12.165219ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -685,7 +685,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -693,14 +693,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 323
+        content_length: 308
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"1.3.0","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"1.3.1","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "323"
+                - "308"
             Content-Type:
                 - application/json
             Nel:
@@ -714,10 +714,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 420fd735-793d-4cdd-99f2-1f8f370cbae4
+                - 7afdc165-af72-4c78-8143-2dfcfdfb0797
         status: 200 OK
         code: 200
-        duration: 12.46098ms
+        duration: 10.670562ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -736,7 +736,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344
+        url: http://localhost:9393/api/instances/354
         method: GET
       response:
         proto: HTTP/1.1
@@ -744,14 +744,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 766
+        content_length: 734
         uncompressed: false
-        body: '{"id":344,"name":"TestAccUpgradeLavinMQ_Latest","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"bcc2538a-72dd-4e9a-8e34-4480a41e2d7c","url":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","ready":true,"apikey":"fcbba273-fa20-4214-9aff-119f76450fc4","backend":"lavinmq","nodes":1,"rmq_version":"1.3.0","urls":{"external":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","internal":"amqp://tliggnwr:***@dev-raw-armadillo.in.lmq.dev.cloudamqp.com/tliggnwr"},"hostname_external":"dev-raw-armadillo.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-armadillo.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":354,"name":"TestAccUpgradeLavinMQ","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"1973ed02-0cdb-4d22-b64a-659f2a964580","url":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","ready":true,"apikey":"3964de4d-a3ba-421e-bfb0-bd8bfbc8ceff","backend":"lavinmq","nodes":1,"rmq_version":"1.3.1","urls":{"external":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","internal":"amqp://dobegezs:***@dev-raw-lark.in.lmq.dev.cloudamqp.com/dobegezs"},"hostname_external":"dev-raw-lark.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-lark.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "766"
+                - "734"
             Content-Type:
                 - application/json
             Nel:
@@ -765,10 +765,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 675c372a-cb24-4609-80ce-7cfb754d4f9a
+                - 931baca2-f44e-49a7-ad71-163e09a44f4b
         status: 200 OK
         code: 200
-        duration: 11.845875ms
+        duration: 11.825723ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -787,7 +787,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -795,14 +795,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 323
+        content_length: 308
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"1.3.0","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"1.3.1","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "323"
+                - "308"
             Content-Type:
                 - application/json
             Nel:
@@ -816,10 +816,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - ae3d6836-e9d6-4c10-afc3-948186b98de1
+                - 774d8e3b-c8b6-4174-bb49-5cc2e6df2624
         status: 200 OK
         code: 200
-        duration: 11.757032ms
+        duration: 12.95228ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -838,7 +838,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -846,14 +846,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 323
+        content_length: 308
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"1.3.0","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"1.3.1","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "323"
+                - "308"
             Content-Type:
                 - application/json
             Nel:
@@ -867,10 +867,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - c233cbd9-e6f3-4aca-b3cf-e1a90590ac1c
+                - a41f1ce8-5d15-40eb-ad4c-04f882f5c427
         status: 200 OK
         code: 200
-        duration: 10.78928ms
+        duration: 12.57767ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -892,7 +892,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/actions/upgrade-lavinmq
+        url: http://localhost:9393/api/instances/354/actions/upgrade-lavinmq
         method: POST
       response:
         proto: HTTP/1.1
@@ -921,10 +921,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 1d308afd-1831-4bc5-800e-fa02fb494f52
+                - c911ee34-8005-4ea1-b9eb-0afcc538043f
         status: 200 OK
         code: 200
-        duration: 27.280573ms
+        duration: 27.744194ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -943,7 +943,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -951,14 +951,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 328
+        content_length: 313
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "328"
+                - "313"
             Content-Type:
                 - application/json
             Nel:
@@ -972,10 +972,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 4dde095d-2986-40f7-8440-306bf6f81316
+                - b28762d0-1831-497b-a399-fe163bca0cae
         status: 200 OK
         code: 200
-        duration: 13.98969ms
+        duration: 11.88139ms
     - id: 19
       request:
         proto: HTTP/1.1
@@ -994,7 +994,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -1002,14 +1002,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 328
+        content_length: 313
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "328"
+                - "313"
             Content-Type:
                 - application/json
             Nel:
@@ -1023,10 +1023,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 6fefaa5b-0d93-4db4-85ab-cffccb8c1e5a
+                - 0ce11aed-1a11-46f2-a290-eaec18d75b3a
         status: 200 OK
         code: 200
-        duration: 12.253165ms
+        duration: 12.217816ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -1045,7 +1045,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344
+        url: http://localhost:9393/api/instances/354
         method: GET
       response:
         proto: HTTP/1.1
@@ -1053,14 +1053,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 771
+        content_length: 739
         uncompressed: false
-        body: '{"id":344,"name":"TestAccUpgradeLavinMQ_Latest","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"bcc2538a-72dd-4e9a-8e34-4480a41e2d7c","url":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","ready":true,"apikey":"fcbba273-fa20-4214-9aff-119f76450fc4","backend":"lavinmq","nodes":1,"rmq_version":"2.0.0-rc.3","urls":{"external":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","internal":"amqp://tliggnwr:***@dev-raw-armadillo.in.lmq.dev.cloudamqp.com/tliggnwr"},"hostname_external":"dev-raw-armadillo.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-armadillo.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":354,"name":"TestAccUpgradeLavinMQ","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"1973ed02-0cdb-4d22-b64a-659f2a964580","url":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","ready":true,"apikey":"3964de4d-a3ba-421e-bfb0-bd8bfbc8ceff","backend":"lavinmq","nodes":1,"rmq_version":"2.0.0-rc.3","urls":{"external":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","internal":"amqp://dobegezs:***@dev-raw-lark.in.lmq.dev.cloudamqp.com/dobegezs"},"hostname_external":"dev-raw-lark.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-lark.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "771"
+                - "739"
             Content-Type:
                 - application/json
             Nel:
@@ -1074,10 +1074,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - e13c5981-6fff-432a-bd70-7bfb044aff15
+                - 7c37f280-8309-437d-bf2e-2dfafaa77acb
         status: 200 OK
         code: 200
-        duration: 11.904892ms
+        duration: 10.88317ms
     - id: 21
       request:
         proto: HTTP/1.1
@@ -1096,7 +1096,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -1104,14 +1104,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 328
+        content_length: 313
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "328"
+                - "313"
             Content-Type:
                 - application/json
             Nel:
@@ -1125,10 +1125,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - ee510fda-56f0-4dc4-8bc4-75a5514b9463
+                - 5c5b108f-e5d5-4dac-a095-96f39687549c
         status: 200 OK
         code: 200
-        duration: 11.147285ms
+        duration: 14.502928ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -1147,7 +1147,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -1155,14 +1155,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 328
+        content_length: 313
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "328"
+                - "313"
             Content-Type:
                 - application/json
             Nel:
@@ -1176,10 +1176,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 57a23030-9280-4922-9642-fce6bbbf78b6
+                - dcd1f3b6-f416-4f11-ac4c-1859e091939a
         status: 200 OK
         code: 200
-        duration: 14.736293ms
+        duration: 10.087402ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -1198,7 +1198,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344
+        url: http://localhost:9393/api/instances/354
         method: GET
       response:
         proto: HTTP/1.1
@@ -1206,14 +1206,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 771
+        content_length: 739
         uncompressed: false
-        body: '{"id":344,"name":"TestAccUpgradeLavinMQ_Latest","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"bcc2538a-72dd-4e9a-8e34-4480a41e2d7c","url":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","ready":true,"apikey":"fcbba273-fa20-4214-9aff-119f76450fc4","backend":"lavinmq","nodes":1,"rmq_version":"2.0.0-rc.3","urls":{"external":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","internal":"amqp://tliggnwr:***@dev-raw-armadillo.in.lmq.dev.cloudamqp.com/tliggnwr"},"hostname_external":"dev-raw-armadillo.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-armadillo.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":354,"name":"TestAccUpgradeLavinMQ","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"1973ed02-0cdb-4d22-b64a-659f2a964580","url":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","ready":true,"apikey":"3964de4d-a3ba-421e-bfb0-bd8bfbc8ceff","backend":"lavinmq","nodes":1,"rmq_version":"2.0.0-rc.3","urls":{"external":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","internal":"amqp://dobegezs:***@dev-raw-lark.in.lmq.dev.cloudamqp.com/dobegezs"},"hostname_external":"dev-raw-lark.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-lark.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "771"
+                - "739"
             Content-Type:
                 - application/json
             Nel:
@@ -1227,10 +1227,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 9b81ef4d-6b59-4a6e-bc39-84eb0e014d0a
+                - 64ee3895-90de-4d0b-9209-aa05265b48e3
         status: 200 OK
         code: 200
-        duration: 10.469589ms
+        duration: 13.986049ms
     - id: 24
       request:
         proto: HTTP/1.1
@@ -1249,7 +1249,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -1257,14 +1257,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 328
+        content_length: 313
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "328"
+                - "313"
             Content-Type:
                 - application/json
             Nel:
@@ -1278,10 +1278,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 0e4725b6-8886-4351-87a9-1d42a5cfa4e8
+                - 25f5a5b2-64a9-407c-a097-c1face83faa5
         status: 200 OK
         code: 200
-        duration: 10.10965ms
+        duration: 11.582408ms
     - id: 25
       request:
         proto: HTTP/1.1
@@ -1300,7 +1300,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -1308,14 +1308,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 328
+        content_length: 313
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "328"
+                - "313"
             Content-Type:
                 - application/json
             Nel:
@@ -1329,10 +1329,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - fd01d82e-73cf-4ce3-a210-5b8221e93948
+                - 50ab176a-c1e4-431d-99af-ac18d265f010
         status: 200 OK
         code: 200
-        duration: 10.961836ms
+        duration: 11.504538ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -1351,7 +1351,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -1359,14 +1359,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 328
+        content_length: 313
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "328"
+                - "313"
             Content-Type:
                 - application/json
             Nel:
@@ -1380,10 +1380,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 0d1a077d-bb99-41b7-aad3-c49455347a38
+                - 3668becd-7ac7-431e-b72c-6c8e897f13e3
         status: 200 OK
         code: 200
-        duration: 10.198992ms
+        duration: 12.923238ms
     - id: 27
       request:
         proto: HTTP/1.1
@@ -1402,7 +1402,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344
+        url: http://localhost:9393/api/instances/354
         method: GET
       response:
         proto: HTTP/1.1
@@ -1410,14 +1410,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 771
+        content_length: 739
         uncompressed: false
-        body: '{"id":344,"name":"TestAccUpgradeLavinMQ_Latest","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"bcc2538a-72dd-4e9a-8e34-4480a41e2d7c","url":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","ready":true,"apikey":"fcbba273-fa20-4214-9aff-119f76450fc4","backend":"lavinmq","nodes":1,"rmq_version":"2.0.0-rc.3","urls":{"external":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","internal":"amqp://tliggnwr:***@dev-raw-armadillo.in.lmq.dev.cloudamqp.com/tliggnwr"},"hostname_external":"dev-raw-armadillo.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-armadillo.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":354,"name":"TestAccUpgradeLavinMQ","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"1973ed02-0cdb-4d22-b64a-659f2a964580","url":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","ready":true,"apikey":"3964de4d-a3ba-421e-bfb0-bd8bfbc8ceff","backend":"lavinmq","nodes":1,"rmq_version":"2.0.0-rc.3","urls":{"external":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","internal":"amqp://dobegezs:***@dev-raw-lark.in.lmq.dev.cloudamqp.com/dobegezs"},"hostname_external":"dev-raw-lark.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-lark.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "771"
+                - "739"
             Content-Type:
                 - application/json
             Nel:
@@ -1431,10 +1431,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 591cd408-97cb-44cd-b9e3-bdbf5097d0bc
+                - 8ea9fb5b-244c-406e-96a1-0b407a37328c
         status: 200 OK
         code: 200
-        duration: 13.169812ms
+        duration: 12.288084ms
     - id: 28
       request:
         proto: HTTP/1.1
@@ -1453,7 +1453,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -1461,14 +1461,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 328
+        content_length: 313
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "328"
+                - "313"
             Content-Type:
                 - application/json
             Nel:
@@ -1482,10 +1482,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 13d9ff75-2aba-4abd-a657-2a67424188d6
+                - e13f3e5c-0599-4757-a2ae-8f5ab571fbc0
         status: 200 OK
         code: 200
-        duration: 10.534866ms
+        duration: 11.850196ms
     - id: 29
       request:
         proto: HTTP/1.1
@@ -1504,7 +1504,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -1512,14 +1512,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 328
+        content_length: 313
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "328"
+                - "313"
             Content-Type:
                 - application/json
             Nel:
@@ -1533,10 +1533,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - b7c2d52f-d279-4f22-9233-d6cbeddefb64
+                - 0152b987-a4ba-4d69-9447-2c126fe6b28c
         status: 200 OK
         code: 200
-        duration: 12.031667ms
+        duration: 11.657796ms
     - id: 30
       request:
         proto: HTTP/1.1
@@ -1555,7 +1555,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344
+        url: http://localhost:9393/api/instances/354
         method: GET
       response:
         proto: HTTP/1.1
@@ -1563,14 +1563,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 771
+        content_length: 739
         uncompressed: false
-        body: '{"id":344,"name":"TestAccUpgradeLavinMQ_Latest","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"bcc2538a-72dd-4e9a-8e34-4480a41e2d7c","url":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","ready":true,"apikey":"fcbba273-fa20-4214-9aff-119f76450fc4","backend":"lavinmq","nodes":1,"rmq_version":"2.0.0-rc.3","urls":{"external":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","internal":"amqp://tliggnwr:***@dev-raw-armadillo.in.lmq.dev.cloudamqp.com/tliggnwr"},"hostname_external":"dev-raw-armadillo.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-armadillo.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":354,"name":"TestAccUpgradeLavinMQ","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"1973ed02-0cdb-4d22-b64a-659f2a964580","url":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","ready":true,"apikey":"3964de4d-a3ba-421e-bfb0-bd8bfbc8ceff","backend":"lavinmq","nodes":1,"rmq_version":"2.0.0-rc.3","urls":{"external":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","internal":"amqp://dobegezs:***@dev-raw-lark.in.lmq.dev.cloudamqp.com/dobegezs"},"hostname_external":"dev-raw-lark.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-lark.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "771"
+                - "739"
             Content-Type:
                 - application/json
             Nel:
@@ -1584,10 +1584,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - afa3e672-4aef-4df7-9715-e3d7a43dc9ed
+                - df3c4387-9749-4937-914a-7475ab788f4f
         status: 200 OK
         code: 200
-        duration: 12.701489ms
+        duration: 12.212823ms
     - id: 31
       request:
         proto: HTTP/1.1
@@ -1606,7 +1606,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -1614,14 +1614,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 328
+        content_length: 313
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "328"
+                - "313"
             Content-Type:
                 - application/json
             Nel:
@@ -1635,10 +1635,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 9321ae9f-db58-441a-93cd-ecf08e2288d6
+                - f8a97476-8c29-41e7-a657-9cc20295dd2c
         status: 200 OK
         code: 200
-        duration: 11.924269ms
+        duration: 12.69476ms
     - id: 32
       request:
         proto: HTTP/1.1
@@ -1657,7 +1657,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -1665,14 +1665,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 328
+        content_length: 313
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "328"
+                - "313"
             Content-Type:
                 - application/json
             Nel:
@@ -1686,10 +1686,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 38e1dee6-3fec-4ae9-a32c-e1ad82a24d18
+                - e4a7b91d-bcd6-4e88-9a96-9e10af141bb0
         status: 200 OK
         code: 200
-        duration: 10.115615ms
+        duration: 12.763316ms
     - id: 33
       request:
         proto: HTTP/1.1
@@ -1708,7 +1708,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -1716,14 +1716,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 328
+        content_length: 313
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "328"
+                - "313"
             Content-Type:
                 - application/json
             Nel:
@@ -1737,10 +1737,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 4ba1a5ab-ba04-47f0-ac7c-e40f11345066
+                - cfa4a019-70da-4370-abc5-684fc6cef37f
         status: 200 OK
         code: 200
-        duration: 9.945856ms
+        duration: 13.318528ms
     - id: 34
       request:
         proto: HTTP/1.1
@@ -1759,7 +1759,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344
+        url: http://localhost:9393/api/instances/354
         method: GET
       response:
         proto: HTTP/1.1
@@ -1767,14 +1767,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 771
+        content_length: 739
         uncompressed: false
-        body: '{"id":344,"name":"TestAccUpgradeLavinMQ_Latest","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"bcc2538a-72dd-4e9a-8e34-4480a41e2d7c","url":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","ready":true,"apikey":"fcbba273-fa20-4214-9aff-119f76450fc4","backend":"lavinmq","nodes":1,"rmq_version":"2.0.0-rc.3","urls":{"external":"amqps://tliggnwr:***@dev-raw-armadillo.lmq.dev.cloudamqp.com/tliggnwr","internal":"amqp://tliggnwr:***@dev-raw-armadillo.in.lmq.dev.cloudamqp.com/tliggnwr"},"hostname_external":"dev-raw-armadillo.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-armadillo.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":354,"name":"TestAccUpgradeLavinMQ","plan":"wolverine-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"1973ed02-0cdb-4d22-b64a-659f2a964580","url":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","ready":true,"apikey":"3964de4d-a3ba-421e-bfb0-bd8bfbc8ceff","backend":"lavinmq","nodes":1,"rmq_version":"2.0.0-rc.3","urls":{"external":"amqps://dobegezs:***@dev-raw-lark.lmq.dev.cloudamqp.com/dobegezs","internal":"amqp://dobegezs:***@dev-raw-lark.in.lmq.dev.cloudamqp.com/dobegezs"},"hostname_external":"dev-raw-lark.lmq.dev.cloudamqp.com","hostname_internal":"dev-raw-lark.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "771"
+                - "739"
             Content-Type:
                 - application/json
             Nel:
@@ -1788,10 +1788,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - df903879-fa65-44e8-9d38-a4e5f3fcded3
+                - 5d1cca6e-8a73-445b-87a5-6fc15bfa64c0
         status: 200 OK
         code: 200
-        duration: 10.856975ms
+        duration: 13.815092ms
     - id: 35
       request:
         proto: HTTP/1.1
@@ -1810,7 +1810,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -1818,14 +1818,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 328
+        content_length: 313
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "328"
+                - "313"
             Content-Type:
                 - application/json
             Nel:
@@ -1839,10 +1839,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 0552bae9-56fa-4723-b32c-4cae013062fb
+                - e55a329d-fbcc-47f9-ba39-ce8d0308787a
         status: 200 OK
         code: 200
-        duration: 11.402637ms
+        duration: 11.464926ms
     - id: 36
       request:
         proto: HTTP/1.1
@@ -1861,7 +1861,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344/nodes
+        url: http://localhost:9393/api/instances/354/nodes
         method: GET
       response:
         proto: HTTP/1.1
@@ -1869,14 +1869,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 328
+        content_length: 313
         uncompressed: false
-        body: '[{"hostname":"dev-raw-armadillo-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-armadillo-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az2","hostname_internal":"dev-raw-armadillo-01.in.lmq.dev.cloudamqp.com"}]'
+        body: '[{"hostname":"dev-raw-lark-01.lmq.dev.cloudamqp.com","configured":true,"name":"dev-raw-lark-01","running":true,"rabbitmq_version":"2.0.0-rc.3","erlang_version":null,"hipe":false,"disk_size":50,"additional_disk_size":0,"availability_zone":"use1-az1","hostname_internal":"dev-raw-lark-01.in.lmq.dev.cloudamqp.com"}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "328"
+                - "313"
             Content-Type:
                 - application/json
             Nel:
@@ -1890,10 +1890,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 95e2a22f-20ee-48eb-9bbc-8fb26a510295
+                - c036103b-1531-4849-9f71-03429209c126
         status: 200 OK
         code: 200
-        duration: 12.174689ms
+        duration: 11.273407ms
     - id: 37
       request:
         proto: HTTP/1.1
@@ -1912,7 +1912,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344?keep_vpc=false
+        url: http://localhost:9393/api/instances/354?keep_vpc=false
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -1937,10 +1937,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 5d85441d-bef2-4909-8181-2a56a42101bc
+                - 6397e812-2603-4ac5-ad57-d778de8bedfa
         status: 204 No Content
         code: 204
-        duration: 36.419919ms
+        duration: 38.386245ms
     - id: 38
       request:
         proto: HTTP/1.1
@@ -1959,7 +1959,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/344
+        url: http://localhost:9393/api/instances/354
         method: GET
       response:
         proto: HTTP/1.1
@@ -1988,7 +1988,7 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 8b54954f-5e75-4140-a3f4-e7c2e4c8fe99
+                - c2f0d81a-e461-42bc-8406-3c0dedcd38ca
         status: 404 Not Found
         code: 404
-        duration: 4.400197ms
+        duration: 3.342783ms
