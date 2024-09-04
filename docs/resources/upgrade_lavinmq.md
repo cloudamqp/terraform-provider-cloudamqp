@@ -18,7 +18,7 @@ Only available for dedicated subscription plans running ***LavinMQ***.
 <details>
   <summary>
     <b>
-      <i>Upgrade LavinMQ, specify which version to upgrade to, from v1.31.0</i>
+      <i>Upgrade LavinMQ, specify which version to upgrade to, from v1.32.0</i>
     </b>
   </summary>
 

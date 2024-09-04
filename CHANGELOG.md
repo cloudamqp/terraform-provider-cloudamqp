@@ -1,4 +1,4 @@
-## Unreleased
+## 1.32.0 (Sep 4, 2024)
 
 FEATURES:
 
