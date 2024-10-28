@@ -11,19 +11,6 @@ type API struct {
 	client *http.Client
 }
 
-func (api *API) DefaultRmqVersion() (map[string]any, error) {
-	var (
-		data   map[string]any
-		failed map[string]any
-	)
-
-	_, err := api.sling.New().Get("/api/default_rabbitmq_version").Receive(&data, &failed)
-	if err != nil {
-		return nil, err
-	}
-	return data, nil
-}
-
 func New(baseUrl, apiKey string, useragent string, client *http.Client) *API {
 	if len(useragent) == 0 {
 		useragent = "84codes go-api"
