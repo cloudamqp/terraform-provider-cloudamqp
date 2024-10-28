@@ -1,3 +1,9 @@
+## 1.32.1 (Unreleased)
+
+BUG FIXES:
+
+* Fixed incorrect schemas in plugin data sources ([#300](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/300))
+
 ## 1.32.0 (Sep 4, 2024)
 
 FEATURES:
