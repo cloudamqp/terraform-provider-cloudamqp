@@ -1,0 +1,3 @@
+data "cloudamqp_plugins_community" "community_plugins" {
+  instance_id = {{.InstanceID}}
+}

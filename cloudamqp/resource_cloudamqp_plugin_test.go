@@ -2,21 +2,23 @@ package cloudamqp
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-// Playing the test benefits from having sleep set to default (10 s) while recording.
-// While using lower sleep (1 s) for replaying the test. This will speed up the test.
+// Recording the test benefits from having sleep set to default (10 s).
+// While replaying the test, using lower sleep (1 s), will speed up the test.
 
 // TestAccPlugin_Basic: Enabled plugin, import and disable it.
 func TestAccPlugin_Basic(t *testing.T) {
 	var (
-		fileNames            = []string{"instance", "plugin"}
-		instanceResourceName = "cloudamqp_instance.instance"
-		pluginResourceName   = "cloudamqp_plugin.rabbitmq_mqtt"
+		fileNames             = []string{"instance", "plugin", "data_source/plugins"}
+		instanceResourceName  = "cloudamqp_instance.instance"
+		pluginResourceName    = "cloudamqp_plugin.rabbitmq_mqtt"
+		dataSourcePluginsName = "data.cloudamqp_plugins.plugins"
 
 		params = map[string]string{
 			"InstanceName":  "TestAccPlugin_Basic",
@@ -47,6 +49,8 @@ func TestAccPlugin_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(pluginResourceName, "name", "rabbitmq_mqtt"),
 					resource.TestCheckResourceAttr(pluginResourceName, "enabled", "true"),
+					resource.TestMatchResourceAttr(dataSourcePluginsName, "plugins.#", regexp.MustCompile(`[0-9]`)),
+					resource.TestCheckResourceAttr(dataSourcePluginsName, "timeout", "1800"),
 				),
 			},
 			{
@@ -61,6 +65,8 @@ func TestAccPlugin_Basic(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(pluginResourceName, "name", "rabbitmq_mqtt"),
 					resource.TestCheckResourceAttr(pluginResourceName, "enabled", "false"),
+					resource.TestMatchResourceAttr(dataSourcePluginsName, "plugins.#", regexp.MustCompile(`[0-9]`)),
+					resource.TestCheckResourceAttr(dataSourcePluginsName, "timeout", "1800"),
 				),
 			},
 		},
