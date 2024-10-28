@@ -39,20 +39,20 @@ func dataSourcePlugins() *schema.Resource {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
-						"sleep": {
-							Type:        schema.TypeInt,
-							Optional:    true,
-							Default:     10,
-							Description: "Configurable sleep time in seconds between retries for plugins",
-						},
-						"timeout": {
-							Type:        schema.TypeInt,
-							Optional:    true,
-							Default:     1800,
-							Description: "Configurable timeout time in seconds for plugins",
-						},
 					},
 				},
+			},
+			"sleep": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     10,
+				Description: "Configurable sleep time in seconds between retries for plugins",
+			},
+			"timeout": {
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     1800,
+				Description: "Configurable timeout time in seconds for plugins",
 			},
 		},
 	}
