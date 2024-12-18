@@ -146,6 +146,14 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 				fmt.Println("SKIP: PUT /api/instances/{id}/config", i.Request.URL, "error:", errStr)
 				i.DiscardOnSave = true
 			}
+		case i.Response.Code == 200 && i.Request.Method == "GET" &&
+			regexp.MustCompile(`/api/vpcs/\d+/vpc-peering$`).MatchString(i.Request.URL):
+			// Filter polling for vpc peering state, only store active response
+			state := gjson.Get(i.Response.Body, "rows.0.state").String()
+			if state == "INACTIVE" {
+				fmt.Println("SKIP: GET /api/vpcs/{id}/vpc-peering", i.Request.URL, "state:", state)
+				i.DiscardOnSave = true
+			}
 		}
 		return nil
 	}

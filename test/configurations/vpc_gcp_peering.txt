@@ -1,0 +1,5 @@
+resource "cloudamqp_vpc_gcp_peering" "vpc_peering" {
+  vpc_id                 = {{or .VpcID `cloudamqp_vpc.vpc.id`}}
+  peer_network_uri       = "{{.PeerNetworkUri}}"
+  wait_on_peering_status = {{or .WaitOnPeeringStatus false}}
+} 
