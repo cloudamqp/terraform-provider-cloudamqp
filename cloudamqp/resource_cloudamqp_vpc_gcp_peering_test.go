@@ -2,7 +2,6 @@ package cloudamqp
 
 import (
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
@@ -18,7 +17,7 @@ func TestAccVpcGcpPeering_Basic(t *testing.T) {
 		instanceResourceName      = "cloudamqp_instance.instance"
 		vpcGcpPeeringResourceName = "cloudamqp_vpc_gcp_peering.vpc_peering"
 		region                    = "google-compute-engine::europe-west1"
-		peerNetworkUri            = os.Getenv("PEER_NETWORK_URI")
+		peerNetworkUri            = "https://www.googleapis.com/compute/v1/projects/playground-84codes/global/networks/vpc-ljopathx"
 
 		params = map[string]string{
 			"VpcName":             "TestAccVpcGcpPeering_Basic",
