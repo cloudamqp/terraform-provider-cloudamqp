@@ -25,39 +25,6 @@ func TestAccVpcPeering_Basic(t *testing.T) {
 		ProviderFactories:         testAccProviderFactory,
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
-			// {
-			// 	ResourceName:            vpcResourceName,
-			// 	ImportStateId:           vpcID,
-			// 	ImportState:             true,
-			// 	ImportStateVerify:       true,
-			// 	ImportStateVerifyIgnore: []string{},
-			// },
-			// {
-			// 	ResourceName:            instanceResourceName,
-			// 	ImportStateId:           instanceID,
-			// 	ImportState:             true,
-			// 	ImportStateVerify:       true,
-			// 	ImportStateVerifyIgnore: []string{},
-			// },
-			// {
-			// 	Config: configuration.GetTemplatedConfig(t, fileNames, params),
-			// 	Check: resource.ComposeAggregateTestCheckFunc(
-			// 		resource.TestCheckResourceAttr(vpcResourceName, "name", params["VpcName"]),
-			// 		resource.TestCheckResourceAttr(vpcResourceName, "id", vpcID),
-			// 		resource.TestCheckResourceAttr(vpcResourceName, "subnet", params["VpcSubnet"]),
-			// 		resource.TestCheckResourceAttr(vpcResourceName, "region", params["VpcRegion"]),
-			// 		resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-			// 		resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-			// 		resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-			// 	),
-			// },
-			// {
-			// 	ResourceName:            vpcPeeringResourceName,
-			// 	ImportStateIdFunc:       testAccImportVpcPeeringStateIdFunc("vpc", vpcResourceName, peeringID),
-			// 	ImportState:             true,
-			// 	ImportStateVerify:       true,
-			// 	ImportStateVerifyIgnore: []string{},
-			// },
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
