@@ -1,0 +1,305 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/186/vpc-peering/status/pcx-03ebf8d9ceac304d7
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 31
+        uncompressed: false
+        body: '{"status":"pending-acceptance"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "31"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 56ccd00b-02b4-4963-be30-f7fc5a09dd7f
+        status: 200 OK
+        code: 200
+        duration: 1.69384039s
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/186/vpc-peering/request/pcx-03ebf8d9ceac304d7
+        method: PUT
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 80
+        uncompressed: false
+        body: '{"success":true,"ports":[5672,5671,15672,5552,5551],"subnets":["10.56.73.0/24"]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "80"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 78c2ac30-9cb0-464f-929e-ec60341f093b
+        status: 200 OK
+        code: 200
+        duration: 4.672059702s
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/186/vpc-peering/request/pcx-03ebf8d9ceac304d7
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 938
+        uncompressed: false
+        body: '{"accepter_vpc_info":{"cidr_block":"10.56.72.0/24","cidr_block_set":[{"cidr_block":"10.56.72.0/24"}],"owner_id":"100855782518","peering_options":{"allow_dns_resolution_from_remote_vpc":true,"allow_egress_from_local_classic_link_to_remote_vpc":false,"allow_egress_from_local_vpc_to_remote_classic_link":false},"vpc_id":"vpc-067c4977b5f0796db","region":"us-east-1"},"requester_vpc_info":{"cidr_block":"10.56.73.0/24","cidr_block_set":[{"cidr_block":"10.56.73.0/24"}],"owner_id":"100855782518","peering_options":{"allow_dns_resolution_from_remote_vpc":false,"allow_egress_from_local_classic_link_to_remote_vpc":false,"allow_egress_from_local_vpc_to_remote_classic_link":false},"vpc_id":"vpc-0d43c74850fed41a0","region":"us-east-1"},"status":{"code":"active","message":"Active"},"tags":[{"key":"Name","value":"Terrform Peering"}],"vpc_peering_connection_id":"pcx-03ebf8d9ceac304d7","routes":[{"destination":"10.56.73.0/24","state":"active"}]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "938"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - a8e1a1d7-1913-4beb-b8f3-6b1e2ca53989
+        status: 200 OK
+        code: 200
+        duration: 1.465121334s
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/186/vpc-peering/request/pcx-03ebf8d9ceac304d7
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 938
+        uncompressed: false
+        body: '{"accepter_vpc_info":{"cidr_block":"10.56.72.0/24","cidr_block_set":[{"cidr_block":"10.56.72.0/24"}],"owner_id":"100855782518","peering_options":{"allow_dns_resolution_from_remote_vpc":true,"allow_egress_from_local_classic_link_to_remote_vpc":false,"allow_egress_from_local_vpc_to_remote_classic_link":false},"vpc_id":"vpc-067c4977b5f0796db","region":"us-east-1"},"requester_vpc_info":{"cidr_block":"10.56.73.0/24","cidr_block_set":[{"cidr_block":"10.56.73.0/24"}],"owner_id":"100855782518","peering_options":{"allow_dns_resolution_from_remote_vpc":false,"allow_egress_from_local_classic_link_to_remote_vpc":false,"allow_egress_from_local_vpc_to_remote_classic_link":false},"vpc_id":"vpc-0d43c74850fed41a0","region":"us-east-1"},"status":{"code":"active","message":"Active"},"tags":[{"key":"Name","value":"Terrform Peering"}],"vpc_peering_connection_id":"pcx-03ebf8d9ceac304d7","routes":[{"destination":"10.56.73.0/24","state":"active"}]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "938"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - b57c9213-73cc-47db-bfa1-358da059164e
+        status: 200 OK
+        code: 200
+        duration: 893.618981ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/186/vpc-peering/request/pcx-03ebf8d9ceac304d7
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 938
+        uncompressed: false
+        body: '{"accepter_vpc_info":{"cidr_block":"10.56.72.0/24","cidr_block_set":[{"cidr_block":"10.56.72.0/24"}],"owner_id":"100855782518","peering_options":{"allow_dns_resolution_from_remote_vpc":true,"allow_egress_from_local_classic_link_to_remote_vpc":false,"allow_egress_from_local_vpc_to_remote_classic_link":false},"vpc_id":"vpc-067c4977b5f0796db","region":"us-east-1"},"requester_vpc_info":{"cidr_block":"10.56.73.0/24","cidr_block_set":[{"cidr_block":"10.56.73.0/24"}],"owner_id":"100855782518","peering_options":{"allow_dns_resolution_from_remote_vpc":false,"allow_egress_from_local_classic_link_to_remote_vpc":false,"allow_egress_from_local_vpc_to_remote_classic_link":false},"vpc_id":"vpc-0d43c74850fed41a0","region":"us-east-1"},"status":{"code":"active","message":"Active"},"tags":[{"key":"Name","value":"Terrform Peering"}],"vpc_peering_connection_id":"pcx-03ebf8d9ceac304d7","routes":[{"destination":"10.56.73.0/24","state":"active"}]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "938"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 460e42de-7657-4753-a439-018f3d536a4f
+        status: 200 OK
+        code: 200
+        duration: 866.872421ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/186/vpc-peering/pcx-03ebf8d9ceac304d7
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - d8622b2d-48ad-4103-8099-05363956686e
+        status: 204 No Content
+        code: 204
+        duration: 1.997313282s
