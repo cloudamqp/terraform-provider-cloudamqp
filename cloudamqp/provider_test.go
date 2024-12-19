@@ -146,6 +146,10 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 				fmt.Println("SKIP: PUT /api/instances/{id}/config", i.Request.URL, "error:", errStr)
 				i.DiscardOnSave = true
 			}
+		case i.Response.Code == 400 && i.Request.Method == "DELETE" &&
+			regexp.MustCompile(`api/vpcs/\d+/vpc-peering/pcx-[0-9].*$`).MatchString(i.Request.URL):
+			fmt.Println("SKIP: GET /api/vpcs/{id}/security/vpc-peering/request", i.Request.URL)
+			i.DiscardOnSave = true
 		}
 		return nil
 	}

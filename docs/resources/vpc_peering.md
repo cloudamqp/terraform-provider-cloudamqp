@@ -250,7 +250,37 @@ This resource depends on CloudAMQP managed VPC identifier, `cloudamqp_vpc.vpc.id
 
 ## Import
 
+*Before v1.33.0*
 Not possible to import this resource.
+
+*From v1.33.0*
+`cloudamqp_vpc_peering` can be imported while using the CloudAMQP managed VPC identifier or
+instance identifier, together with the *peering_id*.
+
+```hcl
+terraform import cloudamqp_vpc_peering.<resource_name> <resource-type>,<resource-identifier>,<peering_id>
+```
+
+### Resource type
+
+To use the CloudAMQP managed VPC identifier set the resource type to *vpc*.
+
+```hcl
+terraform import cloudamqp_vpc_peering.vpc_accept_peering vpc,<vpc_id>,<peering_id>
+```
+
+To use the Cloudamqp instance identifier set the resource type to *instance*.
+
+```hcl
+terraform import cloudamqp_vpc_peering.vpc_accept_peering instance,<instance_id>,<peering_id>
+```
+
+### Peering Identifier
+
+This can be found as *peering connection id* in your AWS VPC dashboard/Peering connections, for the correct VPC peering.
+
+Also available as the identifier for *aws_vpc_peering_connection* [resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection) or
+[data source](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc_peering_connection).
 
 ## Create VPC Peering with additional firewall rules
 

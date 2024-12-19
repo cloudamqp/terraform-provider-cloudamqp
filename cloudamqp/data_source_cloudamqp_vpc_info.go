@@ -2,7 +2,6 @@ package cloudamqp
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -48,16 +47,20 @@ func dataSourceVpcInfo() *schema.Resource {
 }
 
 func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		vpcID      = d.Get("vpc_id").(string)
+		data       map[string]interface{}
+		err        = errors.New("")
+	)
 
-	data := make(map[string]interface{})
-	err := errors.New("")
-	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
+	if instanceID == 0 && vpcID == "" {
 		return errors.New("you need to specify either instance_id or vpc_id")
-	} else if d.Get("instance_id") != 0 {
-		data, err = api.ReadVpcInfo(d.Get("instance_id").(int))
+	} else if instanceID != 0 {
+		data, err = api.ReadVpcInfo(instanceID)
 	} else if d.Get("vpc_id") != nil {
-		data, err = api.ReadVpcInfoWithVpcId(d.Get("vpc_id").(string))
+		data, err = api.ReadVpcInfoWithVpcId(vpcID)
 	}
 
 	if err != nil {
@@ -66,35 +69,20 @@ func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
 
 	d.SetId(data["id"].(string))
 	for k, v := range data {
-		if validateVpcInfoSchemaAttribute(k) {
-			if k == "security_group" {
-				sg := data[k].(map[string]interface{})
-				err = d.Set("security_group_id", sg["id"])
-			} else if k == "security_group_id" {
-				continue
-			} else if k == "subnet" {
-				err = d.Set("vpc_subnet", v)
-			} else {
-				err = d.Set(k, v)
-			}
-
-			if err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
-			}
+		switch k {
+		case "id":
+			d.SetId(v.(string))
+		case "name":
+			d.Set("name", v)
+		case "owner_id":
+			d.Set("owner_id", v)
+		case "subnet":
+			d.Set("vpc_subnet", v)
+		case "security_group":
+			sg := data[k].(map[string]interface{})
+			d.Set("security_group_id", sg["id"])
 		}
 	}
-	return nil
-}
 
-func validateVpcInfoSchemaAttribute(key string) bool {
-	switch key {
-	case "name",
-		"subnet",
-		"vpc_subnet",
-		"owner_id",
-		"security_group",
-		"security_group_id":
-		return true
-	}
-	return false
+	return nil
 }

@@ -1,0 +1,4 @@
+resource "cloudamqp_vpc_peering" "accepter" {
+  vpc_id     = {{.VpcID}}
+  peering_id = "{{.PeeringID}}"
+}
