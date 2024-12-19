@@ -3,6 +3,8 @@ package cloudamqp
 import (
 	"errors"
 	"log"
+	"strconv"
+	"strings"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -14,6 +16,9 @@ func resourceVpcGcpPeering() *schema.Resource {
 		Read:   resourceReadVpcGcpPeering,
 		Update: resourceUpdateVpcGcpPeering,
 		Delete: resourceDeleteVpcGcpPeering,
+		Importer: &schema.ResourceImporter{
+			StateContext: schema.ImportStatePassthroughContext,
+		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
 				Type:        schema.TypeInt,
@@ -81,14 +86,15 @@ func resourceCreateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 		timeout      = d.Get("timeout").(int)
 	)
 
+	log.Printf("[DEBUG] cloudamqp::vpc_gcp_peering#create instance_id: %d, vpc_id: %s, "+
+		"waitOnStatus: %v", instanceID, vpcID, waitOnStatus)
+
 	for _, k := range keys {
 		if v := d.Get(k); v != nil && v != "" {
 			params[k] = v
 		}
 	}
 
-	log.Printf("[DEBUG] cloudamqp::vpc_gcp_peering::create instance_id: %d, vpc_id: %s, "+
-		"waitOnStatus: %v", instanceID, vpcID, waitOnStatus)
 	if instanceID == 0 && vpcID == "" {
 		return errors.New("you need to specify either instance_id or vpc_id")
 	} else if instanceID != 0 {
@@ -96,6 +102,8 @@ func resourceCreateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 	} else if vpcID != "" {
 		data, err = api.RequestVpcGcpPeeringWithVpcId(vpcID, params, waitOnStatus, sleep, timeout)
 	}
+
+	log.Printf("[DEBUG] cloudamqp::vpc_gcp_peering#create data: %v", data)
 
 	if err != nil {
 		return err
@@ -112,29 +120,34 @@ func resourceCreateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 
 func resourceReadVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
 	var (
-		api     = meta.(*api.API)
-		data    map[string]interface{}
-		err     = errors.New("")
-		sleep   = d.Get("sleep").(int)
-		timeout = d.Get("timeout").(int)
+		api        = meta.(*api.API)
+		data       map[string]interface{}
+		err        = errors.New("")
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
+		instanceID = d.Get("instance_id").(int)
+		vpcID      = d.Get("vpc_id").(string)
 	)
 
-	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
-		return errors.New("you need to specify either instance_id or vpc_id")
-	} else if d.Get("instance_id") != 0 {
-		data, err = api.ReadVpcGcpPeering(d.Get("instance_id").(int), sleep, timeout)
-	} else if d.Get("vpc_id") != nil {
-		data, err = api.ReadVpcGcpPeeringWithVpcId(d.Get("vpc_id").(string), sleep, timeout)
+	// Check to determine if the resource should be imported.
+	if strings.Contains(d.Id(), ",") {
+		log.Printf("[DEBUG] cloudamqp::resource::vpc_gcp_peering#read import detected")
+		return resourceImportVpcGcpPeering(d, meta)
 	}
-	log.Printf("[DEBUG] cloudamqp::vpc_gcp_peering::read data: %v", data)
+
+	if instanceID == 0 && vpcID == "" {
+		return errors.New("you need to specify either instance_id or vpc_id")
+	} else if instanceID != 0 {
+		data, err = api.ReadVpcGcpPeering(instanceID, sleep, timeout)
+	} else if vpcID != "" {
+		data, err = api.ReadVpcGcpPeeringWithVpcId(vpcID, sleep, timeout)
+	}
 
 	if err != nil {
 		return err
 	}
 
-	if data["rows"] == nil {
-		return errors.New("no peering data available")
-	}
+	log.Printf("[DEBUG] cloudamqp::vpc_gcp_peering#read data: %v", data)
 
 	rows := data["rows"].([]interface{})
 	if len(rows) > 0 {
@@ -144,17 +157,84 @@ func resourceReadVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
 				continue
 			}
 			for k, v := range tempRow {
-				if validateGcpPeeringSchemaAttribute(k) {
-					if k == "stateDetails" {
-						d.Set("state_details", v.(string))
-					} else if k == "autoCreateRoutes" {
-						d.Set("auto_create_routes", v.(bool))
-					} else {
-						d.Set(k, v.(string))
-					}
+				switch k {
+				case "autoCreateRoutes":
+					d.Set("auto_create_routes", v.(bool))
+				case "network":
+					d.Set("peer_network_uri", v.(string))
+				case "state":
+					d.Set("state", v.(string))
+				case "stateDetails":
+					d.Set("state_details", v.(string))
 				}
 			}
 		}
+	} else {
+		return errors.New("no peering data available")
+	}
+
+	return nil
+}
+
+func resourceImportVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
+	var (
+		api     = meta.(*api.API)
+		data    map[string]interface{}
+		err     = errors.New("")
+		sleep   = 10
+		timeout = 1800
+	)
+
+	// Set default values to arguments
+	d.Set("sleep", 10)
+	d.Set("timeout", 1800)
+	d.Set("wait_on_peering_status", false)
+
+	log.Printf("[DEBUG] cloudamqp::resource::vpc_gcp_peering#import id: %v", d.Id())
+	importValues := strings.Split(d.Id(), ",")
+	if len(importValues) < 3 {
+		return errors.New("wrong number of import argument, need all three <type>,<id>,<peer_network_uri>")
+	}
+	if importValues[0] == "instance" {
+		instanceID, _ := strconv.Atoi(importValues[1])
+		d.Set("instance_id", instanceID)
+		data, err = api.ReadVpcGcpPeering(instanceID, sleep, timeout)
+	} else if importValues[0] == "vpc" {
+		vpcID := importValues[1]
+		d.Set("vpc_id", vpcID)
+		data, err = api.ReadVpcGcpPeeringWithVpcId(vpcID, sleep, timeout)
+	}
+
+	if err != nil {
+		return err
+	}
+
+	log.Printf("[DEBUG] cloudamqp::vpc_gcp_peering#import data: %v", data)
+
+	rows := data["rows"].([]interface{})
+	if len(rows) > 0 {
+		for _, row := range rows {
+			tempRow := row.(map[string]interface{})
+			if tempRow["network"] != importValues[2] {
+				continue
+			}
+			for k, v := range tempRow {
+				switch k {
+				case "autoCreateRoutes":
+					d.Set("auto_create_routes", v.(bool))
+				case "name":
+					d.SetId(v.(string))
+				case "network":
+					d.Set("peer_network_uri", v.(string))
+				case "state":
+					d.Set("state", v.(string))
+				case "stateDetails":
+					d.Set("state_details", v.(string))
+				}
+			}
+		}
+	} else {
+		return errors.New("no peering data available")
 	}
 
 	return nil
@@ -165,24 +245,18 @@ func resourceUpdateVpcGcpPeering(d *schema.ResourceData, meta interface{}) error
 }
 
 func resourceDeleteVpcGcpPeering(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+		vpcID      = d.Get("vpc_id").(string)
+	)
 
-	if d.Get("instance_id") == 0 && d.Get("vpc_id") == nil {
+	if instanceID == 0 && vpcID == "" {
 		return errors.New("you need to specify either instance_id or vpc_id")
-	} else if d.Get("instance_id") != 0 {
-		return api.RemoveVpcGcpPeering(d.Get("instance_id").(int), d.Id())
-	} else if d.Get("vpc_id") != nil {
-		return api.RemoveVpcGcpPeeringWithVpcId(d.Get("vpc_id").(string), d.Id())
+	} else if instanceID != 0 {
+		return api.RemoveVpcGcpPeering(instanceID, d.Id())
+	} else if vpcID != "" {
+		return api.RemoveVpcGcpPeeringWithVpcId(vpcID, d.Id())
 	}
 	return errors.New("failed to remove VPC peering")
-}
-
-func validateGcpPeeringSchemaAttribute(key string) bool {
-	switch key {
-	case "state",
-		"stateDetails",
-		"autoCreateRoutes":
-		return true
-	}
-	return false
 }
