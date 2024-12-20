@@ -1,4 +1,4 @@
-## 1.32.2 (Unreleased)
+## 1.32.2 (Dec 20, 2024)
 
 IMPROVEMENTS:
 
