@@ -1,3 +1,10 @@
+## 1.32.2 (Unreleased)
+
+IMPROVEMENTS:
+
+* Enable import of VPC peering resource for GCP ([#308](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/308))
+* Enable import of VPC peering resource for AWS ([#309](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/309))
+
 ## 1.32.1 (Oct 28, 2024)
 
 BUG FIXES:
