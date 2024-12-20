@@ -189,10 +189,10 @@ identifier, `cloudamqp_instance.instance.id`.
 
 ## Import
 
-*Before v1.33.0*
+*Before v1.32.2*
 Not possible to import this resource.
 
-*From v1.33.0*
+*From v1.32.2*
 `cloudamqp_vpc_gcp_peering` can be imported while using the CloudAMQP managed VPC identifier or
 instance identifier, together with the *peer_network_uri*.
 
@@ -221,7 +221,6 @@ This is required to be able to import the correct peering. Following the same fo
 ```hcl
 https://www.googleapis.com/compute/v1/projects/<PROJECT-NAME>/global/networks/<VPC-NETWORK-NAME>
 ```
-
 
 ## Create VPC Peering with additional firewall rules
 

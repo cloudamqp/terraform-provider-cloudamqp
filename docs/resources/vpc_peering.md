@@ -250,10 +250,10 @@ This resource depends on CloudAMQP managed VPC identifier, `cloudamqp_vpc.vpc.id
 
 ## Import
 
-*Before v1.33.0*
+*Before v1.32.2*
 Not possible to import this resource.
 
-*From v1.33.0*
+*From v1.32.2*
 `cloudamqp_vpc_peering` can be imported while using the CloudAMQP managed VPC identifier or
 instance identifier, together with the *peering_id*.
 
