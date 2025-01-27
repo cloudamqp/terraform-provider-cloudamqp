@@ -9,7 +9,7 @@ description: |-
 
 Use this data source to retrieve information about VPC for a CloudAMQP instance.
 
-Only available for CloudAMQP instances hosted in AWS.
+-> **Note:** Only available for CloudAMQP instances/VPCs hosted in AWS.
 
 ## Example Usage
 

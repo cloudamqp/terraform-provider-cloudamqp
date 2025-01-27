@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -67,7 +68,10 @@ func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	d.SetId(data["id"].(string))
+	if data["id"] == nil {
+		return fmt.Errorf("failed to find external VPC identifier. Data source used for AWS VPC")
+	}
+
 	for k, v := range data {
 		switch k {
 		case "id":
