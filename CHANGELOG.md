@@ -1,3 +1,9 @@
+## 1.32.x (unreleased)
+
+IMPROVEMENTS:
+
+* Docs: Updated VPC connect resource information when used for Azure.
+
 ## 1.32.2 (Dec 20, 2024)
 
 IMPROVEMENTS:
