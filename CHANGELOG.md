@@ -4,6 +4,10 @@ IMPROVEMENTS:
 
 * Docs: Updated VPC connect resource information when used for Azure.
 
+BUG FIXES:
+
+* Fixed throwing error when external VPC identifier cannot be found.
+
 ## 1.32.2 (Dec 20, 2024)
 
 IMPROVEMENTS:
