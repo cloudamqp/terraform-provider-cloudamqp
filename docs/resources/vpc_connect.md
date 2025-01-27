@@ -126,6 +126,30 @@ resource "cloudamqp_vpc_connect" "vpc_connect" {
 }
 ```
 
+The attribute `service_name` found in resource `cloudamqp_vpc_connect` corresponds to the alias in
+the resource `azurerm_private_endpoint` of the Azure provider. This can be used when creating the
+private endpoint.
+
+```hcl
+resource "azurerm_private_endpoint" "example" {
+  name                = "example-endpoint"
+  location            = data.azurerm_resource_group.example.location
+  resource_group_name = data.azurerm_resource_group.example.name
+  subnet_id           = data.azurerm_subnet.subnet.id
+
+  private_service_connection {
+    name                              = "example-privateserviceconnection"
+    private_connection_resource_alias = cloudamqp_vpc_connect.vpc_connect.service_name
+    is_manual_connection              = true
+    request_message                   = "PL"
+  }
+}
+```
+
+More information about the resource and argument can be found here:
+[private_connection_resource_alias](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint#private_connection_resource_alias-1). Or check their example "Using a Private Link
+Service Alias with existing resources:".
+
 </details>
 
 <details>
@@ -193,7 +217,7 @@ All attributes reference are computed
 
 * `id`  - The identifier for this resource. Will be same as `instance_id`
 * `status`- Private Service Connect status [enable, pending, disable]
-* `service_name` - Service name (alias for Azure) of the PrivateLink.
+* `service_name` - Service name (alias for Azure, see example above) of the PrivateLink.
 * `active_zones` - Covering availability zones used when creating an endpoint from other VPC. (AWS)
 
 ## Depedency
