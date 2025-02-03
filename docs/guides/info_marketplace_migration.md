@@ -90,16 +90,15 @@ The VPC resource identifier needs to be update with, `id: "208"`.
     {
       "schema_version": 0,
       "attributes": {
-      "id": "208",
-      "name": "instance",
-      "region": "amazon-web-services::us-east-1",
-      "subnet": "10.56.72.0/24",
-      "tags": [
-        "aws"
-      ],
-      "vpc_name": "vpc-mfbztwps"
-    },
-    ...
+        "id": "208",
+        "name": "instance",
+        "region": "amazon-web-services::us-east-1",
+        "subnet": "10.56.72.0/24",
+        "tags": [
+          "aws"
+        ],
+        "vpc_name": "vpc-mfbztwps"
+      }
     }
   ]
 }
@@ -119,30 +118,30 @@ Two identifier needs to be updated,  first `id: "209"` and then `vpc_id: 208`
     {
       "schema_version": 0,
       "attributes": {
-      "apikey": "***",
-      "backend": "rabbitmq",
-      "copy_settings": [],
-      "dedicated": true,
-      "host": "***.rmq6.dev.cloudamqp.com",
-      "host_internal": "***.in.rmq6.dev.cloudamqp.com",
-      "id": "209",
-      "keep_associated_vpc": true,
-      "name": "instance",
-      "no_default_alarms": null,
-      "nodes": 1,
-      "plan": "bunny-1",
-      "ready": true,
-      "region": "amazon-web-services::us-east-1",
-      "rmq_version": "4.0.5",
-      "tags": [
-        "aws"
-      ],
-      "url": "amqp://***@***.in.rmq6.dev.cloudamqp.com/***",
-      "vhost": "***",
-      "vpc_id": 208,
-      "vpc_subnet": null
-    },
-    ...
+        "apikey": "***",
+        "backend": "rabbitmq",
+        "copy_settings": [],
+        "dedicated": true,
+        "host": "***.rmq6.dev.cloudamqp.com",
+        "host_internal": "***.in.rmq6.dev.cloudamqp.com",
+        "id": "209",
+        "keep_associated_vpc": true,
+        "name": "instance",
+        "no_default_alarms": null,
+        "nodes": 1,
+        "plan": "bunny-1",
+        "ready": true,
+        "region": "amazon-web-services::us-east-1",
+        "rmq_version": "4.0.5",
+        "tags": [
+          "aws"
+        ],
+        "url": "amqp://***@***.in.rmq6.dev.cloudamqp.com/***",
+        "vhost": "***",
+        "vpc_id": 208,
+        "vpc_subnet": null
+      }
+    }
   ]
 }
 ```
