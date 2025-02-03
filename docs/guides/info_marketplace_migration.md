@@ -1,6 +1,6 @@
 ---
 layout: "cloudamqp"
-page_title: "Marketplace migration
+page_title: "Marketplace migration"
 subcategory: "info"
 description: |-
   Update resource and dependencies identifiers.
