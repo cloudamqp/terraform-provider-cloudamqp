@@ -198,3 +198,7 @@ The firewall resource shares the same `id` as `instance_id` update these to `id:
 ### More resources
 
 Depending on the resources to update even more identifiers needs to be fetched from the API.
+
+### Apply new indentifiers
+
+Run `terraform apply` to use the new identifiers.
