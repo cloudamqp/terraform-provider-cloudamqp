@@ -1,12 +1,13 @@
-## 1.32.x (unreleased)
+## 1.x.x (unreleased)
 
 IMPROVEMENTS:
 
-* Docs: Updated VPC connect resource information when used for Azure.
+* Docs: Updated VPC connect resource information when used for Azure ([#311](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/311))
+* Docs: Added guide page about Marketplace migration ([#312](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/312))
 
 BUG FIXES:
 
-* Fixed throwing error when external VPC identifier cannot be found.
+* Fixed throwing error when external VPC identifier cannot be found. ([#310](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/310))
 
 ## 1.32.2 (Dec 20, 2024)
 
