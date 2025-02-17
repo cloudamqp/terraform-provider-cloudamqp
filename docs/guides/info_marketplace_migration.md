@@ -8,8 +8,7 @@ description: |-
 
 # Marketplace migration
 
-When migrating from our marketplace apps to CloudAMQP. The resource identifiers will be updated.
-Below follows an example of how to fetch the new identifiers and which needs to be updated.
+If you migrate your CloudAMQP billing from a cloud marketplace to directly with CloudAMQP (or vice versa), the resource identifiers will change. Below follows an example on how to fetch the new identifiers and update them.
 
 ## Configuration file
 
@@ -54,7 +53,7 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 
 For the basic example above we need to fetch two identifiers to be used when manually update the state file. The identifiers are both the *VPC ID* and *Instance ID*.
 
-This can be done by using the [CloudAMQP API](https://docs.cloudamqp.com/#list-instances) and listing all the CloudAMQP instances on the new account. From the response, the new CloudAMQP instance have the identifier `209` and the VPC `208`. 
+This can be done by using the [CloudAMQP API](https://docs.cloudamqp.com/#list-instances) and listing all the CloudAMQP instances in the new team. From the response, the new CloudAMQP instance have the identifier `209` and the VPC `208`. 
 
 ```json
 [
