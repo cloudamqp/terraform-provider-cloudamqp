@@ -55,23 +55,28 @@ Read more at https://www.terraform.io/docs/language/providers/requirements.html
 
 ### From source
 
-Clone repository to `$GOPATH/src/github.com/cloudamqp/terraform-provider-cloudamqp`
+Clone repository to `/home/USER/code/cloudamqp/terraform-provider-cloudamqp`
 
-Change directory and build the provider from make. This will call `go install` and install the plugin under `$GOPATH/bin`.
+Change directory and build the provider binary using `go build`.
 
-```sh
-$ cd $GOPATH/src/github.com/cloudamqp/terraform-provider-cloudamqp
-$ make build
+Setup [.terraformrc](https://developer.hashicorp.com/terraform/cli/config/config-file) so that terraform will use the binary that we just build instead of the one from the registry
+
 ```
-
-Run `terraform init` from the same folder as the tf.file is located. Terraform should also search in `$GOPATH/bin`. If this not the case, the provider needs to be manually installed by moving it to `$HOME/.terraform.d/plugins`. [Install plugins](https://www.terraform.io/docs/plugins/basics.html#installing-plugins). If `$HOME/.terraform.d/plugins` don't exists, the directory needs to be created.
-
-```sh
-$ mkdir -p ~/.terraform.d/plugins
-$ cp $GOPATH/bin/terraform-provider-cloudamqp $HOME/.terraform.d/plugins/terraform-provider-cloudamqp
-$ cd <path_to_tf_file>
-$ terraform init
+provider_installation {
+  dev_overrides {
+    "hashicorp/cloudamqp" = "/home/USER/code/cloudamqp/terraform-provider-cloudamqp"
+  }
+  direct {}
+}
 ```
+make sure the path points to where you checked out the code.
+
+When using `dev_overrides` there is no need to a `terraform init` since you already have the provider locally. 
+You should also not have the `terraform ... required_provders` block in your `.tf` file 
+
+When this is setup you can just run `plan` or `apply` and terraform will use your locally compiled binary as provider. 
+
+*To change the provider now you can just update the code and hit `go build` and then rerun your terraform command.*
 
 More detailed documentation of the provider can be found at: https://docs.cloudamqp.com/cloudamqp_terraform.html
 
