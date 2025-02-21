@@ -1,31 +1,10 @@
 TEST?=$$(go list ./...)
 GOFMT_FILES?=$$(find . -name '*.go')
-PKG_NAME=cloudamqp
-PROVIDER_VERSION = 1.32.2
 
 default: build
 
-GOOS := $(shell go env GOOS)
-GOARCH := $(shell go env GOARCH)
-PROVIDER_ARCH := $(GOOS)_$(GOARCH)
-
 tools:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-
-build: fmtcheck
-	go install -ldflags "-X 'main.version=$(PROVIDER_VERSION)'"
-
-local-clean:
-	rm -rf ~/.terraform.d/plugins/localhost/cloudamqp/cloudamqp/$(PROVIDER_VERSION)/$(PROVIDER_ARCH)/terraform-provider-cloudamqp_v$(PROVIDER_VERSION)
-
-local-build: local-clean
-	@echo $(GOOS);
-	@echo $(GOARCH);
-	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -ldflags "-X 'main.version=$(PROVIDER_VERSION)'" -o terraform-provider-cloudamqp_v$(PROVIDER_VERSION)
-
-local-install: local-build
-	mkdir -p ~/.terraform.d/plugins/localhost/cloudamqp/cloudamqp/$(PROVIDER_VERSION)/$(PROVIDER_ARCH)
-	cp $(CURDIR)/terraform-provider-cloudamqp_v$(PROVIDER_VERSION) ~/.terraform.d/plugins/localhost/cloudamqp/cloudamqp/$(PROVIDER_VERSION)/$(PROVIDER_ARCH)
 
 fmt:
 	@echo "==> Fixing source code with gofmt..."
