@@ -10,8 +10,7 @@ GOARCH := $(shell go env GOARCH)
 PROVIDER_ARCH := $(GOOS)_$(GOARCH)
 
 tools:
-	GO111MODULE=on go install github.com/client9/misspell/cmd/misspell
-	GO111MODULE=on go install github.com/golangci/golangci-lint/cmd/golangci-lint
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
 build: fmtcheck
 	go install -ldflags "-X 'main.version=$(PROVIDER_VERSION)'"
