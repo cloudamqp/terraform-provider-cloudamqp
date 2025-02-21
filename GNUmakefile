@@ -16,4 +16,4 @@ lint:
 	@echo "==> Checking source code against linters..."
 	golangci-lint run ./...
 
-.PHONY: build test testacc vet fmt fmtcheck lint tools test-compile
+.PHONY: build install fmt fmtcheck lint tools
