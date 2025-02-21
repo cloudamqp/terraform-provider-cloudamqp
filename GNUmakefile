@@ -5,6 +5,9 @@ default: build
 tools:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
+install:
+	go install .
+
 fmt:
 	@echo "==> Fixing source code with gofmt..."
 	gofmt -s -w $(GOFMT_FILES)
