@@ -1,5 +1,5 @@
-TEST?=$$(go list ./... |grep -v 'vendor')
-GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
+TEST?=$$(go list ./...)
+GOFMT_FILES?=$$(find . -name '*.go')
 PKG_NAME=cloudamqp
 PROVIDER_VERSION = 1.32.2
 
@@ -54,14 +54,5 @@ test-compile:
 		exit 1; \
 	fi
 	go test -c $(TEST) $(TESTARGS)
-
-vet:
-	@echo "go vet ."
-	@go vet $$(go list ./... | grep -v vendor/) ; if [ $$? -eq 1 ]; then \
-		echo ""; \
-		echo "Vet found suspicious constructs. Please check the reported constructs"; \
-		echo "and fix them if necessary before submitting the code for review."; \
-		exit 1; \
-	fi
 
 .PHONY: build test testacc vet fmt fmtcheck lint tools test-compile
