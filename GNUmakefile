@@ -9,14 +9,12 @@ install:
 	go install .
 
 fmt:
-	@echo "==> Fixing source code with gofmt..."
 	gofmt -s -w $(GOFMT_FILES)
 
 fmtcheck:
 	@sh -c "'$(CURDIR)/scripts/gofmtcheck.sh'"
 
 lint:
-	@echo "==> Checking source code against linters..."
 	golangci-lint run ./...
 
 .PHONY: build install fmt fmtcheck lint tools
