@@ -1,12 +1,12 @@
 GOFMT_FILES?=$$(find . -name '*.go')
 
-default: build
+build: terraform-provider-cloudamqp
 
 tools:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
-build:
-	go build .
+terraform-provider-cloudamqp:
+	go build -o terraform-provider-cloudamqp
 
 install:
 	go install .
@@ -20,4 +20,7 @@ fmtcheck:
 lint:
 	golangci-lint run ./...
 
-.PHONY: build install fmt fmtcheck lint tools
+clean:
+	rm -f terraform-provider-cloudamqp
+
+.PHONY: clean install fmt fmtcheck lint tools
