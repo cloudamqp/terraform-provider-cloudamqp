@@ -5,6 +5,9 @@ default: build
 tools:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
+build:
+	go build .
+
 install:
 	go install .
 
