@@ -141,6 +141,12 @@ func resourceIntegrationMetric() *schema.Resource {
 				Sensitive:   true,
 				Description: "Base64Encoded credentials. (Stackdriver)",
 			},
+			"include_ad_queues": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "(optional) Include Auto-Delete queues",
+				Default:     false,
+			},
 		},
 	}
 }
@@ -174,6 +180,10 @@ func resourceIntegrationMetricCreate(d *schema.ResourceData, meta interface{}) e
 				params[k] = v
 			}
 		}
+	}
+
+	if d.Get("include_ad_queues").(bool) {
+		params["include_ad_queues"] = "true"
 	}
 
 	// Add commons keys if present
@@ -221,6 +231,8 @@ func resourceIntegrationMetricRead(d *schema.ResourceData, meta interface{}) err
 		return err
 	}
 
+	d.Set("include_ad_queues", false)
+
 	for k, v := range data {
 		if k == "type" {
 			d.Set("name", v)
@@ -230,6 +242,8 @@ func resourceIntegrationMetricRead(d *schema.ResourceData, meta interface{}) err
 				k = "queue_allowlist"
 			} else if k == "vhost_regex" {
 				k = "vhost_allowlist"
+			} else if k == "include_ad_queues" {
+				v = v.(string) == "true"
 			}
 
 			if err = d.Set(k, v); err != nil {
@@ -269,6 +283,10 @@ func resourceIntegrationMetricUpdate(d *schema.ResourceData, meta interface{}) e
 				params[k] = v
 			}
 		}
+	}
+
+	if d.Get("include_ad_queues").(bool) {
+		params["include_ad_queues"] = "true"
 	}
 
 	// Add commons keys if present
@@ -323,6 +341,7 @@ func validateIntegrationMetricSchemaAttribute(key string) bool {
 		"tags",
 		"queue_regex",
 		"vhost_regex",
+		"include_ad_queues",
 		"api_key",
 		"email",
 		"license_key",
