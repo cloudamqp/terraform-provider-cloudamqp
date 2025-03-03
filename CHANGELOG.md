@@ -4,6 +4,7 @@ IMPROVEMENTS:
 
 * Docs: Updated VPC connect resource information when used for Azure ([#311](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/311))
 * Docs: Added guide page about Marketplace migration ([#312](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/312))
+* Added include auto delete queues to metric integration ([323](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/323))
 
 BUG FIXES:
 
