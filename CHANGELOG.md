@@ -1,4 +1,4 @@
-## 1.x.x (unreleased)
+## 1.32.3 (Mar 3, 2025)
 
 IMPROVEMENTS:
 
