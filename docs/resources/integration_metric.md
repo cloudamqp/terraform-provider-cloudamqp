@@ -7,7 +7,9 @@ description: |-
 
 # cloudamqp_integration_metric
 
-This resource allows you to create and manage, forwarding metrics to third party integrations for a CloudAMQP instance. Once configured, the metrics produced will be forward to corresponding integration.
+This resource allows you to create and manage, forwarding metrics to third party integrations for a
+CloudAMQP instance. Once configured, the metrics produced will be forward to corresponding
+integration.
 
 Only available for dedicated subscription plans.
 
@@ -24,19 +26,19 @@ Only available for dedicated subscription plans.
 
 ```hcl
 resource "cloudamqp_integration_metric" "cloudwatch" {
-  instance_id = cloudamqp_instance.instance.id
-  name = "cloudwatch"
-  access_key_id = var.aws_access_key_id
+  instance_id       = cloudamqp_instance.instance.id
+  name              = "cloudwatch"
+  access_key_id     = var.aws_access_key_id
   secret_access_key = var_aws_secret_acccess_key
-  region = var.aws_region
+  region            = var.aws_region
 }
 
 resource "cloudamqp_integration_metric" "cloudwatch_v2" {
-  instance_id = cloudamqp_instance.instance.id
-  name = "cloudwatch_v2"
-  access_key_id = var.aws_access_key_id
+  instance_id       = cloudamqp_instance.instance.id
+  name              = "cloudwatch_v2"
+  access_key_id     = var.aws_access_key_id
   secret_access_key = var_aws_secret_acccess_key
-  region = var.aws_region
+  region            = var.aws_region
 }
 ```
 
@@ -44,19 +46,19 @@ resource "cloudamqp_integration_metric" "cloudwatch_v2" {
 
 ```hcl
 resource "cloudamqp_integration_metric" "cloudwatch" {
-  instance_id = cloudamqp_instance.instance.id
-  name = "cloudwatch"
-  iam_role = var.aws_iam_role
+  instance_id     = cloudamqp_instance.instance.id
+  name            = "cloudwatch"
+  iam_role        = var.aws_iam_role
   iam_external_id = var.external_id
-  region = var.aws_region
+  region          = var.aws_region
 }
 
 resource "cloudamqp_integration_metric" "cloudwatch_v2" {
-  instance_id = cloudamqp_instance.instance.id
-  name = "cloudwatch_v2"
-  iam_role = var.aws_iam_role
+  instance_id     = cloudamqp_instance.instance.id
+  name            = "cloudwatch_v2"
+  iam_role        = var.aws_iam_role
   iam_external_id = var.external_id
-  region = var.aws_region
+  region          = var.aws_region
 }
 ```
 
@@ -75,18 +77,18 @@ resource "cloudamqp_integration_metric" "cloudwatch_v2" {
 ```hcl
 resource "cloudamqp_integration_metric" "datadog" {
   instance_id = cloudamqp_instance.instance.id
-  name = "datadog"
-  api_key = var.datadog_api_key
-  region = var.datadog_region
-  tags = "env=prod,region=us1,version=v1.0"
+  name        = "datadog"
+  api_key     = var.datadog_api_key
+  region      = var.datadog_region
+  tags        = "env=prod,region=us1,version=v1.0"
 }
 
 resource "cloudamqp_integration_metric" "datadog_v2" {
   instance_id = cloudamqp_instance.instance.id
-  name = "datadog_v2"
-  api_key = var.datadog_api_key
-  region = var.datadog_region
-  tags = "env=prod,region=us1,version=v1.0"
+  name        = "datadog_v2"
+  api_key     = var.datadog_api_key
+  region      = var.datadog_region
+  tags        = "env=prod,region=us1,version=v1.0"
 }
 ```
 
@@ -102,9 +104,9 @@ resource "cloudamqp_integration_metric" "datadog_v2" {
 ```hcl
 resource "cloudamqp_integration_metric" "librato" {
   instance_id = cloudamqp_instance.instance.id
-  name = "librato"
-  email = var.librato_email
-  api_key = var.librato_api_key
+  name        = "librato"
+  email       = var.librato_email
+  api_key     = var.librato_api_key
 }
 ```
 
@@ -120,9 +122,9 @@ resource "cloudamqp_integration_metric" "librato" {
 ```hcl
 resource "cloudamqp_integration_metric" "newrelic" {
   instance_id = cloudamqp_instance.instance.id
-  name = "newrelic_v2"
-  api_key = var.newrelic_api_key
-  region = var.newrelic_region
+  name        = "newrelic_v2"
+  api_key     = var.newrelic_api_key
+  region      = var.newrelic_region
 }
 ```
 
@@ -139,11 +141,11 @@ Use variable file populated with project_id, private_key and client_email
 
 ```hcl
 resource "cloudamqp_integration_metric" "stackdriver" {
-  instance_id = cloudamqp_instance.instance.id
-  name = "stackdriver"
-  project_id = var.stackdriver_project_id
-  private_key = var.stackdriver_private_key
-  client_email = var.stackriver_email
+  instance_id   = cloudamqp_instance.instance.id
+  name          = "stackdriver"
+  project_id    = var.stackdriver_project_id
+  private_key   = var.stackdriver_private_key
+  client_email  = var.stackriver_email
 }
 ```
 
@@ -151,9 +153,9 @@ or by using google_service_account_key resource from Google provider
 
 ```hcl
 resource "google_service_account" "service_account" {
-  account_id = "<account_id>"
-  description = "<description>"
-  display_name = "<display_name>"
+  account_id    = "<account_id>"
+  description   = "<description>"
+  display_name  = "<display_name>"
 }
 
 resource "google_service_account_key" "service_account_key" {
@@ -161,11 +163,11 @@ resource "google_service_account_key" "service_account_key" {
 }
 
 resource "cloudamqp_integration_metric" "stackdriver" {
-  instance_id = cloudamqp_instance.instance.id
-  name = "stackdriver"
-  project_id = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).project_id
-  private_key = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).private_key
-  client_email = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).client_email
+  instance_id   = cloudamqp_instance.instance.id
+  name          = "stackdriver"
+  project_id    = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).project_id
+  private_key   = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).private_key
+  client_email  = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).client_email
 }
 ```
 
@@ -178,13 +180,14 @@ resource "cloudamqp_integration_metric" "stackdriver" {
     </b>
   </summary>
 
-Use credentials argument and let the provider do the Base64decode and internally populate, *project_id, client_name, private_key*
+Use credentials argument and let the provider do the Base64decode and internally populate,
+*project_id, client_name, private_key*
 
 ```hcl
 resource "google_service_account" "service_account" {
-  account_id = "<account_id>"
-  description = "<description>"
-  display_name = "<display_name>"
+  account_id    = "<account_id>"
+  description   = "<description>"
+  display_name  = "<display_name>"
 }
 
 resource "google_service_account_key" "service_account_key" {
@@ -193,7 +196,7 @@ resource "google_service_account_key" "service_account_key" {
 
 resource "cloudamqp_integration_metric" "stackdriver" {
   instance_id = cloudamqp_instance.instance.id
-  name = "stackdriver"
+  name        = "stackdriver"
   credentials = google_service_account_key.service_account_key.private_key
 }
 ```
@@ -202,9 +205,9 @@ or use the same as earlier version and decode the google service account key
 
 ```hcl
 resource "google_service_account" "service_account" {
-  account_id = "<account_id>"
-  description = "<description>"
-  display_name = "<display_name>"
+  account_id    = "<account_id>"
+  description   = "<description>"
+  display_name  = "<display_name>"
 }
 
 resource "google_service_account_key" "service_account_key" {
@@ -212,11 +215,11 @@ resource "google_service_account_key" "service_account_key" {
 }
 
 resource "cloudamqp_integration_metric" "stackdriver" {
-  instance_id = cloudamqp_instance.instance.id
-  name = "stackdriver"
-  project_id = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).project_id
-  private_key = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).private_key
-  client_email = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).client_email
+  instance_id   = cloudamqp_instance.instance.id
+  name          = "stackdriver"
+  project_id    = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).project_id
+  private_key   = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).private_key
+  client_email  = jsondecode(base64decode(google_service_account_key.service_account_key.private_key)).client_email
 }
 ```
 
@@ -240,14 +243,19 @@ The following arguments are supported:
 * `client_email`      - (Optional/Computed) The client email registered for the integration service.
 * `tags`              - (Optional) Tags. e.g. `env=prod,region=europe`.
 
-***Note: If tags are used with Datadog. The value part (prod, europe, ...) must start with a letter, read more about tags format in the [Datadog documentation](https://docs.datadoghq.com/getting_started/tagging/#define-tags)***
+***Note: If tags are used with Datadog. The value part (prod, europe, ...) must start with a letter,
+read more about tags format in the
+[Datadog documentation](https://docs.datadoghq.com/getting_started/tagging/#define-tags)***
 
 * `queue_allowlist`   - (Optional) Allowlist queues using regular expression. Leave empty to include all queues.
 * `vhost_allowlist`   - (Optional) Allowlist vhost using regular expression. Leave empty to include all vhosts.
 * `queue_whitelist`   - **Deprecated** Use queue_allowlist instead
 * `vhost_whitelist`   - **Deprecated** Use vhost_allowlist instead
+* `include_ad_queues` - (Optional) Include auto delete queues.
 
-This is the full list of all arguments. Only a subset of arguments are used based on which type of integration used. See [Integration type reference](#integration-type-reference) below for more information.
+This is the full list of all arguments. Only a subset of arguments are used based on which type of
+integration used. See [Integration type reference](#integration-type-reference) below for more
+information.
 
 ## Integration service references
 
@@ -300,6 +308,7 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-`cloudamqp_integration_metric`can be imported using the resource identifier together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
+`cloudamqp_integration_metric`can be imported using the resource identifier together with CloudAMQP
+instance identifier. The name and identifier are CSV separated, see example below.
 
 `terraform import cloudamqp_integration_metric.<resource_name> <resource_id>,<instance_id>`
