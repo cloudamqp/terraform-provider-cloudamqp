@@ -33,7 +33,6 @@ func resourceMaintenanceWindow() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Description: "Preferred day of the week when to run maintenance",
-				// ValidateDiagFunc: validatePreferredDay(),
 				ValidateFunc: func(value any, key string) (warns []string, errs []error) {
 					if value.(string) == "" {
 						return
