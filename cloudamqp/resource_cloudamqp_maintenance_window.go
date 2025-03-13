@@ -8,6 +8,7 @@ import (
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
+	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/utils"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -94,7 +95,11 @@ func resourceMaintenanceWindowUpdate(d *schema.ResourceData, meta any) error {
 	}
 
 	if v := d.Get("automatic_updates"); v != nil {
-		data.AutomaticUpdates = v.(string)
+		if v.(string) == "on" {
+			data.AutomaticUpdates = utils.Pointer(true)
+		} else if v.(string) == "off" {
+			data.AutomaticUpdates = utils.Pointer(false)
+		}
 	}
 
 	if err := api.UpdateMaintenance(instanceID, data); err != nil {
@@ -133,7 +138,12 @@ func resourceMaintenanceWindowRead(d *schema.ResourceData, meta any) error {
 		d.Set("preferred_time", data.PreferredTime)
 	}
 
-	d.Set("automatic_updates", data.AutomaticUpdates)
+	if data.AutomaticUpdates != nil {
+		d.Set("automatic_updates", "off")
+		if *data.AutomaticUpdates {
+			d.Set("automatic_updates", "on")
+		}
+	}
 
 	return nil
 }
