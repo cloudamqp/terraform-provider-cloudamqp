@@ -122,6 +122,8 @@ Pre-defined services for LavinMQ:
 | AMQP         | 5672  |
 | AMQPS        | 5671  |
 | HTTPS        | 443   |
+| MQTT         | 1883  |
+| MQTTS        | 8883  |
 
 ## Attributes Reference
 
