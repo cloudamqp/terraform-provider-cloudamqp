@@ -48,10 +48,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - da5daf1b-97bc-4b80-8e97-2604cdcf054b
+                - 196c6524-cbb1-451e-87ef-c9a5cbe208b8
         status: 200 OK
         code: 200
-        duration: 10.392049ms
+        duration: 9.972417ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -99,10 +99,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 6d19a16d-ccaa-48df-92d9-9586c65910e8
+                - ce484783-8ee9-4de7-8c59-e870207f54c6
         status: 200 OK
         code: 200
-        duration: 1.528383ms
+        duration: 3.594622ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -150,10 +150,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - f52aa7a0-8b9f-499a-8400-d1dece473ed8
+                - d362ac10-bf53-48f4-8ad8-809197ebfa36
         status: 200 OK
         code: 200
-        duration: 10.247149ms
+        duration: 10.372152ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -201,10 +201,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 9c67346b-8837-47cb-b81d-9b29773db1c0
+                - fabf3752-b70c-455c-8519-77bad37db063
         status: 200 OK
         code: 200
-        duration: 2.464481ms
+        duration: 2.478827ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -252,10 +252,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - c36f9c3f-3f4d-4960-baee-71ab8352a7df
+                - 66ee9f68-0fb8-42af-a65a-f4734b88b12c
         status: 200 OK
         code: 200
-        duration: 9.562584ms
+        duration: 15.954965ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -303,10 +303,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - eafdfe4c-578a-4694-b24c-c0e0c7e74f9c
+                - 658586cb-b878-4cfb-a508-f1c04b1f56e8
         status: 200 OK
         code: 200
-        duration: 1.889111ms
+        duration: 3.203312ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -336,14 +336,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 243
+        content_length: 250
         uncompressed: false
-        body: '{"id":346,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"dae0d0d4-d586-4dfe-af11-ebd7320778eb","url":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee"}'
+        body: '{"id":353,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"5095010e-bd62-436d-a239-1fc5a3379090","url":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "243"
+                - "250"
             Content-Type:
                 - application/json
             Nel:
@@ -357,10 +357,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - ae7afcbf-9d08-4649-931e-9f01a77daa29
+                - 8135cfe7-da5d-4ba5-a6cf-3ac5a5f74d5d
         status: 200 OK
         code: 200
-        duration: 54.069159ms
+        duration: 64.197501ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -379,7 +379,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346
+        url: http://localhost:9393/api/instances/353
         method: GET
       response:
         proto: HTTP/1.1
@@ -387,14 +387,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 753
+        content_length: 788
         uncompressed: false
-        body: '{"id":346,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e590d34b-9280-4d12-b642-f1cef386ca33","url":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","ready":true,"apikey":"dae0d0d4-d586-4dfe-af11-ebd7320778eb","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","internal":"amqp://xwugnuee:***@dev-harsh-deer.in.lmq.dev.cloudamqp.com/xwugnuee"},"rmq_version":"2.1.0","hostname_external":"dev-harsh-deer.lmq.dev.cloudamqp.com","hostname_internal":"dev-harsh-deer.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":353,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"438e29a8-889e-4421-a8f7-9065ace9a011","url":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","ready":true,"apikey":"5095010e-bd62-436d-a239-1fc5a3379090","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","internal":"amqp://dwmpkfqh:***@dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com/dwmpkfqh"},"rmq_version":"2.2.0","hostname_external":"dev-wintry-cuttlefish.lmq.dev.cloudamqp.com","hostname_internal":"dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "753"
+                - "788"
             Content-Type:
                 - application/json
             Nel:
@@ -408,10 +408,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 785d3171-7634-4294-9f17-fb5acf7981ea
+                - a291973f-06aa-4664-85d4-20fc6110fa37
         status: 200 OK
         code: 200
-        duration: 29.02878ms
+        duration: 24.282548ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -430,7 +430,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346
+        url: http://localhost:9393/api/instances/353
         method: GET
       response:
         proto: HTTP/1.1
@@ -438,14 +438,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 753
+        content_length: 788
         uncompressed: false
-        body: '{"id":346,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e590d34b-9280-4d12-b642-f1cef386ca33","url":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","ready":true,"apikey":"dae0d0d4-d586-4dfe-af11-ebd7320778eb","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","internal":"amqp://xwugnuee:***@dev-harsh-deer.in.lmq.dev.cloudamqp.com/xwugnuee"},"rmq_version":"2.1.0","hostname_external":"dev-harsh-deer.lmq.dev.cloudamqp.com","hostname_internal":"dev-harsh-deer.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":353,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"438e29a8-889e-4421-a8f7-9065ace9a011","url":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","ready":true,"apikey":"5095010e-bd62-436d-a239-1fc5a3379090","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","internal":"amqp://dwmpkfqh:***@dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com/dwmpkfqh"},"rmq_version":"2.2.0","hostname_external":"dev-wintry-cuttlefish.lmq.dev.cloudamqp.com","hostname_internal":"dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "753"
+                - "788"
             Content-Type:
                 - application/json
             Nel:
@@ -459,10 +459,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 68102cd1-7b72-418f-a72b-4a234c3b490f
+                - 64dbd026-d194-4359-9899-6d339021a791
         status: 200 OK
         code: 200
-        duration: 21.573803ms
+        duration: 19.242142ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -484,8 +484,8 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346/maintenance/settings
-        method: PUT
+        url: http://localhost:9393/api/instances/353/maintenance/settings
+        method: POST
       response:
         proto: HTTP/1.1
         proto_major: 1
@@ -513,10 +513,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 39773107-429a-483f-adc4-89409d9a43a7
+                - 36fe72ff-5b4a-47ca-b33c-a491dc40eecc
         status: 200 OK
         code: 200
-        duration: 29.277411ms
+        duration: 26.152089ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -535,7 +535,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346
+        url: http://localhost:9393/api/instances/353
         method: GET
       response:
         proto: HTTP/1.1
@@ -543,14 +543,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 753
+        content_length: 788
         uncompressed: false
-        body: '{"id":346,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e590d34b-9280-4d12-b642-f1cef386ca33","url":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","ready":true,"apikey":"dae0d0d4-d586-4dfe-af11-ebd7320778eb","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","internal":"amqp://xwugnuee:***@dev-harsh-deer.in.lmq.dev.cloudamqp.com/xwugnuee"},"rmq_version":"2.1.0","hostname_external":"dev-harsh-deer.lmq.dev.cloudamqp.com","hostname_internal":"dev-harsh-deer.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":353,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"438e29a8-889e-4421-a8f7-9065ace9a011","url":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","ready":true,"apikey":"5095010e-bd62-436d-a239-1fc5a3379090","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","internal":"amqp://dwmpkfqh:***@dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com/dwmpkfqh"},"rmq_version":"2.2.0","hostname_external":"dev-wintry-cuttlefish.lmq.dev.cloudamqp.com","hostname_internal":"dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "753"
+                - "788"
             Content-Type:
                 - application/json
             Nel:
@@ -564,10 +564,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 8e3f1da4-d5b9-4f8d-bd32-375a8e402714
+                - b9addda2-85c3-4173-9a9d-42817fcfe1c7
         status: 200 OK
         code: 200
-        duration: 24.444912ms
+        duration: 13.80599ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -586,7 +586,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346/maintenance/settings
+        url: http://localhost:9393/api/instances/353/maintenance/settings
         method: GET
       response:
         proto: HTTP/1.1
@@ -615,10 +615,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 39c7895e-09fc-44b9-8984-f6075120abbd
+                - 6505f801-b48c-4cf4-bedd-e553ece511a3
         status: 200 OK
         code: 200
-        duration: 14.086957ms
+        duration: 15.228835ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -637,7 +637,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346
+        url: http://localhost:9393/api/instances/353
         method: GET
       response:
         proto: HTTP/1.1
@@ -645,14 +645,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 753
+        content_length: 788
         uncompressed: false
-        body: '{"id":346,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e590d34b-9280-4d12-b642-f1cef386ca33","url":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","ready":true,"apikey":"dae0d0d4-d586-4dfe-af11-ebd7320778eb","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","internal":"amqp://xwugnuee:***@dev-harsh-deer.in.lmq.dev.cloudamqp.com/xwugnuee"},"rmq_version":"2.1.0","hostname_external":"dev-harsh-deer.lmq.dev.cloudamqp.com","hostname_internal":"dev-harsh-deer.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":353,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"438e29a8-889e-4421-a8f7-9065ace9a011","url":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","ready":true,"apikey":"5095010e-bd62-436d-a239-1fc5a3379090","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","internal":"amqp://dwmpkfqh:***@dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com/dwmpkfqh"},"rmq_version":"2.2.0","hostname_external":"dev-wintry-cuttlefish.lmq.dev.cloudamqp.com","hostname_internal":"dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "753"
+                - "788"
             Content-Type:
                 - application/json
             Nel:
@@ -666,10 +666,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 6504e7c4-4abb-4e31-aa9d-a3e4a8334092
+                - e7373d8f-0d71-447e-b25d-92fc93457fe9
         status: 200 OK
         code: 200
-        duration: 11.784393ms
+        duration: 18.691763ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -688,7 +688,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346/maintenance/settings
+        url: http://localhost:9393/api/instances/353/maintenance/settings
         method: GET
       response:
         proto: HTTP/1.1
@@ -717,10 +717,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 797dd773-905b-4d81-aed6-76e004ca9779
+                - 42c3e0fa-67b1-42dd-91e7-025d5bb1ec2d
         status: 200 OK
         code: 200
-        duration: 11.392152ms
+        duration: 16.373165ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -742,8 +742,8 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346/maintenance/settings
-        method: PUT
+        url: http://localhost:9393/api/instances/353/maintenance/settings
+        method: POST
       response:
         proto: HTTP/1.1
         proto_major: 1
@@ -771,10 +771,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 9ff5905f-37d5-4f7a-ae3d-56cde37cd2f0
+                - b12c6f20-2c2f-46c7-a07e-5a3888ce59d6
         status: 200 OK
         code: 200
-        duration: 17.259814ms
+        duration: 19.214939ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -793,7 +793,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346
+        url: http://localhost:9393/api/instances/353
         method: GET
       response:
         proto: HTTP/1.1
@@ -801,14 +801,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 753
+        content_length: 788
         uncompressed: false
-        body: '{"id":346,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e590d34b-9280-4d12-b642-f1cef386ca33","url":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","ready":true,"apikey":"dae0d0d4-d586-4dfe-af11-ebd7320778eb","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","internal":"amqp://xwugnuee:***@dev-harsh-deer.in.lmq.dev.cloudamqp.com/xwugnuee"},"rmq_version":"2.1.0","hostname_external":"dev-harsh-deer.lmq.dev.cloudamqp.com","hostname_internal":"dev-harsh-deer.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":353,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"438e29a8-889e-4421-a8f7-9065ace9a011","url":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","ready":true,"apikey":"5095010e-bd62-436d-a239-1fc5a3379090","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","internal":"amqp://dwmpkfqh:***@dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com/dwmpkfqh"},"rmq_version":"2.2.0","hostname_external":"dev-wintry-cuttlefish.lmq.dev.cloudamqp.com","hostname_internal":"dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "753"
+                - "788"
             Content-Type:
                 - application/json
             Nel:
@@ -822,10 +822,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 74599846-b868-4092-8d3b-71e821b36e64
+                - 16eab429-5ae9-4985-94a1-0f7aadbf9d81
         status: 200 OK
         code: 200
-        duration: 22.937219ms
+        duration: 14.46409ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -844,7 +844,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346/maintenance/settings
+        url: http://localhost:9393/api/instances/353/maintenance/settings
         method: GET
       response:
         proto: HTTP/1.1
@@ -852,14 +852,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 101
+        content_length: 97
         uncompressed: false
-        body: '{"preferred_maintenance_day":"Tuesday","preferred_maintenance_time":"None","automatic_updates":false}'
+        body: '{"preferred_maintenance_day":"Tuesday","preferred_maintenance_time":"","automatic_updates":false}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "101"
+                - "97"
             Content-Type:
                 - application/json
             Nel:
@@ -873,10 +873,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - a5dc1f46-d3e0-4b06-934a-f050463cf5e3
+                - 95009bf1-6fd6-4ac8-bd2f-84d80c804d9f
         status: 200 OK
         code: 200
-        duration: 15.86229ms
+        duration: 12.812137ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -895,7 +895,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346
+        url: http://localhost:9393/api/instances/353
         method: GET
       response:
         proto: HTTP/1.1
@@ -903,14 +903,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 753
+        content_length: 788
         uncompressed: false
-        body: '{"id":346,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e590d34b-9280-4d12-b642-f1cef386ca33","url":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","ready":true,"apikey":"dae0d0d4-d586-4dfe-af11-ebd7320778eb","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","internal":"amqp://xwugnuee:***@dev-harsh-deer.in.lmq.dev.cloudamqp.com/xwugnuee"},"rmq_version":"2.1.0","hostname_external":"dev-harsh-deer.lmq.dev.cloudamqp.com","hostname_internal":"dev-harsh-deer.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":353,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"438e29a8-889e-4421-a8f7-9065ace9a011","url":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","ready":true,"apikey":"5095010e-bd62-436d-a239-1fc5a3379090","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","internal":"amqp://dwmpkfqh:***@dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com/dwmpkfqh"},"rmq_version":"2.2.0","hostname_external":"dev-wintry-cuttlefish.lmq.dev.cloudamqp.com","hostname_internal":"dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "753"
+                - "788"
             Content-Type:
                 - application/json
             Nel:
@@ -924,10 +924,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - dfed5d83-1193-4d5e-8f8f-66dd66ca0c82
+                - 4757251b-0f2b-4061-96ca-c4189daa52aa
         status: 200 OK
         code: 200
-        duration: 10.1292ms
+        duration: 13.114509ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -946,7 +946,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346/maintenance/settings
+        url: http://localhost:9393/api/instances/353/maintenance/settings
         method: GET
       response:
         proto: HTTP/1.1
@@ -954,14 +954,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 101
+        content_length: 97
         uncompressed: false
-        body: '{"preferred_maintenance_day":"Tuesday","preferred_maintenance_time":"None","automatic_updates":false}'
+        body: '{"preferred_maintenance_day":"Tuesday","preferred_maintenance_time":"","automatic_updates":false}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "101"
+                - "97"
             Content-Type:
                 - application/json
             Nel:
@@ -975,10 +975,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - a61493d9-4930-434d-8f83-6edf1f66b51b
+                - 10184b27-c8ca-4c4c-8feb-42fa1a632e1b
         status: 200 OK
         code: 200
-        duration: 10.027832ms
+        duration: 10.930569ms
     - id: 19
       request:
         proto: HTTP/1.1
@@ -1000,8 +1000,8 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346/maintenance/settings
-        method: PUT
+        url: http://localhost:9393/api/instances/353/maintenance/settings
+        method: POST
       response:
         proto: HTTP/1.1
         proto_major: 1
@@ -1029,10 +1029,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - c7055436-d970-4f21-baff-e96a60e6df7a
+                - 65fadfc8-2193-4646-970b-0d4e1cbff6a4
         status: 200 OK
         code: 200
-        duration: 19.08734ms
+        duration: 21.135793ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -1051,7 +1051,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346
+        url: http://localhost:9393/api/instances/353
         method: GET
       response:
         proto: HTTP/1.1
@@ -1059,14 +1059,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 753
+        content_length: 788
         uncompressed: false
-        body: '{"id":346,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e590d34b-9280-4d12-b642-f1cef386ca33","url":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","ready":true,"apikey":"dae0d0d4-d586-4dfe-af11-ebd7320778eb","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","internal":"amqp://xwugnuee:***@dev-harsh-deer.in.lmq.dev.cloudamqp.com/xwugnuee"},"rmq_version":"2.1.0","hostname_external":"dev-harsh-deer.lmq.dev.cloudamqp.com","hostname_internal":"dev-harsh-deer.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":353,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"438e29a8-889e-4421-a8f7-9065ace9a011","url":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","ready":true,"apikey":"5095010e-bd62-436d-a239-1fc5a3379090","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","internal":"amqp://dwmpkfqh:***@dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com/dwmpkfqh"},"rmq_version":"2.2.0","hostname_external":"dev-wintry-cuttlefish.lmq.dev.cloudamqp.com","hostname_internal":"dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "753"
+                - "788"
             Content-Type:
                 - application/json
             Nel:
@@ -1080,10 +1080,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 2b3e2837-7478-4c0d-af4e-00d9e4a04d3d
+                - d2eeb2bf-9e56-4d79-a102-33be678f4f86
         status: 200 OK
         code: 200
-        duration: 15.31278ms
+        duration: 17.023345ms
     - id: 21
       request:
         proto: HTTP/1.1
@@ -1102,7 +1102,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346/maintenance/settings
+        url: http://localhost:9393/api/instances/353/maintenance/settings
         method: GET
       response:
         proto: HTTP/1.1
@@ -1110,14 +1110,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 99
+        content_length: 95
         uncompressed: false
-        body: '{"preferred_maintenance_day":"None","preferred_maintenance_time":"02:00","automatic_updates":false}'
+        body: '{"preferred_maintenance_day":"","preferred_maintenance_time":"02:00","automatic_updates":false}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "99"
+                - "95"
             Content-Type:
                 - application/json
             Nel:
@@ -1131,10 +1131,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 1d94544a-2d4c-4a7d-8c37-02f3f8425470
+                - 5c906bde-615b-4451-948c-bf8f0357c81c
         status: 200 OK
         code: 200
-        duration: 12.80826ms
+        duration: 15.520901ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -1153,7 +1153,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346
+        url: http://localhost:9393/api/instances/353
         method: GET
       response:
         proto: HTTP/1.1
@@ -1161,14 +1161,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 753
+        content_length: 788
         uncompressed: false
-        body: '{"id":346,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e590d34b-9280-4d12-b642-f1cef386ca33","url":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","ready":true,"apikey":"dae0d0d4-d586-4dfe-af11-ebd7320778eb","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","internal":"amqp://xwugnuee:***@dev-harsh-deer.in.lmq.dev.cloudamqp.com/xwugnuee"},"rmq_version":"2.1.0","hostname_external":"dev-harsh-deer.lmq.dev.cloudamqp.com","hostname_internal":"dev-harsh-deer.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":353,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"438e29a8-889e-4421-a8f7-9065ace9a011","url":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","ready":true,"apikey":"5095010e-bd62-436d-a239-1fc5a3379090","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","internal":"amqp://dwmpkfqh:***@dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com/dwmpkfqh"},"rmq_version":"2.2.0","hostname_external":"dev-wintry-cuttlefish.lmq.dev.cloudamqp.com","hostname_internal":"dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "753"
+                - "788"
             Content-Type:
                 - application/json
             Nel:
@@ -1182,10 +1182,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - c0900810-02d2-4cc8-aa6c-c85e41e5969c
+                - b5462aed-ddbd-4429-9d40-578e123e62d2
         status: 200 OK
         code: 200
-        duration: 13.082607ms
+        duration: 16.158719ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -1204,7 +1204,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346/maintenance/settings
+        url: http://localhost:9393/api/instances/353/maintenance/settings
         method: GET
       response:
         proto: HTTP/1.1
@@ -1212,14 +1212,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 99
+        content_length: 95
         uncompressed: false
-        body: '{"preferred_maintenance_day":"None","preferred_maintenance_time":"02:00","automatic_updates":false}'
+        body: '{"preferred_maintenance_day":"","preferred_maintenance_time":"02:00","automatic_updates":false}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "99"
+                - "95"
             Content-Type:
                 - application/json
             Nel:
@@ -1233,10 +1233,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 8e8b26a5-dc83-44a7-88e8-cc767fb128eb
+                - ceb697c6-f0cf-4078-a5a6-847cbd5ee988
         status: 200 OK
         code: 200
-        duration: 15.112669ms
+        duration: 17.746117ms
     - id: 24
       request:
         proto: HTTP/1.1
@@ -1258,8 +1258,8 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346/maintenance/settings
-        method: PUT
+        url: http://localhost:9393/api/instances/353/maintenance/settings
+        method: POST
       response:
         proto: HTTP/1.1
         proto_major: 1
@@ -1287,10 +1287,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - cf2c150b-fab4-4d0a-ad40-21e2036997ab
+                - 128cb6fe-d44e-43eb-8116-9dfc4f3649f1
         status: 200 OK
         code: 200
-        duration: 19.079192ms
+        duration: 21.263271ms
     - id: 25
       request:
         proto: HTTP/1.1
@@ -1309,7 +1309,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346
+        url: http://localhost:9393/api/instances/353
         method: GET
       response:
         proto: HTTP/1.1
@@ -1317,14 +1317,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 753
+        content_length: 788
         uncompressed: false
-        body: '{"id":346,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"e590d34b-9280-4d12-b642-f1cef386ca33","url":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","ready":true,"apikey":"dae0d0d4-d586-4dfe-af11-ebd7320778eb","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://xwugnuee:***@dev-harsh-deer.lmq.dev.cloudamqp.com/xwugnuee","internal":"amqp://xwugnuee:***@dev-harsh-deer.in.lmq.dev.cloudamqp.com/xwugnuee"},"rmq_version":"2.1.0","hostname_external":"dev-harsh-deer.lmq.dev.cloudamqp.com","hostname_internal":"dev-harsh-deer.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":353,"name":"TestAccMaintenanceWindow_LavinMQ","plan":"penguin-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"438e29a8-889e-4421-a8f7-9065ace9a011","url":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","ready":true,"apikey":"5095010e-bd62-436d-a239-1fc5a3379090","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://dwmpkfqh:***@dev-wintry-cuttlefish.lmq.dev.cloudamqp.com/dwmpkfqh","internal":"amqp://dwmpkfqh:***@dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com/dwmpkfqh"},"rmq_version":"2.2.0","hostname_external":"dev-wintry-cuttlefish.lmq.dev.cloudamqp.com","hostname_internal":"dev-wintry-cuttlefish.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "753"
+                - "788"
             Content-Type:
                 - application/json
             Nel:
@@ -1338,10 +1338,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - c5984c25-f177-4cb7-9cee-9318ec3b1387
+                - d947ce18-056b-4426-ad41-f2678faa6c33
         status: 200 OK
         code: 200
-        duration: 12.762927ms
+        duration: 15.086303ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -1360,7 +1360,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346/maintenance/settings
+        url: http://localhost:9393/api/instances/353/maintenance/settings
         method: GET
       response:
         proto: HTTP/1.1
@@ -1389,10 +1389,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - cb7222f8-c0a0-4160-9bc7-8320ebd67691
+                - 74cd1cd1-067f-4f37-93df-62e42fb69f03
         status: 200 OK
         code: 200
-        duration: 14.804194ms
+        duration: 13.746191ms
     - id: 27
       request:
         proto: HTTP/1.1
@@ -1411,7 +1411,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346?keep_vpc=false
+        url: http://localhost:9393/api/instances/353?keep_vpc=false
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -1436,10 +1436,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 889c43ba-1360-4f66-bd68-4ed173e06b09
+                - d21c6766-51cf-4e7b-9068-ead8e54e34d3
         status: 204 No Content
         code: 204
-        duration: 42.90937ms
+        duration: 57.232196ms
     - id: 28
       request:
         proto: HTTP/1.1
@@ -1458,7 +1458,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/346
+        url: http://localhost:9393/api/instances/353
         method: GET
       response:
         proto: HTTP/1.1
@@ -1487,7 +1487,7 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 0753de41-79b0-4148-bc6d-6e92ffc977eb
+                - 03c033b1-6cc3-4f58-ae56-2ed675410f6d
         status: 404 Not Found
         code: 404
-        duration: 3.697283ms
+        duration: 5.278556ms

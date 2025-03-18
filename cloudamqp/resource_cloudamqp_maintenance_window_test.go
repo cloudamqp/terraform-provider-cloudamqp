@@ -41,7 +41,7 @@ func TestAccMaintenanceWindow_LavinMQ(t *testing.T) {
 			"PreferredTime": "02:00",
 		}
 
-		fileNamesAutomaticUpdates = []string{"instance", "maintenance/include_automatic_updates"}
+		fileNamesAutomaticUpdates = []string{"instance", "maintenance/set_maintenance"}
 		paramsAutomaticUpdates    = map[string]string{
 			"InstanceName":     name,
 			"InstanceID":       fmt.Sprintf("%s.id", instanceResourceName),

@@ -7,15 +7,15 @@ import (
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
 )
 
-func (api *API) UpdateMaintenance(instanceID int, data model.Maintenance) error {
+func (api *API) SetMaintenance(instanceID int, data model.Maintenance) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/maintenance/settings", instanceID)
 	)
 
-	log.Printf("[DEBUG] api::maintenance#update data: %v", data)
+	log.Printf("[DEBUG] api::maintenance#set data: %v", data)
 
-	response, err := api.sling.New().Put(path).BodyJSON(data).Receive(nil, &failed)
+	response, err := api.sling.New().Post(path).BodyJSON(data).Receive(nil, &failed)
 	if err != nil {
 		return err
 	}

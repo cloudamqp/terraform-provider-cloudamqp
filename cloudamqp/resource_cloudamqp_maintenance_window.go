@@ -101,7 +101,7 @@ func resourceMaintenanceWindowUpdate(d *schema.ResourceData, meta any) error {
 		}
 	}
 
-	if err := api.UpdateMaintenance(instanceID, data); err != nil {
+	if err := api.SetMaintenance(instanceID, data); err != nil {
 		return err
 	}
 
