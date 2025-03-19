@@ -125,17 +125,8 @@ func resourceMaintenanceWindowRead(d *schema.ResourceData, meta any) error {
 		return err
 	}
 
-	if data.PreferredDay == "None" {
-		d.Set("preferred_day", "")
-	} else {
-		d.Set("preferred_day", data.PreferredDay)
-	}
-
-	if data.PreferredTime == "None" {
-		d.Set("preferred_time", "")
-	} else {
-		d.Set("preferred_time", data.PreferredTime)
-	}
+	d.Set("preferred_day", data.PreferredDay)
+	d.Set("preferred_time", data.PreferredTime)
 
 	if data.AutomaticUpdates != nil {
 		d.Set("automatic_updates", "off")
