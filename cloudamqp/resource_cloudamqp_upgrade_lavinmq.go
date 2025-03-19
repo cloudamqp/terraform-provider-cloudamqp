@@ -46,7 +46,7 @@ func resourceUpgradeLavinMQInvoke(d *schema.ResourceData, meta interface{}) erro
 	d.SetId(strconv.Itoa(instanceID))
 
 	if len(response) > 0 {
-		log.Printf("[INFO] - " + response)
+		log.Println("[INFO] - ", response)
 	}
 
 	return nil
