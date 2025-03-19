@@ -1,8 +1,6 @@
 module github.com/cloudamqp/terraform-provider-cloudamqp
 
-go 1.22.0
-
-toolchain go1.23.0
+go 1.24.0
 
 require (
 	github.com/dghubble/sling v1.4.2
