@@ -59,6 +59,7 @@ func Provider(v string, client *http.Client) *schema.Provider {
 			"cloudamqp_integration_aws_eventbridge": resourceAwsEventBridge(),
 			"cloudamqp_integration_log":             resourceIntegrationLog(),
 			"cloudamqp_integration_metric":          resourceIntegrationMetric(),
+			"cloudamqp_maintenance_window":          resourceMaintenanceWindow(),
 			"cloudamqp_node_actions":                resourceNodeAction(),
 			"cloudamqp_notification":                resourceNotification(),
 			"cloudamqp_plugin_community":            resourcePluginCommunity(),

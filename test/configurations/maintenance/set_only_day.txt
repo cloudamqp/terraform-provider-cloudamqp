@@ -1,0 +1,4 @@
+resource "cloudamqp_maintenance_window" "this" {
+  instance_id       = cloudamqp_instance.instance.id
+  preferred_day     = "{{.PreferredDay}}"
+}
