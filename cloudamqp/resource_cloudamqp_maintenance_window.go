@@ -107,12 +107,14 @@ func resourceMaintenanceWindowUpdate(ctx context.Context, d *schema.ResourceData
 		}
 	}
 
-	if err := api.SetMaintenance(ctx, instanceID, data); err != nil {
-		return diag.FromErr(err)
+	if d.HasChanges("preferred_day", "preferred_time", "automatic_updates") {
+		if err := api.SetMaintenance(ctx, instanceID, data); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	d.SetId(strconv.Itoa(instanceID))
-	return nil
+	return diag.Diagnostics{}
 }
 
 func resourceMaintenanceWindowRead(ctx context.Context, d *schema.ResourceData,
@@ -122,9 +124,8 @@ func resourceMaintenanceWindowRead(ctx context.Context, d *schema.ResourceData,
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id())
 	)
-
 	// Set argument during import
-	if d.Get("instance_id").(int) == 0 {
+	if instanceIDValue, ok := d.Get("instance_id").(int); ok && instanceIDValue == 0 {
 		d.Set("instance_id", instanceID)
 	}
 
@@ -137,18 +138,19 @@ func resourceMaintenanceWindowRead(ctx context.Context, d *schema.ResourceData,
 	d.Set("preferred_time", data.PreferredTime)
 
 	if data.AutomaticUpdates != nil {
-		d.Set("automatic_updates", "off")
 		if *data.AutomaticUpdates {
 			d.Set("automatic_updates", "on")
+		} else {
+			d.Set("automatic_updates", "off")
 		}
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
 func resourceMaintenanceWindowDelete(ctx context.Context, d *schema.ResourceData,
 	meta any) diag.Diagnostics {
 
-	// Only remove from state
-	return nil
+	// Only remove from state because the maintenance window is managed by the API
+	return diag.Diagnostics{}
 }
