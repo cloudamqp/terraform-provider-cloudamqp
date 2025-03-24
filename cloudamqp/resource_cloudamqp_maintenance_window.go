@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"slices"
 	"strconv"
+	"strings"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
@@ -57,7 +58,7 @@ func resourceMaintenanceWindow() *schema.Resource {
 					}
 					r, _ := regexp.Compile("^([0-1][0-9]|2[0-3]):([0-5][0-9])$")
 					if !r.MatchString(value.(string)) {
-						errs = append(errs, fmt.Errorf("the time: %s, in wrong on format hh:mm",
+						errs = append(errs, fmt.Errorf("the time: %s, is in the wrong format hh:mm",
 							value.(string)))
 					}
 					return
@@ -69,7 +70,8 @@ func resourceMaintenanceWindow() *schema.Resource {
 				Computed:    true,
 				Description: "Enable automatic updates",
 				ValidateFunc: func(value any, key string) (warns []string, errs []error) {
-					if value.(string) == "" || value.(string) == "on" || value.(string) == "off" {
+					val := strings.ToLower(value.(string))
+					if val == "" || val == "on" || val == "off" {
 						return
 					}
 					errs = append(errs, fmt.Errorf("valid values are [on, off]"))
