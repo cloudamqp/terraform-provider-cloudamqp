@@ -1,6 +1,7 @@
 package cloudamqp
 
 import (
+	"context"
 	"fmt"
 	"regexp"
 	"slices"
@@ -10,15 +11,16 @@ import (
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/utils"
 
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceMaintenanceWindow() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceMaintenanceWindowUpdate,
-		Read:   resourceMaintenanceWindowRead,
-		Update: resourceMaintenanceWindowUpdate,
-		Delete: resourceMaintenanceWindowDelete,
+		CreateContext: resourceMaintenanceWindowUpdate,
+		ReadContext:   resourceMaintenanceWindowRead,
+		UpdateContext: resourceMaintenanceWindowUpdate,
+		DeleteContext: resourceMaintenanceWindowDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -78,7 +80,9 @@ func resourceMaintenanceWindow() *schema.Resource {
 	}
 }
 
-func resourceMaintenanceWindowUpdate(d *schema.ResourceData, meta any) error {
+func resourceMaintenanceWindowUpdate(ctx context.Context, d *schema.ResourceData,
+	meta any) diag.Diagnostics {
+
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -101,15 +105,17 @@ func resourceMaintenanceWindowUpdate(d *schema.ResourceData, meta any) error {
 		}
 	}
 
-	if err := api.SetMaintenance(instanceID, data); err != nil {
-		return err
+	if err := api.SetMaintenance(ctx, instanceID, data); err != nil {
+		return diag.FromErr(err)
 	}
 
 	d.SetId(strconv.Itoa(instanceID))
 	return nil
 }
 
-func resourceMaintenanceWindowRead(d *schema.ResourceData, meta any) error {
+func resourceMaintenanceWindowRead(ctx context.Context, d *schema.ResourceData,
+	meta any) diag.Diagnostics {
+
 	var (
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id())
@@ -120,9 +126,9 @@ func resourceMaintenanceWindowRead(d *schema.ResourceData, meta any) error {
 		d.Set("instance_id", instanceID)
 	}
 
-	data, err := api.ReadMaintenance(instanceID)
+	data, err := api.ReadMaintenance(ctx, instanceID)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.Set("preferred_day", data.PreferredDay)
@@ -138,7 +144,9 @@ func resourceMaintenanceWindowRead(d *schema.ResourceData, meta any) error {
 	return nil
 }
 
-func resourceMaintenanceWindowDelete(d *schema.ResourceData, meta any) error {
+func resourceMaintenanceWindowDelete(ctx context.Context, d *schema.ResourceData,
+	meta any) diag.Diagnostics {
+
 	// Only remove from state
 	return nil
 }

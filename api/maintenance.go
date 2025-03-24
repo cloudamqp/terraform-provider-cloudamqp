@@ -1,19 +1,20 @@
 package api
 
 import (
+	"context"
 	"fmt"
-	"log"
 
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func (api *API) SetMaintenance(instanceID int, data model.Maintenance) error {
+func (api *API) SetMaintenance(ctx context.Context, instanceID int, data model.Maintenance) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/maintenance/settings", instanceID)
 	)
 
-	log.Printf("[DEBUG] api::maintenance#set data: %v", data)
+	tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
 
 	response, err := api.sling.New().Post(path).BodyJSON(data).Receive(nil, &failed)
 	if err != nil {
@@ -29,7 +30,7 @@ func (api *API) SetMaintenance(instanceID int, data model.Maintenance) error {
 	}
 }
 
-func (api *API) ReadMaintenance(instanceID int) (model.Maintenance, error) {
+func (api *API) ReadMaintenance(ctx context.Context, instanceID int) (model.Maintenance, error) {
 	var (
 		data   model.Maintenance
 		failed map[string]any
@@ -41,7 +42,7 @@ func (api *API) ReadMaintenance(instanceID int) (model.Maintenance, error) {
 		return model.Maintenance{}, err
 	}
 
-	log.Printf("[DEBUG] api::maintenance#read data: %v", data)
+	tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
 
 	switch response.StatusCode {
 	case 200:
