@@ -7,16 +7,17 @@ import (
 	"strconv"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourcePrivateLinkAzure() *schema.Resource {
 	return &schema.Resource{
-		Create: resourcePrivateLinkAzureCreate,
-		Read:   resourcePrivateLinkAzureRead,
-		Update: resourcePrivateLinkAzureUpdate,
-		Delete: resourcePrivateLinkAzureDelete,
+		CreateContext: resourcePrivateLinkAzureCreate,
+		ReadContext:   resourcePrivateLinkAzureRead,
+		UpdateContext: resourcePrivateLinkAzureUpdate,
+		DeleteContext: resourcePrivateLinkAzureDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -77,7 +78,7 @@ func resourcePrivateLinkAzure() *schema.Resource {
 	}
 }
 
-func resourcePrivateLinkAzureCreate(d *schema.ResourceData, meta interface{}) error {
+func resourcePrivateLinkAzureCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -87,16 +88,16 @@ func resourcePrivateLinkAzureCreate(d *schema.ResourceData, meta interface{}) er
 	)
 
 	params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
-	err := api.EnablePrivatelink(instanceID, params, sleep, timeout)
+	err := api.EnablePrivatelink(ctx, instanceID, params, sleep, timeout)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(fmt.Sprintf("%d", instanceID))
-	return resourcePrivateLinkAzureRead(d, meta)
+	return resourcePrivateLinkAzureRead(ctx, d, meta)
 }
 
-func resourcePrivateLinkAzureRead(d *schema.ResourceData, meta interface{}) error {
+func resourcePrivateLinkAzureRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id()) // Uses d.Id() to allow import
@@ -115,9 +116,9 @@ func resourcePrivateLinkAzureRead(d *schema.ResourceData, meta interface{}) erro
 		d.Set("timeout", 1800)
 	}
 
-	data, err := api.ReadPrivatelink(instanceID, sleep, timeout)
+	data, err := api.ReadPrivatelink(ctx, instanceID, sleep, timeout)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	for k, v := range data {
@@ -129,10 +130,10 @@ func resourcePrivateLinkAzureRead(d *schema.ResourceData, meta interface{}) erro
 			}
 		}
 	}
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourcePrivateLinkAzureUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourcePrivateLinkAzureUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -140,24 +141,24 @@ func resourcePrivateLinkAzureUpdate(d *schema.ResourceData, meta interface{}) er
 	)
 
 	params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
-	err := api.UpdatePrivatelink(instanceID, params)
+	err := api.UpdatePrivatelink(ctx, instanceID, params)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourcePrivateLinkAzureDelete(d *schema.ResourceData, meta interface{}) error {
+func resourcePrivateLinkAzureDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 	)
 
-	err := api.DisablePrivatelink(instanceID)
+	err := api.DisablePrivatelink(ctx, instanceID)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
-	return nil
+	return diag.Diagnostics{}
 }
 
 func validatePrivateLinkAzureSchemaAttribute(key string) bool {

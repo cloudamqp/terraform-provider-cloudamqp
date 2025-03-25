@@ -1,16 +1,17 @@
 package cloudamqp
 
 import (
-	"fmt"
+	"context"
 	"strconv"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceNodes() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceNodesRead,
+		ReadContext: dataSourceNodesRead,
 
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -63,8 +64,8 @@ func dataSourceNodes() *schema.Resource {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-            "availability_zone": {
-              Type:     schema.TypeString,
+						"availability_zone": {
+							Type:     schema.TypeString,
 							Computed: true,
 						},
 					},
@@ -74,11 +75,11 @@ func dataSourceNodes() *schema.Resource {
 	}
 }
 
-func dataSourceNodesRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceNodesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
-	data, err := api.ListNodes(d.Get("instance_id").(int))
+	data, err := api.ListNodes(ctx, d.Get("instance_id").(int))
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	instanceID := strconv.Itoa(d.Get("instance_id").(int))
 	d.SetId(instanceID)
@@ -89,10 +90,10 @@ func dataSourceNodesRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	if err = d.Set("nodes", nodes); err != nil {
-		return fmt.Errorf("error setting nodes for resource %s, %s", d.Id(), err)
+		return diag.Errorf("error setting nodes for resource %s, %s", d.Id(), err)
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
 func readNode(data map[string]interface{}) map[string]interface{} {
@@ -118,7 +119,7 @@ func validateNodesSchemaAttribute(key string) bool {
 		"disk_size",
 		"additional_disk_size",
 		"hostname_internal",
-    "availability_zone":
+		"availability_zone":
 		return true
 	}
 	return false

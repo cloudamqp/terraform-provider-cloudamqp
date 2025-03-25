@@ -1,15 +1,16 @@
 package cloudamqp
 
 import (
-	"fmt"
+	"context"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceAccount() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceAccountRead,
+		ReadContext: dataSourceAccountRead,
 
 		Schema: map[string]*schema.Schema{
 			"instances": {
@@ -52,14 +53,15 @@ func dataSourceAccount() *schema.Resource {
 	}
 }
 
-func dataSourceAccountRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceAccountRead(ctx context.Context, d *schema.ResourceData,
+	meta interface{}) diag.Diagnostics {
+
 	api := meta.(*api.API)
-	data, err := api.ListInstances()
+	data, err := api.ListInstances(ctx)
 	if err != nil {
-		return err
-	} else if len(data) == 0 {
-		return fmt.Errorf("no instances found for resoruce %s", d.Id())
+		return diag.FromErr(err)
 	}
+
 	d.SetId("noId")
 	instances := make([]map[string]interface{}, len(data))
 	for k, v := range data {
@@ -67,10 +69,10 @@ func dataSourceAccountRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	if err = d.Set("instances", instances); err != nil {
-		return fmt.Errorf("error setting instances for resource %s, %s", d.Id(), err)
+		return diag.Errorf("error setting instances for resource %s, %s", d.Id(), err)
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
 func readAccount(data map[string]interface{}) map[string]interface{} {

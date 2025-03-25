@@ -1,19 +1,23 @@
 package api
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"strconv"
+
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func (api *API) CreateAwsEventBridge(instanceID int, params map[string]any) (map[string]any, error) {
+func (api *API) CreateAwsEventBridge(ctx context.Context, instanceID int, params map[string]any) (
+	map[string]any, error) {
+
 	var (
 		data   map[string]any
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/eventbridges", instanceID)
 	)
 
-	log.Printf("[DEBUG] api::aws-eventbridge#create path: %s", path)
+	tflog.Debug(ctx, fmt.Sprintf("request path: %s, params: %v", path, params))
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -21,11 +25,11 @@ func (api *API) CreateAwsEventBridge(instanceID int, params map[string]any) (map
 
 	switch response.StatusCode {
 	case 201:
+		tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
 		if id, ok := data["id"]; ok {
 			data["id"] = strconv.FormatFloat(id.(float64), 'f', 0, 64)
-			log.Printf("[DEBUG] api::aws-eventbridge#create AWS EventBridge identifier: %v", data["id"])
 		} else {
-			return nil, fmt.Errorf("failed to create AWS EventBridge, invalid identifier: %v", data["id"])
+			return nil, fmt.Errorf("invalid identifier: %v", data["id"])
 		}
 		return data, nil
 	default:
@@ -34,13 +38,16 @@ func (api *API) CreateAwsEventBridge(instanceID int, params map[string]any) (map
 	}
 }
 
-func (api *API) ReadAwsEventBridge(instanceID int, eventbridgeID string) (map[string]any, error) {
+func (api *API) ReadAwsEventBridge(ctx context.Context, instanceID int, eventbridgeID string) (
+	map[string]any, error) {
+
 	var (
 		data   map[string]any
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/eventbridges/%s", instanceID, eventbridgeID)
 	)
 
+	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -48,6 +55,7 @@ func (api *API) ReadAwsEventBridge(instanceID int, eventbridgeID string) (map[st
 
 	switch response.StatusCode {
 	case 200:
+		tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
 		return data, nil
 	default:
 		return nil, fmt.Errorf("failed to read AWS EventBridge, status: %d, message: %s",
@@ -55,13 +63,14 @@ func (api *API) ReadAwsEventBridge(instanceID int, eventbridgeID string) (map[st
 	}
 }
 
-func (api *API) ReadAwsEventBridges(instanceID int) (map[string]any, error) {
+func (api *API) ReadAwsEventBridges(ctx context.Context, instanceID int) (map[string]any, error) {
 	var (
 		data   map[string]any
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/eventbridges", instanceID)
 	)
 
+	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -69,6 +78,7 @@ func (api *API) ReadAwsEventBridges(instanceID int) (map[string]any, error) {
 
 	switch response.StatusCode {
 	case 200:
+		tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
 		return data, nil
 	default:
 		return nil, fmt.Errorf("failed to read AWS EventBridges, status: %d, message: %s",
@@ -76,13 +86,13 @@ func (api *API) ReadAwsEventBridges(instanceID int) (map[string]any, error) {
 	}
 }
 
-func (api *API) DeleteAwsEventBridge(instanceID int, eventbridgeID string) error {
+func (api *API) DeleteAwsEventBridge(ctx context.Context, instanceID int, eventbridgeID string) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/eventbridges/%s", instanceID, eventbridgeID)
 	)
 
-	log.Printf("[DEBUG] api::aws-eventbridge#delete path: %s", path)
+	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 	if err != nil {
 		return err

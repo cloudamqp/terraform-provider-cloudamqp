@@ -1,23 +1,24 @@
 package cloudamqp
 
 import (
-	"errors"
+	"context"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceAlarm() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceAlarmCreate,
-		Read:   resourceAlarmRead,
-		Update: resourceAlarmUpdate,
-		Delete: resourceAlarmDelete,
+		CreateContext: resourceAlarmCreate,
+		ReadContext:   resourceAlarmRead,
+		UpdateContext: resourceAlarmUpdate,
+		DeleteContext: resourceAlarmDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -89,7 +90,7 @@ func resourceAlarm() *schema.Resource {
 	}
 }
 
-func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceAlarmCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
 	keys := alarmAttributeKeys()
 	params := make(map[string]interface{})
@@ -98,68 +99,60 @@ func resourceAlarmCreate(d *schema.ResourceData, meta interface{}) error {
 			params[k] = v
 		}
 	}
-	log.Printf("[DEBUG] cloudamqp::resource::alarm#create params: %v", params)
 
 	if d.Get("type") == "notice" {
-		log.Printf("[DEBUG] cloudamqp::resource::alarm#create type is 'notice', skipping creation")
-		log.Printf("[DEBUG] cloudamqp::resource::alarm#create type is 'notice', getting existing notice alarm")
-		alarms, err := api.ListAlarms(d.Get("instance_id").(int))
+		tflog.Info(ctx, "alarm type is 'notice', skip creation, retrieve existing alarm and update")
+		alarms, err := api.ListAlarms(ctx, d.Get("instance_id").(int))
 
 		if err != nil {
-			return err
+			return diag.FromErr(err)
 		}
 
 		for _, alarm := range alarms {
 			if alarm["type"] == "notice" {
 				d.SetId(strconv.FormatFloat(alarm["id"].(float64), 'f', 0, 64))
-				log.Printf("[DEBUG] cloudamqp::resource::alarm#create retrieved existing alarm id: %v", d.Id())
-				log.Printf("[DEBUG] cloudamqp::resource::alarm#create invoking existing alarm update")
-				return resourceAlarmUpdate(d, meta)
+				tflog.Debug(ctx, fmt.Sprintf("retrieve existing 'notice' alarm with identifier: %s and invoke an update",
+					d.Id()))
+				return resourceAlarmUpdate(ctx, d, meta)
 			}
 		}
 
-		return fmt.Errorf("Couldn't find notice alarm for instance_id %s", d.Get("instance_id"))
+		return diag.Errorf("couldn't find notice alarm for instance_id: %s", d.Get("instance_id"))
 	} else {
-		data, err := api.CreateAlarm(d.Get("instance_id").(int), params)
-		log.Printf("[DEBUG] cloudamqp::resource::alarm#create data: %v", data)
-
+		data, err := api.CreateAlarm(ctx, d.Get("instance_id").(int), params)
 		if err != nil {
-			return err
+			return diag.FromErr(err)
 		}
 		if data["id"] != nil {
 			d.SetId(data["id"].(string))
-			log.Printf("[DEBUG] cloudamqp::resource::alarm#create id set: %v", d.Id())
 		}
 	}
 
-	return resourceAlarmRead(d, meta)
+	return resourceAlarmRead(ctx, d, meta)
 }
 
-func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
+func resourceAlarmRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	if strings.Contains(d.Id(), ",") {
-		log.Printf("[DEBUG] cloudamqp::resource::alarm::read id contains ,: %v", d.Id())
+		tflog.Debug(ctx, fmt.Sprintf("import alarm from input identifier: %s", d.Id()))
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
 		instanceID, _ := strconv.Atoi(s[1])
 		d.Set("instance_id", instanceID)
 	}
 	if d.Get("instance_id").(int) == 0 {
-		return errors.New("missing instance identifier: {resource_id},{instance_id}")
+		return diag.Errorf("missing input identifier for import: {resource_id},{instance_id}")
 	}
 
 	api := meta.(*api.API)
-	log.Printf("[DEBUG] cloudamqp::resource::alarm::read instance id: %v", d.Get("instance_id"))
-	data, err := api.ReadAlarm(d.Get("instance_id").(int), d.Id())
-	log.Printf("[DEBUG] cloudamqp::resource::alarm::read data: %v", data)
-
+	data, err := api.ReadAlarm(ctx, d.Get("instance_id").(int), d.Id())
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	for k, v := range data {
 		if validateAlarmSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
@@ -167,12 +160,11 @@ func resourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func resourceAlarmUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceAlarmUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
 	keys := alarmAttributeKeys()
 	params := make(map[string]interface{})
 	params["id"] = d.Id()
-	log.Printf("[DEBUG] cloudamqp::resource::alarm::update params: %v", params)
 
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
@@ -180,23 +172,24 @@ func resourceAlarmUpdate(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
-	if err := api.UpdateAlarm(d.Get("instance_id").(int), params); err != nil {
-		return err
+	if err := api.UpdateAlarm(ctx, d.Get("instance_id").(int), params); err != nil {
+		return diag.FromErr(err)
 	}
 
-	return resourceAlarmRead(d, meta)
+	return resourceAlarmRead(ctx, d, meta)
 }
 
-func resourceAlarmDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceAlarmDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	if d.Get("type") == "notice" {
-		log.Printf("[DEBUG] cloudamqp::resource::alarm::delete type is 'notice', skipping deletion, just remove it from state")
-		return nil
+		tflog.Debug(ctx, "alarm type is 'notice', skip deletion and just remove from state")
+		return diag.Diagnostics{}
 	}
+
 	api := meta.(*api.API)
-	params := make(map[string]interface{})
-	params["id"] = d.Id()
-	log.Printf("[DEBUG] cloudamqp::resource::alarm::delete params: %v", params)
-	return api.DeleteAlarm(d.Get("instance_id").(int), d.Id())
+	if err := api.DeleteAlarm(ctx, d.Get("instance_id").(int), d.Id()); err != nil {
+		return diag.FromErr(err)
+	}
+	return diag.Diagnostics{}
 }
 
 func validateAlarmType() schema.SchemaValidateDiagFunc {

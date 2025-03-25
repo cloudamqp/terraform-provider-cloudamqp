@@ -3,23 +3,27 @@ package api
 // VPC peering for GCP, using vpcID as identifier.
 
 import (
+	"context"
 	"fmt"
-	"log"
+
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 // RequestVpcGcpPeeringWithVpcId: requests a VPC peering from an instance.
-func (api *API) RequestVpcGcpPeeringWithVpcId(vpcID string, params map[string]any,
-	waitOnStatus bool, sleep, timeout int) (map[string]any, error) {
+func (api *API) RequestVpcGcpPeeringWithVpcId(ctx context.Context, vpcID string,
+	params map[string]any, waitOnStatus bool, sleep, timeout int) (map[string]any, error) {
 
 	path := fmt.Sprintf("api/vpcs/%s/vpc-peering", vpcID)
-	attempt, data, err := api.requestVpcGcpPeeringWithRetry(path, params, waitOnStatus, 1, sleep, timeout)
+	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	attempt, data, err := api.requestVpcGcpPeeringWithRetry(ctx, path, params, waitOnStatus, 1, sleep,
+		timeout)
 	if err != nil {
 		return nil, err
 	}
 
 	if waitOnStatus {
-		log.Printf("[DEBUG] api::vpc_gcp_peering_withvpcid#request waiting for active state")
-		err = api.waitForGcpPeeringStatus(path, data["peering"].(string), attempt, sleep, timeout)
+		tflog.Debug(ctx, "waiting for active state")
+		err = api.waitForGcpPeeringStatus(ctx, path, data["peering"].(string), attempt, sleep, timeout)
 		if err != nil {
 			return nil, err
 		}
@@ -28,30 +32,30 @@ func (api *API) RequestVpcGcpPeeringWithVpcId(vpcID string, params map[string]an
 	return data, nil
 }
 
-func (api *API) ReadVpcGcpPeeringWithVpcId(vpcID string, sleep, timeout int) (
+func (api *API) ReadVpcGcpPeeringWithVpcId(ctx context.Context, vpcID string, sleep, timeout int) (
 	map[string]any, error) {
 
 	path := fmt.Sprintf("/api/vpcs/%s/vpc-peering", vpcID)
-	_, data, err := api.readVpcGcpPeeringWithRetry(path, 1, sleep, timeout)
+	tflog.Debug(ctx, fmt.Sprintf("reqeust path: %s", path))
+	_, data, err := api.readVpcGcpPeeringWithRetry(ctx, path, 1, sleep, timeout)
 	return data, err
 }
 
-// UpdateVpcGcpPeeringWithVpcId: updates the VPC peering from the API
-func (api *API) UpdateVpcGcpPeeringWithVpcId(vpcID string, sleep, timeout int) (
+func (api *API) UpdateVpcGcpPeeringWithVpcId(ctx context.Context, vpcID string, sleep, timeout int) (
 	map[string]any, error) {
 
-	// NOP just read out the VPC peering
-	return api.ReadVpcGcpPeeringWithVpcId(vpcID, sleep, timeout)
+	tflog.Debug(ctx, "Updateing peering not allowed, just read out the peering information")
+	return api.ReadVpcGcpPeeringWithVpcId(ctx, vpcID, sleep, timeout)
 }
 
 // RemoveVpcGcpPeeringWithVpcId: removes the VPC peering from the API
-func (api *API) RemoveVpcGcpPeeringWithVpcId(vpcID, peerID string) error {
+func (api *API) RemoveVpcGcpPeeringWithVpcId(ctx context.Context, vpcID, peerID string) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/vpcs/%s/vpc-peering/%s", vpcID, peerID)
 	)
 
-	log.Printf("[DEBUG] api::vpc_gcp_peering_withvpcid#remove path: %s", path)
+	tflog.Debug(ctx, fmt.Sprintf("path: %s", path))
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 	if err != nil {
 		return err
@@ -61,16 +65,17 @@ func (api *API) RemoveVpcGcpPeeringWithVpcId(vpcID, peerID string) error {
 	case 204:
 		return nil
 	default:
-		return fmt.Errorf("remove VPC peering failed, status: %d, message: %s",
+		return fmt.Errorf("failed to remove VPC peering, status: %d, message: %s",
 			response.StatusCode, failed)
 	}
 }
 
 // ReadVpcGcpInfoWithVpcId: reads the VPC info from the API
-func (api *API) ReadVpcGcpInfoWithVpcId(vpcID string, sleep, timeout int) (
+func (api *API) ReadVpcGcpInfoWithVpcId(ctx context.Context, vpcID string, sleep, timeout int) (
 	map[string]any, error) {
 
 	path := fmt.Sprintf("/api/vpcs/%s/vpc-peering/info", vpcID)
-	_, data, err := api.readVpcGcpPeeringWithRetry(path, 1, sleep, timeout)
+	tflog.Debug(ctx, fmt.Sprintf("path: %s", path))
+	_, data, err := api.readVpcGcpPeeringWithRetry(ctx, path, 1, sleep, timeout)
 	return data, err
 }

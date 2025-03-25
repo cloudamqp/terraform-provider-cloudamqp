@@ -1,21 +1,23 @@
 package cloudamqp
 
 import (
-	"errors"
+	"context"
 	"fmt"
 	"strconv"
 	"strings"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceWebhook() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceWebhookCreate,
-		Read:   resourceWebhookRead,
-		Update: resourceWebhookUpdate,
-		Delete: resourceWebhookDelete,
+		CreateContext: resourceWebhookCreate,
+		ReadContext:   resourceWebhookRead,
+		UpdateContext: resourceWebhookUpdate,
+		DeleteContext: resourceWebhookDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -62,7 +64,7 @@ func resourceWebhook() *schema.Resource {
 	}
 }
 
-func resourceWebhookCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceWebhookCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		keys       = []string{"vhost", "queue", "webhook_uri", "concurrency"}
@@ -78,16 +80,16 @@ func resourceWebhookCreate(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
-	data, err := api.CreateWebhook(instanceID, params, sleep, timeout)
+	data, err := api.CreateWebhook(ctx, instanceID, params, sleep, timeout)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(data["id"].(string))
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceWebhookRead(d *schema.ResourceData, meta interface{}) error {
+func resourceWebhookRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -96,6 +98,7 @@ func resourceWebhookRead(d *schema.ResourceData, meta interface{}) error {
 	)
 
 	if strings.Contains(d.Id(), ",") {
+		tflog.Info(ctx, fmt.Sprintf("import of resource with identifier: %s", d.Id()))
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
 		instanceID, _ = strconv.Atoi(s[1])
@@ -105,12 +108,12 @@ func resourceWebhookRead(d *schema.ResourceData, meta interface{}) error {
 		d.Set("timeout", 1800)
 	}
 	if d.Get("instance_id").(int) == 0 {
-		return errors.New("missing instance identifier: {resource_id},{instance_id}")
+		return diag.Errorf("missing instance identifier: {resource_id},{instance_id}")
 	}
 
-	data, err := api.ReadWebhook(instanceID, d.Id(), sleep, timeout)
+	data, err := api.ReadWebhook(ctx, instanceID, d.Id(), sleep, timeout)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	for k, v := range data {
@@ -118,7 +121,7 @@ func resourceWebhookRead(d *schema.ResourceData, meta interface{}) error {
 			err = d.Set(k, v)
 
 			if err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
@@ -126,7 +129,7 @@ func resourceWebhookRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func resourceWebhookUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceWebhookUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		keys       = []string{"vhost", "queue", "webhook_uri", "concurrency"}
@@ -143,10 +146,13 @@ func resourceWebhookUpdate(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	params["webhook_id"] = d.Id()
-	return api.UpdateWebhook(instanceID, d.Id(), params, sleep, timeout)
+	if err := api.UpdateWebhook(ctx, instanceID, d.Id(), params, sleep, timeout); err != nil {
+		return diag.FromErr(err)
+	}
+	return diag.Diagnostics{}
 }
 
-func resourceWebhookDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceWebhookDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -154,7 +160,10 @@ func resourceWebhookDelete(d *schema.ResourceData, meta interface{}) error {
 		timeout    = d.Get("timeout").(int)
 	)
 
-	return api.DeleteWebhook(instanceID, d.Id(), sleep, timeout)
+	if err := api.DeleteWebhook(ctx, instanceID, d.Id(), sleep, timeout); err != nil {
+		return diag.FromErr(err)
+	}
+	return diag.Diagnostics{}
 }
 
 func validateWebhookSchemaAttribute(key string) bool {

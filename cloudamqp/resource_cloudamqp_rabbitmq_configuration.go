@@ -1,22 +1,24 @@
 package cloudamqp
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"strconv"
 	"strings"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceRabbitMqConfiguration() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceRabbitMqConfigurationUpdate,
-		Read:   resourceRabbitMqConfigurationRead,
-		Update: resourceRabbitMqConfigurationUpdate,
-		Delete: resourceRabbitMqConfigurationDelete,
+		CreateContext: resourceRabbitMqConfigurationUpdate,
+		ReadContext:   resourceRabbitMqConfigurationRead,
+		UpdateContext: resourceRabbitMqConfigurationUpdate,
+		DeleteContext: resourceRabbitMqConfigurationDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -155,7 +157,7 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 	}
 }
 
-func resourceRabbitMqConfigurationRead(d *schema.ResourceData, meta interface{}) error {
+func resourceRabbitMqConfigurationRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id())
@@ -172,10 +174,10 @@ func resourceRabbitMqConfigurationRead(d *schema.ResourceData, meta interface{})
 		d.Set("timeout", 3600)
 	}
 
-	data, err := api.ReadRabbitMqConfiguration(instanceID, sleep, timeout)
+	data, err := api.ReadRabbitMqConfiguration(ctx, instanceID, sleep, timeout)
 	log.Printf("[DEBUG] cloudamqp::resource::rabbitmq_configuration::read data: %v", data)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	for k, v := range data {
@@ -198,10 +200,10 @@ func resourceRabbitMqConfigurationRead(d *schema.ResourceData, meta interface{})
 			d.Set(key, v)
 		}
 	}
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceRabbitMqConfigurationUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceRabbitMqConfigurationUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -235,18 +237,18 @@ func resourceRabbitMqConfigurationUpdate(d *schema.ResourceData, meta interface{
 
 	log.Printf("[DEBUG] RabbitMQ configuration params: %v", params)
 	if len(params) > 0 {
-		err := api.UpdateRabbitMqConfiguration(instanceID, params, sleep, timeout)
+		err := api.UpdateRabbitMqConfiguration(ctx, instanceID, params, sleep, timeout)
 		if err != nil {
-			return err
+			return diag.FromErr(err)
 		}
 	}
 
 	d.SetId(strconv.Itoa(instanceID))
-	return resourceRabbitMqConfigurationRead(d, meta)
+	return resourceRabbitMqConfigurationRead(ctx, d, meta)
 }
 
-func resourceRabbitMqConfigurationDelete(d *schema.ResourceData, meta interface{}) error {
-	return nil
+func resourceRabbitMqConfigurationDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return diag.Diagnostics{}
 }
 
 func validateRabbitMqConfigurationJSONField(key string) bool {

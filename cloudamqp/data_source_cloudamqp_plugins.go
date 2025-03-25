@@ -1,16 +1,17 @@
 package cloudamqp
 
 import (
+	"context"
 	"fmt"
-	"log"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourcePlugins() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourcePluginsRead,
+		ReadContext: dataSourcePluginsRead,
 
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -58,7 +59,7 @@ func dataSourcePlugins() *schema.Resource {
 	}
 }
 
-func dataSourcePluginsRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourcePluginsRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -66,11 +67,10 @@ func dataSourcePluginsRead(d *schema.ResourceData, meta interface{}) error {
 		timeout    = d.Get("timeout").(int)
 	)
 
-	log.Printf("[DEBUG] cloudamqp::data_source::plugins::read instance id: %v", instanceID)
-	data, err := api.ListPlugins(instanceID, sleep, timeout)
+	data, err := api.ListPlugins(ctx, instanceID, sleep, timeout)
 	d.SetId(fmt.Sprintf("%v.plugins", instanceID))
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	plugins := make([]map[string]interface{}, len(data))
@@ -79,7 +79,7 @@ func dataSourcePluginsRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	if err = d.Set("plugins", plugins); err != nil {
-		return fmt.Errorf("error setting plugins for resource %s: %s", d.Id(), err)
+		return diag.Errorf("error setting plugins for resource %s: %s", d.Id(), err)
 	}
 	return nil
 }

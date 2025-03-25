@@ -1,19 +1,23 @@
 package api
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"strconv"
+
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func (api *API) CreateNotification(instanceID int, params map[string]any) (map[string]any, error) {
+func (api *API) CreateNotification(ctx context.Context, instanceID int, params map[string]any) (
+	map[string]any, error) {
+
 	var (
 		data   map[string]any
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients", instanceID)
 	)
 
-	log.Printf("[DEBUG] api::notification#create path: %s", path)
+	tflog.Debug(ctx, fmt.Sprintf("request path: %s, params: %v", path, params))
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -21,27 +25,29 @@ func (api *API) CreateNotification(instanceID int, params map[string]any) (map[s
 
 	switch response.StatusCode {
 	case 201:
-		log.Printf("[DEBUG] api::notification#create data: %v", data)
+		tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
 		if v, ok := data["id"]; ok {
 			data["id"] = strconv.FormatFloat(v.(float64), 'f', 0, 64)
 		} else {
-			return nil, fmt.Errorf("create notification invalid identifier: %v", data["id"])
+			return nil, fmt.Errorf("invalid identifier: %v", data["id"])
 		}
 		return data, err
 	default:
-		return nil, fmt.Errorf("create notification failed, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to create notification, status: %d, message: %s",
 			response.StatusCode, failed)
 	}
 }
 
-func (api *API) ReadNotification(instanceID int, recipientID string) (map[string]any, error) {
+func (api *API) ReadNotification(ctx context.Context, instanceID int, recipientID string) (
+	map[string]any, error) {
+
 	var (
 		data   map[string]any
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients/%s", instanceID, recipientID)
 	)
 
-	log.Printf("[DEBUG] api::notification#read path: %s", path)
+	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
 	response, err := api.sling.New().Path(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -49,22 +55,22 @@ func (api *API) ReadNotification(instanceID int, recipientID string) (map[string
 
 	switch response.StatusCode {
 	case 200:
-		log.Printf("[DEBUG] api::notification#read data: %v", data)
+		tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
 		return data, nil
 	default:
-		return nil, fmt.Errorf("read notification failed, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to read notification, status: %d, message: %s",
 			response.StatusCode, failed)
 	}
 }
 
-func (api *API) ListNotifications(instanceID int) ([]map[string]any, error) {
+func (api *API) ListNotifications(ctx context.Context, instanceID int) ([]map[string]any, error) {
 	var (
 		data   []map[string]any
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients", instanceID)
 	)
 
-	log.Printf("[DEBUG] api::ReadNotifications#read path: %s", path)
+	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
 	response, err := api.sling.New().Path(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -72,15 +78,15 @@ func (api *API) ListNotifications(instanceID int) ([]map[string]any, error) {
 
 	switch response.StatusCode {
 	case 200:
-		log.Printf("[DEBUG] api::ReadNotifications#read data: %v", data)
+		tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
 		return data, nil
 	default:
-		return nil, fmt.Errorf("read notification failed, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to read notifications, status: %d, message: %s",
 			response.StatusCode, failed)
 	}
 }
 
-func (api *API) UpdateNotification(instanceID int, recipientID string,
+func (api *API) UpdateNotification(ctx context.Context, instanceID int, recipientID string,
 	params map[string]any) error {
 
 	var (
@@ -88,7 +94,7 @@ func (api *API) UpdateNotification(instanceID int, recipientID string,
 		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients/%s", instanceID, recipientID)
 	)
 
-	log.Printf("[DEBUG] api::notification#update path: %s", path)
+	tflog.Debug(ctx, fmt.Sprintf("request path: %s, params: %v", path, params))
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 	if err != nil {
 		return err
@@ -98,18 +104,18 @@ func (api *API) UpdateNotification(instanceID int, recipientID string,
 	case 200:
 		return nil
 	default:
-		return fmt.Errorf("update notification failed, status: %d, message: %s",
+		return fmt.Errorf("failed to update notification, status: %d, message: %s",
 			response.StatusCode, failed)
 	}
 }
 
-func (api *API) DeleteNotification(instanceID int, recipientID string) error {
+func (api *API) DeleteNotification(ctx context.Context, instanceID int, recipientID string) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients/%s", instanceID, recipientID)
 	)
 
-	log.Printf("[DEBUG] api::notification#delete path: %s", path)
+	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 	if err != nil {
 		return err
@@ -119,7 +125,7 @@ func (api *API) DeleteNotification(instanceID int, recipientID string) error {
 	case 204:
 		return nil
 	default:
-		return fmt.Errorf("delete notification failed, status: %d, message: %s",
+		return fmt.Errorf("failed to delete notification, status: %d, message: %s",
 			response.StatusCode, failed)
 	}
 }

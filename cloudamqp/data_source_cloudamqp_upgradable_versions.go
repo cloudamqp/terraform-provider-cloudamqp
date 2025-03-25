@@ -1,15 +1,17 @@
 package cloudamqp
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceUpgradableVersions() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceUpgradableVersionRead,
+		ReadContext: dataSourceUpgradableVersionRead,
 
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -31,11 +33,11 @@ func dataSourceUpgradableVersions() *schema.Resource {
 	}
 }
 
-func dataSourceUpgradableVersionRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceUpgradableVersionRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
-	data, err := api.ReadVersions(d.Get("instance_id").(int))
+	data, err := api.ReadVersions(ctx, d.Get("instance_id").(int))
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	instanceID := strconv.Itoa(d.Get("instance_id").(int))
 	d.SetId(instanceID)
@@ -46,7 +48,7 @@ func dataSourceUpgradableVersionRead(d *schema.ResourceData, meta interface{}) e
 		}
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
 func validateVersionsSchemaAttribute(key string) bool {

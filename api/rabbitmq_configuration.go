@@ -1,73 +1,80 @@
 package api
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"strings"
 	"time"
+
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func (api *API) ReadRabbitMqConfiguration(instanceID, sleep, timeout int) (map[string]any, error) {
-	return api.readRabbitMqConfigurationWithRetry(instanceID, 1, sleep, timeout)
+func (api *API) ReadRabbitMqConfiguration(ctx context.Context, instanceID, sleep, timeout int) (
+	map[string]any, error) {
+
+	path := fmt.Sprintf("/api/instances/%d/config", instanceID)
+	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	return api.readRabbitMqConfigurationWithRetry(ctx, path, 1, sleep, timeout)
 }
 
-func (api *API) readRabbitMqConfigurationWithRetry(instanceID, attempt, sleep, timeout int) (
-	map[string]any, error) {
+func (api *API) readRabbitMqConfigurationWithRetry(ctx context.Context, path string, attempt, sleep,
+	timeout int) (map[string]any, error) {
 
 	var (
 		data   map[string]any
 		failed map[string]any
-		path   = fmt.Sprintf("/api/instances/%d/config", instanceID)
 	)
 
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
+	} else if attempt*sleep > timeout {
+		return nil, fmt.Errorf("timeout reached after %d seconds, while reading RabbitMQ",
+			timeout)
 	}
 
 	switch response.StatusCode {
 	case 200:
-		log.Printf("[DEBUG] api::rabbitmq_configuration#readWithRetry data: %v", data)
+		tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
 		return data, nil
 	case 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
-			log.Printf("[DEBUG] api::rabbitmq-configuration#readWithRetry Timeout talking to backend, "+
-				"attempt: %d, until timeout: %d", attempt, (timeout - (attempt * sleep)))
+			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
+				"attempt: %d, until timeout: %d", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.readRabbitMqConfigurationWithRetry(instanceID, attempt, sleep, timeout)
+			return api.readRabbitMqConfigurationWithRetry(ctx, path, attempt, sleep, timeout)
 		}
 	case 503:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
-			log.Printf("[DEBUG] api::rabbitmq_configuration#readWithRetry Timeout talking to backend, "+
-				"attempt: %d, until timeout: %d", attempt, (timeout - (attempt * sleep)))
+			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
+				"attempt: %d, until timeout: %d", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.readRabbitMqConfigurationWithRetry(instanceID, attempt, sleep, timeout)
+			return api.readRabbitMqConfigurationWithRetry(ctx, path, attempt, sleep, timeout)
 		}
 	}
-	return nil, fmt.Errorf("read RabbitMQ configuration failed, status: %d, message: %s",
+	return nil, fmt.Errorf("failed to read RabbitMQ configuration, status: %d, message: %s",
 		response.StatusCode, failed)
 }
 
-func (api *API) UpdateRabbitMqConfiguration(instanceID int, params map[string]any,
-	sleep, timeout int) error {
-	return api.updateRabbitMqConfigurationWithRetry(instanceID, params, 1, sleep, timeout)
+func (api *API) UpdateRabbitMqConfiguration(ctx context.Context, instanceID int,
+	params map[string]any, sleep, timeout int) error {
+
+	path := fmt.Sprintf("api/instances/%d/config", instanceID)
+	tflog.Debug(ctx, fmt.Sprintf("request path: %s, params: %v", path, params))
+	return api.updateRabbitMqConfigurationWithRetry(ctx, path, params, 1, sleep, timeout)
 }
 
-func (api *API) updateRabbitMqConfigurationWithRetry(instanceID int, params map[string]any,
-	attempt, sleep, timeout int) error {
+func (api *API) updateRabbitMqConfigurationWithRetry(ctx context.Context, path string,
+	params map[string]any, attempt, sleep, timeout int) error {
 
-	var (
-		failed map[string]any
-		path   = fmt.Sprintf("api/instances/%d/config", instanceID)
-	)
-
+	failed := make(map[string]any)
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 	if err != nil {
 		return err
 	} else if attempt*sleep > timeout {
-		return fmt.Errorf("update RabbitMQ configuraiton failed, reached timeout of %d seconds",
+		return fmt.Errorf("timeout reached after %d seconds, while updating RabbitMQ",
 			timeout)
 	}
 
@@ -76,22 +83,22 @@ func (api *API) updateRabbitMqConfigurationWithRetry(instanceID int, params map[
 		return nil
 	case 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
-			log.Printf("[DEBUG] api::rabbitmq_configuration#updateWithRetry Timeout talking to backend, "+
-				"attempt: %d, until timeout: %d", attempt, (timeout - (attempt * sleep)))
+			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
+				"attempt: %d, until timeout: %d", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.updateRabbitMqConfigurationWithRetry(instanceID, params, attempt, sleep, timeout)
+			return api.updateRabbitMqConfigurationWithRetry(ctx, path, params, attempt, sleep, timeout)
 		}
 	case 503:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
-			log.Printf("[DEBUG] api::rabbitmq_configuration#updateWithRetry Timeout talking to backend, "+
-				"attempt: %d, until timeout: %d", attempt, (timeout - (attempt * sleep)))
+			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
+				"attempt: %d, until timeout: %d", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.updateRabbitMqConfigurationWithRetry(instanceID, params, attempt, sleep, timeout)
+			return api.updateRabbitMqConfigurationWithRetry(ctx, path, params, attempt, sleep, timeout)
 		}
 	}
-	return fmt.Errorf("update RabbitMQ configuration failed, status: %d, message: %s",
+	return fmt.Errorf("failed to upgrade RabbitMQ configuration, status: %d, message: %s",
 		response.StatusCode, failed)
 }
 

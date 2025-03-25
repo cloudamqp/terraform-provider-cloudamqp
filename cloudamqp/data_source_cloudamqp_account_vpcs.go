@@ -1,15 +1,16 @@
 package cloudamqp
 
 import (
-	"fmt"
+	"context"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceAccountVpcs() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceAccountVpcsRead,
+		ReadContext: dataSourceAccountVpcsRead,
 
 		Schema: map[string]*schema.Schema{
 			"vpcs": {
@@ -58,14 +59,15 @@ func dataSourceAccountVpcs() *schema.Resource {
 	}
 }
 
-func dataSourceAccountVpcsRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceAccountVpcsRead(ctx context.Context, d *schema.ResourceData,
+	meta interface{}) diag.Diagnostics {
+
 	api := meta.(*api.API)
-	data, err := api.ListVpcs()
+	data, err := api.ListVpcs(ctx)
 	if err != nil {
-		return err
-	} else if len(data) == 0 {
-		return fmt.Errorf("no vpcs found for resoruce %s", d.Id())
+		return diag.FromErr(err)
 	}
+
 	d.SetId("noId")
 	vpcs := make([]map[string]interface{}, len(data))
 	for k, v := range data {
@@ -73,10 +75,10 @@ func dataSourceAccountVpcsRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	if err = d.Set("vpcs", vpcs); err != nil {
-		return fmt.Errorf("error setting vpcs for resource %s, %s", d.Id(), err)
+		return diag.Errorf("error setting vpcs for resource %s, %s", d.Id(), err)
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
 func readAccountVpc(data map[string]interface{}) map[string]interface{} {

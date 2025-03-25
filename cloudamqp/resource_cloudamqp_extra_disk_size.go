@@ -1,19 +1,20 @@
 package cloudamqp
 
 import (
-	"fmt"
+	"context"
 	"strconv"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceExtraDiskSize() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceExtraDiskSizeUpdate,
-		Read:   resourceExtraDiskSizeRead,
-		Update: resourceExtraDiskSizeUpdate,
-		Delete: resourceExtraDiskSizeDelete,
+		CreateContext: resourceExtraDiskSizeUpdate,
+		ReadContext:   resourceExtraDiskSizeRead,
+		UpdateContext: resourceExtraDiskSizeUpdate,
+		DeleteContext: resourceExtraDiskSizeDelete,
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
 				Type:        schema.TypeInt,
@@ -71,7 +72,7 @@ func resourceExtraDiskSize() *schema.Resource {
 	}
 }
 
-func resourceExtraDiskSizeUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceExtraDiskSizeUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api     = meta.(*api.API)
 		params  = make(map[string]interface{})
@@ -82,25 +83,25 @@ func resourceExtraDiskSizeUpdate(d *schema.ResourceData, meta interface{}) error
 	params["extra_disk_size"] = d.Get("extra_disk_size")
 	params["allow_downtime"] = d.Get("allow_downtime")
 
-	_, err := api.ResizeDisk(d.Get("instance_id").(int), params, sleep, timeout)
+	_, err := api.ResizeDisk(ctx, d.Get("instance_id").(int), params, sleep, timeout)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	id := strconv.Itoa(d.Get("instance_id").(int))
 	d.SetId(id)
 
-	return resourceExtraDiskSizeRead(d, meta)
+	return resourceExtraDiskSizeRead(ctx, d, meta)
 }
 
-func resourceExtraDiskSizeRead(d *schema.ResourceData, meta interface{}) error {
+func resourceExtraDiskSizeRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 	)
 
-	data, err := api.ListNodes(instanceID)
+	data, err := api.ListNodes(ctx, instanceID)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	nodes := make([]map[string]interface{}, len(data))
@@ -109,16 +110,17 @@ func resourceExtraDiskSizeRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	if err = d.Set("nodes", nodes); err != nil {
-		return fmt.Errorf("error setting nodes for resource %s, %s", d.Id(), err)
+		return diag.Errorf("error setting nodes for resource %s, %s", d.Id(), err)
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceExtraDiskSizeDelete(d *schema.ResourceData, meta interface{}) error {
-	// Just remove this resource from the state file, as the delete route does not exist in the backend
-	// but we need to allow delete to happen, e.g. when you destroy your instance
-	return nil
+func resourceExtraDiskSizeDelete(ctx context.Context, d *schema.ResourceData,
+	meta interface{}) diag.Diagnostics {
+	// Just remove this resource from the state file, as the delete route does not exist in the
+	// backend but we need to allow delete to happen, e.g. when you destroy your instance
+	return diag.Diagnostics{}
 }
 
 func readDiskNode(data map[string]interface{}) map[string]interface{} {

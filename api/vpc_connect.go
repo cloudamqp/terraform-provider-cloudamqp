@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"time"
@@ -141,7 +142,8 @@ func (api *API) EnableVPC(instanceID int) error {
 		path   = fmt.Sprintf("/api/instances/%d/vpc", instanceID)
 	)
 
-	data, _ := api.ReadInstance(fmt.Sprintf("%d", instanceID))
+	// TODO: Set correct context
+	data, _ := api.ReadInstance(context.TODO(), fmt.Sprintf("%d", instanceID))
 	if data["vpc"] == nil {
 		response, err := api.sling.New().Put(path).Receive(nil, &failed)
 		if err != nil {

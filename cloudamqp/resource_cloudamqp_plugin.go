@@ -1,22 +1,24 @@
 package cloudamqp
 
 import (
-	"errors"
+	"context"
 	"fmt"
 	"log"
 	"strconv"
 	"strings"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourcePlugin() *schema.Resource {
 	return &schema.Resource{
-		Create: resourcePluginCreate,
-		Read:   resourcePluginRead,
-		Update: resourcePluginUpdate,
-		Delete: resourcePluginDelete,
+		CreateContext: resourcePluginCreate,
+		ReadContext:   resourcePluginRead,
+		UpdateContext: resourcePluginUpdate,
+		DeleteContext: resourcePluginDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -68,7 +70,7 @@ type Plugin struct {
 	Enabled bool   `json:"enabled"`
 }
 
-func resourcePluginCreate(d *schema.ResourceData, meta interface{}) error {
+func resourcePluginCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -77,17 +79,15 @@ func resourcePluginCreate(d *schema.ResourceData, meta interface{}) error {
 		timeout    = d.Get("timeout").(int)
 	)
 
-	log.Printf("[DEBUG] create plugin instanceID: %v, name: %v, sleep: %v, timeout: %v",
-		instanceID, name, sleep, timeout)
-	_, err := api.EnablePlugin(instanceID, name, sleep, timeout)
+	_, err := api.EnablePlugin(ctx, instanceID, name, sleep, timeout)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	d.SetId(name)
-	return resourcePluginRead(d, meta)
+	return resourcePluginRead(ctx, d, meta)
 }
 
-func resourcePluginRead(d *schema.ResourceData, meta interface{}) error {
+func resourcePluginRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -98,7 +98,7 @@ func resourcePluginRead(d *schema.ResourceData, meta interface{}) error {
 
 	// Support for importing resource
 	if strings.Contains(d.Id(), ",") {
-		log.Printf("[DEBUG] import plugin instanceID: %v, id: %v", instanceID, d.Id())
+		tflog.Info(ctx, fmt.Sprintf("import of resource with identifiers: %s", d.Id()))
 		s := strings.Split(d.Id(), ",")
 		name = s[0]
 		d.SetId(name)
@@ -110,28 +110,28 @@ func resourcePluginRead(d *schema.ResourceData, meta interface{}) error {
 		d.Set("timeout", 1800)
 	}
 	if instanceID == 0 {
-		return errors.New("missing instance identifier: {resource_id},{instance_id}")
+		return diag.Errorf("missing instance identifier: {resource_id},{instance_id}")
 	}
 
 	log.Printf("[DEBUG] import plugin instanceID: %v, name: %v, sleep: %v, timeout: %v",
 		instanceID, name, sleep, timeout)
-	data, err := api.ReadPlugin(instanceID, name, sleep, timeout)
+	data, err := api.ReadPlugin(ctx, instanceID, name, sleep, timeout)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	for k, v := range data {
 		if validatePluginSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourcePluginUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourcePluginUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -141,14 +141,14 @@ func resourcePluginUpdate(d *schema.ResourceData, meta interface{}) error {
 		timeout    = d.Get("timeout").(int)
 	)
 
-	_, err := api.UpdatePlugin(instanceID, name, enabled, sleep, timeout)
+	_, err := api.UpdatePlugin(ctx, instanceID, name, enabled, sleep, timeout)
 	if err != nil {
-		return fmt.Errorf("[Failed to update pluign: %v", err)
+		return diag.Errorf("[Failed to update pluign: %v", err)
 	}
-	return resourcePluginRead(d, meta)
+	return resourcePluginRead(ctx, d, meta)
 }
 
-func resourcePluginDelete(d *schema.ResourceData, meta interface{}) error {
+func resourcePluginDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -159,10 +159,13 @@ func resourcePluginDelete(d *schema.ResourceData, meta interface{}) error {
 
 	if enableFasterInstanceDestroy {
 		log.Printf("[DEBUG] cloudamqp::resource::plugin::delete skip calling backend.")
-		return nil
+		return diag.Diagnostics{}
 	}
 
-	return api.DeletePlugin(instanceID, name, sleep, timeout)
+	if err := api.DeletePlugin(ctx, instanceID, name, sleep, timeout); err != nil {
+		return diag.FromErr(err)
+	}
+	return diag.Diagnostics{}
 }
 
 func validatePluginSchemaAttribute(key string) bool {

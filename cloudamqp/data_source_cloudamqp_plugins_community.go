@@ -1,16 +1,17 @@
 package cloudamqp
 
 import (
+	"context"
 	"fmt"
-	"log"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourcePluginsCommunity() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourcePluginsCommunityRead,
+		ReadContext: dataSourcePluginsCommunityRead,
 
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -54,7 +55,9 @@ func dataSourcePluginsCommunity() *schema.Resource {
 	}
 }
 
-func dataSourcePluginsCommunityRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourcePluginsCommunityRead(ctx context.Context, d *schema.ResourceData,
+	meta interface{}) diag.Diagnostics {
+
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -62,11 +65,10 @@ func dataSourcePluginsCommunityRead(d *schema.ResourceData, meta interface{}) er
 		timeout    = d.Get("timeout").(int)
 	)
 
-	log.Printf("[DEBUG] cloudamqp::data_source::plugin_comminity::read instance id: %v", instanceID)
-	data, err := api.ListPluginsCommunity(instanceID, sleep, timeout)
+	data, err := api.ListPluginsCommunity(ctx, instanceID, sleep, timeout)
 	d.SetId(fmt.Sprintf("%v.plugins_community", instanceID))
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	plugins := make([]map[string]interface{}, len(data))
@@ -75,9 +77,9 @@ func dataSourcePluginsCommunityRead(d *schema.ResourceData, meta interface{}) er
 	}
 
 	if err = d.Set("plugins", plugins); err != nil {
-		return fmt.Errorf("error setting community plugins for resource %s: %s", d.Id(), err)
+		return diag.Errorf("error setting community plugins for resource %s: %s", d.Id(), err)
 	}
-	return nil
+	return diag.Diagnostics{}
 }
 
 func readCommunityPlugin(data map[string]interface{}) map[string]interface{} {
