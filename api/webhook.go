@@ -15,7 +15,8 @@ func (api *API) CreateWebhook(ctx context.Context, instanceID int, params map[st
 	sleep, timeout int) (map[string]any, error) {
 
 	path := fmt.Sprintf("/api/instances/%d/webhooks", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d timeout=%d ", path, sleep, timeout),
+		params)
 	return api.createWebhookWithRetry(ctx, path, params, 1, sleep, timeout)
 }
 
@@ -28,7 +29,6 @@ func (api *API) createWebhookWithRetry(ctx context.Context, path string, params 
 		failed map[string]any
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("path: %s, params: %v", path, params))
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -38,24 +38,24 @@ func (api *API) createWebhookWithRetry(ctx context.Context, path string, params 
 
 	switch response.StatusCode {
 	case 201:
-		tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
+		tflog.Debug(ctx, "response data", data)
 		if v, ok := data["id"]; ok {
 			data["id"] = strconv.FormatFloat(v.(float64), 'f', 0, 64)
 		} else {
-			return nil, fmt.Errorf("invalid identifier: %v", data["id"])
+			return nil, fmt.Errorf("invalid identifier=%v", data["id"])
 		}
 		return data, nil
 	case 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
-			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt: %d, "+
-				"until timeout: %d", attempt, (timeout-(attempt*sleep))))
+			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt=%d "+
+				"until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.createWebhookWithRetry(ctx, path, params, attempt, sleep, timeout)
 		}
 	}
 
-	return nil, fmt.Errorf("failed to create webhook, status: %d, message: %s",
+	return nil, fmt.Errorf("failed to create webhook, status=%d message=%s ",
 		response.StatusCode, failed)
 }
 
@@ -64,7 +64,7 @@ func (api *API) ReadWebhook(ctx context.Context, instanceID int, webhookID strin
 	timeout int) (map[string]any, error) {
 
 	path := fmt.Sprintf("/api/instances/%d/webhooks/%s", instanceID, webhookID)
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%s timeout=%s ", path, sleep, timeout))
 	return api.readWebhookWithRetry(ctx, path, 1, sleep, timeout)
 }
 
@@ -87,19 +87,19 @@ func (api *API) readWebhookWithRetry(ctx context.Context, path string, attempt, 
 
 	switch response.StatusCode {
 	case 200:
-		tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
+		tflog.Debug(ctx, "response data", data)
 		return data, nil
 	case 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
-			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt: %d, "+
-				"until timeout: %d", attempt, (timeout-(attempt*sleep))))
+			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt=%d "+
+				"until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.readWebhookWithRetry(ctx, path, attempt, sleep, timeout)
 		}
 	}
 
-	return nil, fmt.Errorf("failed to read webhook information, status: %d, message: %s",
+	return nil, fmt.Errorf("failed to read webhook information, status=%d message=%s ",
 		response.StatusCode, failed)
 }
 
@@ -111,7 +111,7 @@ func (api *API) ListWebhooks(ctx context.Context, instanceID int) (map[string]an
 		path   = fmt.Sprintf("/api/instances/%d/webhooks", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
 	response, err := api.sling.New().Path(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -121,7 +121,7 @@ func (api *API) ListWebhooks(ctx context.Context, instanceID int) (map[string]an
 	case 200:
 		return data, nil
 	default:
-		return nil, fmt.Errorf("failed to list webhooks, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to list webhooks, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
@@ -131,7 +131,8 @@ func (api *API) UpdateWebhook(ctx context.Context, instanceID int, webhookID str
 	params map[string]any, sleep, timeout int) error {
 
 	path := fmt.Sprintf("/api/instances/%d/webhooks/%s", instanceID, webhookID)
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s, params: %v", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d timeout=%d ", path, sleep, timeout),
+		params)
 	return api.updateWebhookWithRetry(ctx, path, params, 1, sleep, timeout)
 }
 
@@ -153,19 +154,19 @@ func (api *API) updateWebhookWithRetry(ctx context.Context, path string, params 
 
 	switch response.StatusCode {
 	case 201:
-		tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
+		tflog.Debug(ctx, "response data", data)
 		return nil
 	case 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
-			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt: %d, "+
-				"until timeout: %d", attempt, (timeout-(attempt*sleep))))
+			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt=%d "+
+				"until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.updateWebhookWithRetry(ctx, path, params, attempt, sleep, timeout)
 		}
 	}
 
-	return fmt.Errorf("failed to update webhook, status: %d, message: %s",
+	return fmt.Errorf("failed to update webhook, status=%d message=%s ",
 		response.StatusCode, failed)
 }
 
@@ -174,7 +175,7 @@ func (api *API) DeleteWebhook(ctx context.Context, instanceID int, webhookID str
 	timeout int) error {
 
 	path := fmt.Sprintf("/api/instances/%d/webhooks/%s", instanceID, webhookID)
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d ", path, sleep, timeout))
 	return api.deleteWebhookWithRetry(ctx, path, 1, sleep, timeout)
 }
 
@@ -198,14 +199,14 @@ func (api *API) deleteWebhookWithRetry(ctx context.Context, path string, attempt
 		return nil
 	case 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
-			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt: %d, "+
-				"until timeout: %d", attempt, (timeout-(attempt*sleep))))
+			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt=%d "+
+				"until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.deleteWebhookWithRetry(ctx, path, attempt, sleep, timeout)
 		}
 	}
 
-	return fmt.Errorf("failed to delete webhook, status: %d, message: %s",
+	return fmt.Errorf("failed to delete webhook, status=%d message=%s ",
 		response.StatusCode, failed)
 }

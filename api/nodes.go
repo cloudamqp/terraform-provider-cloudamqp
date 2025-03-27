@@ -16,7 +16,7 @@ func (api *API) ListNodes(ctx context.Context, instanceID int) ([]map[string]any
 		path   = fmt.Sprintf("api/instances/%d/nodes", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
 	response, err := api.sling.New().Path(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func (api *API) ListNodes(ctx context.Context, instanceID int) ([]map[string]any
 	case 200:
 		return data, nil
 	default:
-		return nil, fmt.Errorf("failed to list nodes, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to list nodes, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
@@ -73,7 +73,7 @@ func (api *API) PostAction(ctx context.Context, instanceID int, nodeName string,
 	}
 
 	path := fmt.Sprintf("api/instances/%d/actions/%s", instanceID, actionAsRoute)
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s ", path))
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -84,7 +84,7 @@ func (api *API) PostAction(ctx context.Context, instanceID int, nodeName string,
 		return api.waitOnNodeAction(ctx, instanceID, nodeName, action)
 	default:
 
-		return nil, fmt.Errorf("failed to invoke action %s, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to invoke action %s, status=%d message=%s ",
 			action, response.StatusCode, failed)
 	}
 }

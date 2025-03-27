@@ -14,7 +14,8 @@ func (api *API) RequestVpcGcpPeeringWithVpcId(ctx context.Context, vpcID string,
 	params map[string]any, waitOnStatus bool, sleep, timeout int) (map[string]any, error) {
 
 	path := fmt.Sprintf("api/vpcs/%s/vpc-peering", vpcID)
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s wait_on_status=%t, sleep=%d, timeout=%d",
+		path, waitOnStatus, sleep, timeout), params)
 	attempt, data, err := api.requestVpcGcpPeeringWithRetry(ctx, path, params, waitOnStatus, 1, sleep,
 		timeout)
 	if err != nil {
@@ -36,7 +37,7 @@ func (api *API) ReadVpcGcpPeeringWithVpcId(ctx context.Context, vpcID string, sl
 	map[string]any, error) {
 
 	path := fmt.Sprintf("/api/vpcs/%s/vpc-peering", vpcID)
-	tflog.Debug(ctx, fmt.Sprintf("reqeust path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d ", path, sleep, timeout))
 	_, data, err := api.readVpcGcpPeeringWithRetry(ctx, path, 1, sleep, timeout)
 	return data, err
 }
@@ -55,7 +56,7 @@ func (api *API) RemoveVpcGcpPeeringWithVpcId(ctx context.Context, vpcID, peerID 
 		path   = fmt.Sprintf("/api/vpcs/%s/vpc-peering/%s", vpcID, peerID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 	if err != nil {
 		return err
@@ -65,7 +66,7 @@ func (api *API) RemoveVpcGcpPeeringWithVpcId(ctx context.Context, vpcID, peerID 
 	case 204:
 		return nil
 	default:
-		return fmt.Errorf("failed to remove VPC peering, status: %d, message: %s",
+		return fmt.Errorf("failed to remove VPC peering, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
@@ -75,7 +76,7 @@ func (api *API) ReadVpcGcpInfoWithVpcId(ctx context.Context, vpcID string, sleep
 	map[string]any, error) {
 
 	path := fmt.Sprintf("/api/vpcs/%s/vpc-peering/info", vpcID)
-	tflog.Debug(ctx, fmt.Sprintf("path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d ", path, sleep, timeout))
 	_, data, err := api.readVpcGcpPeeringWithRetry(ctx, path, 1, sleep, timeout)
 	return data, err
 }

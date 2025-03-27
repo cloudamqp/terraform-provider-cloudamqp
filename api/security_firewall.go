@@ -17,7 +17,8 @@ func (api *API) waitUntilFirewallConfigured(ctx context.Context, instanceID, att
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall/configured", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("waiting until firewall configured, request path: %s", path))
+	tflog.Debug(ctx, "waiting until firewall configured")
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d ", path, sleep, timeout))
 	for {
 		response, err := api.sling.New().Path(path).Receive(&data, &failed)
 		if err != nil {
@@ -31,12 +32,12 @@ func (api *API) waitUntilFirewallConfigured(ctx context.Context, instanceID, att
 		case 200:
 			return nil
 		case 400:
-			tflog.Debug(ctx, fmt.Sprintf("firewall configuring, will try again, attempt: %d, until "+
-				"timeout: %d", attempt, (timeout-(attempt*sleep))))
+			tflog.Debug(ctx, fmt.Sprintf("firewall configuring, will try again, attempt=%d "+
+				"until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
 		default:
-			return fmt.Errorf("failed to wait until firewall configured, status: %d, message: %s",
+			return fmt.Errorf("failed to wait until firewall configured, status=%d message=%s ",
 				response.StatusCode, failed)
 		}
 	}
@@ -46,7 +47,8 @@ func (api *API) CreateFirewallSettings(ctx context.Context, instanceID int, para
 	sleep, timeout int) ([]map[string]any, error) {
 
 	path := fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d timeout=%d params=%v ", path, sleep,
+		timeout, params))
 	attempt, err := api.createFirewallSettingsWithRetry(ctx, path, params, 1, sleep, timeout)
 	if err != nil {
 		return nil, err
@@ -63,9 +65,7 @@ func (api *API) CreateFirewallSettings(ctx context.Context, instanceID int, para
 func (api *API) createFirewallSettingsWithRetry(ctx context.Context, path string,
 	params []map[string]any, attempt, sleep, timeout int) (int, error) {
 
-	var (
-		failed map[string]any
-	)
+	var failed map[string]any
 
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(nil, &failed)
 	if err != nil {
@@ -84,7 +84,7 @@ func (api *API) createFirewallSettingsWithRetry(ctx context.Context, path string
 			break
 		case failed["error_code"].(float64) == 40001:
 			tflog.Debug(ctx, fmt.Sprintf("firewall not finished configuring, will retry, "+
-				"attempt: %d, until timeout: %d", attempt, (timeout-(attempt*sleep))))
+				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.createFirewallSettingsWithRetry(ctx, path, params, attempt, sleep, timeout)
@@ -93,7 +93,7 @@ func (api *API) createFirewallSettingsWithRetry(ctx context.Context, path string
 				failed["error"].(string))
 		}
 	}
-	return attempt, fmt.Errorf("failed to create new firewall, status: %d, message: %s",
+	return attempt, fmt.Errorf("failed to create new firewall, status=%d message=%s ",
 		response.StatusCode, failed)
 }
 
@@ -104,7 +104,7 @@ func (api *API) ReadFirewallSettings(ctx context.Context, instanceID int) ([]map
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
 	response, err := api.sling.New().Path(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -115,7 +115,7 @@ func (api *API) ReadFirewallSettings(ctx context.Context, instanceID int) ([]map
 		tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
 		return data, nil
 	default:
-		return nil, fmt.Errorf("failed to read firewall settings, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to read firewall settings, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
@@ -124,7 +124,8 @@ func (api *API) UpdateFirewallSettings(ctx context.Context, instanceID int, para
 	sleep, timeout int) ([]map[string]any, error) {
 
 	path := fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("requst path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d timeout=%d params=%v ", path, sleep,
+		timeout, params))
 	attempt, err := api.updateFirewallSettingsWithRetry(ctx, path, params, 1, sleep, timeout)
 	if err != nil {
 		return nil, err
@@ -139,9 +140,7 @@ func (api *API) UpdateFirewallSettings(ctx context.Context, instanceID int, para
 func (api *API) updateFirewallSettingsWithRetry(ctx context.Context, path string,
 	params []map[string]any, attempt, sleep, timeout int) (int, error) {
 
-	var (
-		failed map[string]any
-	)
+	var failed map[string]any
 
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 	if err != nil {
@@ -160,7 +159,7 @@ func (api *API) updateFirewallSettingsWithRetry(ctx context.Context, path string
 			break
 		case failed["error_code"].(float64) == 40001:
 			tflog.Debug(ctx, fmt.Sprintf("firewall not finished configuring, will retry, "+
-				"attempt: %d until timeout: %d", attempt, (timeout-(attempt*sleep))))
+				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.updateFirewallSettingsWithRetry(ctx, path, params, attempt, sleep, timeout)
@@ -169,7 +168,7 @@ func (api *API) updateFirewallSettingsWithRetry(ctx context.Context, path string
 				failed["error"].(string))
 		}
 	}
-	return attempt, fmt.Errorf("failed to update firewall settings, status: %d, message: %v",
+	return attempt, fmt.Errorf("failed to update firewall settings, status=%d message=%s ",
 		response.StatusCode, failed)
 }
 
@@ -177,7 +176,7 @@ func (api *API) DeleteFirewallSettings(ctx context.Context, instanceID, sleep, t
 	[]map[string]any, error) {
 
 	path := fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d ", path, sleep, timeout))
 	attempt, err := api.deleteFirewallSettingsWithRetry(ctx, path, 1, sleep, timeout)
 	if err != nil {
 		return nil, err
@@ -201,7 +200,6 @@ func (api *API) deleteFirewallSettingsWithRetry(ctx context.Context, path string
 
 	// Use default firewall rule and update firewall upon delete.
 	params[0] = DefaultFirewallSettings()
-	tflog.Debug(ctx, fmt.Sprintf("reset firewall rules: %v", params))
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 	if err != nil {
 		return attempt, err
@@ -219,7 +217,7 @@ func (api *API) deleteFirewallSettingsWithRetry(ctx context.Context, path string
 			break
 		case failed["error_code"].(float64) == 40001:
 			tflog.Debug(ctx, fmt.Sprintf("firewall not finished configuring, will retry, "+
-				"attempt: %d until timeout: %d", attempt, (timeout-(attempt*sleep))))
+				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.deleteFirewallSettingsWithRetry(ctx, path, attempt, sleep, timeout)
@@ -228,7 +226,7 @@ func (api *API) deleteFirewallSettingsWithRetry(ctx context.Context, path string
 				failed["error"].(string))
 		}
 	}
-	return attempt, fmt.Errorf("failed to reset firewall, status: %d, message: %s",
+	return attempt, fmt.Errorf("failed to reset firewall, status=%d message=%s ",
 		response.StatusCode, failed)
 }
 

@@ -16,7 +16,7 @@ func (api *API) ReadVersions(ctx context.Context, instanceID int) (map[string]an
 		path   = fmt.Sprintf("api/instances/%d/actions/new-rabbitmq-erlang-versions", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
 	response, err := api.sling.New().Path(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func (api *API) ReadVersions(ctx context.Context, instanceID int) (map[string]an
 	case 200:
 		return data, nil
 	default:
-		return nil, fmt.Errorf("failed to read RabbitMQ versions, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to read RabbitMQ versions, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
@@ -35,8 +35,8 @@ func (api *API) ReadVersions(ctx context.Context, instanceID int) (map[string]an
 func (api *API) UpgradeRabbitMQ(ctx context.Context, instanceID int, current_version,
 	new_version string) (string, error) {
 
-	tflog.Debug(ctx, fmt.Sprintf("upgrade RabbitMQ version, instanceID: %d, current_version: %s, "+
-		"new_version: %s", instanceID, current_version, new_version))
+	tflog.Debug(ctx, fmt.Sprintf("instanceID=%d current_version=%s new_version=%s "+
+		"upgrade RabbitMQ version", instanceID, current_version, new_version))
 	// Keep old behaviour
 	if current_version == "" && new_version == "" {
 		return api.UpgradeToLatestVersion(ctx, instanceID)
@@ -58,8 +58,8 @@ func (api *API) UpgradeToSpecificVersion(ctx context.Context, instanceID int, ve
 	)
 
 	params["version"] = version
-	tflog.Debug(ctx, fmt.Sprintf("upgrade to specific version, request path: %s, params: %v",
-		path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s version=%s upgrade to specific version",
+		path, version), params)
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
 	if err != nil {
 		return "", err
@@ -69,7 +69,7 @@ func (api *API) UpgradeToSpecificVersion(ctx context.Context, instanceID int, ve
 	case 200:
 		return api.waitUntilUpgraded(ctx, instanceID)
 	default:
-		return "", fmt.Errorf("failed to upgrade specific RabbitMQ version, status: %d, message: %s",
+		return "", fmt.Errorf("failed to upgrade specific RabbitMQ version, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
@@ -81,7 +81,7 @@ func (api *API) UpgradeToLatestVersion(ctx context.Context, instanceID int) (str
 		path   = fmt.Sprintf("api/instances/%d/actions/upgrade-rabbitmq-erlang", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s upgrade to latest version", path))
 	response, err := api.sling.New().Post(path).Receive(&data, &failed)
 	if err != nil {
 		return "", err
@@ -93,7 +93,7 @@ func (api *API) UpgradeToLatestVersion(ctx context.Context, instanceID int) (str
 	case 202:
 		return api.waitUntilUpgraded(ctx, instanceID)
 	default:
-		return "", fmt.Errorf("failed to upgrade to latest RabbitMQ version, status: %d, message: %s",
+		return "", fmt.Errorf("failed to upgrade to latest RabbitMQ version, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
@@ -105,7 +105,7 @@ func (api *API) waitUntilUpgraded(ctx context.Context, instanceID int) (string, 
 		path   = fmt.Sprintf("api/instances/%d/nodes", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("waiting until RabbitMQ been upgraded, request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s waiting until RabbitMQ been upgraded", path))
 	for {
 		_, err := api.sling.New().Path(path).Receive(&data, &failed)
 		if err != nil {

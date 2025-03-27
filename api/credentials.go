@@ -15,7 +15,7 @@ func (api *API) ReadCredentials(ctx context.Context, instanceID int) (map[string
 		path   = fmt.Sprintf("/api/instances/%d", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -25,7 +25,7 @@ func (api *API) ReadCredentials(ctx context.Context, instanceID int) (map[string
 	case 200:
 		return extractInfo(data["url"].(string)), nil
 	default:
-		return nil, fmt.Errorf("failed to read credentials, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to read credentials, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }

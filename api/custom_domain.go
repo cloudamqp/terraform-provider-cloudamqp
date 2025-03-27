@@ -22,7 +22,7 @@ func (api *API) waitUntilCustomDomainConfigured(ctx context.Context, instanceID 
 			return response, nil
 		}
 
-		tflog.Debug(ctx, fmt.Sprintf("configure custom domain still waiting, response: %s"), response)
+		tflog.Debug(ctx, fmt.Sprintf("configure custom domain still waiting, response=%s "), response)
 		time.Sleep(1 * time.Second)
 	}
 }
@@ -36,7 +36,7 @@ func (api *API) CreateCustomDomain(ctx context.Context, instanceID int, hostname
 		path   = fmt.Sprintf("/api/instances/%d/custom-domain", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s, hostname: %s", path, hostname))
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s hostname=%s ", path, hostname))
 	params["hostname"] = hostname
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(nil, &failed)
 	if err != nil {
@@ -47,7 +47,7 @@ func (api *API) CreateCustomDomain(ctx context.Context, instanceID int, hostname
 	case 202:
 		return api.waitUntilCustomDomainConfigured(ctx, instanceID, true)
 	default:
-		return nil, fmt.Errorf("create custom domain failed, status: %d, message: %s",
+		return nil, fmt.Errorf("create custom domain failed, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
@@ -59,7 +59,7 @@ func (api *API) ReadCustomDomain(ctx context.Context, instanceID int) (map[strin
 		path   = fmt.Sprintf("/api/instances/%d/custom-domain", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
 	response, err := api.sling.New().Path(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -67,10 +67,10 @@ func (api *API) ReadCustomDomain(ctx context.Context, instanceID int) (map[strin
 
 	switch response.StatusCode {
 	case 200:
-		tflog.Debug(ctx, "data: %v", data)
+		tflog.Debug(ctx, "response data", data)
 		return data, nil
 	default:
-		return nil, fmt.Errorf("failed to read custom domain, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to read custom domain, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
@@ -78,7 +78,7 @@ func (api *API) ReadCustomDomain(ctx context.Context, instanceID int) (map[strin
 func (api *API) UpdateCustomDomain(ctx context.Context, instanceID int, hostname string) (
 	map[string]any, error) {
 
-	tflog.Debug(ctx, fmt.Sprintf("update custom domain, instanceID: %d, hostname: %s",
+	tflog.Debug(ctx, fmt.Sprintf("update custom domain, instanceID=%d hostname=%s ",
 		instanceID, hostname))
 
 	// delete and wait
@@ -105,7 +105,7 @@ func (api *API) DeleteCustomDomain(ctx context.Context, instanceID int) (map[str
 		path   = fmt.Sprintf("/api/instances/%d/custom-domain", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 	if err != nil {
 		return nil, err
@@ -119,7 +119,7 @@ func (api *API) DeleteCustomDomain(ctx context.Context, instanceID int) (map[str
 		// wait until the remove completed successfully
 		return api.waitUntilCustomDomainConfigured(ctx, instanceID, false)
 	default:
-		return nil, fmt.Errorf("failed to delete custom domain, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to delete custom domain, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }

@@ -18,7 +18,7 @@ func (api *API) waitForGcpPeeringStatus(ctx context.Context, path, peerID string
 		err  error
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("waiting for VPC peering status, request path: %s", path))
+	tflog.Debug(ctx, "waiting for VPC peering status")
 	for {
 		if attempt*sleep > timeout {
 			return fmt.Errorf("timeout reached after %d seconds, while waiting on VPC peering status",
@@ -42,7 +42,7 @@ func (api *API) waitForGcpPeeringStatus(ctx context.Context, path, peerID string
 				}
 			}
 		}
-		tflog.Debug(ctx, fmt.Sprintf("waiting for state = ACTIVE, attempt %d until timeout: %d",
+		tflog.Debug(ctx, fmt.Sprintf("waiting for state set to ACTIVE, attemp=%d until_timeout=%d ",
 			attempt, (timeout-(attempt*sleep))))
 		attempt++
 		time.Sleep(time.Duration(sleep) * time.Second)
@@ -53,8 +53,9 @@ func (api *API) waitForGcpPeeringStatus(ctx context.Context, path, peerID string
 func (api *API) RequestVpcGcpPeering(ctx context.Context, instanceID int, params map[string]any,
 	waitOnStatus bool, sleep, timeout int) (map[string]any, error) {
 
-	path := fmt.Sprintf("api/instances/%v/vpc-peering", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("path: %s", path))
+	path := fmt.Sprintf("api/instances/%d/vpc-peering", instanceID)
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s wait_on_status=%t sleep=%d timeout=%d ",
+		path, waitOnStatus, sleep, timeout), params)
 	attempt, data, err := api.requestVpcGcpPeeringWithRetry(ctx, path, params, waitOnStatus, 1, sleep,
 		timeout)
 	if err != nil {
@@ -95,14 +96,14 @@ func (api *API) requestVpcGcpPeeringWithRetry(ctx context.Context, path string, 
 	case 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
 			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
-				"attempt %d until timeout: %d", attempt, (timeout-(attempt*sleep))))
+				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.requestVpcGcpPeeringWithRetry(ctx, path, params, waitOnStatus, attempt, sleep,
 				timeout)
 		}
 	}
-	return attempt, nil, fmt.Errorf("failed to request VPC peering, status: %d, message: %s",
+	return attempt, nil, fmt.Errorf("failed to request VPC peering, status=%d message=%s ",
 		response.StatusCode, failed)
 }
 
@@ -111,7 +112,7 @@ func (api *API) ReadVpcGcpPeering(ctx context.Context, instanceID, sleep, timeou
 	map[string]any, error) {
 
 	path := fmt.Sprintf("/api/instances/%v/vpc-peering", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d ", path, sleep, timeout))
 	_, data, err := api.readVpcGcpPeeringWithRetry(ctx, path, 1, sleep, timeout)
 	return data, err
 }
@@ -139,13 +140,13 @@ func (api *API) readVpcGcpPeeringWithRetry(ctx context.Context, path string, att
 	case 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
 			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
-				"attempt %d until timeout: %d", attempt, (timeout-(attempt*sleep))))
+				"attempt=%d until_timeout=%d", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.readVpcGcpPeeringWithRetry(ctx, path, attempt, sleep, timeout)
 		}
 	}
-	return attempt, nil, fmt.Errorf("failed to read VPC peering, status: %d, message: %s",
+	return attempt, nil, fmt.Errorf("failed to read VPC peering, status=%d message=%s ",
 		response.StatusCode, failed)
 }
 
@@ -164,7 +165,7 @@ func (api *API) RemoveVpcGcpPeering(ctx context.Context, instanceID int, peerID 
 		path   = fmt.Sprintf("/api/instances/%d/vpc-peering/%s", instanceID, peerID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 	if err != nil {
 		return err
@@ -174,7 +175,7 @@ func (api *API) RemoveVpcGcpPeering(ctx context.Context, instanceID int, peerID 
 	case 204:
 		return nil
 	default:
-		return fmt.Errorf("failed to remove VPC peering, status: %d, message: %s",
+		return fmt.Errorf("failed to remove VPC peering, status=%d message=%s",
 			response.StatusCode, failed)
 	}
 }
@@ -184,7 +185,7 @@ func (api *API) ReadVpcGcpInfo(ctx context.Context, instanceID, sleep, timeout i
 	map[string]any, error) {
 
 	path := fmt.Sprintf("/api/instances/%d/vpc-peering/info", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s, sleep=%d, timeout=%d ", path))
 	return api.readVpcGcpInfoWithRetry(ctx, path, 1, sleep, timeout)
 }
 
@@ -210,12 +211,12 @@ func (api *API) readVpcGcpInfoWithRetry(ctx context.Context, path string, attemp
 	case 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
 			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
-				"attempt %d until timeout: %d", attempt, (timeout-(attempt*sleep))))
+				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.readVpcGcpInfoWithRetry(ctx, path, attempt, sleep, timeout)
 		}
 	}
-	return nil, fmt.Errorf("failed to read VPC info, status: %d, message: %s",
+	return nil, fmt.Errorf("failed to read VPC info, status=%d message=%s ",
 		response.StatusCode, failed)
 }

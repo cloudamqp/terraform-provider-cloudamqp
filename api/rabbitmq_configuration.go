@@ -13,7 +13,7 @@ func (api *API) ReadRabbitMqConfiguration(ctx context.Context, instanceID, sleep
 	map[string]any, error) {
 
 	path := fmt.Sprintf("/api/instances/%d/config", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d", path, sleep, timeout))
 	return api.readRabbitMqConfigurationWithRetry(ctx, path, 1, sleep, timeout)
 }
 
@@ -35,12 +35,12 @@ func (api *API) readRabbitMqConfigurationWithRetry(ctx context.Context, path str
 
 	switch response.StatusCode {
 	case 200:
-		tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
+		tflog.Debug(ctx, "response data", data)
 		return data, nil
 	case 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
 			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
-				"attempt: %d, until timeout: %d", attempt, (timeout-(attempt*sleep))))
+				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.readRabbitMqConfigurationWithRetry(ctx, path, attempt, sleep, timeout)
@@ -48,13 +48,13 @@ func (api *API) readRabbitMqConfigurationWithRetry(ctx context.Context, path str
 	case 503:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
 			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
-				"attempt: %d, until timeout: %d", attempt, (timeout-(attempt*sleep))))
+				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.readRabbitMqConfigurationWithRetry(ctx, path, attempt, sleep, timeout)
 		}
 	}
-	return nil, fmt.Errorf("failed to read RabbitMQ configuration, status: %d, message: %s",
+	return nil, fmt.Errorf("failed to read RabbitMQ configuration, status=%d message=%s ",
 		response.StatusCode, failed)
 }
 
@@ -62,7 +62,8 @@ func (api *API) UpdateRabbitMqConfiguration(ctx context.Context, instanceID int,
 	params map[string]any, sleep, timeout int) error {
 
 	path := fmt.Sprintf("api/instances/%d/config", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("request path: %s, params: %v", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d timeout=%d ", path, sleep, timeout),
+		params)
 	return api.updateRabbitMqConfigurationWithRetry(ctx, path, params, 1, sleep, timeout)
 }
 
@@ -74,8 +75,7 @@ func (api *API) updateRabbitMqConfigurationWithRetry(ctx context.Context, path s
 	if err != nil {
 		return err
 	} else if attempt*sleep > timeout {
-		return fmt.Errorf("timeout reached after %d seconds, while updating RabbitMQ",
-			timeout)
+		return fmt.Errorf("timeout reached after %d seconds, while updating RabbitMQ", timeout)
 	}
 
 	switch response.StatusCode {
@@ -84,7 +84,7 @@ func (api *API) updateRabbitMqConfigurationWithRetry(ctx context.Context, path s
 	case 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
 			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
-				"attempt: %d, until timeout: %d", attempt, (timeout-(attempt*sleep))))
+				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.updateRabbitMqConfigurationWithRetry(ctx, path, params, attempt, sleep, timeout)
@@ -92,13 +92,13 @@ func (api *API) updateRabbitMqConfigurationWithRetry(ctx context.Context, path s
 	case 503:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
 			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
-				"attempt: %d, until timeout: %d", attempt, (timeout-(attempt*sleep))))
+				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.updateRabbitMqConfigurationWithRetry(ctx, path, params, attempt, sleep, timeout)
 		}
 	}
-	return fmt.Errorf("failed to upgrade RabbitMQ configuration, status: %d, message: %s",
+	return fmt.Errorf("failed to upgrade RabbitMQ configuration, status=%d message=%s ",
 		response.StatusCode, failed)
 }
 

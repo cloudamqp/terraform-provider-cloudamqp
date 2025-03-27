@@ -18,12 +18,13 @@ func (api *API) AcceptVpcPeeringWithVpcId(ctx context.Context, vpcID, peeringID 
 		return nil, err
 	}
 	path := fmt.Sprintf("/api/vpcs/%s/vpc-peering/request/%s", vpcID, peeringID)
-	tflog.Debug(ctx, fmt.Sprintf("path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d timeout=%d ", path, sleep, timeout))
 	return api.retryAcceptVpcPeering(ctx, path, attempt, sleep, timeout)
 }
 
 func (api *API) ReadVpcInfoWithVpcId(ctx context.Context, vpcID string) (map[string]any, error) {
 	path := fmt.Sprintf("/api/vpcs/%s/vpc-peering/info", vpcID)
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
 	// Initiale values, 5 attempts and 20 second sleep
 	return api.readVpcInfoWithRetry(ctx, path, 5, 20)
 }
@@ -37,6 +38,7 @@ func (api *API) ReadVpcPeeringRequestWithVpcId(ctx context.Context, vpcID, peeri
 		path   = fmt.Sprintf("/api/vpcs/%s/vpc-peering/request/%s", vpcID, peeringID)
 	)
 
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -44,10 +46,10 @@ func (api *API) ReadVpcPeeringRequestWithVpcId(ctx context.Context, vpcID, peeri
 
 	switch response.StatusCode {
 	case 200:
-		tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
+		tflog.Debug(ctx, "response data", data)
 		return data, nil
 	default:
-		return nil, fmt.Errorf("failed to read peering request, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to read peering request, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
@@ -56,7 +58,7 @@ func (api *API) RemoveVpcPeeringWithVpcId(ctx context.Context, vpcID, peeringID 
 	timeout int) error {
 
 	path := fmt.Sprintf("/api/vpcs/%s/vpc-peering/%s", vpcID, peeringID)
-	tflog.Debug(ctx, fmt.Sprintf("path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=DELET path=%s sleep=%d, timeout=%s ", path, sleep, timeout))
 	return api.retryRemoveVpcPeering(ctx, path, 1, sleep, timeout)
 }
 
@@ -65,6 +67,6 @@ func (api *API) waitForPeeringStatusWithVpcID(ctx context.Context, vpcID, peerin
 
 	time.Sleep(10 * time.Second)
 	path := fmt.Sprintf("/api/vpcs/%s/vpc-peering/status/%s", vpcID, peeringID)
-	tflog.Debug(ctx, fmt.Sprintf("path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d ", path, sleep, timeout))
 	return api.waitForPeeringStatusWithRetry(ctx, path, peeringID, attempt, sleep, timeout)
 }
