@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -20,10 +21,10 @@ var (
 
 func resourceVpcConnect() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceVpcConnectCreate,
-		Read:   resourceVpcConnectRead,
-		Update: resourceVpcConnectUpdate,
-		Delete: resourceVpcConnectDelete,
+		CreateContext: resourceVpcConnectCreate,
+		ReadContext:   resourceVpcConnectRead,
+		UpdateContext: resourceVpcConnectUpdate,
+		DeleteContext: resourceVpcConnectDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -89,7 +90,9 @@ func resourceVpcConnect() *schema.Resource {
 			},
 		},
 		CustomizeDiff: customdiff.All(
-			customdiff.ValidateValue("allowed_principals", func(ctx context.Context, value, meta interface{}) error {
+			customdiff.ValidateValue("allowed_principals", func(ctx context.Context,
+				value, meta interface{}) error {
+
 				for _, v := range value.([]interface{}) {
 					if AWS_ARN_VALIDATE_RE.MatchString(v.(string)) {
 						continue
@@ -99,7 +102,9 @@ func resourceVpcConnect() *schema.Resource {
 				}
 				return nil
 			}),
-			customdiff.ValidateValue("approved_subscriptions", func(ctx context.Context, value, meta interface{}) error {
+			customdiff.ValidateValue("approved_subscriptions", func(ctx context.Context, value,
+				meta interface{}) error {
+
 				for _, v := range value.([]interface{}) {
 					if AZURE_SUBS_VALIDATE_RE.MatchString(v.(string)) {
 						continue
@@ -109,7 +114,9 @@ func resourceVpcConnect() *schema.Resource {
 				}
 				return nil
 			}),
-			customdiff.ValidateValue("allowed_projects", func(ctx context.Context, value, meta interface{}) error {
+			customdiff.ValidateValue("allowed_projects", func(ctx context.Context, value,
+				meta interface{}) error {
+
 				for _, v := range value.([]interface{}) {
 					if GCP_PROJECT_ID_VALIDATE_RE.MatchString(v.(string)) {
 						continue
@@ -123,7 +130,9 @@ func resourceVpcConnect() *schema.Resource {
 	}
 }
 
-func resourceVpcConnectCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcConnectCreate(ctx context.Context, d *schema.ResourceData,
+	meta interface{}) diag.Diagnostics {
+
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -141,19 +150,21 @@ func resourceVpcConnectCreate(d *schema.ResourceData, meta interface{}) error {
 	case "google":
 		params["allowed_projects"] = d.Get("allowed_projects").([]interface{})
 	default:
-		return fmt.Errorf("invalid region")
+		return diag.Errorf("invalid region")
 	}
 
-	err := api.EnableVpcConnect(instanceID, params, sleep, timeout)
+	err := api.EnableVpcConnect(ctx, instanceID, params, sleep, timeout)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(fmt.Sprintf("%d", instanceID))
-	return resourceVpcConnectRead(d, meta)
+	return resourceVpcConnectRead(ctx, d, meta)
 }
 
-func resourceVpcConnectRead(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcConnectRead(ctx context.Context, d *schema.ResourceData,
+	meta interface{}) diag.Diagnostics {
+
 	var (
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id()) // Uses d.Id() to allow import
@@ -168,9 +179,9 @@ func resourceVpcConnectRead(d *schema.ResourceData, meta interface{}) error {
 		d.Set("timeout", 3600)
 	}
 
-	data, err := api.ReadVpcConnect(instanceID)
+	data, err := api.ReadVpcConnect(ctx, instanceID)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.Set("active_zones", []string{})
@@ -183,10 +194,12 @@ func resourceVpcConnectRead(d *schema.ResourceData, meta interface{}) error {
 			}
 		}
 	}
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceVpcConnectUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcConnectUpdate(ctx context.Context, d *schema.ResourceData,
+	meta interface{}) diag.Diagnostics {
+
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -202,27 +215,29 @@ func resourceVpcConnectUpdate(d *schema.ResourceData, meta interface{}) error {
 	case "google":
 		params["allowed_projects"] = d.Get("allowed_projects").([]interface{})
 	default:
-		return fmt.Errorf("invalid region")
+		return diag.Errorf("invalid region")
 	}
 
-	err := api.UpdateVpcConnect(instanceID, params)
+	err := api.UpdateVpcConnect(ctx, instanceID, params)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceVpcConnectDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcConnectDelete(ctx context.Context, d *schema.ResourceData,
+	meta interface{}) diag.Diagnostics {
+
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 	)
 
-	err := api.DisableVpcConnect(instanceID)
+	err := api.DisableVpcConnect(ctx, instanceID)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
-	return nil
+	return diag.Diagnostics{}
 }
 
 func validateVpcConnectSchemaAttribute(key string) bool {

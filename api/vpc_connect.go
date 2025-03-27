@@ -3,25 +3,28 @@ package api
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
+
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 // EnableVpcConnect: Enable VPC Connect and wait until finished.
 // Need to enable VPC for an instance, if no standalone VPC used.
 // Wait until finished with configureable sleep and timeout.
-func (api *API) EnableVpcConnect(instanceID int, params map[string][]interface{},
-	sleep, timeout int) error {
+func (api *API) EnableVpcConnect(ctx context.Context, instanceID int,
+	params map[string][]interface{}, sleep, timeout int) error {
 
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/vpc-connect", instanceID)
 	)
 
-	if err := api.EnableVPC(instanceID); err != nil {
+	if err := api.EnableVPC(ctx, instanceID); err != nil {
 		return err
 	}
 
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d timeout=%d params=%v ", path, sleep,
+		timeout, params))
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(nil, &failed)
 	if err != nil {
 		return err
@@ -29,21 +32,22 @@ func (api *API) EnableVpcConnect(instanceID int, params map[string][]interface{}
 
 	switch response.StatusCode {
 	case 204:
-		return api.waitForEnableVpcConnectWithRetry(instanceID, 1, sleep, timeout)
+		return api.waitForEnableVpcConnectWithRetry(ctx, instanceID, 1, sleep, timeout)
 	default:
-		return fmt.Errorf("enable VPC Connect failed, status: %d, message: %s",
+		return fmt.Errorf("failed to enable VPC connect, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
 
 // ReadVpcConnect: Reads VPC Connect information
-func (api *API) ReadVpcConnect(instanceID int) (map[string]any, error) {
+func (api *API) ReadVpcConnect(ctx context.Context, instanceID int) (map[string]any, error) {
 	var (
 		data   map[string]any
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/vpc-connect", instanceID)
 	)
 
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -51,20 +55,24 @@ func (api *API) ReadVpcConnect(instanceID int) (map[string]any, error) {
 
 	switch response.StatusCode {
 	case 200:
+		tflog.Debug(ctx, "response data", data)
 		return data, nil
 	default:
-		return nil, fmt.Errorf("read VPC Connect failed, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to read VPC connect, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
 
 // UpdateVpcConnect: Update allowlist for the VPC Connect
-func (api *API) UpdateVpcConnect(instanceID int, params map[string][]interface{}) error {
+func (api *API) UpdateVpcConnect(ctx context.Context, instanceID int,
+	params map[string][]interface{}) error {
+
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/vpc-connect", instanceID)
 	)
 
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v ", path, params))
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 	if err != nil {
 		return err
@@ -74,18 +82,19 @@ func (api *API) UpdateVpcConnect(instanceID int, params map[string][]interface{}
 	case 204:
 		return nil
 	default:
-		return fmt.Errorf("update VPC connect failed, status: %d, message: %s",
+		return fmt.Errorf("update VPC connect failed, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
 
 // DisableVpcConnect: Disable the VPC Connect feature
-func (api *API) DisableVpcConnect(instanceID int) error {
+func (api *API) DisableVpcConnect(ctx context.Context, instanceID int) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/vpc-connect", instanceID)
 	)
 
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 	if err != nil {
 		return err
@@ -95,13 +104,13 @@ func (api *API) DisableVpcConnect(instanceID int) error {
 	case 204:
 		return nil
 	default:
-		return fmt.Errorf("disable VPC Connect failed, status: %d, message: %s",
+		return fmt.Errorf("failed to disable VPC connect, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
 
 // waitForEnableVpcConnectWithRetry: Wait until status change from pending to enable
-func (api *API) waitForEnableVpcConnectWithRetry(instanceID, attempt, sleep, timeout int) error {
+func (api *API) waitForEnableVpcConnectWithRetry(ctx context.Context, instanceID, attempt, sleep, timeout int) error {
 	var (
 		data   map[string]any
 		failed map[string]any
@@ -112,39 +121,39 @@ func (api *API) waitForEnableVpcConnectWithRetry(instanceID, attempt, sleep, tim
 	if err != nil {
 		return err
 	} else if attempt*sleep > timeout {
-		return fmt.Errorf("enable VPC Connect failed, reached timeout of %d seconds", timeout)
+		return fmt.Errorf("timeout reached after %d seconds, while enable VPC connect", timeout)
 	}
 
 	switch response.StatusCode {
 	case 200:
-		log.Printf("[DEBUG] VPC-Connect: waitForEnableVpcConnectWithRetry data: %v", data)
+		tflog.Debug(ctx, "response data", data)
 		switch data["status"].(string) {
 		case "enabled":
 			return nil
 		case "pending":
-			log.Printf("[DEBUG] api::vpc-connect#enable not finished and will retry, "+
-				"attempt: %d, until timeout: %d", attempt, (timeout - (attempt * sleep)))
+			tflog.Debug(ctx, fmt.Sprintf("enable not finished and will retry, attempt=%d "+
+				"until_timeout=%d", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.waitForEnableVpcConnectWithRetry(instanceID, attempt, sleep, timeout)
+			return api.waitForEnableVpcConnectWithRetry(ctx, instanceID, attempt, sleep, timeout)
 		}
 	}
 
-	return fmt.Errorf("wait for enable VPC Connect failed, status: %d, message: %s",
+	return fmt.Errorf("failed to enable VPC connect, status=%d message=%s ",
 		response.StatusCode, failed)
 }
 
 // enableVPC: Enable VPC for an instance
 // Check if the instance already have a standalone VPC
-func (api *API) EnableVPC(instanceID int) error {
+func (api *API) EnableVPC(ctx context.Context, instanceID int) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/vpc", instanceID)
 	)
 
-	// TODO: Set correct context
-	data, _ := api.ReadInstance(context.TODO(), fmt.Sprintf("%d", instanceID))
+	data, _ := api.ReadInstance(ctx, fmt.Sprintf("%d", instanceID))
 	if data["vpc"] == nil {
+		tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s ", path))
 		response, err := api.sling.New().Put(path).Receive(nil, &failed)
 		if err != nil {
 			return err
@@ -152,14 +161,13 @@ func (api *API) EnableVPC(instanceID int) error {
 
 		switch response.StatusCode {
 		case 200:
-			log.Printf("[DEBUG] VPC-Connect: VPC features enabled")
 			return nil
 		default:
-			return fmt.Errorf("enable VPC failed, status: %d, message: %s",
+			return fmt.Errorf("failed to enable VPC, status=%d message=%s ",
 				response.StatusCode, failed)
 		}
 	}
 
-	log.Printf("[DEBUG] VPC-Connect: VPC features already enabled")
+	tflog.Debug(ctx, "VPC feature already enabled")
 	return nil
 }
