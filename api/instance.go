@@ -12,10 +12,9 @@ import (
 
 func (api *API) waitUntilReady(ctx context.Context, instanceID string) (map[string]any, error) {
 	var (
-		data         map[string]any
-		failed       map[string]any
-		path         = fmt.Sprintf("/api/instances/%s", instanceID)
-		sensitiveCtx = tflog.MaskFieldValuesWithFieldKeys(ctx, "apikey", "url", "urls")
+		data   map[string]any
+		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%s", instanceID)
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s wait until ready", path))
@@ -27,7 +26,6 @@ func (api *API) waitUntilReady(ctx context.Context, instanceID string) (map[stri
 
 		switch response.StatusCode {
 		case 200:
-			tflog.Debug(sensitiveCtx, "response data", data)
 			if data["ready"] == true {
 				data["id"] = instanceID
 				return data, nil
