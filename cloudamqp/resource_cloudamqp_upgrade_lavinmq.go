@@ -33,7 +33,7 @@ func resourceUpgradeLavinMQ() *schema.Resource {
 	}
 }
 
-func resourceUpgradeLavinMQInvoke(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceUpgradeLavinMQInvoke(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api         = meta.(*api.API)
 		instanceID  = d.Get("instance_id").(int)
@@ -54,14 +54,14 @@ func resourceUpgradeLavinMQInvoke(ctx context.Context, d *schema.ResourceData, m
 	return diag.Diagnostics{}
 }
 
-func resourceUpgradeLavinMQRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceUpgradeLavinMQRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	return diag.Diagnostics{}
 }
 
-func resourceUpgradeLavinMQUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceUpgradeLavinMQUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	return diag.Diagnostics{}
 }
 
-func resourceUpgradeLavinMQRemove(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceUpgradeLavinMQRemove(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	return diag.Diagnostics{}
 }

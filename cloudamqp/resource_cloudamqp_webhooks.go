@@ -64,11 +64,11 @@ func resourceWebhook() *schema.Resource {
 	}
 }
 
-func resourceWebhookCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceWebhookCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		keys       = []string{"vhost", "queue", "webhook_uri", "concurrency"}
-		params     = make(map[string]interface{})
+		params     = make(map[string]any)
 		instanceID = d.Get("instance_id").(int)
 		sleep      = d.Get("sleep").(int)
 		timeout    = d.Get("timeout").(int)
@@ -89,7 +89,7 @@ func resourceWebhookCreate(ctx context.Context, d *schema.ResourceData, meta int
 	return diag.Diagnostics{}
 }
 
-func resourceWebhookRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceWebhookRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -129,11 +129,11 @@ func resourceWebhookRead(ctx context.Context, d *schema.ResourceData, meta inter
 	return nil
 }
 
-func resourceWebhookUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceWebhookUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		keys       = []string{"vhost", "queue", "webhook_uri", "concurrency"}
-		params     = make(map[string]interface{})
+		params     = make(map[string]any)
 		instanceID = d.Get("instance_id").(int)
 		sleep      = d.Get("sleep").(int)
 		timeout    = d.Get("timeout").(int)
@@ -152,7 +152,7 @@ func resourceWebhookUpdate(ctx context.Context, d *schema.ResourceData, meta int
 	return diag.Diagnostics{}
 }
 
-func resourceWebhookDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceWebhookDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)

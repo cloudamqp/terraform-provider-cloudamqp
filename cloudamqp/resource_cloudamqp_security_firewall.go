@@ -54,7 +54,7 @@ func resourceSecurityFirewall() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeInt,
-								ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+								ValidateFunc: func(val any, key string) (warns []string, errs []error) {
 									v := val.(int)
 									if v < 0 || v > 65554 {
 										errs = append(errs, fmt.Errorf("%q must be between 0 and 65554, got: %d", key, v))
@@ -69,7 +69,7 @@ func resourceSecurityFirewall() *schema.Resource {
 						"ip": {
 							Type:     schema.TypeString,
 							Required: true,
-							ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+							ValidateFunc: func(val any, key string) (warns []string, errs []error) {
 								v := val.(string)
 								_, _, err := net.ParseCIDR(v)
 								if err != nil {
@@ -103,18 +103,18 @@ func resourceSecurityFirewall() *schema.Resource {
 	}
 }
 
-func resourceSecurityFirewallCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceSecurityFirewallCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api            = meta.(*api.API)
 		instanceID     = d.Get("instance_id").(int)
 		localFirewalls = d.Get("rules").(*schema.Set).List()
-		params         = make([]map[string]interface{}, len(localFirewalls))
+		params         = make([]map[string]any, len(localFirewalls))
 		sleep          = d.Get("sleep").(int)
 		timeout        = d.Get("timeout").(int)
 	)
 
 	for index, value := range localFirewalls {
-		params[index] = value.(map[string]interface{})
+		params[index] = value.(map[string]any)
 	}
 
 	_, err := api.CreateFirewallSettings(ctx, instanceID, params, sleep, timeout)
@@ -127,7 +127,7 @@ func resourceSecurityFirewallCreate(ctx context.Context, d *schema.ResourceData,
 	return diag.Diagnostics{}
 }
 
-func resourceSecurityFirewallRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceSecurityFirewallRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id())
@@ -147,7 +147,7 @@ func resourceSecurityFirewallRead(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(err)
 	}
 
-	rules := make([]map[string]interface{}, len(data))
+	rules := make([]map[string]any, len(data))
 	for k, v := range data {
 		rules[k] = readRule(v)
 	}
@@ -159,18 +159,18 @@ func resourceSecurityFirewallRead(ctx context.Context, d *schema.ResourceData, m
 	return diag.Diagnostics{}
 }
 
-func resourceSecurityFirewallUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceSecurityFirewallUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api            = meta.(*api.API)
 		instanceID     = d.Get("instance_id").(int)
 		localFirewalls = d.Get("rules").(*schema.Set).List()
-		params         = make([]map[string]interface{}, len(localFirewalls))
+		params         = make([]map[string]any, len(localFirewalls))
 		sleep          = d.Get("sleep").(int)
 		timeout        = d.Get("timeout").(int)
 	)
 
 	for index, value := range localFirewalls {
-		params[index] = value.(map[string]interface{})
+		params[index] = value.(map[string]any)
 	}
 
 	_, err := api.UpdateFirewallSettings(ctx, instanceID, params, sleep, timeout)
@@ -181,7 +181,7 @@ func resourceSecurityFirewallUpdate(ctx context.Context, d *schema.ResourceData,
 	return diag.Diagnostics{}
 }
 
-func resourceSecurityFirewallDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceSecurityFirewallDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -202,8 +202,8 @@ func resourceSecurityFirewallDelete(ctx context.Context, d *schema.ResourceData,
 	return diag.Diagnostics{}
 }
 
-func readRule(data map[string]interface{}) map[string]interface{} {
-	rule := make(map[string]interface{})
+func readRule(data map[string]any) map[string]any {
+	rule := make(map[string]any)
 	for k, v := range data {
 		if validateRulesSchemaAttribute(k) {
 			rule[k] = v

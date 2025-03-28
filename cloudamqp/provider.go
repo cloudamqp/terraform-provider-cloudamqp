@@ -81,7 +81,7 @@ func Provider(v string, client *http.Client) *schema.Provider {
 }
 
 func configureClient(client *http.Client) schema.ConfigureFunc {
-	return func(d *schema.ResourceData) (interface{}, error) {
+	return func(d *schema.ResourceData) (any, error) {
 		enableFasterInstanceDestroy = d.Get("enable_faster_instance_destroy").(bool)
 		useragent := fmt.Sprintf("terraform-provider-cloudamqp_v%s", version)
 		return api.New(d.Get("baseurl").(string), d.Get("apikey").(string), useragent, client), nil

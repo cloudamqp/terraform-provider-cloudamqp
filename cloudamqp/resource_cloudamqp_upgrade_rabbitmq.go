@@ -38,7 +38,7 @@ func resourceUpgradeRabbitMQ() *schema.Resource {
 	}
 }
 
-func resourceUpgradeRabbitMQInvoke(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceUpgradeRabbitMQInvoke(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api             = meta.(*api.API)
 		instanceID      = d.Get("instance_id").(int)
@@ -60,14 +60,14 @@ func resourceUpgradeRabbitMQInvoke(ctx context.Context, d *schema.ResourceData, 
 	return diag.Diagnostics{}
 }
 
-func resourceUpgradeRabbitMQRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceUpgradeRabbitMQRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	return diag.Diagnostics{}
 }
 
-func resourceUpgradeRabbitMQUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceUpgradeRabbitMQUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	return diag.Diagnostics{}
 }
 
-func resourceUpgradeRabbitMQRemove(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceUpgradeRabbitMQRemove(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	return diag.Diagnostics{}
 }

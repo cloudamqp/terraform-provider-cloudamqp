@@ -12,7 +12,7 @@ import (
 // Need to enable VPC for an instance, if no standalone VPC used.
 // Wait until finished with configureable sleep and timeout.
 func (api *API) EnableVpcConnect(ctx context.Context, instanceID int,
-	params map[string][]interface{}, sleep, timeout int) error {
+	params map[string][]any, sleep, timeout int) error {
 
 	var (
 		failed map[string]any
@@ -65,7 +65,7 @@ func (api *API) ReadVpcConnect(ctx context.Context, instanceID int) (map[string]
 
 // UpdateVpcConnect: Update allowlist for the VPC Connect
 func (api *API) UpdateVpcConnect(ctx context.Context, instanceID int,
-	params map[string][]interface{}) error {
+	params map[string][]any) error {
 
 	var (
 		failed map[string]any

@@ -59,7 +59,7 @@ func resourceVpcPeering() *schema.Resource {
 	}
 }
 
-func resourceVpcPeeringAccept(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceVpcPeeringAccept(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		err        = errors.New("")
@@ -85,13 +85,13 @@ func resourceVpcPeeringAccept(ctx context.Context, d *schema.ResourceData, meta 
 	return resourceVpcPeeringRead(ctx, d, meta)
 }
 
-func resourceVpcPeeringRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceVpcPeeringRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 		vpcID      = d.Get("vpc_id").(string)
 		peeringID  = d.Get("peering_id").(string)
-		data       map[string]interface{}
+		data       map[string]any
 		err        = errors.New("")
 	)
 
@@ -120,7 +120,7 @@ func resourceVpcPeeringRead(ctx context.Context, d *schema.ResourceData, meta in
 		case "vpc_peering_connection_id":
 			d.SetId(v.(string))
 		case "status":
-			status := v.(map[string]interface{})
+			status := v.(map[string]any)
 			if err = d.Set(k, status["code"]); err != nil {
 				return diag.Errorf("error setting status for resource %s: %s", d.Id(), err)
 			}
@@ -130,10 +130,10 @@ func resourceVpcPeeringRead(ctx context.Context, d *schema.ResourceData, meta in
 	return diag.Diagnostics{}
 }
 
-func resourceVpcPeeringImport(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceVpcPeeringImport(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api  = meta.(*api.API)
-		data map[string]interface{}
+		data map[string]any
 		err  = errors.New("")
 	)
 
@@ -166,7 +166,7 @@ func resourceVpcPeeringImport(ctx context.Context, d *schema.ResourceData, meta 
 		case "vpc_peering_connection_id":
 			d.SetId(v.(string))
 		case "status":
-			status := v.(map[string]interface{})
+			status := v.(map[string]any)
 			if err = d.Set(k, status["code"]); err != nil {
 				return diag.Errorf("error setting status for resource %s: %s", d.Id(), err)
 			}
@@ -176,7 +176,7 @@ func resourceVpcPeeringImport(ctx context.Context, d *schema.ResourceData, meta 
 	return diag.Diagnostics{}
 }
 
-func resourceVpcPeeringDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceVpcPeeringDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)

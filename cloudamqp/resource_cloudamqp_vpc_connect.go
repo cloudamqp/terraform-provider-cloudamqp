@@ -91,9 +91,9 @@ func resourceVpcConnect() *schema.Resource {
 		},
 		CustomizeDiff: customdiff.All(
 			customdiff.ValidateValue("allowed_principals", func(ctx context.Context,
-				value, meta interface{}) error {
+				value, meta any) error {
 
-				for _, v := range value.([]interface{}) {
+				for _, v := range value.([]any) {
 					if AWS_ARN_VALIDATE_RE.MatchString(v.(string)) {
 						continue
 					} else {
@@ -103,9 +103,9 @@ func resourceVpcConnect() *schema.Resource {
 				return nil
 			}),
 			customdiff.ValidateValue("approved_subscriptions", func(ctx context.Context, value,
-				meta interface{}) error {
+				meta any) error {
 
-				for _, v := range value.([]interface{}) {
+				for _, v := range value.([]any) {
 					if AZURE_SUBS_VALIDATE_RE.MatchString(v.(string)) {
 						continue
 					} else {
@@ -115,9 +115,9 @@ func resourceVpcConnect() *schema.Resource {
 				return nil
 			}),
 			customdiff.ValidateValue("allowed_projects", func(ctx context.Context, value,
-				meta interface{}) error {
+				meta any) error {
 
-				for _, v := range value.([]interface{}) {
+				for _, v := range value.([]any) {
 					if GCP_PROJECT_ID_VALIDATE_RE.MatchString(v.(string)) {
 						continue
 					} else {
@@ -131,7 +131,7 @@ func resourceVpcConnect() *schema.Resource {
 }
 
 func resourceVpcConnectCreate(ctx context.Context, d *schema.ResourceData,
-	meta interface{}) diag.Diagnostics {
+	meta any) diag.Diagnostics {
 
 	var (
 		api        = meta.(*api.API)
@@ -139,16 +139,16 @@ func resourceVpcConnectCreate(ctx context.Context, d *schema.ResourceData,
 		region     = d.Get("region").(string)
 		sleep      = d.Get("sleep").(int)
 		timeout    = d.Get("timeout").(int)
-		params     = make(map[string][]interface{})
+		params     = make(map[string][]any)
 	)
 
 	switch getPlatform(region) {
 	case "amazon":
-		params["allowed_principals"] = d.Get("allowed_principals").([]interface{})
+		params["allowed_principals"] = d.Get("allowed_principals").([]any)
 	case "azure":
-		params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
+		params["approved_subscriptions"] = d.Get("approved_subscriptions").([]any)
 	case "google":
-		params["allowed_projects"] = d.Get("allowed_projects").([]interface{})
+		params["allowed_projects"] = d.Get("allowed_projects").([]any)
 	default:
 		return diag.Errorf("invalid region")
 	}
@@ -163,7 +163,7 @@ func resourceVpcConnectCreate(ctx context.Context, d *schema.ResourceData,
 }
 
 func resourceVpcConnectRead(ctx context.Context, d *schema.ResourceData,
-	meta interface{}) diag.Diagnostics {
+	meta any) diag.Diagnostics {
 
 	var (
 		api           = meta.(*api.API)
@@ -198,22 +198,22 @@ func resourceVpcConnectRead(ctx context.Context, d *schema.ResourceData,
 }
 
 func resourceVpcConnectUpdate(ctx context.Context, d *schema.ResourceData,
-	meta interface{}) diag.Diagnostics {
+	meta any) diag.Diagnostics {
 
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 		region     = d.Get("region").(string)
-		params     = make(map[string][]interface{})
+		params     = make(map[string][]any)
 	)
 
 	switch getPlatform(region) {
 	case "amazon":
-		params["allowed_principals"] = d.Get("allowed_principals").([]interface{})
+		params["allowed_principals"] = d.Get("allowed_principals").([]any)
 	case "azure":
-		params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
+		params["approved_subscriptions"] = d.Get("approved_subscriptions").([]any)
 	case "google":
-		params["allowed_projects"] = d.Get("allowed_projects").([]interface{})
+		params["allowed_projects"] = d.Get("allowed_projects").([]any)
 	default:
 		return diag.Errorf("invalid region")
 	}
@@ -226,7 +226,7 @@ func resourceVpcConnectUpdate(ctx context.Context, d *schema.ResourceData,
 }
 
 func resourceVpcConnectDelete(ctx context.Context, d *schema.ResourceData,
-	meta interface{}) diag.Diagnostics {
+	meta any) diag.Diagnostics {
 
 	var (
 		api        = meta.(*api.API)

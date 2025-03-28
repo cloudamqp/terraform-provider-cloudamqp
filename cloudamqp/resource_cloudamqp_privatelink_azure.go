@@ -65,8 +65,8 @@ func resourcePrivateLinkAzure() *schema.Resource {
 			},
 		},
 		CustomizeDiff: customdiff.All(
-			customdiff.ValidateValue("approved_subscriptions", func(ctx context.Context, value, meta interface{}) error {
-				for _, v := range value.([]interface{}) {
+			customdiff.ValidateValue("approved_subscriptions", func(ctx context.Context, value, meta any) error {
+				for _, v := range value.([]any) {
 					re := regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
 					if !re.MatchString(v.(string)) {
 						return fmt.Errorf("invalid Subscription ID : %v", v)
@@ -78,16 +78,16 @@ func resourcePrivateLinkAzure() *schema.Resource {
 	}
 }
 
-func resourcePrivateLinkAzureCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePrivateLinkAzureCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 		sleep      = d.Get("sleep").(int)
 		timeout    = d.Get("timeout").(int)
-		params     = make(map[string][]interface{})
+		params     = make(map[string][]any)
 	)
 
-	params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
+	params["approved_subscriptions"] = d.Get("approved_subscriptions").([]any)
 	err := api.EnablePrivatelink(ctx, instanceID, params, sleep, timeout)
 	if err != nil {
 		return diag.FromErr(err)
@@ -97,7 +97,7 @@ func resourcePrivateLinkAzureCreate(ctx context.Context, d *schema.ResourceData,
 	return resourcePrivateLinkAzureRead(ctx, d, meta)
 }
 
-func resourcePrivateLinkAzureRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePrivateLinkAzureRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id()) // Uses d.Id() to allow import
@@ -133,14 +133,14 @@ func resourcePrivateLinkAzureRead(ctx context.Context, d *schema.ResourceData, m
 	return diag.Diagnostics{}
 }
 
-func resourcePrivateLinkAzureUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePrivateLinkAzureUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
-		params     = make(map[string][]interface{})
+		params     = make(map[string][]any)
 	)
 
-	params["approved_subscriptions"] = d.Get("approved_subscriptions").([]interface{})
+	params["approved_subscriptions"] = d.Get("approved_subscriptions").([]any)
 	err := api.UpdatePrivatelink(ctx, instanceID, params)
 	if err != nil {
 		return diag.FromErr(err)
@@ -148,7 +148,7 @@ func resourcePrivateLinkAzureUpdate(ctx context.Context, d *schema.ResourceData,
 	return diag.Diagnostics{}
 }
 
-func resourcePrivateLinkAzureDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePrivateLinkAzureDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)

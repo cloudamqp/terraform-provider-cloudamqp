@@ -75,7 +75,7 @@ func dataSourceNodes() *schema.Resource {
 	}
 }
 
-func dataSourceNodesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func dataSourceNodesRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	data, err := api.ListNodes(ctx, d.Get("instance_id").(int))
 	if err != nil {
@@ -84,7 +84,7 @@ func dataSourceNodesRead(ctx context.Context, d *schema.ResourceData, meta inter
 	instanceID := strconv.Itoa(d.Get("instance_id").(int))
 	d.SetId(instanceID)
 
-	nodes := make([]map[string]interface{}, len(data))
+	nodes := make([]map[string]any, len(data))
 	for k, v := range data {
 		nodes[k] = readNode(v)
 	}
@@ -96,8 +96,8 @@ func dataSourceNodesRead(ctx context.Context, d *schema.ResourceData, meta inter
 	return diag.Diagnostics{}
 }
 
-func readNode(data map[string]interface{}) map[string]interface{} {
-	node := make(map[string]interface{})
+func readNode(data map[string]any) map[string]any {
+	node := make(map[string]any)
 	for k, v := range data {
 		if validateNodesSchemaAttribute(k) {
 			node[k] = v

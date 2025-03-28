@@ -64,7 +64,7 @@ func resourcePluginCommunity() *schema.Resource {
 	}
 }
 
-func resourcePluginCommunityCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePluginCommunityCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -94,7 +94,7 @@ func resourcePluginCommunityCreate(ctx context.Context, d *schema.ResourceData, 
 	return nil
 }
 
-func resourcePluginCommunityRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePluginCommunityRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -136,7 +136,7 @@ func resourcePluginCommunityRead(ctx context.Context, d *schema.ResourceData, me
 	return diag.Diagnostics{}
 }
 
-func resourcePluginCommunityUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePluginCommunityUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -153,7 +153,7 @@ func resourcePluginCommunityUpdate(ctx context.Context, d *schema.ResourceData, 
 	return resourcePluginCommunityRead(ctx, d, meta)
 }
 
-func resourcePluginCommunityDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePluginCommunityDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)

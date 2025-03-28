@@ -90,11 +90,11 @@ func resourceNotification() *schema.Resource {
 	}
 }
 
-func resourceNotificationCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceNotificationCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api    = meta.(*api.API)
 		keys   = []string{"type", "value", "name", "options", "responders"}
-		params = make(map[string]interface{})
+		params = make(map[string]any)
 	)
 
 	for _, k := range keys {
@@ -123,7 +123,7 @@ func resourceNotificationCreate(ctx context.Context, d *schema.ResourceData, met
 	return diag.Diagnostics{}
 }
 
-func resourceNotificationRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceNotificationRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	if strings.Contains(d.Id(), ",") {
 		tflog.Info(ctx, fmt.Sprintf("import of resource with identifier: %s", d.Id()))
 		s := strings.Split(d.Id(), ",")
@@ -151,9 +151,9 @@ func resourceNotificationRead(ctx context.Context, d *schema.ResourceData, meta 
 
 		switch k {
 		case "options":
-			for key, value := range data[k].(map[string]interface{}) {
+			for key, value := range data[k].(map[string]any) {
 				if key == "responders" {
-					d.Set("responders", value.([]interface{}))
+					d.Set("responders", value.([]any))
 				} else {
 					d.Set(k, v)
 				}
@@ -166,11 +166,11 @@ func resourceNotificationRead(ctx context.Context, d *schema.ResourceData, meta 
 	return diag.Diagnostics{}
 }
 
-func resourceNotificationUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceNotificationUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api         = meta.(*api.API)
 		keys        = []string{"type", "value", "name", "options", "responders"}
-		params      = make(map[string]interface{})
+		params      = make(map[string]any)
 		instanceID  = d.Get("instance_id").(int)
 		recipientID = d.Id()
 	)
@@ -195,7 +195,7 @@ func resourceNotificationUpdate(ctx context.Context, d *schema.ResourceData, met
 	return diag.Diagnostics{}
 }
 
-func resourceNotificationDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceNotificationDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api         = meta.(*api.API)
 		instanceID  = d.Get("instance_id").(int)
@@ -243,12 +243,12 @@ func validateOpsgenieRespondersType() schema.SchemaValidateDiagFunc {
 	}, true))
 }
 
-func opsGenieRespondersParameter(responders []interface{}) map[string]interface{} {
-	responderParams := make(map[string]interface{})
-	params := make([]map[string]interface{}, len(responders))
+func opsGenieRespondersParameter(responders []any) map[string]any {
+	responderParams := make(map[string]any)
+	params := make([]map[string]any, len(responders))
 	for index, responder := range responders {
-		param := make(map[string]interface{})
-		for k, v := range responder.(map[string]interface{}) {
+		param := make(map[string]any)
+		for k, v := range responder.(map[string]any) {
 			if v != nil && v != "" {
 				param[k] = v
 			}

@@ -66,11 +66,11 @@ func resourceAwsEventBridge() *schema.Resource {
 	}
 }
 
-func resourceAwsEventBridgeCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceAwsEventBridgeCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		keys       = awsEventbridgeAttributeKeys()
-		params     = make(map[string]interface{})
+		params     = make(map[string]any)
 		instanceID = d.Get("instance_id").(int)
 	)
 
@@ -89,7 +89,7 @@ func resourceAwsEventBridgeCreate(ctx context.Context, d *schema.ResourceData, m
 	return diag.Diagnostics{}
 }
 
-func resourceAwsEventBridgeRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceAwsEventBridgeRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	if strings.Contains(d.Id(), ",") {
 		tflog.Debug(ctx, fmt.Sprintf("import AWS eventbridge from input identifier: %s", d.Id()))
 		s := strings.Split(d.Id(), ",")
@@ -125,7 +125,7 @@ func resourceAwsEventBridgeRead(ctx context.Context, d *schema.ResourceData, met
 	return diag.Diagnostics{}
 }
 
-func resourceAwsEventBridgeDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceAwsEventBridgeDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)

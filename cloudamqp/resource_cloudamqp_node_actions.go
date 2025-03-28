@@ -41,7 +41,7 @@ func resourceNodeAction() *schema.Resource {
 	}
 }
 
-func resourceNodeActionRequest(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceNodeActionRequest(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	nodeName := d.Get("node_name").(string)
 	data, err := api.PostAction(ctx, d.Get("instance_id").(int), nodeName, d.Get("action").(string))
@@ -53,7 +53,7 @@ func resourceNodeActionRequest(ctx context.Context, d *schema.ResourceData, meta
 	return diag.Diagnostics{}
 }
 
-func resourceNodeActionRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceNodeActionRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	data, err := api.ReadNode(ctx, d.Get("instance_id").(int), d.Get("node_name").(string))
 	if err != nil {
@@ -63,7 +63,7 @@ func resourceNodeActionRead(ctx context.Context, d *schema.ResourceData, meta in
 	return diag.Diagnostics{}
 }
 
-func resourceNodeActionRemove(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceNodeActionRemove(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	return diag.Diagnostics{}
 }
 

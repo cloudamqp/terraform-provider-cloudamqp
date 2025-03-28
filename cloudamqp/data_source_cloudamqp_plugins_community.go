@@ -56,7 +56,7 @@ func dataSourcePluginsCommunity() *schema.Resource {
 }
 
 func dataSourcePluginsCommunityRead(ctx context.Context, d *schema.ResourceData,
-	meta interface{}) diag.Diagnostics {
+	meta any) diag.Diagnostics {
 
 	var (
 		api        = meta.(*api.API)
@@ -71,7 +71,7 @@ func dataSourcePluginsCommunityRead(ctx context.Context, d *schema.ResourceData,
 		return diag.FromErr(err)
 	}
 
-	plugins := make([]map[string]interface{}, len(data))
+	plugins := make([]map[string]any, len(data))
 	for k, v := range data {
 		plugins[k] = readCommunityPlugin(v)
 	}
@@ -82,8 +82,8 @@ func dataSourcePluginsCommunityRead(ctx context.Context, d *schema.ResourceData,
 	return diag.Diagnostics{}
 }
 
-func readCommunityPlugin(data map[string]interface{}) map[string]interface{} {
-	plugin := make(map[string]interface{})
+func readCommunityPlugin(data map[string]any) map[string]any {
+	plugin := make(map[string]any)
 	for k, v := range data {
 		if validateCommunityPluginSchemaAttribute(k) {
 			plugin[k] = v

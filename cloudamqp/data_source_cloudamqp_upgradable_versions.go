@@ -33,7 +33,7 @@ func dataSourceUpgradableVersions() *schema.Resource {
 	}
 }
 
-func dataSourceUpgradableVersionRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func dataSourceUpgradableVersionRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	data, err := api.ReadVersions(ctx, d.Get("instance_id").(int))
 	if err != nil {

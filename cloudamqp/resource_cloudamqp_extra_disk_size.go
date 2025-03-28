@@ -72,10 +72,10 @@ func resourceExtraDiskSize() *schema.Resource {
 	}
 }
 
-func resourceExtraDiskSizeUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceExtraDiskSizeUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api     = meta.(*api.API)
-		params  = make(map[string]interface{})
+		params  = make(map[string]any)
 		sleep   = d.Get("sleep").(int)
 		timeout = d.Get("timeout").(int)
 	)
@@ -93,7 +93,7 @@ func resourceExtraDiskSizeUpdate(ctx context.Context, d *schema.ResourceData, me
 	return resourceExtraDiskSizeRead(ctx, d, meta)
 }
 
-func resourceExtraDiskSizeRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceExtraDiskSizeRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -104,7 +104,7 @@ func resourceExtraDiskSizeRead(ctx context.Context, d *schema.ResourceData, meta
 		return diag.FromErr(err)
 	}
 
-	nodes := make([]map[string]interface{}, len(data))
+	nodes := make([]map[string]any, len(data))
 	for k, v := range data {
 		nodes[k] = readDiskNode(v)
 	}
@@ -117,14 +117,14 @@ func resourceExtraDiskSizeRead(ctx context.Context, d *schema.ResourceData, meta
 }
 
 func resourceExtraDiskSizeDelete(ctx context.Context, d *schema.ResourceData,
-	meta interface{}) diag.Diagnostics {
+	meta any) diag.Diagnostics {
 	// Just remove this resource from the state file, as the delete route does not exist in the
 	// backend but we need to allow delete to happen, e.g. when you destroy your instance
 	return diag.Diagnostics{}
 }
 
-func readDiskNode(data map[string]interface{}) map[string]interface{} {
-	node := make(map[string]interface{})
+func readDiskNode(data map[string]any) map[string]any {
+	node := make(map[string]any)
 	for k, v := range data {
 		if validateDiskSchemaAttribute(k) {
 			node[k] = v

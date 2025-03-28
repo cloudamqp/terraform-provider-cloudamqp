@@ -115,7 +115,7 @@ func dataSourceInstance() *schema.Resource {
 	}
 }
 
-func dataSourceInstanceRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func dataSourceInstanceRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = strconv.Itoa(d.Get("instance_id").(int))
@@ -130,8 +130,8 @@ func dataSourceInstanceRead(ctx context.Context, d *schema.ResourceData, meta in
 	for k, v := range data {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {
-				err = d.Set("vpc_id", v.(map[string]interface{})["id"])
-				err = d.Set("vpc_subnet", v.(map[string]interface{})["subnet"])
+				err = d.Set("vpc_id", v.(map[string]any)["id"])
+				err = d.Set("vpc_subnet", v.(map[string]any)["subnet"])
 			} else {
 				err = d.Set(k, v)
 			}

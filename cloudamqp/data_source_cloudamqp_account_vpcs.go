@@ -60,7 +60,7 @@ func dataSourceAccountVpcs() *schema.Resource {
 }
 
 func dataSourceAccountVpcsRead(ctx context.Context, d *schema.ResourceData,
-	meta interface{}) diag.Diagnostics {
+	meta any) diag.Diagnostics {
 
 	api := meta.(*api.API)
 	data, err := api.ListVpcs(ctx)
@@ -69,7 +69,7 @@ func dataSourceAccountVpcsRead(ctx context.Context, d *schema.ResourceData,
 	}
 
 	d.SetId("noId")
-	vpcs := make([]map[string]interface{}, len(data))
+	vpcs := make([]map[string]any, len(data))
 	for k, v := range data {
 		vpcs[k] = readAccountVpc(v)
 	}
@@ -81,8 +81,8 @@ func dataSourceAccountVpcsRead(ctx context.Context, d *schema.ResourceData,
 	return diag.Diagnostics{}
 }
 
-func readAccountVpc(data map[string]interface{}) map[string]interface{} {
-	vpc := make(map[string]interface{})
+func readAccountVpc(data map[string]any) map[string]any {
+	vpc := make(map[string]any)
 	for k, v := range data {
 		if validateAccountVpcsSchemaAttribute(k) {
 			vpc[k] = v

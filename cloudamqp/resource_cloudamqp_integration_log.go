@@ -174,12 +174,12 @@ func resourceIntegrationLog() *schema.Resource {
 	}
 }
 
-func resourceIntegrationLogCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceIntegrationLogCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api     = meta.(*api.API)
 		intName = strings.ToLower(d.Get("name").(string))
 		keys    = integrationLogKeys(intName)
-		params  = make(map[string]interface{})
+		params  = make(map[string]any)
 	)
 
 	v := d.Get("credentials")
@@ -188,7 +188,7 @@ func resourceIntegrationLogCreate(ctx context.Context, d *schema.ResourceData, m
 		if err != nil {
 			return diag.Errorf("log integration failed, error decoding private_key: %s ", err.Error())
 		}
-		var jsonMap map[string]interface{}
+		var jsonMap map[string]any
 		json.Unmarshal([]byte(uDec), &jsonMap)
 		fmt.Printf("jsonMap: %v", jsonMap)
 		for _, k := range keys {
@@ -217,7 +217,7 @@ func resourceIntegrationLogCreate(ctx context.Context, d *schema.ResourceData, m
 	return resourceIntegrationLogRead(ctx, d, meta)
 }
 
-func resourceIntegrationLogRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceIntegrationLogRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	if strings.Contains(d.Id(), ",") {
 		tflog.Info(ctx, fmt.Sprintf("import resource with identifier: %s", d.Id()))
 		s := strings.Split(d.Id(), ",")
@@ -249,11 +249,11 @@ func resourceIntegrationLogRead(ctx context.Context, d *schema.ResourceData, met
 	return nil
 }
 
-func resourceIntegrationLogUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceIntegrationLogUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		intName = strings.ToLower(d.Get("name").(string))
 		keys    = integrationLogKeys(intName)
-		params  = make(map[string]interface{})
+		params  = make(map[string]any)
 	)
 
 	v := d.Get("credentials")
@@ -262,7 +262,7 @@ func resourceIntegrationLogUpdate(ctx context.Context, d *schema.ResourceData, m
 		if err != nil {
 			return diag.Errorf("log integration failed, error decoding private_key: %s ", err.Error())
 		}
-		var jsonMap map[string]interface{}
+		var jsonMap map[string]any
 		json.Unmarshal([]byte(uDec), &jsonMap)
 		for _, k := range keys {
 			params[k] = jsonMap[k]
@@ -286,7 +286,7 @@ func resourceIntegrationLogUpdate(ctx context.Context, d *schema.ResourceData, m
 	return resourceIntegrationLogRead(ctx, d, meta)
 }
 
-func resourceIntegrationLogDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceIntegrationLogDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	if err := api.DeleteIntegration(ctx, d.Get("instance_id").(int), "logs", d.Id()); err != nil {
 		diag.FromErr(err)

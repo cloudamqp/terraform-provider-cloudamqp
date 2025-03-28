@@ -148,20 +148,20 @@ func resourceInstance() *schema.Resource {
 			},
 		},
 		CustomizeDiff: customdiff.All(
-			customdiff.ForceNewIfChange("plan", func(ctx context.Context, old, new, meta interface{}) bool {
+			customdiff.ForceNewIfChange("plan", func(ctx context.Context, old, new, meta any) bool {
 				// Recreate instance if changing plan type (from dedicated to shared or vice versa)
 				oldPlanType := isSharedPlan(old.(string))
 				newPlanType := isSharedPlan(new.(string))
 				return !(oldPlanType == newPlanType)
 			}),
-			customdiff.ValidateChange("plan", func(ctx context.Context, old, new, meta interface{}) error {
+			customdiff.ValidateChange("plan", func(ctx context.Context, old, new, meta any) error {
 				if old == new {
 					return nil
 				}
 				api := meta.(*api.API)
 				return api.ValidatePlan(new.(string))
 			}),
-			customdiff.ValidateChange("region", func(ctx context.Context, old, new, meta interface{}) error {
+			customdiff.ValidateChange("region", func(ctx context.Context, old, new, meta any) error {
 				if old == new {
 					return nil
 				}
@@ -172,10 +172,10 @@ func resourceInstance() *schema.Resource {
 	}
 }
 
-func resourceCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	keys := instanceCreateAttributeKeys()
-	params := make(map[string]interface{})
+	params := make(map[string]any)
 	for _, k := range keys {
 		if v := d.Get(k); v != nil && v != "" {
 			params[k] = v
@@ -203,7 +203,7 @@ func resourceCreate(ctx context.Context, d *schema.ResourceData, meta interface{
 				delete(params, k)
 			} else {
 				for _, v := range d.Get(k).(*schema.Set).List() {
-					params[k] = v.(map[string]interface{})
+					params[k] = v.(map[string]any)
 				}
 			}
 		}
@@ -218,7 +218,7 @@ func resourceCreate(ctx context.Context, d *schema.ResourceData, meta interface{
 	return resourceRead(ctx, d, meta)
 }
 
-func resourceRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	data, err := api.ReadInstance(ctx, d.Id())
 
@@ -229,7 +229,7 @@ func resourceRead(ctx context.Context, d *schema.ResourceData, meta interface{})
 	for k, v := range data {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {
-				err = d.Set("vpc_id", v.(map[string]interface{})["id"])
+				err = d.Set("vpc_id", v.(map[string]any)["id"])
 			} else {
 				err = d.Set(k, v)
 			}
@@ -265,10 +265,10 @@ func resourceRead(ctx context.Context, d *schema.ResourceData, meta interface{})
 	return diag.Diagnostics{}
 }
 
-func resourceUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	keys := []string{"name", "plan", "nodes", "tags"}
-	params := make(map[string]interface{})
+	params := make(map[string]any)
 
 	if !d.HasChanges("name", "plan", "nodes", "tags") {
 		return nil
@@ -293,7 +293,7 @@ func resourceUpdate(ctx context.Context, d *schema.ResourceData, meta interface{
 	return resourceRead(ctx, d, meta)
 }
 
-func resourceDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	if err := api.DeleteInstance(ctx, d.Id(), d.Get("keep_associated_vpc").(bool)); err != nil {
 		return diag.FromErr(err)

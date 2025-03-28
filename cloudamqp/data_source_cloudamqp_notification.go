@@ -54,10 +54,10 @@ func dataSourceNotification() *schema.Resource {
 	}
 }
 
-func dataSourceNotificationRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func dataSourceNotificationRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		instanceID = d.Get("instance_id").(int)
-		data       map[string]interface{}
+		data       map[string]any
 		err        error
 	)
 
@@ -83,7 +83,7 @@ func dataSourceNotificationRead(ctx context.Context, d *schema.ResourceData, met
 }
 
 func dataSourceNotificationIDRead(ctx context.Context, instanceID int, alarmID int,
-	meta interface{}) (map[string]interface{}, error) {
+	meta any) (map[string]any, error) {
 
 	api := meta.(*api.API)
 	id := strconv.Itoa(alarmID)
@@ -92,7 +92,7 @@ func dataSourceNotificationIDRead(ctx context.Context, instanceID int, alarmID i
 }
 
 func dataSourceNotificationTypeRead(ctx context.Context, instanceID int, name string,
-	meta interface{}) (map[string]interface{}, error) {
+	meta any) (map[string]any, error) {
 
 	api := meta.(*api.API)
 	recipients, err := api.ListNotifications(ctx, instanceID)

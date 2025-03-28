@@ -70,7 +70,7 @@ type Plugin struct {
 	Enabled bool   `json:"enabled"`
 }
 
-func resourcePluginCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePluginCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -87,7 +87,7 @@ func resourcePluginCreate(ctx context.Context, d *schema.ResourceData, meta inte
 	return resourcePluginRead(ctx, d, meta)
 }
 
-func resourcePluginRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePluginRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -131,7 +131,7 @@ func resourcePluginRead(ctx context.Context, d *schema.ResourceData, meta interf
 	return diag.Diagnostics{}
 }
 
-func resourcePluginUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePluginUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -148,7 +148,7 @@ func resourcePluginUpdate(ctx context.Context, d *schema.ResourceData, meta inte
 	return resourcePluginRead(ctx, d, meta)
 }
 
-func resourcePluginDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePluginDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)

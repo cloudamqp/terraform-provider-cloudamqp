@@ -59,7 +59,7 @@ func dataSourcePlugins() *schema.Resource {
 	}
 }
 
-func dataSourcePluginsRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func dataSourcePluginsRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -73,7 +73,7 @@ func dataSourcePluginsRead(ctx context.Context, d *schema.ResourceData, meta int
 		return diag.FromErr(err)
 	}
 
-	plugins := make([]map[string]interface{}, len(data))
+	plugins := make([]map[string]any, len(data))
 	for k, v := range data {
 		plugins[k] = readPlugin(v)
 	}
@@ -84,8 +84,8 @@ func dataSourcePluginsRead(ctx context.Context, d *schema.ResourceData, meta int
 	return nil
 }
 
-func readPlugin(data map[string]interface{}) map[string]interface{} {
-	plugin := make(map[string]interface{})
+func readPlugin(data map[string]any) map[string]any {
+	plugin := make(map[string]any)
 	for k, v := range data {
 		if validatePluginsSchemaAttribute(k) {
 			plugin[k] = v

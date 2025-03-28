@@ -76,15 +76,15 @@ func resourceVpcGcpPeering() *schema.Resource {
 	}
 }
 
-func resourceCreateVpcGcpPeering(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceCreateVpcGcpPeering(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api          = meta.(*api.API)
 		keys         = []string{"peer_network_uri"}
-		params       = make(map[string]interface{})
+		params       = make(map[string]any)
 		instanceID   = d.Get("instance_id").(int)
 		vpcID        = d.Get("vpc_id").(string)
 		waitOnStatus = d.Get("wait_on_peering_status").(bool)
-		data         map[string]interface{}
+		data         map[string]any
 		err          = errors.New("")
 		sleep        = d.Get("sleep").(int)
 		timeout      = d.Get("timeout").(int)
@@ -117,10 +117,10 @@ func resourceCreateVpcGcpPeering(ctx context.Context, d *schema.ResourceData, me
 	return resourceReadVpcGcpPeering(ctx, d, meta)
 }
 
-func resourceReadVpcGcpPeering(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceReadVpcGcpPeering(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
-		data       map[string]interface{}
+		data       map[string]any
 		err        = errors.New("")
 		sleep      = d.Get("sleep").(int)
 		timeout    = d.Get("timeout").(int)
@@ -146,10 +146,10 @@ func resourceReadVpcGcpPeering(ctx context.Context, d *schema.ResourceData, meta
 		return diag.FromErr(err)
 	}
 
-	rows := data["rows"].([]interface{})
+	rows := data["rows"].([]any)
 	if len(rows) > 0 {
 		for _, row := range rows {
-			tempRow := row.(map[string]interface{})
+			tempRow := row.(map[string]any)
 			if tempRow["name"] != d.Id() {
 				continue
 			}
@@ -173,10 +173,10 @@ func resourceReadVpcGcpPeering(ctx context.Context, d *schema.ResourceData, meta
 	return diag.Diagnostics{}
 }
 
-func resourceImportVpcGcpPeering(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceImportVpcGcpPeering(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api     = meta.(*api.API)
-		data    map[string]interface{}
+		data    map[string]any
 		err     = errors.New("")
 		sleep   = 10
 		timeout = 1800
@@ -206,10 +206,10 @@ func resourceImportVpcGcpPeering(ctx context.Context, d *schema.ResourceData, me
 		return diag.FromErr(err)
 	}
 
-	rows := data["rows"].([]interface{})
+	rows := data["rows"].([]any)
 	if len(rows) > 0 {
 		for _, row := range rows {
-			tempRow := row.(map[string]interface{})
+			tempRow := row.(map[string]any)
 			if tempRow["network"] != importValues[2] {
 				continue
 			}
@@ -235,11 +235,11 @@ func resourceImportVpcGcpPeering(ctx context.Context, d *schema.ResourceData, me
 	return diag.Diagnostics{}
 }
 
-func resourceUpdateVpcGcpPeering(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceUpdateVpcGcpPeering(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	return resourceReadVpcGcpPeering(ctx, d, meta)
 }
 
-func resourceDeleteVpcGcpPeering(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceDeleteVpcGcpPeering(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)

@@ -34,7 +34,7 @@ func resourceCustomDomain() *schema.Resource {
 	}
 }
 
-func resourceCustomDomainCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceCustomDomainCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	instanceID := d.Get("instance_id").(int)
 	hostname := d.Get("hostname").(string)
@@ -56,7 +56,7 @@ func resourceCustomDomainCreate(ctx context.Context, d *schema.ResourceData, met
 	return diag.Diagnostics{}
 }
 
-func resourceCustomDomainRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceCustomDomainRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	instanceID, _ := strconv.Atoi(d.Id())
 
@@ -78,7 +78,7 @@ func resourceCustomDomainRead(ctx context.Context, d *schema.ResourceData, meta 
 	return diag.Diagnostics{}
 }
 
-func resourceCustomDomainUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceCustomDomainUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	instanceID, _ := strconv.Atoi(d.Id())
 	hostname := d.Get("hostname").(string)
@@ -101,7 +101,7 @@ func resourceCustomDomainUpdate(ctx context.Context, d *schema.ResourceData, met
 	return diag.Diagnostics{}
 }
 
-func resourceCustomDomainDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceCustomDomainDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	instanceID, _ := strconv.Atoi(d.Id())
 

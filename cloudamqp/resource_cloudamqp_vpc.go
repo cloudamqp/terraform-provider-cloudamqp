@@ -35,7 +35,7 @@ func resourceVpc() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
-				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+				ValidateFunc: func(val any, key string) (warns []string, errs []error) {
 					v := val.(string)
 					_, _, err := net.ParseCIDR(v)
 					if err != nil {
@@ -62,10 +62,10 @@ func resourceVpc() *schema.Resource {
 	}
 }
 
-func resourceVpcCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceVpcCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	keys := []string{"name", "region", "subnet", "tags"}
-	params := make(map[string]interface{})
+	params := make(map[string]any)
 	for _, k := range keys {
 		if v := d.Get(k); v != nil && v != "" {
 			params[k] = v
@@ -81,7 +81,7 @@ func resourceVpcCreate(ctx context.Context, d *schema.ResourceData, meta interfa
 	return resourceVpcRead(ctx, d, meta)
 }
 
-func resourceVpcRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceVpcRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	data, err := api.ReadVpcInstance(ctx, d.Id())
 
@@ -101,10 +101,10 @@ func resourceVpcRead(ctx context.Context, d *schema.ResourceData, meta interface
 	return diag.Diagnostics{}
 }
 
-func resourceVpcUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceVpcUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	keys := []string{"name", "tags"}
-	params := make(map[string]interface{})
+	params := make(map[string]any)
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
 			params[k] = d.Get(k)
@@ -118,7 +118,7 @@ func resourceVpcUpdate(ctx context.Context, d *schema.ResourceData, meta interfa
 	return resourceVpcRead(ctx, d, meta)
 }
 
-func resourceVpcDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceVpcDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	if err := api.DeleteVpcInstance(ctx, d.Id()); err != nil {
 		return diag.FromErr(err)

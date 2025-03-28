@@ -90,10 +90,10 @@ func resourceAlarm() *schema.Resource {
 	}
 }
 
-func resourceAlarmCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceAlarmCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	keys := alarmAttributeKeys()
-	params := make(map[string]interface{})
+	params := make(map[string]any)
 	for _, k := range keys {
 		if v := d.Get(k); v != nil {
 			params[k] = v
@@ -131,7 +131,7 @@ func resourceAlarmCreate(ctx context.Context, d *schema.ResourceData, meta inter
 	return resourceAlarmRead(ctx, d, meta)
 }
 
-func resourceAlarmRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceAlarmRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	if strings.Contains(d.Id(), ",") {
 		tflog.Debug(ctx, fmt.Sprintf("import alarm from input identifier: %s", d.Id()))
 		s := strings.Split(d.Id(), ",")
@@ -160,10 +160,10 @@ func resourceAlarmRead(ctx context.Context, d *schema.ResourceData, meta interfa
 	return nil
 }
 
-func resourceAlarmUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceAlarmUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	keys := alarmAttributeKeys()
-	params := make(map[string]interface{})
+	params := make(map[string]any)
 	params["id"] = d.Id()
 
 	for _, k := range keys {
@@ -179,7 +179,7 @@ func resourceAlarmUpdate(ctx context.Context, d *schema.ResourceData, meta inter
 	return resourceAlarmRead(ctx, d, meta)
 }
 
-func resourceAlarmDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceAlarmDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	if d.Get("type") == "notice" {
 		tflog.Debug(ctx, "alarm type is 'notice', skip deletion and just remove from state")
 		return diag.Diagnostics{}

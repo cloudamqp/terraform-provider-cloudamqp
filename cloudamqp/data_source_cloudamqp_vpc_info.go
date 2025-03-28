@@ -48,12 +48,12 @@ func dataSourceVpcInfo() *schema.Resource {
 	}
 }
 
-func dataSourceVpcInfoRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func dataSourceVpcInfoRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 		vpcID      = d.Get("vpc_id").(string)
-		data       map[string]interface{}
+		data       map[string]any
 		err        = errors.New("")
 	)
 
@@ -84,7 +84,7 @@ func dataSourceVpcInfoRead(ctx context.Context, d *schema.ResourceData, meta int
 		case "subnet":
 			d.Set("vpc_subnet", v)
 		case "security_group":
-			sg := data[k].(map[string]interface{})
+			sg := data[k].(map[string]any)
 			d.Set("security_group_id", sg["id"])
 		}
 	}

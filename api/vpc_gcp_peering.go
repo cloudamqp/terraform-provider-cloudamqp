@@ -30,7 +30,7 @@ func (api *API) waitForGcpPeeringStatus(ctx context.Context, path, peerID string
 			return err
 		}
 
-		rows := data["rows"].([]interface{})
+		rows := data["rows"].([]any)
 		if len(rows) > 0 {
 			for _, row := range rows {
 				tempRow := row.(map[string]any)

@@ -153,13 +153,13 @@ func resourceIntegrationMetric() *schema.Resource {
 	}
 }
 
-func resourceIntegrationMetricCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceIntegrationMetricCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		intName    = strings.ToLower(d.Get("name").(string))
 		commonKeys = []string{"tags", "queue_allowlist", "vhost_allowlist"}
 		keys       = integrationMetricKeys(intName)
-		params     = make(map[string]interface{})
+		params     = make(map[string]any)
 	)
 
 	v := d.Get("credentials")
@@ -168,7 +168,7 @@ func resourceIntegrationMetricCreate(ctx context.Context, d *schema.ResourceData
 		if err != nil {
 			return diag.Errorf("log integration failed, error decoding private_key: %s ", err.Error())
 		}
-		var jsonMap map[string]interface{}
+		var jsonMap map[string]any
 		json.Unmarshal([]byte(uDec), &jsonMap)
 		for _, k := range keys {
 			params[k] = jsonMap[k]
@@ -215,7 +215,7 @@ func resourceIntegrationMetricCreate(ctx context.Context, d *schema.ResourceData
 	return resourceIntegrationMetricRead(ctx, d, meta)
 }
 
-func resourceIntegrationMetricRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceIntegrationMetricRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	if strings.Contains(d.Id(), ",") {
 		tflog.Info(ctx, fmt.Sprintf("import resource with indentifier: %s", d.Id()))
 		s := strings.Split(d.Id(), ",")
@@ -257,13 +257,13 @@ func resourceIntegrationMetricRead(ctx context.Context, d *schema.ResourceData, 
 	return nil
 }
 
-func resourceIntegrationMetricUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceIntegrationMetricUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		intName    = strings.ToLower(d.Get("name").(string))
 		commonKeys = []string{"tags", "queue_allowlist", "vhost_allowlist"}
 		keys       = integrationMetricKeys(intName)
-		params     = make(map[string]interface{})
+		params     = make(map[string]any)
 	)
 
 	v := d.Get("credentials")
@@ -272,7 +272,7 @@ func resourceIntegrationMetricUpdate(ctx context.Context, d *schema.ResourceData
 		if err != nil {
 			return diag.Errorf("log integration failed, error decoding private_key: %s ", err.Error())
 		}
-		var jsonMap map[string]interface{}
+		var jsonMap map[string]any
 		json.Unmarshal([]byte(uDec), &jsonMap)
 		for _, k := range keys {
 			params[k] = jsonMap[k]
@@ -316,7 +316,7 @@ func resourceIntegrationMetricUpdate(ctx context.Context, d *schema.ResourceData
 	return resourceIntegrationMetricRead(ctx, d, meta)
 }
 
-func resourceIntegrationMetricDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceIntegrationMetricDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	if err := api.DeleteIntegration(ctx, d.Get("instance_id").(int), "metrics", d.Id()); err != nil {
 		return diag.FromErr(err)

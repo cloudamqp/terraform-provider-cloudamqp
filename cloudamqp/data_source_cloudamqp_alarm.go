@@ -85,7 +85,7 @@ func dataSourceAlarm() *schema.Resource {
 	}
 }
 
-func dataSourceAlarmRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func dataSourceAlarmRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		data       map[string]any
 		instanceID = d.Get("instance_id").(int)
@@ -115,8 +115,8 @@ func dataSourceAlarmRead(ctx context.Context, d *schema.ResourceData, meta inter
 	return diag.Diagnostics{}
 }
 
-func dataSourceAlarmIDRead(ctx context.Context, instanceID int, alarmID int, meta interface{}) (
-	map[string]interface{}, error) {
+func dataSourceAlarmIDRead(ctx context.Context, instanceID int, alarmID int, meta any) (
+	map[string]any, error) {
 
 	api := meta.(*api.API)
 	id := strconv.Itoa(alarmID)
@@ -125,7 +125,7 @@ func dataSourceAlarmIDRead(ctx context.Context, instanceID int, alarmID int, met
 }
 
 func dataSourceAlarmTypeRead(ctx context.Context, instanceID int, alarmType string,
-	meta interface{}) (map[string]interface{}, error) {
+	meta any) (map[string]any, error) {
 
 	api := meta.(*api.API)
 	alarms, err := api.ListAlarms(ctx, instanceID)

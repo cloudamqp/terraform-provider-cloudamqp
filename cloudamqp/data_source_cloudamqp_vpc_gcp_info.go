@@ -55,10 +55,10 @@ func dataSourceVpcGcpInfo() *schema.Resource {
 	}
 }
 
-func dataSourceVpcGcpInfoRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func dataSourceVpcGcpInfoRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api         = meta.(*api.API)
-		data        = make(map[string]interface{})
+		data        = make(map[string]any)
 		err         = errors.New("")
 		instance_id = d.Get("instance_id").(int)
 		vpc_id      = d.Get("vpc_id").(string)

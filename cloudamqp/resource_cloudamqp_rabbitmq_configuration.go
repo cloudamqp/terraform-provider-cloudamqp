@@ -34,7 +34,7 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 				Computed:    true,
 				Optional:    true,
 				Description: "Set the server AMQP 0-9-1 heartbeat timeout in seconds.",
-				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+				ValidateFunc: func(val any, key string) (warns []string, errs []error) {
 					v := val.(int)
 					if v < 0 {
 						errs = append(errs, fmt.Errorf("%q must be greater than or equal to 0, got: %d", key, v))
@@ -47,7 +47,7 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 				Computed:    true,
 				Optional:    true,
 				Description: "Set the maximum permissible number of connection, -1 means infinity.",
-				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+				ValidateFunc: func(val any, key string) (warns []string, errs []error) {
 					v := val.(int)
 					if v == -1 {
 						return
@@ -63,7 +63,7 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 				Computed:    true,
 				Optional:    true,
 				Description: "Set the maximum permissible number of channels per connection. 0 means unlimited",
-				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+				ValidateFunc: func(val any, key string) (warns []string, errs []error) {
 					v := val.(int)
 					if v < 0 {
 						errs = append(errs, fmt.Errorf("%q must be greater than or equal to 0, got: %d", key, v))
@@ -76,7 +76,7 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 				Computed:    true,
 				Optional:    true,
 				Description: "A consumer that has recevied a message and does not acknowledge that message within the timeout in milliseconds",
-				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+				ValidateFunc: func(val any, key string) (warns []string, errs []error) {
 					v := val.(int)
 					if v == -1 {
 						return
@@ -92,7 +92,7 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 				Computed:    true,
 				Optional:    true,
 				Description: "When the server will enter memory based flow-control as relative to the maximum available memory.",
-				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+				ValidateFunc: func(val any, key string) (warns []string, errs []error) {
 					v := val.(float64)
 					if v < 0.4 || v > 0.9 {
 						errs = append(errs, fmt.Errorf("%q must be between 0.4 and 0.9 inclusive, got: %v", key, v))
@@ -105,7 +105,7 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 				Computed:    true,
 				Optional:    true,
 				Description: "Size in bytes below which to embed messages in the queue index. 0 will turn off payload embedding in the queue index.",
-				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+				ValidateFunc: func(val any, key string) (warns []string, errs []error) {
 					v := val.(int)
 					if v < 0 || v > 10485760 {
 						errs = append(errs, fmt.Errorf("%q must be between 0 and 10485760 inclusive, got: %d", key, v))
@@ -118,7 +118,7 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 				Computed:    true,
 				Optional:    true,
 				Description: "The largest allowed message payload size in bytes.",
-				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+				ValidateFunc: func(val any, key string) (warns []string, errs []error) {
 					v := val.(int)
 					if v < 1 || v > 536870912 {
 						errs = append(errs, fmt.Errorf("%q must be between 1 and 536870912 inclusive, got: %d", key, v))
@@ -157,7 +157,7 @@ func resourceRabbitMqConfiguration() *schema.Resource {
 	}
 }
 
-func resourceRabbitMqConfigurationRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceRabbitMqConfigurationRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id())
@@ -203,12 +203,12 @@ func resourceRabbitMqConfigurationRead(ctx context.Context, d *schema.ResourceDa
 	return diag.Diagnostics{}
 }
 
-func resourceRabbitMqConfigurationUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceRabbitMqConfigurationUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 		keys       = rabbitMqConfigurationWriteAttributeKeys()
-		params     = make(map[string]interface{})
+		params     = make(map[string]any)
 		sleep      = d.Get("sleep").(int)
 		timeout    = d.Get("timeout").(int)
 	)
@@ -247,7 +247,7 @@ func resourceRabbitMqConfigurationUpdate(ctx context.Context, d *schema.Resource
 	return resourceRabbitMqConfigurationRead(ctx, d, meta)
 }
 
-func resourceRabbitMqConfigurationDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceRabbitMqConfigurationDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	return diag.Diagnostics{}
 }
 

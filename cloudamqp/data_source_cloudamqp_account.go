@@ -54,7 +54,7 @@ func dataSourceAccount() *schema.Resource {
 }
 
 func dataSourceAccountRead(ctx context.Context, d *schema.ResourceData,
-	meta interface{}) diag.Diagnostics {
+	meta any) diag.Diagnostics {
 
 	api := meta.(*api.API)
 	data, err := api.ListInstances(ctx)
@@ -63,7 +63,7 @@ func dataSourceAccountRead(ctx context.Context, d *schema.ResourceData,
 	}
 
 	d.SetId("noId")
-	instances := make([]map[string]interface{}, len(data))
+	instances := make([]map[string]any, len(data))
 	for k, v := range data {
 		instances[k] = readAccount(v)
 	}
@@ -75,8 +75,8 @@ func dataSourceAccountRead(ctx context.Context, d *schema.ResourceData,
 	return diag.Diagnostics{}
 }
 
-func readAccount(data map[string]interface{}) map[string]interface{} {
-	instance := make(map[string]interface{})
+func readAccount(data map[string]any) map[string]any {
+	instance := make(map[string]any)
 	for k, v := range data {
 		if validateAccountSchemaAttribute(k) {
 			instance[k] = v

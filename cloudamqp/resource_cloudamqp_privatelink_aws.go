@@ -68,8 +68,8 @@ func resourcePrivateLinkAws() *schema.Resource {
 			},
 		},
 		CustomizeDiff: customdiff.All(
-			customdiff.ValidateValue("allowed_principals", func(ctx context.Context, value, meta interface{}) error {
-				for _, v := range value.([]interface{}) {
+			customdiff.ValidateValue("allowed_principals", func(ctx context.Context, value, meta any) error {
+				for _, v := range value.([]any) {
 					re := regexp.MustCompile(`^arn:aws:iam::\d{12}:(root|user/.+|role/.+)$`)
 					if !re.MatchString(v.(string)) {
 						return fmt.Errorf("invalid ARN : %v", v)
@@ -81,16 +81,16 @@ func resourcePrivateLinkAws() *schema.Resource {
 	}
 }
 
-func resourcePrivateLinkAwsCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePrivateLinkAwsCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 		sleep      = d.Get("sleep").(int)
 		timeout    = d.Get("timeout").(int)
-		params     = make(map[string][]interface{})
+		params     = make(map[string][]any)
 	)
 
-	params["allowed_principals"] = d.Get("allowed_principals").([]interface{})
+	params["allowed_principals"] = d.Get("allowed_principals").([]any)
 	err := api.EnablePrivatelink(ctx, instanceID, params, sleep, timeout)
 	if err != nil {
 		return diag.FromErr(err)
@@ -100,7 +100,7 @@ func resourcePrivateLinkAwsCreate(ctx context.Context, d *schema.ResourceData, m
 	return resourcePrivateLinkAwsRead(ctx, d, meta)
 }
 
-func resourcePrivateLinkAwsRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePrivateLinkAwsRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id()) // Uses d.Id() to allow import
@@ -132,14 +132,14 @@ func resourcePrivateLinkAwsRead(ctx context.Context, d *schema.ResourceData, met
 	return diag.Diagnostics{}
 }
 
-func resourcePrivateLinkAwsUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePrivateLinkAwsUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
-		params     = make(map[string][]interface{})
+		params     = make(map[string][]any)
 	)
 
-	params["allowed_principals"] = d.Get("allowed_principals").([]interface{})
+	params["allowed_principals"] = d.Get("allowed_principals").([]any)
 	err := api.UpdatePrivatelink(ctx, instanceID, params)
 	if err != nil {
 		return diag.FromErr(err)
@@ -147,7 +147,7 @@ func resourcePrivateLinkAwsUpdate(ctx context.Context, d *schema.ResourceData, m
 	return diag.Diagnostics{}
 }
 
-func resourcePrivateLinkAwsDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourcePrivateLinkAwsDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)

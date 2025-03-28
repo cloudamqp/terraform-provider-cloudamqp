@@ -35,7 +35,7 @@ func resourceAccountAction() *schema.Resource {
 }
 
 func resourceAccountActionRequest(ctx context.Context, d *schema.ResourceData,
-	meta interface{}) diag.Diagnostics {
+	meta any) diag.Diagnostics {
 
 	var (
 		api        = meta.(*api.API)
@@ -59,13 +59,13 @@ func resourceAccountActionRequest(ctx context.Context, d *schema.ResourceData,
 }
 
 func resourceAccountActionRead(ctx context.Context, d *schema.ResourceData,
-	meta interface{}) diag.Diagnostics {
+	meta any) diag.Diagnostics {
 
 	return diag.Diagnostics{}
 }
 
 func resourceAccountActionRemove(ctx context.Context, d *schema.ResourceData,
-	meta interface{}) diag.Diagnostics {
+	meta any) diag.Diagnostics {
 
 	return diag.Diagnostics{}
 }
