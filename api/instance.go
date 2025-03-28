@@ -122,9 +122,10 @@ func (api *API) waitUntilDeletion(ctx context.Context, instanceID string) error 
 
 func (api *API) CreateInstance(ctx context.Context, params map[string]any) (map[string]any, error) {
 	var (
-		data   map[string]any
-		failed map[string]any
-		path   = "/api/instances"
+		data         map[string]any
+		failed       map[string]any
+		path         = "/api/instances"
+		sensitiveCtx = tflog.MaskFieldValuesWithFieldKeys(ctx, "apikey", "url", "urls")
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s ", path), params)
@@ -135,7 +136,7 @@ func (api *API) CreateInstance(ctx context.Context, params map[string]any) (map[
 
 	switch response.StatusCode {
 	case 200:
-		tflog.Debug(ctx, "response data", data)
+		tflog.Debug(sensitiveCtx, "response data", data)
 		if id, ok := data["id"]; ok {
 			data["id"] = strconv.FormatFloat(id.(float64), 'f', 0, 64)
 		} else {
