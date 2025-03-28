@@ -60,7 +60,7 @@ func (api *API) ListPluginsCommunity(ctx context.Context, instanceID, sleep, tim
 	[]map[string]any, error) {
 
 	path := fmt.Sprintf("/api/instances/%d/plugins/community", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d", path, sleep, timeout))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d ", path, sleep, timeout))
 	return api.listPluginsCommunityWithRetry(ctx, path, 1, sleep, timeout)
 }
 
@@ -109,7 +109,7 @@ func (api *API) UpdatePluginCommunity(ctx context.Context, instanceID int, plugi
 
 	params["plugin_name"] = pluginName
 	params["enabled"] = enabled
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s enabled=%t sleep=%d timeout=%d", path, enabled,
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s enabled=%t sleep=%d timeout=%d ", path, enabled,
 		sleep, timeout), params)
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 	if err != nil {
@@ -134,7 +134,7 @@ func (api *API) UninstallPluginCommunity(ctx context.Context, instanceID int, pl
 		path   = fmt.Sprintf("/api/instances/%d/plugins/community/%s?async=true", instanceID, pluginName)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d", path, sleep, timeout))
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d ", path, sleep, timeout))
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 	if err != nil {
 		return nil, err

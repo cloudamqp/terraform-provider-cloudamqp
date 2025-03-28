@@ -13,7 +13,7 @@ func (api *API) ReadRabbitMqConfiguration(ctx context.Context, instanceID, sleep
 	map[string]any, error) {
 
 	path := fmt.Sprintf("/api/instances/%d/config", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d", path, sleep, timeout))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d ", path, sleep, timeout))
 	return api.readRabbitMqConfigurationWithRetry(ctx, path, 1, sleep, timeout)
 }
 

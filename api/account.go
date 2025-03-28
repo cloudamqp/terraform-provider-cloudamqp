@@ -68,7 +68,7 @@ func (api *API) RotatePassword(ctx context.Context, instanceID int) error {
 		path   = fmt.Sprintf("api/instances/%d/account/rotate-password", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path: %s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s ", path))
 	response, err := api.sling.New().Post(path).Receive(nil, &failed)
 	if err != nil {
 		return err

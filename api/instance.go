@@ -127,7 +127,7 @@ func (api *API) CreateInstance(ctx context.Context, params map[string]any) (map[
 		path   = "/api/instances"
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("path: %s, params: %v", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s ", path), params)
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
 	if err != nil {
 		return nil, err

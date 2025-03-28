@@ -14,7 +14,7 @@ func (api *API) RequestVpcGcpPeeringWithVpcId(ctx context.Context, vpcID string,
 	params map[string]any, waitOnStatus bool, sleep, timeout int) (map[string]any, error) {
 
 	path := fmt.Sprintf("api/vpcs/%s/vpc-peering", vpcID)
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s wait_on_status=%t, sleep=%d, timeout=%d",
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s wait_on_status=%t, sleep=%d, timeout=%d ",
 		path, waitOnStatus, sleep, timeout), params)
 	attempt, data, err := api.requestVpcGcpPeeringWithRetry(ctx, path, params, waitOnStatus, 1, sleep,
 		timeout)

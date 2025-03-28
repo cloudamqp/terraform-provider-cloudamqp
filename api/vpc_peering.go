@@ -37,7 +37,7 @@ func (api *API) ReadVpcPeeringRequest(ctx context.Context, instanceID int, peeri
 		path   = fmt.Sprintf("/api/instances/%d/vpc-peering/request/%s", instanceID, peeringID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err

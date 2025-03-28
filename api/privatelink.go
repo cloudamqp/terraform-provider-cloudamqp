@@ -88,7 +88,7 @@ func (api *API) UpdatePrivatelink(ctx context.Context, instanceID int, params ma
 		path   = fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v ", path, params))
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 	if err != nil {
 		return err
@@ -135,7 +135,7 @@ func (api *API) waitForEnablePrivatelinkWithRetry(ctx context.Context, instanceI
 		path   = fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s attempt=%d sleep=%d timeout=%d", path, attempt,
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s attempt=%d sleep=%d timeout=%d ", path, attempt,
 		sleep, timeout))
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
