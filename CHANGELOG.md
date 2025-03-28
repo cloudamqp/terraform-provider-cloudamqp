@@ -1,3 +1,18 @@
+## 1.33.0 (Unreleased)
+
+NOTES:
+
+* Bump Go version to 1.24
+* Bump golang.org/x/net from 0.34.0 to 0.36.0 ([#325](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/325))
+
+FEATURES:
+
+* Added support to managing maintenance window ([#326](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/326))
+
+IMPROVEMENTS:
+
+* Docs: LavinMQ supports MQTT and MQTTS ([#327](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/327))
+
 ## 1.32.3 (Mar 3, 2025)
 
 IMPROVEMENTS:
