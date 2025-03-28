@@ -256,6 +256,8 @@ func resourceDeleteVpcGcpPeering(ctx context.Context, d *schema.ResourceData, me
 		if err := api.RemoveVpcGcpPeeringWithVpcId(ctx, vpcID, d.Id()); err != nil {
 			return diag.FromErr(err)
 		}
+	} else {
+		return diag.Errorf("failed to remove VPC peering")
 	}
-	return diag.Errorf("failed to remove VPC peering")
+	return diag.Diagnostics{}
 }
