@@ -27,7 +27,7 @@ func (api *API) waitUntilVpcReady(ctx context.Context, vpcID string) error {
 		case 200:
 			return nil
 		case 400:
-			tflog.Warn(ctx, fmt.Sprintf("failed to wait until ready, status=%d message=%s ",
+			tflog.Warn(ctx, fmt.Sprintf("wait until ready, status=%d message=%s ",
 				response.StatusCode, failed))
 		default:
 			return fmt.Errorf("failed to wait until ready, status=%d message=%s ",
