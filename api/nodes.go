@@ -1,20 +1,22 @@
 package api
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"time"
+
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 // ListNodes - list all nodes of the cluster
-func (api *API) ListNodes(instanceID int) ([]map[string]any, error) {
+func (api *API) ListNodes(ctx context.Context, instanceID int) ([]map[string]any, error) {
 	var (
 		data   []map[string]any
 		failed map[string]any
 		path   = fmt.Sprintf("api/instances/%d/nodes", instanceID)
 	)
 
-	log.Printf("[DEBUG] api::nodes#list_nodes path: %s", path)
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
 	response, err := api.sling.New().Path(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -24,19 +26,20 @@ func (api *API) ListNodes(instanceID int) ([]map[string]any, error) {
 	case 200:
 		return data, nil
 	default:
-		return nil, fmt.Errorf("list nodes failed, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to list nodes, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
 
 // ReadNode - read out node information of a single node
-func (api *API) ReadNode(instanceID int, nodeName string) (map[string]any, error) {
+func (api *API) ReadNode(ctx context.Context, instanceID int, nodeName string) (
+	map[string]any, error) {
+
 	var (
 		data map[string]any
 	)
 
-	log.Printf("[DEBUG] go-api::nodes#read_node instance id: %d node name: %s", instanceID, nodeName)
-	response, err := api.ListNodes(instanceID)
+	response, err := api.ListNodes(ctx, instanceID)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +54,7 @@ func (api *API) ReadNode(instanceID int, nodeName string) (map[string]any, error
 }
 
 // PostAction - request an action for the node (e.g. start/stop/restart RabbitMQ)
-func (api *API) PostAction(instanceID int, nodeName string, action string) (
+func (api *API) PostAction(ctx context.Context, instanceID int, nodeName string, action string) (
 	map[string]any, error) {
 
 	var (
@@ -68,7 +71,9 @@ func (api *API) PostAction(instanceID int, nodeName string, action string) (
 	} else {
 		actionAsRoute = action
 	}
+
 	path := fmt.Sprintf("api/instances/%d/actions/%s", instanceID, actionAsRoute)
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s ", path))
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -76,21 +81,20 @@ func (api *API) PostAction(instanceID int, nodeName string, action string) (
 
 	switch response.StatusCode {
 	case 200:
-		return api.waitOnNodeAction(instanceID, nodeName, action)
+		return api.waitOnNodeAction(ctx, instanceID, nodeName, action)
 	default:
 
-		return nil, fmt.Errorf("action %s failed, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to invoke action %s, status=%d message=%s ",
 			action, response.StatusCode, failed)
 	}
 }
 
-func (api *API) waitOnNodeAction(instanceID int, nodeName string, action string) (
+func (api *API) waitOnNodeAction(ctx context.Context, instanceID int, nodeName string, action string) (
 	map[string]any, error) {
 
-	log.Printf("[DEBUG] api::nodes#waitOnNodeAction waiting")
+	tflog.Debug(ctx, "waiting on node action")
 	for {
-		data, err := api.ReadNode(instanceID, nodeName)
-
+		data, err := api.ReadNode(ctx, instanceID, nodeName)
 		if err != nil {
 			return nil, err
 		}

@@ -1,16 +1,18 @@
 package cloudamqp
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceAlarm() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceAlarmRead,
+		ReadContext: dataSourceAlarmRead,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -83,43 +85,50 @@ func dataSourceAlarm() *schema.Resource {
 	}
 }
 
-func dataSourceAlarmRead(d *schema.ResourceData, meta interface{}) error {
-	var data map[string]interface{}
-	var err error
+func dataSourceAlarmRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	var (
+		data       map[string]any
+		instanceID = d.Get("instance_id").(int)
+		err        error
+	)
 
 	// Multiple purpose read. To be used when using data source either by declaring alarm id or type.
 	if d.Get("alarm_id") != 0 {
-		data, err = dataSourceAlarmIDRead(d.Get("instance_id").(int), d.Get("alarm_id").(int), meta)
+		data, err = dataSourceAlarmIDRead(ctx, instanceID, d.Get("alarm_id").(int), meta)
 	} else if d.Get("type") != "" {
-		data, err = dataSourceAlarmTypeRead(d.Get("instance_id").(int), d.Get("type").(string), meta)
+		data, err = dataSourceAlarmTypeRead(ctx, instanceID, d.Get("type").(string), meta)
 	}
 
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	d.SetId(fmt.Sprintf("%v", data["id"]))
 	d.Set("alarm_id", data["id"])
 	for k, v := range data {
 		if validateAlarmSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
-func dataSourceAlarmIDRead(instanceID int, alarmID int, meta interface{}) (map[string]interface{}, error) {
+func dataSourceAlarmIDRead(ctx context.Context, instanceID int, alarmID int, meta interface{}) (
+	map[string]interface{}, error) {
+
 	api := meta.(*api.API)
 	id := strconv.Itoa(alarmID)
-	alarm, err := api.ReadAlarm(instanceID, id)
+	alarm, err := api.ReadAlarm(ctx, instanceID, id)
 	return alarm, err
 }
 
-func dataSourceAlarmTypeRead(instanceID int, alarmType string, meta interface{}) (map[string]interface{}, error) {
+func dataSourceAlarmTypeRead(ctx context.Context, instanceID int, alarmType string,
+	meta interface{}) (map[string]interface{}, error) {
+
 	api := meta.(*api.API)
-	alarms, err := api.ListAlarms(instanceID)
+	alarms, err := api.ListAlarms(ctx, instanceID)
 
 	if err != nil {
 		return nil, err

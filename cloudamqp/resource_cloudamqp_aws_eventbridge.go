@@ -1,20 +1,22 @@
 package cloudamqp
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceAwsEventBridge() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceAwsEventBridgeCreate,
-		Read:   resourceAwsEventBridgeRead,
-		Delete: resourceAwsEventBridgeDelete,
+		CreateContext: resourceAwsEventBridgeCreate,
+		ReadContext:   resourceAwsEventBridgeRead,
+		DeleteContext: resourceAwsEventBridgeDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -64,7 +66,7 @@ func resourceAwsEventBridge() *schema.Resource {
 	}
 }
 
-func resourceAwsEventBridgeCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceAwsEventBridgeCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		keys       = awsEventbridgeAttributeKeys()
@@ -78,26 +80,25 @@ func resourceAwsEventBridgeCreate(d *schema.ResourceData, meta interface{}) erro
 		}
 	}
 
-	data, err := api.CreateAwsEventBridge(instanceID, params)
+	data, err := api.CreateAwsEventBridge(ctx, instanceID, params)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(data["id"].(string))
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceAwsEventBridgeRead(d *schema.ResourceData, meta interface{}) error {
+func resourceAwsEventBridgeRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	if strings.Contains(d.Id(), ",") {
-		log.Printf("[DEBUG] cloudamqp::resource::aws-eventbridge::read id contains : %v", d.Id())
+		tflog.Debug(ctx, fmt.Sprintf("import AWS eventbridge from input identifier: %s", d.Id()))
 		s := strings.Split(d.Id(), ",")
-		log.Printf("[DEBUG] cloudamqp::resource::aws-eventbridge::read split ids: %v, %v", s[0], s[1])
 		d.SetId(s[0])
 		instanceID, _ := strconv.Atoi(s[1])
 		d.Set("instance_id", instanceID)
 	}
 	if d.Get("instance_id").(int) == 0 {
-		return fmt.Errorf("missing instance identifier: {resource_id},{instance_id}")
+		return diag.Errorf("missing input identifier for import: {resource_id},{instance_id}")
 	}
 
 	var (
@@ -105,10 +106,9 @@ func resourceAwsEventBridgeRead(d *schema.ResourceData, meta interface{}) error 
 		instanceID = d.Get("instance_id").(int)
 	)
 
-	log.Printf("[DEBUG] cloudamqp::resource::aws-eventbridge::read ID: %v, instanceID %v", d.Id(), instanceID)
-	data, err := api.ReadAwsEventBridge(instanceID, d.Id())
+	data, err := api.ReadAwsEventBridge(ctx, instanceID, d.Id())
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	for k, v := range data {
@@ -117,21 +117,24 @@ func resourceAwsEventBridgeRead(d *schema.ResourceData, meta interface{}) error 
 				continue
 			}
 			if err = d.Set(k, v); err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceAwsEventBridgeDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceAwsEventBridgeDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 	)
 
-	return api.DeleteAwsEventBridge(instanceID, d.Id())
+	if err := api.DeleteAwsEventBridge(ctx, instanceID, d.Id()); err != nil {
+		return diag.FromErr(err)
+	}
+	return diag.Diagnostics{}
 }
 
 func awsEventbridgeAttributeKeys() []string {

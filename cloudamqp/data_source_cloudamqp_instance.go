@@ -1,16 +1,17 @@
 package cloudamqp
 
 import (
-	"fmt"
+	"context"
 	"strconv"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceInstance() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceInstanceRead,
+		ReadContext: dataSourceInstanceRead,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -114,15 +115,18 @@ func dataSourceInstance() *schema.Resource {
 	}
 }
 
-func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	instanceID := strconv.Itoa(d.Get("instance_id").(int))
-	data, err := api.ReadInstance(instanceID)
+func dataSourceInstanceRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	var (
+		api        = meta.(*api.API)
+		instanceID = strconv.Itoa(d.Get("instance_id").(int))
+	)
 
+	data, err := api.ReadInstance(ctx, instanceID)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
-	d.SetId(fmt.Sprintf("%v", data["id"]))
+
+	d.SetId(instanceID)
 	for k, v := range data {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {
@@ -133,7 +137,7 @@ func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 			}
 
 			if err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
@@ -145,11 +149,11 @@ func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	if err = d.Set("host", data["hostname_external"].(string)); err != nil {
-		return fmt.Errorf("error setting host for resource %s: %s", d.Id(), err)
+		return diag.Errorf("error setting host for resource %s: %s", d.Id(), err)
 	}
 
 	if err = d.Set("host_internal", data["hostname_internal"].(string)); err != nil {
-		return fmt.Errorf("error setting host for resource %s: %s", d.Id(), err)
+		return diag.Errorf("error setting host for resource %s: %s", d.Id(), err)
 	}
 
 	if data["no_default_alarms"] == nil {
@@ -160,7 +164,7 @@ func dataSourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 	for k, v := range data {
 		if validateInstanceSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}

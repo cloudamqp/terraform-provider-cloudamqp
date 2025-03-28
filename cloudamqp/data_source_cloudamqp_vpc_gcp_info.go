@@ -1,17 +1,17 @@
 package cloudamqp
 
 import (
+	"context"
 	"errors"
-	"fmt"
-	"log"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceVpcGcpInfo() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceVpcGcpInfoRead,
+		ReadContext: dataSourceVpcGcpInfoRead,
 
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -55,7 +55,7 @@ func dataSourceVpcGcpInfo() *schema.Resource {
 	}
 }
 
-func dataSourceVpcGcpInfoRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceVpcGcpInfoRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api         = meta.(*api.API)
 		data        = make(map[string]interface{})
@@ -66,18 +66,16 @@ func dataSourceVpcGcpInfoRead(d *schema.ResourceData, meta interface{}) error {
 		timeout     = d.Get("timeout").(int)
 	)
 
-	log.Printf("[DEBUG] cloudamqp::data::vpc_gcp_info::request instance_id: %v, vpc_id: %v",
-		instance_id, vpc_id)
 	if instance_id == 0 && vpc_id == "" {
-		return errors.New("you need to specify either instance_id or vpc_id")
+		return diag.Errorf("you need to specify either instance_id or vpc_id")
 	} else if instance_id != 0 {
-		data, err = api.ReadVpcGcpInfo(instance_id, sleep, timeout)
+		data, err = api.ReadVpcGcpInfo(ctx, instance_id, sleep, timeout)
 	} else if d.Get("vpc_id") != nil {
-		data, err = api.ReadVpcGcpInfoWithVpcId(vpc_id, sleep, timeout)
+		data, err = api.ReadVpcGcpInfoWithVpcId(ctx, vpc_id, sleep, timeout)
 	}
 
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(data["name"].(string))
@@ -91,11 +89,11 @@ func dataSourceVpcGcpInfoRead(d *schema.ResourceData, meta interface{}) error {
 			}
 
 			if err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
-	return nil
+	return diag.Diagnostics{}
 }
 
 func validateVpcGcpInfoSchemaAttribute(key string) bool {

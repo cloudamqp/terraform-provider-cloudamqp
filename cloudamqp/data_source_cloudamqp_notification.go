@@ -1,16 +1,18 @@
 package cloudamqp
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceNotification() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceNotificationRead,
+		ReadContext: dataSourceNotificationRead,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -52,41 +54,48 @@ func dataSourceNotification() *schema.Resource {
 	}
 }
 
-func dataSourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
-	var data map[string]interface{}
-	var err error
+func dataSourceNotificationRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	var (
+		instanceID = d.Get("instance_id").(int)
+		data       map[string]interface{}
+		err        error
+	)
 
 	// Multiple purpose read. To be used when using data source either by declaring recipient id or type.
 	if d.Get("recipient_id") != 0 {
-		data, err = dataSourceNotificationIDRead(d.Get("instance_id").(int), d.Get("recipient_id").(int), meta)
+		data, err = dataSourceNotificationIDRead(ctx, instanceID, d.Get("recipient_id").(int), meta)
 	} else if d.Get("name") != "" {
-		data, err = dataSourceNotificationTypeRead(d.Get("instance_id").(int), d.Get("name").(string), meta)
+		data, err = dataSourceNotificationTypeRead(ctx, instanceID, d.Get("name").(string), meta)
 	}
 
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	d.SetId(fmt.Sprintf("%v", data["id"]))
 	for k, v := range data {
 		if validateRecipientAttribute(k) {
 			if err = d.Set(k, v); err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
-	return nil
+	return diag.Diagnostics{}
 }
 
-func dataSourceNotificationIDRead(instanceID int, alarmID int, meta interface{}) (map[string]interface{}, error) {
+func dataSourceNotificationIDRead(ctx context.Context, instanceID int, alarmID int,
+	meta interface{}) (map[string]interface{}, error) {
+
 	api := meta.(*api.API)
 	id := strconv.Itoa(alarmID)
-	recipient, err := api.ReadNotification(instanceID, id)
+	recipient, err := api.ReadNotification(ctx, instanceID, id)
 	return recipient, err
 }
 
-func dataSourceNotificationTypeRead(instanceID int, name string, meta interface{}) (map[string]interface{}, error) {
+func dataSourceNotificationTypeRead(ctx context.Context, instanceID int, name string,
+	meta interface{}) (map[string]interface{}, error) {
+
 	api := meta.(*api.API)
-	recipients, err := api.ListNotifications(instanceID)
+	recipients, err := api.ListNotifications(ctx, instanceID)
 
 	if err != nil {
 		return nil, err

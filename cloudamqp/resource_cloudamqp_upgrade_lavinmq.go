@@ -1,19 +1,22 @@
 package cloudamqp
 
 import (
-	"log"
+	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceUpgradeLavinMQ() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceUpgradeLavinMQInvoke,
-		Read:   resourceUpgradeLavinMQRead,
-		Update: resourceUpgradeLavinMQUpdate,
-		Delete: resourceUpgradeLavinMQRemove,
+		CreateContext: resourceUpgradeLavinMQInvoke,
+		ReadContext:   resourceUpgradeLavinMQRead,
+		UpdateContext: resourceUpgradeLavinMQUpdate,
+		DeleteContext: resourceUpgradeLavinMQRemove,
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
 				Type:        schema.TypeInt,
@@ -30,36 +33,35 @@ func resourceUpgradeLavinMQ() *schema.Resource {
 	}
 }
 
-func resourceUpgradeLavinMQInvoke(d *schema.ResourceData, meta interface{}) error {
+func resourceUpgradeLavinMQInvoke(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api         = meta.(*api.API)
 		instanceID  = d.Get("instance_id").(int)
 		new_version = d.Get("new_version").(string)
 	)
 
-	log.Printf("[DEBUG] - Upgrading LavinMQ instance %d to version %s", instanceID, new_version)
-	response, err := api.UpgradeLavinMQ(instanceID, new_version)
+	response, err := api.UpgradeLavinMQ(ctx, instanceID, new_version)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(strconv.Itoa(instanceID))
 
 	if len(response) > 0 {
-		log.Println("[INFO] - ", response)
+		tflog.Info(ctx, fmt.Sprintf("LavinMQ update result: %s", response))
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceUpgradeLavinMQRead(d *schema.ResourceData, meta interface{}) error {
-	return nil
+func resourceUpgradeLavinMQRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return diag.Diagnostics{}
 }
 
-func resourceUpgradeLavinMQUpdate(d *schema.ResourceData, meta interface{}) error {
-	return nil
+func resourceUpgradeLavinMQUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return diag.Diagnostics{}
 }
 
-func resourceUpgradeLavinMQRemove(d *schema.ResourceData, meta interface{}) error {
-	return nil
+func resourceUpgradeLavinMQRemove(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return diag.Diagnostics{}
 }

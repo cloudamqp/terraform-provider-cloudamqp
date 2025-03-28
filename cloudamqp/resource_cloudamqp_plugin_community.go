@@ -1,22 +1,23 @@
 package cloudamqp
 
 import (
-	"errors"
+	"context"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourcePluginCommunity() *schema.Resource {
 	return &schema.Resource{
-		Create: resourcePluginCommunityCreate,
-		Read:   resourcePluginCommunityRead,
-		Update: resourcePluginCommunityUpdate,
-		Delete: resourcePluginCommunityDelete,
+		CreateContext: resourcePluginCommunityCreate,
+		ReadContext:   resourcePluginCommunityRead,
+		UpdateContext: resourcePluginCommunityUpdate,
+		DeleteContext: resourcePluginCommunityDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -63,7 +64,7 @@ func resourcePluginCommunity() *schema.Resource {
 	}
 }
 
-func resourcePluginCommunityCreate(d *schema.ResourceData, meta interface{}) error {
+func resourcePluginCommunityCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -72,28 +73,28 @@ func resourcePluginCommunityCreate(d *schema.ResourceData, meta interface{}) err
 		timeout    = d.Get("timeout").(int)
 	)
 
-	data, err := api.ReadPluginCommunity(instanceID, name, sleep, timeout)
+	data, err := api.ReadPluginCommunity(ctx, instanceID, name, sleep, timeout)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	_, err = api.InstallPluginCommunity(instanceID, name, sleep, timeout)
+	_, err = api.InstallPluginCommunity(ctx, instanceID, name, sleep, timeout)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	d.SetId(name)
 
 	for k, v := range data {
 		if validateCommunityPluginSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
 	return nil
 }
 
-func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error {
+func resourcePluginCommunityRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -104,6 +105,7 @@ func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error
 
 	// Support for importing resource
 	if strings.Contains(d.Id(), ",") {
+		tflog.Info(ctx, fmt.Sprintf("import of resource with identifiers: %s", d.Id()))
 		s := strings.Split(d.Id(), ",")
 		name = s[0]
 		d.SetId(name)
@@ -115,26 +117,26 @@ func resourcePluginCommunityRead(d *schema.ResourceData, meta interface{}) error
 		d.Set("timeout", 1800)
 	}
 	if instanceID == 0 {
-		return errors.New("missing instance identifier: {resource_id},{instance_id}")
+		return diag.Errorf("missing instance identifier: {resource_id},{instance_id}")
 	}
 
-	data, err := api.ReadPluginCommunity(instanceID, name, sleep, timeout)
+	data, err := api.ReadPluginCommunity(ctx, instanceID, name, sleep, timeout)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	for k, v := range data {
 		if validateCommunityPluginSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourcePluginCommunityUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourcePluginCommunityUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -144,14 +146,14 @@ func resourcePluginCommunityUpdate(d *schema.ResourceData, meta interface{}) err
 		timeout    = d.Get("timeout").(int)
 	)
 
-	_, err := api.UpdatePluginCommunity(instanceID, name, enabled, sleep, timeout)
+	_, err := api.UpdatePluginCommunity(ctx, instanceID, name, enabled, sleep, timeout)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
-	return resourcePluginCommunityRead(d, meta)
+	return resourcePluginCommunityRead(ctx, d, meta)
 }
 
-func resourcePluginCommunityDelete(d *schema.ResourceData, meta interface{}) error {
+func resourcePluginCommunityDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -161,12 +163,14 @@ func resourcePluginCommunityDelete(d *schema.ResourceData, meta interface{}) err
 	)
 
 	if enableFasterInstanceDestroy {
-		log.Printf("[DEBUG] cloudamqp::resource::plugin-community::delete skip calling backend.")
+		tflog.Debug(ctx, "delete will skip calling backend.")
 		return nil
 	}
 
-	_, err := api.UninstallPluginCommunity(instanceID, name, sleep, timeout)
-	return err
+	if _, err := api.UninstallPluginCommunity(ctx, instanceID, name, sleep, timeout); err != nil {
+		return diag.FromErr(err)
+	}
+	return diag.Diagnostics{}
 }
 
 func validateCommunityPluginSchemaAttribute(key string) bool {

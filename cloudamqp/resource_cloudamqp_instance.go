@@ -2,9 +2,9 @@ package cloudamqp
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -12,10 +12,10 @@ import (
 
 func resourceInstance() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceCreate,
-		Read:   resourceRead,
-		Update: resourceUpdate,
-		Delete: resourceDelete,
+		CreateContext: resourceCreate,
+		ReadContext:   resourceRead,
+		UpdateContext: resourceUpdate,
+		DeleteContext: resourceDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -172,7 +172,7 @@ func resourceInstance() *schema.Resource {
 	}
 }
 
-func resourceCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
 	keys := instanceCreateAttributeKeys()
 	params := make(map[string]interface{})
@@ -209,21 +209,21 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
-	data, err := api.CreateInstance(params)
+	data, err := api.CreateInstance(ctx, params)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(data["id"].(string))
-	return resourceRead(d, meta)
+	return resourceRead(ctx, d, meta)
 }
 
-func resourceRead(d *schema.ResourceData, meta interface{}) error {
+func resourceRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
-	data, err := api.ReadInstance(d.Id())
+	data, err := api.ReadInstance(ctx, d.Id())
 
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	for k, v := range data {
@@ -235,7 +235,7 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 			}
 
 			if err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
@@ -247,25 +247,25 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	if err = d.Set("host", data["hostname_external"].(string)); err != nil {
-		return fmt.Errorf("error setting host for resource %s: %s", d.Id(), err)
+		return diag.Errorf("error setting host for resource %s: %s", d.Id(), err)
 	}
 
 	if err = d.Set("host_internal", data["hostname_internal"].(string)); err != nil {
-		return fmt.Errorf("error setting host for resource %s: %s", d.Id(), err)
+		return diag.Errorf("error setting host for resource %s: %s", d.Id(), err)
 	}
 
 	data = api.UrlInformation(data["url"].(string))
 	for k, v := range data {
 		if validateInstanceSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
 	keys := []string{"name", "plan", "nodes", "tags"}
 	params := make(map[string]interface{})
@@ -286,16 +286,19 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
-	if err := api.UpdateInstance(d.Id(), params); err != nil {
-		return err
+	if err := api.UpdateInstance(ctx, d.Id(), params); err != nil {
+		return diag.FromErr(err)
 	}
 
-	return resourceRead(d, meta)
+	return resourceRead(ctx, d, meta)
 }
 
-func resourceDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
-	return api.DeleteInstance(d.Id(), d.Get("keep_associated_vpc").(bool))
+	if err := api.DeleteInstance(ctx, d.Id(), d.Get("keep_associated_vpc").(bool)); err != nil {
+		return diag.FromErr(err)
+	}
+	return diag.Diagnostics{}
 }
 
 func validateInstanceSchemaAttribute(key string) bool {

@@ -1,20 +1,21 @@
 package cloudamqp
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"net"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceVpc() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceVpcCreate,
-		Read:   resourceVpcRead,
-		Update: resourceVpcUpdate,
-		Delete: resourceVpcDelete,
+		CreateContext: resourceVpcCreate,
+		ReadContext:   resourceVpcRead,
+		UpdateContext: resourceVpcUpdate,
+		DeleteContext: resourceVpcDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -61,7 +62,7 @@ func resourceVpc() *schema.Resource {
 	}
 }
 
-func resourceVpcCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
 	keys := []string{"name", "region", "subnet", "tags"}
 	params := make(map[string]interface{})
@@ -71,37 +72,36 @@ func resourceVpcCreate(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
-	data, err := api.CreateVpcInstance(params)
+	data, err := api.CreateVpcInstance(ctx, params)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	log.Printf("[DEBUG] cloudamqp::vpc::create data: %v", data)
 	d.SetId(data["id"].(string))
-	return resourceVpcRead(d, meta)
+	return resourceVpcRead(ctx, d, meta)
 }
 
-func resourceVpcRead(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
-	data, err := api.ReadVpcInstance(d.Id())
+	data, err := api.ReadVpcInstance(ctx, d.Id())
 
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	for k, v := range data {
 		if validateVpcSchemaAttribute(k) {
 			err = d.Set(k, v)
 			if err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceVpcUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
 	keys := []string{"name", "tags"}
 	params := make(map[string]interface{})
@@ -111,16 +111,19 @@ func resourceVpcUpdate(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
-	if err := api.UpdateVpcInstance(d.Id(), params); err != nil {
-		return err
+	if err := api.UpdateVpcInstance(ctx, d.Id(), params); err != nil {
+		return diag.FromErr(err)
 	}
 
-	return resourceVpcRead(d, meta)
+	return resourceVpcRead(ctx, d, meta)
 }
 
-func resourceVpcDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
-	return api.DeleteVpcInstance(d.Id())
+	if err := api.DeleteVpcInstance(ctx, d.Id()); err != nil {
+		return diag.FromErr(err)
+	}
+	return diag.Diagnostics{}
 }
 
 func validateVpcSchemaAttribute(key string) bool {

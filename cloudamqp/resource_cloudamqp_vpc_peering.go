@@ -1,22 +1,24 @@
 package cloudamqp
 
 import (
+	"context"
 	"errors"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceVpcPeering() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceVpcPeeringAccept,
-		Read:   resourceVpcPeeringRead,
-		Update: resourceVpcPeeringAccept,
-		Delete: resourceVpcPeeringDelete,
+		CreateContext: resourceVpcPeeringAccept,
+		ReadContext:   resourceVpcPeeringRead,
+		UpdateContext: resourceVpcPeeringAccept,
+		DeleteContext: resourceVpcPeeringDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -57,7 +59,7 @@ func resourceVpcPeering() *schema.Resource {
 	}
 }
 
-func resourceVpcPeeringAccept(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcPeeringAccept(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		err        = errors.New("")
@@ -68,25 +70,22 @@ func resourceVpcPeeringAccept(d *schema.ResourceData, meta interface{}) error {
 		timeout    = d.Get("timeout").(int)
 	)
 
-	log.Printf("[DEBUG] cloudamqp::resource::vpc_aws_peering#accept instance_id: %d, vpc_id: %s, "+
-		"peering_id: %s", instanceID, vpcID, peeringID)
-
 	if instanceID == 0 && vpcID == "" {
-		return errors.New("you need to specify either instance_id or vpc_id")
+		return diag.Errorf("you need to specify either instance_id or vpc_id")
 	} else if instanceID != 0 {
-		_, err = api.AcceptVpcPeering(instanceID, peeringID, sleep, timeout)
+		_, err = api.AcceptVpcPeering(ctx, instanceID, peeringID, sleep, timeout)
 	} else if vpcID != "" {
-		_, err = api.AcceptVpcPeeringWithVpcId(vpcID, peeringID, sleep, timeout)
+		_, err = api.AcceptVpcPeeringWithVpcId(ctx, vpcID, peeringID, sleep, timeout)
 	}
 
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return resourceVpcPeeringRead(d, meta)
+	return resourceVpcPeeringRead(ctx, d, meta)
 }
 
-func resourceVpcPeeringRead(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcPeeringRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -98,20 +97,22 @@ func resourceVpcPeeringRead(d *schema.ResourceData, meta interface{}) error {
 
 	// Check to determine if the resource should be imported.
 	if strings.Contains(d.Id(), ",") {
-		log.Printf("[DEBUG] cloudamqp::resource::vpc_aws_peering#read import detected")
-		return resourceVpcPeeringImport(d, meta)
+		tflog.Info(ctx, fmt.Sprintf("import of resource with identifiers: %s", d.Id()))
+		if diag := resourceVpcPeeringImport(ctx, d, meta); diag != nil {
+			return diag
+		}
 	}
 
 	if instanceID == 0 && vpcID == "" {
-		return errors.New("you need to specify either instance_id or vpc_id")
+		return diag.Errorf("you need to specify either instance_id or vpc_id")
 	} else if instanceID != 0 {
-		data, err = api.ReadVpcPeeringRequest(instanceID, peeringID)
+		data, err = api.ReadVpcPeeringRequest(ctx, instanceID, peeringID)
 	} else if d.Get("vpc_id") != nil {
-		data, err = api.ReadVpcPeeringRequestWithVpcId(vpcID, peeringID)
+		data, err = api.ReadVpcPeeringRequestWithVpcId(ctx, vpcID, peeringID)
 	}
 
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	for k, v := range data {
@@ -121,15 +122,15 @@ func resourceVpcPeeringRead(d *schema.ResourceData, meta interface{}) error {
 		case "status":
 			status := v.(map[string]interface{})
 			if err = d.Set(k, status["code"]); err != nil {
-				return fmt.Errorf("error setting status for resource %s: %s", d.Id(), err)
+				return diag.Errorf("error setting status for resource %s: %s", d.Id(), err)
 			}
 		}
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceVpcPeeringImport(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcPeeringImport(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api  = meta.(*api.API)
 		data map[string]interface{}
@@ -140,25 +141,24 @@ func resourceVpcPeeringImport(d *schema.ResourceData, meta interface{}) error {
 	d.Set("sleep", 60)
 	d.Set("timeout", 3600)
 
-	log.Printf("[DEBUG] cloudamqp::resource::vpc_aws_peering#import id: %v", d.Id())
 	importValues := strings.Split(d.Id(), ",")
 	if len(importValues) < 3 {
-		return errors.New("wrong number of import argument, need all three <type>,<id>,<peering_id>")
+		return diag.Errorf("wrong number of import argument, need all three <type>,<id>,<peering_id>")
 	}
 	peeringID := importValues[2]
 	d.Set("peering_id", peeringID)
 	if importValues[0] == "instance" {
 		instanceID, _ := strconv.Atoi(importValues[1])
 		d.Set("instance_id", instanceID)
-		data, err = api.ReadVpcPeeringRequest(instanceID, peeringID)
+		data, err = api.ReadVpcPeeringRequest(ctx, instanceID, peeringID)
 	} else if importValues[0] == "vpc" {
 		vpcID := importValues[1]
 		d.Set("vpc_id", vpcID)
-		data, err = api.ReadVpcPeeringRequestWithVpcId(vpcID, peeringID)
+		data, err = api.ReadVpcPeeringRequestWithVpcId(ctx, vpcID, peeringID)
 	}
 
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	for k, v := range data {
@@ -168,15 +168,15 @@ func resourceVpcPeeringImport(d *schema.ResourceData, meta interface{}) error {
 		case "status":
 			status := v.(map[string]interface{})
 			if err = d.Set(k, status["code"]); err != nil {
-				return fmt.Errorf("error setting status for resource %s: %s", d.Id(), err)
+				return diag.Errorf("error setting status for resource %s: %s", d.Id(), err)
 			}
 		}
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceVpcPeeringDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceVpcPeeringDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -187,12 +187,16 @@ func resourceVpcPeeringDelete(d *schema.ResourceData, meta interface{}) error {
 	)
 
 	if instanceID == 0 && vpcID == "" {
-		return errors.New("you need to specify either instance_id or vpc_id")
+		return diag.Errorf("you need to specify either instance_id or vpc_id")
 	} else if instanceID != 0 {
-		return api.RemoveVpcPeering(instanceID, peeringID, sleep, timeout)
+		if err := api.RemoveVpcPeering(ctx, instanceID, peeringID, sleep, timeout); err != nil {
+			return diag.FromErr(err)
+		}
 	} else if vpcID != "" {
-		return api.RemoveVpcPeeringWithVpcId(vpcID, peeringID, sleep, timeout)
+		if err := api.RemoveVpcPeeringWithVpcId(ctx, vpcID, peeringID, sleep, timeout); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }

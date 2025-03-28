@@ -35,9 +35,9 @@ func (api *API) ValidatePlan(name string) error {
 				return nil
 			}
 		}
-		return fmt.Errorf("subscription plan: %s is not valid", name)
+		return fmt.Errorf("subscription plan, %s, is not valid", name)
 	default:
-		return fmt.Errorf("failed to validate subscription plan, status code: %d, message: %s",
+		return fmt.Errorf("failed to validate subscription plan, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }
@@ -68,8 +68,7 @@ func (api *API) PlanTypes(old, new string) (string, string, error) {
 		}
 		return oldPlanType, newPlanType, nil
 	default:
-		return "", "", fmt.Errorf("Plan types. "+
-			"Status code: %d, message: %v", response.StatusCode, failed)
+		return "", "", fmt.Errorf("Plan types. status=%d message=%s ", response.StatusCode, failed)
 	}
 }
 
@@ -103,9 +102,9 @@ func (api *API) ValidateRegion(region string) error {
 				return nil
 			}
 		}
-		return fmt.Errorf("provider & region: %s is not valid", region)
+		return fmt.Errorf("provider & region, %s, is not valid", region)
 	default:
-		return fmt.Errorf("failed to validate region, status code: %d, message: %v",
+		return fmt.Errorf("failed to validate region, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }

@@ -1,17 +1,20 @@
 package cloudamqp
 
 import (
+	"context"
+
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceNodeAction() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceNodeActionRequest,
-		Update: resourceNodeActionRequest,
-		Read:   resourceNodeActionRead,
-		Delete: resourceNodeActionRemove,
+		CreateContext: resourceNodeActionRequest,
+		UpdateContext: resourceNodeActionRequest,
+		ReadContext:   resourceNodeActionRead,
+		DeleteContext: resourceNodeActionRemove,
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
 				Type:        schema.TypeInt,
@@ -38,30 +41,30 @@ func resourceNodeAction() *schema.Resource {
 	}
 }
 
-func resourceNodeActionRequest(d *schema.ResourceData, meta interface{}) error {
+func resourceNodeActionRequest(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
 	nodeName := d.Get("node_name").(string)
-	data, err := api.PostAction(d.Get("instance_id").(int), nodeName, d.Get("action").(string))
+	data, err := api.PostAction(ctx, d.Get("instance_id").(int), nodeName, d.Get("action").(string))
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	d.SetId(nodeName)
 	d.Set("running", data["running"])
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceNodeActionRead(d *schema.ResourceData, meta interface{}) error {
+func resourceNodeActionRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
-	data, err := api.ReadNode(d.Get("instance_id").(int), d.Get("node_name").(string))
+	data, err := api.ReadNode(ctx, d.Get("instance_id").(int), d.Get("node_name").(string))
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	d.Set("running", data["running"])
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceNodeActionRemove(d *schema.ResourceData, meta interface{}) error {
-	return nil
+func resourceNodeActionRemove(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	return diag.Diagnostics{}
 }
 
 func validateNodeAction() schema.SchemaValidateDiagFunc {

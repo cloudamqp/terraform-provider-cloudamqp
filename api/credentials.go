@@ -1,19 +1,22 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"regexp"
-	"strconv"
+
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func (api *API) ReadCredentials(id int) (map[string]any, error) {
+func (api *API) ReadCredentials(ctx context.Context, instanceID int) (map[string]any, error) {
 	var (
-		data       map[string]any
-		failed     map[string]any
-		instanceID = strconv.Itoa(id)
+		data   map[string]any
+		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%d", instanceID)
 	)
 
-	response, err := api.sling.New().Path("/api/instances/").Get(instanceID).Receive(&data, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
+	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
 	}
@@ -22,7 +25,7 @@ func (api *API) ReadCredentials(id int) (map[string]any, error) {
 	case 200:
 		return extractInfo(data["url"].(string)), nil
 	default:
-		return nil, fmt.Errorf("read credentials failed, status: %d, message: %s",
+		return nil, fmt.Errorf("failed to read credentials, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }

@@ -1,12 +1,14 @@
 package cloudamqp
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"net"
 	"strconv"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
@@ -18,10 +20,10 @@ type ServicePort struct {
 
 func resourceSecurityFirewall() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceSecurityFirewallCreate,
-		Read:   resourceSecurityFirewallRead,
-		Update: resourceSecurityFirewallUpdate,
-		Delete: resourceSecurityFirewallDelete,
+		CreateContext: resourceSecurityFirewallCreate,
+		ReadContext:   resourceSecurityFirewallRead,
+		UpdateContext: resourceSecurityFirewallUpdate,
+		DeleteContext: resourceSecurityFirewallDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -101,7 +103,7 @@ func resourceSecurityFirewall() *schema.Resource {
 	}
 }
 
-func resourceSecurityFirewallCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceSecurityFirewallCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api            = meta.(*api.API)
 		instanceID     = d.Get("instance_id").(int)
@@ -115,18 +117,17 @@ func resourceSecurityFirewallCreate(d *schema.ResourceData, meta interface{}) er
 		params[index] = value.(map[string]interface{})
 	}
 
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::create instanceID: %d, params: %v", instanceID, params)
-	_, err := api.CreateFirewallSettings(instanceID, params, sleep, timeout)
+	_, err := api.CreateFirewallSettings(ctx, instanceID, params, sleep, timeout)
 	if err != nil {
-		return fmt.Errorf("error setting security firewall for resource %s: %s", d.Id(), err)
+		return diag.Errorf("error setting security firewall for resource %s: %s", d.Id(), err)
 	}
 
 	d.SetId(strconv.Itoa(instanceID))
 
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) error {
+func resourceSecurityFirewallRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api           = meta.(*api.API)
 		instanceID, _ = strconv.Atoi(d.Id())
@@ -141,9 +142,9 @@ func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) erro
 		d.Set("timeout", 1800)
 	}
 
-	data, err := api.ReadFirewallSettings(instanceID)
+	data, err := api.ReadFirewallSettings(ctx, instanceID)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	rules := make([]map[string]interface{}, len(data))
@@ -151,15 +152,14 @@ func resourceSecurityFirewallRead(d *schema.ResourceData, meta interface{}) erro
 		rules[k] = readRule(v)
 	}
 
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::read rules: %v", rules)
 	if err = d.Set("rules", rules); err != nil {
-		return fmt.Errorf("error setting rules for resource %s, %s", d.Id(), err)
+		return diag.Errorf("error setting rules for resource %s, %s", d.Id(), err)
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceSecurityFirewallUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api            = meta.(*api.API)
 		instanceID     = d.Get("instance_id").(int)
@@ -173,16 +173,15 @@ func resourceSecurityFirewallUpdate(d *schema.ResourceData, meta interface{}) er
 		params[index] = value.(map[string]interface{})
 	}
 
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::update instance id: %d, params: %v", instanceID, params)
-	_, err := api.UpdateFirewallSettings(instanceID, params, sleep, timeout)
+	_, err := api.UpdateFirewallSettings(ctx, instanceID, params, sleep, timeout)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceSecurityFirewallDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -191,14 +190,16 @@ func resourceSecurityFirewallDelete(d *schema.ResourceData, meta interface{}) er
 	)
 
 	if enableFasterInstanceDestroy {
-		log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete skip calling backend.")
-		return nil
+		tflog.Info(ctx, fmt.Sprintf("delete being skipped and no call to backend"))
+		return diag.Diagnostics{}
 	}
 
-	log.Printf("[DEBUG] cloudamqp::resource::security_firewall::delete instance id: %d", instanceID)
-	data, err := api.DeleteFirewallSettings(instanceID, sleep, timeout)
+	data, err := api.DeleteFirewallSettings(ctx, instanceID, sleep, timeout)
 	d.Set("rules", data)
-	return err
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	return diag.Diagnostics{}
 }
 
 func readRule(data map[string]interface{}) map[string]interface{} {

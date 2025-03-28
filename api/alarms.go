@@ -1,20 +1,24 @@
 package api
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"strconv"
 	"time"
+
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func (api *API) CreateAlarm(instanceID int, params map[string]any) (map[string]any, error) {
+func (api *API) CreateAlarm(ctx context.Context, instanceID int, params map[string]any) (
+	map[string]any, error) {
+
 	var (
 		data   map[string]any
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms", instanceID)
 	)
 
-	log.Printf("[DEBUG] api::alarms#create path: %s", path)
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s ", path), params)
 	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -22,27 +26,29 @@ func (api *API) CreateAlarm(instanceID int, params map[string]any) (map[string]a
 
 	switch response.StatusCode {
 	case 201:
-		log.Printf("[DEBUG] api::alarms#create data: %v", data)
+		tflog.Debug(ctx, "response data", data)
 		if id, ok := data["id"]; ok {
 			data["id"] = strconv.FormatFloat(id.(float64), 'f', 0, 64)
 		} else {
-			return nil, fmt.Errorf("create alarm failed, invalid alarm identifier: %v", data["id"])
+			return nil, fmt.Errorf("invalid identifier=%v ", data["id"])
 		}
 		return data, err
 	default:
-		return nil,
-			fmt.Errorf("create alarm failed, status: %d, message: %s", response.StatusCode, failed)
+		return nil, fmt.Errorf("failed to create alarm, status=%d message=%s ",
+			response.StatusCode, failed)
 	}
 }
 
-func (api *API) ReadAlarm(instanceID int, alarmID string) (map[string]any, error) {
+func (api *API) ReadAlarm(ctx context.Context, instanceID int, alarmID string) (
+	map[string]any, error) {
+
 	var (
 		data   map[string]any
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/%s", instanceID, alarmID)
 	)
 
-	log.Printf("[DEBUG] api::alarms#read path: %s", path)
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -50,22 +56,22 @@ func (api *API) ReadAlarm(instanceID int, alarmID string) (map[string]any, error
 
 	switch response.StatusCode {
 	case 200:
-		log.Printf("[DEBUG] api::alarms#read data : %v", data)
+		tflog.Debug(ctx, "response data", data)
 		return data, err
 	default:
 		return nil,
-			fmt.Errorf("read alarm failed, status: %d, message: %s", response.StatusCode, failed)
+			fmt.Errorf("failed to read alarm, status=%d message=%s ", response.StatusCode, failed)
 	}
 }
 
-func (api *API) ListAlarms(instanceID int) ([]map[string]any, error) {
+func (api *API) ListAlarms(ctx context.Context, instanceID int) ([]map[string]any, error) {
 	var (
 		data   []map[string]any
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms", instanceID)
 	)
 
-	log.Printf("[DEBUG] api::alarms#list path: %s", path)
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
 		return nil, err
@@ -73,21 +79,21 @@ func (api *API) ListAlarms(instanceID int) ([]map[string]any, error) {
 
 	switch response.StatusCode {
 	case 200:
-		log.Printf("[DEBUG] api::alarms#list data: %v", data)
+		tflog.Debug(ctx, fmt.Sprintf("response data=%v ", data))
 		return data, err
 	default:
 		return nil,
-			fmt.Errorf("list alarms failed, status: %d, message: %s", response.StatusCode, failed)
+			fmt.Errorf("failed to list alarms, status=%d message=%s ", response.StatusCode, failed)
 	}
 }
 
-func (api *API) UpdateAlarm(instanceID int, params map[string]any) error {
+func (api *API) UpdateAlarm(ctx context.Context, instanceID int, params map[string]any) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/%s", instanceID, params["id"].(string))
 	)
 
-	log.Printf("[DEBUG] api::alarms#update path: %s", path)
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s ", path), params)
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 	if err != nil {
 		return err
@@ -97,17 +103,17 @@ func (api *API) UpdateAlarm(instanceID int, params map[string]any) error {
 	case 201:
 		return nil
 	default:
-		return fmt.Errorf("update alarm failed, status: %d, message: %s", response.StatusCode, failed)
+		return fmt.Errorf("failed to update alarm, status=%d message=%s ", response.StatusCode, failed)
 	}
 }
 
-func (api *API) DeleteAlarm(instanceID int, alarmID string) error {
+func (api *API) DeleteAlarm(ctx context.Context, instanceID int, alarmID string) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/%s", instanceID, alarmID)
 	)
 
-	log.Printf("[DEBUG] api::alarms::delete path: %s", path)
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 	if err != nil {
 		return err
@@ -115,30 +121,31 @@ func (api *API) DeleteAlarm(instanceID int, alarmID string) error {
 
 	switch response.StatusCode {
 	case 204:
-		return api.waitUntilAlarmDeletion(instanceID, alarmID)
+		return api.waitUntilAlarmDeletion(ctx, instanceID, alarmID)
 	default:
-		return fmt.Errorf("delete alarm failed, status: %d, message: %s", response.StatusCode, failed)
+		return fmt.Errorf("failed to delete alarm, status=%d message=%s ", response.StatusCode, failed)
 	}
 }
 
-func (api *API) waitUntilAlarmDeletion(instanceID int, alarmID string) error {
+// TODO: Should not be needed. Removed from backend and should be instant.
+func (api *API) waitUntilAlarmDeletion(ctx context.Context, instanceID int, alarmID string) error {
 	var (
 		data   map[string]any
 		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%d/alarms/%s", instanceID, alarmID)
 	)
 
-	log.Printf("[DEBUG] api::alarms#waitUntilAlarmDeletion waiting")
+	tflog.Debug(ctx, "waiting on deletion")
 	for {
-		path := fmt.Sprintf("/api/instances/%d/alarms/%s", instanceID, alarmID)
 		response, err := api.sling.New().Path(path).Receive(&data, &failed)
 		if err != nil {
-			log.Printf("[DEBUG] api::alarms#waitUntilAlarmDeletion error: %v", err)
-			return err
+			return fmt.Errorf("failed to delete alarm, status=%d message=%s ",
+				response.StatusCode, failed)
 		}
 
 		switch response.StatusCode {
 		case 404:
-			log.Print("[DEBUG] api::alarms#waitUntilAlarmDeletion deleted")
+			tflog.Debug(ctx, fmt.Sprintf("alarm with identifier %s deleted", alarmID))
 			return nil
 		}
 

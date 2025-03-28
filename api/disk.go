@@ -1,26 +1,29 @@
 package api
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"strconv"
 	"time"
+
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func (api *API) ResizeDisk(instanceID int, params map[string]any, sleep, timeout int) (
-	map[string]any, error) {
+func (api *API) ResizeDisk(ctx context.Context, instanceID int, params map[string]any,
+	sleep, timeout int) (map[string]any, error) {
 
 	var (
 		id   = strconv.Itoa(instanceID)
 		path = fmt.Sprintf("api/instances/%s/disk", id)
 	)
-	log.Printf("[DEBUG] api::resizeDisk#resizeDiskWithRetry path: %s, "+
-		"attempt: %d, sleep: %d, timeout: %d", path, 1, sleep, timeout)
-	return api.resizeDiskWithRetry(id, params, 1, sleep, timeout)
+
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d timeout=%d ", path, sleep, timeout),
+		params)
+	return api.resizeDiskWithRetry(ctx, id, params, 1, sleep, timeout)
 }
 
-func (api *API) resizeDiskWithRetry(id string, params map[string]any, attempt, sleep,
-	timeout int) (map[string]any, error) {
+func (api *API) resizeDiskWithRetry(ctx context.Context, id string, params map[string]any,
+	attempt, sleep, timeout int) (map[string]any, error) {
 
 	var (
 		data   map[string]any
@@ -37,25 +40,26 @@ func (api *API) resizeDiskWithRetry(id string, params map[string]any, attempt, s
 
 	switch response.StatusCode {
 	case 200:
-		if err = api.waitWithTimeoutUntilAllNodesConfigured(id, attempt, sleep, timeout); err != nil {
+		if err = api.waitUntilAllNodesConfigured(ctx, id, attempt, sleep, timeout); err != nil {
 			return nil, err
 		}
+		tflog.Debug(ctx, "response data", data)
 		return data, nil
 	case 400:
-		log.Printf("[DEBUG] api::resizeDisk#resizeDiskWithRetry failed: %v", failed)
+		tflog.Debug(ctx, "response failed", failed)
 		switch {
 		case failed["error_code"] == nil:
 			break
 		case failed["error_code"].(float64) == 40099:
-			log.Printf("[DEBUG] api::resizeDisk#resizeDiskWithRetry %s, will try again, attempt: %d, "+
-				"until timeout: %d", failed["error"].(string), attempt, (timeout - (attempt * sleep)))
+			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt=%d "+
+				"until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.resizeDiskWithRetry(id, params, attempt, sleep, timeout)
+			return api.resizeDiskWithRetry(ctx, id, params, attempt, sleep, timeout)
 		default:
-			return nil, fmt.Errorf("resize disk failed: %s", failed["error"].(string))
+			return nil, fmt.Errorf("failed to resize disk: %s", failed["error"].(string))
 		}
 	}
-	return nil, fmt.Errorf("resize disk failed, status: %d, message: %s",
+	return nil, fmt.Errorf("failed to resize disk, status=%d message=%s ",
 		response.StatusCode, failed["error"].(string))
 }

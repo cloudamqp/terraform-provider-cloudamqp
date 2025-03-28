@@ -1,20 +1,20 @@
 package cloudamqp
 
 import (
-	"fmt"
-	"log"
+	"context"
 	"strconv"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceCustomDomain() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceCustomDomainCreate,
-		Read:   resourceCustomDomainRead,
-		Update: resourceCustomDomainUpdate,
-		Delete: resourceCustomDomainDelete,
+		CreateContext: resourceCustomDomainCreate,
+		ReadContext:   resourceCustomDomainRead,
+		UpdateContext: resourceCustomDomainUpdate,
+		DeleteContext: resourceCustomDomainDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -34,16 +34,13 @@ func resourceCustomDomain() *schema.Resource {
 	}
 }
 
-func resourceCustomDomainCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceCustomDomainCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
 	instanceID := d.Get("instance_id").(int)
-	log.Printf("[DEBUG] cloudamqp::resource::custom_domain::create instance id: %v", instanceID)
 	hostname := d.Get("hostname").(string)
-	data, err := api.CreateCustomDomain(instanceID, hostname)
-	log.Printf("[DEBUG] cloudamqp::resource::custom_domain::create data: %v", data)
-
+	data, err := api.CreateCustomDomain(ctx, instanceID, hostname)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(strconv.Itoa(instanceID))
@@ -52,24 +49,20 @@ func resourceCustomDomainCreate(d *schema.ResourceData, meta interface{}) error 
 	for k, v := range data {
 		if validateCustomDomainSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceCustomDomainRead(d *schema.ResourceData, meta interface{}) error {
+func resourceCustomDomainRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
 	instanceID, _ := strconv.Atoi(d.Id())
-	log.Printf("[DEBUG] cloudamqp::resource::custom_domain::read instance id: %v", instanceID)
 
-	data, err := api.ReadCustomDomain(instanceID)
-
-	log.Printf("[DEBUG] cloudamqp::resource::custom_domain::read data: %v", data)
-
+	data, err := api.ReadCustomDomain(ctx, instanceID)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(strconv.Itoa(instanceID))
@@ -78,23 +71,21 @@ func resourceCustomDomainRead(d *schema.ResourceData, meta interface{}) error {
 	for k, v := range data {
 		if validateCustomDomainSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceCustomDomainUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceCustomDomainUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
 	instanceID, _ := strconv.Atoi(d.Id())
-	log.Printf("[DEBUG] cloudamqp::resource::custom_domain::update instance id: %v", instanceID)
 	hostname := d.Get("hostname").(string)
-	data, err := api.UpdateCustomDomain(instanceID, hostname)
-	log.Printf("[DEBUG] cloudamqp::resource::custom_domain::create data: %v", data)
 
+	data, err := api.UpdateCustomDomain(ctx, instanceID, hostname)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(strconv.Itoa(instanceID))
@@ -103,27 +94,23 @@ func resourceCustomDomainUpdate(d *schema.ResourceData, meta interface{}) error 
 	for k, v := range data {
 		if validateCustomDomainSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceCustomDomainDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceCustomDomainDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
 	instanceID, _ := strconv.Atoi(d.Id())
 
-	log.Printf("[DEBUG] cloudamqp::resource::custom_domain::delete instance id: %v", instanceID)
-
-	data, err := api.DeleteCustomDomain(instanceID)
-	log.Printf("[DEBUG] cloudamqp::resource::custom_domain::delete data: %v", data)
-
+	_, err := api.DeleteCustomDomain(ctx, instanceID)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
 func validateCustomDomainSchemaAttribute(key string) bool {

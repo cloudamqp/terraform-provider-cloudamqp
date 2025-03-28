@@ -1,22 +1,25 @@
 package cloudamqp
 
 import (
-	"errors"
+	"context"
+	"fmt"
 	"log"
 	"strconv"
 	"strings"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceNotification() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceNotificationCreate,
-		Read:   resourceNotificationRead,
-		Update: resourceNotificationUpdate,
-		Delete: resourceNotificationDelete,
+		CreateContext: resourceNotificationCreate,
+		ReadContext:   resourceNotificationRead,
+		UpdateContext: resourceNotificationUpdate,
+		DeleteContext: resourceNotificationDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -87,7 +90,7 @@ func resourceNotification() *schema.Resource {
 	}
 }
 
-func resourceNotificationCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceNotificationCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api    = meta.(*api.API)
 		keys   = []string{"type", "value", "name", "options", "responders"}
@@ -109,32 +112,33 @@ func resourceNotificationCreate(d *schema.ResourceData, meta interface{}) error 
 	}
 
 	log.Printf("[DEBUG] resourceNotificationCreate params %v", params)
-	data, err := api.CreateNotification(d.Get("instance_id").(int), params)
+	data, err := api.CreateNotification(ctx, d.Get("instance_id").(int), params)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	if data["id"] != nil {
 		d.SetId(data["id"].(string))
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
+func resourceNotificationRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	if strings.Contains(d.Id(), ",") {
+		tflog.Info(ctx, fmt.Sprintf("import of resource with identifier: %s", d.Id()))
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
 		instanceID, _ := strconv.Atoi(s[1])
 		d.Set("instance_id", instanceID)
 	}
 	if d.Get("instance_id").(int) == 0 {
-		return errors.New("missing instance identifier: {resource_id},{instance_id}")
+		return diag.Errorf("missing instance identifier: {resource_id},{instance_id}")
 	}
 
 	api := meta.(*api.API)
-	data, err := api.ReadNotification(d.Get("instance_id").(int), d.Id())
+	data, err := api.ReadNotification(ctx, d.Get("instance_id").(int), d.Id())
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	for k, v := range data {
@@ -159,10 +163,10 @@ func resourceNotificationRead(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceNotificationUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceNotificationUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api         = meta.(*api.API)
 		keys        = []string{"type", "value", "name", "options", "responders"}
@@ -185,18 +189,23 @@ func resourceNotificationUpdate(d *schema.ResourceData, meta interface{}) error 
 		}
 	}
 
-	log.Printf("[DEBUG] resourceNotificationUpdate params %v", params)
-	return api.UpdateNotification(instanceID, recipientID, params)
+	if err := api.UpdateNotification(ctx, instanceID, recipientID, params); err != nil {
+		return diag.FromErr(err)
+	}
+	return diag.Diagnostics{}
 }
 
-func resourceNotificationDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceNotificationDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api         = meta.(*api.API)
 		instanceID  = d.Get("instance_id").(int)
 		recipientID = d.Id()
 	)
 
-	return api.DeleteNotification(instanceID, recipientID)
+	if err := api.DeleteNotification(ctx, instanceID, recipientID); err != nil {
+		return diag.FromErr(err)
+	}
+	return diag.Diagnostics{}
 }
 
 func validateNotificationType() schema.SchemaValidateDiagFunc {

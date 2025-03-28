@@ -1,24 +1,26 @@
 package cloudamqp
 
 import (
+	"context"
 	"encoding/base64"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"strconv"
 	"strings"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceIntegrationMetric() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceIntegrationMetricCreate,
-		Read:   resourceIntegrationMetricRead,
-		Update: resourceIntegrationMetricUpdate,
-		Delete: resourceIntegrationMetricDelete,
+		CreateContext: resourceIntegrationMetricCreate,
+		ReadContext:   resourceIntegrationMetricRead,
+		UpdateContext: resourceIntegrationMetricUpdate,
+		DeleteContext: resourceIntegrationMetricDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -151,7 +153,7 @@ func resourceIntegrationMetric() *schema.Resource {
 	}
 }
 
-func resourceIntegrationMetricCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceIntegrationMetricCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		intName    = strings.ToLower(d.Get("name").(string))
@@ -164,7 +166,7 @@ func resourceIntegrationMetricCreate(d *schema.ResourceData, meta interface{}) e
 	if intName == "stackdriver" && v != "" {
 		uDec, err := base64.URLEncoding.DecodeString(v.(string))
 		if err != nil {
-			return fmt.Errorf("log integration failed, error decoding private_key: %s ", err.Error())
+			return diag.Errorf("log integration failed, error decoding private_key: %s ", err.Error())
 		}
 		var jsonMap map[string]interface{}
 		json.Unmarshal([]byte(uDec), &jsonMap)
@@ -202,33 +204,34 @@ func resourceIntegrationMetricCreate(d *schema.ResourceData, meta interface{}) e
 		}
 	}
 
-	data, err := api.CreateIntegration(d.Get("instance_id").(int), "metrics", intName, params)
+	data, err := api.CreateIntegration(ctx, d.Get("instance_id").(int), "metrics", intName, params)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	if data["id"] != nil {
 		d.SetId(data["id"].(string))
 	}
 
-	return resourceIntegrationMetricRead(d, meta)
+	return resourceIntegrationMetricRead(ctx, d, meta)
 }
 
-func resourceIntegrationMetricRead(d *schema.ResourceData, meta interface{}) error {
+func resourceIntegrationMetricRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	if strings.Contains(d.Id(), ",") {
+		tflog.Info(ctx, fmt.Sprintf("import resource with indentifier: %s", d.Id()))
 		s := strings.Split(d.Id(), ",")
 		d.SetId(s[0])
 		instanceID, _ := strconv.Atoi(s[1])
 		d.Set("instance_id", instanceID)
 	}
 	if d.Get("instance_id").(int) == 0 {
-		return errors.New("missing instance identifier: {resource_id},{instance_id}")
+		return diag.Errorf("missing instance identifier: {resource_id},{instance_id}")
 	}
 
 	api := meta.(*api.API)
-	data, err := api.ReadIntegration(d.Get("instance_id").(int), "metrics", d.Id())
+	data, err := api.ReadIntegration(ctx, d.Get("instance_id").(int), "metrics", d.Id())
 
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.Set("include_ad_queues", false)
@@ -247,14 +250,14 @@ func resourceIntegrationMetricRead(d *schema.ResourceData, meta interface{}) err
 			}
 
 			if err = d.Set(k, v); err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
 	return nil
 }
 
-func resourceIntegrationMetricUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceIntegrationMetricUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		intName    = strings.ToLower(d.Get("name").(string))
@@ -267,7 +270,7 @@ func resourceIntegrationMetricUpdate(d *schema.ResourceData, meta interface{}) e
 	if intName == "stackdriver" && v != "" {
 		uDec, err := base64.URLEncoding.DecodeString(v.(string))
 		if err != nil {
-			return fmt.Errorf("log integration failed, error decoding private_key: %s ", err.Error())
+			return diag.Errorf("log integration failed, error decoding private_key: %s ", err.Error())
 		}
 		var jsonMap map[string]interface{}
 		json.Unmarshal([]byte(uDec), &jsonMap)
@@ -305,17 +308,20 @@ func resourceIntegrationMetricUpdate(d *schema.ResourceData, meta interface{}) e
 		}
 	}
 
-	err := api.UpdateIntegration(d.Get("instance_id").(int), "metrics", d.Id(), params)
+	err := api.UpdateIntegration(ctx, d.Get("instance_id").(int), "metrics", d.Id(), params)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return resourceIntegrationMetricRead(d, meta)
+	return resourceIntegrationMetricRead(ctx, d, meta)
 }
 
-func resourceIntegrationMetricDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceIntegrationMetricDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*api.API)
-	return api.DeleteIntegration(d.Get("instance_id").(int), "metrics", d.Id())
+	if err := api.DeleteIntegration(ctx, d.Get("instance_id").(int), "metrics", d.Id()); err != nil {
+		return diag.FromErr(err)
+	}
+	return diag.Diagnostics{}
 }
 
 func validateIntegrationMetricName() schema.SchemaValidateDiagFunc {

@@ -1,20 +1,22 @@
 package cloudamqp
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceAccountAction() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceAccountActionRequest,
-		Update: resourceAccountActionRequest,
-		Read:   resourceAccountActionRead,
-		Delete: resourceAccountActionRemove,
+		CreateContext: resourceAccountActionRequest,
+		UpdateContext: resourceAccountActionRequest,
+		ReadContext:   resourceAccountActionRead,
+		DeleteContext: resourceAccountActionRemove,
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
 				Type:        schema.TypeInt,
@@ -32,7 +34,9 @@ func resourceAccountAction() *schema.Resource {
 	}
 }
 
-func resourceAccountActionRequest(d *schema.ResourceData, meta interface{}) error {
+func resourceAccountActionRequest(ctx context.Context, d *schema.ResourceData,
+	meta interface{}) diag.Diagnostics {
+
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -42,24 +46,28 @@ func resourceAccountActionRequest(d *schema.ResourceData, meta interface{}) erro
 
 	switch action {
 	case "rotate-password":
-		err = api.RotatePassword(instanceID)
+		err = api.RotatePassword(ctx, instanceID)
 	case "rotate-apikey":
-		err = api.RotateApiKey(instanceID)
+		err = api.RotateApiKey(ctx, instanceID)
 	}
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(fmt.Sprintf("%d", instanceID))
-	return nil
+	return diag.Diagnostics{}
 }
 
-func resourceAccountActionRead(d *schema.ResourceData, meta interface{}) error {
-	return nil
+func resourceAccountActionRead(ctx context.Context, d *schema.ResourceData,
+	meta interface{}) diag.Diagnostics {
+
+	return diag.Diagnostics{}
 }
 
-func resourceAccountActionRemove(d *schema.ResourceData, meta interface{}) error {
-	return nil
+func resourceAccountActionRemove(ctx context.Context, d *schema.ResourceData,
+	meta interface{}) diag.Diagnostics {
+
+	return diag.Diagnostics{}
 }
 
 func validateAccountAction() schema.SchemaValidateDiagFunc {

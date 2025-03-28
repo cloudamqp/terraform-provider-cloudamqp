@@ -1,15 +1,17 @@
 package cloudamqp
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceCredentials() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceCredentialsRead,
+		ReadContext: dataSourceCredentialsRead,
 
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -31,22 +33,26 @@ func dataSourceCredentials() *schema.Resource {
 	}
 }
 
-func dataSourceCredentialsRead(d *schema.ResourceData, meta interface{}) error {
-	api := meta.(*api.API)
-	data, err := api.ReadCredentials(d.Get("instance_id").(int))
+func dataSourceCredentialsRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	var (
+		api        = meta.(*api.API)
+		instanceID = d.Get("instance_id").(int)
+	)
+
+	data, err := api.ReadCredentials(ctx, instanceID)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	d.SetId(fmt.Sprintf("%v.%s", d.Get("instance_id").(int), data["username"]))
+	d.SetId(fmt.Sprintf("%d.%s", instanceID, data["username"]))
 	for k, v := range data {
 		if validateCredentialsSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
-				return fmt.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
 			}
 		}
 	}
-	return nil
+	return diag.Diagnostics{}
 }
 
 func validateCredentialsSchemaAttribute(key string) bool {

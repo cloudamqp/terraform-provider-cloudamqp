@@ -1,16 +1,17 @@
 package cloudamqp
 
 import (
+	"context"
 	"errors"
-	"fmt"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceVpcInfo() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceVpcInfoRead,
+		ReadContext: dataSourceVpcInfoRead,
 
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -47,7 +48,7 @@ func dataSourceVpcInfo() *schema.Resource {
 	}
 }
 
-func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceVpcInfoRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
@@ -57,19 +58,19 @@ func dataSourceVpcInfoRead(d *schema.ResourceData, meta interface{}) error {
 	)
 
 	if instanceID == 0 && vpcID == "" {
-		return errors.New("you need to specify either instance_id or vpc_id")
+		return diag.Errorf("you need to specify either instance_id or vpc_id")
 	} else if instanceID != 0 {
-		data, err = api.ReadVpcInfo(instanceID)
+		data, err = api.ReadVpcInfo(ctx, instanceID)
 	} else if d.Get("vpc_id") != nil {
-		data, err = api.ReadVpcInfoWithVpcId(vpcID)
+		data, err = api.ReadVpcInfoWithVpcId(ctx, vpcID)
 	}
 
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	if data["id"] == nil {
-		return fmt.Errorf("failed to find external VPC identifier. Data source used for AWS VPC")
+		return diag.Errorf("failed to find external VPC identifier. Data source used for AWS VPC")
 	}
 
 	for k, v := range data {
