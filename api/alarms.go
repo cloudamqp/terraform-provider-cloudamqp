@@ -132,15 +132,15 @@ func (api *API) waitUntilAlarmDeletion(ctx context.Context, instanceID int, alar
 	var (
 		data   map[string]any
 		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%d/alarms/%s", instanceID, alarmID)
 	)
 
 	tflog.Debug(ctx, "waiting on deletion")
 	for {
-		path := fmt.Sprintf("/api/instances/%d/alarms/%s ", instanceID, alarmID)
 		response, err := api.sling.New().Path(path).Receive(&data, &failed)
 		if err != nil {
-			return fmt.Errorf("failed to delete alarm, status=%d message=%s ", response.StatusCode,
-				failed)
+			return fmt.Errorf("failed to delete alarm, status=%d message=%s ",
+				response.StatusCode, failed)
 		}
 
 		switch response.StatusCode {
