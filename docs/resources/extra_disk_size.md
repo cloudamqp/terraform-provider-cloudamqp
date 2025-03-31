@@ -196,7 +196,7 @@ Any changes to the arguments will destroy and recreate this resource.
 * `extra_disk_size` - (ForceNew/Required) Extra disk size in GB. Supported values: 0, 25, 50, 100,
                         250, 500, 1000, 2000
 * `allow_downtime`  - (Optional) When resizing the disk, allow cluster downtime if necessary.
-                      Default set to false. Required when hosting in *Azure*.
+                      Default set to false.
 * `sleep`           - (Optional) Configurable sleep time in seconds between retries for resizing the
                       disk. Default set to 30 seconds.
 * `timeout`         - (Optional) Configurable timeout time in seconds for resizing the disk. Default
