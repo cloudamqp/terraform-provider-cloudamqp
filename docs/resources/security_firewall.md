@@ -9,14 +9,19 @@ description: |-
 
 This resource allows you to configure and manage firewall rules for the CloudAMQP instance.
 
-~> **WARNING:** Firewall rules applied with this resource will replace any existing firewall rules. Make sure all wanted rules are present to not lose them.
+~> **WARNING:** Firewall rules applied with this resource will replace any existing firewall rules.
+Make sure all wanted rules are present to not lose them.
+
+-> **NOTE:** From [v1.33.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.33.0)
+when destroying this resource the firewall on the servers will also be removed. I.e. the firewall
+will be completely closed.
 
 Only available for dedicated subscription plans.
 
 ## Example Usage
 
 ```hcl
-resource "cloudamqp_security_firewall" "firewall_settings" {
+resource "cloudamqp_security_firewall" "this" {
   instance_id = cloudamqp_instance.instance.id
 
   rules {
@@ -48,7 +53,9 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
     </b>
   </summary>
 
-CloudAMQP Terraform provider [v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) enables faster `cloudamqp_instance` destroy when running `terraform destroy`.
+CloudAMQP Terraform provider
+[v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) enables
+faster `cloudamqp_instance` destroy when running `terraform destroy`.
 
 ```hcl
 # Configure the CloudAMQP Provider
@@ -64,7 +71,7 @@ resource "cloudamqp_instance" "instance" {
   tags    = ["terraform"]
 }
 
-resource "cloudamqp_security_firewall" "firewall_settings" {
+resource "cloudamqp_security_firewall" "this" {
   instance_id = cloudamqp_instance.instance.id
 
   rules {
@@ -88,9 +95,12 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 Top level argument reference
 
 * `instance_id` - (Required) The CloudAMQP instance ID.
-* `rules`       - (Required) An array of rules, minimum of 1 needs to be configured. Each `rules` block consists of the field documented below.
-* `sleep`       - (Optional) Configurable sleep time in seconds between retries for firewall configuration. Default set to 30 seconds.
-* `timeout`     - (Optional) Configurable timeout time in seconds for firewall configuration. Default set to 1800 seconds.
+* `rules`       - (Required) An array of rules, minimum of 1 needs to be configured. Each `rules`
+                  block consists of the field documented below.
+* `sleep`       - (Optional) Configurable sleep time in seconds between retries for firewall
+                  configuration. Default set to 30 seconds.
+* `timeout`     - (Optional) Configurable timeout time in seconds for firewall configuration.
+                  Default set to 1800 seconds.
 
 ___
 
@@ -135,18 +145,49 @@ All attributes reference are computed
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
-If used together with [VPC GPC peering](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/vpc_gcp_peering#create-vpc-peering-with-additional-firewall-rules), see additional information.
+If used together with
+[VPC GPC peering](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/vpc_gcp_peering#create-vpc-peering-with-additional-firewall-rules), see additional information.
 
 ## Import
 
-`cloudamqp_security_firewall` can be imported using CloudAMQP instance identifier.
+`cloudamqp_security_firewall` can be imported using CloudAMQP instance identifier. To retrieve the
+identifier of an instance, use [CloudAMQP API](https://docs.cloudamqp.com/#list-instances).
+
+From Terraform v1.5.0, the `import` block can be used to import this resource:
+
+```hcl
+import {
+  to = cloudamqp_security_firewall.this
+  id = cloudamqp_instance.instance.id
+}
+```
+
+Or with Terraform CLI:
 
 `terraform import cloudamqp_security_firewall.firewall <instance_id>`
 
+## Destroy the resource
+
+From [v1.33.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.33.0)
+when destroying this resource the firewall on the servers will be removed. I.e. the firewall will be
+completly closed.
+
+Older version will instead update the firewall with a default rule.
+
+```hcl
+rules {
+  ip          = "0.0.0.0/0"
+  ports       = []
+  services    = ["AMQP", "AMQPS", "STOMP", "STOMPS", "MQTT", "MQTTS", "HTTPS", "STREAM", "STREAM_SSL"]
+  description = "Default"
+}
+```
+
 ## Enable faster instance destroy
 
-When running `terraform destroy` this resource will try configure the firewall with default rules before deleting
-`cloudamqp_instance`. This is not necessary since the servers will be deleted.
+When running `terraform destroy` this resource will try configure the firewall with either default
+rules or no rules, before deleting `cloudamqp_instance`. This is not necessary when the
+`cloudamqp_instance` resource also being destroyed.
 
 Set `enable_faster_instance_destroy` to ***true*** in the provider configuration to skip this.
 
@@ -155,7 +196,9 @@ Set `enable_faster_instance_destroy` to ***true*** in the provider configuration
 <details>
   <summary>Custom ports trigger new update every time</summary>
 
-  Before release [v1.15.1](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.15.1) using the custom ports can cause a missmatch upon reading data and trigger a new update every time.
+  Before release
+  [v1.15.1](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.15.1) using
+  the custom ports can cause a missmatch upon reading data and trigger a new update every time.
 
   Reason is that there is a bug in validating the response from the underlying API.
 
@@ -165,7 +208,8 @@ Set `enable_faster_instance_destroy` to ***true*** in the provider configuration
 <details>
   <summary>Using pre-defined service port in ports</summary>
 
-Using one of the port from the pre-defined services in ports argument, see example of using port 5671 instead of the service *AMQPS*.
+Using one of the port from the pre-defined services in ports argument, see example of using port
+5671 instead of the service *AMQPS*.
 
 ```hcl
 resource "cloudamqp_security_firewall" "firewall_settings" {
@@ -179,9 +223,11 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 }
 ```
 
-Will still create the firewall rule for the instance, but will trigger a new update each `plan` or `apply`. Due to a missmatch between state file and underlying API response.
+Will still create the firewall rule for the instance, but will trigger a new update each `plan` or
+`apply`. Due to a missmatch between state file and underlying API response.
 
-To solve this, edit the configuration file and change port 5671 to service *AMQPS* and run `terraform apply -refresh-only` to only update the state file and remove the missmatch.
+To solve this, edit the configuration file and change port 5671 to service *AMQPS* and run
+`terraform apply -refresh-only` to only update the state file and remove the missmatch.
 
 ```hcl
 resource "cloudamqp_security_firewall" "firewall_settings" {
@@ -195,5 +241,7 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 }
 ```
 
-The provider from [v1.15.2](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.16.0) will start to warn about using this.
+The provider from
+[v1.15.2](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.16.0) will start
+to warn about using this.
  </details>
