@@ -7,7 +7,8 @@ description: |-
 
 # cloudamqp_upgradable_versions
 
-Use this data source to retrieve information about possible upgradable versions for RabbitMQ and Erlang.
+Use this data source to retrieve information about possible upgradable versions for RabbitMQ and
+Erlang.
 
 ## Example Usage
 
@@ -17,11 +18,11 @@ data "cloudamqp_upgradable_versions" "versions" {
 }
 ```
 
-## Argument reference
+## Argument Reference
 
 * `instance_id` - (Required) The CloudAMQP instance identifier.
 
-## Attributes reference
+## Attributes Reference
 
 All attributes reference are computed
 

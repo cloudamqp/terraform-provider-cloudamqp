@@ -7,7 +7,8 @@ description: |-
 
 # cloudamqp_plugins
 
-Use this data source to retrieve information about installed and available plugins for the CloudAMQP instance.
+Use this data source to retrieve information about installed and available plugins for the CloudAMQP
+instance.
 
 ## Example Usage
 
@@ -17,20 +18,20 @@ data "cloudamqp_plugins" "plugins" {
 }
 ```
 
-## Argument reference
+## Argument Reference
 
 * `instance_id` - (Required) The CloudAMQP instance identifier.
+* `sleep`       - (Optional) Configurable sleep time (seconds) for retries when requesting
+                  information about plugins. Default set to 10 seconds.
+* `timeout`     - (Optional) Configurable timeout time (seconds) for retries when requesting
+                  information about plugins. Default set to 1800 seconds.
 
-## Attributes reference
+## Attributes Reference
 
 All attributes reference are computed
 
 * `id`      - The identifier for this resource.
 * `plugins` - An array of plugins. Each `plugins` block consists of the fields documented below.
-* `sleep` - (Optional) Configurable sleep time (seconds) for retries when requesting information
-about plugins. Default set to 10 seconds. *Available from v1.29.0*
-* `timeout` - (Optional) - Configurable timeout time (seconds) for retries when requesting
-information about plugins. Default set to 1800 seconds. *Available from v1.29.0*
 
 ___
 

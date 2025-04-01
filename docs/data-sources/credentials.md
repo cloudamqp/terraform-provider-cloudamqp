@@ -7,7 +7,8 @@ description: |-
 
 # cloudamqp_credentials
 
-Use this data source to retrieve information about the credentials of the configured user in Rabbit MQ. Information is extracted from `cloudamqp_instance.instance.url`.
+Use this data source to retrieve information about the credentials of the configured user in
+RabbitMQ. Information is extracted from `cloudamqp_instance.instance.url`.
 
 ## Example Usage
 
@@ -17,11 +18,11 @@ data "cloudamqp_credentials" "credentials" {
 }
 ```
 
-## Argument reference
+## Argument Reference
 
 * `instance_id` - (Required) The CloudAMQP instance identifier.
 
-## Attributes reference
+## Attributes Reference
 
 All attributes reference are computed.
 

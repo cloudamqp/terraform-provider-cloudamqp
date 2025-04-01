@@ -8,9 +8,14 @@ description: |-
 
 # Instance region
 
-CloudAMQP support hosting by multiple cloud platform providers and over multiple regions. Below a few examples of supported platforms and regions. For fully updated list see [CloudAMQP plans](https://www.cloudamqp.com/plans.html) and scroll to the bottom and extend `List all available regions`. Platforms and regions with shared servers are also listed, for AWS we try to have at least one shared server supported for each region.
+CloudAMQP support hosting by multiple cloud platform providers and over multiple regions. Below a
+few examples of supported platforms and regions. For fully updated list see [CloudAMQP plans] and
+scroll to the bottom and extend `List all available regions`.
 
--> To retrieve an up to date list check out [cloudamqp-docs](https://docs.cloudamqp.com/#regions)
+Platforms and regions with shared servers are also listed, for AWS we
+try to have at least one shared server supported for each region.
+
+-> To retrieve an up to date list check out [CloudAMQP API regions]
 
 Format used on instance regions are as follow `{provider}::{region}`
 
@@ -35,3 +40,6 @@ google-compute-engine::asia-east1
 digital-ocean::nyc3
 digital-ocean::sgp1
 ```
+
+[CloudAMQP plans]: https://www.cloudamqp.com/plans.html
+[CloudAMQP API regions]: https://docs.cloudamqp.com/#regions

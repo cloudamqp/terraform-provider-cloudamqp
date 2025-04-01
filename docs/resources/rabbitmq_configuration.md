@@ -23,15 +23,15 @@ Only available for dedicated subscription plans running ***RabbitMQ***.
 ```hcl
 resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
   instance_id = cloudamqp_instance.instance.id
-  channel_max = 0
-  connection_max = -1
-  consumer_timeout = 7200000
-  heartbeat = 120
-  log_exchange_level = "error"
-  max_message_size = 134217728
-  queue_index_embed_msgs_below = 4096
-  vm_memory_high_watermark = 0.81
-  cluster_partition_handling = "autoheal"
+  channel_max                   = 0
+  connection_max                = -1
+  consumer_timeout              = 7200000
+  heartbeat                     = 120
+  log_exchange_level            = "error"
+  max_message_size              = 134217728
+  queue_index_embed_msgs_below  = 4096
+  vm_memory_high_watermark      = 0.81
+  cluster_partition_handling    = "autoheal"
 }
 ```
 
@@ -47,15 +47,15 @@ resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
 ```hcl
 resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
   instance_id = cloudamqp_instance.instance.id
-  channel_max = 0
-  connection_max = -1
-  consumer_timeout = 7200000
-  heartbeat = 120
-  log_exchange_level = "info"
-  max_message_size = 134217728
-  queue_index_embed_msgs_below = 4096
-  vm_memory_high_watermark = 0.81
-  cluster_partition_handling = "autoheal"
+  channel_max                   = 0
+  connection_max                = -1
+  consumer_timeout              = 7200000
+  heartbeat                     = 120
+  log_exchange_level            = "info"
+  max_message_size              = 134217728
+  queue_index_embed_msgs_below  = 4096
+  vm_memory_high_watermark      = 0.81
+  cluster_partition_handling    = "autoheal"
 }
 
 data "cloudamqp_nodes" "list_nodes" {
@@ -64,8 +64,8 @@ data "cloudamqp_nodes" "list_nodes" {
 
 resource "cloudamqp_node_actions" "node_action" {
   instance_id = cloudamqp_instance.instance.id
-  node_name = data.cloudamqp_nodes.list_nodes.nodes[0].name
-  action = "restart"
+  node_name   = data.cloudamqp_nodes.list_nodes.nodes[0].name
+  action      = "restart"
 
   depends_on = [
     cloudamqp_rabbitmq_configuration.rabbitmq_config,
@@ -78,14 +78,17 @@ resource "cloudamqp_node_actions" "node_action" {
 <details>
   <summary>
     <b>
-      <i>Only change log level for exchange. All other values will be read from the RabbitMQ configuration.</i>
+      <i>
+        Only change log level for exchange. All other values will be read from the RabbitMQ
+        configuration.
+      </i>
     </b>
   </summary>
 
 ```hcl
 resource "cloudamqp_rabbitmq_configuration" "rabbit_config" {
-  instance_id = cloudamqp_instance.instance.id
-  log_exchange_level = "info"
+  instance_id         = cloudamqp_instance.instance.id
+  log_exchange_level  = "info"
 }
 ```
 
@@ -96,19 +99,33 @@ resource "cloudamqp_rabbitmq_configuration" "rabbit_config" {
 The following arguments are supported:
 
 * `instance_id`                   - (Required) The CloudAMQP instance ID.
-* `heartbeat`                     - (Computed/Optional) Set the server AMQP 0-9-1 heartbeat timeout in seconds.
-* `connection_max`                - (Computed/Optional) Set the maximum permissible number of connection.
-* `channel_max`                   - (Computed/Optional) Set the maximum permissible number of channels per connection.
-* `consumer_timeout`              - (Computed/Optional) A consumer that has recevied a message and does not acknowledge that message within the timeout in milliseconds
-* `vm_memory_high_watermark`      - (Computed/Optional) When the server will enter memory based flow-control as relative to the maximum available memory.
-* `queue_index_embed_msgs_below`  - (Computed/Optional) Size in bytes below which to embed messages in the queue index. 0 will turn off payload embedding in the queue index.
-* `max_message_size`              - (Computed/Optional) The largest allowed message payload size in bytes.
-* `log_exchange_level`            - (Computed/Optional) Log level for the logger used for log integrations and the CloudAMQP Console log view.
+* `heartbeat`                     - (Optional/Computed) Set the server AMQP 0-9-1 heartbeat timeout
+                                    in seconds.
+* `connection_max`                - (Optional/Computed) Set the maximum permissible number of
+                                    connection.
+* `channel_max`                   - (Optional/Computed) Set the maximum permissible number of
+                                    channels per connection.
+* `consumer_timeout`              - (Optional/Computed) A consumer that has recevied a message and
+                                    does not acknowledge that message within the timeout in
+                                    milliseconds
+* `vm_memory_high_watermark`      - (Optional/Computed) When the server will enter memory based
+                                    flow-control as relative to the maximum available memory.
+* `queue_index_embed_msgs_below`  - (Optional/Computed) Size in bytes below which to embed messages
+                                    in the queue index. 0 will turn off payload embedding in the
+                                    queue index.
+* `max_message_size`              - (Optional/Computed) The largest allowed message payload size in
+                                    bytes.
+* `log_exchange_level`            - (Optional/Computed) Log level for the logger used for log
+                                    integrations and the CloudAMQP Console log view.
 
-  *Note: Requires a restart of RabbitMQ to be applied.*
-* `cluster_partition_handling`    - (Computed/Optional) Set how the cluster should handle network partition.
-* `sleep` - (Optional) Configurable sleep time in seconds between retries for RabbitMQ configuration. Default set to 60 seconds.
-* `timeout` - (Optional) - Configurable timeout time in seconds for RabbitMQ configuration. Default set to 3600 seconds.
+  ***Note:*** Requires a restart of RabbitMQ to be applied.
+
+* `cluster_partition_handling`    - (Optional/Computed) Set how the cluster should handle network
+                                    partition.
+* `sleep`                         - (Optional) Configurable sleep time in seconds between retries
+                                    for RabbitMQ configuration. Default set to 60 seconds.
+* `timeout`                       - (Optional) - Configurable timeout time in seconds for RabbitMQ
+                                    configuration. Default set to 3600 seconds.
 
 ## Attributes Reference
 
@@ -130,7 +147,9 @@ All attributes reference are computed
 | log_exchange_level | string | error | - | - |  | RabbitMQ restart required | debug, info, warning, error, critical |
 | cluster_partition_handling | string | see below | - | - |  | Applied immediately | autoheal, pause_minority, ignore |
 
-  ***Note: Recommended setting for cluster_partition_handling: `autoheal` for cluster with 1-2 nodes, `pause_minority` for cluster with 3 or more nodes. While `ignore` setting is not recommended.***
+  ***Note:*** Recommended setting for cluster_partition_handling: `autoheal` for cluster with 1-2
+  nodes, `pause_minority` for cluster with 3 or more nodes. While `ignore` setting is not
+  recommended.
 
 ## Dependency
 
@@ -138,7 +157,19 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-`cloudamqp_rabbitmq_configuration` can be imported using the CloudAMQP instance identifier.
+`cloudamqp_rabbitmq_configuration` can be imported using the CloudAMQP instance identifier.  To
+retrieve the identifier, use [CloudAMQP API list intances].
+
+From Terraform v1.5.0, the `import` block can be used to import this resource:
+
+```hcl
+import {
+  to = cloudamqp_rabbitmq_configuration.config
+  id = cloudamqp_instance.instance.id
+}
+```
+
+Or use Terraform CLI:
 
 `terraform import cloudamqp_rabbitmq_configuration.config <instance_id>`
 
@@ -147,17 +178,21 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 <details>
   <summary>Cannot set heartbeat=0 when creating this resource</summary>
 
-The provider is built by older `Terraform Plugin SDK` which doesn't support nullable configuration values. Instead the values will be set to it's default value based on it's schema primitive type.
+The provider is built by older `Terraform Plugin SDK` which doesn't support nullable configuration
+values. Instead the values will be set to it's default value based on it's schema primitive type.
 
 * schema.TypeString = ""
 * schema.TypeInt = 0
 * schema.TypeFloat = 0.0
 * schema.TypeBool = false
 
-During initial create of this resource, we need to exclude all arguments that can take these default values.
-Argument such as `hearbeat`, `channel_max`, etc. cannot be set to its default value, 0 in these cases.
-Current workaround is to use the default value in the initial create run, then change to the wanted value in the re-run.
+During initial create of this resource, we need to exclude all arguments that can take these default
+values. Argument such as `hearbeat`, `channel_max`, etc. cannot be set to its default value, 0 in
+these cases. Current workaround is to use the default value in the initial create run, then change
+to the wanted value in the re-run.
 
 Will be solved once we migrate the current provider to `Terraform Plugin Framework`.
 
 </details>
+
+[CloudAMQP API list intances]: https://docs.cloudamqp.com/#list-instances

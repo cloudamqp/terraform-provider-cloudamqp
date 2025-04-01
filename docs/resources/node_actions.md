@@ -24,15 +24,12 @@ Only available for dedicated subscription plans.
 # New recipient to receieve notifications
 resource "cloudamqp_node_actions" "node_action" {
   instance_id = cloudamqp_instance.instance.id
-  node_name = "<node name>"
-  action = "restart"
+  node_name   = "<node name>"
+  action      = "restart"
 }
 ```
 
 </details>
-
-Using data source `cloudamqp_nodes` to restart RabbitMQ on all nodes.</br>
-***Note: RabbitMQ restart on multiple nodes need to be chained, so one node restart at the time.***
 
 <details>
   <summary>
@@ -41,6 +38,10 @@ Using data source `cloudamqp_nodes` to restart RabbitMQ on all nodes.</br>
     </b>
   </summary>
 
+Using data source `cloudamqp_nodes` to restart RabbitMQ on all nodes.
+
+-> **Note:** RabbitMQ restart on multiple nodes need to be chained, let one node restart at the time.
+
 ```hcl
 data "cloudamqp_nodes" "list_nodes" {
   instance_id = cloudamqp_instance.instance.id
@@ -48,14 +49,15 @@ data "cloudamqp_nodes" "list_nodes" {
 
 resource "cloudamqp_node_actions" "restart_01" {
   instance_id = cloudamqp_instance.instance.id
-  action = "restart"
-  node_name = data.cloudamqp_nodes.list_nodes.nodes[0].name
+  action      = "restart"
+  node_name   = data.cloudamqp_nodes.list_nodes.nodes[0].name
 }
 
 resource "cloudamqp_node_actions" "restart_02" {
   instance_id = cloudamqp_instance.instance.id
-  action = "restart"
-  node_name = data.cloudamqp_nodes.list_nodes.nodes[1].name
+  action      = "restart"
+  node_name   = data.cloudamqp_nodes.list_nodes.nodes[1].name
+
   depends_on = [
     cloudamqp_node_actions.restart_01,
   ]
@@ -63,8 +65,9 @@ resource "cloudamqp_node_actions" "restart_02" {
 
 resource "cloudamqp_node_actions" "restart_03" {
   instance_id = cloudamqp_instance.instance.id
-  action = "restart"
-  node_name = data.cloudamqp_nodes.list_nodes.nodes[2].name
+  action      = "restart"
+  node_name   = data.cloudamqp_nodes.list_nodes.nodes[2].name
+
   depends_on = [
     cloudamqp_node_actions.restart_01,
     cloudamqp_node_actions.restart_02,
@@ -88,14 +91,15 @@ data "cloudamqp_nodes" "list_nodes" {
 }
 
 resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
-  instance_id = cloudamqp_instance.instance.id
-  log_exchange_level = "info"
+  instance_id         = cloudamqp_instance.instance.id
+  log_exchange_level  = "info"
 }
 
 resource "cloudamqp_node_actions" "restart_01" {
   instance_id = cloudamqp_instance.instance.id
-  action = "restart"
-  node_name = data.cloudamqp_nodes.list_nodes.nodes[0].name
+  action      = "restart"
+  node_name   = data.cloudamqp_nodes.list_nodes.nodes[0].name
+
   depends_on = [
     cloudamqp_rabbitmq_configuration.rabbitmq_config,
   ]
@@ -103,8 +107,9 @@ resource "cloudamqp_node_actions" "restart_01" {
 
 resource "cloudamqp_node_actions" "restart_02" {
   instance_id = cloudamqp_instance.instance.id
-  action = "restart"
-  node_name = data.cloudamqp_nodes.list_nodes.nodes[1].name
+  action      = "restart"
+  node_name   = data.cloudamqp_nodes.list_nodes.nodes[1].name
+
   depends_on = [
     cloudamqp_rabbitmq_configuration.rabbitmq_config,
     cloudamqp_node_actions.restart_01,
@@ -113,8 +118,9 @@ resource "cloudamqp_node_actions" "restart_02" {
 
 resource "cloudamqp_node_actions" "restart_03" {
   instance_id = cloudamqp_instance.instance.id
-  action = "restart"
-  node_name = data.cloudamqp_nodes.list_nodes.nodes[2].name
+  action      = "restart"
+  node_name   = data.cloudamqp_nodes.list_nodes.nodes[2].name
+  
   depends_on = [
     cloudamqp_rabbitmq_configuration.rabbitmq_config,
     cloudamqp_node_actions.restart_01,
@@ -155,7 +161,8 @@ Valid options for action.
 
 ## Dependency
 
-This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id` and node name.
+This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id` and node
+name.
 
 ## Import
 

@@ -32,7 +32,7 @@ the rate time limit. See `Possible to resize` column above for the different clo
 -> **Note:** Shrinking the disk will always need to swap the old disk to a new one and require
 `allow_downtime` set to *true*.
 
-Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/) and only available for dedicated subscription plans.
+Pricing is available at [CloudAMQP] and only available for dedicated subscription plans.
 
 ## Example Usage
 
@@ -58,7 +58,7 @@ resource "cloudamqp_instance" "instance" {
 
 # Resize disk with 25 extra GB
 resource "cloudamqp_extra_disk_size" "resize_disk" {
-  instance_id = cloudamqp_instance.instance.id
+  instance_id     = cloudamqp_instance.instance.id
   extra_disk_size = 25
 }
 
@@ -66,6 +66,7 @@ resource "cloudamqp_extra_disk_size" "resize_disk" {
 # to cloudamqp_extra_disk_size.resize_disk resource
 data "cloudamqp_nodes" "nodes" {
   instance_id = cloudamqp_instance.instance.id
+
   depends_on = [
     cloudamqp_extra_disk_size.resize_disk,
   ]
@@ -96,7 +97,7 @@ resource "cloudamqp_instance" "instance" {
 
 # Resize disk with 25 extra GB, without downtime
 resource "cloudamqp_extra_disk_size" "resize_disk" {
-  instance_id = cloudamqp_instance.instance.id
+  instance_id     = cloudamqp_instance.instance.id
   extra_disk_size = 25
 }
 
@@ -104,6 +105,7 @@ resource "cloudamqp_extra_disk_size" "resize_disk" {
 # to cloudamqp_extra_disk_size.resize_disk resource
 data "cloudamqp_nodes" "nodes" {
   instance_id = cloudamqp_instance.instance.id
+
   depends_on = [
     cloudamqp_extra_disk_size.resize_disk,
   ]
@@ -134,7 +136,7 @@ resource "cloudamqp_instance" "instance" {
 
 # Resize disk with 25 extra GB, without downtime
 resource "cloudamqp_extra_disk_size" "resize_disk" {
-  instance_id = cloudamqp_instance.instance.id
+  instance_id     = cloudamqp_instance.instance.id
   extra_disk_size = 25
 }
 
@@ -142,6 +144,7 @@ resource "cloudamqp_extra_disk_size" "resize_disk" {
 # to cloudamqp_extra_disk_size.resize_disk resource
 data "cloudamqp_nodes" "nodes" {
   instance_id = cloudamqp_instance.instance.id
+  
   depends_on = [
     cloudamqp_extra_disk_size.resize_disk,
   ]
@@ -172,7 +175,7 @@ resource "cloudamqp_instance" "instance" {
 
 # Resize disk with 25 extra GB, with downtime
 resource "cloudamqp_extra_disk_size" "resize_disk" {
-  instance_id = cloudamqp_instance.instance.id
+  instance_id     = cloudamqp_instance.instance.id
   extra_disk_size = 25
 }
 
@@ -180,6 +183,7 @@ resource "cloudamqp_extra_disk_size" "resize_disk" {
 # to cloudamqp_extra_disk_size.resize_disk resource
 data "cloudamqp_nodes" "nodes" {
   instance_id = cloudamqp_instance.instance.id
+
   depends_on = [
     cloudamqp_extra_disk_size.resize_disk,
   ]
@@ -202,9 +206,9 @@ Any changes to the arguments will destroy and recreate this resource.
 * `timeout`         - (Optional) Configurable timeout time in seconds for resizing the disk. Default
                       set to 1800 seconds.
 
-***Note:*** `allow_downtime`, `sleep`, `timeout` only available from v1.25.0.
+  ***Note:*** `allow_downtime`, `sleep`, `timeout` only available from [v1.25.0].
 
-## Attributes reference
+## Attributes Reference
 
 All attributes reference are computed
 
@@ -219,7 +223,7 @@ The `nodes` block consist of
 * `disk_size`             - Subscription plan disk size
 * `additional_disk_size`  - Additional added disk size
 
-***Note:*** *Total disk size = disk_size + additional_disk_size*
+  ***Note:*** Total disk size = disk_size + additional_disk_size
 
 ## Dependency
 
@@ -228,3 +232,6 @@ This data source depends on CloudAMQP instance identifier, `cloudamqp_instance.i
 ## Import
 
 Not possible to import this resource.
+
+[CloudAMQP]: https://www.cloudamqp.com/
+[v1.25.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.25.0

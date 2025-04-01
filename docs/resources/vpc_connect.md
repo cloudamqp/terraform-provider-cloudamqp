@@ -8,13 +8,15 @@ description: |-
 
 # cloudamqp_vpc_connect
 
-This resource is a generic way to handle PrivateLink (AWS and Azure) and Private Service Connect (GCP).
-Communication between resources can be done just as they were living inside a VPC. CloudAMQP creates an Endpoint
-Service to connect the VPC and creating a new network interface to handle the communicate.
+This resource is a generic way to handle PrivateLink (AWS and Azure) and Private Service Connect
+(GCP). Communication between resources can be done just as they were living inside a VPC. CloudAMQP
+creates an Endpoint Service to connect the VPC and creating a new network interface to handle the
+communicate.
 
-If no existing VPC available when enable VPC connect, a new VPC will be created with subnet `10.52.72.0/24`.
+If no existing VPC available when enable VPC connect, a new VPC will be created with subnet
+`10.52.72.0/24`.
 
-More information can be found at: [CloudAMQP VPC Connect](https://www.cloudamqp.com/docs/cloudamqp-vpc-connect.html)
+More information can be found at: [CloudAMQP VPC Connect]
 
 -> **Note:** Enabling VPC Connect will automatically add a firewall rule.
 
@@ -67,24 +69,24 @@ Only available for dedicated subscription plans.
 
 ```hcl
 resource "cloudamqp_vpc" "vpc" {
-  name = "Standalone VPC"
-  region = "amazon-web-services::us-west-1"
-  subnet = "10.56.72.0/24"
-  tags = []
+  name    = "Standalone VPC"
+  region  = "amazon-web-services::us-west-1"
+  subnet  = "10.56.72.0/24"
+  tags    = []
 }
 
 resource "cloudamqp_instance" "instance" {
-  name   = "Instance 01"
-  plan   = "bunny-1"
-  region = "amazon-web-services::us-west-1"
-  tags   = []
-  vpc_id = cloudamqp_vpc.vpc.id
+  name                = "Instance 01"
+  plan                = "bunny-1"
+  region              = "amazon-web-services::us-west-1"
+  tags                = []
+  vpc_id              = cloudamqp_vpc.vpc.id
   keep_associated_vpc = true
 }
 
 resource "cloudamqp_vpc_connect" "vpc_connect" {
   instance_id = cloudamqp_instance.instance.id
-  region = cloudamqp_instance.instance.region
+  region      = cloudamqp_instance.instance.region
   allowed_principals = [
     "arn:aws:iam::aws-account-id:user/user-name"
   ]
@@ -102,24 +104,24 @@ resource "cloudamqp_vpc_connect" "vpc_connect" {
 
 ```hcl
 resource "cloudamqp_vpc" "vpc" {
-  name = "Standalone VPC"
-  region = "azure-arm::westus"
-  subnet = "10.56.72.0/24"
-  tags = []
+  name    = "Standalone VPC"
+  region  = "azure-arm::westus"
+  subnet  = "10.56.72.0/24"
+  tags    = []
 }
 
 resource "cloudamqp_instance" "instance" {
-  name   = "Instance 01"
-  plan   = "bunny-1"
-  region = "azure-arm::westus"
-  tags   = []
-  vpc_id = cloudamqp_vpc.vpc.id
+  name                = "Instance 01"
+  plan                = "bunny-1"
+  region              = "azure-arm::westus"
+  tags                = []
+  vpc_id              = cloudamqp_vpc.vpc.id
   keep_associated_vpc = true
 }
 
 resource "cloudamqp_vpc_connect" "vpc_connect" {
   instance_id = cloudamqp_instance.instance.id
-  region = cloudamqp_instance.instance.region
+  region      = cloudamqp_instance.instance.region
   approved_subscriptions = [
     "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
   ]
@@ -147,8 +149,8 @@ resource "azurerm_private_endpoint" "example" {
 ```
 
 More information about the resource and argument can be found here:
-[private_connection_resource_alias](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint#private_connection_resource_alias-1). Or check their example "Using a Private Link
-Service Alias with existing resources:".
+[private_connection_resource_alias]. Or check their example "Using a Private Link Service Alias with
+existing resources".
 
 </details>
 
@@ -161,24 +163,24 @@ Service Alias with existing resources:".
 
 ```hcl
 resource "cloudamqp_vpc" "vpc" {
-  name = "Standalone VPC"
-  region = "google-compute-engine::us-west1"
-  subnet = "10.56.72.0/24"
-  tags = []
+  name    = "Standalone VPC"
+  region  = "google-compute-engine::us-west1"
+  subnet  = "10.56.72.0/24"
+  tags    = []
 }
 
 resource "cloudamqp_instance" "instance" {
-  name   = "Instance 01"
-  plan   = "bunny-1"
-  region = "google-compute-engine::us-west1"
-  tags   = []
-  vpc_id = cloudamqp_vpc.vpc.id
+  name                = "Instance 01"
+  plan                = "bunny-1"
+  region              = "google-compute-engine::us-west1"
+  tags                = []
+  vpc_id              = cloudamqp_vpc.vpc.id
   keep_associated_vpc = true
 }
 
 resource "cloudamqp_vpc_connect" "vpc_connect" {
   instance_id = cloudamqp_instance.instance.id
-  region = cloudamqp_instance.instance.region
+  region      = cloudamqp_instance.instance.region
   allowed_projects = [
     "some-project-123456"
   ]
@@ -189,36 +191,36 @@ resource "cloudamqp_vpc_connect" "vpc_connect" {
 
 ## Argument Reference
 
-* `instance_id` - (Required) The CloudAMQP instance identifier.
-* `region` - (Required) The region where the CloudAMQP instance is hosted.
-* `allowed_principals` - (Optional) List of allowed prinicpals used by AWS, see below table.
-* `approved_subscriptions` - (Optional) List of approved subscriptions used by Azure, see below table.
-* `allowed_projects` - (Optional) List of allowed projects used by GCP, see below table.
-* `sleep` - (Optional) Configurable sleep time (seconds) when enable Private Service Connect.
-  Default set to 10 seconds.
-* `timeout` - (Optional) Configurable timeout time (seconds) when enable Private Service Connect.
-  Default set to 1800 seconds.
+* `instance_id`             - (Required) The CloudAMQP instance identifier.
+* `region`                  - (Required) The region where the CloudAMQP instance is hosted.
+* `allowed_principals`      - (Optional) List of allowed prinicpals used by AWS, see below table.
+* `approved_subscriptions`  - (Optional) List of approved subscriptions used by Azure, see below
+                              table.
+* `allowed_projects`        - (Optional) List of allowed projects used by GCP, see below table.
+* `sleep`                   - (Optional) Configurable sleep time (seconds) when enable Private
+                              Service Connect. Default set to 10 seconds.
+* `timeout`                 - (Optional) Configurable timeout time (seconds) when enable Private
+                              Service Connect. Default set to 1800 seconds.
 
 ___
 
-The `allowed_principals`, `approved_subscriptions` or `allowed_projects` data depends on the provider platform:
+The `allowed_principals`, `approved_subscriptions` or `allowed_projects` data depends on the
+provider platform:
 
-| Platform | Description         | Format                                                                                                                             |
-|----------|---------------------|------------------------------------------------------------------------------------------------------------------------------------|
-| AWS      | IAM ARN principals  | arn:aws:iam::aws-account-id:root<br /> arn:aws:iam::aws-account-id:user/user-name<br /> arn:aws:iam::aws-account-id:role/role-name |
-| Azure    | Subscription (GUID) | XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX                                                                                               |
-| GCP      | Project IDs*        | 6 to 30 lowercase letters, digits, or hyphens                                                                                      |
-
-*https://cloud.google.com/resource-manager/reference/rest/v1/projects
+| Platform | Description | Format |
+|---|---|---|
+| AWS | IAM ARN principals | arn:aws:iam::aws-account-id:root<br>arn:aws:iam::aws-account-id:user/user-name<br> arn:aws:iam::aws-account-id:role/role-name |
+| Azure | Subscription (GUID) | XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX |
+| GCP | Project IDs [Google docs] | 6 to 30 lowercase letters, digits, or hyphens |
 
 ## Attributes Reference
 
 All attributes reference are computed
 
-* `id`  - The identifier for this resource. Will be same as `instance_id`
-* `status`- Private Service Connect status [enable, pending, disable]
-* `service_name` - Service name (alias for Azure, see example above) of the PrivateLink.
-* `active_zones` - Covering availability zones used when creating an endpoint from other VPC. (AWS)
+* `id`            - The identifier for this resource. Will be same as `instance_id`
+* `status`        - Private Service Connect status [enable, pending, disable]
+* `service_name`  - Service name (alias for Azure, see example above) of the PrivateLink.
+* `active_zones`  - Covering availability zones used when creating an endpoint from other VPC. (AWS)
 
 ## Depedency
 
@@ -229,17 +231,28 @@ Since `region` also is required, suggest to reuse the argument from CloudAMQP in
 
 ## Import
 
-`cloudamqp_vpc_connect` can be imported using CloudAMQP internal identifier.
+`cloudamqp_vpc_connect` can be imported using CloudAMQP instance identifier. To
+retrieve the identifier, use [CloudAMQP API list intances].
+
+From Terraform v1.5.0, the `import` block can be used to import this resource:
+
+```hcl
+import {
+  to = cloudamqp_vpc_connect.this
+  id = cloudamqp_instance.instance.id
+}
+```
+
+Or use Terraform CLI:
 
 `terraform import cloudamqp_vpc_connect.vpc_connect <id>`
 
-The resource uses the same identifier as the CloudAMQP instance. To retrieve the identifier for an instance, either use [CloudAMQP customer API](https://docs.cloudamqp.com/#list-instances) or use the data source [`cloudamqp_account`](./data-sources/account.md).
-
 ## Create VPC Connect with additional firewall rules
 
-To create a PrivateLink/Private Service Connect configuration with additional firewall rules, it's required to chain the [cloudamqp_security_firewall](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall)
-resource to avoid parallel conflicting resource calls. You can do this by making the firewall
-resource depend on the VPC Connect resource, `cloudamqp_vpc_connect.vpc_connect`.
+To create a PrivateLink/Private Service Connect configuration with additional firewall rules, it's
+required to chain the [cloudamqp_security_firewall] resource to avoid parallel conflicting resource
+calls. You can do this by making the firewall resource depend on the VPC Connect resource
+`cloudamqp_vpc_connect.vpc_connect`.
 
 Furthermore, since all firewall rules are overwritten, the otherwise automatically added rules for
 the VPC Connect also needs to be added.
@@ -255,18 +268,18 @@ the VPC Connect also needs to be added.
 
 ```hcl
 resource "cloudamqp_vpc" "vpc" {
-  name = "Standalone VPC"
-  region = "amazon-web-services::us-west-1"
-  subnet = "10.56.72.0/24"
-  tags = []
+  name    = "Standalone VPC"
+  region  = "amazon-web-services::us-west-1"
+  subnet  = "10.56.72.0/24"
+  tags    = []
 }
 
 resource "cloudamqp_instance" "instance" {
-  name   = "Instance 01"
-  plan   = "bunny-1"
-  region = "amazon-web-services::us-west-1"
-  tags   = []
-  vpc_id = cloudamqp_vpc.vpc.id
+  name                = "Instance 01"
+  plan                = "bunny-1"
+  region              = "amazon-web-services::us-west-1"
+  tags                = []
+  vpc_id              = cloudamqp_vpc.vpc.id
   keep_associated_vpc = true
 }
 
@@ -289,9 +302,9 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 
   rules {
     description = "MGMT interface"
-    ip = "0.0.0.0/0"
-    ports = []
-    services = ["HTTPS"]
+    ip          = "0.0.0.0/0"
+    ports       = []
+    services    = ["HTTPS"]
   }
 
   depends_on = [
@@ -301,3 +314,9 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 ```
 
 </details>
+
+[CloudAMQP API list intances]: https://docs.cloudamqp.com/#list-instances
+[CloudAMQP VPC Connect]: https://www.cloudamqp.com/docs/cloudamqp-vpc-connect.html
+[cloudamqp_security_firewall]: https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall
+[Google docs]: https://cloud.google.com/resource-manager/reference/rest/v1/projects
+[private_connection_resource_alias]: ./private_endpoint#private_connection_resource_alias-1

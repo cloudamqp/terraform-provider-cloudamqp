@@ -8,9 +8,8 @@ description: |-
 # cloudamqp_vpc_gcp_peering
 
 This resouce creates a VPC peering configuration for the CloudAMQP instance. The configuration will
-connect to another VPC network hosted on Google Cloud Platform (GCP). See the
-[GCP documentation](https://cloud.google.com/vpc/docs/using-vpc-peering) for more information on how
-to create the VPC peering configuration.
+connect to another VPC network hosted on Google Cloud Platform (GCP). See the [GCP documentation]
+for more information on how to create the VPC peering configuration.
 
 ~> **Note:** Creating a VPC peering will automatically add firewall rules for the peered subnet.
 
@@ -23,14 +22,14 @@ to create the VPC peering configuration.
 rules {
   Description = "VPC peer request"
   ip          = "<VPC peered subnet>"
-  ports       = [15672]
+  ports       = []
   services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL"]
 }
 ```
 
 </details>
 
-Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html).
+Pricing is available at [CloudAMQP plans].
 
 Only available for dedicated subscription plans.
 
@@ -51,11 +50,11 @@ provider "cloudamqp" {
 
 # CloudAMQP instance
 resource "cloudamqp_instance" "instance" {
-  name   = "terraform-vpc-peering"
-  plan   = "bunny-1"
-  region = "google-compute-engine::europe-north1"
-  tags   = ["terraform"]
-  vpc_subnet = "10.40.72.0/24"
+  name        = "terraform-vpc-peering"
+  plan        = "bunny-1"
+  region      = "google-compute-engine::europe-north1"
+  tags        = ["terraform"]
+  vpc_subnet  = "10.40.72.0/24"
 }
 
 # VPC information
@@ -65,8 +64,8 @@ data "cloudamqp_vpc_gcp_info" "vpc_info" {
 
 # VPC peering configuration
 resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
-  instance_id = cloudamqp_instance.instance.id
-  peer_network_uri = "https://www.googleapis.com/compute/v1/projects/<PROJECT-NAME>/global/networks/<VPC-NETWORK-NAME>"
+  instance_id       = cloudamqp_instance.instance.id
+  peer_network_uri  = "https://www.googleapis.com/compute/v1/projects/PROJECT-NAME/global/networks/VPC-NETWORK-NAME"
 }
 ```
 
@@ -75,7 +74,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 <details>
   <summary>
     <b>
-      <i>VPC peering from v1.16.0 (Managed VPC)</i>
+      <i>VPC peering from [v1.16.0] (Managed VPC)</i>
     </b>
   </summary>
 
@@ -87,10 +86,10 @@ provider "cloudamqp" {
 
 # Managed VPC resource
 resource "cloudamqp_vpc" "vpc" {
-  name = "<VPC name>"
-  region = "google-compute-engine::europe-north1"
-  subnet = "10.56.72.0/24"
-  tags = []
+  name    = "<VPC name>"
+  region  = "google-compute-engine::europe-north1"
+  subnet  = "10.56.72.0/24"
+  tags    = []
 }
 
 # CloudAMQP instance
@@ -114,7 +113,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
   vpc_id = cloudamqp_vpc.vpc.id
   # or
   # instance_id = cloudamqp_instance.instance.id
-  peer_network_uri = "https://www.googleapis.com/compute/v1/projects/<PROJECT-NAME>/global/networks/<VPC-NETWORK-NAME>"
+  peer_network_uri = "https://www.googleapis.com/compute/v1/projects/PROJECT-NAME/global/networks/VPC-NETWORK-NAME"
 }
 ```
 
@@ -123,28 +122,29 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 <details>
   <summary>
     <b>
-      <i>VPC peering from v1.28.0, wait_on_peering_status </i>
+      <i>VPC peering from [v1.28.0], wait_on_peering_status </i>
     </b>
   </summary>
 
 Default peering request, no need to set `wait_on_peering_status`. It's default set to false and will
-not wait on peering status. Create resource will be considered completed, regardless of the status of the state.
+not wait on peering status. Create resource will be considered completed, regardless of the status
+of the state.
 
 ```hcl
 resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
-  vpc_id = cloudamqp_vpc.vpc.id
-  peer_network_uri = "https://www.googleapis.com/compute/v1/projects/<PROJECT-NAME>/global/networks/<VPC-NETWORK-NAME>"
+  vpc_id            = cloudamqp_vpc.vpc.id
+  peer_network_uri  = "https://www.googleapis.com/compute/v1/projects/ROJECT-NAME/global/networks/VPC-NETWORK-NAME"
 }
 ```
 
-Peering request and waiting for peering status of the state to change to ACTIVE before the create resource is consider complete.
-This is done once both side have done the peering.
+Peering request and waiting for peering status of the state to change to ACTIVE before the create
+resource is consider complete. This is done once both side have done the peering.
 
 ```hcl
 resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
-  vpc_id = cloudamqp_vpc.vpc.id
-  wait_on_peering_status = true
-  peer_network_uri = "https://www.googleapis.com/compute/v1/projects/<PROJECT-NAME>/global/networks/<VPC-NETWORK-NAME>"
+  vpc_id                  = cloudamqp_vpc.vpc.id
+  wait_on_peering_status  = true
+  peer_network_uri        = "https://www.googleapis.com/compute/v1/projects/PROJECT-NAME/global/networks/VPC-NETWORK-NAME"
 }
 ```
 
@@ -152,89 +152,117 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 
 ## Argument Reference
 
- *Note: this resource require either `instance_id` or `vpc_id` from v1.16.0*
+* `instance_id`             - (Optional) The CloudAMQP instance identifier.
 
-* `instance_id` - (Optional) The CloudAMQP instance identifier. *Deprecated from v1.16.0*
+  ***Deprecated:*** from [v1.16.0], will be removed in next major version (v2.0)
 
-* `vpc_id` - (Optional) The managed VPC identifier. *Available from v1.16.0*
+* `vpc_id`                  - (Optional) The managed VPC identifier.
 
-* `peer_network_uri`- (Required) Network URI of the VPC network to which you will peer with. See examples above for the format.
+  ***Note:*** Available from [v1.16.0], will be required in next major version (v2.0)
 
-* `wait_on_peering_status` - (Optional) Makes the resource wait until the peering is connected.
-Default set to false. *Available from v1.28.0*
+* `peer_network_uri`        - (Required) Network URI of the VPC network to which you will peer with.
+                              See examples above for the format.
+* `wait_on_peering_status`  - (Optional) Makes the resource wait until the peering is connected.
+                              Default set to false.
 
-* `sleep` - (Optional) Configurable sleep time (seconds) between retries when requesting or reading
-peering. Default set to 10 seconds. *Available from v1.29.0*
+  ***Note:*** Available from [v1.28.0]
 
-* `timeout` - (Optional) - Configurable timeout time (seconds) before retries times out. Default set
-to 1800 seconds. *Available from v1.29.0*
+* `sleep`                   - (Optional) Configurable sleep time (seconds) between retries when
+                              requesting or reading peering. Default set to 10 seconds.
+
+  ***Note:*** Available from [v1.29.0]
+
+* `timeout`                 - (Optional) Configurable timeout time (seconds) before retries times
+                              out. Default set to 1800 seconds.
+
+  ***Note:*** Available from [v1.29.0]
 
 ## Attributes Reference
 
 All attributes reference are computed
 
-* `id` - The identifier for this resource.
-* `state` - VPC peering state
-* `state_details` - VPC peering state details
-* `auto_create_routes` - VPC peering auto created routes
+* `id`                  - The identifier for this resource.
+* `state`               - VPC peering state
+* `state_details`       - VPC peering state details
+* `auto_create_routes`  - VPC peering auto created routes
 
 ## Depedency
 
-*Before v1.16.0*
-This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
-
-*From v1.16.0*
+***From v1.16.0:***
 This resource depends on CloudAMQP managed VPC identifier, `cloudamqp_vpc.vpc.id` or instance
 identifier, `cloudamqp_instance.instance.id`.
 
+***Before v1.16.0:***
+This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+
 ## Import
 
-*Before v1.32.2*
-Not possible to import this resource.
+***From v1.32.2:***
+`cloudamqp_vpc_gcp_peering` can be imported while using the resource type, with CloudAMQP VPC
+identifier or instance identifier together with *peering_network_uri* (CSV seperated).
 
-*From v1.32.2*
-`cloudamqp_vpc_gcp_peering` can be imported while using the CloudAMQP managed VPC identifier or
-instance identifier, together with the *peer_network_uri*.
-
-```hcl
-terraform import cloudamqp_vpc_gcp_peering.<resource_name> <resource-type>,<resource-identifier>,<peer_network_uri>
-```
-
-### Resource type
+### Resource type VPC
 
 To use the CloudAMQP managed VPC identifier set the resource type to *vpc*.
+
+From Terraform v1.5.0, the `import` block can be used to import this resource:
+
+```hcl
+import {
+  to = cloudamqp_vpc_gcp_peering.this
+  id = "vpc,<vpc_id>,<peering_network_uri>"
+}
+```
+
+Or use Terraform CLI:
 
 ```hcl
 terraform import cloudamqp_vpc_gcp_peering.vpc_peering_request vpc,<vpc_id>,<peer_network_uri>
 ```
 
-To use the Cloudamqp instance identifier set the resource type to *instance*.
+### Resource type instance
+
+To use the Cloudamqp instance identifier set the resource type to *instance*
+
+From Terraform v1.5.0, the `import` block can be used to import this resource:
+
+```hcl
+import {
+  to = cloudamqp_vpc_gcp_peering.this
+  id = "instance,<instance_id>,<peering_network_uri>"
+}
+```
+
+Or use Terraform CLI:
 
 ```hcl
 terraform import cloudamqp_vpc_gcp_peering.vpc_peering_request instance,<instance_id>,<peer_network_uri>
 ```
 
+***Before v1.32.2:***
+Not possible to import this resource.
+
 ### Peering network URI
 
-This is required to be able to import the correct peering. Following the same format as the argument reference.
+This is required to be able to import the correct peering. Following the same format as the argument
+reference.
 
 ```hcl
-https://www.googleapis.com/compute/v1/projects/<PROJECT-NAME>/global/networks/<VPC-NETWORK-NAME>
+https://www.googleapis.com/compute/v1/projects/PROJECT-NAME/global/networks/VPC-NETWORK-NAME
 ```
 
-## Create VPC Peering with additional firewall rules
+## Create VPC peering with additional firewall rules
 
 To create a VPC peering configuration with additional firewall rules, it's required to chain the
-[cloudamqp_security_firewall](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall)
-resource to avoid parallel conflicting resource calls. This is done by adding dependency from the
-firewall resource to the VPC peering resource.
+[cloudamqp_security_firewall] resource to avoid parallel conflicting resource calls. This is done by
+adding dependency from the firewall resource to the VPC peering resource.
 
 Furthermore, since all firewall rules are overwritten, the otherwise automatically added rules for
 the VPC peering also needs to be added.
 
 See example below.
 
-## Example Usage with additional firewall rules
+## Example usage with additional firewall rules
 
 <details>
   <summary>
@@ -246,8 +274,8 @@ See example below.
 ```hcl
 # VPC peering configuration
 resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
-  instance_id = cloudamqp_instance.instance.id
-  peer_network_uri = var.peer_network_uri
+  instance_id       = cloudamqp_instance.instance.id
+  peer_network_uri  = var.peer_network_uri
 }
 
 # Firewall rules
@@ -263,9 +291,9 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   }
 
   rules {
-    ip          = "192.168.0.0/24"
-    ports       = [4567, 4568]
-    services    = ["AMQP","AMQPS", "HTTPS"]
+    ip        = "192.168.0.0/24"
+    ports     = [4567, 4568]
+    services  = ["AMQP","AMQPS", "HTTPS"]
   }
 
   depends_on = [
@@ -279,7 +307,7 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 <details>
   <summary>
     <b>
-      <i>VPC peering from v1.16.0 (Managed VPC)</i>
+      <i>VPC peering from [v1.16.0] (Managed VPC)</i>
     </b>
   </summary>
 
@@ -318,3 +346,10 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 ```
 
 </details>
+
+[CloudAMQP plans]: https://www.cloudamqp.com/plans.html
+[cloudamqp_security_firewall]: https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall
+[GCP documentation]: https://cloud.google.com/vpc/docs/using-vpc-peering
+[v1.16.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.16.0
+[v1.28.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.28.0
+[v1.29.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.0

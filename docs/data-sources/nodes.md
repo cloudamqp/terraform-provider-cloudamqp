@@ -17,11 +17,11 @@ data "cloudamqp_nodes" "nodes" {
 }
 ```
 
-## Argument reference
+## Argument Reference
 
 * `instance_id` - (Required) The CloudAMQP instance identifier.
 
-## Attributes reference
+## Attributes Reference
 
 All attributes reference are computed
 
@@ -44,7 +44,7 @@ The `nodes` block consist of
 * `additional_disk_size`  - Additional added disk size
 * `availability_zone`     - Availability zone the node is hosted in.
 
-***Note:*** *Total disk size = disk_size + additional_disk_size*
+  ***Note:*** Total disk size = disk_size + additional_disk_size
 
 ## Dependency
 

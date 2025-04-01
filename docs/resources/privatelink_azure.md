@@ -28,14 +28,13 @@ rules {
 
 </details>
 
-Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html) where you can also
-find more information about
-[CloudAMQP PrivateLink](https://www.cloudamqp.com/docs/cloudamqp-privatelink.html#azure-privatelink).
+Pricing is available at [CloudAMQP plans] where you can also find more information about
+[CloudAMQP PrivateLink].
 
 Only available for dedicated subscription plans.
 
 ~> **Warning:** This resource considered deprecated and will be removed in next major version (v2.0).
-Recommended to start using the new resource[`cloudamqp_vpc_connect`](./vpc_connect.md).
+Recommended to start using the new resource [cloudamqp_vpc_connect].
 
 ## Example Usage
 
@@ -61,6 +60,7 @@ resource "cloudamqp_privatelink_azure" "privatelink" {
   ]
 }
 ```
+
 </details>
 
 <details>
@@ -72,18 +72,18 @@ resource "cloudamqp_privatelink_azure" "privatelink" {
 
 ```hcl
 resource "cloudamqp_vpc" "vpc" {
-  name = "Standalone VPC"
-  region = "azure-arm::westus"
-  subnet = "10.56.72.0/24"
-  tags = []
+  name    = "Standalone VPC"
+  region  = "azure-arm::westus"
+  subnet  = "10.56.72.0/24"
+  tags    = []
 }
 
 resource "cloudamqp_instance" "instance" {
-  name   = "Instance 01"
-  plan   = "bunny-1"
-  region = "azure-arm::westus"
-  tags   = []
-  vpc_id = cloudamqp_vpc.vpc.id
+  name                = "Instance 01"
+  plan                = "bunny-1"
+  region              = "azure-arm::westus"
+  tags                = []
+  vpc_id              = cloudamqp_vpc.vpc.id
   keep_associated_vpc = true
 }
 
@@ -99,13 +99,18 @@ resource "cloudamqp_privatelink_azure" "privatelink" {
 
 ## Argument Reference
 
-* `instance_id` - (Required) The CloudAMQP instance identifier.
-* `approved_subscriptions` - (Required) Approved subscriptions to access the endpoint service.
-  See format below.
-* `sleep` - (Optional) Configurable sleep time (seconds) when enable PrivateLink.
-  Default set to 10 seconds. *Available from v1.29.0*
-* `timeout` - (Optional) Configurable timeout time (seconds) when enable PrivateLink.
-  Default set to 1800 seconds. *Available from v1.29.0*
+* `instance_id`             - (Required) The CloudAMQP instance identifier.
+* `approved_subscriptions`  - (Required) Approved subscriptions to access the endpoint service.
+                              See format below.
+* `sleep`                   - (Optional) Configurable sleep time (seconds) when enable PrivateLink.
+                              Default set to 10 seconds.
+
+  ***Note:*** Available from [v1.29.0]
+
+* `timeout`                 - (Optional) Configurable timeout time (seconds) when enable PrivateLink.
+                              Default set to 1800 seconds.
+
+  ***Note:*** Available from [v1.29.0]
 
 Approved subscriptions format (GUID): <br>
 `XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX`
@@ -125,17 +130,30 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-`cloudamqp_privatelink_aws` can be imported using CloudAMQP internal identifier.
+`cloudamqp_privatelink_azure` can be imported using CloudAMQP instance identifier. To retrieve the
+identifier, use [CloudAMQP API list intances].
 
-`terraform import cloudamqp_privatelink_aws.privatelink <id>`
+From Terraform v1.5.0, the `import` block can be used to import this resource:
 
-The resource uses the same identifier as the CloudAMQP instance. To retrieve the identifier for an instance, either use [CloudAMQP customer API](https://docs.cloudamqp.com/#list-instances) or use the data source [`cloudamqp_account`](./data-sources/account.md).
+```hcl
+import {
+  to = cloudamqp_privatelink_azure.privatelink
+  id = cloudamqp_instance.instance.id
+}
+```
+
+Or use Terraform CLI:
+
+`terraform import cloudamqp_privatelink_azure.privatelink <id>`
+
+`cloudamqp_privatelink_aws` can be imported using CloudAMQP instance identifier.
 
 ## Create PrivateLink with additional firewall rules
 
-To create a PrivateLink configuration with additional firewall rules, it's required to chain the [cloudamqp_security_firewall](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall)
-resource to avoid parallel conflicting resource calls. You can do this by making the firewall
-resource depend on the PrivateLink resource, `cloudamqp_privatelink_azure.privatelink`.
+To create a PrivateLink configuration with additional firewall rules, it's required to chain the
+[cloudamqp_security_firewall] resource to avoid parallel conflicting resource calls. You can do this
+by making the firewall resource depend on the PrivateLink resource
+`cloudamqp_privatelink_azure.privatelink`.
 
 Furthermore, since all firewall rules are overwritten, the otherwise automatically added rules for
 the PrivateLink also needs to be added.
@@ -151,18 +169,18 @@ the PrivateLink also needs to be added.
 
 ```hcl
 resource "cloudamqp_vpc" "vpc" {
-  name = "Standalone VPC"
-  region = "azure-arm::westus"
-  subnet = "10.56.72.0/24"
-  tags = []
+  name    = "Standalone VPC"
+  region  = "azure-arm::westus"
+  subnet  = "10.56.72.0/24"
+  tags    = []
 }
 
 resource "cloudamqp_instance" "instance" {
-  name   = "Instance 01"
-  plan   = "bunny-1"
-  region = "azure-arm::westus"
-  tags   = []
-  vpc_id = cloudamqp_vpc.vpc.id
+  name                = "Instance 01"
+  plan                = "bunny-1"
+  region              = "azure-arm::westus"
+  tags                = []
+  vpc_id              = cloudamqp_vpc.vpc.id
   keep_associated_vpc = true
 }
 
@@ -185,9 +203,9 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 
   rules {
     description = "MGMT interface"
-    ip = "0.0.0.0/0"
-    ports = []
-    services = ["HTTPS"]
+    ip          = "0.0.0.0/0"
+    ports       = []
+    services    = ["HTTPS"]
   }
 
   depends_on = [
@@ -197,3 +215,10 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 ```
 
 </details>
+
+[CloudAMQP API list intances]: https://docs.cloudamqp.com/#list-instances
+[CloudAMQP plans]: https://www.cloudamqp.com/plans.html
+[CloudAMQP PrivateLink]: https://www.cloudamqp.com/docs/cloudamqp-privatelink.html#azure-privatelink
+[cloudamqp_security_firewall]: ./security_firewall.md
+[cloudamqp_vpc_connect]: ./vpc_connect.md
+[v1.29.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.0

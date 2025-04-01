@@ -7,11 +7,14 @@ description: |-
 
 # cloudamqp_account
 
-Use this data source to retrieve basic information about all instances available for an account. Uses the included apikey in provider configuration, to determine which account to read from.
+Use this data source to retrieve basic information about all instances available for an account.
+Uses the included apikey in provider configuration, to determine which account to read from.
 
 ## Example Usage
 
-Can be used in other resources/data sources when instance identifier is unknown, while other attributes are known. E.g. find correct instance from `instance name`. Then iterate over instances to find the matching one and extract the instance identifier.
+Can be used in other resources/data sources when instance identifier is unknown, while other
+attributes are known. E.g. find correct instance from `instance name`. Then iterate over instances
+to find the matching one and extract the instance identifier.
 
 ```hcl
 provider "cloudamqp" {
@@ -29,12 +32,14 @@ output "instance_id" {
 }
 ```
 
-## Attributes reference
+## Attributes Reference
 
 All attributes reference are computed
 
-* `id`          - The identifier for this data source. Set to `na` since there is no unique identifier.
-* `instances`   - An array of instances. Each `instances` block consists of the fields documented below.
+* `id`        - The identifier for this data source. Set to `na` since there is no unique
+                identifier.
+* `instances` - An array of instances. Each `instances` block consists of the fields documented
+                below.
 
 ___
 

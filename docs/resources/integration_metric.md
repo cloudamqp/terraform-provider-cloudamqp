@@ -13,7 +13,7 @@ integration.
 
 Only available for dedicated subscription plans.
 
-## Example usage
+## Example Usage
 
 <details>
   <summary>
@@ -225,11 +225,12 @@ resource "cloudamqp_integration_metric" "stackdriver" {
 
 </details>
 
-## Argument references
+## Argument References
 
 The following arguments are supported:
 
-* `name`              - (Required) The name of the third party log integration. See `Integration service reference`
+* `name`              - (Required) The name of the third party log integration. See
+                        `Integration service reference`
 * `region`            - (Optional) Region hosting the integration service.
 * `access_key_id`     - (Optional) AWS access key identifier.
 * `secret_access_key` - (Optional) AWS secret access key.
@@ -243,19 +244,19 @@ The following arguments are supported:
 * `client_email`      - (Optional/Computed) The client email registered for the integration service.
 * `tags`              - (Optional) Tags. e.g. `env=prod,region=europe`.
 
-***Note: If tags are used with Datadog. The value part (prod, europe, ...) must start with a letter,
-read more about tags format in the
-[Datadog documentation](https://docs.datadoghq.com/getting_started/tagging/#define-tags)***
+  ***Note:*** If tags are used with Datadog. The value part (prod, europe, ...) must start with a
+              letter, read more about tags format in the [Datadog documentation].
 
-* `queue_allowlist`   - (Optional) Allowlist queues using regular expression. Leave empty to include all queues.
-* `vhost_allowlist`   - (Optional) Allowlist vhost using regular expression. Leave empty to include all vhosts.
+* `queue_allowlist`   - (Optional) Allowlist queues using regular expression. Leave empty to include
+                        all queues.
+* `vhost_allowlist`   - (Optional) Allowlist vhost using regular expression. Leave empty to include
+                        all vhosts.
 * `queue_whitelist`   - **Deprecated** Use queue_allowlist instead
 * `vhost_whitelist`   - **Deprecated** Use vhost_allowlist instead
 * `include_ad_queues` - (Optional) Include auto delete queues.
 
 This is the full list of all arguments. Only a subset of arguments are used based on which type of
-integration used. See [Integration type reference](#integration-type-reference) below for more
-information.
+integration used. See [integration type reference] below for more information.
 
 ## Integration service references
 
@@ -276,25 +277,27 @@ Valid names for third party log integration.
 
 ## Integration type reference
 
-Valid arguments for third party log integrations.
+Valid arguments for third party metrics integrations. See more information at
+[CloudAMQP API add integrations].
 
 Required arguments for all integrations: *name*</br>
 Optional arguments for all integrations: *tags*, *queue_allowlist*, *vhost_allowlist*
 
-| Name | Type | Required arguments |
-| ---- | ---- | ---- |
+| Name                   | Type           | Required arguments                                   |
+|------------------------|----------------|------------------------------------------------------|
 | Cloudwatch             | cloudwatch     | Access key: region, access_key_id, secret_access_key |
 | Cloudwatch v2          | cloudwatch_v2  | Access key: region, access_key_id, secret_access_key |
-| Cloudwatch             | cloudwatch     | Assume role: region, iam_role, iam_external_id |
-| Cloudwatch v2          | cloudwatch_v2  | Assume role: region, iam_role, iam_external_id |
-| Datadog                | datadog        | api_key, region |
-| Datadog v2             | datadog_v2     | api_key, region |
-| Librato                | librato        | email, api_key |
-| New relic (deprecated) | newrelic       | - |
-| New relic v2           | newrelic_v2    | api_key, region |
-| Stackdriver            | stackdriver    | credentials |
+| Cloudwatch             | cloudwatch     | Assume role: region, iam_role, iam_external_id       |
+| Cloudwatch v2          | cloudwatch_v2  | Assume role: region, iam_role, iam_external_id       |
+| Datadog                | datadog        | api_key, region                                      |
+| Datadog v2             | datadog_v2     | api_key, region                                      |
+| Librato                | librato        | email, api_key                                       |
+| New relic (deprecated) | newrelic       | -                                                    |
+| New relic v2           | newrelic_v2    | api_key, region                                      |
+| Stackdriver            | stackdriver    | credentials                                          |
 
-***Note:*** Stackdriver (v1.20.2 or earlier versions) required arguments  : project_id, private_key, client_email
+***Note:*** Stackdriver (v1.20.2 or earlier versions) required arguments: project_id, private_key,
+client_email
 
 ## Attributes Reference
 
@@ -309,6 +312,23 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 ## Import
 
 `cloudamqp_integration_metric`can be imported using the resource identifier together with CloudAMQP
-instance identifier. The name and identifier are CSV separated, see example below.
+instance identifier (CSV separated). To retrieve the resource identifier, use
+[CloudAMQP API list integrations].
+
+From Terraform v1.5.0, the `import` block can be used to import this resource:
+
+```hcl
+import {
+  to = cloudamqp_alarm.alarm
+  id = format("<id>,%s", cloudamqp_instance.instance.id)
+}
+```
+
+Or use Terraform CLI:
 
 `terraform import cloudamqp_integration_metric.<resource_name> <resource_id>,<instance_id>`
+
+[CloudAMQP API add integrations]: https://docs.cloudamqp.com/cloudamqp_api.html#add-metrics-integration
+[CloudAMQP API list integrations]: https://docs.cloudamqp.com/cloudamqp_api.html#list-metrics-integrations
+[Datadog documentation]: https://docs.datadoghq.com/getting_started/tagging/#define-tags
+[integration type reference]: #integration-type-reference

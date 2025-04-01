@@ -22,9 +22,9 @@ Available for dedicated subscription plans.
 
 ```hcl
 resource "cloudamqp_maintenance_window" "this" {
-  instance_id       = cloudamqp_instance.instance.id
-  preferred_day     = "Monday"
-  preferred_time    = "23:00"
+  instance_id     = cloudamqp_instance.instance.id
+  preferred_day   = "Monday"
+  preferred_time  = "23:00"
 }
 ```
 
@@ -56,8 +56,8 @@ resource "cloudamqp_maintenance_window" "this" {
 
 ```hcl
 resource "cloudamqp_maintenance_window" "this" {
-  instance_id       = cloudamqp_instance.instance.id
-  preferred_time    = "23:00"
+  instance_id     = cloudamqp_instance.instance.id
+  preferred_time  = "23:00"
 }
 ```
 
@@ -70,8 +70,8 @@ resource "cloudamqp_maintenance_window" "this" {
 
 ```hcl
 resource "cloudamqp_maintenance_window" "this" {
-  instance_id       = cloudamqp_instance.instance.id
-  preferred_day     = "Monday"
+  instance_id   = cloudamqp_instance.instance.id
+  preferred_day = "Monday"
 }
 ```
 
@@ -95,8 +95,7 @@ Valid days for preferred days:
 
 ### Valid preferred time
 
-All times are in UTC and follow `hh:mm`
-[format](https://developer.hashicorp.com/terraform/language/functions/formatdate#specification-syntax)
+All times are in UTC and follow `hh:mm` [format].
 
 Example: "00:00", "06:00", "12:00", "18:00", "23:00"
 
@@ -120,7 +119,7 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 ## Import
 
 `cloudamqp_maintenance_window` can be imported using CloudAMQP instance identifier. To retrieve the
-identifier of an instance, use [CloudAMQP API](https://docs.cloudamqp.com/#list-instances).
+identifier of an instance, use [CloudAMQP API list instances].
 
 From Terraform v1.5.0, the `import` block can be used to import this resource:
 
@@ -134,3 +133,6 @@ import {
 Or with Terraform CLI:
 
 `terraform import cloudamqp_maintenance_window.this <id>`
+
+[CloudAMQP API list instances]: https://docs.cloudamqp.com/#list-instances
+[format]: https://developer.hashicorp.com/terraform/language/functions/formatdate#specification-syntax

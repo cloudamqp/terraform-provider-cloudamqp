@@ -8,7 +8,9 @@ description: |-
 
 # Marketplace migration
 
-If you migrate your CloudAMQP billing from a cloud marketplace to directly with CloudAMQP (or vice versa), the resource identifiers will change. Below follows an example on how to fetch the new identifiers and update them.
+If you migrate your CloudAMQP billing from a cloud marketplace to directly with CloudAMQP (or vice
+versa), the resource identifiers will change. Below follows an example on how to fetch the new
+identifiers and update them.
 
 ## Configuration file
 
@@ -51,9 +53,12 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 
 ## Fetch new identifier
 
-For the basic example above we need to fetch two identifiers to be used when manually update the state file. The identifiers are both the *VPC ID* and *Instance ID*.
+For the basic example above we need to fetch two identifiers to be used when manually update the
+state file. The identifiers are both the *VPC ID* and *Instance ID*.
 
-This can be done by using the [CloudAMQP API](https://docs.cloudamqp.com/#list-instances) and listing all the CloudAMQP instances in the new team. From the response, the new CloudAMQP instance have the identifier `209` and the VPC `208`. 
+This can be done by using the [CloudAMQP API list instances] and listing all the CloudAMQP instances
+in the new team. From the response, the new CloudAMQP instance have the identifier `209` and the
+VPC `208`.
 
 ```json
 [
@@ -73,7 +78,8 @@ This can be done by using the [CloudAMQP API](https://docs.cloudamqp.com/#list-i
 
 ## State file
 
-Update the already populated `id`, `instance_id` and `vpc_id` for each resource with the new identifier. 
+Update the already populated `id`, `instance_id` and `vpc_id` for each resource with the new
+identifier.
 
 ### VPC resource
 
@@ -105,7 +111,7 @@ The VPC resource identifier needs to be update with, `id: "208"`.
 
 ### CloudAMQP instance resource
 
-Two identifier needs to be updated,  first `id: "209"` and then `vpc_id: 208` 
+Two identifier needs to be updated,  first `id: "209"` and then `vpc_id: 208`.
 
 ```json
 {
@@ -147,7 +153,8 @@ Two identifier needs to be updated,  first `id: "209"` and then `vpc_id: 208`
 
 ### Firewall resource
 
-The firewall resource shares the same `id` as `instance_id` update these to `id: "209"` and `instance_id: 209` 
+The firewall resource shares the same `id` as `instance_id` update these to `id: "209"` and
+`instance_id: 209`.
 
 ```json
 {
@@ -201,3 +208,5 @@ Depending on the resources to update even more identifiers needs to be fetched f
 ### Apply new indentifiers
 
 Run `terraform apply` to use the new identifiers.
+
+[CloudAMQP API list instances]: https://docs.cloudamqp.com/#list-instances

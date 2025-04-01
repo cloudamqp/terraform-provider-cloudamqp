@@ -12,8 +12,7 @@ This provider doesn't support using the Message Broker HTTP API to create user, 
 underlying RabbitMQ or LavinMQ instance.
 
 There are other providers here at the registry that are built for this. Example of the current
-unofficial RabbitMQ provider with most downloads:
-https://registry.terraform.io/providers/cyrilgdn/rabbitmq/latest
+unofficial RabbitMQ provider with most downloads: [cyrilgdn]
 
 ## Example Usage
 
@@ -31,3 +30,5 @@ provider "rabbitmq" {
   password = data.cloudamqp_credentials.credentials.password
 }
 ```
+
+[cyrilgdn]: https://registry.terraform.io/providers/cyrilgdn/rabbitmq/latest

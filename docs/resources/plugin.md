@@ -28,7 +28,9 @@ resource "cloudamqp_plugin" "rabbitmq_top" {
     </b>
   </summary>
 
-Rabbit MQ can only change one plugin at a time. It will fail if multiple plugins resources are used, unless by creating dependencies with `depend_on` between the resources. Once one plugin has been enabled, the other will continue. See example below.
+Rabbit MQ can only change one plugin at a time. It will fail if multiple plugins resources are used,
+unless by creating dependencies with `depend_on` between the resources. Once one plugin has been
+enabled, the other will continue. See example below.
 
 ```hcl
 resource "cloudamqp_plugin" "rabbitmq_top" {
@@ -58,7 +60,7 @@ resource "cloudamqp_plugin" "rabbitmq_amqp1_0" {
     </b>
   </summary>
 
-CloudAMQP Terraform provider [v1.19.2](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.19.2) support asynchronous request for plugin actions.
+CloudAMQP Terraform provider [v1.19.2] support asynchronous request for plugin actions.
 
 ```hcl
 resource "cloudamqp_plugin" "rabbitmq_top" {
@@ -84,13 +86,14 @@ resource "cloudamqp_plugin" "rabbitmq_amqp1_0" {
     </b>
   </summary>
 
-CloudAMQP Terraform provider [v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) enables faster `cloudamqp_instance` destroy when running `terraform destroy`.
+CloudAMQP Terraform provider [v1.27.0] enables faster `cloudamqp_instance` destroy when running
+`terraform destroy`.
 
 ```hcl
 # Configure the CloudAMQP Provider
 provider "cloudamqp" {
-  apikey = var.cloudamqp_customer_api_key
-  enable_faster_instance_destroy = true
+  apikey                          = var.cloudamqp_customer_api_key
+  enable_faster_instance_destroy  = true
 }
 
 resource "cloudamqp_instance" "instance" {
@@ -122,10 +125,15 @@ The following arguments are supported:
 * `instance_id` - (Required) The CloudAMQP instance ID.
 * `name`        - (Required) The name of the Rabbit MQ plugin.
 * `enabled`     - (Required) Enable or disable the plugins.
-* `sleep` - (Optional) Configurable sleep time (seconds) for retries when requesting information
-about plugins. Default set to 10 seconds. *Available from v1.29.0*
-* `timeout` - (Optional) - Configurable timeout time (seconds) for retries when requesting
-information about plugins. Default set to 1800 seconds. *Available from v1.29.0*
+* `sleep`       - (Optional) Configurable sleep time (seconds) for retries when requesting
+                  information about plugins. Default set to 10 seconds.
+
+  ***Note:*** Available from [v1.29.0]
+
+* `timeout`     - (Optional) Configurable timeout time (seconds) for retries when requesting
+                  information about plugins. Default set to 1800 seconds.
+
+  ***Note:*** Available from [v1.29.0]
 
 ## Attributes Reference
 
@@ -139,17 +147,32 @@ All attributes reference are computed
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
-If multiple plugins should be enable, create dependencies between the plugin resources. See example above.
+If multiple plugins should be enable, create dependencies between the plugin resources. See example
+above.
 
 ## Import
 
-`cloudamqp_plugin` can be imported using the name argument of the resource together with CloudAMQP instance identifier. The name and identifier are CSV separated, see example below.
+`cloudamqp_plugin` can be imported using the name argument of the resource together with CloudAMQP
+instance identifier (CSV separated). To retrieve list of available community plugins, use
+[CloudAMQP API list plugins].
 
-`terraform import cloudamqp_plugin.rabbitmq_management rabbitmq_management,<instance_id>`
+From Terraform v1.5.0, the `import` block can be used to import this resource:
+
+```hcl
+import {
+  to = cloudamqp_plugin.<resource_name>
+  id = format("<plugin_name>,%s", cloudamqp_instance.instance.id)
+}
+```
+
+Or use Terraform CLI:
+
+`terraform import cloudamqp_plugin.<resource_name> <plugin_name>,<instance_id>`
 
 ## Required plugins
 
-Plugins that is not needed to be managed by the provider since they will always be enabled. We have made `rabbitmq_prometheus` required for all clusters since RabbitMQ version 3.10.0.
+Plugins that is not needed to be managed by the provider since they will always be enabled. We have
+made `rabbitmq_prometheus` required for all clusters since RabbitMQ version 3.10.0.
 
 | Name                      | Version |
 |---------------------------|---------|
@@ -163,3 +186,8 @@ When running `terraform destroy` this resource will try to disable the managed p
 deleting `cloudamqp_instance`. This is not necessary since the servers will be deleted.
 
 Set `enable_faster_instance_destroy` to ***true*** in the provider configuration to skip this.
+
+[CloudAMQP API list plugins]: https://docs.cloudamqp.com/cloudamqp_api.html#list-plugins
+[v1.19.2]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.19.2
+[v1.27.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0
+[v1.29.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.0

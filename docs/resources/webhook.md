@@ -27,8 +27,8 @@ The argument `retry_interval` have also been removed.
 ```hcl
 resource "cloudamqp_webhook" "webhook_queue" {
   instance_id = cloudamqp_instance.instance.id
-  vhost = cloudamqp_instance.instance.vhost
-  queue = "webhook-queue"
+  vhost       = cloudamqp_instance.instance.vhost
+  queue       = "webhook-queue"
   webhook_uri = "https://example.com/webhook?key=secret"
   concurrency = 5
 }
@@ -43,16 +43,16 @@ resource "cloudamqp_webhook" "webhook_queue" {
     </b>
   </summary>
 
-For more information see below [versions](#Versions) section.
+For more information see below [versions](#versions) section.
 
 ```hcl
 resource "cloudamqp_webhook" "webhook_queue" {
-  instance_id = cloudamqp_instance.instance.id
-  vhost = cloudamqp_instance.instance.vhost
-  queue = "webhook-queue"
-  webhook_uri = "https://example.com/webhook?key=secret"
-  retry_interval = 5
-  concurrency = 5
+  instance_id     = cloudamqp_instance.instance.id
+  vhost           = cloudamqp_instance.instance.vhost
+  queue           = "webhook-queue"
+  webhook_uri     = "https://example.com/webhook?key=secret"
+  retry_interval  = 5
+  concurrency     = 5
 }
 ```
 
@@ -62,11 +62,12 @@ resource "cloudamqp_webhook" "webhook_queue" {
 
 The following arguments are supported:
 
-* `instance_id`     - (Required) The CloudAMQP instance ID.
-* `vhost`           - (Required) The vhost the queue resides in.
-* `queue`           - (Required) A (durable) queue on your RabbitMQ instance.
-* `webhook_uri`     - (Required) A POST request will be made for each message in the queue to this endpoint.
-* `concurrency`     - (Required) Max simultaneous requests to the endpoint.
+* `instance_id` - (Required) The CloudAMQP instance ID.
+* `vhost`       - (Required) The vhost the queue resides in.
+* `queue`       - (Required) A (durable) queue on your RabbitMQ instance.
+* `webhook_uri` - (Required) A POST request will be made for each message in the queue to this
+                  endpoint.
+* `concurrency` - (Required) Max simultaneous requests to the endpoint.
 
 ## Attributes Reference
 
@@ -80,13 +81,25 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-`cloudamqp_webhook` can be imported using the resource identifier together with CloudAMQP instance identifier. The identifiers are CSV separated, see example below.
+`cloudamqp_webhook` can be imported using the resource identifier together with CloudAMQP instance
+identifier (CSV separated). To retrieve the resource identifier, use [CloudAMQP API list webhooks].
+
+From Terraform v1.5.0, the `import` block can be used to import this resource:
+
+```hcl
+import {
+  to = cloudamqp_webhook.webhook_queue
+  id = format("<id>,%s", cloudamqp_instance.instance.id)
+}
+```
+
+Or use Terraform CLI:
 
 `terraform import cloudamqp_webhook.webhook_queue <id>,<instance_id>`
 
 ## Versions
 
-Important information for older versions
+Information for older versions
 
 <details>
   <summary>
@@ -101,24 +114,27 @@ Important information for older versions
   
   ```hcl
     resource "cloudamqp_webhook" "webhook_queue" {
-    instance_id = cloudamqp_instance.instance.id
-    vhost = cloudamqp_instance.instance.vhost
-    queue = "webhook-queue"
-    webhook_uri = "https://example.com/webhook?key=secret"
-    retry_interval = 5
-    concurrency = 5
+    instance_id     = cloudamqp_instance.instance.id
+    vhost           = cloudamqp_instance.instance.vhost
+    queue           = "webhook-queue"
+    webhook_uri     = "https://example.com/webhook?key=secret"
+    retry_interval  = 5
+    concurrency     = 5
   }
   ```
 
-  <b>Argument Reference</b>
+  **Argument Reference**
 
   The following arguments are supported:
 
-  * `instance_id`     - (Required/ForceNew) The CloudAMQP instance ID.
-  * `vhost`           - (Required/ForceNew) The vhost the queue resides in.
-  * `queue`           - (Required/ForceNew) A (durable) queue on your RabbitMQ instance.
-  * `webhook_uri`     - (Required/ForceNew) A POST request will be made for each message in the queue to this endpoint.
-  * `retry_interval`  - (Required/ForceNew) How often we retry if your endpoint fails (in seconds).
-  * `concurrency`     - (Required/ForceNew) Max simultaneous requests to the endpoint.
+  > * `instance_id`     - (Required/ForceNew) The CloudAMQP instance ID.
+  > * `vhost`           - (Required/ForceNew) The vhost the queue resides in.
+  > * `queue`           - (Required/ForceNew) A (durable) queue on your RabbitMQ instance.
+  > * `webhook_uri`     - (Required/ForceNew) A POST request will be made for each message in the
+                          queue to this endpoint.
+  > * `retry_interval`  - (Required/ForceNew) How often we retry if your endpoint fails (in seconds).
+  > * `concurrency`     - (Required/ForceNew) Max simultaneous requests to the endpoint.
 
 </details>
+
+[CloudAMQP API list webhooks]: https://docs.cloudamqp.com/cloudamqp_api.html#list-webhooks
