@@ -34,7 +34,7 @@ resource "cloudamqp_instance" "lemur_instance" {
   tags    = ["lavinmq"]
 }
 
-# Minimum free lemming instance running RabbitMQ
+# Minimum free lemur instance running RabbitMQ
 resource "cloudamqp_instance" "lemming_instance" {
   name    = "cloudamqp-free-instance-02"
   plan    = "lemur"
@@ -331,7 +331,7 @@ Then add the settings to be copied over to the new dedicated instance. Settings 
 
 ### Settings supported by LavinMQ
 
-***Allowed values:*** alarms, definitions, firewall, logs, metrics
+***Allowed values:*** alarms, definitions, firewall, metrics
 
 <details>
   <summary>
@@ -350,7 +350,7 @@ resource "cloudamqp_instance" "penguin_instance" {
 
   copy_settings {
     subscription_id = var.instance_id
-    settings = ["alarms", "definitions", "firewall", "logs", "metrics"]
+    settings = ["alarms", "definitions", "firewall", "metrics"]
   }
 }
 ```
