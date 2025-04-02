@@ -12,9 +12,8 @@ This resource allows you to configure and manage firewall rules for the CloudAMQ
 ~> **WARNING:** Firewall rules applied with this resource will replace any existing firewall rules.
 Make sure all wanted rules are present to not lose them.
 
--> **NOTE:** From [v1.33.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.33.0)
-when destroying this resource the firewall on the servers will also be removed. I.e. the firewall
-will be completely closed.
+-> **NOTE:** From [v1.33.0] when destroying this resource the firewall on the servers will also be
+removed. I.e. the firewall will be completely closed.
 
 Only available for dedicated subscription plans.
 
@@ -166,9 +165,8 @@ Or use Terraform CLI:
 
 ## Destroy the resource
 
-From [v1.33.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.33.0)
-when destroying this resource the firewall on the servers will be removed. I.e. the firewall will be
-completly closed.
+From [v1.33.0] when destroying this resource the firewall on the servers will be removed. I.e. the
+firewall will be completly closed.
 
 Older version will instead update the firewall with a default rule.
 
@@ -245,4 +243,5 @@ The provider from [v1.15.2] will start to warn about using this.
 [v1.15.1]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.15.1
 [v1.15.2]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.15.2
 [v1.27.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0
+[v1.33.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.33.0
 [VPC GPC peering]: ./vpc_gcp_peering#create-vpc-peering-with-additional-firewall-rules
