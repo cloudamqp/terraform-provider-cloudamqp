@@ -25,22 +25,22 @@ resource "cloudamqp_security_firewall" "this" {
   instance_id = cloudamqp_instance.instance.id
 
   rules {
-    ip          = "192.168.0.0/24"
-    ports       = [4567, 4568]
-    services    = ["AMQP","AMQPS", "HTTPS"]
+    ip        = "192.168.0.0/24"
+    ports     = [4567, 4568]
+    services  = ["AMQP","AMQPS", "HTTPS"]
   }
 
   rules {
-    ip          = "10.56.72.0/24"
-    ports       = []
-    services    = ["AMQP","AMQPS", "HTTPS"]
+    ip        = "10.56.72.0/24"
+    ports     = []
+    services  = ["AMQP","AMQPS", "HTTPS"]
   }
 
   // Single IP address
   rules {
-    ip          = "192.168.1.10/32"
-    ports       = []
-    services    = ["AMQP","AMQPS", "HTTPS"]
+    ip        = "192.168.1.10/32"
+    ports     = []
+    services  = ["AMQP","AMQPS", "HTTPS"]
   }
 }
 ```
@@ -53,15 +53,14 @@ resource "cloudamqp_security_firewall" "this" {
     </b>
   </summary>
 
-CloudAMQP Terraform provider
-[v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) enables
-faster `cloudamqp_instance` destroy when running `terraform destroy`.
+CloudAMQP Terraform provider [v1.27.0] enables faster `cloudamqp_instance` destroy when running
+`terraform destroy`.
 
 ```hcl
 # Configure the CloudAMQP Provider
 provider "cloudamqp" {
-  apikey = var.cloudamqp_customer_api_key
-  enable_faster_instance_destroy = true
+  apikey                          = var.cloudamqp_customer_api_key
+  enable_faster_instance_destroy  = true
 }
 
 resource "cloudamqp_instance" "instance" {
@@ -75,15 +74,15 @@ resource "cloudamqp_security_firewall" "this" {
   instance_id = cloudamqp_instance.instance.id
 
   rules {
-    ip          = "192.168.0.0/24"
-    ports       = [4567, 4568]
-    services    = ["AMQP","AMQPS", "HTTPS"]
+    ip        = "192.168.0.0/24"
+    ports     = [4567, 4568]
+    services  = ["AMQP","AMQPS", "HTTPS"]
   }
 
   rules {
-    ip          = "10.56.72.0/24"
-    ports       = []
-    services    = ["AMQP","AMQPS", "HTTPS"]
+    ip        = "10.56.72.0/24"
+    ports     = []
+    services  = ["AMQP","AMQPS", "HTTPS"]
   }
 }
 ```
@@ -145,24 +144,23 @@ All attributes reference are computed
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
-If used together with
-[VPC GPC peering](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/vpc_gcp_peering#create-vpc-peering-with-additional-firewall-rules), see additional information.
+If used together with [VPC GPC peering], see additional information.
 
 ## Import
 
-`cloudamqp_security_firewall` can be imported using CloudAMQP instance identifier. To retrieve the
-identifier of an instance, use [CloudAMQP API](https://docs.cloudamqp.com/#list-instances).
+`cloudamqp_security_firewall` can be imported using CloudAMQP instance identifier. To
+retrieve the identifier, use [CloudAMQP API list intances].
 
 From Terraform v1.5.0, the `import` block can be used to import this resource:
 
 ```hcl
 import {
-  to = cloudamqp_security_firewall.this
+  to = cloudamqp_security_firewall.firewall
   id = cloudamqp_instance.instance.id
 }
 ```
 
-Or with Terraform CLI:
+Or use Terraform CLI:
 
 `terraform import cloudamqp_security_firewall.firewall <instance_id>`
 
@@ -185,9 +183,8 @@ rules {
 
 ## Enable faster instance destroy
 
-When running `terraform destroy` this resource will try configure the firewall with either default
-rules or no rules, before deleting `cloudamqp_instance`. This is not necessary when the
-`cloudamqp_instance` resource also being destroyed.
+When running `terraform destroy` this resource will try configure the firewall with default rules
+before deleting `cloudamqp_instance`. This is not necessary since the servers will be deleted.
 
 Set `enable_faster_instance_destroy` to ***true*** in the provider configuration to skip this.
 
@@ -196,13 +193,12 @@ Set `enable_faster_instance_destroy` to ***true*** in the provider configuration
 <details>
   <summary>Custom ports trigger new update every time</summary>
 
-  Before release
-  [v1.15.1](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.15.1) using
-  the custom ports can cause a missmatch upon reading data and trigger a new update every time.
+  Before release v1.15.1 using the custom ports can cause a missmatch upon reading data and
+  trigger a new update every time.
 
   Reason is that there is a bug in validating the response from the underlying API.
 
-  Update the provider to at least v1.15.1 to fix the issue.
+  Update the provider to at least [v1.15.1] to fix the issue.
  </details>
 
 <details>
@@ -216,9 +212,9 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   instance_id = cloudamqp_instance.instance.id
 
   rules {
-    ip          = "192.168.0.0/24"
-    ports       = [5671]
-    services    = []
+    ip        = "192.168.0.0/24"
+    ports     = [5671]
+    services  = []
   }
 }
 ```
@@ -234,14 +230,19 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   instance_id = cloudamqp_instance.instance.id
 
   rules {
-    ip          = "192.168.0.0/24"
-    ports       = []
-    services    = ["AMQPS"]
+    ip        = "192.168.0.0/24"
+    ports     = []
+    services  = ["AMQPS"]
   }
 }
 ```
 
-The provider from
-[v1.15.2](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.16.0) will start
-to warn about using this.
+The provider from [v1.15.2] will start to warn about using this.
+
  </details>
+
+[CloudAMQP API list intances]: https://docs.cloudamqp.com/#list-instances
+[v1.15.1]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.15.1
+[v1.15.2]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.15.2
+[v1.27.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0
+[VPC GPC peering]: ./vpc_gcp_peering#create-vpc-peering-with-additional-firewall-rules

@@ -11,6 +11,7 @@ Enable PrivateLink for a CloudAMQP instance hosted in AWS. If no existing VPC av
 PrivateLink, a new VPC will be created with subnet `10.52.72.0/24`.
 
 -> **Note:** Enabling PrivateLink will automatically add firewall rules for the peered subnet.
+
 <details>
  <summary>
     <i>Default PrivateLink firewall rule</i>
@@ -27,14 +28,13 @@ rules {
 
 </details>
 
-Pricing is available at [cloudamqp.com](https://www.cloudamqp.com/plans.html)
-where you can also find more information about
-[CloudAMQP PrivateLink](https://www.cloudamqp.com/docs/cloudamqp-privatelink.html#aws-privatelink).
+Pricing is available at [CloudAMQP plans] where you can also find more information about
+[CloudAMQP PrivateLink].
 
 Only available for dedicated subscription plans.
 
 ~> **Warning:** This resource considered deprecated and will be removed in next major version (v2.0).
-Recommended to start using the new resource[`cloudamqp_vpc_connect`](./vpc_connect.md).
+Recommended to start using the new resource [cloudamqp_vpc_connect].
 
 ## Example Usage
 
@@ -72,18 +72,18 @@ resource "cloudamqp_privatelink_aws" "privatelink" {
 
 ```hcl
 resource "cloudamqp_vpc" "vpc" {
-  name = "Standalone VPC"
-  region = "amazon-web-services::us-west-1"
-  subnet = "10.56.72.0/24"
-  tags = []
+  name    = "Standalone VPC"
+  region  = "amazon-web-services::us-west-1"
+  subnet  = "10.56.72.0/24"
+  tags    = []
 }
 
 resource "cloudamqp_instance" "instance" {
-  name   = "Instance 01"
-  plan   = "bunny-1"
-  region = "amazon-web-services::us-west-1"
-  tags   = []
-  vpc_id = cloudamqp_vpc.vpc.id
+  name                = "Instance 01"
+  plan                = "bunny-1"
+  region              = "amazon-web-services::us-west-1"
+  tags                = []
+  vpc_id              = cloudamqp_vpc.vpc.id
   keep_associated_vpc = true
 }
 
@@ -99,12 +99,17 @@ resource "cloudamqp_privatelink_aws" "privatelink" {
 
 ## Argument Reference
 
-* `instance_id` - (Required) The CloudAMQP instance identifier.
-* `allowed_principals` - (Required) Allowed principals to access the endpoint service.
-* `sleep` - (Optional) Configurable sleep time (seconds) when enable PrivateLink.
-  Default set to 10 seconds. *Available from v1.29.0*
-* `timeout` - (Optional) Configurable timeout time (seconds) when enable PrivateLink.
-  Default set to 1800 seconds. *Available from v1.29.0*
+* `instance_id`         - (Required) The CloudAMQP instance identifier.
+* `allowed_principals`  - (Required) Allowed principals to access the endpoint service.
+* `sleep`               - (Optional) Configurable sleep time (seconds) when enable PrivateLink.
+                          Default set to 10 seconds.
+
+  ***Note:*** Available from [v1.29.0]
+
+* `timeout`             - (Optional) Configurable timeout time (seconds) when enable PrivateLink.
+                          Default set to 1800 seconds.
+
+  ***Note:*** Available from [v1.29.0]
 
 Allowed principals format: <br>
 `arn:aws:iam::aws-account-id:root` <br>
@@ -115,10 +120,10 @@ Allowed principals format: <br>
 
 All attributes reference are computed
 
-* `id`  - The identifier for this resource. Will be same as `instance_id`
-* `status`- PrivateLink status [enable, pending, disable]
-* `service_name` - Service name of the PrivateLink used when creating the endpoint from other VPC.
-* `active_zones` - Covering availability zones used when creating an Endpoint from other VPC.
+* `id`            - The identifier for this resource. Will be same as `instance_id`
+* `status`        - PrivateLink status [enable, pending, disable]
+* `service_name`  - Service name of the PrivateLink used when creating the endpoint from other VPC.
+* `active_zones`  - Covering availability zones used when creating an Endpoint from other VPC.
 
 ## Depedency
 
@@ -126,17 +131,28 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-`cloudamqp_privatelink_aws` can be imported using CloudAMQP internal identifier.
+`cloudamqp_privatelink_aws` can be imported using CloudAMQP instance identifier. To retrieve the
+identifier, use [CloudAMQP API list intances].
+
+From Terraform v1.5.0, the `import` block can be used to import this resource:
+
+```hcl
+import {
+  to = cloudamqp_privatelink_aws.privatelink
+  id = cloudamqp_instance.instance.id
+}
+```
+
+Or use Terraform CLI:
 
 `terraform import cloudamqp_privatelink_aws.privatelink <id>`
 
-The resource uses the same identifier as the CloudAMQP instance. To retrieve the identifier for an instance, either use [CloudAMQP customer API](https://docs.cloudamqp.com/#list-instances) or use the data source [`cloudamqp_account`](./data-sources/account.md).
-
 ## Create PrivateLink with additional firewall rules
 
-To create a PrivateLink configuration with additional firewall rules, it's required to chain the [cloudamqp_security_firewall](https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall)
-resource to avoid parallel conflicting resource calls. You can do this by making the firewall
-resource depend on the PrivateLink resource, `cloudamqp_privatelink_aws.privatelink`.
+To create a PrivateLink configuration with additional firewall rules, it's required to chain the
+[cloudamqp_security_firewall] resource to avoid parallel conflicting resource calls. You can do this
+by making the firewall resource depend on the PrivateLink resource,
+`cloudamqp_privatelink_aws.privatelink`.
 
 Furthermore, since all firewall rules are overwritten, the otherwise automatically added rules for
 the PrivateLink also needs to be added.
@@ -152,18 +168,18 @@ the PrivateLink also needs to be added.
 
 ```hcl
 resource "cloudamqp_vpc" "vpc" {
-  name = "Standalone VPC"
-  region = "amazon-web-services::us-west-1"
-  subnet = "10.56.72.0/24"
-  tags = []
+  name    = "Standalone VPC"
+  region  = "amazon-web-services::us-west-1"
+  subnet  = "10.56.72.0/24"
+  tags    = []
 }
 
 resource "cloudamqp_instance" "instance" {
-  name   = "Instance 01"
-  plan   = "bunny-1"
-  region = "amazon-web-services::us-west-1"
-  tags   = []
-  vpc_id = cloudamqp_vpc.vpc.id
+  name                = "Instance 01"
+  plan                = "bunny-1"
+  region              = "amazon-web-services::us-west-1"
+  tags                = []
+  vpc_id              = cloudamqp_vpc.vpc.id
   keep_associated_vpc = true
 }
 
@@ -186,9 +202,9 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 
   rules {
     description = "MGMT interface"
-    ip = "0.0.0.0/0"
-    ports = []
-    services = ["HTTPS"]
+    ip          = "0.0.0.0/0"
+    ports       = []
+    services    = ["HTTPS"]
   }
 
   depends_on = [
@@ -198,3 +214,10 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 ```
 
 </details>
+
+[CloudAMQP API list intances]: https://docs.cloudamqp.com/#list-instances
+[CloudAMQP plans]: https://www.cloudamqp.com/plans.html
+[CloudAMQP PrivateLink]: https://www.cloudamqp.com/docs/cloudamqp-privatelink.html#aws-privatelink
+[cloudamqp_security_firewall]: ./security_firewall.md
+[cloudamqp_vpc_connect]: ./vpc_connect.md
+[v1.29.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.0

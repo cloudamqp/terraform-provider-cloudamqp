@@ -9,7 +9,9 @@ description: |-
 
 The CloudAMQP provider is used to interact with CloudAMQP organization resources.
 
-The provider allows you to manage your CloudAMQP instances and features. Create, configure and deploy [**RabbitMQ**](https://www.rabbitmq.com/) or [**LavinMQ**](https://lavinmq.com/) to different cloud platforms. The provider needs to be configured with the proper API key before it can be used.
+The provider allows you to manage your CloudAMQP instances and features. Create, configure and
+deploy [**RabbitMQ**](https://www.rabbitmq.com/) or [**LavinMQ**](https://lavinmq.com/) to different
+cloud platforms. The provider needs to be configured with the proper API key before it can be used.
 
 Use the navigation to the left to read about the available resources.
 
@@ -17,17 +19,19 @@ Use the navigation to the left to read about the available resources.
 
 ```hcl
 # Configure the CloudAMQP Provider
+
+# Create a new cloudamqp instance
 provider "cloudamqp" {
-  apikey          = var.cloudamqp_customer_api_key
+  apikey                         = var.cloudamqp_customer_api_key
   enable_faster_instance_destroy = true // Optional configuration, can be left out.
 }
 
 # Create a new cloudamqp instance
 resource "cloudamqp_instance" "instance" {
-  name          = "terraform-cloudamqp-instance"
-  plan          = "bunny-1"
-  region        = "amazon-web-services::us-west-1"
-  tags          = [ "terraform" ]
+  name   = "terraform-cloudamqp-instance"
+  plan   = "bunny-1"
+  region = "amazon-web-services::us-west-1"
+  tags   = ["terraform"]
 }
 
 # New recipient to receieve notifications
@@ -52,28 +56,28 @@ resource "cloudamqp_alarm" "cpu_alarm" {
 resource "cloudamqp_security_firewall" "firewall" {
   instance_id = cloudamqp_instance.instance.id
   rules {
-    ip = "10.54.72.0/0"
-    ports = [4567]
+    ip       = "10.54.72.0/0"
+    ports    = [4567]
     services = ["AMQPS"]
   }
 }
 
 # Cloudwatch logs integration
 resource "cloudamqp_integration_log" "cloudwatchlog" {
-  instance_id = cloudamqp_instance.instance.id
-  name = "cloudwatchlog"
-  access_key_id = var.aws_access_key
+  instance_id       = cloudamqp_instance.instance.id
+  name              = "cloudwatchlog"
+  access_key_id     = var.aws_access_key
   secret_access_key = var.aws_secret_key
-  region = var.aws_region
+  region            = var.aws_region
 }
 
 # Cloudwatch metrics integration
 resource "cloudamqp_integration_metric" "cloudwatch" {
-  instance_id = cloudamqp_instance.instance.id
-  name = "cloudwatch"
-  access_key_id = var.aws_access_key
+  instance_id       = cloudamqp_instance.instance.id
+  name              = "cloudwatch"
+  access_key_id     = var.aws_access_key
   secret_access_key = var.aws_secret_key
-  region = var.aws_region
+  region            = var.aws_region
 }
 ```
 
@@ -81,17 +85,20 @@ resource "cloudamqp_integration_metric" "cloudwatch" {
 
 The following arguments are supported in the `provider` block:
 
-* `apikey` - (Required) This is the CloudAMQP Customer API key needed to make calls to the customer API.
-             It can be sourced from login in to your CloudAMQP account and go to API access or go
-             directly to [API Keys](https://customer.cloudamqp.com/apikeys).
-             The API key can also be read from the environment variable `CLOUDAMQP_APIKEY`.
+* `apikey` - (Required) This is the CloudAMQP Customer API key needed to make calls to the customer
+             API. It can be sourced from login in to your CloudAMQP account and go to API access or
+             go directly to [API Keys]. The API key can also be read from the environment variable
+             `CLOUDAMQP_APIKEY`.
 
-* `enable_faster_instance_destroy` - (Optional) This will speed up the destroy action for `cloudamqp_instance`
-                                      when running `terraform destroy`. It's done by skipping delete behaviour
-                                      for resources that don't need to be cleaned up when the servers are deleted.
-                                      The argument can also be read from the environment variable
-                                      `CLOUDAMQP_ENABLE_FASTER_INSTANCE_DESTROY`, default set to false.
-                                      *Available from v1.27.0*
+* `enable_faster_instance_destroy` - (Optional) This will speed up the destroy action for
+                                     `cloudamqp_instance` when running `terraform destroy`. It's
+                                      done by skipping delete behaviour for resources that don't
+                                      need to be cleaned up when the servers are deleted. The
+                                      argument can also be read from the environment variable
+                                      `CLOUDAMQP_ENABLE_FASTER_INSTANCE_DESTROY`, default set to
+                                      false.
+
+  ***Note:*** Available from [v1.27.0].
 
 ___
 
@@ -102,3 +109,6 @@ ___
 * cloudamqp_security_firewall
 
 More information can be found under `Enable faster instance destroy` section on respective resource.
+
+[API Keys]: https://customer.cloudamqp.com/apikeys
+[v1.27.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0

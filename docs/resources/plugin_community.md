@@ -25,17 +25,18 @@ resource "cloudamqp_plugin_community" "rabbitmq_delayed_message_exchange" {
 <details>
   <summary>
     <b>
-      <i>Faster instance destroy when running `terraform destroy` from v1.27.0
+      <i>Faster instance destroy when running `terraform destroy` from [v1.27.0]</i>
     </b>
   </summary>
 
-CloudAMQP Terraform provider [v1.27.0](https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0) enables faster `cloudamqp_instance` destroy when running `terraform destroy`.
+CloudAMQP Terraform provider [v1.27.0] enables faster `cloudamqp_instance` destroy when running
+`terraform destroy`.
 
 ```hcl
 # Configure the CloudAMQP Provider
 provider "cloudamqp" {
-  apikey = var.cloudamqp_customer_api_key
-  enable_faster_instance_destroy = true
+  apikey                          = var.cloudamqp_customer_api_key
+  enable_faster_instance_destroy  = true
 }
 
 resource "cloudamqp_instance" "instance" {
@@ -61,10 +62,15 @@ The following arguments are supported:
 * `instance_id` - (Required) The CloudAMQP instance ID.
 * `name`        - (Required) The name of the Rabbit MQ community plugin.
 * `enabled`     - (Required) Enable or disable the plugins.
-* `sleep` - (Optional) Configurable sleep time (seconds) for retries when requesting information
-about community plugins. Default set to 10 seconds. *Available from v1.29.0*
-* `timeout` - (Optional) - Configurable timeout time (seconds) for retries when requesting
-information about community plugins. Default set to 1800 seconds. *Available from v1.29.0*
+* `sleep`       - (Optional) Configurable sleep time (seconds) for retries when requesting
+                  information about community plugins. Default set to 10 seconds.
+
+  ***Note:*** Available from [v1.29.0]
+
+* `timeout`     - (Optional) - Configurable timeout time (seconds) for retries when requesting
+                  information about community plugins. Default set to 1800 seconds.
+
+  ***Note:*** Available from [v1.29.0]
 
 ## Attributes Reference
 
@@ -78,10 +84,22 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-`cloudamqp_plugin` can be imported using the name argument of the resource together with CloudAMQP
-instance identifier. The name and identifier are CSV separated, see example below.
+`cloudamqp_plugin_community` can be imported if it's has already been installed by using the name
+argument of the resource together with CloudAMQP instance identifier (CSV separated). To retrieve
+list of available community plugins, use [CloudAMQP API list community plugins].
 
-`terraform import cloudamqp_plugin.<resource_name> <plugin_name>,<instance_id>`
+From Terraform v1.5.0, the `import` block can be used to import this resource:
+
+```hcl
+import {
+  to = cloudamqp_plugin_community.rabbitmq_delayed_message_exchange
+  id = format("rabbitmq_delayed_message_exchange,%s", cloudamqp_instance.instance.id)
+}
+```
+
+Or use Terraform CLI:
+
+`terraform import cloudamqp_plugin.rabbitmq_delayed_message_exchange <plugin_name>,<instance_id>`
 
 ## Enable faster instance destroy
 
@@ -89,3 +107,7 @@ When running `terraform destroy` this resource will try to uninstall the managed
 before deleting `cloudamqp_instance`. This is not necessary since the servers will be deleted.
 
 Set `enable_faster_instance_destroy` to ***true***  in the provider configuration to skip this.
+
+[CloudAMQP API list community plugins]: https://docs.cloudamqp.com/cloudamqp_api.html#list-community-plugins
+[v1.27.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0
+[v1.29.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.0

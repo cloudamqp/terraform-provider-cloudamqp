@@ -16,7 +16,7 @@ Use this data source to retrieve information about VPC for a CloudAMQP instance.
 <details>
   <summary>
     <b>
-      <i>AWS VPC peering pre v1.16.0</i>
+      <i>AWS VPC peering before v1.16.0</i>
     </b>
   </summary>
 
@@ -25,12 +25,13 @@ data "cloudamqp_vpc_info" "vpc_info" {
   instance_id = cloudamqp_instance.instance.id
 }
 ```
+
 </details>
 
 <details>
   <summary>
     <b>
-      <i>AWS VPC peering post v1.16.0 (Managed VPC)</i>
+      <i>AWS VPC peering from [v1.16.0] (Managed VPC)</i>
     </b>
   </summary>
 
@@ -41,22 +42,20 @@ data "cloudamqp_vpc_info" "vpc_info" {
   # instance_id = cloudamqp_instance.instance.id
 }
 ```
+
 </details>
 
-
-## Argument reference
-
- *Note: this resource require either `instance_id` or `vpc_id` from v1.16.0*
+## Argument Reference
 
 * `instance_id` - (Optional) The CloudAMQP instance identifier.
 
- ***Deprecated: Changed from required to optional in v1.16.0 will be removed in next major version (v2.0)***
+  ***Deprecated:*** from [v1.16.0], will be removed in next major version (v2.0)
 
 * `vpc_id` - (Optional) The managed VPC identifier.
 
- ***Note: Added as optional in version v1.16.0 and will be required in next major version (v2.0)***
+  ***Note:*** Available from [v1.16.0], will be removed in next major version (v2.0)
 
-## Attributes reference
+## Attributes Reference
 
 All attributes reference are computed
 
@@ -68,8 +67,11 @@ All attributes reference are computed
 
 ## Dependency
 
-*Pre v1.16.0*
+*Before v1.16.0*
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
-*Post v1.16.0*
-This resource depends on CloudAMQP managed VPC identifier, `cloudamqp_vpc.vpc.id` or instance identifier, `cloudamqp_instance.instance.id`.
+*From [v1.16.0]*
+This resource depends on CloudAMQP managed VPC identifier, `cloudamqp_vpc.vpc.id` or instance
+identifier, `cloudamqp_instance.instance.id`.
+
+[v1.16.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.16.0

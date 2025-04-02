@@ -23,6 +23,7 @@ resource "cloudamqp_vpc" "vpc" {
   tags   = []
 }
 ```
+
 Create multiple instances and add them to the managed VPC.
 
 ```hcl
@@ -49,9 +50,12 @@ resource "cloudamqp_instance" "instance_02" {
 
 Both instances can be deleted and the managed VPC can still be used.
 
-## Dedicated instance and vpc_subnet
+## Dedicated instance and VPC subnet
 
-Creating dedicated instance with attribute vpc_subnet. This will both create an instance and a standalone VPC.
+~>  ***Deprecated:*** Will be removed in next major version (v2.0)
+
+Creating dedicated instance with attribute vpc_subnet. This will both create an instance and a
+standalone VPC.
 
 ```hcl
 # Dedicated instance with vpc_subnet also creates VPC
@@ -66,15 +70,26 @@ resource "cloudamqp_instance" "instance_01" {
 ```
 
 ### Import managed VPC
+
 Once the instance and the VPC are created, the VPC can be imported as a managed VPC.
 
+`cloudamqp_vpc` can be imported using the resource identifier. To retrieve the resource identifier,
+use [CloudAMQP API list VPCs].
+
+From Terraform v1.5.0, the `import` block can be used to import this resource:
+
 ```hcl
-# Imported managed VPC
-resource "cloudamqp_vpc" "vpc" { }
+import {
+  to = cloudamqp_vpc.vpc
+  id = <vpc_id>
+}
 ```
+
+Or with Terraform CLI:
+
 `terraform import cloudamqp_vpc.vpc <vpc_id>`
 
-Add the correct info for the imported standalone VPC.
+Add then correct info for the imported standalone VPC.
 
 ```hcl
 # Imported standalone VPC as a managed VPC
@@ -105,7 +120,8 @@ Run `terraform apply -refresh-only` to update the state file with the correct da
 
 ### Delete instance
 
-When deleting the instance, the associated VPC will be deleted by default (if no other instances are added).
+When deleting the instance, the associated VPC will be deleted by default (if no other instances
+are added).
 
 ```hcl
 resource "cloudamqp_instance" "instance_01" {
@@ -122,4 +138,7 @@ resource "cloudamqp_instance" "instance_01" {
 
 In order to keep the associated VPC the attribute `keep_associated_vpc` must be set to *true*.
 
-Run `terraform apply` to update the state file with the correct data, then the instance can be deleted.
+Run `terraform apply` to update the state file with the correct data, then the instance can be
+deleted.
+
+[CloudAMQP API list vpcs]: https://docs.cloudamqp.com/#list-vpcs

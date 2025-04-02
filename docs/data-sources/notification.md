@@ -7,24 +7,26 @@ description: |-
 
 # cloudamqp_notification
 
-Use this data source to retrieve information about default or created recipients. The recipient will receive notifications assigned to an alarm that has triggered. To retrieve the recipient either use `recipient_id` or `name`.
+Use this data source to retrieve information about default or created recipients. The recipient will
+receive notifications assigned to an alarm that has triggered. To retrieve the recipient either use
+`recipient_id` or `name`.
 
 ## Example Usage
 
 ```hcl
 data "cloudamqp_notification" "default_recipient" {
   instance_id = cloudamqp_instance.instance.id
-  name = "default"
+  name        = "default"
 }
 ```
 
-## Argument reference
+## Argument Reference
 
 * `instance_id`   - (Required) The CloudAMQP instance identifier.
 * `recipient_id`  - (Optional) The recipient identifier.
 * `name`          - (Optional) The name set for the recipient.
 
-## Attributes reference
+## Attributes Reference
 
 All attributes reference are computed
 
