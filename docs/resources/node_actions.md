@@ -149,7 +149,16 @@ All attributes reference are computed
 
 ## Action reference
 
-Valid options for action.
+Valid actions for ***LavinMQ***.
+
+| Action       | Info                               |
+|--------------|------------------------------------|
+| start        | Start LavinMQ                      |
+| stop         | Stop LavinMQ                       |
+| restart      | Restart LavinMQ                    |
+| reboot       | Reboot the node                    |
+
+Valid actions for ***RabbitMQ***.
 
 | Action       | Info                               |
 |--------------|------------------------------------|

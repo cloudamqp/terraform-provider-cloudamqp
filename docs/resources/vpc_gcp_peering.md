@@ -18,11 +18,24 @@ for more information on how to create the VPC peering configuration.
     <i>Default VPC peering firewall rule</i>
   </summary>
 
+For LavinMQ:
+
 ```hcl
 rules {
   Description = "VPC peer request"
   ip          = "<VPC peered subnet>"
-  ports       = []
+  ports       = [15672, 5552, 5551]
+  services    = ["AMQP", "AMQPS", "HTTPS"]
+}
+```
+
+For RabbitMQ:
+
+```hcl
+rules {
+  Description = "VPC peer request"
+  ip          = "<VPC peered subnet>"
+  ports       = [15672]
   services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL"]
 }
 ```
@@ -51,7 +64,7 @@ provider "cloudamqp" {
 # CloudAMQP instance
 resource "cloudamqp_instance" "instance" {
   name        = "terraform-vpc-peering"
-  plan        = "bunny-1"
+  plan        = "penguin-1"
   region      = "google-compute-engine::europe-north1"
   tags        = ["terraform"]
   vpc_subnet  = "10.40.72.0/24"
@@ -95,7 +108,7 @@ resource "cloudamqp_vpc" "vpc" {
 # CloudAMQP instance
 resource "cloudamqp_instance" "instance" {
   name   = "terraform-vpc-peering"
-  plan   = "bunny-1"
+  plan   = "penguin-1"
   region = "google-compute-engine::europe-north1"
   tags   = ["terraform"]
   vpc_id = cloudamqp_vpc.vpc.id
@@ -285,8 +298,8 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   # Default VPC peering rule
   rules {
     ip          =  var.peer_subnet
-    ports       = [15672]
-    services    = ["AMQP","AMQPS", "STREAM", "STREAM_SSL"]
+    ports       = [15672, 5552, 5551]
+    services    = ["AMQP","AMQPS"]
     description = "VPC peering for <NETWORK>"
   }
 
@@ -327,8 +340,8 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   # Default VPC peering rule
   rules {
     ip          =  var.peer_subnet
-    ports       = [15672]
-    services    = ["AMQP","AMQPS", "STREAM", "STREAM_SSL"]
+    ports       = [15672, 5552, 5551]
+    services    = ["AMQP","AMQPS"]
     description = "VPC peering for <NETWORK>"
   }
 
