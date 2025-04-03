@@ -25,7 +25,7 @@ Only available for dedicated subscription plans.
 ```hcl
 resource "cloudamqp_instance" "instance" {
   name        = "Test instance"
-  plan        = "squirrel-1"
+  plan        = "penguin-1"
   region      = "amazon-web-services::us-west-1"
   rmq_version = "3.11.5"
   tags        = ["aws"]

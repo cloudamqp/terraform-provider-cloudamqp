@@ -52,7 +52,7 @@ provider "cloudamqp" {
 # Instance
 resource "cloudamqp_instance" "instance" {
   name   = "Instance"
-  plan   = "bunny-1"
+  plan   = "penguin-1"
   region = "amazon-web-services::us-west-2"
 }
 
@@ -91,7 +91,7 @@ provider "cloudamqp" {
 # Instance
 resource "cloudamqp_instance" "instance" {
   name   = "Instance"
-  plan   = "bunny-1"
+  plan   = "penguin-1"
   region = "amazon-web-services::us-west-2"
 }
 
@@ -130,7 +130,7 @@ provider "cloudamqp" {
 # Instance
 resource "cloudamqp_instance" "instance" {
   name   = "Instance"
-  plan   = "bunny-1"
+  plan   = "penguin-1"
   region = "google-compute-engine::us-central1"
 }
 
@@ -169,7 +169,7 @@ provider "cloudamqp" {
 # Instance
 resource "cloudamqp_instance" "instance" {
   name   = "Instance"
-  plan   = "bunny-1"
+  plan   = "penguin-1"
   region = "azure-arm::centralus"
 }
 

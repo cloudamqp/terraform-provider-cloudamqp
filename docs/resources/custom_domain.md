@@ -20,7 +20,7 @@ current connections.
 Your custom domain name needs to point to your CloudAMQP hostname, preferably using a CNAME DNS
 record.
 
-Only available for dedicated subscription plans.
+Only available for dedicated subscription plans running ***RabbitMQ***.
 
 ## Example Usage
 

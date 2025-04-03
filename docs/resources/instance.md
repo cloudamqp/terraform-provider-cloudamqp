@@ -21,33 +21,41 @@ Pricing is available at [CloudAMQP plans].
 <details>
   <summary>
     <b>
-      <i>Basic example of shared and dedicated instances</i>
+      <i>Shared and dedicated instances running LavinMQ</i>
     </b>
   </summary>
 
 ```hcl
-# Minimum free lemur instance running RabbitMQ
-resource "cloudamqp_instance" "lemur_instance" {
-  name    = "cloudamqp-free-instance"
-  plan    = "lemur"
-  region  = "amazon-web-services::us-west-1"
-  tags    = ["rabbitmq"]
-}
-
 # Minimum free lemming instance running LavinMQ
-resource "cloudamqp_instance" "lemming_instance" {
-  name    = "cloudamqp-free-instance"
+resource "cloudamqp_instance" "lemur_instance" {
+  name    = "cloudamqp-free-instance-01"
   plan    = "lemming"
   region  = "amazon-web-services::us-west-1"
   tags    = ["lavinmq"]
 }
 
-# New dedicated bunny instance running RabbitMQ
-resource "cloudamqp_instance" "instance" {
-  name    = "terraform-cloudamqp-instance"
+# Minimum free lemur instance running RabbitMQ
+resource "cloudamqp_instance" "lemming_instance" {
+  name    = "cloudamqp-free-instance-02"
+  plan    = "lemur"
+  region  = "amazon-web-services::us-west-1"
+  tags    = ["rabbitmq"]
+}
+
+# Dedicated penguin instance running LavinMQ
+resource "cloudamqp_instance" "penguin_instance" {
+  name    = "terraform-cloudamqp-instance-01"
+  plan    = "penguin-1"
+  region  = "amazon-web-services::us-west-1"
+  tags    = ["lavinmq"]
+}
+
+# Dedicated bunny instance running RabbitMQ
+resource "cloudamqp_instance" "bunny_instance" {
+  name    = "terraform-cloudamqp-instance-02"
   plan    = "bunny-1"
   region  = "amazon-web-services::us-west-1"
-  tags    = ["terraform"]
+  tags    = ["rabbitmq"]
 }
 ```
 
@@ -63,7 +71,7 @@ resource "cloudamqp_instance" "instance" {
 ```hcl
 resource "cloudamqp_instance" "instance" {
   name        = "terraform-cloudamqp-instance"
-  plan        = "bunny-1"
+  plan        = "penguin-1"
   region      = "amazon-web-services::us-west-1"
   tags        = ["terraform"]
   vpc_subnet  = "10.56.72.0/24"
@@ -86,7 +94,7 @@ resource "cloudamqp_instance" "instance" {
 # Dedicated instance that also creates VPC
 resource "cloudamqp_instance" "instance_01" {
   name        = "terraform-cloudamqp-instance-01"
-  plan        = "bunny-1"
+  plan        = "penguin-1"
   region      = "amazon-web-services::us-west-1"
   tags        = ["terraform"]
   vpc_subnet  = "10.56.72.0/24"
@@ -110,7 +118,7 @@ resource "cloudamqp_vpc" "vpc" {
 # Add vpc_id and keep_associated_vpc attributes
 resource "cloudamqp_instance" "instance_01" {
   name                = "terraform-cloudamqp-instance-01"
-  plan                = "bunny-1"
+  plan                = "penguin-1"
   region              = "amazon-web-services::us-west-1"
   tags                = ["terraform"]
   vpc_id              = cloudamqp_vpc.vpc.id
@@ -139,7 +147,7 @@ resource "cloudamqp_vpc" "vpc" {
 # First instance added to managed VPC
 resource "cloudamqp_instance" "instance_01" {
   name                = "terraform-cloudamqp-instance-01"
-  plan                = "bunny-1"
+  plan                = "penguin-1"
   region              = "amazon-web-services::us-west-1"
   tags                = ["terraform"]
   vpc_id              = cloudamqp_vpc.vpc.id
@@ -149,7 +157,7 @@ resource "cloudamqp_instance" "instance_01" {
 # Second instance added to managed VPC
 resource "cloudamqp_instance" "instance_02" {
   name                = "terraform-cloudamqp-instance-02"
-  plan                = "bunny-1"
+  plan                = "penguin-1"
   region              = "amazon-web-services::us-west-1"
   tags                = ["terraform"]
   vpc_id              = cloudamqp_vpc.vpc.id
@@ -266,7 +274,7 @@ in the configuration and apply the changes. See available [plans].
 # Initial CloudAMQP instance configuration
 resource "cloudamqp_instance" "instance" {
   name    = "instance"
-  plan    = "squirrel-1"
+  plan    = "puffin-1"
   region  = "amazon-web-services::us-west-1"
   tags    = ["terraform"]
 }
@@ -274,7 +282,7 @@ resource "cloudamqp_instance" "instance" {
 # Upgraded CloudAMQP instance configuration
 resource "cloudamqp_instance" "instance" {
   name    = "instance"
-  plan    = "bunny-1"
+  plan    = "penguin-1"
   region  = "amazon-web-services::us-west-1"
   tags    = ["terraform"]
 }
@@ -293,7 +301,7 @@ resource "cloudamqp_instance" "instance" {
 # Initial CloudAMQP instance configuration
 resource "cloudamqp_instance" "instance" {
   name    = "instance"
-  plan    = "bunny-3"
+  plan    = "penguin-3"
   region  = "amazon-web-services::us-west-1"
   tags    = ["terraform"]
 }
@@ -301,7 +309,7 @@ resource "cloudamqp_instance" "instance" {
 # Downgraded CloudAMQP instance configuration
 resource "cloudamqp_instance" "instance" {
   name    = "instance"
-  plan    = "bunny-1"
+  plan    = "penguin-1"
   region  = "amazon-web-services::us-west-1"
   tags    = ["terraform"]
 }
@@ -316,11 +324,14 @@ config, etc. from another dedicated instance. This can be done by adding the `co
 to this resource and populate `subscription_id` with a CloudAMQP instance identifier from another
 already existing instance.
 
-Then add the settings to be copied over to the new dedicated instance. Settings that can be copied
-[alarms, config, definitions, firewall, logs, metrics, plugins]
-
-~> `rmq_version` argument is required when doing this action. Must match the RabbitMQ version of the
+~> `rmq_version` argument is required when doing this action. Must match the broker version of the
 dedicated instance to be copied from.
+
+Then add the settings to be copied over to the new dedicated instance. Settings that can be copied
+
+### Settings supported by LavinMQ
+
+***Allowed values:*** alarms, definitions, firewall, metrics
 
 <details>
   <summary>
@@ -330,9 +341,37 @@ dedicated instance to be copied from.
   </summary>
 
 ```hcl
-resource "cloudamqp_instance" "instance_02" {
+resource "cloudamqp_instance" "penguin_instance" {
+  name        = "terraform-cloudamqp-instance-01"
+  plan        = "penguin-1"
+  region      = "amazon-web-services::us-west-1"
+  rmq_version = "2.2.0"
+  tags        = ["terraform"]
+
+  copy_settings {
+    subscription_id = var.instance_id
+    settings = ["alarms", "definitions", "firewall", "metrics"]
+  }
+}
+```
+
+</details>
+
+### Settings supported by RabbitMQ
+
+***Allowed values:*** alarms, config, definitions, firewall, logs, metrics, plugins
+
+<details>
+  <summary>
+    <b>
+      <i>Copy settings from a dedicated instance to a new dedicated instance</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_instance" "bunny_instance" {
   name        = "terraform-cloudamqp-instance-02"
-  plan        = "squirrel-1"
+  plan        = "bunny-1"
   region      = "amazon-web-services::us-west-1"
   rmq_version = "3.12.2"
   tags        = ["terraform"]
