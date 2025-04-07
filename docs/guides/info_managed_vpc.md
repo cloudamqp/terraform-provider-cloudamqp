@@ -29,20 +29,18 @@ Create multiple instances and add them to the managed VPC.
 ```hcl
 resource "cloudamqp_instance" "instance_01" {
   name                = "terraform-cloudamqp-instance-01"
-  plan                = "squirrel-1"
+  plan                = "penguin-1"
   region              = "amazon-web-services::us-west-1"
   tags                = ["terraform"]
-  rmq_version         = "3.9.14"
   vpc_id = cloudamqp_vpc.vpc.id
   keep_associated_vpc = true
 }
 
 resource "cloudamqp_instance" "instance_02" {
   name                = "terraform-cloudamqp-instance-02"
-  plan                = "squirrel-1"
+  plan                = "penguin-1"
   region              = "amazon-web-services::us-west-1"
   tags                = ["terraform"]
-  rmq_version         = "3.9.14"
   vpc_id = cloudamqp_vpc.vpc.id
   keep_associated_vpc = true
 }
@@ -61,10 +59,9 @@ standalone VPC.
 # Dedicated instance with vpc_subnet also creates VPC
 resource "cloudamqp_instance" "instance_01" {
   name                = "terraform-cloudamqp-instance-01"
-  plan                = "squirrel-1"
+  plan                = "penguin-1"
   region              = "amazon-web-services::us-west-1"
   tags                = ["terraform"]
-  rmq_version         = "3.9.14"
   vpc_subnet          = "10.56.72.0/24"
 }
 ```
@@ -89,7 +86,7 @@ Or with Terraform CLI:
 
 `terraform import cloudamqp_vpc.vpc <vpc_id>`
 
-Add then correct info for the imported standalone VPC.
+Add the correct information for the imported standalone VPC.
 
 ```hcl
 # Imported standalone VPC as a managed VPC
@@ -107,10 +104,9 @@ resource "cloudamqp_vpc" "vpc" {
 # Add vpc_id attribute
 resource "cloudamqp_instance" "instance_01" {
   name                = "terraform-cloudamqp-instance-01"
-  plan                = "squirrel-1"
+  plan                = "penguin-1"
   region              = "amazon-web-services::us-west-1"
   tags                = ["terraform"]
-  rmq_version         = "3.9.14"
   vpc_subnet          = "10.56.72.0/24"
   vpc_id              = cloudamqp_vpc.vpc.id
 }
@@ -126,10 +122,9 @@ are added).
 ```hcl
 resource "cloudamqp_instance" "instance_01" {
   name                = "terraform-cloudamqp-instance-01"
-  plan                = "squirrel-1"
+  plan                = "penguin-1"
   region              = "amazon-web-services::us-west-1"
   tags                = ["terraform"]
-  rmq_version         = "3.9.14"
   vpc_subnet          = "10.56.72.0/24"
   vpc_id              = cloudamqp_vpc.vpc.id
   keep_associated_vpc = true

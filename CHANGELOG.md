@@ -4,7 +4,10 @@ NOTES:
 
 * Bump Go version to 1.24
 * Bump golang.org/x/net from 0.34.0 to 0.36.0 ([#325](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/325))
+* Bump crazy-max/ghaction-import-gpg from 6.2.0 to 6.3.0 ([#332](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/332))
+* Bump goreleaser/goreleaser-action from 6.2.1 to 6.3.0 ([#333](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/333))
 * Changed logging from legacy log to tflog
+* Documentation updates
 
 FEATURES:
 
@@ -15,6 +18,7 @@ IMPROVEMENTS:
 * Removed legacy log and use tflog package ([#329](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/329))
 * Docs: LavinMQ supports MQTT and MQTTS ([#327](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/327))
 * Docs: Updated extra disk information for Azure ([#331](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/331))
+* Docs: Updated information about LavinMQ ([#334](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/334))
 
 ## 1.32.3 (Mar 3, 2025)
 

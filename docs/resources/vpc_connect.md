@@ -27,6 +27,19 @@ More information can be found at: [CloudAMQP VPC Connect]
     </b>
   </summary>
 
+For LavinMQ:
+
+```hcl
+rules {
+  Description = "PrivateLink setup"
+  ip          = "<VPC Subnet>"
+  ports       = [5552, 5551, 61613, 61614]
+  services    = ["AMQP", "AMQPS", "HTTPS", "MQTT", "MQTTS"]
+}
+```
+
+For RabbitMQ:
+
 ```hcl
 rules {
   Description = "PrivateLink setup"
@@ -44,6 +57,19 @@ rules {
       <i>Default Private Service Connect firewall rule [GCP]</i>
     </b>
   </summary>
+
+For LavinMQ:
+
+```hcl
+rules {
+  Description = "Private Service Connect"
+  ip          = "10.0.0.0/24"
+  ports       = [5552, 5551, 61613, 61614]
+  services    = ["AMQP", "AMQPS", "HTTPS", "MQTT", "MQTTS"]
+}
+```
+
+For RabbitMQ:
 
 ```hcl
 rules {
@@ -77,7 +103,7 @@ resource "cloudamqp_vpc" "vpc" {
 
 resource "cloudamqp_instance" "instance" {
   name                = "Instance 01"
-  plan                = "bunny-1"
+  plan                = "penguin-1"
   region              = "amazon-web-services::us-west-1"
   tags                = []
   vpc_id              = cloudamqp_vpc.vpc.id
@@ -112,7 +138,7 @@ resource "cloudamqp_vpc" "vpc" {
 
 resource "cloudamqp_instance" "instance" {
   name                = "Instance 01"
-  plan                = "bunny-1"
+  plan                = "penguin-1"
   region              = "azure-arm::westus"
   tags                = []
   vpc_id              = cloudamqp_vpc.vpc.id
@@ -171,7 +197,7 @@ resource "cloudamqp_vpc" "vpc" {
 
 resource "cloudamqp_instance" "instance" {
   name                = "Instance 01"
-  plan                = "bunny-1"
+  plan                = "penguin-1"
   region              = "google-compute-engine::us-west1"
   tags                = []
   vpc_id              = cloudamqp_vpc.vpc.id
@@ -276,7 +302,7 @@ resource "cloudamqp_vpc" "vpc" {
 
 resource "cloudamqp_instance" "instance" {
   name                = "Instance 01"
-  plan                = "bunny-1"
+  plan                = "penguin-1"
   region              = "amazon-web-services::us-west-1"
   tags                = []
   vpc_id              = cloudamqp_vpc.vpc.id
@@ -297,7 +323,7 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
     description = "Custom PrivateLink setup"
     ip          = cloudamqp_vpc.vpc.subnet
     ports       = []
-    services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL"]
+    services    = ["AMQP", "AMQPS", "HTTPS"]
   }
 
   rules {

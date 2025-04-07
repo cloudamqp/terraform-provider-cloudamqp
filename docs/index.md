@@ -10,8 +10,8 @@ description: |-
 The CloudAMQP provider is used to interact with CloudAMQP organization resources.
 
 The provider allows you to manage your CloudAMQP instances and features. Create, configure and
-deploy [**RabbitMQ**](https://www.rabbitmq.com/) or [**LavinMQ**](https://lavinmq.com/) to different
-cloud platforms. The provider needs to be configured with the proper API key before it can be used.
+deploy [**LavinMQ**] or [**RabbitMQ**] to different cloud platforms. The provider needs to be
+configured with the proper API key before it can be used.
 
 Use the navigation to the left to read about the available resources.
 
@@ -29,7 +29,7 @@ provider "cloudamqp" {
 # Create a new cloudamqp instance
 resource "cloudamqp_instance" "instance" {
   name   = "terraform-cloudamqp-instance"
-  plan   = "bunny-1"
+  plan   = "penguin-1"
   region = "amazon-web-services::us-west-1"
   tags   = ["terraform"]
 }
@@ -60,15 +60,6 @@ resource "cloudamqp_security_firewall" "firewall" {
     ports    = [4567]
     services = ["AMQPS"]
   }
-}
-
-# Cloudwatch logs integration
-resource "cloudamqp_integration_log" "cloudwatchlog" {
-  instance_id       = cloudamqp_instance.instance.id
-  name              = "cloudwatchlog"
-  access_key_id     = var.aws_access_key
-  secret_access_key = var.aws_secret_key
-  region            = var.aws_region
 }
 
 # Cloudwatch metrics integration
@@ -111,4 +102,6 @@ ___
 More information can be found under `Enable faster instance destroy` section on respective resource.
 
 [API Keys]: https://customer.cloudamqp.com/apikeys
+[**LavinMQ**]: https://lavinmq.com/
+[**RabbitMQ**]: https://www.rabbitmq.com/
 [v1.27.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0

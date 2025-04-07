@@ -17,12 +17,25 @@ available for CloudAMQP instance hosted in AWS.
     <i>Default VPC peering firewall rule</i>
   </summary>
 
+For LavinMQ:
+
 ```hcl
 rules {
   Description = "VPC peer request"
   ip          = "<VPC peered subnet>"
-  ports       = []
-  services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL", "STOMP", "STOMPS", "MQTT", "MQTTS"]
+  ports       = [15672, 5552, 5551]
+  services    = ["AMQP", "AMQPS", "HTTPS"]
+}
+```
+
+For RabbitMQ:
+
+```hcl
+rules {
+  Description = "VPC peer request"
+  ip          = "<VPC peered subnet>"
+  ports       = [15672]
+  services    = ["AMQP", "AMQPS", "HTTPS", "STREAM", "STREAM_SSL"]
 }
 ```
 
@@ -53,7 +66,7 @@ provider "cloudamqp" {
 # CloudAMQP - new instance, need to be created with a vpc
 resource "cloudamqp_instance" "instance" {
   name        = "terraform-vpc-accepter"
-  plan        = "bunny-1"
+  plan        = "penguin-1"
   region      = "amazon-web-services::us-east-1"
   tags        = ["terraform"]
   vpc_subnet  = "10.40.72.0/24"
@@ -146,7 +159,7 @@ resource "cloudamqp_vpc" "vpc" {
 # CloudAMQP - new instance, need to be created with a vpc
 resource "cloudamqp_instance" "instance" {
   name                = "terraform-vpc-accepter"
-  plan                = "bunny-1"
+  plan                = "penguin-1"
   region              = "amazon-web-services::us-east-1"
   tags                = ["terraform"]
   vpc_id              = cloudamqp_vpc.vpc.id
@@ -349,8 +362,8 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   # Default VPC peering rule
   rules {
     ip          =  data.aws_instance.aws_instance.subnet_id
-    ports       = [15672]
-    services    = ["AMQP","AMQPS", "STREAM", "STREAM_SSL"]
+    ports       = [15672, 5552, 5551]
+    services    = ["AMQP","AMQPS"]
     description = "VPC peering for <NETWORK>"
   }
 
@@ -404,8 +417,8 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
   # Default VPC peering rule
   rules {
     ip          =  data.aws_vpc.requester_vpc.cidr_block
-    ports       = [15672]
-    services    = ["AMQP","AMQPS", "STREAM", "STREAM_SSL"]
+    ports       = [15672, 5552, 5551]
+    services    = ["AMQP","AMQPS"]
     description = "VPC peering for <NETWORK>"
   }
 

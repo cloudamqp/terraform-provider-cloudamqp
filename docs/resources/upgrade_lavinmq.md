@@ -7,9 +7,7 @@ description: |-
 
 # cloudamqp_upgrade_lavinmq
 
-This resource allows you to upgrade LavinMQ version. 
-
-See below example usage.
+This resource allows you to upgrade LavinMQ version.
 
 Only available for dedicated subscription plans running ***LavinMQ***.
 

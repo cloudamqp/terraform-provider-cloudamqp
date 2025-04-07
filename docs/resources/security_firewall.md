@@ -64,7 +64,7 @@ provider "cloudamqp" {
 
 resource "cloudamqp_instance" "instance" {
   name    = "terraform-cloudamqp-instance"
-  plan    = "bunny-1"
+  plan    = "penguin-1"
   region  = "amazon-web-services::us-west-1"
   tags    = ["terraform"]
 }
@@ -73,15 +73,17 @@ resource "cloudamqp_security_firewall" "this" {
   instance_id = cloudamqp_instance.instance.id
 
   rules {
-    ip        = "192.168.0.0/24"
-    ports     = [4567, 4568]
-    services  = ["AMQP","AMQPS", "HTTPS"]
+    ip          = "0.0.0.0/0"
+    ports       = []
+    services    = ["HTTPS"]
+    description = "MGMT interface"
   }
 
   rules {
-    ip        = "10.56.72.0/24"
-    ports     = []
-    services  = ["AMQP","AMQPS", "HTTPS"]
+    ip          = "10.56.72.0/24"
+    ports       = []
+    services    = ["AMQP","AMQPS", "HTTPS"]
+    description = "VPC subnet"
   }
 }
 ```
