@@ -194,12 +194,10 @@ func (api *API) deleteFirewallSettingsWithRetry(ctx context.Context, path string
 	timeout int) (int, error) {
 
 	var (
-		params [1]map[string]any
+		params = []map[string]any{}
 		failed map[string]any
 	)
 
-	// Use default firewall rule and update firewall upon delete.
-	params[0] = DefaultFirewallSettings()
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
 	if err != nil {
 		return attempt, err
@@ -228,15 +226,4 @@ func (api *API) deleteFirewallSettingsWithRetry(ctx context.Context, path string
 	}
 	return attempt, fmt.Errorf("failed to reset firewall, status=%d message=%s ",
 		response.StatusCode, failed)
-}
-
-func DefaultFirewallSettings() map[string]any {
-	defaultRule := map[string]any{
-		"services": []string{"AMQP", "AMQPS", "STOMP", "STOMPS", "MQTT", "MQTTS", "HTTPS", "STREAM",
-			"STREAM_SSL"},
-		"ports":       []int{},
-		"ip":          "0.0.0.0/0",
-		"description": "Default",
-	}
-	return defaultRule
 }
