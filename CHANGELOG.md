@@ -17,6 +17,7 @@ IMPROVEMENTS:
 
 * Removed legacy log and use tflog package ([#329](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/329))
 * Docs: LavinMQ supports MQTT and MQTTS ([#327](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/327))
+* Updated firewall destroy behavior ([#330](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/330))
 * Docs: Updated extra disk information for Azure ([#331](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/331))
 * Docs: Updated information about LavinMQ ([#334](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/334))
 
