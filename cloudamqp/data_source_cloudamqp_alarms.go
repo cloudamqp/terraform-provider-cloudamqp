@@ -141,7 +141,9 @@ func dataSourceAlarmsRead(ctx context.Context, d *schema.ResourceData, meta any)
 func readAlarm(data map[string]any) map[string]any {
 	alarm := make(map[string]any)
 	for k, v := range data {
-		if validateAlarmSchemaAttribute(k) {
+		if k == "id" {
+			alarm["alarm_id"] = int(v.(float64))
+		} else if validateAlarmSchemaAttribute(k) {
 			alarm[k] = v
 		}
 	}
