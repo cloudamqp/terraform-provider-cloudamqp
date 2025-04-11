@@ -40,6 +40,7 @@ func Provider(v string, client *http.Client) *schema.Provider {
 			"cloudamqp_account_vpcs":        dataSourceAccountVpcs(),
 			"cloudamqp_account":             dataSourceAccount(),
 			"cloudamqp_alarm":               dataSourceAlarm(),
+			"cloudamqp_alarms":              dataSourceAlarms(),
 			"cloudamqp_credentials":         dataSourceCredentials(),
 			"cloudamqp_instance":            dataSourceInstance(),
 			"cloudamqp_nodes":               dataSourceNodes(),
