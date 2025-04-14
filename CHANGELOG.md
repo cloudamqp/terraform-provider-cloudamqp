@@ -1,3 +1,9 @@
+## 1.x.x (Unreleased)
+
+FEATURES:
+
+* Add new datasource `cloudamqp_alarms` to fetch all alarms ([#335](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/335))
+
 ## 1.33.0 (Apr 7, 2025)
 
 NOTES:
