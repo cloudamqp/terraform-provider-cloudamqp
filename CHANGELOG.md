@@ -1,4 +1,4 @@
-## 1.x.x (Unreleased)
+## 1.34.0 (May 2, 2025)
 
 NOTES:
 
