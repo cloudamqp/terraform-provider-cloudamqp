@@ -1,8 +1,13 @@
 ## 1.x.x (Unreleased)
 
+NOTES:
+
+* Bump golang.org/x/net from 0.36.0 to 0.38.0 ([#338](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/338))
+
 FEATURES:
 
-* Add new datasource `cloudamqp_alarms` to fetch all alarms ([#335](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/335))
+* Add new data source `cloudamqp_alarms` to fetch all alarms ([#335](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/335))
+* Add new data source `cloudamqp_notifications` to fetch all recipients ([#339](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/339))
 
 ## 1.33.0 (Apr 7, 2025)
 
