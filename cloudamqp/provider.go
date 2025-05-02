@@ -45,6 +45,7 @@ func Provider(v string, client *http.Client) *schema.Provider {
 			"cloudamqp_instance":            dataSourceInstance(),
 			"cloudamqp_nodes":               dataSourceNodes(),
 			"cloudamqp_notification":        dataSourceNotification(),
+			"cloudamqp_notifications":       dataSourceNotifications(),
 			"cloudamqp_plugins_community":   dataSourcePluginsCommunity(),
 			"cloudamqp_plugins":             dataSourcePlugins(),
 			"cloudamqp_upgradable_versions": dataSourceUpgradableVersions(),
