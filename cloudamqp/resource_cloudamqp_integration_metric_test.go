@@ -40,8 +40,7 @@ func TestAccIntegrationMetric_Basic(t *testing.T) {
 	)
 
 	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck:          func() { testAccPreCheck(t) },
-		ProviderFactories: testAccProviderFactory,
+		PreCheck: func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
 				ExpectNonEmptyPlan: true,
