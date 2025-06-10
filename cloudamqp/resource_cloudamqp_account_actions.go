@@ -15,13 +15,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-// Ensure the implementation satisfies the expected interfaces.
 var (
 	_ resource.Resource              = &accountActionsResource{}
 	_ resource.ResourceWithConfigure = &accountActionsResource{}
 )
 
-// Helper function to simplify the provider implementation.
 func NewAccountActionsResource() resource.Resource {
 	return &accountActionsResource{}
 }
