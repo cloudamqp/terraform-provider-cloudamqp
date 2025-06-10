@@ -23,6 +23,10 @@ type awsEventBridgeResource struct {
 	client *api.API
 }
 
+func NewAwsEventBridgeResource() resource.Resource {
+	return &awsEventBridgeResource{}
+}
+
 type awsEventBridgeResourceModel struct {
 	Id           types.String `tfsdk:"id"`
 	InstanceID   types.Int64  `tfsdk:"instance_id"`
