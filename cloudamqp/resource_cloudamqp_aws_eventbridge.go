@@ -23,6 +23,12 @@ type awsEventBridgeResource struct {
 	client *api.API
 }
 
+var (
+	_ resource.Resource              = &awsEventBridgeResource{}
+	_ resource.ResourceWithConfigure = &awsEventBridgeResource{}
+	_ resource.Resource              = &awsEventBridgeResource{}
+)
+
 func NewAwsEventBridgeResource() resource.Resource {
 	return &awsEventBridgeResource{}
 }
