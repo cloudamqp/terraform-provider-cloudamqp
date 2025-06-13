@@ -6,11 +6,12 @@ import (
 	"strings"
 	"time"
 
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance/configuration"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 func (api *API) ReadRabbitMqConfiguration(ctx context.Context, instanceID, sleep, timeout int) (
-	map[string]any, error) {
+	model.RabbitMqConfigResponse, error) {
 
 	path := fmt.Sprintf("/api/instances/%d/config", instanceID)
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d ", path, sleep, timeout))
@@ -18,24 +19,24 @@ func (api *API) ReadRabbitMqConfiguration(ctx context.Context, instanceID, sleep
 }
 
 func (api *API) readRabbitMqConfigurationWithRetry(ctx context.Context, path string, attempt, sleep,
-	timeout int) (map[string]any, error) {
+	timeout int) (model.RabbitMqConfigResponse, error) {
 
 	var (
-		data   map[string]any
+		data   model.RabbitMqConfigResponse
 		failed map[string]any
 	)
 
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
-		return nil, err
+		return model.RabbitMqConfigResponse{}, err
 	} else if attempt*sleep > timeout {
-		return nil, fmt.Errorf("timeout reached after %d seconds, while reading RabbitMQ",
-			timeout)
+		return model.RabbitMqConfigResponse{},
+			fmt.Errorf("timeout reached after %d seconds, while reading RabbitMQ", timeout)
 	}
 
 	switch response.StatusCode {
 	case 200:
-		tflog.Debug(ctx, "response data", data)
+		tflog.Debug(ctx, fmt.Sprintf("response data: %v", data))
 		return data, nil
 	case 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
@@ -54,21 +55,21 @@ func (api *API) readRabbitMqConfigurationWithRetry(ctx context.Context, path str
 			return api.readRabbitMqConfigurationWithRetry(ctx, path, attempt, sleep, timeout)
 		}
 	}
-	return nil, fmt.Errorf("failed to read RabbitMQ configuration, status=%d message=%s ",
-		response.StatusCode, failed)
+	return model.RabbitMqConfigResponse{},
+		fmt.Errorf("failed to read RabbitMQ configuration, status=%d message=%s ", response.StatusCode, failed)
 }
 
 func (api *API) UpdateRabbitMqConfiguration(ctx context.Context, instanceID int,
-	params map[string]any, sleep, timeout int) error {
+	params model.RabbitMqConfigRequest, sleep, timeout int) error {
 
 	path := fmt.Sprintf("api/instances/%d/config", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d timeout=%d ", path, sleep, timeout),
-		params)
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d timeout=%d params=%v", path, sleep,
+		timeout, params))
 	return api.updateRabbitMqConfigurationWithRetry(ctx, path, params, 1, sleep, timeout)
 }
 
 func (api *API) updateRabbitMqConfigurationWithRetry(ctx context.Context, path string,
-	params map[string]any, attempt, sleep, timeout int) error {
+	params model.RabbitMqConfigRequest, attempt, sleep, timeout int) error {
 
 	failed := make(map[string]any)
 	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
