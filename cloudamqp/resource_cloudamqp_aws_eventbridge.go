@@ -19,6 +19,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+var (
+	_ resource.Resource                = &awsEventBridgeResource{}
+	_ resource.ResourceWithConfigure   = &awsEventBridgeResource{}
+	_ resource.ResourceWithImportState = &awsEventBridgeResource{}
+)
+
 func NewAwsEventBridgeResource() resource.Resource {
 	return &awsEventBridgeResource{}
 }
