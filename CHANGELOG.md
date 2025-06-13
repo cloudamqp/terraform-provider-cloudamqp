@@ -1,3 +1,17 @@
+## 1.x.x (Unreleased)
+
+NOTES:
+
+* Initial migration to Terraform Plugin Framework
+
+FEATURES:
+
+* Serve the provider through a mux server ([#344])
+* Implemented skeleton of provider in the framework plugin ([#344])
+* Migrated `cloudamqp_integration_aws_eventbridge` towards Terraform plugin framework ([#344])
+
+[#344]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/344
+
 ## 1.34.0 (May 2, 2025)
 
 NOTES:
