@@ -1,3 +1,11 @@
+## 1.35.1 (Unreleased)
+
+BUG FIXES:
+
+* Fix provider schema mismatch ([#349])
+
+[#349]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/349
+
 ## 1.35.0 (Jun 16, 2025)
 
 NOTES:
