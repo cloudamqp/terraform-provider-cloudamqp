@@ -3,14 +3,20 @@
 NOTES:
 
 * Initial migration to Terraform Plugin Framework
+* Bump github.com/cloudflare/circl from 1.6.0 to 1.6.1 ([#342])
 
 FEATURES:
 
 * Serve the provider through a mux server ([#344])
 * Implemented skeleton of provider in the framework plugin ([#344])
 * Migrated `cloudamqp_integration_aws_eventbridge` towards Terraform plugin framework ([#344])
+* Migrated `cloudamqp_account_actions` towards Terraform plugin framework ([#345])
+* Migrated `cloudamqp_rabbitmq_configuration` towards Terraform plugin framework ([#346])
 
+[#342]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/342
 [#344]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/344
+[#345]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/345
+[#346]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/346
 
 ## 1.34.0 (May 2, 2025)
 
