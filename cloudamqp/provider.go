@@ -101,7 +101,9 @@ func (p *cloudamqpProvider) DataSources(_ context.Context) []func() datasource.D
 
 func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewAwsEventBridgeResource,
+		func() resource.Resource {
+			return &awsEventBridgeResource{}
+		},
 	}
 }
 

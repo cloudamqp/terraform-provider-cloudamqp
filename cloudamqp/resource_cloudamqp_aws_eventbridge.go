@@ -19,10 +19,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func NewAwsEventBridgeResource() resource.Resource {
-	return &awsEventBridgeResource{}
-}
-
 type awsEventBridgeResource struct {
 	client *api.API
 }
