@@ -40,7 +40,7 @@ func (p *cloudamqpProvider) Schema(_ context.Context, _ provider.SchemaRequest, 
 	response.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"apikey": schema.StringAttribute{
-				Optional:    true,
+				Required:    true,
 				Description: "Key used to authentication to the CloudAMQP Customer API",
 			},
 			"baseurl": schema.StringAttribute{
