@@ -101,7 +101,6 @@ func (p *cloudamqpProvider) DataSources(_ context.Context) []func() datasource.D
 
 func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewAccountActionsResource,
 		NewAwsEventBridgeResource,
 	}
 }
@@ -151,6 +150,7 @@ func Provider(v string, client *http.Client) *schemaSdk.Provider {
 			"cloudamqp_vpc_info":            dataSourceVpcInfo(),
 		},
 		ResourcesMap: map[string]*schemaSdk.Resource{
+			"cloudamqp_account_action":         resourceAccountAction(),
 			"cloudamqp_alarm":                  resourceAlarm(),
 			"cloudamqp_custom_domain":          resourceCustomDomain(),
 			"cloudamqp_extra_disk_size":        resourceExtraDiskSize(),
