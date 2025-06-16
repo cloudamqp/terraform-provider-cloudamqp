@@ -118,7 +118,8 @@ func Provider(v string, client *http.Client) *schemaSdk.Provider {
 		Schema: map[string]*schemaSdk.Schema{
 			"apikey": {
 				Type:        schemaSdk.TypeString,
-				Required:    true,
+				Required:    false,
+				Optional:    true,
 				DefaultFunc: schemaSdk.EnvDefaultFunc("CLOUDAMQP_APIKEY", nil),
 				Description: "Key used to authentication to the CloudAMQP Customer API",
 			},
