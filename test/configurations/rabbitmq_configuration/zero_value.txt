@@ -1,4 +1,0 @@
-resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
-  instance_id = {{.InstanceID}}
-  heartbeat   = {{.Heartbeat}}
-}
