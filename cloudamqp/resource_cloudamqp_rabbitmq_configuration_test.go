@@ -27,7 +27,8 @@ func TestAccRabbitMqConfiguration_Basic(t *testing.T) {
 	)
 
 	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck: func() { testAccPreCheck(t) },
+		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories: testAccProviderFactory,
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
@@ -69,7 +70,8 @@ func TestAccRabbitMqConfiguration_LogExhangeLevel(t *testing.T) {
 	)
 
 	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck: func() { testAccPreCheck(t) },
+		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories: testAccProviderFactory,
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),

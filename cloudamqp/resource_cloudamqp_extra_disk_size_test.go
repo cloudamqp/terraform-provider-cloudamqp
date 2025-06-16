@@ -26,7 +26,8 @@ func TestAccExtraDiskSize_AWS_Basic(t *testing.T) {
 	)
 
 	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck: func() { testAccPreCheck(t) },
+		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories: testAccProviderFactory,
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
@@ -59,7 +60,8 @@ func TestAccExtraDiskSize_GCE_Basic(t *testing.T) {
 	)
 
 	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck: func() { testAccPreCheck(t) },
+		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories: testAccProviderFactory,
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
@@ -92,7 +94,8 @@ func TestAccExtraDiskSize_Azure_Basic(t *testing.T) {
 	)
 
 	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck: func() { testAccPreCheck(t) },
+		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories: testAccProviderFactory,
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),

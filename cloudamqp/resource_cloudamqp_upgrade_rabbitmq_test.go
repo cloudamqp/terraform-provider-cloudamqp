@@ -57,7 +57,8 @@ func TestAccUpgradeRabbitMQ_Latest(t *testing.T) {
 	)
 
 	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck: func() { testAccPreCheck(t) },
+		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories: testAccProviderFactory,
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
@@ -150,7 +151,8 @@ func TestAccUpgradeRabbitMQ_Specific(t *testing.T) {
 	)
 
 	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck: func() { testAccPreCheck(t) },
+		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories: testAccProviderFactory,
 		Steps: []resource.TestStep{
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),

@@ -22,6 +22,7 @@ func TestAccVpcPeering_Basic(t *testing.T) {
 
 	cloudamqpResourceTest(t, resource.TestCase{
 		PreCheck:                  func() { testAccPreCheck(t) },
+		ProviderFactories:         testAccProviderFactory,
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
