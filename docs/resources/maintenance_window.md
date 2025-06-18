@@ -13,6 +13,8 @@ preferred start. A maintenance will never start before the window.
 
 Available for dedicated subscription plans.
 
+From **August 5, 2025** LavinMQ instances will have `automatic_updates` set to `on` by default.
+
 ## Example Usage
 
 <details>
