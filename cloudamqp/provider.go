@@ -104,6 +104,7 @@ func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resou
 		NewAccountActionsResource,
 		NewAwsEventBridgeResource,
 		NewRabbitMqConfigurationResource,
+		NewOAuth2ConfigurationResource,
 	}
 }
 

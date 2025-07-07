@@ -1,0 +1,8 @@
+resource "cloudamqp_oauth2_configuration" "oauth2_config" {
+  instance_id        = {{.InstanceID}}
+  resource_server_id = "{{.ResourceServerId}}"
+  issuer             = "{{.Issuer}}"
+  verify_aud         = {{or .VerifyAud `true`}}
+  oauth_client_id    = "{{or .OauthClientId `test-client-id`}}"
+  oauth_scopes       = "{{or .OauthScopes `read write`}}"
+}
