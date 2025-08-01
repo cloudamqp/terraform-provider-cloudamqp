@@ -6,5 +6,5 @@ resource "cloudamqp_oauth2_configuration" "oauth2_config" {
   scope_aliases              = {{or .ScopeAliases `{read = "read:all", write = "write:all"}`}}
   verify_aud                 = {{or .VerifyAud `true`}}
   oauth_client_id            = "{{or .OauthClientId `test-client-id`}}"
-  oauth_scopes               = "{{or .OauthScopes `read write admin`}}"
+  oauth_scopes               = {{or .OauthScopes `["read", "write", "admin"]`}}
 }
