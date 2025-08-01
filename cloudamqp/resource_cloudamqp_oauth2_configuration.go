@@ -50,9 +50,6 @@ type oauth2ConfigurationResourceModel struct {
 	OauthClientId           types.String `tfsdk:"oauth_client_id"`
 	OauthScopes             types.List   `tfsdk:"oauth_scopes"`
 	Configured              types.Bool   `tfsdk:"configured"`
-	Deleted                 types.Bool   `tfsdk:"deleted"`
-	CreatedAt               types.String `tfsdk:"created_at"`
-	UpdatedAt               types.String `tfsdk:"updated_at"`
 	Sleep                   types.Int64  `tfsdk:"sleep"`
 	Timeout                 types.Int64  `tfsdk:"timeout"`
 }
@@ -362,30 +359,6 @@ func (r *oauth2ConfigurationResource) Schema(ctx context.Context, req resource.S
 					boolplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"deleted": schema.BoolAttribute{
-				Optional:    false,
-				Computed:    true,
-				Description: "Deleted",
-				PlanModifiers: []planmodifier.Bool{
-					boolplanmodifier.UseStateForUnknown(),
-				},
-			},
-			"created_at": schema.StringAttribute{
-				Optional:    false,
-				Computed:    true,
-				Description: "Created at",
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.UseStateForUnknown(),
-				},
-			},
-			"updated_at": schema.StringAttribute{
-				Optional:    false,
-				Computed:    true,
-				Description: "Updated at",
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.UseStateForUnknown(),
-				},
-			},
 			"sleep": schema.Int64Attribute{
 				Optional:    true,
 				Default:     int64default.StaticInt64(60),
@@ -425,10 +398,6 @@ func populateOAuth2ConfigurationStateModel(ctx context.Context, state *oauth2Con
 
 	state.VerifyAud = types.BoolValue(*data.VerifyAud)
 	state.Configured = types.BoolValue(*data.Configured)
-	state.Deleted = types.BoolValue(*data.Deleted)
-
-	state.CreatedAt = types.StringValue(data.CreatedAt.Format(time.RFC3339))
-	state.UpdatedAt = types.StringValue(data.UpdatedAt.Format(time.RFC3339))
 }
 
 func populateOAuth2ConfigRequestModel(ctx context.Context, plan *oauth2ConfigurationResourceModel, data *model.OAuth2ConfigRequest) {
