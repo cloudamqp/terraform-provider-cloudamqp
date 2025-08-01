@@ -71,20 +71,19 @@ func (r *oauth2ConfigurationResource) Create(ctx context.Context, req resource.C
 	request := model.OAuth2ConfigRequest{}
 	populateOAuth2ConfigRequestModel(ctx, &plan, &request)
 
-	err := r.client.CreateOAuth2Configuration(timeoutCtx, instanceID, sleep, request)
+	data, err := r.client.CreateOAuth2Configuration(timeoutCtx, instanceID, sleep, request)
 	if err != nil {
 		resp.Diagnostics.AddError("Error creating OAuth2 configuration", err.Error())
 		return
 	}
 
-	settingID := plan.ID.ValueString()
-	err = r.client.PollForConfigured(timeoutCtx, instanceID, settingID, sleep)
+	err = r.client.PollForOauth2Configured(timeoutCtx, instanceID, *data.ConfigurationId, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Error polling for OAuth2 configuration", err.Error())
 		return
 	}
 
-	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep, &settingID)
+	data, err = r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep, data.ConfigurationId)
 	if err != nil {
 		resp.Diagnostics.AddError("Error reading OAuth2 configuration", err.Error())
 		return
