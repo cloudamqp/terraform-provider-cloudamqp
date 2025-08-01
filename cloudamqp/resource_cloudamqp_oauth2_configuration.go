@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
@@ -218,20 +219,26 @@ func (r *oauth2ConfigurationResource) ImportState(ctx context.Context, req resou
 		return
 	}
 
-	// Parse the import ID as instance ID
-	instanceID, err := strconv.Atoi(req.ID)
-	if err != nil {
-		resp.Diagnostics.AddError("Invalid import ID", fmt.Sprintf("Expected numeric instance ID, got: %s", req.ID))
+	// Parse the import ID as a combination of resource ID and instance ID
+	parts := strings.Split(req.ID, ",")
+	if len(parts) != 2 {
+		resp.Diagnostics.AddError("Invalid import ID", "Expected format: {resource_id},{instance_id}")
 		return
 	}
+	state.ID = types.StringValue(parts[0])
+	instanceID, err := strconv.ParseInt(parts[1], 10, 64)
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid instance ID", fmt.Sprintf("Expected numeric instance ID, got: %s", parts[1]))
+		return
+	}
+	state.InstanceID = types.Int64Value(instanceID)
+	state.Sleep = types.Int64Value(60)
+	state.Timeout = types.Int64Value(3600)
 
-	// Using default values for sleep and timeout when importing state.
-	sleep, timeout := time.Duration(60)*time.Second, time.Duration(3600)*time.Second
-
-	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 3600*time.Second)
 	defer cancel()
 
-	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep, nil)
+	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, int(instanceID), 60*time.Second, state.ID.ValueStringPointer())
 	if err != nil {
 		resp.Diagnostics.AddError("Error reading OAuth2 configuration", err.Error())
 		return
