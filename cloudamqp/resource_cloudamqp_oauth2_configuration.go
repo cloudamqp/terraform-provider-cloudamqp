@@ -110,7 +110,7 @@ func (r *oauth2ConfigurationResource) Delete(ctx context.Context, req resource.D
 	}
 
 	settingID := state.ID.ValueString()
-	err = r.client.PollForConfigured(timeoutCtx, instanceID, settingID, sleep)
+	err = r.client.PollForOauth2Configured(timeoutCtx, instanceID, settingID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Error polling for deleted OAuth2 configuration", err.Error())
 		return
@@ -189,7 +189,7 @@ func (r *oauth2ConfigurationResource) Update(ctx context.Context, req resource.U
 	}
 
 	settingID := plan.ID.ValueString()
-	err = r.client.PollForConfigured(timeoutCtx, instanceID, settingID, sleep)
+	err = r.client.PollForOauth2Configured(timeoutCtx, instanceID, settingID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Error polling for OAuth2 configuration", err.Error())
 		return
