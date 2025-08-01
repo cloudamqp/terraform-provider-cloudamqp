@@ -388,6 +388,9 @@ func populateOAuth2ConfigurationStateModel(ctx context.Context, state *oauth2Con
 
 	state.AdditionalScopesKeys, _ = types.ListValueFrom(ctx, types.StringType, data.AdditionalScopesKeys)
 	state.OauthScopes, _ = types.ListValueFrom(ctx, types.StringType, data.OauthScopes)
+	if data.OauthClientId != nil {
+		state.OauthClientId = types.StringValue(*data.OauthClientId)
+	}
 
 	state.VerifyAud = types.BoolValue(*data.VerifyAud)
 	state.Configured = types.BoolValue(*data.Configured)
