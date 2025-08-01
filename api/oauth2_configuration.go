@@ -30,19 +30,20 @@ func (api *API) ReadOAuth2Configuration(ctx context.Context, instanceID int, sle
 	return data, nil
 }
 
-func (api *API) CreateOAuth2Configuration(ctx context.Context, instanceID int, sleep time.Duration, params model.OAuth2ConfigRequest) error {
+func (api *API) CreateOAuth2Configuration(ctx context.Context, instanceID int, sleep time.Duration, params model.OAuth2ConfigRequest) (model.OAuth2ConfigResponse, error) {
 
 	path := fmt.Sprintf("/api/instances/%d/oauth2-configuration", instanceID)
 	var (
+		data   model.OAuth2ConfigResponse
 		failed map[string]any
 	)
 
-	err := callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(&params), 1, sleep, nil, &failed)
+	err := callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(&params), 1, sleep, &data, &failed)
 	if err != nil {
-		return err
+		return model.OAuth2ConfigResponse{}, err
 	}
 
-	return nil
+	return data, nil
 }
 
 func (api *API) UpdateOAuth2Configuration(ctx context.Context, instanceID int, sleep time.Duration, params model.OAuth2ConfigRequest) error {
