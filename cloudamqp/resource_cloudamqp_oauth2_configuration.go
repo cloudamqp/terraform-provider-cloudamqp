@@ -221,8 +221,11 @@ func (r *oauth2ConfigurationResource) ImportState(ctx context.Context, req resou
 		return
 	}
 
+	state.InstanceID = types.Int64Value(int64(instanceID))
 	// Using default values for sleep and timeout when importing state.
 	sleep, timeout := time.Duration(60)*time.Second, time.Duration(3600)*time.Second
+	state.Sleep = types.Int64Value(int64(sleep.Seconds()))
+	state.Timeout = types.Int64Value(int64(timeout.Seconds()))
 
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
@@ -388,6 +391,9 @@ func populateOAuth2ConfigurationStateModel(ctx context.Context, state *oauth2Con
 
 	state.AdditionalScopesKeys, _ = types.ListValueFrom(ctx, types.StringType, data.AdditionalScopesKeys)
 	state.OauthScopes, _ = types.ListValueFrom(ctx, types.StringType, data.OauthScopes)
+	if data.OauthClientId != nil {
+		state.OauthClientId = types.StringValue(*data.OauthClientId)
+	}
 
 	state.VerifyAud = types.BoolValue(*data.VerifyAud)
 	state.Configured = types.BoolValue(*data.Configured)
