@@ -60,7 +60,7 @@ func (api *API) UpdateOAuth2Configuration(ctx context.Context, instanceID int, s
 	return nil
 }
 
-func (api *API) PollForConfigured(ctx context.Context, instanceID int, settingID string, sleep time.Duration) error {
+func (api *API) PollForOauth2Configured(ctx context.Context, instanceID int, settingID string, sleep time.Duration) error {
 	const interval = 5 * time.Second
 
 	_, ok := ctx.Deadline()
