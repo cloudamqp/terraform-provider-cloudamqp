@@ -403,9 +403,7 @@ func (r *oauth2ConfigurationResource) Schema(ctx context.Context, req resource.S
 }
 
 func populateOAuth2ConfigurationStateModel(ctx context.Context, state *oauth2ConfigurationResourceModel, data *model.OAuth2ConfigResponse) {
-
 	state.ID = types.StringValue(*data.ConfigurationId)
-	state.InstanceID = types.Int64Value(int64(*data.ClusterId))
 	state.ResourceServerId = types.StringValue(*data.ResourceServerId)
 	state.Issuer = types.StringValue(*data.Issuer)
 
