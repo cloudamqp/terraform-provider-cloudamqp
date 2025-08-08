@@ -2,12 +2,17 @@ package cloudamqp
 
 import (
 	"context"
+	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
+// Note: Cannot yet be migrated to framework while using "vpcs: schema.ListNestedAttribute" to build
+// up the data source schema.
+// Error: Failed to load plugin schema: AttributeName("vpcs"): protocol version 5 cannot have Attributes set..
+// Makes the provider crash when loading the provider.
 func dataSourceAccountVpcs() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: dataSourceAccountVpcsRead,
@@ -62,16 +67,27 @@ func dataSourceAccountVpcs() *schema.Resource {
 func dataSourceAccountVpcsRead(ctx context.Context, d *schema.ResourceData,
 	meta any) diag.Diagnostics {
 
+	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
+	defer cancel()
+
 	api := meta.(*api.API)
-	data, err := api.ListVpcs(ctx)
+	data, err := api.ListVpcs(timeoutCtx)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
 	d.SetId("noId")
 	vpcs := make([]map[string]any, len(data))
-	for k, v := range data {
-		vpcs[k] = readAccountVpc(v)
+	for k, vpcData := range data {
+		vpc := map[string]any{
+			"id":       vpcData.ID,
+			"name":     vpcData.Name,
+			"region":   vpcData.Region,
+			"subnet":   vpcData.Subnet,
+			"tags":     vpcData.Tags,
+			"vpc_name": vpcData.VpcName,
+		}
+		vpcs[k] = vpc
 	}
 
 	if err = d.Set("vpcs", vpcs); err != nil {
@@ -79,27 +95,4 @@ func dataSourceAccountVpcsRead(ctx context.Context, d *schema.ResourceData,
 	}
 
 	return diag.Diagnostics{}
-}
-
-func readAccountVpc(data map[string]any) map[string]any {
-	vpc := make(map[string]any)
-	for k, v := range data {
-		if validateAccountVpcsSchemaAttribute(k) {
-			vpc[k] = v
-		}
-	}
-	return vpc
-}
-
-func validateAccountVpcsSchemaAttribute(key string) bool {
-	switch key {
-	case "id",
-		"name",
-		"region",
-		"subnet",
-		"tags",
-		"vpc_name":
-		return true
-	}
-	return false
 }
