@@ -3,8 +3,9 @@ package api
 import (
 	"context"
 	"fmt"
-	"strconv"
+	"time"
 
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/network"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
@@ -34,32 +35,27 @@ func (api *API) ListInstances(ctx context.Context) ([]map[string]any, error) {
 	}
 }
 
-func (api *API) ListVpcs(ctx context.Context) ([]map[string]any, error) {
+func (api *API) ListVpcs(ctx context.Context) ([]model.VpcResponse, error) {
 	var (
-		data   []map[string]any
+		data   []model.VpcResponse
 		failed map[string]any
 		path   = "/api/vpcs"
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
-	response, err := api.sling.New().Path(path).Receive(&data, &failed)
+	err := CallWithRetry(ctx, api.sling.New().Get(path), "VPC", 1, 10*time.Second, &data, &failed)
 	if err != nil {
-		return nil, err
+		return []model.VpcResponse{}, fmt.Errorf("failed to read VPC: %w", err)
 	}
 
-	switch response.StatusCode {
-	case 200:
-		tflog.Debug(ctx, fmt.Sprintf("response data=%v ", data))
-		for k := range data {
-			vpcID := strconv.FormatFloat(data[k]["id"].(float64), 'f', 0, 64)
-			data_temp, _ := api.readVpcName(ctx, vpcID)
-			data[k]["vpc_name"] = data_temp["name"]
+	for i := range data {
+		name, err := api.readVpcName(ctx, data[i].ID)
+		if err != nil {
+			return []model.VpcResponse{}, fmt.Errorf("failed to read VPC name: %w", err)
 		}
-		return data, nil
-	default:
-		return nil, fmt.Errorf("failed to list VPCs, status=%d message=%s ",
-			response.StatusCode, failed)
+		data[i].VpcName = name
 	}
+	return data, nil
 }
 
 func (api *API) RotatePassword(ctx context.Context, instanceID int) error {
