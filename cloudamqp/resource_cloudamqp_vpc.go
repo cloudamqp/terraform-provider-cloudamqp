@@ -175,7 +175,12 @@ func (r *vpcResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 		return
 	}
 
-	populateVpcStateModel(ctx, &state, &data)
+	state.Name = types.StringValue(data.Name)
+	state.Region = types.StringValue(data.Region)
+	state.Subnet = types.StringValue(data.Subnet)
+	state.Tags, _ = types.ListValueFrom(ctx, types.StringType, data.Tags)
+	state.VpcName = types.StringValue(data.VpcName)
+
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -234,12 +239,4 @@ func (r *vpcResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 		)
 		return
 	}
-}
-
-func populateVpcStateModel(ctx context.Context, state *vpcResourceModel, data *model.VpcResponse) {
-	state.Name = types.StringValue(data.Name)
-	state.Region = types.StringValue(data.Region)
-	state.Subnet = types.StringValue(data.Subnet)
-	state.Tags, _ = types.ListValueFrom(ctx, types.StringType, data.Tags)
-	state.VpcName = types.StringValue(data.VpcName)
 }
