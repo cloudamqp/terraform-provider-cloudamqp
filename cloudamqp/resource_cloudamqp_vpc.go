@@ -234,11 +234,6 @@ func (r *vpcResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 		)
 		return
 	}
-
-	// resp.State.RemoveResource(ctx)
-	// if resp.Diagnostics.HasError() {
-	// 	return
-	// }
 }
 
 func populateVpcStateModel(ctx context.Context, state *vpcResourceModel, data *model.VpcResponse) {
@@ -248,21 +243,3 @@ func populateVpcStateModel(ctx context.Context, state *vpcResourceModel, data *m
 	state.Tags, _ = types.ListValueFrom(ctx, types.StringType, data.Tags)
 	state.VpcName = types.StringValue(data.VpcName)
 }
-
-// func populateVpcRequestModel(ctx context.Context, request *model.VpcRequest, config, plan *vpcResourceModel) {
-// 	if config.Name != plan.Name {
-// 		request.Name = config.Name.ValueString()
-// 	}
-// 	if config.Region != plan.Region {
-// 		request.Region = config.Region.ValueString()
-// 	}
-// 	if config.Subnet != plan.Subnet {
-// 		request.Subnet = config.Subnet.ValueString()
-// 	}
-// 	if len(config.Tags.Elements()) != len(plan.Tags.Elements()) {
-// 		request.Tags = make([]string, 0, len(config.Tags.Elements()))
-// 		config.Tags.ElementsAs(ctx, &request.Tags, false)
-// 	} else {
-// 		request.Tags = make([]string, 0)
-// 	}
-// }
