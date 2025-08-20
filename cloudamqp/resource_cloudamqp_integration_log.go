@@ -236,6 +236,11 @@ func resourceIntegrationLogRead(ctx context.Context, d *schema.ResourceData, met
 		return diag.FromErr(err)
 	}
 
+	if data == nil {
+		d.SetId("")
+		return nil
+	}
+
 	for k, v := range data {
 		if k == "type" {
 			d.Set("name", v)

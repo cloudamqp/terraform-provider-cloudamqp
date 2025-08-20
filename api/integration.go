@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -77,6 +78,11 @@ func (api *API) ReadIntegration(ctx context.Context, instanceID int, intType, in
 			}
 		}
 		return convertedData, err
+	case 400:
+		if strings.Compare(failed["error"].(string), "Integration does not exist") == 0 {
+			return nil, nil
+		}
+		fallthrough
 	default:
 		return nil, fmt.Errorf("failed to read integration, status=%d message=%s ",
 			response.StatusCode, failed)

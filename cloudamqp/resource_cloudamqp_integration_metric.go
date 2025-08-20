@@ -234,6 +234,11 @@ func resourceIntegrationMetricRead(ctx context.Context, d *schema.ResourceData, 
 		return diag.FromErr(err)
 	}
 
+	if data == nil {
+		d.SetId("")
+		return nil
+	}
+
 	d.Set("include_ad_queues", false)
 
 	for k, v := range data {
