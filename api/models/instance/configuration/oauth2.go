@@ -14,8 +14,6 @@ type OAuth2ConfigResponse struct {
 	VerifyAud               *bool              `json:"verify_aud,omitempty"`
 	OauthClientId           *string            `json:"oauth_client_id,omitempty"`
 	OauthScopes             *[]string          `json:"oauth_scopes,omitempty"`
-	Configured              *bool              `json:"configured,omitempty"`
-	Deleted                 *bool              `json:"deleted,omitempty"`
 	CreatedAt               *time.Time         `json:"created_at,omitempty"`
 	UpdatedAt               *time.Time         `json:"updated_at,omitempty"`
 }
