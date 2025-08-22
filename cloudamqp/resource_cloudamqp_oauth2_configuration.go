@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
@@ -48,7 +49,6 @@ type oauth2ConfigurationResourceModel struct {
 	VerifyAud               types.Bool   `tfsdk:"verify_aud"`
 	OauthClientId           types.String `tfsdk:"oauth_client_id"`
 	OauthScopes             types.List   `tfsdk:"oauth_scopes"`
-	Configured              types.Bool   `tfsdk:"configured"`
 	Sleep                   types.Int64  `tfsdk:"sleep"`
 	Timeout                 types.Int64  `tfsdk:"timeout"`
 }
@@ -68,19 +68,19 @@ func (r *oauth2ConfigurationResource) Create(ctx context.Context, req resource.C
 	request := model.OAuth2ConfigRequest{}
 	populateOAuth2ConfigRequestModel(ctx, &plan, &request)
 
-	data, err := r.client.CreateOAuth2Configuration(timeoutCtx, instanceID, sleep, request)
+	job, err := r.client.CreateOAuth2Configuration(timeoutCtx, instanceID, sleep, request)
 	if err != nil {
 		resp.Diagnostics.AddError("Error creating OAuth2 configuration", err.Error())
 		return
 	}
 
-	err = r.client.PollForOauth2Configured(timeoutCtx, instanceID, *data.ConfigurationId, sleep)
+	_, err = r.client.PollForJobCompleted(timeoutCtx, instanceID, *job.ID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Error polling for OAuth2 configuration", err.Error())
 		return
 	}
 
-	data, err = r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep, data.ConfigurationId)
+	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Error reading OAuth2 configuration", err.Error())
 		return
@@ -103,14 +103,13 @@ func (r *oauth2ConfigurationResource) Delete(ctx context.Context, req resource.D
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	err := r.client.DeleteOAuth2Configuration(timeoutCtx, instanceID, sleep)
+	job, err := r.client.DeleteOAuth2Configuration(timeoutCtx, instanceID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Error deleting OAuth2 configuration", err.Error())
 		return
 	}
 
-	settingID := state.ID.ValueString()
-	err = r.client.PollForOauth2Configured(timeoutCtx, instanceID, settingID, sleep)
+	_, err = r.client.PollForJobCompleted(timeoutCtx, instanceID, *job.ID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Error polling for deleted OAuth2 configuration", err.Error())
 		return
@@ -126,14 +125,19 @@ func (r *oauth2ConfigurationResource) Read(ctx context.Context, req resource.Rea
 	}
 
 	instanceID := int(state.InstanceID.ValueInt64())
-	settingID := state.ID.ValueString()
 	sleep, timeout := extractSleepAndTimeout(&state)
 
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep, &settingID)
+	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep)
 	if err != nil {
+		if strings.Contains(strings.ToLower(err.Error()), "not found") {
+			tflog.Info(ctx, "OAuth2 configuration not found, removing resource")
+			resp.State.RemoveResource(ctx)
+			return
+		}
+
 		resp.Diagnostics.AddError("Error reading OAuth2 configuration", err.Error())
 		return
 	}
@@ -182,20 +186,19 @@ func (r *oauth2ConfigurationResource) Update(ctx context.Context, req resource.U
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	err := r.client.UpdateOAuth2Configuration(timeoutCtx, instanceID, sleep, params)
+	job, err := r.client.UpdateOAuth2Configuration(timeoutCtx, instanceID, sleep, params)
 	if err != nil {
 		resp.Diagnostics.AddError("Error updating OAuth2 configuration", err.Error())
 		return
 	}
 
-	settingID := plan.ID.ValueString()
-	err = r.client.PollForOauth2Configured(timeoutCtx, instanceID, settingID, sleep)
+	_, err = r.client.PollForJobCompleted(timeoutCtx, instanceID, *job.ID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Error polling for OAuth2 configuration", err.Error())
 		return
 	}
 
-	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep, &settingID)
+	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Error reading OAuth2 configuration", err.Error())
 		return
@@ -230,7 +233,7 @@ func (r *oauth2ConfigurationResource) ImportState(ctx context.Context, req resou
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep, nil)
+	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Error reading OAuth2 configuration", err.Error())
 		return
@@ -347,14 +350,6 @@ func (r *oauth2ConfigurationResource) Schema(ctx context.Context, req resource.S
 					listplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"configured": schema.BoolAttribute{
-				Optional:    false,
-				Computed:    true,
-				Description: "Configured",
-				PlanModifiers: []planmodifier.Bool{
-					boolplanmodifier.UseStateForUnknown(),
-				},
-			},
 			"sleep": schema.Int64Attribute{
 				Optional:    true,
 				Default:     int64default.StaticInt64(60),
@@ -396,7 +391,6 @@ func populateOAuth2ConfigurationStateModel(ctx context.Context, state *oauth2Con
 	}
 
 	state.VerifyAud = types.BoolValue(*data.VerifyAud)
-	state.Configured = types.BoolValue(*data.Configured)
 }
 
 func populateOAuth2ConfigRequestModel(ctx context.Context, plan *oauth2ConfigurationResourceModel, data *model.OAuth2ConfigRequest) {
