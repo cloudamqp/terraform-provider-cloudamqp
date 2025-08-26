@@ -215,6 +215,12 @@ func (r *awsEventBridgeResource) Read(ctx context.Context, request resource.Read
 		return
 	}
 
+	// Handle deleted resource drift, trigger re-creation
+	if data == nil {
+		response.State.RemoveResource(ctx)
+		return
+	}
+
 	state.AwsAccountId = types.StringValue(data["aws_account_id"].(string))
 	state.AwsRegion = types.StringValue(data["aws_region"].(string))
 	state.Vhost = types.StringValue(data["vhost"].(string))

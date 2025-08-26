@@ -57,6 +57,9 @@ func (api *API) ReadAwsEventBridge(ctx context.Context, instanceID int, eventbri
 	case 200:
 		tflog.Debug(ctx, "response data", data)
 		return data, nil
+	case 404:
+		tflog.Warn(ctx, "AWS EventBridge not found")
+		return nil, nil
 	default:
 		return nil, fmt.Errorf("failed to read AWS EventBridge, status=%d message=%s ",
 			response.StatusCode, failed)
