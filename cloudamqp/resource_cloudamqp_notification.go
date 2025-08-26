@@ -141,6 +141,12 @@ func resourceNotificationRead(ctx context.Context, d *schema.ResourceData, meta 
 		return diag.FromErr(err)
 	}
 
+	// Handle resource drift, if resource is deleted
+	if data == nil {
+		d.SetId("")
+		return nil
+	}
+
 	for k, v := range data {
 		if !validateRecipientAttribute(k) {
 			continue
