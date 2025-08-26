@@ -226,6 +226,11 @@ func resourceRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Di
 		return diag.FromErr(err)
 	}
 
+	if data == nil {
+		d.SetId("")
+		return nil
+	}
+
 	for k, v := range data {
 		if validateInstanceSchemaAttribute(k) {
 			if k == "vpc" {

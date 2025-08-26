@@ -167,6 +167,9 @@ func (api *API) ReadInstance(ctx context.Context, instanceID string) (map[string
 	case 200:
 		tflog.Debug(sensitiveCtx, "response data", data)
 		return data, nil
+	case 404:
+		tflog.Warn(ctx, "instance not found")
+		return nil, nil
 	case 410:
 		tflog.Warn(ctx, "instance has been deleted")
 		return nil, nil
