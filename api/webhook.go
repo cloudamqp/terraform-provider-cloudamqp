@@ -98,7 +98,7 @@ func (api *API) readWebhookWithRetry(ctx context.Context, path string, attempt, 
 			return api.readWebhookWithRetry(ctx, path, attempt, sleep, timeout)
 		}
 	case 404:
-		tflog.Debug(ctx, "webhook not found")
+		tflog.Warn(ctx, "webhook not found")
 		return nil, nil
 	}
 

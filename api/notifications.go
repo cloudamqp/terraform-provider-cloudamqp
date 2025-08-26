@@ -58,7 +58,7 @@ func (api *API) ReadNotification(ctx context.Context, instanceID int, recipientI
 		tflog.Debug(ctx, "response data", data)
 		return data, nil
 	case 404:
-		tflog.Debug(ctx, "notification not found")
+		tflog.Warn(ctx, "notification not found")
 		return nil, nil
 	default:
 		return nil, fmt.Errorf("failed to read notification, status=%d message=%s ",
