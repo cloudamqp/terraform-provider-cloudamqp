@@ -149,6 +149,12 @@ func resourceAlarmRead(ctx context.Context, d *schema.ResourceData, meta any) di
 		return diag.FromErr(err)
 	}
 
+	// Handle resource drift, if resource is deleted
+	if data == nil {
+		d.SetId("")
+		return nil
+	}
+
 	for k, v := range data {
 		if validateAlarmSchemaAttribute(k) {
 			if err = d.Set(k, v); err != nil {
