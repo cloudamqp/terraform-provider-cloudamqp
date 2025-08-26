@@ -215,7 +215,7 @@ func (r *awsEventBridgeResource) Read(ctx context.Context, request resource.Read
 		return
 	}
 
-	// Handle deleted resource drift, trigger re-creation
+	// Handle resource drift and trigger re-creation if resource been deleted outside the provider
 	if data == nil {
 		response.State.RemoveResource(ctx)
 		return

@@ -141,7 +141,7 @@ func resourceNotificationRead(ctx context.Context, d *schema.ResourceData, meta 
 		return diag.FromErr(err)
 	}
 
-	// Handle resource drift, if resource is deleted
+	// Handle resource drift and trigger re-creation if resource been deleted outside the provider
 	if data == nil {
 		d.SetId("")
 		return nil

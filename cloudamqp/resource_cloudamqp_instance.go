@@ -221,11 +221,11 @@ func resourceCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.
 func resourceRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
 	data, err := api.ReadInstance(ctx, d.Id())
-
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
+	// Handle resource drift and trigger re-creation if resource been deleted outside the provider
 	if data == nil {
 		d.SetId("")
 		return nil
