@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/dghubble/sling"
@@ -56,18 +55,14 @@ func CallWithRetry(ctx context.Context, sling *sling.Sling, request RetryRequest
 	case 200, 201, 204:
 		return nil
 	case 400, 409:
-		timeoutMsg := "Timeout talking to backend"
-		if errorMsg, ok := (*request.Failed)["error"].(string); ok && strings.Compare(errorMsg, timeoutMsg) == 0 {
-			if deadline, ok := ctx.Deadline(); ok {
-				tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
-					"attempt=%d until_timeout=%d ", request.Attempt, time.Until(deadline)))
-			} else {
+		if errStr, ok := (*request.Failed)["error"].(string); ok && errStr == "Timeout talking to backend" {
+			if _, ok := ctx.Deadline(); !ok {
 				return fmt.Errorf("context has no deadline")
 			}
+			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt=%d", request.Attempt))
+		} else if msg, ok := (*request.Failed)["message"].(string); ok {
+			return fmt.Errorf("getting %s: %s", request.ResourceName, msg)
 		} else {
-			if msg, ok := (*request.Failed)["message"].(string); ok {
-				return fmt.Errorf("getting %s: %s", request.ResourceName, msg)
-			}
 			return fmt.Errorf("getting %s: %v", request.ResourceName, *request.Failed)
 		}
 	case 404:
@@ -77,13 +72,10 @@ func CallWithRetry(ctx context.Context, sling *sling.Sling, request RetryRequest
 		tflog.Warn(ctx, fmt.Sprintf("the %s has been deleted", request.ResourceName))
 		return nil
 	case 503:
-		// Handle service unavailable or timeout talking to backend. Retry after a delay.
-		if deadline, ok := ctx.Deadline(); ok {
-			tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, "+
-				"attempt=%d until_timeout=%d ", request.Attempt, time.Until(deadline)))
-		} else {
+		if _, ok := ctx.Deadline(); !ok {
 			return fmt.Errorf("context has no deadline")
 		}
+		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d", request.Attempt))
 	default:
 		return fmt.Errorf("unexpected status code: %d", response.StatusCode)
 	}
