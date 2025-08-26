@@ -116,6 +116,11 @@ func resourceWebhookRead(ctx context.Context, d *schema.ResourceData, meta any) 
 		return diag.FromErr(err)
 	}
 
+	if data == nil {
+		d.SetId("")
+		return nil
+	}
+
 	for k, v := range data {
 		if validateWebhookSchemaAttribute(k) {
 			err = d.Set(k, v)
