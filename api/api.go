@@ -71,10 +71,8 @@ func CallWithRetry(ctx context.Context, sling *sling.Sling, request RetryRequest
 			return fmt.Errorf("getting %s: %v", request.ResourceName, *request.Failed)
 		}
 	case 404:
-		if msg, ok := (*request.Failed)["message"].(string); ok {
-			return fmt.Errorf("getting %s: %s", request.ResourceName, msg)
-		}
-		return fmt.Errorf("getting %s: %v", request.ResourceName, *request.Failed)
+		tflog.Debug(ctx, fmt.Sprintf("the %s was not found", request.ResourceName))
+		return nil
 	case 410:
 		tflog.Warn(ctx, fmt.Sprintf("the %s has been deleted", request.ResourceName))
 		return nil
