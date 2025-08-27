@@ -49,7 +49,7 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 	}
 
 	tflog.Info(ctx, fmt.Sprintf("callWithRetry function=%s attempt=%d status=%d", request.functionName,
-		request.Attempt, response.StatusCode))
+		request.attempt, response.StatusCode))
 
 	switch response.StatusCode {
 	case 200, 201, 204:
