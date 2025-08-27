@@ -38,7 +38,7 @@ type RetryRequest struct {
 	Failed       *map[string]any
 }
 
-func CallWithRetry(ctx context.Context, sling *sling.Sling, request RetryRequest) error {
+func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request RetryRequest) error {
 	if ctx.Err() != nil {
 		return ctx.Err()
 	}
@@ -48,7 +48,7 @@ func CallWithRetry(ctx context.Context, sling *sling.Sling, request RetryRequest
 		return err
 	}
 
-	tflog.Info(ctx, fmt.Sprintf("CallWithRetry function=%s attempt=%d status=%d", request.FunctionName,
+	tflog.Info(ctx, fmt.Sprintf("callWithRetry function=%s attempt=%d status=%d", request.FunctionName,
 		request.Attempt, response.StatusCode))
 
 	switch response.StatusCode {
@@ -86,6 +86,6 @@ func CallWithRetry(ctx context.Context, sling *sling.Sling, request RetryRequest
 		return ctx.Err()
 	case <-time.After(request.Sleep):
 		request.Attempt++
-		return CallWithRetry(ctx, sling, request)
+		return api.callWithRetry(ctx, sling, request)
 	}
 }
