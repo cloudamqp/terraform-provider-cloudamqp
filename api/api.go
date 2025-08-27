@@ -29,53 +29,53 @@ func New(baseUrl, apiKey string, useragent string, client *http.Client) *API {
 	}
 }
 
-type RetryRequest struct {
-	FunctionName string
-	ResourceName string
-	Attempt      int
-	Sleep        time.Duration
-	Data         any
-	Failed       *map[string]any
+type retryRequest struct {
+	functionName string
+	resourceName string
+	attempt      int
+	sleep        time.Duration
+	data         any
+	failed       *map[string]any
 }
 
-func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request RetryRequest) error {
+func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request retryRequest) error {
 	if ctx.Err() != nil {
 		return ctx.Err()
 	}
 
-	response, err := sling.Receive(request.Data, request.Failed)
+	response, err := sling.Receive(request.data, request.failed)
 	if err != nil {
 		return err
 	}
 
-	tflog.Info(ctx, fmt.Sprintf("callWithRetry function=%s attempt=%d status=%d", request.FunctionName,
+	tflog.Info(ctx, fmt.Sprintf("callWithRetry function=%s attempt=%d status=%d", request.functionName,
 		request.Attempt, response.StatusCode))
 
 	switch response.StatusCode {
 	case 200, 201, 204:
 		return nil
 	case 400, 409:
-		if errStr, ok := (*request.Failed)["error"].(string); ok && errStr == "Timeout talking to backend" {
+		if errStr, ok := (*request.failed)["error"].(string); ok && errStr == "Timeout talking to backend" {
 			if _, ok := ctx.Deadline(); !ok {
 				return fmt.Errorf("context has no deadline")
 			}
-			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt=%d", request.Attempt))
-		} else if msg, ok := (*request.Failed)["message"].(string); ok {
-			return fmt.Errorf("getting %s: %s", request.ResourceName, msg)
+			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt=%d", request.attempt))
+		} else if msg, ok := (*request.failed)["message"].(string); ok {
+			return fmt.Errorf("getting %s: %s", request.resourceName, msg)
 		} else {
-			return fmt.Errorf("getting %s: %v", request.ResourceName, *request.Failed)
+			return fmt.Errorf("getting %s: %v", request.resourceName, *request.failed)
 		}
 	case 404:
-		tflog.Warn(ctx, fmt.Sprintf("the %s was not found", request.ResourceName))
+		tflog.Warn(ctx, fmt.Sprintf("the %s was not found", request.resourceName))
 		return nil
 	case 410:
-		tflog.Warn(ctx, fmt.Sprintf("the %s has been deleted", request.ResourceName))
+		tflog.Warn(ctx, fmt.Sprintf("the %s has been deleted", request.resourceName))
 		return nil
 	case 503:
 		if _, ok := ctx.Deadline(); !ok {
 			return fmt.Errorf("context has no deadline")
 		}
-		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d", request.Attempt))
+		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d", request.attempt))
 	default:
 		return fmt.Errorf("unexpected status code: %d", response.StatusCode)
 	}
@@ -84,8 +84,8 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request R
 	case <-ctx.Done():
 		tflog.Debug(ctx, "Timeout reached while calling with retry")
 		return ctx.Err()
-	case <-time.After(request.Sleep):
-		request.Attempt++
+	case <-time.After(request.sleep):
+		request.attempt++
 		return api.callWithRetry(ctx, sling, request)
 	}
 }
