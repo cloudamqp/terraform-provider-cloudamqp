@@ -58,6 +58,9 @@ func (api *API) ReadAlarm(ctx context.Context, instanceID int, alarmID string) (
 	case 200:
 		tflog.Debug(ctx, "response data", data)
 		return data, err
+	case 404:
+		tflog.Warn(ctx, "alarm not found")
+		return nil, nil
 	default:
 		return nil,
 			fmt.Errorf("failed to read alarm, status=%d message=%s ", response.StatusCode, failed)
