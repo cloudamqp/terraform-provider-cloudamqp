@@ -43,7 +43,14 @@ func (api *API) ListVpcs(ctx context.Context) ([]model.VpcResponse, error) {
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
-	err := CallWithRetry(ctx, api.sling.New().Get(path), "VPC", 1, 10*time.Second, &data, &failed)
+	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+		functionName: "ListVpcs",
+		resourceName: "VPC",
+		attempt:      1,
+		sleep:        10 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return []model.VpcResponse{}, fmt.Errorf("failed to read VPC: %w", err)
 	}
