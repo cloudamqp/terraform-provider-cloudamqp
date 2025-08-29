@@ -256,4 +256,5 @@ func (r *vpcResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 		)
 		return
 	}
+	resp.State.RemoveResource(ctx)
 }
