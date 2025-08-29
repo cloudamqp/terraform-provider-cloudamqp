@@ -165,7 +165,12 @@ func (r *vpcResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
 	defer cancel()
 
-	id, _ := strconv.Atoi(state.ID.ValueString())
+	id, err := strconv.Atoi(state.ID.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid ID", fmt.Sprintf("Could not convert ID to integer: %s", err))
+		return
+	}
+
 	data, err := r.client.ReadVPC(timeoutCtx, id)
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -206,11 +211,17 @@ func (r *vpcResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	data.Tags = make([]string, 0)
 	plan.Tags.ElementsAs(timeoutCtx, &data.Tags, false)
 
-	err := r.client.UpdateVPC(timeoutCtx, plan.ID.ValueString(), data)
+	id, err := strconv.Atoi(state.ID.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid ID", fmt.Sprintf("Could not convert ID to integer: %s", err))
+		return
+	}
+
+	err = r.client.UpdateVPC(timeoutCtx, id, data)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Failed to Update VPC instance",
-			fmt.Sprintf("Could not update VPC instance with ID %s: %s", plan.ID.ValueString(), err),
+			fmt.Sprintf("Could not update VPC instance with ID %d: %s", id, err),
 		)
 		return
 	}
@@ -231,11 +242,17 @@ func (r *vpcResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
 	defer cancel()
 
-	err := r.client.DeleteVPC(timeoutCtx, state.ID.ValueString())
+	id, err := strconv.Atoi(state.ID.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid ID", fmt.Sprintf("Could not convert ID to integer: %s", err))
+		return
+	}
+
+	err = r.client.DeleteVPC(timeoutCtx, id)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Failed to Delete VPC Instance",
-			fmt.Sprintf("Could not delete VPC instance with ID %s: %s", state.ID.ValueString(), err),
+			fmt.Sprintf("Could not delete VPC instance with ID %d: %s", id, err),
 		)
 		return
 	}
