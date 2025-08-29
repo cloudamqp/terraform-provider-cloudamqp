@@ -126,7 +126,11 @@ func (r *vpcResource) Create(ctx context.Context, req resource.CreateRequest, re
 	}
 
 	tags := make([]string, 0)
-	plan.Tags.ElementsAs(ctx, &tags, false)
+	diag := plan.Tags.ElementsAs(ctx, &tags, false)
+	resp.Diagnostics.Append(diag...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	vpc := model.VpcRequest{
 		Name:   plan.Name.ValueString(),
@@ -183,8 +187,16 @@ func (r *vpcResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	state.Name = types.StringValue(data.Name)
 	state.Region = types.StringValue(data.Region)
 	state.Subnet = types.StringValue(data.Subnet)
-	state.Tags, _ = types.ListValueFrom(ctx, types.StringType, data.Tags)
 	state.VpcName = types.StringValue(data.VpcName)
+
+	if len(data.Tags) > 0 {
+		tags, tagsDiag := types.ListValueFrom(ctx, types.StringType, data.Tags)
+		resp.Diagnostics.Append(tagsDiag...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		state.Tags = tags
+	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
@@ -193,12 +205,8 @@ func (r *vpcResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 }
 
 func (r *vpcResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var (
-		plan  vpcResourceModel
-		state vpcResourceModel
-	)
+	var plan vpcResourceModel
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
-	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -209,12 +217,12 @@ func (r *vpcResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	var data model.VpcRequest
 	data.Name = plan.Name.ValueString()
 	data.Tags = make([]string, 0)
-	diags := plan.Tags.ElementsAs(timeoutCtx, &data.Tags, false)
-	resp.Diagnostics.Append(diags...)
+	resp.Diagnostics.Append(plan.Tags.ElementsAs(timeoutCtx, &data.Tags, false)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	id, err := strconv.Atoi(state.ID.ValueString())
+
+	id, err := strconv.Atoi(plan.ID.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("Invalid ID", fmt.Sprintf("Could not convert ID to integer: %s", err))
 		return
