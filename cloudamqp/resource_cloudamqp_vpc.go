@@ -209,8 +209,11 @@ func (r *vpcResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	var data model.VpcRequest
 	data.Name = plan.Name.ValueString()
 	data.Tags = make([]string, 0)
-	plan.Tags.ElementsAs(timeoutCtx, &data.Tags, false)
-
+	diags := plan.Tags.ElementsAs(timeoutCtx, &data.Tags, false)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 	id, err := strconv.Atoi(state.ID.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("Invalid ID", fmt.Sprintf("Could not convert ID to integer: %s", err))

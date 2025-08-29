@@ -17,6 +17,9 @@ func (v CidrValidator) MarkdownDescription(ctx context.Context) string {
 }
 
 func (v CidrValidator) ValidateString(ctx context.Context, req validator.StringRequest, resp *validator.StringResponse) {
+	if req.ConfigValue.IsNull() || req.ConfigValue.IsUnknown() {
+		return
+	}
 	if _, _, err := net.ParseCIDR(req.ConfigValue.ValueString()); err != nil {
 		resp.Diagnostics.AddAttributeError(
 			req.Path,
