@@ -1,3 +1,25 @@
+## 1.36.0 (29 Aug, 2025)
+
+NOTES:
+
+* Change of underlying maintenance for LavinMQ ([#351])
+* Bump github.com/hashicorp/terraform-plugin-framework from 1.15.0 to 1.15.1 ([#355])
+* Bump actions/checkout from 4 to 5 ([#357])
+* Bump goreleaser/goreleaser-action from 6.3.0 to 6.4.0 ([#358])
+
+IMPROVEMENTS:
+
+* Handle deleted resource drift
+  - log/metric integration ([#359])
+  - alarm, aws eventbridge, instance, notification, webhook ([#361])
+
+[#351]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/351
+[#355]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/355
+[#357]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/357
+[#358]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/358
+[#359]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/359
+[#361]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/361
+
 ## 1.35.1 (Jun 16, 2025)
 
 BUG FIXES:
