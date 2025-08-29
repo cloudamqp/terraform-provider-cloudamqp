@@ -3,137 +3,269 @@ package cloudamqp
 import (
 	"context"
 	"fmt"
-	"net"
+	"strconv"
+	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/network"
+	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/utils/validators"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func resourceVpc() *schema.Resource {
-	return &schema.Resource{
-		CreateContext: resourceVpcCreate,
-		ReadContext:   resourceVpcRead,
-		UpdateContext: resourceVpcUpdate,
-		DeleteContext: resourceVpcDelete,
-		Importer: &schema.ResourceImporter{
-			StateContext: schema.ImportStatePassthroughContext,
-		},
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:        schema.TypeString,
+var (
+	_ resource.Resource                = &vpcResource{}
+	_ resource.ResourceWithConfigure   = &vpcResource{}
+	_ resource.ResourceWithImportState = &vpcResource{}
+)
+
+type vpcResource struct {
+	client *api.API
+}
+
+func NewVpcResource() resource.Resource {
+	return &vpcResource{}
+}
+
+type vpcResourceModel struct {
+	ID      types.String `tfsdk:"id"`
+	Name    types.String `tfsdk:"name"`
+	Region  types.String `tfsdk:"region"`
+	Subnet  types.String `tfsdk:"subnet"`
+	Tags    types.List   `tfsdk:"tags"`
+	VpcName types.String `tfsdk:"vpc_name"`
+}
+
+func (r *vpcResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = "cloudamqp_vpc"
+}
+
+func (r *vpcResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: "Resource ID of the VPC instance",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"name": schema.StringAttribute{
 				Required:    true,
 				Description: "Name of the VPC instance",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
-			"region": {
-				Type:        schema.TypeString,
+			"region": schema.StringAttribute{
 				Required:    true,
-				ForceNew:    true,
-				Description: "The hosted region for the standalone VPC instance",
-			},
-			"subnet": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
-				ValidateFunc: func(val any, key string) (warns []string, errs []error) {
-					v := val.(string)
-					_, _, err := net.ParseCIDR(v)
-					if err != nil {
-						errs = append(errs, fmt.Errorf("subnet: %v", err))
-					}
-					return
+				Description: "Region where the VPC is located",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
-				Description: "The VPC subnet",
 			},
-			"tags": {
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+			"subnet": schema.StringAttribute{
+				Required:    true,
+				Description: "The VPC subnet in CIDR notation (e.g., 10.56.72.0/24)",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
-				Description: "Tag the VPC instance with optional tags",
+				Validators: []validator.String{
+					validators.CidrValidator{},
+				},
 			},
-			"vpc_name": {
-				Type:        schema.TypeString,
+			"tags": schema.ListAttribute{
+				Optional:    true,
+				ElementType: types.StringType,
+				Description: "Optional tags to associate with the VPC instance",
+				PlanModifiers: []planmodifier.List{
+					listplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"vpc_name": schema.StringAttribute{
 				Computed:    true,
 				Description: "VPC name given when hosted at the cloud provider",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 		},
 	}
 }
 
-func resourceVpcCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	api := meta.(*api.API)
-	keys := []string{"name", "region", "subnet", "tags"}
-	params := make(map[string]any)
-	for _, k := range keys {
-		if v := d.Get(k); v != nil && v != "" {
-			params[k] = v
-		}
+func (r *vpcResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+	client, ok := req.ProviderData.(*api.API)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Provider Data Type",
+			fmt.Sprintf("Expected *api.API, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+		return
+	}
+	r.client = client
+}
+
+func (r *vpcResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+}
+
+func (r *vpcResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan vpcResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
-	data, err := api.CreateVpcInstance(ctx, params)
+	tags := make([]string, 0)
+	diag := plan.Tags.ElementsAs(ctx, &tags, false)
+	resp.Diagnostics.Append(diag...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	vpc := model.VpcRequest{
+		Name:   plan.Name.ValueString(),
+		Region: plan.Region.ValueString(),
+		Subnet: plan.Subnet.ValueString(),
+		Tags:   tags,
+	}
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
+	defer cancel()
+
+	data, err := r.client.CreateVPC(timeoutCtx, vpc)
 	if err != nil {
-		return diag.FromErr(err)
+		resp.Diagnostics.AddError(
+			"Failed to Create VPC Instance",
+			fmt.Sprintf("Could not create VPC instance: %s", err),
+		)
+		return
 	}
 
-	d.SetId(data["id"].(string))
-	return resourceVpcRead(ctx, d, meta)
+	plan.ID = types.StringValue(strconv.Itoa(data.ID))
+	plan.VpcName = types.StringValue(data.VpcName)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 }
 
-func resourceVpcRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	api := meta.(*api.API)
-	data, err := api.ReadVpcInstance(ctx, d.Id())
+func (r *vpcResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state vpcResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
+	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
+	defer cancel()
+
+	id, err := strconv.Atoi(state.ID.ValueString())
 	if err != nil {
-		return diag.FromErr(err)
+		resp.Diagnostics.AddError("Invalid ID", fmt.Sprintf("Could not convert ID to integer: %s", err))
+		return
 	}
 
-	for k, v := range data {
-		if validateVpcSchemaAttribute(k) {
-			err = d.Set(k, v)
-			if err != nil {
-				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
-			}
+	data, err := r.client.ReadVPC(timeoutCtx, id)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Failed to Read VPC Instance",
+			fmt.Sprintf("Could not read VPC instance with ID %d: %s", id, err),
+		)
+		return
+	}
+
+	state.Name = types.StringValue(data.Name)
+	state.Region = types.StringValue(data.Region)
+	state.Subnet = types.StringValue(data.Subnet)
+	state.VpcName = types.StringValue(data.VpcName)
+
+	if len(data.Tags) > 0 {
+		tags, tagsDiag := types.ListValueFrom(ctx, types.StringType, data.Tags)
+		resp.Diagnostics.Append(tagsDiag...)
+		if resp.Diagnostics.HasError() {
+			return
 		}
+		state.Tags = tags
 	}
 
-	return diag.Diagnostics{}
+	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 }
 
-func resourceVpcUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	api := meta.(*api.API)
-	keys := []string{"name", "tags"}
-	params := make(map[string]any)
-	for _, k := range keys {
-		if v := d.Get(k); v != nil {
-			params[k] = d.Get(k)
-		}
+func (r *vpcResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan vpcResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
-	if err := api.UpdateVpcInstance(ctx, d.Id(), params); err != nil {
-		return diag.FromErr(err)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
+	defer cancel()
+
+	var data model.VpcRequest
+	data.Name = plan.Name.ValueString()
+	data.Tags = make([]string, 0)
+	resp.Diagnostics.Append(plan.Tags.ElementsAs(timeoutCtx, &data.Tags, false)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
-	return resourceVpcRead(ctx, d, meta)
+	id, err := strconv.Atoi(plan.ID.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid ID", fmt.Sprintf("Could not convert ID to integer: %s", err))
+		return
+	}
+
+	err = r.client.UpdateVPC(timeoutCtx, id, data)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Failed to Update VPC instance",
+			fmt.Sprintf("Could not update VPC instance with ID %d: %s", id, err),
+		)
+		return
+	}
+
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 }
 
-func resourceVpcDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	api := meta.(*api.API)
-	if err := api.DeleteVpcInstance(ctx, d.Id()); err != nil {
-		return diag.FromErr(err)
+func (r *vpcResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state vpcResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	return diag.Diagnostics{}
-}
 
-func validateVpcSchemaAttribute(key string) bool {
-	switch key {
-	case "name",
-		"region",
-		"subnet",
-		"tags",
-		"vpc_name":
-		return true
+	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
+	defer cancel()
+
+	id, err := strconv.Atoi(state.ID.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid ID", fmt.Sprintf("Could not convert ID to integer: %s", err))
+		return
 	}
-	return false
+
+	err = r.client.DeleteVPC(timeoutCtx, id)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Failed to Delete VPC Instance",
+			fmt.Sprintf("Could not delete VPC instance with ID %d: %s", id, err),
+		)
+		return
+	}
+	resp.State.RemoveResource(ctx)
 }

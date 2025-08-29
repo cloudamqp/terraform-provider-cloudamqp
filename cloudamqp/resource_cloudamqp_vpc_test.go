@@ -44,13 +44,13 @@ func TestAccVpc_Basic(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:            vpcResourceName,
-				ImportState:             true,
-				ImportStateVerify:       true,
-				ImportStateVerifyIgnore: []string{},
+				ResourceName:      vpcResourceName,
+				ImportState:       true,
+				ImportStateVerify: true,
 			},
 			{
-				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
+				ExpectNonEmptyPlan: true,
+				Config:             configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(vpcResourceName, "name", paramsUpdated["VpcName"]),
 					resource.TestCheckResourceAttr(vpcResourceName, "region", paramsUpdated["VpcRegion"]),

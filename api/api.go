@@ -30,12 +30,13 @@ func New(baseUrl, apiKey string, useragent string, client *http.Client) *API {
 }
 
 type retryRequest struct {
-	functionName string
-	resourceName string
-	attempt      int
-	sleep        time.Duration
-	data         any
-	failed       *map[string]any
+	functionName    string
+	resourceName    string
+	attempt         int
+	sleep           time.Duration
+	data            any
+	failed          *map[string]any
+	customRetryCode int
 }
 
 func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request retryRequest) error {
@@ -52,6 +53,12 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 		request.attempt, response.StatusCode))
 
 	switch response.StatusCode {
+	case request.customRetryCode:
+		if _, ok := ctx.Deadline(); !ok {
+			return fmt.Errorf("context has no deadline")
+		}
+		tflog.Debug(ctx, fmt.Sprintf("custom retry logic, will try again, attempt=%d", request.attempt))
+		// Intentionally fall through to retry logic below
 	case 200, 201, 204:
 		return nil
 	case 400, 409:
