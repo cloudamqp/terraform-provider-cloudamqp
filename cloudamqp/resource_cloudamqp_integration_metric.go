@@ -234,6 +234,12 @@ func resourceIntegrationMetricRead(ctx context.Context, d *schema.ResourceData, 
 		return diag.FromErr(err)
 	}
 
+	// Handle resource drift and trigger re-creation if resource been deleted outside the provider
+	if data == nil {
+		d.SetId("")
+		return nil
+	}
+
 	d.Set("include_ad_queues", false)
 
 	for k, v := range data {
