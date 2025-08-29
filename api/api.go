@@ -53,6 +53,10 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 		request.attempt, response.StatusCode))
 
 	switch response.StatusCode {
+	case request.customRetryCode:
+		if _, ok := ctx.Deadline(); !ok {
+			return fmt.Errorf("context has no deadline")
+		}
 		tflog.Debug(ctx, fmt.Sprintf("custom retry logic, will try again, attempt=%d", request.attempt))
 		// Intentionally fall through to retry logic below
 	case 200, 201, 204:
