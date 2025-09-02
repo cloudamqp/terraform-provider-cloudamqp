@@ -284,8 +284,13 @@ func (r *rabbitMqConfigurationResource) Create(ctx context.Context, req resource
 		return
 	}
 
+	if dataResp == nil {
+		resp.Diagnostics.AddError("API Error", "Failed to read RabbitMQ configuration: received nil response")
+		return
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("Read RabbitMQ configuration data: %v", dataResp))
-	populateRabbitMqConfigModel(&plan, &dataResp, instanceID, sleep, timeout)
+	populateRabbitMqConfigModel(&plan, dataResp, instanceID, sleep, timeout)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
@@ -305,9 +310,16 @@ func (r *rabbitMqConfigurationResource) Read(ctx context.Context, req resource.R
 		resp.Diagnostics.AddError("API Error", err.Error())
 		return
 	}
+
+	// Handle resource drift and trigger re-creation if resource been deleted outside the provider
+	if data == nil {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+
 	tflog.Info(ctx, fmt.Sprintf("Read RabbitMQ configuration data: %v", data))
 
-	populateRabbitMqConfigModel(&state, &data, instanceID, sleep, timeout)
+	populateRabbitMqConfigModel(&state, data, instanceID, sleep, timeout)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
@@ -371,8 +383,13 @@ func (r *rabbitMqConfigurationResource) Update(ctx context.Context, req resource
 		return
 	}
 
+	if dataResp == nil {
+		resp.Diagnostics.AddError("API Error", "Failed to read RabbitMQ configuration: received nil response")
+		return
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("Read RabbitMQ configuration data: %v", dataResp))
-	populateRabbitMqConfigModel(&plan, &dataResp, instanceID, sleep, timeout)
+	populateRabbitMqConfigModel(&plan, dataResp, instanceID, sleep, timeout)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 

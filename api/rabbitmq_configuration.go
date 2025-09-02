@@ -11,7 +11,7 @@ import (
 )
 
 func (api *API) ReadRabbitMqConfiguration(ctx context.Context, instanceID, sleep, timeout int) (
-	model.RabbitMqConfigResponse, error) {
+	*model.RabbitMqConfigResponse, error) {
 
 	path := fmt.Sprintf("/api/instances/%d/config", instanceID)
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d ", path, sleep, timeout))
@@ -19,7 +19,7 @@ func (api *API) ReadRabbitMqConfiguration(ctx context.Context, instanceID, sleep
 }
 
 func (api *API) readRabbitMqConfigurationWithRetry(ctx context.Context, path string, attempt, sleep,
-	timeout int) (model.RabbitMqConfigResponse, error) {
+	timeout int) (*model.RabbitMqConfigResponse, error) {
 
 	var (
 		data   model.RabbitMqConfigResponse
@@ -28,16 +28,19 @@ func (api *API) readRabbitMqConfigurationWithRetry(ctx context.Context, path str
 
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
-		return model.RabbitMqConfigResponse{}, err
+		return nil, err
 	} else if attempt*sleep > timeout {
-		return model.RabbitMqConfigResponse{},
+		return nil,
 			fmt.Errorf("timeout reached after %d seconds, while reading RabbitMQ", timeout)
 	}
 
 	switch response.StatusCode {
 	case 200:
 		tflog.Debug(ctx, fmt.Sprintf("response data: %v", data))
-		return data, nil
+		return &data, nil
+	case 404:
+		tflog.Warn(ctx, "RabbitMQ configuration not found")
+		return nil, nil
 	case 400:
 		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
 			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
@@ -55,7 +58,7 @@ func (api *API) readRabbitMqConfigurationWithRetry(ctx context.Context, path str
 			return api.readRabbitMqConfigurationWithRetry(ctx, path, attempt, sleep, timeout)
 		}
 	}
-	return model.RabbitMqConfigResponse{},
+	return nil,
 		fmt.Errorf("failed to read RabbitMQ configuration, status=%d message=%s ", response.StatusCode, failed)
 }
 
