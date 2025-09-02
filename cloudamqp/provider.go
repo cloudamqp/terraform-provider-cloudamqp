@@ -105,6 +105,7 @@ func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resou
 		NewAwsEventBridgeResource,
 		NewRabbitMqConfigurationResource,
 		NewVpcResource,
+		NewWebhookResource,
 	}
 }
 
@@ -173,7 +174,6 @@ func Provider(v string, client *http.Client) *schemaSdk.Provider {
 			"cloudamqp_vpc_connect":        resourceVpcConnect(),
 			"cloudamqp_vpc_gcp_peering":    resourceVpcGcpPeering(),
 			"cloudamqp_vpc_peering":        resourceVpcPeering(),
-			"cloudamqp_webhook":            resourceWebhook(),
 		},
 		ConfigureContextFunc: configureClient(client),
 	}
