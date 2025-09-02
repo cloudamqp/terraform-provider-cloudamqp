@@ -129,7 +129,25 @@ func (r *webhookResource) Configure(ctx context.Context, req resource.ConfigureR
 }
 
 func (r *webhookResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+	tflog.Info(ctx, fmt.Sprintf("ImportState: ID=%s", req.ID))
+	if !strings.Contains(req.ID, ",") {
+		resp.Diagnostics.AddError("Invalid import ID format", "Expected format: {resource_id},{instance_id}")
+		return
+	}
+
+	idSplit := strings.Split(req.ID, ",")
+	if len(idSplit) != 2 {
+		resp.Diagnostics.AddError("Invalid import ID format", "Expected format: {resource_id},{instance_id}")
+		return
+	}
+	instanceID, err := strconv.Atoi(idSplit[1])
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid instance_id in import ID", fmt.Sprintf("Could not convert instance_id to int: %s", err))
+		return
+	}
+
+	resp.State.SetAttribute(ctx, path.Root("id"), idSplit[0])
+	resp.State.SetAttribute(ctx, path.Root("instance_id"), int64(instanceID))
 }
 
 func (r *webhookResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -174,19 +192,6 @@ func (r *webhookResource) Read(ctx context.Context, req resource.ReadRequest, re
 	var state webhookResourceModel
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	// Import resource with identifier {resource_id},{instance_id}
-	if strings.Contains(state.ID.ValueString(), ",") {
-		s := strings.Split(state.ID.ValueString(), ",")
-		state.ID = types.StringValue(s[0])
-		instanceID, _ := strconv.Atoi(s[1])
-		state.InstanceID = types.Int64Value(int64(instanceID))
-		tflog.Info(ctx, fmt.Sprintf("Importing webhook with ID: %s for instanceID: %d", state.ID.ValueString(), instanceID))
-	}
-	if state.InstanceID.ValueInt64() == 0 {
-		resp.Diagnostics.AddError("Missing instance identifier {resource_id},{instance_id}", "")
 		return
 	}
 
