@@ -45,9 +45,9 @@ resource "cloudamqp_account_actions" "enable_vpc" {
     </b>
   </summary>
 
-To add the enable VPC to a managed standalone VPC.
+To add the enable VPC as a managed standalone VPC.
 
-First fetch the VPC identifier <id>
+First fetch the VPC identifier <vpc_id> with either
 
 1. Run `terraform refresh` the `vpc_id` will be added to the state for the `cloudamqp_instance.instance` resource.
 2. Retrieve the `vpc_id` form the CloudAMQP HTTP API. Either via [list-instances] or [list-vpcs].
@@ -55,14 +55,13 @@ First fetch the VPC identifier <id>
 ```hcl
 import {
   to = cloudamqp_vpc.vpc
-  id = <id>
+  id = <vpc_id>
 }
 
 resource "cloudamqp_vpc" "vpc" {
   name    = "enable-vpc-feature"
   region  = "amazon-web-services::us-east-1"
   subnet  = "10.56.72.0/24"
-  tags    = []
 }
 
 resource "cloudamqp_instance" "instance" {
@@ -96,17 +95,20 @@ The following arguments are supported:
 
 ### Actions
 
-**rotate-password**
+**rotate-password:**
 Initiate rotation of the user password on your instance.
 
-**rotate-apikey**
+**rotate-apikey:**
 Initiate rotation of the instance API key used for the CloudAMQP [HTTP API].
 
-**enable-vpc**
-Enables the VPC feature on existing instance not using standalone VPC. Extra cost will be applied:
-https://www.cloudamqp.com/plans.html#xtr
+**enable-vpc:**
+Enables the VPC feature on existing instance not using standalone VPC. You can't choose subnet when
+enabling VPC features and it will be set to `10.56.72.0/24`.
 
--> NOTE: This action is irreversible, if you want to disable VPC features you will need to delete the instance and create a new one.
+Extra cost will be applied: [CloudAMQP extra plans]
+
+~> This action is irreversible, if you want to disable VPC features you will need to delete
+the instance and create a new one.
 
 ## Dependency
 
@@ -119,3 +121,4 @@ Not possible to import this resource.
 [list-instances]: https://docs.cloudamqp.com/#list-instances
 [list-vpcs]: https://docs.cloudamqp.com/#list-vpcs
 [HTTP API]: https://docs.cloudamqp.com/cloudamqp_api.html
+[CloudAMQP extra plans]: https://www.cloudamqp.com/plans.html#xtr
