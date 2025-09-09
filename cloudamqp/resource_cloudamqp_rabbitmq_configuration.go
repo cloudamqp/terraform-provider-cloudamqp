@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance/configuration"
@@ -223,17 +224,20 @@ func (r *rabbitMqConfigurationResource) Create(ctx context.Context, req resource
 	}
 
 	instanceID := int(plan.InstanceID.ValueInt64())
-	sleep := int(plan.Sleep.ValueInt64())
-	timeout := int(plan.Timeout.ValueInt64())
 	data := r.populateCreateRequest(&plan)
 
-	err := r.client.UpdateRabbitMqConfiguration(ctx, instanceID, data, sleep, timeout)
+	sleep := int(plan.Sleep.ValueInt64())
+	timeout := int(plan.Timeout.ValueInt64())
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	err := r.client.UpdateRabbitMqConfiguration(timeoutCtx, instanceID, data, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("API Error", fmt.Sprintf("Failed to create RabbitMQ configuration: %s", err.Error()))
 		return
 	}
 
-	dataResp, err := r.client.ReadRabbitMqConfiguration(ctx, instanceID, sleep, timeout)
+	dataResp, err := r.client.ReadRabbitMqConfiguration(ctx, instanceID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("API Error", fmt.Sprintf("Failed to read RabbitMQ configuration: %s", err.Error()))
 		return
@@ -266,7 +270,7 @@ func (r *rabbitMqConfigurationResource) Read(ctx context.Context, req resource.R
 		timeout = 3600 // fallback default
 	}
 
-	data, err := r.client.ReadRabbitMqConfiguration(ctx, instanceID, sleep, timeout)
+	data, err := r.client.ReadRabbitMqConfiguration(ctx, instanceID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("API Error", err.Error())
 		return
@@ -296,13 +300,13 @@ func (r *rabbitMqConfigurationResource) Update(ctx context.Context, req resource
 	timeout := int(plan.Timeout.ValueInt64())
 	data := r.populateUpdateRequest(&plan)
 
-	err := r.client.UpdateRabbitMqConfiguration(ctx, instanceID, data, sleep, timeout)
+	err := r.client.UpdateRabbitMqConfiguration(ctx, instanceID, data, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("API Error", fmt.Sprintf("Failed to update RabbitMQ configuration: %s", err.Error()))
 		return
 	}
 
-	dataResp, err := r.client.ReadRabbitMqConfiguration(ctx, instanceID, sleep, timeout)
+	dataResp, err := r.client.ReadRabbitMqConfiguration(ctx, instanceID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("API Error", fmt.Sprintf("Failed to read RabbitMQ configuration: %s", err.Error()))
 		return
