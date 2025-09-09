@@ -44,10 +44,7 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 		return ctx.Err()
 	}
 
-	response, err := sling.Receive(request.data, request.failed)
-	if err != nil {
-		return err
-	}
+	response, _ := sling.Receive(request.data, request.failed)
 
 	tflog.Info(ctx, fmt.Sprintf("callWithRetry function=%s attempt=%d status=%d", request.functionName,
 		request.attempt, response.StatusCode))
