@@ -270,7 +270,10 @@ func (r *rabbitMqConfigurationResource) Read(ctx context.Context, req resource.R
 		timeout = 3600 // fallback default
 	}
 
-	data, err := r.client.ReadRabbitMqConfiguration(ctx, instanceID, sleep)
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	data, err := r.client.ReadRabbitMqConfiguration(timeoutCtx, instanceID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("API Error", err.Error())
 		return
