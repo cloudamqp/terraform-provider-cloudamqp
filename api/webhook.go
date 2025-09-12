@@ -15,8 +15,9 @@ func (api *API) CreateWebhook(ctx context.Context, instanceID int64, params mode
 	string, error) {
 
 	var (
-		data model.WebhookResponse
-		path = fmt.Sprintf("/api/instances/%d/webhooks", instanceID)
+		data   model.WebhookResponse
+		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%d/webhooks", instanceID)
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%v ", path, params))
@@ -26,7 +27,7 @@ func (api *API) CreateWebhook(ctx context.Context, instanceID int64, params mode
 		attempt:      1,
 		sleep:        sleep,
 		data:         &data,
-		failed:       nil,
+		failed:       &failed,
 	})
 	if err != nil {
 		return "", err
@@ -41,8 +42,9 @@ func (api *API) ReadWebhook(ctx context.Context, instanceID int64, webhookID str
 	model.WebhookResponse, error) {
 
 	var (
-		data model.WebhookResponse
-		path = fmt.Sprintf("/api/instances/%d/webhooks/%s", instanceID, webhookID)
+		data   model.WebhookResponse
+		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%d/webhooks/%s", instanceID, webhookID)
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
@@ -52,7 +54,7 @@ func (api *API) ReadWebhook(ctx context.Context, instanceID int64, webhookID str
 		attempt:      1,
 		sleep:        sleep,
 		data:         &data,
-		failed:       nil,
+		failed:       &failed,
 	})
 	if err != nil {
 		return model.WebhookResponse{}, err
@@ -67,7 +69,11 @@ func (api *API) ReadWebhook(ctx context.Context, instanceID int64, webhookID str
 func (api *API) UpdateWebhook(ctx context.Context, instanceID int64, webhookID string,
 	params model.WebhookUpdateRequest, sleep time.Duration) error {
 
-	path := fmt.Sprintf("/api/instances/%d/webhooks/%s", instanceID, webhookID)
+	var (
+		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%d/webhooks/%s", instanceID, webhookID)
+	)
+
 	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v ", path, params))
 	return api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
 		functionName: "UpdateWebhook",
@@ -75,13 +81,17 @@ func (api *API) UpdateWebhook(ctx context.Context, instanceID int64, webhookID s
 		attempt:      1,
 		sleep:        sleep,
 		data:         nil,
-		failed:       nil,
+		failed:       &failed,
 	})
 }
 
 // DeleteWebhook - removes a specific webhook for an instance
 func (api *API) DeleteWebhook(ctx context.Context, instanceID int64, webhookID string, sleep time.Duration) error {
-	path := fmt.Sprintf("/api/instances/%d/webhooks/%s", instanceID, webhookID)
+	var (
+		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%d/webhooks/%s", instanceID, webhookID)
+	)
+
 	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
 	return api.callWithRetry(ctx, api.sling.New().Delete(path), retryRequest{
 		functionName: "DeleteWebhook",
@@ -89,6 +99,6 @@ func (api *API) DeleteWebhook(ctx context.Context, instanceID int64, webhookID s
 		attempt:      1,
 		sleep:        sleep,
 		data:         nil,
-		failed:       nil,
+		failed:       &failed,
 	})
 }
