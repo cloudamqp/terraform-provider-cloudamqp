@@ -320,7 +320,8 @@ func validateInstanceSchemaAttribute(key string) bool {
 		"vhost",
 		"no_default_alarms",
 		"ready",
-		"backend":
+		"backend",
+		"vpc_id":
 		return true
 	}
 	return false

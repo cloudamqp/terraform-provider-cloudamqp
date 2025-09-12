@@ -78,7 +78,7 @@ func (r *accountActionsResource) Schema(ctx context.Context, request resource.Sc
 					stringplanmodifier.RequiresReplace(),
 				},
 				Validators: []validator.String{
-					stringvalidator.OneOf("rotate-password", "rotate-apikey"),
+					stringvalidator.OneOf("rotate-password", "rotate-apikey", "enable-vpc"),
 				},
 			},
 		},
@@ -109,6 +109,14 @@ func (r *accountActionsResource) Create(ctx context.Context, request resource.Cr
 			)
 			return
 		}
+	case "enable-vpc":
+		if err := r.client.EnableVPC(ctx, int(plan.InstanceID.ValueInt64())); err != nil {
+			response.Diagnostics.AddError(
+				"Enable VPC Error",
+				fmt.Sprintf("An error occurred while enabling the VPC for instance %d: %s", plan.InstanceID, err),
+			)
+			return
+		}
 	}
 
 	plan.Id = types.StringValue(plan.InstanceID.String())
@@ -125,4 +133,5 @@ func (r *accountActionsResource) Update(ctx context.Context, request resource.Up
 
 func (r *accountActionsResource) Delete(ctx context.Context, request resource.DeleteRequest, response *resource.DeleteResponse) {
 	// This resource does not implement the Delete function
+	response.State.RemoveResource(ctx)
 }
