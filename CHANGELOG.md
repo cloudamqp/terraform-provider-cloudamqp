@@ -1,3 +1,26 @@
+## 1.37.0 (Unreleased)
+
+NOTES:
+
+FEATURES:
+
+* Added new account action to enable VPC feature ([#371])
+
+IMPROVEMENTS:
+
+* Client library: Added generic retry ([#362])
+* Migrated `cloudamqp_vpc` towards Terraform plugin framework ([#363])
+* Migrated `cloudamqp_webhook` towards Terraform plugin framework ([#364])
+* Handled resource drift `cloudamqp_rabbitmq_configuration` ([#366])
+* Default values drift ([#372])
+
+[#362]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/362
+[#363]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/363
+[#364]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/364
+[#366]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/366
+[#371]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/371
+[#372]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/372
+
 ## 1.36.0 (29 Aug, 2025)
 
 NOTES:
@@ -10,8 +33,8 @@ NOTES:
 IMPROVEMENTS:
 
 * Handle deleted resource drift
-  - log/metric integration ([#359])
-  - alarm, aws eventbridge, instance, notification, webhook ([#361])
+  * log/metric integration ([#359])
+  * alarm, aws eventbridge, instance, notification, webhook ([#361])
 
 [#351]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/351
 [#355]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/355
