@@ -103,6 +103,7 @@ func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resou
 	return []func() resource.Resource{
 		NewAccountActionsResource,
 		NewAwsEventBridgeResource,
+		NewIntegrationLogResource,
 		NewRabbitMqConfigurationResource,
 		NewVpcResource,
 		NewWebhookResource,
@@ -159,7 +160,6 @@ func Provider(v string, client *http.Client) *schemaSdk.Provider {
 			"cloudamqp_custom_domain":      resourceCustomDomain(),
 			"cloudamqp_extra_disk_size":    resourceExtraDiskSize(),
 			"cloudamqp_instance":           resourceInstance(),
-			"cloudamqp_integration_log":    resourceIntegrationLog(),
 			"cloudamqp_integration_metric": resourceIntegrationMetric(),
 			"cloudamqp_maintenance_window": resourceMaintenanceWindow(),
 			"cloudamqp_node_actions":       resourceNodeAction(),
