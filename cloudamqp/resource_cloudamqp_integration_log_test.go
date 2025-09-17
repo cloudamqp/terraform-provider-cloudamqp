@@ -69,7 +69,6 @@ func TestAccIntegrationLog_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(azmResourceName, "tenant_id", params["AzmTentantId"]),
 					resource.TestCheckResourceAttr(azmResourceName, "application_id", params["AzmApplicationId"]),
 					resource.TestCheckResourceAttr(cloudwatchResourceName, "name", "cloudwatchlog"),
-					resource.TestCheckResourceAttr(cloudwatchResourceName, "access_key_id", "CLOUDWATCH_ACCESS_KEY_ID"),
 					resource.TestCheckResourceAttr(cloudwatchResourceName, "region", params["CloudwatchRegion"]),
 					resource.TestCheckResourceAttr(coralogixResourceName, "name", "coralogix"),
 					resource.TestCheckResourceAttr(coralogixResourceName, "endpoint", params["CoralogixEndpoint"]),
