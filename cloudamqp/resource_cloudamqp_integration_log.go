@@ -396,8 +396,7 @@ func (r *integrationLogResource) populateResourceModel(resourceModel *integratio
 		resourceModel.Region = types.StringValue(*data.Config.Region)
 		resourceModel.ApiKey = types.StringValue(*data.Config.APIKey)
 		if data.Config.Tags != nil {
-			tags := strings.Join(*data.Config.Tags, ",")
-			resourceModel.Tags = types.StringValue(tags)
+			resourceModel.Tags = types.StringValue(*data.Config.Tags)
 		} else {
 			resourceModel.Tags = types.StringNull()
 		}
@@ -450,15 +449,10 @@ func (r *integrationLogResource) populateRequest(plan *integrationLogResourceMod
 			Subsystem:   plan.Subsystem.ValueString(),
 		}
 	case "datadog":
-		var tags []string
-		if !plan.Tags.IsNull() {
-			tags = strings.Split(plan.Tags.ValueString(), ",")
-		}
 		request = model.LogRequest{
-			Region:    plan.Region.ValueString(),
-			APIKey:    plan.ApiKey.ValueString(),
-			Tags:      tags,
-			ProjectID: plan.ProjectID.ValueString(),
+			Region: plan.Region.ValueString(),
+			APIKey: plan.ApiKey.ValueString(),
+			Tags:   plan.Tags.ValueString(),
 		}
 	case "logentries":
 		request = model.LogRequest{
