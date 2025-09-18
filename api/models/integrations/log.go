@@ -16,6 +16,7 @@ type LogRequest struct {
 	PrivateKeyID      string `json:"private_key_id,omitempty"`
 	ProjectID         string `json:"project_id,omitempty"`
 	Region            string `json:"region,omitempty"`
+	Retention         int64  `json:"retention,omitempty"`
 	SecretAccessKey   string `json:"secret_access_key,omitempty"`
 	Sourcetype        string `json:"sourcetype,omitempty"`
 	Subsystem         string `json:"subsystem,omitempty"`
@@ -48,6 +49,7 @@ type LogConfigResponse struct {
 	PrivateKeyID      *string `json:"private_key_id,omitempty"`
 	ProjectID         *string `json:"project_id,omitempty"`
 	Region            *string `json:"region,omitempty"`
+	Retention         *int64  `json:"retention,omitempty"`
 	SecretAccessKey   *string `json:"secret_access_key,omitempty"`
 	Sourcetype        *string `json:"sourcetype,omitempty"`
 	Subsystem         *string `json:"subsystem,omitempty"`
