@@ -159,16 +159,28 @@ func (r *integrationLogResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"project_id": schema.StringAttribute{
 				Optional:    true,
-				Description: "The project ID for the integration service. (Datadog)",
+				Computed:    true,
+				Description: "The project ID for the integration service. (Stackdriver)",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"private_key": schema.StringAttribute{
 				Optional:    true,
+				Computed:    true,
 				Sensitive:   true,
 				Description: "The private API key used for authentication. (Stackdriver, Coralogix)",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"client_email": schema.StringAttribute{
 				Optional:    true,
+				Computed:    true,
 				Description: "The client email. (Stackdriver)",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"host": schema.StringAttribute{
 				Optional:    true,
@@ -186,8 +198,12 @@ func (r *integrationLogResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"private_key_id": schema.StringAttribute{
 				Optional:    true,
+				Computed:    true,
 				Sensitive:   true,
 				Description: "Private key identifier. (Stackdriver)",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"credentials": schema.StringAttribute{
 				Optional:    true,
@@ -280,6 +296,7 @@ func (r *integrationLogResource) Create(ctx context.Context, req resource.Create
 	}
 
 	plan.ID = types.StringValue(id)
+	r.computedValues(&plan)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -342,6 +359,7 @@ func (r *integrationLogResource) Update(ctx context.Context, req resource.Update
 		return
 	}
 
+	r.computedValues(&plan)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -369,6 +387,29 @@ func (r *integrationLogResource) Delete(ctx context.Context, req resource.Delete
 		return
 	}
 	resp.State.RemoveResource(ctx)
+}
+
+// Compute values that are not user set to keep backwards compatibility
+func (r *integrationLogResource) computedValues(resourceModel *integrationLogResourceModel) {
+	if resourceModel.Name.ValueString() == "coralogix" {
+		resourceModel.ProjectID = types.StringNull()
+		resourceModel.ClientEmail = types.StringNull()
+		resourceModel.PrivateKeyID = types.StringNull()
+	} else if resourceModel.Name.ValueString() != "stackdriver" {
+		resourceModel.ProjectID = types.StringNull()
+		resourceModel.PrivateKey = types.StringNull()
+		resourceModel.ClientEmail = types.StringNull()
+		resourceModel.PrivateKeyID = types.StringNull()
+	} else if resourceModel.Name.ValueString() == "stackdriver" {
+		if resourceModel.Credentials.ValueString() != "" {
+			resourceModel.ProjectID = types.StringNull()
+			resourceModel.PrivateKey = types.StringNull()
+			resourceModel.ClientEmail = types.StringNull()
+			resourceModel.PrivateKeyID = types.StringNull()
+		} else {
+			resourceModel.PrivateKeyID = types.StringValue("")
+		}
+	}
 }
 
 // Handle data conversion from API response to resource model
@@ -414,10 +455,11 @@ func (r *integrationLogResource) populateResourceModel(resourceModel *integratio
 		resourceModel.Token = types.StringValue(*data.Config.Token)
 		resourceModel.SourceType = types.StringValue(*data.Config.Sourcetype)
 	case "stackdriver":
-		resourceModel.ClientEmail = types.StringValue(*data.Config.ClientEmail)
-		resourceModel.PrivateKeyID = types.StringValue(*data.Config.PrivateKeyID)
-		resourceModel.PrivateKey = types.StringValue(*data.Config.PrivateKey)
-		resourceModel.ProjectID = types.StringValue(*data.Config.ProjectID)
+		if resourceModel.Credentials.ValueString() == "" {
+			resourceModel.ClientEmail = types.StringValue(*data.Config.ClientEmail)
+			resourceModel.PrivateKey = types.StringValue(*data.Config.PrivateKey)
+			resourceModel.ProjectID = types.StringValue(*data.Config.ProjectID)
+		}
 	}
 }
 
