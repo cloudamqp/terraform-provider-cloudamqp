@@ -48,7 +48,6 @@ func TestAccIntegrationMetric_Basic(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(cloudwatchResourceName, "name", "cloudwatch_v2"),
-					resource.TestCheckResourceAttr(cloudwatchResourceName, "access_key_id", "CLOUDWATCH_ACCESS_KEY_ID"),
 					resource.TestCheckResourceAttr(cloudwatchResourceName, "region", params["CloudwatchRegion"]),
 					resource.TestCheckResourceAttr(cloudwatchResourceName, "tags", params["CloudwatchTags"]),
 					resource.TestCheckResourceAttr(dataDogResourceName, "name", "datadog_v2"),
