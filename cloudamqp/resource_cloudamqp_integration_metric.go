@@ -7,385 +7,497 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/integrations"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
-func resourceIntegrationMetric() *schema.Resource {
-	return &schema.Resource{
-		CreateContext: resourceIntegrationMetricCreate,
-		ReadContext:   resourceIntegrationMetricRead,
-		UpdateContext: resourceIntegrationMetricUpdate,
-		DeleteContext: resourceIntegrationMetricDelete,
-		Importer: &schema.ResourceImporter{
-			StateContext: schema.ImportStatePassthroughContext,
-		},
-		Schema: map[string]*schema.Schema{
-			"instance_id": {
-				Type:        schema.TypeInt,
+var (
+	_ resource.Resource                = &integrationMetricResource{}
+	_ resource.ResourceWithConfigure   = &integrationMetricResource{}
+	_ resource.ResourceWithImportState = &integrationMetricResource{}
+)
+
+type integrationMetricResource struct {
+	client *api.API
+}
+
+func NewIntegrationMetricResource() resource.Resource {
+	return &integrationMetricResource{}
+}
+
+type integrationMetricResourceModel struct {
+	ID              types.String `tfsdk:"id"`
+	InstanceID      types.Int64  `tfsdk:"instance_id"`
+	Name            types.String `tfsdk:"name"`
+	AccessKeyID     types.String `tfsdk:"access_key_id"`
+	ApiKey          types.String `tfsdk:"api_key"`
+	ClientEmail     types.String `tfsdk:"client_email"`
+	Credentials     types.String `tfsdk:"credentials"`
+	Email           types.String `tfsdk:"email"`
+	IAMExternalID   types.String `tfsdk:"iam_external_id"`
+	IAMRole         types.String `tfsdk:"iam_role"`
+	IncludeAdQueues types.Bool   `tfsdk:"include_ad_queues"`
+	HostPort        types.String `tfsdk:"host_port"`
+	PrivateKey      types.String `tfsdk:"private_key"`
+	PrivateKeyID    types.String `tfsdk:"private_key_id"`
+	ProjectID       types.String `tfsdk:"project_id"`
+	QueueAllowlist  types.String `tfsdk:"queue_allowlist"`
+	Region          types.String `tfsdk:"region"`
+	Tags            types.String `tfsdk:"tags"`
+	Token           types.String `tfsdk:"token"`
+	SecretAccessKey types.String `tfsdk:"secret_access_key"`
+	SourceType      types.String `tfsdk:"sourcetype"`
+	VhostAllowlist  types.String `tfsdk:"vhost_allowlist"`
+}
+
+func (r *integrationMetricResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = "cloudamqp_integration_metric"
+}
+
+func (r *integrationMetricResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+	client, ok := req.ProviderData.(*api.API)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Provider Data Type",
+			fmt.Sprintf("Expected *api.API, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+		return
+	}
+	r.client = client
+}
+
+func (r *integrationMetricResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: "Resource ID of the integration metric",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"instance_id": schema.Int64Attribute{
 				Required:    true,
-				ForceNew:    true,
 				Description: "Instance identifier",
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.RequiresReplace(),
+				},
 			},
-			"name": {
-				Type:             schema.TypeString,
-				Required:         true,
-				Description:      "The name of metrics integration",
-				ValidateDiagFunc: validateIntegrationMetricName(),
+			"name": schema.StringAttribute{
+				Required:    true,
+				Description: "The name of log integration",
+				Validators: []validator.String{
+					stringvalidator.OneOf(
+						"cloudwatch",
+						"cloudwatch_v2",
+						"datadog",
+						"datadog_v2",
+						"librato",
+						"newrelic_v2",
+						"splunk",
+						"stackdriver",
+					),
+				},
 			},
-			"region": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "AWS region for Cloudwatch and [US/EU] for Data dog/New relic. (Cloudwatch, Data Dog, New Relic)",
-			},
-			"access_key_id": {
-				Type:        schema.TypeString,
+			"access_key_id": schema.StringAttribute{
 				Optional:    true,
 				Description: "AWS access key identifier. (Cloudwatch)",
 			},
-			"secret_access_key": {
-				Type:        schema.TypeString,
+			"api_key": schema.StringAttribute{
 				Optional:    true,
 				Sensitive:   true,
-				Description: "AWS secret key. (Cloudwatch)",
+				Description: "The API key for the integration service. (Librato, Data Dog, New Relic)",
 			},
-			"iam_role": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "The ARN of the role to be assumed when publishing metrics. (Cloudwatch)",
-			},
-			"iam_external_id": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "External identifier that match the role you created. (Cloudwatch)",
-			},
-			"api_key": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Sensitive:   true,
-				Description: "The API key for the integration service. (Librato)",
-			},
-			"email": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "The email address registred for the integration service. (Librato)",
-			},
-			"license_key": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Sensitive:   true,
-				Description: "The license key registred for the integration service. (New Relic)",
-			},
-			"tags": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "(optional) tags. E.g. env=prod,region=europe",
-			},
-			"queue_whitelist": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Description:   "**Deprecated**",
-				Deprecated:    "use queue_allowlist instead",
-				ConflictsWith: []string{"queue_allowlist"},
-			},
-			"vhost_whitelist": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Description:   "**Deprecated**",
-				Deprecated:    "use vhost_allowlist instead",
-				ConflictsWith: []string{"vhost_allowlist"},
-			},
-			"queue_allowlist": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Description:   "(optional) allowlist using regular expression",
-				ConflictsWith: []string{"queue_whitelist"},
-			},
-			"vhost_allowlist": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Description:   "(optional) allowlist using regular expression",
-				ConflictsWith: []string{"vhost_whitelist"},
-			},
-			"project_id": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: "Project ID. (Stackdriver)",
-			},
-			"private_key": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Sensitive:   true,
-				Description: "The private key. (Stackdriver)",
-			},
-			"client_email": {
-				Type:        schema.TypeString,
+			"client_email": schema.StringAttribute{
 				Optional:    true,
 				Computed:    true,
 				Description: "The client email. (Stackdriver)",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
-			"private_key_id": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Sensitive:   true,
-				Description: "Private key identifier. (Stackdriver)",
-			},
-			"credentials": {
-				Type:        schema.TypeString,
+			"credentials": schema.StringAttribute{
 				Optional:    true,
 				Sensitive:   true,
 				Description: "Base64Encoded credentials. (Stackdriver)",
 			},
-			"include_ad_queues": {
-				Type:        schema.TypeBool,
+			"email": schema.StringAttribute{
+				Optional:    true,
+				Description: "The email address registred for the integration service. (Librato)",
+			},
+			"iam_external_id": schema.StringAttribute{
+				Optional:    true,
+				Description: "External identifier that match the role you created. (Cloudwatch)",
+			},
+			"iam_role": schema.StringAttribute{
+				Optional:    true,
+				Description: "The ARN of the role to be assumed when publishing metrics. (Cloudwatch)",
+			},
+			"include_ad_queues": schema.BoolAttribute{
 				Optional:    true,
 				Description: "(optional) Include Auto-Delete queues",
-				Default:     false,
+			},
+			"host_port": schema.StringAttribute{
+				Optional:    true,
+				Description: "The host and port of the monitoring service. (Splunk)",
+			},
+			"private_key": schema.StringAttribute{
+				Optional:    true,
+				Computed:    true,
+				Sensitive:   true,
+				Description: "The private key. (Stackdriver)",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"private_key_id": schema.StringAttribute{
+				Optional:    true,
+				Computed:    true,
+				Sensitive:   true,
+				Description: "Private key identifier. (Stackdriver)",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"project_id": schema.StringAttribute{
+				Optional:    true,
+				Computed:    true,
+				Description: "Project ID. (Stackdriver)",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"queue_allowlist": schema.StringAttribute{
+				Optional:    true,
+				Description: "(optional) allowlist using regular expression",
+			},
+			"region": schema.StringAttribute{
+				Optional:    true,
+				Description: "AWS region for Cloudwatch and [US/EU] for Data dog/New relic. (Cloudwatch, Data Dog, New Relic)",
+			},
+			"secret_access_key": schema.StringAttribute{
+				Optional:    true,
+				Sensitive:   true,
+				Description: "AWS secret key. (Cloudwatch)",
+			},
+			"sourcetype": schema.StringAttribute{
+				Optional:    true,
+				Description: "Sourcetype of the metric data. (Splunk)",
+			},
+			"tags": schema.StringAttribute{
+				Optional:    true,
+				Description: "(optional) tags. E.g. env=prod,region=europe",
+			},
+			"token": schema.StringAttribute{
+				Optional:    true,
+				Sensitive:   true,
+				Description: "The token for the integration service. (Splunk)",
+			},
+			"vhost_allowlist": schema.StringAttribute{
+				Optional:    true,
+				Description: "(optional) allowlist using regular expression",
 			},
 		},
 	}
 }
 
-func resourceIntegrationMetricCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	var (
-		api        = meta.(*api.API)
-		intName    = strings.ToLower(d.Get("name").(string))
-		commonKeys = []string{"tags", "queue_allowlist", "vhost_allowlist"}
-		keys       = integrationMetricKeys(intName)
-		params     = make(map[string]any)
-	)
-
-	v := d.Get("credentials")
-	if intName == "stackdriver" && v != "" {
-		uDec, err := base64.URLEncoding.DecodeString(v.(string))
-		if err != nil {
-			return diag.Errorf("log integration failed, error decoding private_key: %s ", err.Error())
-		}
-		var jsonMap map[string]any
-		json.Unmarshal([]byte(uDec), &jsonMap)
-		for _, k := range keys {
-			params[k] = jsonMap[k]
-		}
-	} else {
-		for _, k := range keys {
-			v := d.Get(k)
-			if v == "" || v == nil {
-				continue
-			} else {
-				params[k] = v
-			}
-		}
+func (r *integrationMetricResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	tflog.Info(ctx, fmt.Sprintf("ImportState: ID=%s", req.ID))
+	if !strings.Contains(req.ID, ",") {
+		resp.Diagnostics.AddError("Invalid import ID format", "Expected format: {resource_id},{instance_id}")
+		return
 	}
 
-	if d.Get("include_ad_queues").(bool) {
-		params["include_ad_queues"] = "true"
+	idSplit := strings.Split(req.ID, ",")
+	if len(idSplit) != 2 {
+		resp.Diagnostics.AddError("Invalid import ID format", "Expected format: {resource_id},{instance_id}")
+		return
 	}
-
-	// Add commons keys if present
-	for _, k := range commonKeys {
-		v := d.Get(k)
-		if k == "queue_allowlist" {
-			k = "queue_regex"
-		} else if k == "vhost_allowlist" {
-			k = "vhost_regex"
-		}
-
-		if v == "" || v == nil {
-			continue
-		} else {
-			params[k] = v
-		}
-	}
-
-	data, err := api.CreateIntegration(ctx, d.Get("instance_id").(int), "metrics", intName, params)
+	instanceID, err := strconv.Atoi(idSplit[1])
 	if err != nil {
-		return diag.FromErr(err)
-	}
-	if data["id"] != nil {
-		d.SetId(data["id"].(string))
+		resp.Diagnostics.AddError("Invalid instance_id in import ID", fmt.Sprintf("Could not convert instance_id to int: %s", err))
+		return
 	}
 
-	return resourceIntegrationMetricRead(ctx, d, meta)
+	resp.State.SetAttribute(ctx, path.Root("id"), idSplit[0])
+	resp.State.SetAttribute(ctx, path.Root("instance_id"), int64(instanceID))
 }
 
-func resourceIntegrationMetricRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	if strings.Contains(d.Id(), ",") {
-		tflog.Info(ctx, fmt.Sprintf("import resource with indentifier: %s", d.Id()))
-		s := strings.Split(d.Id(), ",")
-		d.SetId(s[0])
-		instanceID, _ := strconv.Atoi(s[1])
-		d.Set("instance_id", instanceID)
-	}
-	if d.Get("instance_id").(int) == 0 {
-		return diag.Errorf("missing instance identifier: {resource_id},{instance_id}")
+func (r *integrationMetricResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan integrationMetricResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
-	api := meta.(*api.API)
-	data, err := api.ReadIntegration(ctx, d.Get("instance_id").(int), "metrics", d.Id())
+	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
+	defer cancel()
+	instanceID := plan.InstanceID.ValueInt64()
+	type_ := plan.Name.ValueString()
+	request := r.populateRequest(&plan)
 
+	id, err := r.client.CreateIntegrationMetric(timeoutCtx, instanceID, type_, request)
 	if err != nil {
-		return diag.FromErr(err)
+		resp.Diagnostics.AddError(
+			"Failed to Create Metric Integration",
+			fmt.Sprintf("Could not create metric integration: %s", err),
+		)
+		return
+	}
+
+	plan.ID = types.StringValue(id)
+	r.computedValues(&plan)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+}
+
+func (r *integrationMetricResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state integrationMetricResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, 2*time.Minute)
+	defer cancel()
+	instanceID := state.InstanceID.ValueInt64()
+	metricID := state.ID.ValueString()
+
+	data, err := r.client.ReadIntegrationMetric(timeoutCtx, instanceID, metricID)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Failed to Read Metric Integration",
+			fmt.Sprintf("Could not read metric integration: %s", err),
+		)
+		return
 	}
 
 	// Handle resource drift and trigger re-creation if resource been deleted outside the provider
 	if data == nil {
-		d.SetId("")
-		return nil
+		resp.State.RemoveResource(ctx)
+		return
 	}
 
-	d.Set("include_ad_queues", false)
-
-	for k, v := range data {
-		if k == "type" {
-			d.Set("name", v)
-		}
-		if validateIntegrationMetricSchemaAttribute(k) {
-			if k == "queue_regex" {
-				k = "queue_allowlist"
-			} else if k == "vhost_regex" {
-				k = "vhost_allowlist"
-			} else if k == "include_ad_queues" {
-				v = v.(string) == "true"
-			}
-
-			if err = d.Set(k, v); err != nil {
-				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
-			}
-		}
+	r.populateResourceModel(&state, data)
+	r.computedValues(&state)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	return nil
 }
 
-func resourceIntegrationMetricUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	var (
-		api        = meta.(*api.API)
-		intName    = strings.ToLower(d.Get("name").(string))
-		commonKeys = []string{"tags", "queue_allowlist", "vhost_allowlist"}
-		keys       = integrationMetricKeys(intName)
-		params     = make(map[string]any)
-	)
-
-	v := d.Get("credentials")
-	if intName == "stackdriver" && v != "" {
-		uDec, err := base64.URLEncoding.DecodeString(v.(string))
-		if err != nil {
-			return diag.Errorf("log integration failed, error decoding private_key: %s ", err.Error())
-		}
-		var jsonMap map[string]any
-		json.Unmarshal([]byte(uDec), &jsonMap)
-		for _, k := range keys {
-			params[k] = jsonMap[k]
-		}
-	} else {
-		for _, k := range keys {
-			v := d.Get(k)
-			if v == "" || v == nil {
-				continue
-			} else {
-				params[k] = v
-			}
-		}
+func (r *integrationMetricResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan integrationMetricResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
-	if d.Get("include_ad_queues").(bool) {
-		params["include_ad_queues"] = "true"
-	}
+	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
+	defer cancel()
+	instanceID := plan.InstanceID.ValueInt64()
+	metricID := plan.ID.ValueString()
+	request := r.populateRequest(&plan)
 
-	// Add commons keys if present
-	for _, k := range commonKeys {
-		v := d.Get(k)
-		if k == "queue_allowlist" {
-			k = "queue_regex"
-		} else if k == "vhost_allowlist" {
-			k = "vhost_regex"
-		}
-
-		if v == "" || v == nil {
-			continue
-		} else {
-			params[k] = v
-		}
-	}
-
-	err := api.UpdateIntegration(ctx, d.Get("instance_id").(int), "metrics", d.Id(), params)
+	err := r.client.UpdateIntegrationMetric(timeoutCtx, instanceID, metricID, request)
 	if err != nil {
-		return diag.FromErr(err)
+		resp.Diagnostics.AddError(
+			"Failed to Update Metric Integration",
+			fmt.Sprintf("Could not update metric integration: %s", err),
+		)
+		return
 	}
 
-	return resourceIntegrationMetricRead(ctx, d, meta)
-}
-
-func resourceIntegrationMetricDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	api := meta.(*api.API)
-	if err := api.DeleteIntegration(ctx, d.Get("instance_id").(int), "metrics", d.Id()); err != nil {
-		return diag.FromErr(err)
-	}
-	return diag.Diagnostics{}
-}
-
-func validateIntegrationMetricName() schema.SchemaValidateDiagFunc {
-	return validation.ToDiagFunc(validation.StringInSlice([]string{
-		"cloudwatch",
-		"cloudwatch_v2",
-		"librato",
-		"datadog",
-		"datadog_v2",
-		"newrelic",
-		"newrelic_v2",
-		"stackdriver",
-	}, true))
-}
-
-func validateIntegrationMetricSchemaAttribute(key string) bool {
-	switch key {
-	case "region",
-		"access_key_id",
-		"secret_access_key",
-		"iam_role",
-		"iam_external_id",
-		"tags",
-		"queue_regex",
-		"vhost_regex",
-		"include_ad_queues",
-		"api_key",
-		"email",
-		"license_key",
-		"project_id",
-		"private_key",
-		"client_email",
-		"private_key_id":
-		return true
-	default:
-		return false
+	r.computedValues(&plan)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 }
 
-func integrationMetricKeys(intName string) []string {
-	switch intName {
-	case "cloudwatch":
-		return []string{"region", "access_key_id", "secret_access_key", "iam_role", "iam_external_id"}
-	case "cloudwatch_v2":
-		return []string{"region", "access_key_id", "secret_access_key", "iam_role", "iam_external_id"}
+func (r *integrationMetricResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state integrationMetricResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, 2*time.Minute)
+	defer cancel()
+	instanceID := state.InstanceID.ValueInt64()
+	metricID := state.ID.ValueString()
+
+	err := r.client.DeleteIntegrationMetric(timeoutCtx, instanceID, metricID)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Failed to Delete Metric Integration",
+			fmt.Sprintf("Could not delete metric integration: %s", err),
+		)
+		return
+	}
+}
+
+// Compute values that are not user set to keep backwards compatibility
+func (r *integrationMetricResource) computedValues(resourceModel *integrationMetricResourceModel) {
+	if resourceModel.Name.ValueString() != "stackdriver" {
+		resourceModel.ProjectID = types.StringNull()
+		resourceModel.PrivateKey = types.StringNull()
+		resourceModel.ClientEmail = types.StringNull()
+		resourceModel.PrivateKeyID = types.StringNull()
+	} else if resourceModel.Name.ValueString() == "stackdriver" {
+		if resourceModel.Credentials.ValueString() != "" {
+			resourceModel.ProjectID = types.StringNull()
+			resourceModel.PrivateKey = types.StringNull()
+			resourceModel.ClientEmail = types.StringNull()
+			resourceModel.PrivateKeyID = types.StringNull()
+		} else {
+			resourceModel.PrivateKeyID = types.StringValue("")
+		}
+	}
+}
+
+// Handle data conversion from API response to resource model
+func (r *integrationMetricResource) populateResourceModel(resourceModel *integrationMetricResourceModel, data *model.MetricResponse) {
+	resourceModel.Name = types.StringValue(data.Type)
+
+	switch data.Type {
+	case "cloudwatch", "cloudwatch_v2":
+		resourceModel.Region = types.StringValue(*data.Config.Region)
+		if data.Config.AccessKeyID != nil {
+			resourceModel.AccessKeyID = types.StringValue(*data.Config.AccessKeyID)
+		}
+		if data.Config.SecretAccessKey != nil {
+			resourceModel.SecretAccessKey = types.StringValue(*data.Config.SecretAccessKey)
+		}
+		if data.Config.IAMExternalID != nil {
+			resourceModel.IAMExternalID = types.StringValue(*data.Config.IAMExternalID)
+		}
+		if data.Config.IAMRole != nil {
+			resourceModel.IAMRole = types.StringValue(*data.Config.IAMRole)
+		}
+	case "datadog", "datadog_v2":
+		resourceModel.Region = types.StringValue(*data.Config.Region)
+		resourceModel.ApiKey = types.StringValue(*data.Config.APIKey)
 	case "librato":
-		return []string{"email", "api_key"}
-	case "datadog":
-		return []string{"api_key", "region"}
-	case "datadog_v2":
-		return []string{"api_key", "region"}
-	case "newrelic":
-		return []string{"license_key"}
+		resourceModel.Email = types.StringValue(*data.Config.Email)
+		resourceModel.ApiKey = types.StringValue(*data.Config.APIKey)
 	case "newrelic_v2":
-		return []string{"api_key", "region"}
+		resourceModel.ApiKey = types.StringValue(*data.Config.APIKey)
+		resourceModel.Region = types.StringValue(*data.Config.Region)
+	case "splunk":
+		resourceModel.HostPort = types.StringValue(*data.Config.HostPort)
+		resourceModel.Token = types.StringValue(*data.Config.Token)
+		resourceModel.SourceType = types.StringValue(*data.Config.Sourcetype)
 	case "stackdriver":
-		return []string{"client_email", "private_key_id", "private_key", "project_id"}
-	default:
-		return []string{"region", "access_keys", "secret_access_keys", "email", "api_key", "license_key"}
+		if resourceModel.Credentials.ValueString() == "" {
+			resourceModel.ClientEmail = types.StringValue(*data.Config.ClientEmail)
+			resourceModel.PrivateKey = types.StringValue(*data.Config.PrivateKey)
+			resourceModel.ProjectID = types.StringValue(*data.Config.ProjectID)
+		}
 	}
+
+	// Set commons values
+	if data.Config.IncludeAdQueues != nil {
+		resourceModel.IncludeAdQueues = types.BoolValue(*data.Config.IncludeAdQueues)
+	} else {
+		resourceModel.IncludeAdQueues = types.BoolNull()
+	}
+	if data.Config.QueueRegex != nil {
+		resourceModel.QueueAllowlist = types.StringValue(*data.Config.QueueRegex)
+	} else {
+		resourceModel.QueueAllowlist = types.StringNull()
+	}
+	if data.Config.VhostRegex != nil {
+		resourceModel.VhostAllowlist = types.StringValue(*data.Config.VhostRegex)
+	} else {
+		resourceModel.VhostAllowlist = types.StringNull()
+	}
+	if data.Config.Tags != nil {
+		resourceModel.Tags = types.StringValue(strings.Join(*data.Config.Tags, ","))
+	} else {
+		resourceModel.Tags = types.StringNull()
+	}
+}
+
+// Handle data conversion from resource model to API request
+func (r *integrationMetricResource) populateRequest(plan *integrationMetricResourceModel) model.MetricRequest {
+	var request model.MetricRequest
+
+	switch plan.Name.ValueString() {
+	case "cloudwatch", "cloudwatch_v2":
+		request.Region = plan.Region.ValueString()
+		if !plan.AccessKeyID.IsUnknown() {
+			request.AccessKeyID = plan.AccessKeyID.ValueString()
+		}
+		if !plan.SecretAccessKey.IsUnknown() {
+			request.SecretAccessKey = plan.SecretAccessKey.ValueString()
+		}
+		if !plan.IAMExternalID.IsUnknown() {
+			request.IAMExternalID = plan.IAMExternalID.ValueString()
+		}
+		if !plan.IAMRole.IsUnknown() {
+			request.IAMRole = plan.IAMRole.ValueString()
+		}
+	case "datadog", "datadog_v2":
+		request.APIKey = plan.ApiKey.ValueString()
+		request.Region = plan.Region.ValueString()
+	case "librato":
+		request.APIKey = plan.ApiKey.ValueString()
+		request.Email = plan.Email.ValueString()
+	case "newrelic_v2":
+		request.APIKey = plan.ApiKey.ValueString()
+		request.Region = plan.Region.ValueString()
+	case "splunk":
+		request.HostPort = plan.HostPort.ValueString()
+		request.Sourcetype = plan.SourceType.ValueString()
+		request.Token = plan.Token.ValueString()
+	case "stackdriver":
+		if plan.Credentials.ValueString() != "" {
+			uDec, _ := base64.URLEncoding.DecodeString(plan.Credentials.ValueString())
+			var jsonMap map[string]any
+			json.Unmarshal([]byte(uDec), &jsonMap)
+			request.ClientEmail = jsonMap["client_email"].(string)
+			request.PrivateKeyID = jsonMap["private_key_id"].(string)
+			request.PrivateKey = jsonMap["private_key"].(string)
+			request.ProjectID = jsonMap["project_id"].(string)
+		} else {
+			request.ClientEmail = plan.ClientEmail.ValueString()
+			request.PrivateKeyID = plan.PrivateKeyID.ValueString()
+			request.PrivateKey = plan.PrivateKey.ValueString()
+			request.ProjectID = plan.ProjectID.ValueString()
+		}
+	}
+
+	// Set common values
+	if !plan.IncludeAdQueues.IsUnknown() {
+		request.IncludeAdQueues = plan.IncludeAdQueues.ValueBool()
+	}
+	if !plan.QueueAllowlist.IsUnknown() {
+		request.QueueRegex = plan.QueueAllowlist.ValueString()
+	}
+	if !plan.Tags.IsUnknown() {
+		request.Tags = strings.Split(plan.Tags.ValueString(), ",")
+	}
+	if !plan.VhostAllowlist.IsUnknown() {
+		request.VhostRegex = plan.VhostAllowlist.ValueString()
+	}
+
+	return request
 }
