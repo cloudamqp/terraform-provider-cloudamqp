@@ -93,7 +93,8 @@ func TestAccVpc_DifferentSubnets(t *testing.T) {
 	}
 
 	for i, subnet := range subnets {
-		t.Run(subnet, func(t *testing.T) {
+		replacedSubnet := strings.ReplaceAll(subnet, "/", "_")
+		t.Run(replacedSubnet, func(t *testing.T) {
 			params := map[string]string{
 				"VpcName":   fmt.Sprintf("TestAccVpc_Subnet_%d", i),
 				"VpcRegion": "amazon-web-services::us-east-1",
@@ -239,7 +240,8 @@ func TestAccVpc_InvalidCIDR(t *testing.T) {
 	}
 
 	for _, cidr := range invalidCIDRs {
-		t.Run(cidr, func(t *testing.T) {
+		replacedCidr := strings.ReplaceAll(cidr, "/", "_")
+		t.Run(replacedCidr, func(t *testing.T) {
 			params := map[string]string{
 				"VpcName":   "TestAccVpc_InvalidCIDR",
 				"VpcRegion": "amazon-web-services::us-east-1",
