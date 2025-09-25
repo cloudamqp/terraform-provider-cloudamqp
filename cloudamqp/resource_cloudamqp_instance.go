@@ -127,7 +127,7 @@ func resourceInstance() *schema.Resource {
 			"preferred_az": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Computed:    true,
+				ForceNew:    true,
 				Description: "Preferred availability zone for the instance(s), one entry per node in the cluster",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
