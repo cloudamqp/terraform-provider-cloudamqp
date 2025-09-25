@@ -211,10 +211,9 @@ The following arguments are supported:
                           false.
 * `copy_settings`       - (Optional) Copy settings from one CloudAMQP instance to a new. Consists of
                           the block documented below.
-* `preferred_az`        - (Optional) The AZs you would like your nodes to end up in. Provide the same number 
-                          of entries for the number of nodes in the cluster.
-                          
-  ***Note:*** Preferred_az can only be set upon instance creation as of now. Changing this will enforce replacement.
+* `preferred_az`        - (Optional) The AZs to place your nodes in. Each entry corresponds to a server in your cluster, so for a 3 node cluster, provide 3 AZs in the list.
+
+  ***Note:*** Preferred_az can only be set upon instance creation as of now and the result is not guaranteed, on eventual failed resource allocation in the Zone, CloudAMQP will fallback to a different zone.
 
 ___
 
