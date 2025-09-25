@@ -1,0 +1,6 @@
+resource "cloudamqp_integration_metric_prometheus" "newrelic_v3_notags" {
+  instance_id = {{.InstanceID}}
+  newrelic_v3 {
+    api_key = "{{.NewRelicApiKey}}"
+  }
+}

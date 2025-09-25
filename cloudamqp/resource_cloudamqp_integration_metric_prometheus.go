@@ -31,6 +31,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 			"newrelic_v3": {
 				Type:     schema.TypeSet,
 				Optional: true,
+				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
@@ -58,8 +59,15 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 
 	if d.Get("newrelic_v3") != nil {
 		intName = "newrelic_v3"
-		params["api_key"] = d.Get("newrelic_v3").(*schema.Set).List()[0].(map[string]any)["api_key"]
-		params["tags"] = d.Get("newrelic_v3").(*schema.Set).List()[0].(map[string]any)["tags"]
+		newrelicConfig := d.Get("newrelic_v3").(*schema.Set).List()[0].(map[string]any)
+		params["api_key"] = newrelicConfig["api_key"]
+		if tags := newrelicConfig["tags"]; tags != nil && tags != "" {
+			params["tags"] = tags
+		}
+	}
+
+	if intName == "" {
+		return diag.Errorf("no integration configuration provided")
 	}
 
 	data, err := api.CreateIntegration(ctx, d.Get("instance_id").(int), "metrics", intName, params)
@@ -99,20 +107,16 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 	}
 
 	name := strings.ToLower(data["type"].(string))
-	d.Set("name", name)
 	if name == "newrelic_v3" {
+		newRelicV3 := []map[string]any{{}}
 		if _, ok := data["api_key"]; ok {
-			newRelicV3 := []map[string]any{
-				{
-					"api_key": data["api_key"],
-				},
-			}
-			if tags, ok := data["tags"]; ok {
-				newRelicV3[0]["tags"] = tags
-			}
-			if err := d.Set("newrelic_v3", newRelicV3); err != nil {
-				return diag.Errorf("error setting newrelic_v3 for resource %s: %s", d.Id(), err)
-			}
+			newRelicV3[0]["api_key"] = data["api_key"]
+		}
+		if tags, ok := data["tags"]; ok {
+			newRelicV3[0]["tags"] = tags
+		}
+		if err := d.Set("newrelic_v3", newRelicV3); err != nil {
+			return diag.Errorf("error setting newrelic_v3 for resource %s: %s", d.Id(), err)
 		}
 	}
 
@@ -126,8 +130,11 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 	)
 
 	if d.Get("newrelic_v3") != nil {
-		params["api_key"] = d.Get("newrelic_v3").(*schema.Set).List()[0].(map[string]any)["api_key"]
-		params["tags"] = d.Get("newrelic_v3").(*schema.Set).List()[0].(map[string]any)["tags"]
+		newrelicConfig := d.Get("newrelic_v3").(*schema.Set).List()[0].(map[string]any)
+		params["api_key"] = newrelicConfig["api_key"]
+		if tags := newrelicConfig["tags"]; tags != nil && tags != "" {
+			params["tags"] = tags
+		}
 	}
 
 	err := api.UpdateIntegration(ctx, d.Get("instance_id").(int), "metrics", d.Id(), params)
