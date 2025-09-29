@@ -37,9 +37,8 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
-							Type:      schema.TypeString,
-							Required:  true,
-							Sensitive: true,
+							Type:     schema.TypeString,
+							Required: true,
 						},
 						"tags": {
 							Type:        schema.TypeString,
@@ -57,9 +56,8 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
-							Type:      schema.TypeString,
-							Required:  true,
-							Sensitive: true,
+							Type:     schema.TypeString,
+							Required: true,
 						},
 						"region": {
 							Type:         schema.TypeString,
@@ -91,8 +89,10 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		intName = "newrelic_v3"
 		newrelicConfig := newrelicList[0].(map[string]any)
 		params["api_key"] = newrelicConfig["api_key"]
-		if tags := newrelicConfig["tags"]; tags != nil && tags != "" {
+		if tags := newrelicConfig["tags"]; tags != nil {
 			params["tags"] = tags
+		} else {
+			params["tags"] = ""
 		}
 	} else if datadogList := d.Get("datadog_v3").(*schema.Set).List(); len(datadogList) > 0 {
 		intName = "datadog_v3"
@@ -101,8 +101,10 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		if region := datadogConfig["region"]; region != nil && region != "" {
 			params["region"] = region
 		}
-		if tags := datadogConfig["tags"]; tags != nil && tags != "" {
+		if tags := datadogConfig["tags"]; tags != nil {
 			params["tags"] = tags
+		} else {
+			params["tags"] = ""
 		}
 	}
 
@@ -114,7 +116,7 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		d.SetId(data["id"].(string))
 	}
 
-	return nil
+	return resourceIntegrationMetricPrometheusRead(ctx, d, meta)
 }
 
 func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
@@ -141,6 +143,10 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		d.SetId("")
 		return nil
 	}
+
+	// Clear all blocks first
+	d.Set("newrelic_v3", nil)
+	d.Set("datadog_v3", nil)
 
 	name := strings.ToLower(data["type"].(string))
 	if name == "newrelic_v3" {
@@ -187,8 +193,10 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 	if newrelicList := d.Get("newrelic_v3").(*schema.Set).List(); len(newrelicList) > 0 {
 		newrelicConfig := newrelicList[0].(map[string]any)
 		params["api_key"] = newrelicConfig["api_key"]
-		if tags := newrelicConfig["tags"]; tags != nil && tags != "" {
+		if tags := newrelicConfig["tags"]; tags != nil {
 			params["tags"] = tags
+		} else {
+			params["tags"] = ""
 		}
 	} else if datadogList := d.Get("datadog_v3").(*schema.Set).List(); len(datadogList) > 0 {
 		datadogConfig := datadogList[0].(map[string]any)
@@ -196,8 +204,10 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 		if region := datadogConfig["region"]; region != nil && region != "" {
 			params["region"] = region
 		}
-		if tags := datadogConfig["tags"]; tags != nil && tags != "" {
+		if tags := datadogConfig["tags"]; tags != nil {
 			params["tags"] = tags
+		} else {
+			params["tags"] = ""
 		}
 	}
 
@@ -206,7 +216,7 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 		return diag.FromErr(err)
 	}
 
-	return nil
+	return resourceIntegrationMetricPrometheusRead(ctx, d, meta)
 }
 
 func resourceIntegrationMetricPrometheusDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
