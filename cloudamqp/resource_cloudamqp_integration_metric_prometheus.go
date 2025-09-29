@@ -150,6 +150,8 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		}
 		if tags, ok := data["tags"]; ok {
 			newRelicV3[0]["tags"] = tags
+		} else {
+			newRelicV3[0]["tags"] = ""
 		}
 		if err := d.Set("newrelic_v3", newRelicV3); err != nil {
 			return diag.Errorf("error setting newrelic_v3 for resource %s: %s", d.Id(), err)
@@ -164,6 +166,8 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		}
 		if tags, ok := data["tags"]; ok {
 			datadogV3[0]["tags"] = tags
+		} else {
+			datadogV3[0]["tags"] = ""
 		}
 		if err := d.Set("datadog_v3", datadogV3); err != nil {
 			return diag.Errorf("error setting datadog_v3 for resource %s: %s", d.Id(), err)
