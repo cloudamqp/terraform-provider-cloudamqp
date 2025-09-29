@@ -9,18 +9,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-// TestAccIntegrationMetricPrometheus_Basic: Add prometheus metric integrations and import.
-func TestAccIntegrationMetricPrometheus_Basic(t *testing.T) {
+// TestAccIntegrationMetricPrometheusNewRelicV3_Basic: Add NewRelic v3 prometheus metric integration and import.
+func TestAccIntegrationMetricPrometheusNewRelicV3_Basic(t *testing.T) {
 	var (
-		fileNames                      = []string{"instance", "integrations/metrics/integration_metric_prometheus"}
+		fileNames                      = []string{"instance", "integrations/metrics/integration_metric_prometheus_newrelic_v3"}
 		instanceResourceName           = "cloudamqp_instance.instance"
 		prometheusNewRelicResourceName = "cloudamqp_integration_metric_prometheus.newrelic_v3"
 
 		params = map[string]string{
-			"InstanceName":   "TestAccIntegrationMetricPrometheus_Basic",
+			"InstanceName":   "TestAccIntegrationMetricPrometheusNewRelicV3_Basic",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"NewRelicApiKey": os.Getenv("NEWRELIC_V3_APIKEY"),
+			"NewRelicApiKey": os.Getenv("NEWRELIC_APIKEY"),
 			"NewRelicTags":   "env=test,region=us1",
 		}
 	)
@@ -29,8 +29,7 @@ func TestAccIntegrationMetricPrometheus_Basic(t *testing.T) {
 		PreCheck: func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				ExpectNonEmptyPlan: true,
-				Config:             configuration.GetTemplatedConfig(t, fileNames, params),
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(prometheusNewRelicResourceName, "newrelic_v3.#", "1"),
@@ -47,18 +46,18 @@ func TestAccIntegrationMetricPrometheus_Basic(t *testing.T) {
 	})
 }
 
-// TestAccIntegrationMetricPrometheus_WithoutTags: Test prometheus integration without optional tags.
-func TestAccIntegrationMetricPrometheus_WithoutTags(t *testing.T) {
+// TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags: Test NewRelic v3 prometheus integration without optional tags.
+func TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags(t *testing.T) {
 	var (
-		fileNames                      = []string{"instance", "integrations/metrics/integration_metric_prometheus_notags"}
+		fileNames                      = []string{"instance", "integrations/metrics/integration_metric_prometheus_newrelic_v3_notags"}
 		instanceResourceName           = "cloudamqp_instance.instance"
 		prometheusNewRelicResourceName = "cloudamqp_integration_metric_prometheus.newrelic_v3_notags"
 
 		params = map[string]string{
-			"InstanceName":   "TestAccIntegrationMetricPrometheus_WithoutTags",
+			"InstanceName":   "TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"NewRelicApiKey": os.Getenv("NEWRELIC_V3_APIKEY"),
+			"NewRelicApiKey": os.Getenv("NEWRELIC_APIKEY"),
 		}
 	)
 
@@ -66,8 +65,7 @@ func TestAccIntegrationMetricPrometheus_WithoutTags(t *testing.T) {
 		PreCheck: func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				ExpectNonEmptyPlan: true,
-				Config:             configuration.GetTemplatedConfig(t, fileNames, params),
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(prometheusNewRelicResourceName, "newrelic_v3.#", "1"),
@@ -84,26 +82,26 @@ func TestAccIntegrationMetricPrometheus_WithoutTags(t *testing.T) {
 	})
 }
 
-// TestAccIntegrationMetricPrometheus_Update: Test updating prometheus integration.
-func TestAccIntegrationMetricPrometheus_Update(t *testing.T) {
+// TestAccIntegrationMetricPrometheusNewRelicV3_Update: Test updating NewRelic v3 prometheus integration.
+func TestAccIntegrationMetricPrometheusNewRelicV3_Update(t *testing.T) {
 	var (
-		fileNames                      = []string{"instance", "integrations/metrics/integration_metric_prometheus"}
+		fileNames                      = []string{"instance", "integrations/metrics/integration_metric_prometheus_newrelic_v3"}
 		instanceResourceName           = "cloudamqp_instance.instance"
 		prometheusNewRelicResourceName = "cloudamqp_integration_metric_prometheus.newrelic_v3"
 
 		paramsCreate = map[string]string{
-			"InstanceName":   "TestAccIntegrationMetricPrometheus_Update",
+			"InstanceName":   "TestAccIntegrationMetricPrometheusNewRelicV3_Update",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"NewRelicApiKey": os.Getenv("NEWRELIC_V3_APIKEY"),
+			"NewRelicApiKey": os.Getenv("NEWRELIC_APIKEY"),
 			"NewRelicTags":   "env=test,region=us1",
 		}
 
 		paramsUpdate = map[string]string{
-			"InstanceName":   "TestAccIntegrationMetricPrometheus_Update",
+			"InstanceName":   "TestAccIntegrationMetricPrometheusNewRelicV3_Update",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"NewRelicApiKey": os.Getenv("NEWRELIC_V3_APIKEY"),
+			"NewRelicApiKey": os.Getenv("NEWRELIC_APIKEY"),
 			"NewRelicTags":   "env=prod,region=eu1",
 		}
 	)
@@ -112,19 +110,143 @@ func TestAccIntegrationMetricPrometheus_Update(t *testing.T) {
 		PreCheck: func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				ExpectNonEmptyPlan: true,
-				Config:             configuration.GetTemplatedConfig(t, fileNames, paramsCreate),
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsCreate),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsCreate["InstanceName"]),
 					resource.TestCheckResourceAttr(prometheusNewRelicResourceName, "newrelic_v3.0.tags", paramsCreate["NewRelicTags"]),
 				),
 			},
 			{
-				ExpectNonEmptyPlan: true,
-				Config:             configuration.GetTemplatedConfig(t, fileNames, paramsUpdate),
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdate),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdate["InstanceName"]),
 					resource.TestCheckResourceAttr(prometheusNewRelicResourceName, "newrelic_v3.0.tags", paramsUpdate["NewRelicTags"]),
+				),
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusDatadogV3_Basic: Add Datadog v3 prometheus metric integration and import.
+func TestAccIntegrationMetricPrometheusDatadogV3_Basic(t *testing.T) {
+	var (
+		fileNames                     = []string{"instance", "integrations/metrics/integration_metric_prometheus_datadog_v3"}
+		instanceResourceName          = "cloudamqp_instance.instance"
+		prometheusDatadogResourceName = "cloudamqp_integration_metric_prometheus.datadog_v3"
+
+		params = map[string]string{
+			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Basic",
+			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":  "bunny-1",
+			"DatadogApiKey": os.Getenv("DATADOG_APIKEY"),
+			"DatadogRegion": "us1",
+			"DatadogTags":   "env=test,region=us1",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.#", "1"),
+					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.0.region", params["DatadogRegion"]),
+					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.0.tags", params["DatadogTags"]),
+				),
+			},
+			{
+				ResourceName:      prometheusDatadogResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusDatadogResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags: Test Datadog v3 prometheus integration without optional tags.
+func TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags(t *testing.T) {
+	var (
+		fileNames                     = []string{"instance", "integrations/metrics/integration_metric_prometheus_datadog_v3_notags"}
+		instanceResourceName          = "cloudamqp_instance.instance"
+		prometheusDatadogResourceName = "cloudamqp_integration_metric_prometheus.datadog_v3_notags"
+
+		params = map[string]string{
+			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags",
+			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":  "bunny-1",
+			"DatadogApiKey": os.Getenv("DATADOG_APIKEY"),
+			"DatadogRegion": "us1",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.#", "1"),
+					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.0.region", params["DatadogRegion"]),
+					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.0.tags", ""),
+				),
+			},
+			{
+				ResourceName:      prometheusDatadogResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusDatadogResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusDatadogV3_Update: Test updating Datadog v3 prometheus integration.
+func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
+	var (
+		fileNames                     = []string{"instance", "integrations/metrics/integration_metric_prometheus_datadog_v3"}
+		instanceResourceName          = "cloudamqp_instance.instance"
+		prometheusDatadogResourceName = "cloudamqp_integration_metric_prometheus.datadog_v3"
+
+		paramsCreate = map[string]string{
+			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Update",
+			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":  "bunny-1",
+			"DatadogApiKey": os.Getenv("DATADOG_APIKEY"),
+			"DatadogRegion": "us1",
+			"DatadogTags":   "env=test,region=us1",
+		}
+
+		paramsUpdate = map[string]string{
+			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Update",
+			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":  "bunny-1",
+			"DatadogApiKey": os.Getenv("DATADOG_APIKEY"),
+			"DatadogRegion": "us1",
+			"DatadogTags":   "env=prod,region=us1",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsCreate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsCreate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.0.region", paramsCreate["DatadogRegion"]),
+					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.0.tags", paramsCreate["DatadogTags"]),
+				),
+			},
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.0.region", paramsUpdate["DatadogRegion"]),
+					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.0.tags", paramsUpdate["DatadogTags"]),
 				),
 			},
 		},

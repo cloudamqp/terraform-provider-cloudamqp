@@ -48,10 +48,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - f9d0f712-cbcd-4ffc-a819-6f1de9b368ab
+                - cb57f417-5480-45d0-8173-4e6594fbb4fd
         status: 200 OK
         code: 200
-        duration: 39.428583ms
+        duration: 48.408333ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -99,10 +99,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 4168991d-dc44-4a4e-bab4-cbab9d1a2ff4
+                - 5fc89031-5d1f-4b09-9eb7-3510992f72cc
         status: 200 OK
         code: 200
-        duration: 5.366167ms
+        duration: 9.888125ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -150,10 +150,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 9814b3b3-9ad6-428e-a42b-57a45d40de19
+                - 8acfe7be-1e76-4800-bbf2-659cc95cace5
         status: 200 OK
         code: 200
-        duration: 22.617125ms
+        duration: 52.698958ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -201,10 +201,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 1bdd218d-0818-48fb-b409-91b7f9513adb
+                - b1733be3-32d1-48e6-9a23-361fc72c8bf5
         status: 200 OK
         code: 200
-        duration: 5.25025ms
+        duration: 8.395708ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -252,10 +252,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - ee5bae91-2bb6-4c80-bed5-aeb54fa2c370
+                - 56d935d1-c8e2-4e63-99df-084423c9258f
         status: 200 OK
         code: 200
-        duration: 21.275417ms
+        duration: 34.693333ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -303,23 +303,23 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 2829664f-953d-487c-a628-1bba09bc59cd
+                - 7e5d6185-12e1-4e50-8a46-e35fb8217928
         status: 200 OK
         code: 200
-        duration: 4.93925ms
+        duration: 7.995625ms
     - id: 6
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 164
+        content_length: 167
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"TestAccIntegrationMetricPrometheus_WithoutTags","no_default_alarms":false,"plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"]}
+            {"name":"TestAccIntegrationMetricPrometheusDatadogV3_Basic","no_default_alarms":false,"plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"]}
         form: {}
         headers:
             Authorization:
@@ -336,14 +336,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 254
+        content_length: 253
         uncompressed: false
-        body: '{"id":363,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"f40a00ee-d479-4a1a-9f19-b8af9e1d651d","url":"amqps://yunzchim:***@dev-hilarious-teal-whale.rmq4.dev.cloudamqp.com/yunzchim"}'
+        body: '{"id":420,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"7c2b16ec-ba75-48ed-9f6d-4212ae635a3a","url":"amqps://zhmzqnro:***@dev-active-maroon-hyena.rmq7.dev.cloudamqp.com/zhmzqnro"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "254"
+                - "253"
             Content-Type:
                 - application/json
             Nel:
@@ -357,10 +357,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 2927897c-2034-4205-a9d5-624447f6977f
+                - 9eec0e48-082b-4478-9907-f90a3868ba5b
         status: 200 OK
         code: 200
-        duration: 159.586959ms
+        duration: 161.181ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -379,7 +379,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/363
+        url: http://localhost:9393/api/instances/420
         method: GET
       response:
         proto: HTTP/1.1
@@ -387,14 +387,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 821
+        content_length: 819
         uncompressed: false
-        body: '{"id":363,"name":"TestAccIntegrationMetricPrometheus_WithoutTags","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"148e83ee-57d1-4fc1-a0cd-091c31e0d8c3","url":"amqps://yunzchim:***@dev-hilarious-teal-whale.rmq4.dev.cloudamqp.com/yunzchim","ready":true,"apikey":"f40a00ee-d479-4a1a-9f19-b8af9e1d651d","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://yunzchim:***@dev-hilarious-teal-whale.rmq4.dev.cloudamqp.com/yunzchim","internal":"amqp://yunzchim:***@dev-hilarious-teal-whale.in.rmq4.dev.cloudamqp.com/yunzchim"},"rmq_version":"4.1.4","hostname_external":"dev-hilarious-teal-whale.rmq4.dev.cloudamqp.com","hostname_internal":"dev-hilarious-teal-whale.in.rmq4.dev.cloudamqp.com"}'
+        body: '{"id":420,"name":"TestAccIntegrationMetricPrometheusDatadogV3_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"126764d0-47ca-4bc7-9bb6-6bfb169ab050","url":"amqps://zhmzqnro:***@dev-active-maroon-hyena.rmq7.dev.cloudamqp.com/zhmzqnro","ready":true,"apikey":"7c2b16ec-ba75-48ed-9f6d-4212ae635a3a","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://zhmzqnro:***@dev-active-maroon-hyena.rmq7.dev.cloudamqp.com/zhmzqnro","internal":"amqp://zhmzqnro:***@dev-active-maroon-hyena.in.rmq7.dev.cloudamqp.com/zhmzqnro"},"rmq_version":"4.1.4","hostname_external":"dev-active-maroon-hyena.rmq7.dev.cloudamqp.com","hostname_internal":"dev-active-maroon-hyena.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "821"
+                - "819"
             Content-Type:
                 - application/json
             Nel:
@@ -408,10 +408,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 40177de4-ee3d-43e9-ad77-7322db2c27da
+                - 82c17774-68ae-4356-85a0-00d00fb33cc9
         status: 200 OK
         code: 200
-        duration: 54.939541ms
+        duration: 62.7865ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -430,7 +430,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/363
+        url: http://localhost:9393/api/instances/420
         method: GET
       response:
         proto: HTTP/1.1
@@ -438,14 +438,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 821
+        content_length: 819
         uncompressed: false
-        body: '{"id":363,"name":"TestAccIntegrationMetricPrometheus_WithoutTags","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"148e83ee-57d1-4fc1-a0cd-091c31e0d8c3","url":"amqps://yunzchim:***@dev-hilarious-teal-whale.rmq4.dev.cloudamqp.com/yunzchim","ready":true,"apikey":"f40a00ee-d479-4a1a-9f19-b8af9e1d651d","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://yunzchim:***@dev-hilarious-teal-whale.rmq4.dev.cloudamqp.com/yunzchim","internal":"amqp://yunzchim:***@dev-hilarious-teal-whale.in.rmq4.dev.cloudamqp.com/yunzchim"},"rmq_version":"4.1.4","hostname_external":"dev-hilarious-teal-whale.rmq4.dev.cloudamqp.com","hostname_internal":"dev-hilarious-teal-whale.in.rmq4.dev.cloudamqp.com"}'
+        body: '{"id":420,"name":"TestAccIntegrationMetricPrometheusDatadogV3_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"126764d0-47ca-4bc7-9bb6-6bfb169ab050","url":"amqps://zhmzqnro:***@dev-active-maroon-hyena.rmq7.dev.cloudamqp.com/zhmzqnro","ready":true,"apikey":"7c2b16ec-ba75-48ed-9f6d-4212ae635a3a","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://zhmzqnro:***@dev-active-maroon-hyena.rmq7.dev.cloudamqp.com/zhmzqnro","internal":"amqp://zhmzqnro:***@dev-active-maroon-hyena.in.rmq7.dev.cloudamqp.com/zhmzqnro"},"rmq_version":"4.1.4","hostname_external":"dev-active-maroon-hyena.rmq7.dev.cloudamqp.com","hostname_internal":"dev-active-maroon-hyena.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "821"
+                - "819"
             Content-Type:
                 - application/json
             Nel:
@@ -459,23 +459,23 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 0f5614fc-d0f4-4e75-88b2-00a95da3fdd2
+                - 62172670-741e-4d28-b2f3-a57e1cf4934c
         status: 200 OK
         code: 200
-        duration: 22.729916ms
+        duration: 23.963292ms
     - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 37
+        content_length: 91
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"api_key":"NEWRELIC_V3_APIKEY"}
+            {"api_key":"DATADOG_APIKEY","region":"us1","tags":"env=test,region=us1"}
         form: {}
         headers:
             Authorization:
@@ -484,7 +484,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/363/integrations/metrics/newrelic_v3
+        url: http://localhost:9393/api/instances/420/integrations/metrics/datadog_v3
         method: POST
       response:
         proto: HTTP/1.1
@@ -494,7 +494,7 @@ interactions:
         trailer: {}
         content_length: 10
         uncompressed: false
-        body: '{"id":152}'
+        body: '{"id":192}'
         headers:
             Cache-Control:
                 - no-cache
@@ -513,10 +513,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 50ca0f3f-c951-4276-a28c-c580743eb702
+                - 0ac85b87-1e9b-497c-bc74-b2be29d38399
         status: 201 Created
         code: 201
-        duration: 27.668792ms
+        duration: 493.761917ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -535,7 +535,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/363
+        url: http://localhost:9393/api/instances/420
         method: GET
       response:
         proto: HTTP/1.1
@@ -543,14 +543,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 821
+        content_length: 819
         uncompressed: false
-        body: '{"id":363,"name":"TestAccIntegrationMetricPrometheus_WithoutTags","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"148e83ee-57d1-4fc1-a0cd-091c31e0d8c3","url":"amqps://yunzchim:***@dev-hilarious-teal-whale.rmq4.dev.cloudamqp.com/yunzchim","ready":true,"apikey":"f40a00ee-d479-4a1a-9f19-b8af9e1d651d","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://yunzchim:***@dev-hilarious-teal-whale.rmq4.dev.cloudamqp.com/yunzchim","internal":"amqp://yunzchim:***@dev-hilarious-teal-whale.in.rmq4.dev.cloudamqp.com/yunzchim"},"rmq_version":"4.1.4","hostname_external":"dev-hilarious-teal-whale.rmq4.dev.cloudamqp.com","hostname_internal":"dev-hilarious-teal-whale.in.rmq4.dev.cloudamqp.com"}'
+        body: '{"id":420,"name":"TestAccIntegrationMetricPrometheusDatadogV3_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"126764d0-47ca-4bc7-9bb6-6bfb169ab050","url":"amqps://zhmzqnro:***@dev-active-maroon-hyena.rmq7.dev.cloudamqp.com/zhmzqnro","ready":true,"apikey":"7c2b16ec-ba75-48ed-9f6d-4212ae635a3a","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://zhmzqnro:***@dev-active-maroon-hyena.rmq7.dev.cloudamqp.com/zhmzqnro","internal":"amqp://zhmzqnro:***@dev-active-maroon-hyena.in.rmq7.dev.cloudamqp.com/zhmzqnro"},"rmq_version":"4.1.4","hostname_external":"dev-active-maroon-hyena.rmq7.dev.cloudamqp.com","hostname_internal":"dev-active-maroon-hyena.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "821"
+                - "819"
             Content-Type:
                 - application/json
             Nel:
@@ -564,10 +564,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 3103f0aa-98da-41cf-aa33-4d56b71bbbcc
+                - fb5e7b33-1053-4b2f-bde6-d988bc5c23e4
         status: 200 OK
         code: 200
-        duration: 14.335917ms
+        duration: 27.703ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -586,7 +586,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/363/integrations/metrics/152
+        url: http://localhost:9393/api/instances/420/integrations/metrics/192
         method: GET
       response:
         proto: HTTP/1.1
@@ -594,14 +594,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 1587
+        content_length: 1640
         uncompressed: false
-        body: '{"id":152,"type":"newrelic_v3","config":{"api_key":"NEWRELIC_V3_APIKEY"},"account_id":"148e83ee-57d1-4fc1-a0cd-091c31e0d8c3","error":null,"created_at":"2025-09-25 12:13:22 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked","rabbitmq_queue_head_message_timestamp"]}'
+        body: '{"id":192,"type":"datadog_v3","config":{"tags":"env=test,region=us1","region":"us1","api_key":"DATADOG_APIKEY"},"account_id":"126764d0-47ca-4bc7-9bb6-6bfb169ab050","error":null,"created_at":"2025-09-29 10:49:24 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked","rabbitmq_queue_head_message_timestamp"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "1587"
+                - "1640"
             Content-Type:
                 - application/json
             Nel:
@@ -615,10 +615,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 69f1c64e-74db-423d-895a-0cd60a40c173
+                - 109a2f38-09d5-43ac-9228-9a77720c5c2a
         status: 200 OK
         code: 200
-        duration: 15.301084ms
+        duration: 20.802333ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -637,7 +637,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/363/integrations/metrics/152
+        url: http://localhost:9393/api/instances/420/integrations/metrics/192
         method: GET
       response:
         proto: HTTP/1.1
@@ -645,14 +645,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 1587
+        content_length: 1640
         uncompressed: false
-        body: '{"id":152,"type":"newrelic_v3","config":{"api_key":"NEWRELIC_V3_APIKEY"},"account_id":"148e83ee-57d1-4fc1-a0cd-091c31e0d8c3","error":null,"created_at":"2025-09-25 12:13:22 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked","rabbitmq_queue_head_message_timestamp"]}'
+        body: '{"id":192,"type":"datadog_v3","config":{"tags":"env=test,region=us1","region":"us1","api_key":"DATADOG_APIKEY"},"account_id":"126764d0-47ca-4bc7-9bb6-6bfb169ab050","error":null,"created_at":"2025-09-29 10:49:24 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked","rabbitmq_queue_head_message_timestamp"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "1587"
+                - "1640"
             Content-Type:
                 - application/json
             Nel:
@@ -666,10 +666,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - eb98edb6-bad0-47bc-a361-96cc1ca11cc8
+                - 21e3625f-6467-44c9-893b-525fd200ac41
         status: 200 OK
         code: 200
-        duration: 20.857ms
+        duration: 30.50175ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -688,7 +688,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/363/integrations/metrics/152
+        url: http://localhost:9393/api/instances/420/integrations/metrics/192
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -713,10 +713,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - b4774818-4f00-4d06-8f6f-c1fca61daa2d
+                - 55f04f14-f5ec-4a36-8d0c-574289d22bb6
         status: 204 No Content
         code: 204
-        duration: 32.392375ms
+        duration: 42.141667ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -735,7 +735,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/363?keep_vpc=false
+        url: http://localhost:9393/api/instances/420?keep_vpc=false
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -760,10 +760,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 61245dc5-49e7-435b-83f5-0caa11da9ead
+                - df58c0ad-6a6b-4273-8d0a-8f3cc2be2483
         status: 204 No Content
         code: 204
-        duration: 59.018167ms
+        duration: 69.08575ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -782,7 +782,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/363
+        url: http://localhost:9393/api/instances/420
         method: GET
       response:
         proto: HTTP/1.1
@@ -811,7 +811,7 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 23aa2e7b-3407-4b24-8360-ffad794bdeed
+                - d244c065-a6eb-4319-abcc-86f603b58160
         status: 404 Not Found
         code: 404
-        duration: 7.260791ms
+        duration: 8.916125ms

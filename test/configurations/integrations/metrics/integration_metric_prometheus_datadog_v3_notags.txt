@@ -1,0 +1,7 @@
+resource "cloudamqp_integration_metric_prometheus" "datadog_v3_notags" {
+  instance_id = {{.InstanceID}}
+  datadog_v3 {
+    api_key = "{{.DatadogApiKey}}"
+    region  = "{{.DatadogRegion}}"
+  }
+}

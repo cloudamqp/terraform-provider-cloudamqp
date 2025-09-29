@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceIntegrationMetricPrometheus() *schema.Resource {
@@ -29,14 +30,40 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Description: "Instance identifier",
 			},
 			"newrelic_v3": {
-				Type:     schema.TypeSet,
-				Optional: true,
-				MaxItems: 1,
+				Type:          schema.TypeSet,
+				Optional:      true,
+				MaxItems:      1,
+				ConflictsWith: []string{"datadog_v3"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
 							Type:     schema.TypeString,
 							Required: true,
+						},
+						"tags": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "tags. E.g. env=prod,region=europe",
+						},
+					},
+				},
+			},
+			"datadog_v3": {
+				Type:          schema.TypeSet,
+				Optional:      true,
+				MaxItems:      1,
+				ConflictsWith: []string{"newrelic_v3"},
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"api_key": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"region": {
+							Type:         schema.TypeString,
+							Required:     true,
+							Description:  "Datadog region; us1, us3, us5, or eu1",
+							ValidateFunc: validation.StringInSlice([]string{"us1", "us3", "us5", "eu1"}, true),
 						},
 						"tags": {
 							Type:        schema.TypeString,
@@ -57,17 +84,24 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		params  = make(map[string]any)
 	)
 
-	if d.Get("newrelic_v3") != nil {
+	// Check which integration type is configured
+	if newrelicList := d.Get("newrelic_v3").(*schema.Set).List(); len(newrelicList) > 0 {
 		intName = "newrelic_v3"
-		newrelicConfig := d.Get("newrelic_v3").(*schema.Set).List()[0].(map[string]any)
+		newrelicConfig := newrelicList[0].(map[string]any)
 		params["api_key"] = newrelicConfig["api_key"]
 		if tags := newrelicConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}
-	}
-
-	if intName == "" {
-		return diag.Errorf("no integration configuration provided")
+	} else if datadogList := d.Get("datadog_v3").(*schema.Set).List(); len(datadogList) > 0 {
+		intName = "datadog_v3"
+		datadogConfig := datadogList[0].(map[string]any)
+		params["api_key"] = datadogConfig["api_key"]
+		if region := datadogConfig["region"]; region != nil && region != "" {
+			params["region"] = region
+		}
+		if tags := datadogConfig["tags"]; tags != nil && tags != "" {
+			params["tags"] = tags
+		}
 	}
 
 	data, err := api.CreateIntegration(ctx, d.Get("instance_id").(int), "metrics", intName, params)
@@ -118,6 +152,20 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		if err := d.Set("newrelic_v3", newRelicV3); err != nil {
 			return diag.Errorf("error setting newrelic_v3 for resource %s: %s", d.Id(), err)
 		}
+	} else if name == "datadog_v3" {
+		datadogV3 := []map[string]any{{}}
+		if _, ok := data["api_key"]; ok {
+			datadogV3[0]["api_key"] = data["api_key"]
+		}
+		if region, ok := data["region"]; ok {
+			datadogV3[0]["region"] = region
+		}
+		if tags, ok := data["tags"]; ok {
+			datadogV3[0]["tags"] = tags
+		}
+		if err := d.Set("datadog_v3", datadogV3); err != nil {
+			return diag.Errorf("error setting datadog_v3 for resource %s: %s", d.Id(), err)
+		}
 	}
 
 	return nil
@@ -129,10 +177,20 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 		params = make(map[string]any)
 	)
 
-	if d.Get("newrelic_v3") != nil {
-		newrelicConfig := d.Get("newrelic_v3").(*schema.Set).List()[0].(map[string]any)
+	// Check which integration type is configured
+	if newrelicList := d.Get("newrelic_v3").(*schema.Set).List(); len(newrelicList) > 0 {
+		newrelicConfig := newrelicList[0].(map[string]any)
 		params["api_key"] = newrelicConfig["api_key"]
 		if tags := newrelicConfig["tags"]; tags != nil && tags != "" {
+			params["tags"] = tags
+		}
+	} else if datadogList := d.Get("datadog_v3").(*schema.Set).List(); len(datadogList) > 0 {
+		datadogConfig := datadogList[0].(map[string]any)
+		params["api_key"] = datadogConfig["api_key"]
+		if region := datadogConfig["region"]; region != nil && region != "" {
+			params["region"] = region
+		}
+		if tags := datadogConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}
 	}
