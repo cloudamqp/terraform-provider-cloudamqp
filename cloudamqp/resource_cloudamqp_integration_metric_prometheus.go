@@ -37,8 +37,9 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:      schema.TypeString,
+							Required:  true,
+							Sensitive: true,
 						},
 						"tags": {
 							Type:        schema.TypeString,
@@ -56,8 +57,9 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:      schema.TypeString,
+							Required:  true,
+							Sensitive: true,
 						},
 						"region": {
 							Type:         schema.TypeString,
