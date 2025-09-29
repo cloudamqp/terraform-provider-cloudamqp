@@ -99,10 +99,8 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		if region := datadogConfig["region"]; region != nil && region != "" {
 			params["region"] = region
 		}
-		if tags := datadogConfig["tags"]; tags != nil {
+		if tags := datadogConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
-		} else {
-			params["tags"] = ""
 		}
 	}
 
