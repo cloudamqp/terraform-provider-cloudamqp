@@ -89,10 +89,8 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		intName = "newrelic_v3"
 		newrelicConfig := newrelicList[0].(map[string]any)
 		params["api_key"] = newrelicConfig["api_key"]
-		if tags := newrelicConfig["tags"]; tags != nil {
+		if tags := newrelicConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
-		} else {
-			params["tags"] = ""
 		}
 	} else if datadogList := d.Get("datadog_v3").(*schema.Set).List(); len(datadogList) > 0 {
 		intName = "datadog_v3"
@@ -106,6 +104,10 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		} else {
 			params["tags"] = ""
 		}
+	}
+
+	if intName == "" {
+		return diag.Errorf("no integration configuration provided")
 	}
 
 	data, err := api.CreateIntegration(ctx, d.Get("instance_id").(int), "metrics", intName, params)
@@ -156,8 +158,6 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		}
 		if tags, ok := data["tags"]; ok {
 			newRelicV3[0]["tags"] = tags
-		} else {
-			newRelicV3[0]["tags"] = ""
 		}
 		if err := d.Set("newrelic_v3", newRelicV3); err != nil {
 			return diag.Errorf("error setting newrelic_v3 for resource %s: %s", d.Id(), err)
@@ -193,10 +193,8 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 	if newrelicList := d.Get("newrelic_v3").(*schema.Set).List(); len(newrelicList) > 0 {
 		newrelicConfig := newrelicList[0].(map[string]any)
 		params["api_key"] = newrelicConfig["api_key"]
-		if tags := newrelicConfig["tags"]; tags != nil {
+		if tags := newrelicConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
-		} else {
-			params["tags"] = ""
 		}
 	} else if datadogList := d.Get("datadog_v3").(*schema.Set).List(); len(datadogList) > 0 {
 		datadogConfig := datadogList[0].(map[string]any)
@@ -204,10 +202,8 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 		if region := datadogConfig["region"]; region != nil && region != "" {
 			params["region"] = region
 		}
-		if tags := datadogConfig["tags"]; tags != nil {
+		if tags := datadogConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
-		} else {
-			params["tags"] = ""
 		}
 	}
 
