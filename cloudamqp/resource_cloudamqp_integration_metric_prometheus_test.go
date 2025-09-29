@@ -20,7 +20,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Basic(t *testing.T) {
 			"InstanceName":   "TestAccIntegrationMetricPrometheusNewRelicV3_Basic",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"NewRelicApiKey": os.Getenv("NEWRELIC_APIKEY"),
+			"NewRelicApiKey": "NEWRELIC_APIKEY",
 			"NewRelicTags":   "env=test,region=us1",
 		}
 	)
@@ -57,7 +57,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags(t *testing.T) {
 			"InstanceName":   "TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"NewRelicApiKey": os.Getenv("NEWRELIC_APIKEY"),
+			"NewRelicApiKey": "NEWRELIC_APIKEY",
 		}
 	)
 
@@ -93,7 +93,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Update(t *testing.T) {
 			"InstanceName":   "TestAccIntegrationMetricPrometheusNewRelicV3_Update",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"NewRelicApiKey": os.Getenv("NEWRELIC_APIKEY"),
+			"NewRelicApiKey": "NEWRELIC_APIKEY",
 			"NewRelicTags":   "env=test,region=us1",
 		}
 
@@ -101,7 +101,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Update(t *testing.T) {
 			"InstanceName":   "TestAccIntegrationMetricPrometheusNewRelicV3_Update",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"NewRelicApiKey": os.Getenv("NEWRELIC_APIKEY"),
+			"NewRelicApiKey": "NEWRELIC_APIKEY",
 			"NewRelicTags":   "env=prod,region=eu1",
 		}
 	)
@@ -138,7 +138,7 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Basic(t *testing.T) {
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Basic",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": os.Getenv("DATADOG_APIKEY"),
+			"DatadogApiKey": "DATADOG_APIKEY",
 			"DatadogRegion": "us1",
 			"DatadogTags":   "env=test,region=us1",
 		}
@@ -177,7 +177,7 @@ func TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags(t *testing.T) {
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": os.Getenv("DATADOG_APIKEY"),
+			"DatadogApiKey": "DATADOG_APIKEY",
 			"DatadogRegion": "us1",
 		}
 	)
@@ -215,7 +215,7 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Update",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": os.Getenv("DATADOG_APIKEY"),
+			"DatadogApiKey": "DATADOG_APIKEY",
 			"DatadogRegion": "us1",
 			"DatadogTags":   "env=test,region=us1",
 		}
