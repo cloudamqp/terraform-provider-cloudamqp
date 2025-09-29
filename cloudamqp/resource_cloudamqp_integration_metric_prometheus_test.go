@@ -2,7 +2,6 @@ package cloudamqp
 
 import (
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
@@ -224,7 +223,7 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Update",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": os.Getenv("DATADOG_APIKEY"),
+			"DatadogApiKey": "DATADOG_APIKEY",
 			"DatadogRegion": "us1",
 			"DatadogTags":   "env=prod,region=us1",
 		}
