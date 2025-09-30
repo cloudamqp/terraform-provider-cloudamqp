@@ -33,12 +33,13 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"datadog_v3"},
+				ConflictsWith: []string{"datadog_v3", "azure_monitor"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:      schema.TypeString,
+							Required:  true,
+							Sensitive: true,
 						},
 						"tags": {
 							Type:        schema.TypeString,
@@ -52,18 +53,40 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3"},
+				ConflictsWith: []string{"newrelic_v3", "azure_monitor"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:      schema.TypeString,
+							Required:  true,
+							Sensitive: true,
 						},
 						"region": {
 							Type:         schema.TypeString,
 							Required:     true,
 							Description:  "Datadog region; us1, us3, us5, or eu1",
 							ValidateFunc: validation.StringInSlice([]string{"us1", "us3", "us5", "eu1"}, true),
+						},
+						"tags": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "tags. E.g. env=prod,region=europe",
+						},
+					},
+				},
+			},
+			"azure_monitor": {
+				Type:          schema.TypeSet,
+				Optional:      true,
+				MaxItems:      1,
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3"},
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"connection_string": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Sensitive:   true,
+							Description: "Azure Application Insights Connection String",
 						},
 						"tags": {
 							Type:        schema.TypeString,
@@ -100,6 +123,13 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 			params["region"] = region
 		}
 		if tags := datadogConfig["tags"]; tags != nil && tags != "" {
+			params["tags"] = tags
+		}
+	} else if azureMonitorList := d.Get("azure_monitor").(*schema.Set).List(); len(azureMonitorList) > 0 {
+		intName = "azure_monitor"
+		azureMonitorConfig := azureMonitorList[0].(map[string]any)
+		params["connection_string"] = azureMonitorConfig["connection_string"]
+		if tags := azureMonitorConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}
 	}
@@ -174,6 +204,17 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		if err := d.Set("datadog_v3", datadogV3); err != nil {
 			return diag.Errorf("error setting datadog_v3 for resource %s: %s", d.Id(), err)
 		}
+	} else if name == "azure_monitor" {
+		azureMonitor := []map[string]any{{}}
+		if _, ok := data["connection_string"]; ok {
+			azureMonitor[0]["connection_string"] = data["connection_string"]
+		}
+		if tags, ok := data["tags"]; ok {
+			azureMonitor[0]["tags"] = tags
+		}
+		if err := d.Set("azure_monitor", azureMonitor); err != nil {
+			return diag.Errorf("error setting azure_monitor for resource %s: %s", d.Id(), err)
+		}
 	}
 
 	return nil
@@ -199,6 +240,12 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 			params["region"] = region
 		}
 		if tags := datadogConfig["tags"]; tags != nil && tags != "" {
+			params["tags"] = tags
+		}
+	} else if azureMonitorList := d.Get("azure_monitor").(*schema.Set).List(); len(azureMonitorList) > 0 {
+		azureMonitorConfig := azureMonitorList[0].(map[string]any)
+		params["connection_string"] = azureMonitorConfig["connection_string"]
+		if tags := azureMonitorConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}
 	}

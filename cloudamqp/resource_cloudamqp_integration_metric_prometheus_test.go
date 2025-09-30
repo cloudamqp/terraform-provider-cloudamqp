@@ -251,3 +251,121 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
 		},
 	})
 }
+
+// TestAccIntegrationMetricPrometheusAzureMonitor_Basic: Add Azure Monitor prometheus metric integration and import.
+func TestAccIntegrationMetricPrometheusAzureMonitor_Basic(t *testing.T) {
+	var (
+		fileNames                          = []string{"instance", "integrations/metrics/integration_metric_prometheus_azure_monitor"}
+		instanceResourceName               = "cloudamqp_instance.instance"
+		prometheusAzureMonitorResourceName = "cloudamqp_integration_metric_prometheus.azure_monitor"
+
+		params = map[string]string{
+			"InstanceName":                 "TestAccIntegrationMetricPrometheusAzureMonitor_Basic",
+			"InstanceID":                   fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":                 "bunny-1",
+			"AzureMonitorConnectionString": "InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f",
+			"AzureTags":                    "env=test,region=azure",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusAzureMonitorResourceName, "azure_monitor.#", "1"),
+					resource.TestCheckResourceAttr(prometheusAzureMonitorResourceName, "azure_monitor.0.tags", params["AzureTags"]),
+				),
+			},
+			{
+				ResourceName:      prometheusAzureMonitorResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusAzureMonitorResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusAzureMonitor_WithoutTags: Test Azure Monitor prometheus integration without optional tags.
+func TestAccIntegrationMetricPrometheusAzureMonitor_WithoutTags(t *testing.T) {
+	var (
+		fileNames                          = []string{"instance", "integrations/metrics/integration_metric_prometheus_azure_monitor_notags"}
+		instanceResourceName               = "cloudamqp_instance.instance"
+		prometheusAzureMonitorResourceName = "cloudamqp_integration_metric_prometheus.azure_monitor_notags"
+
+		params = map[string]string{
+			"InstanceName":                 "TestAccIntegrationMetricPrometheusAzureMonitor_WithoutTags",
+			"InstanceID":                   fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":                 "bunny-1",
+			"AzureMonitorConnectionString": "InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusAzureMonitorResourceName, "azure_monitor.#", "1"),
+					resource.TestCheckResourceAttr(prometheusAzureMonitorResourceName, "azure_monitor.0.tags", ""),
+				),
+			},
+			{
+				ResourceName:      prometheusAzureMonitorResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusAzureMonitorResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusAzureMonitor_Update: Test updating Azure Monitor prometheus integration.
+func TestAccIntegrationMetricPrometheusAzureMonitor_Update(t *testing.T) {
+	var (
+		fileNames                          = []string{"instance", "integrations/metrics/integration_metric_prometheus_azure_monitor"}
+		instanceResourceName               = "cloudamqp_instance.instance"
+		prometheusAzureMonitorResourceName = "cloudamqp_integration_metric_prometheus.azure_monitor"
+
+		paramsCreate = map[string]string{
+			"InstanceName":                 "TestAccIntegrationMetricPrometheusAzureMonitor_Update",
+			"InstanceID":                   fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":                 "bunny-1",
+			"AzureMonitorConnectionString": "InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f",
+			"AzureTags":                    "env=test,region=azure",
+		}
+
+		paramsUpdate = map[string]string{
+			"InstanceName":                 "TestAccIntegrationMetricPrometheusAzureMonitor_Update",
+			"InstanceID":                   fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":                 "bunny-1",
+			"AzureMonitorConnectionString": "InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f",
+			"AzureTags":                    "env=prod,region=azure-west",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsCreate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsCreate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusAzureMonitorResourceName, "azure_monitor.0.tags", paramsCreate["AzureTags"]),
+				),
+			},
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusAzureMonitorResourceName, "azure_monitor.0.tags", paramsUpdate["AzureTags"]),
+				),
+			},
+		},
+	})
+}

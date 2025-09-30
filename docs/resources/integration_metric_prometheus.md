@@ -1,6 +1,6 @@
 # cloudamqp_integration_metric_prometheus
 
-This resource allows you to create and manage Prometheus-compatible metric integrations for CloudAMQP instances. Currently supported integrations include New Relic v3 and Datadog v3.
+This resource allows you to create and manage Prometheus-compatible metric integrations for CloudAMQP instances. Currently supported integrations include New Relic v3, Datadog v3, and Azure Monitor.
 
 ## Example Usage
 
@@ -31,13 +31,27 @@ resource "cloudamqp_integration_metric_prometheus" "datadog" {
 }
 ```
 
+### Azure Monitor Integration
+
+```hcl
+resource "cloudamqp_integration_metric_prometheus" "azure_monitor" {
+  instance_id = cloudamqp_instance.instance.id
+
+  azure_monitor {
+    connection_string = var.azure_monitor_connection_string
+    tags              = "env=prod,region=azure"
+  }
+}
+```
+
 ## Argument Reference
 
 The following arguments are supported:
 
 * `instance_id` - (Required) The CloudAMQP instance identifier.
-* `newrelic_v3` - (Optional) Configuration block for New Relic v3 integration. Cannot be used with `datadog_v3`.
-* `datadog_v3` - (Optional) Configuration block for Datadog v3 integration. Cannot be used with `newrelic_v3`.
+* `newrelic_v3` - (Optional) Configuration block for New Relic v3 integration. Cannot be used with `datadog_v3` or `azure_monitor`.
+* `datadog_v3` - (Optional) Configuration block for Datadog v3 integration. Cannot be used with `newrelic_v3` or `azure_monitor`.
+* `azure_monitor` - (Optional) Configuration block for Azure Monitor integration. Cannot be used with `newrelic_v3` or `datadog_v3`.
 
 ### newrelic_v3 Block
 
@@ -52,6 +66,13 @@ The following arguments are supported:
 
 * `api_key` - (Required) Datadog API key for authentication.
 * `region` - (Optional) Datadog region code. Defaults to `us1`. Valid values: `us1`, `us3`, `us5`, `eu1`.
+* `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
+
+### azure_monitor Block
+
+The following arguments are supported:
+
+* `connection_string` - (Required) Azure Application Insights Connection String for authentication.
 * `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
 
 ## Attributes Reference
