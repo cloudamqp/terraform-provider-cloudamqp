@@ -137,7 +137,7 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Basic(t *testing.T) {
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Basic",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": "d3d4d528973148a232c09be6c8772d36",
+			"DatadogApiKey": "DATADOG_APIKEY",
 			"DatadogRegion": "us1",
 			"DatadogTags":   "key=value,key2=value2",
 		}
@@ -176,7 +176,7 @@ func TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags(t *testing.T) {
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": "d3d4d528973148a232c09be6c8772d36",
+			"DatadogApiKey": "DATADOG_APIKEY",
 			"DatadogRegion": "us1",
 		}
 	)
@@ -214,7 +214,7 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Update",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": "d3d4d528973148a232c09be6c8772d36",
+			"DatadogApiKey": "DATADOG_APIKEY",
 			"DatadogRegion": "us1",
 			"DatadogTags":   "key=value,key2=value2",
 		}
@@ -223,7 +223,7 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Update",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": "d3d4d528973148a232c09be6c8772d36",
+			"DatadogApiKey": "DATADOG_APIKEY",
 			"DatadogRegion": "us1",
 			"DatadogTags":   "key=value2,key2=value3",
 		}
