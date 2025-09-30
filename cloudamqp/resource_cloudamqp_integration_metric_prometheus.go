@@ -169,6 +169,7 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 	// Clear all blocks first
 	d.Set("newrelic_v3", nil)
 	d.Set("datadog_v3", nil)
+	d.Set("azure_monitor", nil)
 
 	name := strings.ToLower(data["type"].(string))
 	if name == "newrelic_v3" {
