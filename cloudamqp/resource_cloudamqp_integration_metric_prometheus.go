@@ -102,7 +102,6 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		params  = make(map[string]any)
 	)
 
-	// Check which integration type is configured
 	if newrelicList := d.Get("newrelic_v3").(*schema.Set).List(); len(newrelicList) > 0 {
 		intName = "newrelic_v3"
 		newrelicConfig := newrelicList[0].(map[string]any)
@@ -166,7 +165,6 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		return nil
 	}
 
-	// Clear all blocks first
 	d.Set("newrelic_v3", nil)
 	d.Set("datadog_v3", nil)
 	d.Set("azure_monitor", nil)
@@ -216,7 +214,6 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 		params = make(map[string]any)
 	)
 
-	// Check which integration type is configured
 	if newrelicList := d.Get("newrelic_v3").(*schema.Set).List(); len(newrelicList) > 0 {
 		newrelicConfig := newrelicList[0].(map[string]any)
 		params["api_key"] = newrelicConfig["api_key"]
