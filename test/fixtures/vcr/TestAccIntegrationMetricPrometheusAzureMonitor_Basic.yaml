@@ -48,10 +48,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 5e691cc1-91a6-4cb8-a1a7-79f7bd4e6e5a
+                - 1635cd45-c232-48dc-8c9b-175c3e660af5
         status: 200 OK
         code: 200
-        duration: 21.511792ms
+        duration: 48.379167ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -99,10 +99,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 167620fd-8d4f-484c-88f8-ce5db6632218
+                - 24e13090-47e9-4a5b-ab4e-dd7e321e2e27
         status: 200 OK
         code: 200
-        duration: 6.869833ms
+        duration: 5.806583ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -150,10 +150,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - e5a2d707-12b8-44a4-a11f-db0b19b200ab
+                - c152719e-2f2d-44ff-8c51-e13d3fdaf7b3
         status: 200 OK
         code: 200
-        duration: 20.955708ms
+        duration: 25.167958ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -201,10 +201,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 923af727-795a-4620-a115-3073cb49f255
+                - f02cf725-5e78-4350-a35b-7435bd211e0f
         status: 200 OK
         code: 200
-        duration: 5.927125ms
+        duration: 6.16975ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -252,10 +252,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 0088dc8b-7900-4383-81c7-e3f9e81e5310
+                - 9dbd6f3a-1296-4dd9-b688-3469bc819895
         status: 200 OK
         code: 200
-        duration: 18.194375ms
+        duration: 22.848458ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -303,10 +303,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 18b2038a-88aa-4336-96fb-c6d9f75f410f
+                - 38b45c10-b4a3-45df-beaf-e764ef9d3a68
         status: 200 OK
         code: 200
-        duration: 5.049875ms
+        duration: 6.912625ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -336,14 +336,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 254
+        content_length: 250
         uncompressed: false
-        body: '{"id":451,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"8103fbaa-44cc-44aa-8797-edfda2602b66","url":"amqps://bjsjzafj:***@dev-tiny-white-crocodile.rmq7.dev.cloudamqp.com/bjsjzafj"}'
+        body: '{"id":455,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"92e48e04-629b-4833-9847-ae212b093937","url":"amqps://ufqfohsz:***@dev-glad-pink-weasel.rmq7.dev.cloudamqp.com/ufqfohsz"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "254"
+                - "250"
             Content-Type:
                 - application/json
             Nel:
@@ -357,10 +357,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 0def013a-d45a-4d23-bec1-1a85ee6d0231
+                - 93fd4d23-80e1-4b82-987d-1e510e17c01e
         status: 200 OK
         code: 200
-        duration: 116.360792ms
+        duration: 106.745583ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -379,7 +379,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/451
+        url: http://localhost:9393/api/instances/455
         method: GET
       response:
         proto: HTTP/1.1
@@ -387,14 +387,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 827
+        content_length: 807
         uncompressed: false
-        body: '{"id":451,"name":"TestAccIntegrationMetricPrometheusAzureMonitor_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"1f1af252-ae49-4b82-8ad4-0a6b39885b86","url":"amqps://bjsjzafj:***@dev-tiny-white-crocodile.rmq7.dev.cloudamqp.com/bjsjzafj","ready":true,"apikey":"8103fbaa-44cc-44aa-8797-edfda2602b66","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://bjsjzafj:***@dev-tiny-white-crocodile.rmq7.dev.cloudamqp.com/bjsjzafj","internal":"amqp://bjsjzafj:***@dev-tiny-white-crocodile.in.rmq7.dev.cloudamqp.com/bjsjzafj"},"rmq_version":"4.1.4","hostname_external":"dev-tiny-white-crocodile.rmq7.dev.cloudamqp.com","hostname_internal":"dev-tiny-white-crocodile.in.rmq7.dev.cloudamqp.com"}'
+        body: '{"id":455,"name":"TestAccIntegrationMetricPrometheusAzureMonitor_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"5ac1db26-9b01-420f-8b1a-a5df65700950","url":"amqps://ufqfohsz:***@dev-glad-pink-weasel.rmq7.dev.cloudamqp.com/ufqfohsz","ready":true,"apikey":"92e48e04-629b-4833-9847-ae212b093937","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://ufqfohsz:***@dev-glad-pink-weasel.rmq7.dev.cloudamqp.com/ufqfohsz","internal":"amqp://ufqfohsz:***@dev-glad-pink-weasel.in.rmq7.dev.cloudamqp.com/ufqfohsz"},"rmq_version":"4.1.4","hostname_external":"dev-glad-pink-weasel.rmq7.dev.cloudamqp.com","hostname_internal":"dev-glad-pink-weasel.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "827"
+                - "807"
             Content-Type:
                 - application/json
             Nel:
@@ -408,10 +408,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 93e2a863-b951-45e9-beab-3bdf4b57d3a6
+                - 109901c2-ea3e-42f3-a062-0a232b1b12d9
         status: 200 OK
         code: 200
-        duration: 42.165709ms
+        duration: 52.42725ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -430,7 +430,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/451
+        url: http://localhost:9393/api/instances/455
         method: GET
       response:
         proto: HTTP/1.1
@@ -438,14 +438,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 827
+        content_length: 807
         uncompressed: false
-        body: '{"id":451,"name":"TestAccIntegrationMetricPrometheusAzureMonitor_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"1f1af252-ae49-4b82-8ad4-0a6b39885b86","url":"amqps://bjsjzafj:***@dev-tiny-white-crocodile.rmq7.dev.cloudamqp.com/bjsjzafj","ready":true,"apikey":"8103fbaa-44cc-44aa-8797-edfda2602b66","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://bjsjzafj:***@dev-tiny-white-crocodile.rmq7.dev.cloudamqp.com/bjsjzafj","internal":"amqp://bjsjzafj:***@dev-tiny-white-crocodile.in.rmq7.dev.cloudamqp.com/bjsjzafj"},"rmq_version":"4.1.4","hostname_external":"dev-tiny-white-crocodile.rmq7.dev.cloudamqp.com","hostname_internal":"dev-tiny-white-crocodile.in.rmq7.dev.cloudamqp.com"}'
+        body: '{"id":455,"name":"TestAccIntegrationMetricPrometheusAzureMonitor_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"5ac1db26-9b01-420f-8b1a-a5df65700950","url":"amqps://ufqfohsz:***@dev-glad-pink-weasel.rmq7.dev.cloudamqp.com/ufqfohsz","ready":true,"apikey":"92e48e04-629b-4833-9847-ae212b093937","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://ufqfohsz:***@dev-glad-pink-weasel.rmq7.dev.cloudamqp.com/ufqfohsz","internal":"amqp://ufqfohsz:***@dev-glad-pink-weasel.in.rmq7.dev.cloudamqp.com/ufqfohsz"},"rmq_version":"4.1.4","hostname_external":"dev-glad-pink-weasel.rmq7.dev.cloudamqp.com","hostname_internal":"dev-glad-pink-weasel.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "827"
+                - "807"
             Content-Type:
                 - application/json
             Nel:
@@ -459,23 +459,23 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 66a4da10-831f-48c0-9b1b-c2a8b6aaa92e
+                - 42d67ed8-27c6-4d14-ba44-c5eb19f12ce9
         status: 200 OK
         code: 200
-        duration: 21.838375ms
+        duration: 24.036416ms
     - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 308
+        content_length: 277
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"connection_string":"InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f","tags":"env=test,region=azure"}
+            {"connection_string":"InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f"}
         form: {}
         headers:
             Authorization:
@@ -484,7 +484,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/451/integrations/metrics/azure_monitor
+        url: http://localhost:9393/api/instances/455/integrations/metrics/azure_monitor
         method: POST
       response:
         proto: HTTP/1.1
@@ -494,7 +494,7 @@ interactions:
         trailer: {}
         content_length: 10
         uncompressed: false
-        body: '{"id":210}'
+        body: '{"id":214}'
         headers:
             Cache-Control:
                 - no-cache
@@ -513,10 +513,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 7de7974e-585d-4e23-843a-5ccb7ad28c0c
+                - 5543d706-a997-4993-82ac-2218aa1b19e0
         status: 201 Created
         code: 201
-        duration: 68.896917ms
+        duration: 80.016584ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -535,7 +535,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/451/integrations/metrics/210
+        url: http://localhost:9393/api/instances/455/integrations/metrics/214
         method: GET
       response:
         proto: HTTP/1.1
@@ -543,14 +543,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 1860
+        content_length: 1829
         uncompressed: false
-        body: '{"id":210,"type":"azure_monitor","config":{"tags":"env=test,region=azure","connection_string":"InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f"},"account_id":"1f1af252-ae49-4b82-8ad4-0a6b39885b86","error":null,"created_at":"2025-09-30 11:53:31 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked","rabbitmq_queue_head_message_timestamp"]}'
+        body: '{"id":214,"type":"azure_monitor","config":{"connection_string":"InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f"},"account_id":"5ac1db26-9b01-420f-8b1a-a5df65700950","error":null,"created_at":"2025-09-30 14:22:07 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked","rabbitmq_queue_head_message_timestamp"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "1860"
+                - "1829"
             Content-Type:
                 - application/json
             Nel:
@@ -564,10 +564,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 7eede0ac-e123-4c0e-9a03-b8624b5066de
+                - c53152f8-d6cb-4255-841d-e263ae311a06
         status: 200 OK
         code: 200
-        duration: 31.8865ms
+        duration: 28.755125ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -586,7 +586,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/451
+        url: http://localhost:9393/api/instances/455
         method: GET
       response:
         proto: HTTP/1.1
@@ -594,14 +594,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 827
+        content_length: 807
         uncompressed: false
-        body: '{"id":451,"name":"TestAccIntegrationMetricPrometheusAzureMonitor_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"1f1af252-ae49-4b82-8ad4-0a6b39885b86","url":"amqps://bjsjzafj:***@dev-tiny-white-crocodile.rmq7.dev.cloudamqp.com/bjsjzafj","ready":true,"apikey":"8103fbaa-44cc-44aa-8797-edfda2602b66","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://bjsjzafj:***@dev-tiny-white-crocodile.rmq7.dev.cloudamqp.com/bjsjzafj","internal":"amqp://bjsjzafj:***@dev-tiny-white-crocodile.in.rmq7.dev.cloudamqp.com/bjsjzafj"},"rmq_version":"4.1.4","hostname_external":"dev-tiny-white-crocodile.rmq7.dev.cloudamqp.com","hostname_internal":"dev-tiny-white-crocodile.in.rmq7.dev.cloudamqp.com"}'
+        body: '{"id":455,"name":"TestAccIntegrationMetricPrometheusAzureMonitor_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"5ac1db26-9b01-420f-8b1a-a5df65700950","url":"amqps://ufqfohsz:***@dev-glad-pink-weasel.rmq7.dev.cloudamqp.com/ufqfohsz","ready":true,"apikey":"92e48e04-629b-4833-9847-ae212b093937","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://ufqfohsz:***@dev-glad-pink-weasel.rmq7.dev.cloudamqp.com/ufqfohsz","internal":"amqp://ufqfohsz:***@dev-glad-pink-weasel.in.rmq7.dev.cloudamqp.com/ufqfohsz"},"rmq_version":"4.1.4","hostname_external":"dev-glad-pink-weasel.rmq7.dev.cloudamqp.com","hostname_internal":"dev-glad-pink-weasel.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "827"
+                - "807"
             Content-Type:
                 - application/json
             Nel:
@@ -615,10 +615,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - d4a70f17-d45d-495e-8328-b78d607ce9bd
+                - 68ccb562-6cce-4742-924d-5fb5bee97a66
         status: 200 OK
         code: 200
-        duration: 14.839291ms
+        duration: 16.151625ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -637,7 +637,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/451/integrations/metrics/210
+        url: http://localhost:9393/api/instances/455/integrations/metrics/214
         method: GET
       response:
         proto: HTTP/1.1
@@ -645,14 +645,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 1860
+        content_length: 1829
         uncompressed: false
-        body: '{"id":210,"type":"azure_monitor","config":{"tags":"env=test,region=azure","connection_string":"InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f"},"account_id":"1f1af252-ae49-4b82-8ad4-0a6b39885b86","error":null,"created_at":"2025-09-30 11:53:31 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked","rabbitmq_queue_head_message_timestamp"]}'
+        body: '{"id":214,"type":"azure_monitor","config":{"connection_string":"InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f"},"account_id":"5ac1db26-9b01-420f-8b1a-a5df65700950","error":null,"created_at":"2025-09-30 14:22:07 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked","rabbitmq_queue_head_message_timestamp"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "1860"
+                - "1829"
             Content-Type:
                 - application/json
             Nel:
@@ -666,10 +666,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 8afd945a-6df0-46cc-ba59-4331a2f281b0
+                - 8347e17b-18bc-4938-b0e9-a606b88af11b
         status: 200 OK
         code: 200
-        duration: 24.452625ms
+        duration: 23.75775ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -688,7 +688,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/451/integrations/metrics/210
+        url: http://localhost:9393/api/instances/455/integrations/metrics/214
         method: GET
       response:
         proto: HTTP/1.1
@@ -696,14 +696,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 1860
+        content_length: 1829
         uncompressed: false
-        body: '{"id":210,"type":"azure_monitor","config":{"tags":"env=test,region=azure","connection_string":"InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f"},"account_id":"1f1af252-ae49-4b82-8ad4-0a6b39885b86","error":null,"created_at":"2025-09-30 11:53:31 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked","rabbitmq_queue_head_message_timestamp"]}'
+        body: '{"id":214,"type":"azure_monitor","config":{"connection_string":"InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f"},"account_id":"5ac1db26-9b01-420f-8b1a-a5df65700950","error":null,"created_at":"2025-09-30 14:22:07 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked","rabbitmq_queue_head_message_timestamp"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "1860"
+                - "1829"
             Content-Type:
                 - application/json
             Nel:
@@ -717,10 +717,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 0485f873-bf9d-4b51-b3b7-3d4509ba5979
+                - 464ee2ee-eb3b-4474-8472-63d9d8e18e01
         status: 200 OK
         code: 200
-        duration: 34.053625ms
+        duration: 31.605417ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -739,7 +739,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/451/integrations/metrics/210
+        url: http://localhost:9393/api/instances/455/integrations/metrics/214
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -764,10 +764,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 113d94b9-f56f-4233-82d6-601e7a3d8740
+                - 175e20fc-341e-437d-873c-466ef39b5636
         status: 204 No Content
         code: 204
-        duration: 54.097666ms
+        duration: 39.104584ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -786,7 +786,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/451?keep_vpc=false
+        url: http://localhost:9393/api/instances/455?keep_vpc=false
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -811,10 +811,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - a2c5dac1-5c87-4108-a085-0c19d3a2e3ee
+                - e653d938-8407-4463-ba5c-a849684c232f
         status: 204 No Content
         code: 204
-        duration: 53.796125ms
+        duration: 60.73525ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -833,7 +833,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/451
+        url: http://localhost:9393/api/instances/455
         method: GET
       response:
         proto: HTTP/1.1
@@ -862,7 +862,7 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 795d7357-3b9d-4f3f-b87e-f2e7401d3bbc
+                - 237e5977-f875-49d5-b647-e53de319d28c
         status: 404 Not Found
         code: 404
-        duration: 7.1285ms
+        duration: 8.638125ms

@@ -44,7 +44,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 						"tags": {
 							Type:        schema.TypeString,
 							Optional:    true,
-							Description: "tags. E.g. env=prod,region=europe",
+							Description: "tags. E.g. env=prod,service=web",
 						},
 					},
 				},
@@ -70,7 +70,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 						"tags": {
 							Type:        schema.TypeString,
 							Optional:    true,
-							Description: "tags. E.g. env=prod,region=europe",
+							Description: "tags. E.g. env=prod,service=web",
 						},
 					},
 				},
@@ -87,11 +87,6 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 							Required:    true,
 							Sensitive:   true,
 							Description: "Azure Application Insights Connection String",
-						},
-						"tags": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Description: "tags. E.g. env=prod,region=europe",
 						},
 					},
 				},
@@ -129,9 +124,6 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		intName = "azure_monitor"
 		azureMonitorConfig := azureMonitorList[0].(map[string]any)
 		params["connection_string"] = azureMonitorConfig["connection_string"]
-		if tags := azureMonitorConfig["tags"]; tags != nil && tags != "" {
-			params["tags"] = tags
-		}
 	}
 
 	if intName == "" {
@@ -209,9 +201,6 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		if _, ok := data["connection_string"]; ok {
 			azureMonitor[0]["connection_string"] = data["connection_string"]
 		}
-		if tags, ok := data["tags"]; ok {
-			azureMonitor[0]["tags"] = tags
-		}
 		if err := d.Set("azure_monitor", azureMonitor); err != nil {
 			return diag.Errorf("error setting azure_monitor for resource %s: %s", d.Id(), err)
 		}
@@ -245,9 +234,6 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 	} else if azureMonitorList := d.Get("azure_monitor").(*schema.Set).List(); len(azureMonitorList) > 0 {
 		azureMonitorConfig := azureMonitorList[0].(map[string]any)
 		params["connection_string"] = azureMonitorConfig["connection_string"]
-		if tags := azureMonitorConfig["tags"]; tags != nil && tags != "" {
-			params["tags"] = tags
-		}
 	}
 
 	err := api.UpdateIntegration(ctx, d.Get("instance_id").(int), "metrics", d.Id(), params)

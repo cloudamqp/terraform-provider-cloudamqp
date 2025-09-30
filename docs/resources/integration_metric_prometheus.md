@@ -4,7 +4,7 @@ This resource allows you to create and manage Prometheus-compatible metric integ
 
 ## Example Usage
 
-### New Relic v3 Integration
+### New Relic v3
 
 ```hcl
 resource "cloudamqp_integration_metric_prometheus" "newrelic" {
@@ -12,12 +12,12 @@ resource "cloudamqp_integration_metric_prometheus" "newrelic" {
 
   newrelic_v3 {
     api_key = var.newrelic_api_key
-    tags    = "env=prod,region=us-east-1"
+    tags    = "key=value,key2=value2"
   }
 }
 ```
 
-### Datadog v3 Integration
+### Datadog v3
 
 ```hcl
 resource "cloudamqp_integration_metric_prometheus" "datadog" {
@@ -26,12 +26,12 @@ resource "cloudamqp_integration_metric_prometheus" "datadog" {
   datadog_v3 {
     api_key = var.datadog_api_key
     region  = "us1"
-    tags    = "env=prod,region=us-east-1"
+    tags    = "key=value,key2=value2"
   }
 }
 ```
 
-### Azure Monitor Integration
+### Azure Monitor
 
 ```hcl
 resource "cloudamqp_integration_metric_prometheus" "azure_monitor" {
@@ -39,7 +39,6 @@ resource "cloudamqp_integration_metric_prometheus" "azure_monitor" {
 
   azure_monitor {
     connection_string = var.azure_monitor_connection_string
-    tags              = "env=prod,region=azure"
   }
 }
 ```
@@ -48,32 +47,30 @@ resource "cloudamqp_integration_metric_prometheus" "azure_monitor" {
 
 The following arguments are supported:
 
-* `instance_id` - (Required) The CloudAMQP instance identifier.
-* `newrelic_v3` - (Optional) Configuration block for New Relic v3 integration. Cannot be used with `datadog_v3` or `azure_monitor`.
-* `datadog_v3` - (Optional) Configuration block for Datadog v3 integration. Cannot be used with `newrelic_v3` or `azure_monitor`.
-* `azure_monitor` - (Optional) Configuration block for Azure Monitor integration. Cannot be used with `newrelic_v3` or `datadog_v3`.
+* `instance_id` - (Required) Instance identifier for the CloudAMQP instance.
 
-### newrelic_v3 Block
+Exactly one of the following integration blocks must be specified:
+
+### newrelic_v3
 
 The following arguments are supported:
 
 * `api_key` - (Required) New Relic API key for authentication.
 * `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
 
-### datadog_v3 Block
+### datadog_v3
 
 The following arguments are supported:
 
 * `api_key` - (Required) Datadog API key for authentication.
-* `region` - (Optional) Datadog region code. Defaults to `us1`. Valid values: `us1`, `us3`, `us5`, `eu1`.
+* `region` - (Required) Datadog region code. Valid values: `us1`, `us3`, `us5`, `eu1`.
 * `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
 
-### azure_monitor Block
+### azure_monitor
 
 The following arguments are supported:
 
 * `connection_string` - (Required) Azure Application Insights Connection String for authentication.
-* `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
 
 ## Attributes Reference
 
@@ -85,8 +82,41 @@ In addition to all arguments above, the following attributes are exported:
 
 CloudAMQP Prometheus metric integrations can be imported using the integration identifier together with the instance identifier. The import identifier should be in the format `{integration_id},{instance_id}`.
 
+From Terraform v1.5.0, the `import` block can be used to import this resource:
+
+### New Relic v3
+
+```hcl
+import {
+  to = cloudamqp_integration_metric_prometheus.newrelic
+  id = format("<integration_id>,%s", cloudamqp_instance.instance.id)
+}
 ```
-$ terraform import cloudamqp_integration_metric_prometheus.datadog 12345,67890
+
+### Datadog v3
+
+```hcl
+import {
+  to = cloudamqp_integration_metric_prometheus.datadog
+  id = format("<integration_id>,%s", cloudamqp_instance.instance.id)
+}
+```
+
+### Azure Monitor
+
+```hcl
+import {
+  to = cloudamqp_integration_metric_prometheus.azure_monitor
+  id = format("<integration_id>,%s", cloudamqp_instance.instance.id)
+}
+```
+
+Or use Terraform CLI:
+
+```
+$ terraform import cloudamqp_integration_metric_prometheus.newrelic <integration_id>,<instance_id>
+$ terraform import cloudamqp_integration_metric_prometheus.datadog <integration_id>,<instance_id>
+$ terraform import cloudamqp_integration_metric_prometheus.azure_monitor <integration_id>,<instance_id>
 ```
 
 ## Dependency

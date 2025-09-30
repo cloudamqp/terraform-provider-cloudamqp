@@ -20,7 +20,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Basic(t *testing.T) {
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
 			"NewRelicApiKey": "NEWRELIC_APIKEY",
-			"NewRelicTags":   "env=test,region=us1",
+			"NewRelicTags":   "key=value,key2=value2",
 		}
 	)
 
@@ -93,7 +93,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Update(t *testing.T) {
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
 			"NewRelicApiKey": "NEWRELIC_APIKEY",
-			"NewRelicTags":   "env=test,region=us1",
+			"NewRelicTags":   "key=value,key2=value2",
 		}
 
 		paramsUpdate = map[string]string{
@@ -101,7 +101,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Update(t *testing.T) {
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
 			"NewRelicApiKey": "NEWRELIC_APIKEY",
-			"NewRelicTags":   "env=prod,region=eu1",
+			"NewRelicTags":   "key=value2,key2=value3",
 		}
 	)
 
@@ -137,9 +137,9 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Basic(t *testing.T) {
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Basic",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": "DATADOG_APIKEY",
+			"DatadogApiKey": "d3d4d528973148a232c09be6c8772d36",
 			"DatadogRegion": "us1",
-			"DatadogTags":   "env=test,region=us1",
+			"DatadogTags":   "key=value,key2=value2",
 		}
 	)
 
@@ -176,7 +176,7 @@ func TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags(t *testing.T) {
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": "DATADOG_APIKEY",
+			"DatadogApiKey": "d3d4d528973148a232c09be6c8772d36",
 			"DatadogRegion": "us1",
 		}
 	)
@@ -214,18 +214,18 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Update",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": "DATADOG_APIKEY",
+			"DatadogApiKey": "d3d4d528973148a232c09be6c8772d36",
 			"DatadogRegion": "us1",
-			"DatadogTags":   "env=test,region=us1",
+			"DatadogTags":   "key=value,key2=value2",
 		}
 
 		paramsUpdate = map[string]string{
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Update",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": "DATADOG_APIKEY",
+			"DatadogApiKey": "d3d4d528973148a232c09be6c8772d36",
 			"DatadogRegion": "us1",
-			"DatadogTags":   "env=prod,region=us1",
+			"DatadogTags":   "key=value2,key2=value3",
 		}
 	)
 
@@ -264,7 +264,6 @@ func TestAccIntegrationMetricPrometheusAzureMonitor_Basic(t *testing.T) {
 			"InstanceID":                   fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":                 "bunny-1",
 			"AzureMonitorConnectionString": "InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f",
-			"AzureTags":                    "env=test,region=azure",
 		}
 	)
 
@@ -276,7 +275,6 @@ func TestAccIntegrationMetricPrometheusAzureMonitor_Basic(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(prometheusAzureMonitorResourceName, "azure_monitor.#", "1"),
-					resource.TestCheckResourceAttr(prometheusAzureMonitorResourceName, "azure_monitor.0.tags", params["AzureTags"]),
 				),
 			},
 			{
@@ -289,43 +287,7 @@ func TestAccIntegrationMetricPrometheusAzureMonitor_Basic(t *testing.T) {
 	})
 }
 
-// TestAccIntegrationMetricPrometheusAzureMonitor_WithoutTags: Test Azure Monitor prometheus integration without optional tags.
-func TestAccIntegrationMetricPrometheusAzureMonitor_WithoutTags(t *testing.T) {
-	var (
-		fileNames                          = []string{"instance", "integrations/metrics/integration_metric_prometheus_azure_monitor_notags"}
-		instanceResourceName               = "cloudamqp_instance.instance"
-		prometheusAzureMonitorResourceName = "cloudamqp_integration_metric_prometheus.azure_monitor_notags"
-
-		params = map[string]string{
-			"InstanceName":                 "TestAccIntegrationMetricPrometheusAzureMonitor_WithoutTags",
-			"InstanceID":                   fmt.Sprintf("%s.id", instanceResourceName),
-			"InstancePlan":                 "bunny-1",
-			"AzureMonitorConnectionString": "InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f",
-		}
-	)
-
-	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck: func() { testAccPreCheck(t) },
-		Steps: []resource.TestStep{
-			{
-				Config: configuration.GetTemplatedConfig(t, fileNames, params),
-				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(prometheusAzureMonitorResourceName, "azure_monitor.#", "1"),
-					resource.TestCheckResourceAttr(prometheusAzureMonitorResourceName, "azure_monitor.0.tags", ""),
-				),
-			},
-			{
-				ResourceName:      prometheusAzureMonitorResourceName,
-				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusAzureMonitorResourceName),
-				ImportState:       true,
-				ImportStateVerify: true,
-			},
-		},
-	})
-}
-
-// TestAccIntegrationMetricPrometheusAzureMonitor_Update: Test updating Azure Monitor prometheus integration.
+// TestAccIntegrationMetricPrometheusAzureMonitor_Update: Test updating Azure Monitor prometheus integration connection string.
 func TestAccIntegrationMetricPrometheusAzureMonitor_Update(t *testing.T) {
 	var (
 		fileNames                          = []string{"instance", "integrations/metrics/integration_metric_prometheus_azure_monitor"}
@@ -336,16 +298,14 @@ func TestAccIntegrationMetricPrometheusAzureMonitor_Update(t *testing.T) {
 			"InstanceName":                 "TestAccIntegrationMetricPrometheusAzureMonitor_Update",
 			"InstanceID":                   fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":                 "bunny-1",
-			"AzureMonitorConnectionString": "InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f",
-			"AzureTags":                    "env=test,region=azure",
+			"AzureMonitorConnectionString": "InstrumentationKey=11111111-1111-1111-1111-111111111111;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f",
 		}
 
 		paramsUpdate = map[string]string{
 			"InstanceName":                 "TestAccIntegrationMetricPrometheusAzureMonitor_Update",
 			"InstanceID":                   fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":                 "bunny-1",
-			"AzureMonitorConnectionString": "InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f",
-			"AzureTags":                    "env=prod,region=azure-west",
+			"AzureMonitorConnectionString": "InstrumentationKey=22222222-2222-2222-2222-222222222222;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f",
 		}
 	)
 
@@ -356,14 +316,14 @@ func TestAccIntegrationMetricPrometheusAzureMonitor_Update(t *testing.T) {
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsCreate),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsCreate["InstanceName"]),
-					resource.TestCheckResourceAttr(prometheusAzureMonitorResourceName, "azure_monitor.0.tags", paramsCreate["AzureTags"]),
+					resource.TestCheckResourceAttr(prometheusAzureMonitorResourceName, "azure_monitor.#", "1"),
 				),
 			},
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdate),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdate["InstanceName"]),
-					resource.TestCheckResourceAttr(prometheusAzureMonitorResourceName, "azure_monitor.0.tags", paramsUpdate["AzureTags"]),
+					resource.TestCheckResourceAttr(prometheusAzureMonitorResourceName, "azure_monitor.#", "1"),
 				),
 			},
 		},
