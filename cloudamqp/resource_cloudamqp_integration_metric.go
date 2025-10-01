@@ -49,16 +49,13 @@ type integrationMetricResourceModel struct {
 	IAMExternalID   types.String `tfsdk:"iam_external_id"`
 	IAMRole         types.String `tfsdk:"iam_role"`
 	IncludeAdQueues types.Bool   `tfsdk:"include_ad_queues"`
-	HostPort        types.String `tfsdk:"host_port"`
 	PrivateKey      types.String `tfsdk:"private_key"`
 	PrivateKeyID    types.String `tfsdk:"private_key_id"`
 	ProjectID       types.String `tfsdk:"project_id"`
 	QueueAllowlist  types.String `tfsdk:"queue_allowlist"`
 	Region          types.String `tfsdk:"region"`
 	Tags            types.String `tfsdk:"tags"`
-	Token           types.String `tfsdk:"token"`
 	SecretAccessKey types.String `tfsdk:"secret_access_key"`
-	SourceType      types.String `tfsdk:"sourcetype"`
 	VhostAllowlist  types.String `tfsdk:"vhost_allowlist"`
 }
 
@@ -109,7 +106,6 @@ func (r *integrationMetricResource) Schema(ctx context.Context, req resource.Sch
 						"datadog_v2",
 						"librato",
 						"newrelic_v2",
-						"splunk",
 						"stackdriver",
 					),
 				},
@@ -152,10 +148,6 @@ func (r *integrationMetricResource) Schema(ctx context.Context, req resource.Sch
 				Optional:    true,
 				Description: "(optional) Include Auto-Delete queues",
 			},
-			"host_port": schema.StringAttribute{
-				Optional:    true,
-				Description: "The host and port of the monitoring service. (Splunk)",
-			},
 			"private_key": schema.StringAttribute{
 				Optional:    true,
 				Computed:    true,
@@ -195,18 +187,9 @@ func (r *integrationMetricResource) Schema(ctx context.Context, req resource.Sch
 				Sensitive:   true,
 				Description: "AWS secret key. (Cloudwatch)",
 			},
-			"sourcetype": schema.StringAttribute{
-				Optional:    true,
-				Description: "Sourcetype of the metric data. (Splunk)",
-			},
 			"tags": schema.StringAttribute{
 				Optional:    true,
 				Description: "(optional) tags. E.g. env=prod,region=europe",
-			},
-			"token": schema.StringAttribute{
-				Optional:    true,
-				Sensitive:   true,
-				Description: "The token for the integration service. (Splunk)",
 			},
 			"vhost_allowlist": schema.StringAttribute{
 				Optional:    true,
@@ -401,10 +384,6 @@ func (r *integrationMetricResource) populateResourceModel(resourceModel *integra
 	case "newrelic_v2":
 		resourceModel.ApiKey = types.StringValue(*data.Config.APIKey)
 		resourceModel.Region = types.StringValue(*data.Config.Region)
-	case "splunk":
-		resourceModel.HostPort = types.StringValue(*data.Config.HostPort)
-		resourceModel.Token = types.StringValue(*data.Config.Token)
-		resourceModel.SourceType = types.StringValue(*data.Config.Sourcetype)
 	case "stackdriver":
 		if resourceModel.Credentials.ValueString() == "" {
 			resourceModel.ClientEmail = types.StringValue(*data.Config.ClientEmail)
@@ -464,10 +443,6 @@ func (r *integrationMetricResource) populateRequest(plan *integrationMetricResou
 	case "newrelic_v2":
 		request.APIKey = plan.ApiKey.ValueString()
 		request.Region = plan.Region.ValueString()
-	case "splunk":
-		request.HostPort = plan.HostPort.ValueString()
-		request.Sourcetype = plan.SourceType.ValueString()
-		request.Token = plan.Token.ValueString()
 	case "stackdriver":
 		if plan.Credentials.ValueString() != "" {
 			uDec, _ := base64.URLEncoding.DecodeString(plan.Credentials.ValueString())
