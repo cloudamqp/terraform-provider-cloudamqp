@@ -430,7 +430,7 @@ func (r *integrationMetricResource) populateResourceModel(resourceModel *integra
 		resourceModel.VhostAllowlist = types.StringNull()
 	}
 	if data.Config.Tags != nil {
-		resourceModel.Tags = types.StringValue(strings.Join(*data.Config.Tags, ","))
+		resourceModel.Tags = types.StringValue(*data.Config.Tags)
 	} else {
 		resourceModel.Tags = types.StringNull()
 	}
@@ -493,7 +493,7 @@ func (r *integrationMetricResource) populateRequest(plan *integrationMetricResou
 		request.QueueRegex = plan.QueueAllowlist.ValueString()
 	}
 	if !plan.Tags.IsUnknown() {
-		request.Tags = strings.Split(plan.Tags.ValueString(), ",")
+		request.Tags = plan.Tags.ValueString()
 	}
 	if !plan.VhostAllowlist.IsUnknown() {
 		request.VhostRegex = plan.VhostAllowlist.ValueString()
