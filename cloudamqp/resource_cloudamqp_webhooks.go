@@ -211,6 +211,12 @@ func (r *webhookResource) Read(ctx context.Context, req resource.ReadRequest, re
 		return
 	}
 
+	// Handle resource drift and trigger re-creation if resource been deleted outside the provider
+	if data == nil {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+
 	state.ID = types.StringValue(strconv.FormatInt(data.ID, 10))
 	state.Concurrency = types.Int64Value(data.Concurrency)
 	state.Queue = types.StringValue(data.Queue)
