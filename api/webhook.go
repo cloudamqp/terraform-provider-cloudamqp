@@ -39,7 +39,7 @@ func (api *API) CreateWebhook(ctx context.Context, instanceID int64, params mode
 
 // ReadWebhook - retrieves a specific webhook for an instance
 func (api *API) ReadWebhook(ctx context.Context, instanceID int64, webhookID string, sleep time.Duration) (
-	model.WebhookResponse, error) {
+	*model.WebhookResponse, error) {
 
 	var (
 		data   model.WebhookResponse
@@ -57,12 +57,15 @@ func (api *API) ReadWebhook(ctx context.Context, instanceID int64, webhookID str
 		failed:       &failed,
 	})
 	if err != nil {
-		return model.WebhookResponse{}, err
+		return nil, err
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s data=%v ", path, data))
-
-	return data, nil
+	// Handle resource drift
+	if data.ID == 0 {
+		return nil, nil
+	}
+	return &data, nil
 }
 
 // UpdateWebhook - updates a specific webhook for an instance
