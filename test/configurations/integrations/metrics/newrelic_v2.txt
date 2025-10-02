@@ -1,0 +1,9 @@
+resource "cloudamqp_integration_metric" "newrelic_v2" {
+  instance_id = {{.InstanceID}}
+  name        = "newrelic_v2"
+  api_key     = "{{.NewRelicApiKey}}"
+  region      = "{{.NewRelicRegion}}"
+  {{if .NewRelicTags}}tags = "{{.NewRelicTags}}"{{end}}
+  {{if .NewrelicQueueAllowList}}queue_allowlist = "{{.NewRelicAllowList}}"{{end}}
+  {{if .NewrelicVhostAllowList}}vhost_allowlist = "{{.NewRelicVhostAllowList}}"{{end}}
+}

@@ -10,18 +10,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-// CreateIntegrationLog - create a log integration for a specific instance
-func (api *API) CreateIntegrationLog(ctx context.Context, instanceID int64, intName string, params model.LogRequest) (string, error) {
+// CreateIntegrationMetric - create a metric integration for a specific instance
+func (api *API) CreateIntegrationMetric(ctx context.Context, instanceID int64, intName string, params model.MetricRequest) (string, error) {
 	var (
-		data   model.LogResponse
+		data   model.MetricResponse
 		failed map[string]any
-		path   = fmt.Sprintf("/api/instances/%d/integrations/logs/%s", instanceID, intName)
+		path   = fmt.Sprintf("/api/instances/%d/integrations/metrics/%s", instanceID, intName)
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%+v ", path, params))
 	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
-		functionName: "CreateIntegrationLog",
-		resourceName: "IntegrationLog",
+		functionName: "CreateIntegrationMetric",
+		resourceName: "IntegrationMetric",
 		attempt:      1,
 		sleep:        5 * time.Second,
 		data:         &data,
@@ -35,19 +35,19 @@ func (api *API) CreateIntegrationLog(ctx context.Context, instanceID int64, intN
 	return id, nil
 }
 
-// ReadIntegrationLog - retrieves a specific integration log for an instance
-func (api *API) ReadIntegrationLog(ctx context.Context, instanceID int64, logID string) (*model.LogResponse, error) {
+// ReadIntegrationMetric - retrieves a specific integration metric for an instance
+func (api *API) ReadIntegrationMetric(ctx context.Context, instanceID int64, metricID string) (*model.MetricResponse, error) {
 
 	var (
-		data   model.LogResponse
+		data   model.MetricResponse
 		failed map[string]any
-		path   = fmt.Sprintf("/api/instances/%d/integrations/logs/%s", instanceID, logID)
+		path   = fmt.Sprintf("/api/instances/%d/integrations/metrics/%s", instanceID, metricID)
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
 	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
-		functionName: "ReadIntegrationLog",
-		resourceName: "IntegrationLog",
+		functionName: "ReadIntegrationMetric",
+		resourceName: "IntegrationMetric",
 		attempt:      1,
 		sleep:        5 * time.Second,
 		data:         &data,
@@ -58,7 +58,6 @@ func (api *API) ReadIntegrationLog(ctx context.Context, instanceID int64, logID 
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s data=%+v ", path, data))
-
 	// Handle resource drift
 	if data.ID == 0 {
 		return nil, nil
@@ -66,18 +65,18 @@ func (api *API) ReadIntegrationLog(ctx context.Context, instanceID int64, logID 
 	return &data, nil
 }
 
-// UpdateIntegrationLog - updates a specific integration log for an instance
-func (api *API) UpdateIntegrationLog(ctx context.Context, instanceID int64, logID string, params model.LogRequest) error {
+// UpdateIntegrationMetric - updates a specific integration metric for an instance
+func (api *API) UpdateIntegrationMetric(ctx context.Context, instanceID int64, metricID string, params model.MetricRequest) error {
 
 	var (
 		failed map[string]any
-		path   = fmt.Sprintf("/api/instances/%d/integrations/logs/%s", instanceID, logID)
+		path   = fmt.Sprintf("/api/instances/%d/integrations/metrics/%s", instanceID, metricID)
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v ", path, params))
 	return api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
-		functionName: "UpdateIntegrationLog",
-		resourceName: "IntegrationLog",
+		functionName: "UpdateIntegrationMetric",
+		resourceName: "IntegrationMetric",
 		attempt:      1,
 		sleep:        5 * time.Second,
 		data:         nil,
@@ -85,17 +84,17 @@ func (api *API) UpdateIntegrationLog(ctx context.Context, instanceID int64, logI
 	})
 }
 
-// DeleteIntegrationLog - removes a specific integration log for an instance
-func (api *API) DeleteIntegrationLog(ctx context.Context, instanceID int64, logID string) error {
+// DeleteIntegrationMetric - removes a specific integration metric for an instance
+func (api *API) DeleteIntegrationMetric(ctx context.Context, instanceID int64, metricID string) error {
 	var (
 		failed map[string]any
-		path   = fmt.Sprintf("/api/instances/%d/integrations/logs/%s", instanceID, logID)
+		path   = fmt.Sprintf("/api/instances/%d/integrations/metrics/%s", instanceID, metricID)
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
 	return api.callWithRetry(ctx, api.sling.New().Delete(path), retryRequest{
-		functionName: "DeleteIntegrationLog",
-		resourceName: "IntegrationLog",
+		functionName: "DeleteIntegrationMetric",
+		resourceName: "IntegrationMetric",
 		attempt:      1,
 		sleep:        5 * time.Second,
 		data:         nil,
