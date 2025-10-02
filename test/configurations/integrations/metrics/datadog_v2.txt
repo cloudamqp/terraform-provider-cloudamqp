@@ -1,0 +1,9 @@
+resource "cloudamqp_integration_metric" "datadog_v2" {
+  instance_id = {{.InstanceID}}
+  name        = "datadog_v2"
+  api_key     = "{{.DataDogApiKey}}"
+  region      = "{{.DataDogRegion}}"
+  {{if .DataDogTags}}tags = "{{.DataDogTags}}"{{end}}
+  {{if .DataDogQueueAllowList}}queue_allowlist = "{{.DataDogAllowList}}"{{end}}
+  {{if .DataDogVhostAllowList}}vhost_allowlist = "{{.DataDogVhostAllowList}}"{{end}}
+}
