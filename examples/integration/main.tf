@@ -83,13 +83,15 @@ resource "cloudamqp_integration_metric" "newrelic_v2" {
 
 resource "cloudamqp_integration_metric_prometheus" "newrelic_v3" {
   instance_id = cloudamqp_instance.instance.id
-  name        = "newrelic_v3"
-  api_key     = var.newrelic_apikey
+  newrelic_v3 {
+    api_key = var.newrelic_apikey
+  }
 }
 
 resource "cloudamqp_integration_metric_prometheus" "datadog_v3" {
   instance_id = cloudamqp_instance.instance.id
-  name        = "datadog_v3"
-  region      = var.datadog_region
-  api_key     = var.datadog_apikey
+  datadog_v3 {
+    region  = var.datadog_region
+    api_key = var.datadog_apikey
+  }
 }
