@@ -184,6 +184,12 @@ func (r *vpcResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 		return
 	}
 
+	// Handle resource drift and trigger re-creation if resource been deleted outside the provider
+	if data == nil {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+
 	state.Name = types.StringValue(data.Name)
 	state.Region = types.StringValue(data.Region)
 	state.Subnet = types.StringValue(data.Subnet)

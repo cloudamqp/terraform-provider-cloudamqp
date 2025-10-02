@@ -42,7 +42,7 @@ func (api *API) CreateVPC(ctx context.Context, params model.VpcRequest) (model.V
 	return data, nil
 }
 
-func (api *API) ReadVPC(ctx context.Context, vpcID int) (model.VpcResponse, error) {
+func (api *API) ReadVPC(ctx context.Context, vpcID int) (*model.VpcResponse, error) {
 	var (
 		data   model.VpcResponse
 		failed map[string]any
@@ -59,15 +59,20 @@ func (api *API) ReadVPC(ctx context.Context, vpcID int) (model.VpcResponse, erro
 		failed:       &failed,
 	})
 	if err != nil {
-		return model.VpcResponse{}, fmt.Errorf("failed to read VPC: %w", err)
+		return nil, fmt.Errorf("failed to read VPC: %w", err)
+	}
+
+	// Handle resource drift
+	if data.ID == 0 {
+		return nil, nil
 	}
 
 	name, err := api.readVpcName(ctx, data.ID)
 	if err != nil {
-		return model.VpcResponse{}, fmt.Errorf("failed to read VPC name: %w", err)
+		return nil, fmt.Errorf("failed to read VPC name: %w", err)
 	}
 	data.VpcName = name
-	return data, nil
+	return &data, nil
 }
 
 func (api *API) UpdateVPC(ctx context.Context, vpcID int, params model.VpcRequest) error {
