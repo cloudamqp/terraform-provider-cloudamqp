@@ -1,0 +1,6 @@
+resource "cloudamqp_integration_metric_prometheus" "azure_monitor" {
+  instance_id = {{.InstanceID}}
+  azure_monitor {
+    connection_string = "{{.AzureMonitorConnectionString}}"
+  }
+}

@@ -24,3 +24,12 @@ output "cloudwatch_log_id" {
 output "cloudwatch_metric_id" {
   value = cloudamqp_integration_metric.cloudwatch.id
 }
+
+// Prometheus integrations
+output "newrelic_v3_integration_id" {
+  value = cloudamqp_integration_metric_prometheus.newrelic_v3.id
+}
+
+output "datadog_v3_integration_id" {
+  value = cloudamqp_integration_metric_prometheus.datadog_v3.id
+}

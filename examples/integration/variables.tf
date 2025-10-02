@@ -43,8 +43,8 @@ variable "datadog_region" {
   type = string
 
   validation {
-    condition     = var.newrelic_region == "us" || var.newrelic_region == "eu"
-    error_message = "Available regions are, us and eu"
+    condition     = var.datadog_region == "us1" || var.datadog_region == "us3" || var.datadog_region == "us5" || var.datadog_region == "eu"
+    error_message = "Available regions are, us1, us3, us5 and eu"
   }
 }
 
