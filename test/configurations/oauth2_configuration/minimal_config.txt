@@ -1,0 +1,5 @@
+resource "cloudamqp_oauth2_configuration" "oauth2_config" {
+  instance_id        = {{.InstanceID}}
+  resource_server_id = "{{.ResourceServerId}}"
+  issuer             = "{{.Issuer}}"
+}
