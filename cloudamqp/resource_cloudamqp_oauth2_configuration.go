@@ -10,6 +10,7 @@ import (
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance/configuration"
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/utils"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
@@ -263,6 +264,32 @@ func (r *oauth2ConfigurationResource) Configure(ctx context.Context, req resourc
 
 func (r *oauth2ConfigurationResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = "cloudamqp_oauth2_configuration"
+}
+
+func (r *oauth2ConfigurationResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	var plan oauth2ConfigurationResourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	// Validate required fields
+	if plan.ResourceServerId.IsNull() || plan.ResourceServerId.IsUnknown() || plan.ResourceServerId.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("resource_server_id"),
+			"Resource server identifier is required",
+			"Resource server identifier cannot be empty",
+		)
+	}
+
+	if plan.Issuer.IsNull() || plan.Issuer.IsUnknown() || plan.Issuer.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("issuer"),
+			"Issuer is required",
+			"Issuer cannot be empty",
+		)
+	}
+
 }
 
 func (r *oauth2ConfigurationResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
