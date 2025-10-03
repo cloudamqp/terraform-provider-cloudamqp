@@ -14,6 +14,7 @@ type OAuth2ConfigResponse struct {
 	VerifyAud               *bool              `json:"verify_aud,omitempty"`
 	OauthClientId           *string            `json:"oauth_client_id,omitempty"`
 	OauthScopes             *[]string          `json:"oauth_scopes,omitempty"`
+	Audience                *string            `json:"audience,omitempty"`
 	CreatedAt               *time.Time         `json:"created_at,omitempty"`
 	UpdatedAt               *time.Time         `json:"updated_at,omitempty"`
 }
@@ -28,4 +29,5 @@ type OAuth2ConfigRequest struct {
 	VerifyAud               *bool             `json:"verify_aud,omitempty"`
 	OauthClientId           string            `json:"oauth_client_id,omitempty"`
 	OauthScopes             []string          `json:"oauth_scopes,omitempty"`
+	Audience                string            `json:"audience,omitempty"`
 }

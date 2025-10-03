@@ -49,6 +49,7 @@ type oauth2ConfigurationResourceModel struct {
 	VerifyAud               types.Bool   `tfsdk:"verify_aud"`
 	OauthClientId           types.String `tfsdk:"oauth_client_id"`
 	OauthScopes             types.List   `tfsdk:"oauth_scopes"`
+	Audience                types.String `tfsdk:"audience"`
 	Sleep                   types.Int64  `tfsdk:"sleep"`
 	Timeout                 types.Int64  `tfsdk:"timeout"`
 }
@@ -348,6 +349,13 @@ func (r *oauth2ConfigurationResource) Schema(ctx context.Context, req resource.S
 				ElementType: types.StringType,
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"audience": schema.StringAttribute{
+				Optional:    true,
+				Description: "Audience",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"sleep": schema.Int64Attribute{
