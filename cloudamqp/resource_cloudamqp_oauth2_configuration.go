@@ -213,38 +213,14 @@ func (r *oauth2ConfigurationResource) Update(ctx context.Context, req resource.U
 }
 
 func (r *oauth2ConfigurationResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	var state oauth2ConfigurationResourceModel
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	// Parse the import ID as instance ID
-	instanceID, err := strconv.Atoi(req.ID)
+	tflog.Info(ctx, fmt.Sprintf("ImportState: ID=%s", req.ID))
+	instanceID, err := strconv.ParseInt(req.ID, 10, 64)
 	if err != nil {
-		resp.Diagnostics.AddError("Invalid import ID", fmt.Sprintf("Expected numeric instance ID, got: %s", req.ID))
+		resp.Diagnostics.AddError("Invalid import ID", fmt.Sprintf("Expected numeric instance_id, got: %q", req.ID))
 		return
 	}
-
-	state.InstanceID = types.Int64Value(int64(instanceID))
-	// Using default values for sleep and timeout when importing state.
-	sleep, timeout := time.Duration(60)*time.Second, time.Duration(3600)*time.Second
-	state.Sleep = types.Int64Value(int64(sleep.Seconds()))
-	state.Timeout = types.Int64Value(int64(timeout.Seconds()))
-
-	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
-	defer cancel()
-
-	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep)
-	if err != nil {
-		resp.Diagnostics.AddError("Error reading OAuth2 configuration", err.Error())
-		return
-	}
-
-	tflog.Info(ctx, fmt.Sprintf("Read OAuth2 configuration data: %v", data))
-
-	populateOAuth2ConfigurationStateModel(ctx, &state, &data)
-	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
+	resp.State.SetAttribute(ctx, path.Root("id"), req.ID)
+	resp.State.SetAttribute(ctx, path.Root("instance_id"), instanceID)
 }
 
 func (r *oauth2ConfigurationResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
