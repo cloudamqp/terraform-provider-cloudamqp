@@ -7,7 +7,7 @@ This resource allows you to create and manage Prometheus-compatible metric integ
 ### New Relic v3
 
 ```hcl
-resource "cloudamqp_integration_metric_prometheus" "newrelic" {
+resource "cloudamqp_integration_metric_prometheus" "newrelic_v3" {
   instance_id = cloudamqp_instance.instance.id
 
   newrelic_v3 {
@@ -20,7 +20,7 @@ resource "cloudamqp_integration_metric_prometheus" "newrelic" {
 ### Datadog v3
 
 ```hcl
-resource "cloudamqp_integration_metric_prometheus" "datadog" {
+resource "cloudamqp_integration_metric_prometheus" "datadog_v3" {
   instance_id = cloudamqp_instance.instance.id
 
   datadog_v3 {
@@ -46,7 +46,7 @@ resource "cloudamqp_integration_metric_prometheus" "azure_monitor" {
 ### Splunk v2
 
 ```hcl
-resource "cloudamqp_integration_metric_prometheus" "splunk" {
+resource "cloudamqp_integration_metric_prometheus" "splunk_v2" {
   instance_id = cloudamqp_instance.instance.id
 
   splunk_v2 {
@@ -110,7 +110,7 @@ From Terraform v1.5.0, the `import` block can be used to import this resource:
 
 ```hcl
 import {
-  to = cloudamqp_integration_metric_prometheus.newrelic
+  to = cloudamqp_integration_metric_prometheus.newrelic_v3
   id = format("<integration_id>,%s", cloudamqp_instance.instance.id)
 }
 ```
@@ -119,7 +119,7 @@ import {
 
 ```hcl
 import {
-  to = cloudamqp_integration_metric_prometheus.datadog
+  to = cloudamqp_integration_metric_prometheus.datadog_v3
   id = format("<integration_id>,%s", cloudamqp_instance.instance.id)
 }
 ```
@@ -137,7 +137,7 @@ import {
 
 ```hcl
 import {
-  to = cloudamqp_integration_metric_prometheus.splunk
+  to = cloudamqp_integration_metric_prometheus.splunk_v2
   id = format("<integration_id>,%s", cloudamqp_instance.instance.id)
 }
 ```
@@ -145,10 +145,10 @@ import {
 Or use Terraform CLI:
 
 ```
-$ terraform import cloudamqp_integration_metric_prometheus.newrelic <integration_id>,<instance_id>
-$ terraform import cloudamqp_integration_metric_prometheus.datadog <integration_id>,<instance_id>
+$ terraform import cloudamqp_integration_metric_prometheus.newrelic_v3 <integration_id>,<instance_id>
+$ terraform import cloudamqp_integration_metric_prometheus.datadog_v3 <integration_id>,<instance_id>
 $ terraform import cloudamqp_integration_metric_prometheus.azure_monitor <integration_id>,<instance_id>
-$ terraform import cloudamqp_integration_metric_prometheus.splunk <integration_id>,<instance_id>
+$ terraform import cloudamqp_integration_metric_prometheus.splunk_v2 <integration_id>,<instance_id>
 ```
 
 ## Dependency
