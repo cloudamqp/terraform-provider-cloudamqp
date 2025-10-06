@@ -33,7 +33,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"datadog_v3", "azure_monitor"},
+				ConflictsWith: []string{"datadog_v3", "azure_monitor", "splunk_v2"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
@@ -53,7 +53,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "azure_monitor"},
+				ConflictsWith: []string{"newrelic_v3", "azure_monitor", "splunk_v2"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
@@ -79,7 +79,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "splunk_v2"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"connection_string": {
@@ -87,6 +87,32 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 							Required:    true,
 							Sensitive:   true,
 							Description: "Azure Application Insights Connection String",
+						},
+					},
+				},
+			},
+			"splunk_v2": {
+				Type:          schema.TypeSet,
+				Optional:      true,
+				MaxItems:      1,
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor"},
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"token": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Sensitive:   true,
+							Description: "Splunk HEC token",
+						},
+						"endpoint": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "Splunk HEC endpoint. E.g. https://your-instance-id.splunkcloud.com:8088/services/collector",
+						},
+						"tags": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "tags. E.g. env=prod,service=web",
 						},
 					},
 				},
@@ -123,6 +149,14 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		intName = "azure_monitor"
 		azureMonitorConfig := azureMonitorList[0].(map[string]any)
 		params["connection_string"] = azureMonitorConfig["connection_string"]
+	} else if splunkList := d.Get("splunk_v2").(*schema.Set).List(); len(splunkList) > 0 {
+		intName = "splunk_v2"
+		splunkConfig := splunkList[0].(map[string]any)
+		params["token"] = splunkConfig["token"]
+		params["endpoint"] = splunkConfig["endpoint"]
+		if tags := splunkConfig["tags"]; tags != nil && tags != "" {
+			params["tags"] = tags
+		}
 	}
 
 	if intName == "" {
@@ -168,6 +202,7 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 	d.Set("newrelic_v3", nil)
 	d.Set("datadog_v3", nil)
 	d.Set("azure_monitor", nil)
+	d.Set("splunk_v2", nil)
 
 	name := strings.ToLower(data["type"].(string))
 	if name == "newrelic_v3" {
@@ -203,6 +238,20 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		if err := d.Set("azure_monitor", azureMonitor); err != nil {
 			return diag.Errorf("error setting azure_monitor for resource %s: %s", d.Id(), err)
 		}
+	} else if name == "splunk_v2" {
+		splunkV2 := []map[string]any{{}}
+		if _, ok := data["token"]; ok {
+			splunkV2[0]["token"] = data["token"]
+		}
+		if _, ok := data["endpoint"]; ok {
+			splunkV2[0]["endpoint"] = data["endpoint"]
+		}
+		if tags, ok := data["tags"]; ok {
+			splunkV2[0]["tags"] = tags
+		}
+		if err := d.Set("splunk_v2", splunkV2); err != nil {
+			return diag.Errorf("error setting splunk_v2 for resource %s: %s", d.Id(), err)
+		}
 	}
 
 	return nil
@@ -232,6 +281,13 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 	} else if azureMonitorList := d.Get("azure_monitor").(*schema.Set).List(); len(azureMonitorList) > 0 {
 		azureMonitorConfig := azureMonitorList[0].(map[string]any)
 		params["connection_string"] = azureMonitorConfig["connection_string"]
+	} else if splunkList := d.Get("splunk_v2").(*schema.Set).List(); len(splunkList) > 0 {
+		splunkConfig := splunkList[0].(map[string]any)
+		params["token"] = splunkConfig["token"]
+		params["endpoint"] = splunkConfig["endpoint"]
+		if tags := splunkConfig["tags"]; tags != nil && tags != "" {
+			params["tags"] = tags
+		}
 	}
 
 	err := api.UpdateIntegration(ctx, d.Get("instance_id").(int), "metrics", d.Id(), params)
