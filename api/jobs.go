@@ -20,23 +20,23 @@ func (api *API) PollForJobCompleted(ctx context.Context, instanceID int, jobID s
 	defer ticker.Stop()
 
 	for {
+		data, err := api.ReadJob(ctx, instanceID, jobID, sleep)
+		if err != nil {
+			return job.JobResponse{}, err
+		}
+
+		if *data.Status == "completed" {
+			return data, nil
+		}
+
+		if *data.Status == "failed" {
+			return job.JobResponse{}, fmt.Errorf("job failed: %s", *data.ErrorMessage)
+		}
+
 		select {
 		case <-ctx.Done():
 			return job.JobResponse{}, fmt.Errorf("context cancelled while polling for job completed")
 		case <-ticker.C:
-			data, err := api.ReadJob(ctx, instanceID, jobID, sleep)
-			if err != nil {
-				return job.JobResponse{}, err
-			}
-
-			if *data.Status == "completed" {
-				return data, nil
-			}
-
-			if *data.Status == "failed" {
-				return job.JobResponse{}, fmt.Errorf("job failed: %s", *data.ErrorMessage)
-			}
-
 			continue
 		}
 	}
