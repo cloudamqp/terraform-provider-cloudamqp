@@ -128,11 +128,11 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 				i.DiscardOnSave = true
 			}
 		case i.Response.Code == 200 && i.Request.Method == "GET" &&
-			regexp.MustCompile(`/api/instances/\d+/oauth2-configuration`).MatchString(i.Request.URL):
-			// Filter polling for OAuth2 configuration state, only store configured response
-			configured := gjson.Get(i.Response.Body, "configured").Bool()
-			if !configured {
-				fmt.Println("SKIP: GET /api/instances/{id}/oauth2-configuration", i.Request.URL, "configured:", configured)
+			regexp.MustCompile(`/api/instances/\d+/jobs/[a-f0-9-]{36}$`).MatchString(i.Request.URL):
+			// Filter polling for Job state, skip pending response
+			status := gjson.Get(i.Response.Body, "status").String()
+			if status == "pending" {
+				fmt.Println("SKIP: GET /api/instances/{id}/jobs/{id}", i.Request.URL, "status:", status)
 				i.DiscardOnSave = true
 			}
 		case i.Response.Code == 400 && i.Request.Method == "GET" &&

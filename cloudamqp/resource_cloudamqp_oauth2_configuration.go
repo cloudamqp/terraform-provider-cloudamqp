@@ -44,7 +44,7 @@ type oauth2ConfigurationResourceModel struct {
 	ResourceServerId        types.String `tfsdk:"resource_server_id"`
 	Issuer                  types.String `tfsdk:"issuer"`
 	PreferredUsernameClaims types.List   `tfsdk:"preferred_username_claims"`
-	AdditionalScopesKeys    types.List   `tfsdk:"additional_scopes_keys"`
+	AdditionalScopesKey     types.List   `tfsdk:"additional_scopes_key"`
 	ScopePrefix             types.String `tfsdk:"scope_prefix"`
 	ScopeAliases            types.Map    `tfsdk:"scope_aliases"`
 	VerifyAud               types.Bool   `tfsdk:"verify_aud"`
@@ -169,8 +169,8 @@ func (r *oauth2ConfigurationResource) Update(ctx context.Context, req resource.U
 	oauthScopes := make([]string, 0)
 	plan.OauthScopes.ElementsAs(ctx, &oauthScopes, false)
 
-	additionalScopesKeys := make([]string, 0)
-	plan.AdditionalScopesKeys.ElementsAs(ctx, &additionalScopesKeys, false)
+	additionalScopesKey := make([]string, 0)
+	plan.AdditionalScopesKey.ElementsAs(ctx, &additionalScopesKey, false)
 
 	params := model.OAuth2ConfigRequest{
 		ResourceServerId:        plan.ResourceServerId.ValueString(),
@@ -180,7 +180,7 @@ func (r *oauth2ConfigurationResource) Update(ctx context.Context, req resource.U
 		VerifyAud:               utils.Pointer(plan.VerifyAud.ValueBool()),
 		OauthClientId:           plan.OauthClientId.ValueString(),
 		OauthScopes:             oauthScopes,
-		AdditionalScopesKeys:    additionalScopesKeys,
+		AdditionalScopesKey:     additionalScopesKey,
 		ScopePrefix:             plan.ScopePrefix.ValueString(),
 	}
 
@@ -308,9 +308,9 @@ func (r *oauth2ConfigurationResource) Schema(ctx context.Context, req resource.S
 					listplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"additional_scopes_keys": schema.ListAttribute{
+			"additional_scopes_key": schema.ListAttribute{
 				Optional:    true,
-				Description: "Additional scopes keys",
+				Description: "Additional scopes key",
 				ElementType: types.StringType,
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.UseStateForUnknown(),
@@ -395,7 +395,7 @@ func populateOAuth2ConfigurationStateModel(ctx context.Context, state *oauth2Con
 		state.ScopePrefix = types.StringValue(*data.ScopePrefix)
 	}
 
-	state.AdditionalScopesKeys, _ = types.ListValueFrom(ctx, types.StringType, data.AdditionalScopesKeys)
+	state.AdditionalScopesKey, _ = types.ListValueFrom(ctx, types.StringType, data.AdditionalScopesKey)
 	state.OauthScopes, _ = types.ListValueFrom(ctx, types.StringType, data.OauthScopes)
 	if data.OauthClientId != nil {
 		state.OauthClientId = types.StringValue(*data.OauthClientId)
@@ -413,7 +413,7 @@ func populateOAuth2ConfigRequestModel(ctx context.Context, plan *oauth2Configura
 	data.VerifyAud = utils.Pointer(plan.VerifyAud.ValueBool())
 	data.OauthClientId = plan.OauthClientId.ValueString()
 	plan.OauthScopes.ElementsAs(ctx, &data.OauthScopes, false)
-	plan.AdditionalScopesKeys.ElementsAs(ctx, &data.AdditionalScopesKeys, false)
+	plan.AdditionalScopesKey.ElementsAs(ctx, &data.AdditionalScopesKey, false)
 	data.ScopePrefix = plan.ScopePrefix.ValueString()
 }
 

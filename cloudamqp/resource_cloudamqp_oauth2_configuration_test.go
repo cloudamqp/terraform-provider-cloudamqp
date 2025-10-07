@@ -41,7 +41,6 @@ func TestAccOAuth2Configuration_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_scopes.#", "2"),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_scopes.0", "read"),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_scopes.1", "write"),
-					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "configured", "true"),
 					resource.TestCheckResourceAttrSet(oauth2ConfigResourceName, "id"),
 				),
 			},
@@ -59,7 +58,7 @@ func TestAccOAuth2Configuration_Basic(t *testing.T) {
 // TestAccOAuth2Configuration_WithAllFields: Create OAuth2 configuration with all optional fields.
 func TestAccOAuth2Configuration_WithAllFields(t *testing.T) {
 	var (
-		fileNames                = []string{"instance", "oauth2_configuration/config_all_fields"}
+		fileNames                = []string{"instance", "oauth2_configuration/config"}
 		instanceResourceName     = "cloudamqp_instance.instance"
 		oauth2ConfigResourceName = "cloudamqp_oauth2_configuration.oauth2_config"
 
@@ -70,10 +69,13 @@ func TestAccOAuth2Configuration_WithAllFields(t *testing.T) {
 			"ResourceServerId":        "test-resource-server",
 			"Issuer":                  "https://test-issuer.example.com",
 			"PreferredUsernameClaims": `["preferred_username", "username"]`,
+			"AdditionalScopesKey":     `["admin"]`,
+			"ScopePrefix":             "cloudamqp",
 			"ScopeAliases":            `{read = "read:all", write = "write:all"}`,
 			"VerifyAud":               "true",
 			"OauthClientId":           "test-client-id",
 			"OauthScopes":             `["read", "write", "admin"]`,
+			"Audience":                "https://test-audience.example.com",
 		}
 	)
 
@@ -92,13 +94,16 @@ func TestAccOAuth2Configuration_WithAllFields(t *testing.T) {
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "scope_aliases.%", "2"),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "scope_aliases.read", "read:all"),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "scope_aliases.write", "write:all"),
+					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "additional_scopes_key.#", "1"),
+					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "additional_scopes_key.0", "admin"),
+					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "scope_prefix", params["ScopePrefix"]),
+					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "audience", params["Audience"]),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "verify_aud", params["VerifyAud"]),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_client_id", params["OauthClientId"]),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_scopes.#", "3"),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_scopes.0", "read"),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_scopes.1", "write"),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_scopes.2", "admin"),
-					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "configured", "true"),
 					resource.TestCheckResourceAttrSet(oauth2ConfigResourceName, "id"),
 				),
 			},
@@ -173,7 +178,7 @@ func TestAccOAuth2Configuration_Update(t *testing.T) {
 // TestAccOAuth2Configuration_MinimalConfig: Test with minimal configuration.
 func TestAccOAuth2Configuration_MinimalConfig(t *testing.T) {
 	var (
-		fileNames                = []string{"instance", "oauth2_configuration/minimal_config"}
+		fileNames                = []string{"instance", "oauth2_configuration/config"}
 		instanceResourceName     = "cloudamqp_instance.instance"
 		oauth2ConfigResourceName = "cloudamqp_oauth2_configuration.oauth2_config"
 
@@ -195,7 +200,6 @@ func TestAccOAuth2Configuration_MinimalConfig(t *testing.T) {
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "resource_server_id", params["ResourceServerId"]),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "issuer", params["Issuer"]),
-					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "configured", "true"),
 					resource.TestCheckResourceAttrSet(oauth2ConfigResourceName, "id"),
 				),
 			},
