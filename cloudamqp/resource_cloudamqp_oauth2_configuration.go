@@ -55,217 +55,8 @@ type oauth2ConfigurationResourceModel struct {
 	Timeout                 types.Int64  `tfsdk:"timeout"`
 }
 
-func (r *oauth2ConfigurationResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan oauth2ConfigurationResourceModel
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	instanceID := int(plan.InstanceID.ValueInt64())
-	sleep, timeout := extractSleepAndTimeout(&plan)
-	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
-	defer cancel()
-
-	request := model.OAuth2ConfigRequest{}
-	populateOAuth2ConfigRequestModel(ctx, &plan, &request)
-
-	job, err := r.client.CreateOAuth2Configuration(timeoutCtx, instanceID, sleep, request)
-	if err != nil {
-		resp.Diagnostics.AddError("Error creating OAuth2 configuration", err.Error())
-		return
-	}
-
-	_, err = r.client.PollForJobCompleted(timeoutCtx, instanceID, *job.ID, sleep)
-	if err != nil {
-		resp.Diagnostics.AddError("Error polling for OAuth2 configuration", err.Error())
-		return
-	}
-
-	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep)
-	if err != nil {
-		resp.Diagnostics.AddError("Error reading OAuth2 configuration", err.Error())
-		return
-	}
-
-	populateOAuth2ConfigurationStateModel(ctx, &plan, &data)
-	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
-}
-
-func (r *oauth2ConfigurationResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-
-	var state oauth2ConfigurationResourceModel
-	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	instanceID := int(state.InstanceID.ValueInt64())
-	sleep, timeout := extractSleepAndTimeout(&state)
-	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
-	defer cancel()
-
-	job, err := r.client.DeleteOAuth2Configuration(timeoutCtx, instanceID, sleep)
-	if err != nil {
-		resp.Diagnostics.AddError("Error deleting OAuth2 configuration", err.Error())
-		return
-	}
-
-	_, err = r.client.PollForJobCompleted(timeoutCtx, instanceID, *job.ID, sleep)
-	if err != nil {
-		resp.Diagnostics.AddError("Error polling for deleted OAuth2 configuration", err.Error())
-		return
-	}
-}
-
-func (r *oauth2ConfigurationResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-
-	var state oauth2ConfigurationResourceModel
-	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	instanceID := int(state.InstanceID.ValueInt64())
-	sleep, timeout := extractSleepAndTimeout(&state)
-
-	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
-	defer cancel()
-
-	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep)
-	if err != nil {
-		if strings.Contains(strings.ToLower(err.Error()), "not found") {
-			tflog.Info(ctx, "OAuth2 configuration not found, removing resource")
-			resp.State.RemoveResource(ctx)
-			return
-		}
-
-		resp.Diagnostics.AddError("Error reading OAuth2 configuration", err.Error())
-		return
-	}
-
-	tflog.Info(ctx, fmt.Sprintf("Read OAuth2 configuration data: %v", data))
-
-	populateOAuth2ConfigurationStateModel(ctx, &state, &data)
-	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
-}
-
-func (r *oauth2ConfigurationResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-
-	var plan oauth2ConfigurationResourceModel
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	instanceID := int(plan.InstanceID.ValueInt64())
-
-	preferredUsernameClaims := make([]string, 0)
-	plan.PreferredUsernameClaims.ElementsAs(ctx, &preferredUsernameClaims, false)
-
-	scopeAliases := make(map[string]string)
-	plan.ScopeAliases.ElementsAs(ctx, &scopeAliases, false)
-
-	oauthScopes := make([]string, 0)
-	plan.OauthScopes.ElementsAs(ctx, &oauthScopes, false)
-
-	additionalScopesKey := make([]string, 0)
-	plan.AdditionalScopesKey.ElementsAs(ctx, &additionalScopesKey, false)
-
-	params := model.OAuth2ConfigRequest{
-		ResourceServerId:        plan.ResourceServerId.ValueString(),
-		Issuer:                  plan.Issuer.ValueString(),
-		PreferredUsernameClaims: preferredUsernameClaims,
-		ScopeAliases:            scopeAliases,
-		VerifyAud:               utils.Pointer(plan.VerifyAud.ValueBool()),
-		OauthClientId:           plan.OauthClientId.ValueString(),
-		OauthScopes:             oauthScopes,
-		AdditionalScopesKey:     additionalScopesKey,
-		ScopePrefix:             plan.ScopePrefix.ValueString(),
-	}
-
-	sleep, timeout := extractSleepAndTimeout(&plan)
-	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
-	defer cancel()
-
-	job, err := r.client.UpdateOAuth2Configuration(timeoutCtx, instanceID, sleep, params)
-	if err != nil {
-		resp.Diagnostics.AddError("Error updating OAuth2 configuration", err.Error())
-		return
-	}
-
-	_, err = r.client.PollForJobCompleted(timeoutCtx, instanceID, *job.ID, sleep)
-	if err != nil {
-		resp.Diagnostics.AddError("Error polling for OAuth2 configuration", err.Error())
-		return
-	}
-
-	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep)
-	if err != nil {
-		resp.Diagnostics.AddError("Error reading OAuth2 configuration", err.Error())
-		return
-	}
-
-	tflog.Info(ctx, fmt.Sprintf("Read OAuth2 configuration data: %v", data))
-
-	populateOAuth2ConfigurationStateModel(ctx, &plan, &data)
-	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
-}
-
-func (r *oauth2ConfigurationResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	tflog.Info(ctx, fmt.Sprintf("ImportState: ID=%s", req.ID))
-	instanceID, err := strconv.ParseInt(req.ID, 10, 64)
-	if err != nil {
-		resp.Diagnostics.AddError("Invalid import ID", fmt.Sprintf("Expected numeric instance_id, got: %q", req.ID))
-		return
-	}
-	resp.State.SetAttribute(ctx, path.Root("id"), req.ID)
-	resp.State.SetAttribute(ctx, path.Root("instance_id"), instanceID)
-}
-
-func (r *oauth2ConfigurationResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
-	if req.ProviderData == nil {
-		return
-	}
-	client, ok := req.ProviderData.(*api.API)
-	if !ok {
-		resp.Diagnostics.AddError(
-			"Unexpected Provider Data Type",
-			fmt.Sprintf("Expected *api.API, got: %T. Please report this issue to the provider developers.", req.ProviderData),
-		)
-		return
-	}
-	r.client = client
-}
-
 func (r *oauth2ConfigurationResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = "cloudamqp_oauth2_configuration"
-}
-
-func (r *oauth2ConfigurationResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
-	var plan oauth2ConfigurationResourceModel
-	resp.Diagnostics.Append(req.Config.Get(ctx, &plan)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	// Validate required fields
-	if plan.ResourceServerId.IsNull() || plan.ResourceServerId.IsUnknown() || plan.ResourceServerId.ValueString() == "" {
-		resp.Diagnostics.AddAttributeError(
-			path.Root("resource_server_id"),
-			"Resource server identifier is required",
-			"Resource server identifier cannot be empty",
-		)
-	}
-
-	if plan.Issuer.IsNull() || plan.Issuer.IsUnknown() || plan.Issuer.ValueString() == "" {
-		resp.Diagnostics.AddAttributeError(
-			path.Root("issuer"),
-			"Issuer is required",
-			"Issuer cannot be empty",
-		)
-	}
-
 }
 
 func (r *oauth2ConfigurationResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
@@ -383,6 +174,188 @@ func (r *oauth2ConfigurationResource) Schema(ctx context.Context, req resource.S
 	}
 }
 
+func (r *oauth2ConfigurationResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+	client, ok := req.ProviderData.(*api.API)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Provider Data Type",
+			fmt.Sprintf("Expected *api.API, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+		return
+	}
+	r.client = client
+}
+
+func (r *oauth2ConfigurationResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	tflog.Info(ctx, fmt.Sprintf("ImportState: ID=%s", req.ID))
+	instanceID, err := strconv.ParseInt(req.ID, 10, 64)
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid import ID", fmt.Sprintf("Expected numeric instance_id, got: %q", req.ID))
+		return
+	}
+	resp.State.SetAttribute(ctx, path.Root("id"), req.ID)
+	resp.State.SetAttribute(ctx, path.Root("instance_id"), instanceID)
+}
+
+func (r *oauth2ConfigurationResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan oauth2ConfigurationResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	instanceID := int(plan.InstanceID.ValueInt64())
+	sleep, timeout := extractSleepAndTimeout(&plan)
+	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+
+	request := model.OAuth2ConfigRequest{}
+	populateOAuth2ConfigRequestModel(ctx, &plan, &request)
+
+	job, err := r.client.CreateOAuth2Configuration(timeoutCtx, instanceID, sleep, request)
+	if err != nil {
+		resp.Diagnostics.AddError("Error creating OAuth2 configuration", err.Error())
+		return
+	}
+
+	_, err = r.client.PollForJobCompleted(timeoutCtx, instanceID, *job.ID, sleep)
+	if err != nil {
+		resp.Diagnostics.AddError("Error polling for OAuth2 configuration", err.Error())
+		return
+	}
+
+	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep)
+	if err != nil {
+		resp.Diagnostics.AddError("Error reading OAuth2 configuration", err.Error())
+		return
+	}
+
+	populateOAuth2ConfigurationStateModel(ctx, &plan, &data)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+}
+
+func (r *oauth2ConfigurationResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state oauth2ConfigurationResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	instanceID := int(state.InstanceID.ValueInt64())
+	sleep, timeout := extractSleepAndTimeout(&state)
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+
+	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep)
+	if err != nil {
+		if strings.Contains(strings.ToLower(err.Error()), "not found") {
+			tflog.Info(ctx, "OAuth2 configuration not found, removing resource")
+			resp.State.RemoveResource(ctx)
+			return
+		}
+
+		resp.Diagnostics.AddError("Error reading OAuth2 configuration", err.Error())
+		return
+	}
+
+	tflog.Info(ctx, fmt.Sprintf("Read OAuth2 configuration data: %v", data))
+
+	populateOAuth2ConfigurationStateModel(ctx, &state, &data)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
+}
+
+func (r *oauth2ConfigurationResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan oauth2ConfigurationResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	instanceID := int(plan.InstanceID.ValueInt64())
+
+	preferredUsernameClaims := make([]string, 0)
+	plan.PreferredUsernameClaims.ElementsAs(ctx, &preferredUsernameClaims, false)
+
+	scopeAliases := make(map[string]string)
+	plan.ScopeAliases.ElementsAs(ctx, &scopeAliases, false)
+
+	oauthScopes := make([]string, 0)
+	plan.OauthScopes.ElementsAs(ctx, &oauthScopes, false)
+
+	additionalScopesKey := make([]string, 0)
+	plan.AdditionalScopesKey.ElementsAs(ctx, &additionalScopesKey, false)
+
+	params := model.OAuth2ConfigRequest{
+		ResourceServerId:        plan.ResourceServerId.ValueString(),
+		Issuer:                  plan.Issuer.ValueString(),
+		PreferredUsernameClaims: preferredUsernameClaims,
+		ScopeAliases:            scopeAliases,
+		VerifyAud:               utils.Pointer(plan.VerifyAud.ValueBool()),
+		OauthClientId:           plan.OauthClientId.ValueString(),
+		OauthScopes:             oauthScopes,
+		AdditionalScopesKey:     additionalScopesKey,
+		ScopePrefix:             plan.ScopePrefix.ValueString(),
+		Audience:                plan.Audience.ValueString(),
+	}
+
+	sleep, timeout := extractSleepAndTimeout(&plan)
+	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+
+	job, err := r.client.UpdateOAuth2Configuration(timeoutCtx, instanceID, sleep, params)
+	if err != nil {
+		resp.Diagnostics.AddError("Error updating OAuth2 configuration", err.Error())
+		return
+	}
+
+	_, err = r.client.PollForJobCompleted(timeoutCtx, instanceID, *job.ID, sleep)
+	if err != nil {
+		resp.Diagnostics.AddError("Error polling for OAuth2 configuration", err.Error())
+		return
+	}
+
+	data, err := r.client.ReadOAuth2Configuration(timeoutCtx, instanceID, sleep)
+	if err != nil {
+		resp.Diagnostics.AddError("Error reading OAuth2 configuration", err.Error())
+		return
+	}
+
+	tflog.Info(ctx, fmt.Sprintf("Read OAuth2 configuration data: %v", data))
+
+	populateOAuth2ConfigurationStateModel(ctx, &plan, &data)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+}
+
+func (r *oauth2ConfigurationResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state oauth2ConfigurationResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	instanceID := int(state.InstanceID.ValueInt64())
+	sleep, timeout := extractSleepAndTimeout(&state)
+	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+
+	job, err := r.client.DeleteOAuth2Configuration(timeoutCtx, instanceID, sleep)
+	if err != nil {
+		resp.Diagnostics.AddError("Error deleting OAuth2 configuration", err.Error())
+		return
+	}
+
+	_, err = r.client.PollForJobCompleted(timeoutCtx, instanceID, *job.ID, sleep)
+	if err != nil {
+		resp.Diagnostics.AddError("Error polling for deleted OAuth2 configuration", err.Error())
+		return
+	}
+}
+
+// Private methods
 func populateOAuth2ConfigurationStateModel(ctx context.Context, state *oauth2ConfigurationResourceModel, data *model.OAuth2ConfigResponse) {
 	state.ID = types.StringValue(*data.ConfigurationId)
 	state.ResourceServerId = types.StringValue(*data.ResourceServerId)
@@ -401,6 +374,10 @@ func populateOAuth2ConfigurationStateModel(ctx context.Context, state *oauth2Con
 		state.OauthClientId = types.StringValue(*data.OauthClientId)
 	}
 
+	if data.Audience != nil {
+		state.Audience = types.StringValue(*data.Audience)
+	}
+
 	state.VerifyAud = types.BoolValue(*data.VerifyAud)
 }
 
@@ -415,6 +392,7 @@ func populateOAuth2ConfigRequestModel(ctx context.Context, plan *oauth2Configura
 	plan.OauthScopes.ElementsAs(ctx, &data.OauthScopes, false)
 	plan.AdditionalScopesKey.ElementsAs(ctx, &data.AdditionalScopesKey, false)
 	data.ScopePrefix = plan.ScopePrefix.ValueString()
+	data.Audience = plan.Audience.ValueString()
 }
 
 func extractSleepAndTimeout(plan *oauth2ConfigurationResourceModel) (time.Duration, time.Duration) {
