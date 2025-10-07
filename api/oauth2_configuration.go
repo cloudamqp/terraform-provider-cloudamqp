@@ -19,7 +19,14 @@ func (api *API) ReadOAuth2Configuration(ctx context.Context, instanceID int, sle
 		failed map[string]any
 	)
 
-	err := callWithRetry(ctx, api.sling.New().Get(getPath(instanceID)), 1, sleep, &data, &failed)
+	err := api.callWithRetry(ctx, api.sling.New().Get(getPath(instanceID)), retryRequest{
+		functionName: "ReadOAuth2Configuration",
+		resourceName: "OAuth2Configuration",
+		attempt:      1,
+		sleep:        sleep,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return model.OAuth2ConfigResponse{}, err
 	}
@@ -34,7 +41,14 @@ func (api *API) CreateOAuth2Configuration(ctx context.Context, instanceID int, s
 		failed map[string]any
 	)
 
-	err := callWithRetry(ctx, api.sling.New().Post(getPath(instanceID)).BodyJSON(&params), 1, sleep, &data, &failed)
+	err := api.callWithRetry(ctx, api.sling.New().Post(getPath(instanceID)).BodyJSON(&params), retryRequest{
+		functionName: "CreateOAuth2Configuration",
+		resourceName: "OAuth2Configuration",
+		attempt:      1,
+		sleep:        sleep,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return job.JobCreationResponse{}, err
 	}
@@ -48,7 +62,14 @@ func (api *API) UpdateOAuth2Configuration(ctx context.Context, instanceID int, s
 		failed map[string]any
 	)
 
-	err := callWithRetry(ctx, api.sling.New().Put(getPath(instanceID)).BodyJSON(&params), 1, sleep, &data, &failed)
+	err := api.callWithRetry(ctx, api.sling.New().Put(getPath(instanceID)).BodyJSON(&params), retryRequest{
+		functionName: "UpdateOAuth2Configuration",
+		resourceName: "OAuth2Configuration",
+		attempt:      1,
+		sleep:        sleep,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return job.JobCreationResponse{}, err
 	}
@@ -62,7 +83,14 @@ func (api *API) DeleteOAuth2Configuration(ctx context.Context, instanceID int, s
 		failed map[string]any
 	)
 
-	err := callWithRetry(ctx, api.sling.New().Delete(getPath(instanceID)), 1, sleep, &data, &failed)
+	err := api.callWithRetry(ctx, api.sling.New().Delete(getPath(instanceID)), retryRequest{
+		functionName: "DeleteOAuth2Configuration",
+		resourceName: "OAuth2Configuration",
+		attempt:      1,
+		sleep:        sleep,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return job.JobCreationResponse{}, err
 	}

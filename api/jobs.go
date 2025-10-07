@@ -49,7 +49,14 @@ func (api *API) ReadJob(ctx context.Context, instanceID int, jobID string, sleep
 		failed map[string]any
 	)
 
-	err := callWithRetry(ctx, api.sling.New().Get(path), 1, sleep, &data, &failed)
+	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+		functionName: "ReadJob",
+		resourceName: "Jobs",
+		attempt:      1,
+		sleep:        sleep,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return job.JobResponse{}, err
 	}
