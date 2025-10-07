@@ -33,7 +33,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"datadog_v3", "azure_monitor", "splunk_v2"},
+				ConflictsWith: []string{"datadog_v3", "azure_monitor", "splunk_v2", "dynatrace"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
@@ -53,7 +53,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "azure_monitor", "splunk_v2"},
+				ConflictsWith: []string{"newrelic_v3", "azure_monitor", "splunk_v2", "dynatrace"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
@@ -79,7 +79,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "splunk_v2"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "splunk_v2", "dynatrace"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"connection_string": {
@@ -95,7 +95,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "dynatrace"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"token": {
@@ -108,6 +108,32 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 							Type:        schema.TypeString,
 							Required:    true,
 							Description: "Splunk HEC endpoint. E.g. https://your-instance-id.splunkcloud.com:8088/services/collector",
+						},
+						"tags": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "tags. E.g. env=prod,service=web",
+						},
+					},
+				},
+			},
+			"dynatrace": {
+				Type:          schema.TypeSet,
+				Optional:      true,
+				MaxItems:      1,
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2"},
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"environment_id": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "Dynatrace environment ID",
+						},
+						"access_token": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Sensitive:   true,
+							Description: "Dynatrace access token with 'Ingest metrics' permission",
 						},
 						"tags": {
 							Type:        schema.TypeString,
@@ -157,6 +183,14 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		if tags := splunkConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}
+	} else if dynatraceList := d.Get("dynatrace").(*schema.Set).List(); len(dynatraceList) > 0 {
+		intName = "dynatrace"
+		dynatraceConfig := dynatraceList[0].(map[string]any)
+		params["environment_id"] = dynatraceConfig["environment_id"]
+		params["access_token"] = dynatraceConfig["access_token"]
+		if tags := dynatraceConfig["tags"]; tags != nil && tags != "" {
+			params["tags"] = tags
+		}
 	}
 
 	if intName == "" {
@@ -203,6 +237,7 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 	d.Set("datadog_v3", nil)
 	d.Set("azure_monitor", nil)
 	d.Set("splunk_v2", nil)
+	d.Set("dynatrace", nil)
 
 	name := strings.ToLower(data["type"].(string))
 	if name == "newrelic_v3" {
@@ -252,6 +287,20 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		if err := d.Set("splunk_v2", splunkV2); err != nil {
 			return diag.Errorf("error setting splunk_v2 for resource %s: %s", d.Id(), err)
 		}
+	} else if name == "dynatrace" {
+		dynatrace := []map[string]any{{}}
+		if _, ok := data["environment_id"]; ok {
+			dynatrace[0]["environment_id"] = data["environment_id"]
+		}
+		if _, ok := data["access_token"]; ok {
+			dynatrace[0]["access_token"] = data["access_token"]
+		}
+		if tags, ok := data["tags"]; ok {
+			dynatrace[0]["tags"] = tags
+		}
+		if err := d.Set("dynatrace", dynatrace); err != nil {
+			return diag.Errorf("error setting dynatrace for resource %s: %s", d.Id(), err)
+		}
 	}
 
 	return nil
@@ -286,6 +335,13 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 		params["token"] = splunkConfig["token"]
 		params["endpoint"] = splunkConfig["endpoint"]
 		if tags := splunkConfig["tags"]; tags != nil && tags != "" {
+			params["tags"] = tags
+		}
+	} else if dynatraceList := d.Get("dynatrace").(*schema.Set).List(); len(dynatraceList) > 0 {
+		dynatraceConfig := dynatraceList[0].(map[string]any)
+		params["environment_id"] = dynatraceConfig["environment_id"]
+		params["access_token"] = dynatraceConfig["access_token"]
+		if tags := dynatraceConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}
 	}

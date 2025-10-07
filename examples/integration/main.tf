@@ -103,3 +103,11 @@ resource "cloudamqp_integration_metric_prometheus" "splunk_v2" {
     endpoint = var.splunk_endpoint
   }
 }
+
+resource "cloudamqp_integration_metric_prometheus" "dynatrace" {
+  instance_id = cloudamqp_instance.instance.id
+  dynatrace {
+    environment_id = var.dynatrace_environment_id
+    access_token   = var.dynatrace_access_token
+  }
+}

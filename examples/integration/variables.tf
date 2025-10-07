@@ -74,3 +74,15 @@ variable "newrelic_region" {
     error_message = "Available regions are, us and eu"
   }
 }
+
+// Dynatrace
+variable "dynatrace_environment_id" {
+  type        = string
+  description = "Dynatrace environment ID"
+}
+
+variable "dynatrace_access_token" {
+  type        = string
+  description = "Dynatrace access token with 'Ingest metrics' permission"
+  sensitive   = true
+}
