@@ -21,6 +21,12 @@ lint:
 	golangci-lint run ./...
 
 clean:
-	rm -f terraform-provider-cloudamqp
+	rm -f terraform-provider-cloudamqp 
 
-.PHONY: clean install fmt fmtcheck lint tools
+test:
+	TF_ACC=1 go test ./cloudamqp/ -v $(filter-out $@,$(MAKECMDGOALS))
+
+.PHONY: clean install fmt fmtcheck lint tools test
+
+%:
+	@:
