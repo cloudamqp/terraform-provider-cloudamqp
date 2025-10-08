@@ -54,3 +54,7 @@ output "splunk_v2_integration_id" {
 output "dynatrace_integration_id" {
   value = cloudamqp_integration_metric_prometheus.dynatrace.id
 }
+
+output "cloudwatch_v3_integration_id" {
+  value = cloudamqp_integration_metric_prometheus.cloudwatch_v3.id
+}

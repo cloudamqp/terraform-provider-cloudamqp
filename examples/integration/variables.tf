@@ -86,3 +86,19 @@ variable "dynatrace_access_token" {
   description = "Dynatrace access token with 'Ingest metrics' permission"
   sensitive   = true
 }
+
+// CloudWatch v3
+variable "cloudwatch_iam_role" {
+  type        = string
+  description = "AWS IAM role ARN with PutMetricData permission"
+}
+
+variable "cloudwatch_iam_external_id" {
+  type        = string
+  description = "AWS IAM external ID for role assumption"
+}
+
+variable "cloudwatch_region" {
+  type        = string
+  description = "AWS region for CloudWatch metrics"
+}

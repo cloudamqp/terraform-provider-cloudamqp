@@ -581,3 +581,141 @@ func TestAccIntegrationMetricPrometheusDynatrace_Update(t *testing.T) {
 		},
 	})
 }
+
+// TestAccIntegrationMetricPrometheusCloudwatchV3_Basic: Add CloudWatch v3 prometheus metric integration and import.
+func TestAccIntegrationMetricPrometheusCloudwatchV3_Basic(t *testing.T) {
+	var (
+		fileNames                        = []string{"instance", "integrations/metrics/integration_metric_prometheus_cloudwatch_v3"}
+		instanceResourceName             = "cloudamqp_instance.instance"
+		prometheusCloudwatchResourceName = "cloudamqp_integration_metric_prometheus.cloudwatch_v3"
+
+		params = map[string]string{
+			"InstanceName":            "TestAccIntegrationMetricPrometheusCloudwatchV3_Basic",
+			"InstanceID":              fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":            "bunny-1",
+			"CloudwatchIAMRole":       "arn:aws:iam::123456789012:role/cloudamqp-role",
+			"CloudwatchIAMExternalID": "cloudamqp-external-id-123",
+			"CloudwatchRegion":        "us-east-1",
+			"CloudwatchTags":          "env=test,service=rabbitmq",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.#", "1"),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_role", params["CloudwatchIAMRole"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_external_id", params["CloudwatchIAMExternalID"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.region", params["CloudwatchRegion"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.tags", params["CloudwatchTags"]),
+				),
+			},
+			{
+				ResourceName:      prometheusCloudwatchResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusCloudwatchResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusCloudwatchV3_WithoutTags: Test CloudWatch v3 prometheus integration without optional tags.
+func TestAccIntegrationMetricPrometheusCloudwatchV3_WithoutTags(t *testing.T) {
+	var (
+		fileNames                        = []string{"instance", "integrations/metrics/integration_metric_prometheus_cloudwatch_v3_notags"}
+		instanceResourceName             = "cloudamqp_instance.instance"
+		prometheusCloudwatchResourceName = "cloudamqp_integration_metric_prometheus.cloudwatch_v3_notags"
+
+		params = map[string]string{
+			"InstanceName":            "TestAccIntegrationMetricPrometheusCloudwatchV3_WithoutTags",
+			"InstanceID":              fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":            "bunny-1",
+			"CloudwatchIAMRole":       "arn:aws:iam::123456789012:role/cloudamqp-role",
+			"CloudwatchIAMExternalID": "cloudamqp-external-id-123",
+			"CloudwatchRegion":        "us-east-1",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.#", "1"),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_role", params["CloudwatchIAMRole"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_external_id", params["CloudwatchIAMExternalID"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.region", params["CloudwatchRegion"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.tags", ""),
+				),
+			},
+			{
+				ResourceName:      prometheusCloudwatchResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusCloudwatchResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusCloudwatchV3_Update: Test updating CloudWatch v3 prometheus integration.
+func TestAccIntegrationMetricPrometheusCloudwatchV3_Update(t *testing.T) {
+	var (
+		fileNames                        = []string{"instance", "integrations/metrics/integration_metric_prometheus_cloudwatch_v3"}
+		instanceResourceName             = "cloudamqp_instance.instance"
+		prometheusCloudwatchResourceName = "cloudamqp_integration_metric_prometheus.cloudwatch_v3"
+
+		paramsCreate = map[string]string{
+			"InstanceName":            "TestAccIntegrationMetricPrometheusCloudwatchV3_Update",
+			"InstanceID":              fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":            "bunny-1",
+			"CloudwatchIAMRole":       "arn:aws:iam::123456789012:role/cloudamqp-role",
+			"CloudwatchIAMExternalID": "cloudamqp-external-id-123",
+			"CloudwatchRegion":        "us-east-1",
+			"CloudwatchTags":          "env=test,service=rabbitmq",
+		}
+
+		paramsUpdate = map[string]string{
+			"InstanceName":            "TestAccIntegrationMetricPrometheusCloudwatchV3_Update",
+			"InstanceID":              fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":            "bunny-1",
+			"CloudwatchIAMRole":       "arn:aws:iam::987654321098:role/cloudamqp-role-updated",
+			"CloudwatchIAMExternalID": "cloudamqp-external-id-456",
+			"CloudwatchRegion":        "us-west-2",
+			"CloudwatchTags":          "env=prod,service=messaging,team=platform",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsCreate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsCreate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_role", paramsCreate["CloudwatchIAMRole"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_external_id", paramsCreate["CloudwatchIAMExternalID"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.region", paramsCreate["CloudwatchRegion"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.tags", paramsCreate["CloudwatchTags"]),
+				),
+			},
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_role", paramsUpdate["CloudwatchIAMRole"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_external_id", paramsUpdate["CloudwatchIAMExternalID"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.region", paramsUpdate["CloudwatchRegion"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.tags", paramsUpdate["CloudwatchTags"]),
+				),
+			},
+		},
+	})
+}

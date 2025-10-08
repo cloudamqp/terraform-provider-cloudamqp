@@ -1,6 +1,6 @@
 # cloudamqp_integration_metric_prometheus
 
-This resource allows you to create and manage Prometheus-compatible metric integrations for CloudAMQP instances. Currently supported integrations include New Relic v3, Datadog v3, Azure Monitor, Splunk v2, and Dynatrace.
+This resource allows you to create and manage Prometheus-compatible metric integrations for CloudAMQP instances. Currently supported integrations include New Relic v3, Datadog v3, Azure Monitor, Splunk v2, Dynatrace, and CloudWatch v3.
 
 ## Example Usage
 
@@ -69,6 +69,22 @@ resource "cloudamqp_integration_metric_prometheus" "dynatrace" {
     tags           = "key=value,key2=value2"
   }
 }
+```
+
+### CloudWatch v3
+
+```hcl
+resource "cloudamqp_integration_metric_prometheus" "cloudwatch_v3" {
+  instance_id = cloudamqp_instance.instance.id
+
+  cloudwatch_v3 {
+    iam_role        = var.cloudwatch_iam_role
+    iam_external_id = var.cloudwatch_iam_external_id
+    region          = var.cloudwatch_region
+    tags            = "key=value,key2=value2"
+  }
+}
+```
 
 ## Argument Reference
 
@@ -113,6 +129,15 @@ The following arguments are supported:
 
 * `environment_id` - (Required) Dynatrace environment ID.
 * `access_token` - (Required) Dynatrace access token with 'Ingest metrics' permission.
+* `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
+
+### cloudwatch_v3
+
+The following arguments are supported:
+
+* `iam_role` - (Required) AWS IAM role ARN with PutMetricData permission for CloudWatch integration.
+* `iam_external_id` - (Required) AWS IAM external ID for role assumption.
+* `region` - (Required) AWS region for CloudWatch metrics.
 * `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
 
 ## Attributes Reference
@@ -170,6 +195,16 @@ import {
   to = cloudamqp_integration_metric_prometheus.dynatrace
   id = format("<integration_id>,%s", cloudamqp_instance.instance.id)
 }
+```
+
+### CloudWatch v3
+
+```hcl
+import {
+  to = cloudamqp_integration_metric_prometheus.cloudwatch_v3
+  id = format("<integration_id>,%s", cloudamqp_instance.instance.id)
+}
+```
 
 Or use Terraform CLI:
 
@@ -179,6 +214,7 @@ $ terraform import cloudamqp_integration_metric_prometheus.datadog_v3 <integrati
 $ terraform import cloudamqp_integration_metric_prometheus.azure_monitor <integration_id>,<instance_id>
 $ terraform import cloudamqp_integration_metric_prometheus.splunk_v2 <integration_id>,<instance_id>
 $ terraform import cloudamqp_integration_metric_prometheus.dynatrace <integration_id>,<instance_id>
+$ terraform import cloudamqp_integration_metric_prometheus.cloudwatch_v3 <integration_id>,<instance_id>
 ```
 
 ## Dependency
