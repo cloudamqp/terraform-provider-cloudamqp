@@ -16,23 +16,7 @@ output "instance_region" {
 }
 
 output "cloudwatch_log_id" {
-  value = cloudamqp_integration_log.cloudwatchlog.id
-}
-
-output "logentries_log_id" {
-  value = cloudamqp_integration_log.logentries.id
-}
-
-output "loggly_log_id" {
-  value = cloudamqp_integration_log.loggly.id
-}
-
-output "papertrail_log_id" {
-  value = cloudamqp_integration_log.papertrail.id
-}
-
-output "splunk_log_id" {
-  value = cloudamqp_integration_log.splunk.id
+  value = cloudamqp_integration_log.cloudwatch.id
 }
 
 output "cloudwatch_metric_id" {
