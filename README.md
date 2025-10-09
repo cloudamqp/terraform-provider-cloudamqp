@@ -64,7 +64,7 @@ Setup [.terraformrc](https://developer.hashicorp.com/terraform/cli/config/config
 ```
 provider_installation {
   dev_overrides {
-    "hashicorp/cloudamqp" = "/home/USER/code/cloudamqp/terraform-provider-cloudamqp"
+    "cloudamqp/cloudamqp" = "/home/USER/code/cloudamqp/terraform-provider-cloudamqp"
   }
   direct {}
 }
