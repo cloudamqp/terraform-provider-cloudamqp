@@ -233,7 +233,7 @@ func (r *oauth2ConfigurationResource) Create(ctx context.Context, req resource.C
 		return
 	}
 
-	populateOAuth2ConfigurationStateModel(ctx, &plan, &data)
+	populateOAuth2ConfigurationStateModel(ctx, &plan, data)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
@@ -262,9 +262,16 @@ func (r *oauth2ConfigurationResource) Read(ctx context.Context, req resource.Rea
 		return
 	}
 
+	// If no data returned (instance not found), return nil to indicate resource not found
+	if data == nil {
+		tflog.Info(ctx, fmt.Sprintf("oauth2 configuration not found, resource will be recreated: %s", state.ID.ValueString()))
+		resp.State.RemoveResource(ctx)
+		return
+	}
+
 	tflog.Info(ctx, fmt.Sprintf("Read OAuth2 configuration data: %v", data))
 
-	populateOAuth2ConfigurationStateModel(ctx, &state, &data)
+	populateOAuth2ConfigurationStateModel(ctx, &state, data)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
@@ -324,9 +331,9 @@ func (r *oauth2ConfigurationResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	tflog.Info(ctx, fmt.Sprintf("Read OAuth2 configuration data: %v", data))
+	tflog.Info(ctx, fmt.Sprintf("Read OAuth2 configuration data: %+v", data))
 
-	populateOAuth2ConfigurationStateModel(ctx, &plan, &data)
+	populateOAuth2ConfigurationStateModel(ctx, &plan, data)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 

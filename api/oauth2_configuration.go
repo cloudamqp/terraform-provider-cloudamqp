@@ -13,7 +13,7 @@ func getPath(instanceID int) string {
 	return fmt.Sprintf("/api/instances/%d/oauth2-configurations", instanceID)
 }
 
-func (api *API) ReadOAuth2Configuration(ctx context.Context, instanceID int, sleep time.Duration) (model.OAuth2ConfigResponse, error) {
+func (api *API) ReadOAuth2Configuration(ctx context.Context, instanceID int, sleep time.Duration) (*model.OAuth2ConfigResponse, error) {
 	var (
 		data   model.OAuth2ConfigResponse
 		failed map[string]any
@@ -28,10 +28,14 @@ func (api *API) ReadOAuth2Configuration(ctx context.Context, instanceID int, sle
 		failed:       &failed,
 	})
 	if err != nil {
-		return model.OAuth2ConfigResponse{}, err
+		return nil, err
+	}
+	// Handle resource drift
+	if data.ClusterId == nil {
+		return nil, nil
 	}
 
-	return data, nil
+	return &data, nil
 }
 
 func (api *API) CreateOAuth2Configuration(ctx context.Context, instanceID int, sleep time.Duration, params model.OAuth2ConfigRequest) (job.JobCreationResponse, error) {
