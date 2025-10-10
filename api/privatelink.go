@@ -75,6 +75,9 @@ func (api *API) readPrivateLinkWithRetry(ctx context.Context, path string, attem
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.readPrivateLinkWithRetry(ctx, path, attempt, sleep, timeout)
 		}
+	case 404:
+		tflog.Warn(ctx, "Privatelink not found")
+		return nil, nil
 	}
 
 	return nil, fmt.Errorf("failed to read PrivateLink, status=%d message=%s ",
