@@ -1,0 +1,8 @@
+resource "cloudamqp_integration_metric_prometheus" "cloudwatch_v3_notags" {
+  instance_id = {{.InstanceID}}
+  cloudwatch_v3 {
+    iam_role        = "{{.CloudwatchIAMRole}}"
+    iam_external_id = "{{.CloudwatchIAMExternalID}}"
+    region          = "{{.CloudwatchRegion}}"
+  }
+}

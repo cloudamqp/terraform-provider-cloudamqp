@@ -329,3 +329,393 @@ func TestAccIntegrationMetricPrometheusAzureMonitor_Update(t *testing.T) {
 		},
 	})
 }
+
+// TestAccIntegrationMetricPrometheusSplunkV2_Basic: Add Splunk v2 prometheus metric integration and import.
+func TestAccIntegrationMetricPrometheusSplunkV2_Basic(t *testing.T) {
+	var (
+		fileNames                    = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2"}
+		instanceResourceName         = "cloudamqp_instance.instance"
+		prometheusSplunkResourceName = "cloudamqp_integration_metric_prometheus.splunk_v2"
+
+		params = map[string]string{
+			"InstanceName":   "TestAccIntegrationMetricPrometheusSplunkV2_Basic",
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
+			"SplunkToken":    "12345678-1234-1234-1234-123456789012",
+			"SplunkEndpoint": "https://prd-p-abcde.splunkcloud.com:8088/services/collector",
+			"SplunkTags":     "key=value,key2=value2",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.#", "1"),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.endpoint", params["SplunkEndpoint"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.tags", params["SplunkTags"]),
+				),
+			},
+			{
+				ResourceName:      prometheusSplunkResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusSplunkResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusSplunkV2_WithoutTags: Test Splunk v2 prometheus integration without optional tags.
+func TestAccIntegrationMetricPrometheusSplunkV2_WithoutTags(t *testing.T) {
+	var (
+		fileNames                    = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2_notags"}
+		instanceResourceName         = "cloudamqp_instance.instance"
+		prometheusSplunkResourceName = "cloudamqp_integration_metric_prometheus.splunk_v2_notags"
+
+		params = map[string]string{
+			"InstanceName":   "TestAccIntegrationMetricPrometheusSplunkV2_WithoutTags",
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
+			"SplunkToken":    "12345678-1234-1234-1234-123456789012",
+			"SplunkEndpoint": "https://prd-p-abcde.splunkcloud.com:8088/services/collector",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.#", "1"),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.endpoint", params["SplunkEndpoint"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.tags", ""),
+				),
+			},
+			{
+				ResourceName:      prometheusSplunkResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusSplunkResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusSplunkV2_Update: Test updating Splunk v2 prometheus integration.
+func TestAccIntegrationMetricPrometheusSplunkV2_Update(t *testing.T) {
+	var (
+		fileNames                    = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2"}
+		instanceResourceName         = "cloudamqp_instance.instance"
+		prometheusSplunkResourceName = "cloudamqp_integration_metric_prometheus.splunk_v2"
+
+		paramsCreate = map[string]string{
+			"InstanceName":   "TestAccIntegrationMetricPrometheusSplunkV2_Update",
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
+			"SplunkToken":    "12345678-1234-1234-1234-123456789012",
+			"SplunkEndpoint": "https://prd-p-abcde.splunkcloud.com:8088/services/collector",
+			"SplunkTags":     "key=value,key2=value2",
+		}
+
+		paramsUpdate = map[string]string{
+			"InstanceName":   "TestAccIntegrationMetricPrometheusSplunkV2_Update",
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
+			"SplunkToken":    "87654321-4321-4321-4321-210987654321",
+			"SplunkEndpoint": "https://prd-p-fghij.splunkcloud.com:8088/services/collector",
+			"SplunkTags":     "key=value2,key2=value3",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsCreate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsCreate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.endpoint", paramsCreate["SplunkEndpoint"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.tags", paramsCreate["SplunkTags"]),
+				),
+			},
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.endpoint", paramsUpdate["SplunkEndpoint"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.tags", paramsUpdate["SplunkTags"]),
+				),
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusDynatrace_Basic: Add Dynatrace prometheus metric integration and import.
+func TestAccIntegrationMetricPrometheusDynatrace_Basic(t *testing.T) {
+	var (
+		fileNames                       = []string{"instance", "integrations/metrics/integration_metric_prometheus_dynatrace"}
+		instanceResourceName            = "cloudamqp_instance.instance"
+		prometheusDynatraceResourceName = "cloudamqp_integration_metric_prometheus.dynatrace"
+
+		params = map[string]string{
+			"InstanceName":           "TestAccIntegrationMetricPrometheusDynatrace_Basic",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"DynatraceEnvironmentID": "abc12345",
+			"DynatraceAccessToken":   "dt0c01.ST2EY72KQINMH574WMNVI7YN.G3DFPBEJYMODIDAEX4KTJHQB",
+			"DynatraceTags":          "env=prod,service=rabbitmq",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.#", "1"),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.environment_id", params["DynatraceEnvironmentID"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.tags", params["DynatraceTags"]),
+				),
+			},
+			{
+				ResourceName:      prometheusDynatraceResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusDynatraceResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusDynatrace_WithoutTags: Test Dynatrace prometheus integration without optional tags.
+func TestAccIntegrationMetricPrometheusDynatrace_WithoutTags(t *testing.T) {
+	var (
+		fileNames                       = []string{"instance", "integrations/metrics/integration_metric_prometheus_dynatrace_notags"}
+		instanceResourceName            = "cloudamqp_instance.instance"
+		prometheusDynatraceResourceName = "cloudamqp_integration_metric_prometheus.dynatrace_notags"
+
+		params = map[string]string{
+			"InstanceName":           "TestAccIntegrationMetricPrometheusDynatrace_WithoutTags",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"DynatraceEnvironmentID": "abc12345",
+			"DynatraceAccessToken":   "dt0c01.ST2EY72KQINMH574WMNVI7YN.G3DFPBEJYMODIDAEX4KTJHQB",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.#", "1"),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.environment_id", params["DynatraceEnvironmentID"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.tags", ""),
+				),
+			},
+			{
+				ResourceName:      prometheusDynatraceResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusDynatraceResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusDynatrace_Update: Test updating Dynatrace prometheus integration.
+func TestAccIntegrationMetricPrometheusDynatrace_Update(t *testing.T) {
+	var (
+		fileNames                       = []string{"instance", "integrations/metrics/integration_metric_prometheus_dynatrace"}
+		instanceResourceName            = "cloudamqp_instance.instance"
+		prometheusDynatraceResourceName = "cloudamqp_integration_metric_prometheus.dynatrace"
+
+		params = map[string]string{
+			"InstanceName":           "TestAccIntegrationMetricPrometheusDynatrace_Update",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"DynatraceEnvironmentID": "abc12345",
+			"DynatraceAccessToken":   "dt0c01.ST2EY72KQINMH574WMNVI7YN.G3DFPBEJYMODIDAEX4KTJHQB",
+			"DynatraceTags":          "env=prod,service=rabbitmq",
+		}
+
+		paramsUpdate = map[string]string{
+			"InstanceName":           "TestAccIntegrationMetricPrometheusDynatrace_Update",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"DynatraceEnvironmentID": "xyz67890",
+			"DynatraceAccessToken":   "dt0c01.ABCDEFGHIJKLMNOPQRSTUV.WXYZ123456789ABCDEFGHIJKLMN",
+			"DynatraceTags":          "env=staging,service=messaging,team=platform",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.environment_id", params["DynatraceEnvironmentID"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.tags", params["DynatraceTags"]),
+				),
+			},
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.environment_id", paramsUpdate["DynatraceEnvironmentID"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.tags", paramsUpdate["DynatraceTags"]),
+				),
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusCloudwatchV3_Basic: Add CloudWatch v3 prometheus metric integration and import.
+func TestAccIntegrationMetricPrometheusCloudwatchV3_Basic(t *testing.T) {
+	var (
+		fileNames                        = []string{"instance", "integrations/metrics/integration_metric_prometheus_cloudwatch_v3"}
+		instanceResourceName             = "cloudamqp_instance.instance"
+		prometheusCloudwatchResourceName = "cloudamqp_integration_metric_prometheus.cloudwatch_v3"
+
+		params = map[string]string{
+			"InstanceName":            "TestAccIntegrationMetricPrometheusCloudwatchV3_Basic",
+			"InstanceID":              fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":            "bunny-1",
+			"CloudwatchIAMRole":       "arn:aws:iam::123456789012:role/cloudamqp-role",
+			"CloudwatchIAMExternalID": "cloudamqp-external-id-123",
+			"CloudwatchRegion":        "us-east-1",
+			"CloudwatchTags":          "env=test,service=rabbitmq",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.#", "1"),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_role", params["CloudwatchIAMRole"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_external_id", params["CloudwatchIAMExternalID"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.region", params["CloudwatchRegion"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.tags", params["CloudwatchTags"]),
+				),
+			},
+			{
+				ResourceName:      prometheusCloudwatchResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusCloudwatchResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusCloudwatchV3_WithoutTags: Test CloudWatch v3 prometheus integration without optional tags.
+func TestAccIntegrationMetricPrometheusCloudwatchV3_WithoutTags(t *testing.T) {
+	var (
+		fileNames                        = []string{"instance", "integrations/metrics/integration_metric_prometheus_cloudwatch_v3_notags"}
+		instanceResourceName             = "cloudamqp_instance.instance"
+		prometheusCloudwatchResourceName = "cloudamqp_integration_metric_prometheus.cloudwatch_v3_notags"
+
+		params = map[string]string{
+			"InstanceName":            "TestAccIntegrationMetricPrometheusCloudwatchV3_WithoutTags",
+			"InstanceID":              fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":            "bunny-1",
+			"CloudwatchIAMRole":       "arn:aws:iam::123456789012:role/cloudamqp-role",
+			"CloudwatchIAMExternalID": "cloudamqp-external-id-123",
+			"CloudwatchRegion":        "us-east-1",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.#", "1"),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_role", params["CloudwatchIAMRole"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_external_id", params["CloudwatchIAMExternalID"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.region", params["CloudwatchRegion"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.tags", ""),
+				),
+			},
+			{
+				ResourceName:      prometheusCloudwatchResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusCloudwatchResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusCloudwatchV3_Update: Test updating CloudWatch v3 prometheus integration.
+func TestAccIntegrationMetricPrometheusCloudwatchV3_Update(t *testing.T) {
+	var (
+		fileNames                        = []string{"instance", "integrations/metrics/integration_metric_prometheus_cloudwatch_v3"}
+		instanceResourceName             = "cloudamqp_instance.instance"
+		prometheusCloudwatchResourceName = "cloudamqp_integration_metric_prometheus.cloudwatch_v3"
+
+		paramsCreate = map[string]string{
+			"InstanceName":            "TestAccIntegrationMetricPrometheusCloudwatchV3_Update",
+			"InstanceID":              fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":            "bunny-1",
+			"CloudwatchIAMRole":       "arn:aws:iam::123456789012:role/cloudamqp-role",
+			"CloudwatchIAMExternalID": "cloudamqp-external-id-123",
+			"CloudwatchRegion":        "us-east-1",
+			"CloudwatchTags":          "env=test,service=rabbitmq",
+		}
+
+		paramsUpdate = map[string]string{
+			"InstanceName":            "TestAccIntegrationMetricPrometheusCloudwatchV3_Update",
+			"InstanceID":              fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":            "bunny-1",
+			"CloudwatchIAMRole":       "arn:aws:iam::987654321098:role/cloudamqp-role-updated",
+			"CloudwatchIAMExternalID": "cloudamqp-external-id-456",
+			"CloudwatchRegion":        "us-west-2",
+			"CloudwatchTags":          "env=prod,service=messaging,team=platform",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsCreate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsCreate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_role", paramsCreate["CloudwatchIAMRole"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_external_id", paramsCreate["CloudwatchIAMExternalID"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.region", paramsCreate["CloudwatchRegion"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.tags", paramsCreate["CloudwatchTags"]),
+				),
+			},
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_role", paramsUpdate["CloudwatchIAMRole"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_external_id", paramsUpdate["CloudwatchIAMExternalID"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.region", paramsUpdate["CloudwatchRegion"]),
+					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.tags", paramsUpdate["CloudwatchTags"]),
+				),
+			},
+		},
+	})
+}
