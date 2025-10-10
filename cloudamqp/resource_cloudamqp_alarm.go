@@ -149,8 +149,9 @@ func resourceAlarmRead(ctx context.Context, d *schema.ResourceData, meta any) di
 		return diag.FromErr(err)
 	}
 
-	// Handle resource drift and trigger re-creation if resource been deleted outside the provider
+	// Resource drift: instance or resource not found, trigger re-creation
 	if data == nil {
+		tflog.Info(ctx, fmt.Sprintf("alarm not found, resource will be recreated: %s", d.Id()))
 		d.SetId("")
 		return nil
 	}

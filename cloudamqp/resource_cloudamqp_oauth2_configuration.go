@@ -262,7 +262,7 @@ func (r *oauth2ConfigurationResource) Read(ctx context.Context, req resource.Rea
 		return
 	}
 
-	// If no data returned (instance not found), return nil to indicate resource not found
+	// Resource drift: instance or resource not found, trigger re-creation
 	if data == nil {
 		tflog.Info(ctx, fmt.Sprintf("oauth2 configuration not found, resource will be recreated: %s", state.ID.ValueString()))
 		resp.State.RemoveResource(ctx)
