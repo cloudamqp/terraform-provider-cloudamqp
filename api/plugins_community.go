@@ -92,6 +92,10 @@ func (api *API) listPluginsCommunityWithRetry(ctx context.Context, path string,
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.listPluginsCommunityWithRetry(ctx, path, attempt, sleep, timeout)
 		}
+	case 404:
+		// Instance not found - likely manually deleted
+		tflog.Debug(ctx, fmt.Sprintf("instance not found (404), likely manually deleted: %s", path))
+		return nil, fmt.Errorf("instance not found, status=404 message=%s", failed)
 	}
 	return nil, fmt.Errorf("failed to list communit plugins, status=%d message=%s ",
 		response.StatusCode, failed)
@@ -143,6 +147,10 @@ func (api *API) UninstallPluginCommunity(ctx context.Context, instanceID int, pl
 	switch response.StatusCode {
 	case 204:
 		return api.waitUntilPluginUninstalled(ctx, instanceID, pluginName, 1, sleep, timeout)
+	case 404:
+		// Instance not found - likely manually deleted
+		tflog.Debug(ctx, fmt.Sprintf("instance not found (404) during community plugin uninstall: %s", path))
+		return nil, fmt.Errorf("instance not found, status=404 message=%s", failed)
 	default:
 		return nil, fmt.Errorf("failed to disable communit plugin, status=%d message=%s ",
 			response.StatusCode, failed)

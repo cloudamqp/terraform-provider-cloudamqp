@@ -117,7 +117,19 @@ func resourcePluginRead(ctx context.Context, d *schema.ResourceData, meta any) d
 		instanceID, name, sleep, timeout)
 	data, err := api.ReadPlugin(ctx, instanceID, name, sleep, timeout)
 	if err != nil {
+		// If instance not found (404), return nil to indicate resource not found
+		// This allows Terraform to recreate the resource when the instance is recreated
+		if strings.Contains(err.Error(), "instance not found") || strings.Contains(err.Error(), "status=404") {
+			tflog.Info(ctx, fmt.Sprintf("instance not found, plugin resource will be recreated: %s", name))
+			return nil
+		}
 		return diag.FromErr(err)
+	}
+
+	// If no data returned (instance not found), return nil to indicate resource not found
+	if data == nil {
+		tflog.Info(ctx, fmt.Sprintf("plugin not found, resource will be recreated: %s", name))
+		return nil
 	}
 
 	for k, v := range data {
@@ -163,6 +175,11 @@ func resourcePluginDelete(ctx context.Context, d *schema.ResourceData, meta any)
 	}
 
 	if err := api.DeletePlugin(ctx, instanceID, name, sleep, timeout); err != nil {
+		// If instance not found (404), consider deletion successful
+		if strings.Contains(err.Error(), "instance not found") || strings.Contains(err.Error(), "status=404") {
+			tflog.Info(ctx, fmt.Sprintf("instance not found during plugin deletion, considering successful: %s", name))
+			return nil
+		}
 		return diag.FromErr(err)
 	}
 	return diag.Diagnostics{}
