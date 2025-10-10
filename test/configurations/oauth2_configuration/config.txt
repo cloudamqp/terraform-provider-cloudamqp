@@ -1,0 +1,13 @@
+resource "cloudamqp_oauth2_configuration" "oauth2_config" {
+  instance_id = {{.InstanceID}}
+  resource_server_id = "{{.ResourceServerId}}"
+  issuer = "{{.Issuer}}"
+  {{if .PreferredUsernameClaims}}preferred_username_claims = {{.PreferredUsernameClaims}}{{end}}
+  {{if .ScopeAliases}}scope_aliases = {{.ScopeAliases}}{{end}}
+  {{if .VerifyAud}}verify_aud = {{.VerifyAud}}{{end}}
+  {{if .OauthClientId}}oauth_client_id = "{{.OauthClientId}}"{{end}}
+  {{if .OauthScopes}}oauth_scopes = {{.OauthScopes}}{{end}}
+  {{if .AdditionalScopesKey }} additional_scopes_key    = {{.AdditionalScopesKey}}{{end}}
+  {{if .ScopePrefix }} scope_prefix = "{{.ScopePrefix}}"{{end}}
+  {{if .Audience }} audience = "{{.Audience}}" {{end}}
+}

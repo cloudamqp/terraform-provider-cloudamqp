@@ -127,6 +127,14 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 				fmt.Println("SKIP: GET /api/instances/{id}/vpc_connects", i.Request.URL, "status:", status)
 				i.DiscardOnSave = true
 			}
+		case i.Response.Code == 200 && i.Request.Method == "GET" &&
+			regexp.MustCompile(`/api/instances/\d+/jobs/[a-f0-9-]{36}$`).MatchString(i.Request.URL):
+			// Filter polling for Job state, skip pending response
+			status := gjson.Get(i.Response.Body, "status").String()
+			if status == "pending" {
+				fmt.Println("SKIP: GET /api/instances/{id}/jobs/{id}", i.Request.URL, "status:", status)
+				i.DiscardOnSave = true
+			}
 		case i.Response.Code == 400 && i.Request.Method == "GET" &&
 			regexp.MustCompile(`/api/vpcs/\d+/vpc-peering/info$`).MatchString(i.Request.URL):
 			// Filter polling for VPC create state, only store successful response
