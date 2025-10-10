@@ -11,6 +11,8 @@ import (
 
 // TestAccIntegrationMetric_CloudWatch: Test CloudWatch v2 integration.
 func TestAccIntegrationMetric_CloudWatch(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames              = []string{"instance", "integrations/metrics/cloudwatch_v2"}
 		instanceResourceName   = "cloudamqp_instance.instance"
@@ -52,6 +54,8 @@ func TestAccIntegrationMetric_CloudWatch(t *testing.T) {
 
 // TestAccIntegrationMetric_DataDog: Test DataDog v2 integration.
 func TestAccIntegrationMetric_DataDog(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames            = []string{"instance", "integrations/metrics/datadog_v2"}
 		instanceResourceName = "cloudamqp_instance.instance"
@@ -92,6 +96,8 @@ func TestAccIntegrationMetric_DataDog(t *testing.T) {
 
 // TestAccIntegrationMetric_Librato: Test Librato integration.
 func TestAccIntegrationMetric_Librato(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames            = []string{"instance", "integrations/metrics/librato"}
 		instanceResourceName = "cloudamqp_instance.instance"
@@ -132,6 +138,8 @@ func TestAccIntegrationMetric_Librato(t *testing.T) {
 
 // TestAccIntegrationMetric_NewRelic: Test New Relic v2 integration.
 func TestAccIntegrationMetric_NewRelic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames            = []string{"instance", "integrations/metrics/newrelic_v2"}
 		instanceResourceName = "cloudamqp_instance.instance"

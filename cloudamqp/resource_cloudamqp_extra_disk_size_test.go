@@ -10,6 +10,8 @@ import (
 
 // TestAccExtraDiskSize_AWS_Basic: Add extra disk size to an instance hosted in AWS.
 func TestAccExtraDiskSize_AWS_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames             = []string{"instance", "extra_disk_size"}
 		instanceResourceName  = "cloudamqp_instance.instance"
@@ -43,6 +45,8 @@ func TestAccExtraDiskSize_AWS_Basic(t *testing.T) {
 
 // TestAccExtraDiskSize_GCE_Basic: Add extra disk size to an instance hosted in Google.
 func TestAccExtraDiskSize_GCE_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames             = []string{"instance", "extra_disk_size"}
 		instanceResourceName  = "cloudamqp_instance.instance"

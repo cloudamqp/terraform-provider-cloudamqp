@@ -11,6 +11,8 @@ import (
 
 // TestAccIntegrationLog_Basic: Add log integrations and import.
 func TestAccIntegrationLog_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames              = []string{"instance", "integration_log"}
 		instanceResourceName   = "cloudamqp_instance.instance"
