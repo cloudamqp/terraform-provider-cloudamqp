@@ -329,3 +329,129 @@ func TestAccIntegrationMetricPrometheusAzureMonitor_Update(t *testing.T) {
 		},
 	})
 }
+
+// TestAccIntegrationMetricPrometheusSplunkV2_Basic: Add Splunk v2 prometheus metric integration and import.
+func TestAccIntegrationMetricPrometheusSplunkV2_Basic(t *testing.T) {
+	var (
+		fileNames                   = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2"}
+		instanceResourceName        = "cloudamqp_instance.instance"
+		prometheusSplunkResourceName = "cloudamqp_integration_metric_prometheus.splunk_v2"
+
+		params = map[string]string{
+			"InstanceName":   "TestAccIntegrationMetricPrometheusSplunkV2_Basic",
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
+			"SplunkToken":    "12345678-1234-1234-1234-123456789012",
+			"SplunkEndpoint": "https://prd-p-abcde.splunkcloud.com:8088/services/collector",
+			"SplunkTags":     "key=value,key2=value2",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.#", "1"),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.endpoint", params["SplunkEndpoint"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.tags", params["SplunkTags"]),
+				),
+			},
+			{
+				ResourceName:      prometheusSplunkResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusSplunkResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusSplunkV2_WithoutTags: Test Splunk v2 prometheus integration without optional tags.
+func TestAccIntegrationMetricPrometheusSplunkV2_WithoutTags(t *testing.T) {
+	var (
+		fileNames                   = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2_notags"}
+		instanceResourceName        = "cloudamqp_instance.instance"
+		prometheusSplunkResourceName = "cloudamqp_integration_metric_prometheus.splunk_v2_notags"
+
+		params = map[string]string{
+			"InstanceName":   "TestAccIntegrationMetricPrometheusSplunkV2_WithoutTags",
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
+			"SplunkToken":    "12345678-1234-1234-1234-123456789012",
+			"SplunkEndpoint": "https://prd-p-abcde.splunkcloud.com:8088/services/collector",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.#", "1"),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.endpoint", params["SplunkEndpoint"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.tags", ""),
+				),
+			},
+			{
+				ResourceName:      prometheusSplunkResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusSplunkResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusSplunkV2_Update: Test updating Splunk v2 prometheus integration.
+func TestAccIntegrationMetricPrometheusSplunkV2_Update(t *testing.T) {
+	var (
+		fileNames                   = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2"}
+		instanceResourceName        = "cloudamqp_instance.instance"
+		prometheusSplunkResourceName = "cloudamqp_integration_metric_prometheus.splunk_v2"
+
+		paramsCreate = map[string]string{
+			"InstanceName":   "TestAccIntegrationMetricPrometheusSplunkV2_Update",
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
+			"SplunkToken":    "12345678-1234-1234-1234-123456789012",
+			"SplunkEndpoint": "https://prd-p-abcde.splunkcloud.com:8088/services/collector",
+			"SplunkTags":     "key=value,key2=value2",
+		}
+
+		paramsUpdate = map[string]string{
+			"InstanceName":   "TestAccIntegrationMetricPrometheusSplunkV2_Update",
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
+			"SplunkToken":    "87654321-4321-4321-4321-210987654321",
+			"SplunkEndpoint": "https://prd-p-fghij.splunkcloud.com:8088/services/collector",
+			"SplunkTags":     "key=value2,key2=value3",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsCreate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsCreate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.endpoint", paramsCreate["SplunkEndpoint"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.tags", paramsCreate["SplunkTags"]),
+				),
+			},
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.endpoint", paramsUpdate["SplunkEndpoint"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.tags", paramsUpdate["SplunkTags"]),
+				),
+			},
+		},
+	})
+}

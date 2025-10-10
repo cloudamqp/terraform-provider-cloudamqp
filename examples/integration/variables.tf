@@ -34,6 +34,14 @@ variable "splunk_host_port" {
   type = string
 }
 
+variable "splunk_endpoint" {
+  type = string
+}
+
+variable "splunk_token" {
+  type = string
+}
+
 // Datadog
 variable "datadog_apikey" {
   type = string
