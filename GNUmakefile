@@ -26,7 +26,4 @@ clean:
 test:
 	TF_ACC=1 go test ./cloudamqp/ -v $(TESTARGS)
 
-test-ci:
-	TF_ACC=1 go test ./cloudamqp/ -v -parallel=10 -timeout=10m
-
 .PHONY: clean install fmt fmtcheck lint tools test terraform-provider-cloudamqp
