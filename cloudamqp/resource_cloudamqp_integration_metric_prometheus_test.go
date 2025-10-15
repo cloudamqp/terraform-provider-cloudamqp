@@ -10,6 +10,8 @@ import (
 
 // TestAccIntegrationMetricPrometheusNewRelicV3_Basic: Add NewRelic v3 prometheus metric integration and import.
 func TestAccIntegrationMetricPrometheusNewRelicV3_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                      = []string{"instance", "integrations/metrics/integration_metric_prometheus_newrelic_v3"}
 		instanceResourceName           = "cloudamqp_instance.instance"
@@ -47,6 +49,8 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Basic(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags: Test NewRelic v3 prometheus integration without optional tags.
 func TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                      = []string{"instance", "integrations/metrics/integration_metric_prometheus_newrelic_v3_notags"}
 		instanceResourceName           = "cloudamqp_instance.instance"
@@ -83,6 +87,8 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusNewRelicV3_Update: Test updating NewRelic v3 prometheus integration.
 func TestAccIntegrationMetricPrometheusNewRelicV3_Update(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                      = []string{"instance", "integrations/metrics/integration_metric_prometheus_newrelic_v3"}
 		instanceResourceName           = "cloudamqp_instance.instance"
@@ -128,6 +134,8 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Update(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusDatadogV3_Basic: Add Datadog v3 prometheus metric integration and import.
 func TestAccIntegrationMetricPrometheusDatadogV3_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                     = []string{"instance", "integrations/metrics/integration_metric_prometheus_datadog_v3"}
 		instanceResourceName          = "cloudamqp_instance.instance"
@@ -167,6 +175,8 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Basic(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags: Test Datadog v3 prometheus integration without optional tags.
 func TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                     = []string{"instance", "integrations/metrics/integration_metric_prometheus_datadog_v3_notags"}
 		instanceResourceName          = "cloudamqp_instance.instance"
@@ -205,6 +215,8 @@ func TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusDatadogV3_Update: Test updating Datadog v3 prometheus integration.
 func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                     = []string{"instance", "integrations/metrics/integration_metric_prometheus_datadog_v3"}
 		instanceResourceName          = "cloudamqp_instance.instance"
@@ -254,6 +266,8 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusAzureMonitor_Basic: Add Azure Monitor prometheus metric integration and import.
 func TestAccIntegrationMetricPrometheusAzureMonitor_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                          = []string{"instance", "integrations/metrics/integration_metric_prometheus_azure_monitor"}
 		instanceResourceName               = "cloudamqp_instance.instance"
@@ -289,6 +303,8 @@ func TestAccIntegrationMetricPrometheusAzureMonitor_Basic(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusAzureMonitor_Update: Test updating Azure Monitor prometheus integration connection string.
 func TestAccIntegrationMetricPrometheusAzureMonitor_Update(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                          = []string{"instance", "integrations/metrics/integration_metric_prometheus_azure_monitor"}
 		instanceResourceName               = "cloudamqp_instance.instance"

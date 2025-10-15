@@ -24,9 +24,6 @@ clean:
 	rm -f terraform-provider-cloudamqp 
 
 test:
-	TF_ACC=1 go test ./cloudamqp/ -v $(filter-out $@,$(MAKECMDGOALS))
+	TF_ACC=1 go test ./cloudamqp/ -v $(TESTARGS)
 
 .PHONY: clean install fmt fmtcheck lint tools test terraform-provider-cloudamqp
-
-%:
-	@:

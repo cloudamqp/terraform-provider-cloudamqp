@@ -10,6 +10,8 @@ import (
 
 // TestAccOAuth2Configuration_Basic: Create OAuth2 configuration and import.
 func TestAccOAuth2Configuration_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                = []string{"instance", "oauth2_configuration/config"}
 		instanceResourceName     = "cloudamqp_instance.instance"
@@ -57,6 +59,8 @@ func TestAccOAuth2Configuration_Basic(t *testing.T) {
 
 // TestAccOAuth2Configuration_WithAllFields: Create OAuth2 configuration with all optional fields.
 func TestAccOAuth2Configuration_WithAllFields(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                = []string{"instance", "oauth2_configuration/config"}
 		instanceResourceName     = "cloudamqp_instance.instance"
@@ -113,6 +117,8 @@ func TestAccOAuth2Configuration_WithAllFields(t *testing.T) {
 
 // TestAccOAuth2Configuration_Update: Test updating OAuth2 configuration.
 func TestAccOAuth2Configuration_Update(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                = []string{"instance", "oauth2_configuration/config"}
 		instanceResourceName     = "cloudamqp_instance.instance"
@@ -177,6 +183,8 @@ func TestAccOAuth2Configuration_Update(t *testing.T) {
 
 // TestAccOAuth2Configuration_MinimalConfig: Test with minimal configuration.
 func TestAccOAuth2Configuration_MinimalConfig(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                = []string{"instance", "oauth2_configuration/config"}
 		instanceResourceName     = "cloudamqp_instance.instance"
