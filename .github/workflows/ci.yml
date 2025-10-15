@@ -18,7 +18,7 @@ jobs:
           go-version-file: .go-version
 
       - name: Run tests
-        run: make test
+        run: make test TESTARGS='-parallel=10 -timeout=10m'
 
       - name: Build for single target with GoReleaser
         uses: goreleaser/goreleaser-action@e435ccd777264be153ace6237001ef4d979d3a7a # v6.4.0
