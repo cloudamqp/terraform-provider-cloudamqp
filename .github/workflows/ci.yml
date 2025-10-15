@@ -18,7 +18,7 @@ jobs:
           go-version-file: .go-version
 
       - name: Run tests
-        run: make test-ci
+        run: make test
 
       - name: Build for single target with GoReleaser
         uses: goreleaser/goreleaser-action@e435ccd777264be153ace6237001ef4d979d3a7a # v6.4.0
