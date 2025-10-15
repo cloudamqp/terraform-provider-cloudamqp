@@ -34,6 +34,14 @@ variable "splunk_host_port" {
   type = string
 }
 
+variable "splunk_endpoint" {
+  type = string
+}
+
+variable "splunk_token" {
+  type = string
+}
+
 // Datadog
 variable "datadog_apikey" {
   type = string
@@ -65,4 +73,16 @@ variable "newrelic_region" {
     condition     = var.newrelic_region == "us" || var.newrelic_region == "eu"
     error_message = "Available regions are, us and eu"
   }
+}
+
+// Dynatrace
+variable "dynatrace_environment_id" {
+  type        = string
+  description = "Dynatrace environment ID"
+}
+
+variable "dynatrace_access_token" {
+  type        = string
+  description = "Dynatrace access token with 'Ingest metrics' permission"
+  sensitive   = true
 }
