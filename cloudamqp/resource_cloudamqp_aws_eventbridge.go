@@ -17,6 +17,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 var (
@@ -208,15 +209,15 @@ func (r *awsEventBridgeResource) Read(ctx context.Context, request resource.Read
 		instanceID = int(state.InstanceID.ValueInt64())
 	)
 
-	log.Printf("[DEBUG] cloudamqp::resource::aws-eventbridge::read ID: %v, instanceID %v", id, instanceID)
 	data, err := r.client.ReadAwsEventBridge(ctx, instanceID, id)
 	if err != nil {
 		response.Diagnostics.AddError("Something went wrong while reading the aws event bridge", fmt.Sprintf("%v", err))
 		return
 	}
 
-	// Handle resource drift and trigger re-creation if resource been deleted outside the provider
+	// Resource drift: instance or resource not found, trigger re-creation
 	if data == nil {
+		tflog.Info(ctx, fmt.Sprintf("oauth2 configuration not found, resource will be recreated: %s", state.Id.ValueString()))
 		response.State.RemoveResource(ctx)
 		return
 	}
