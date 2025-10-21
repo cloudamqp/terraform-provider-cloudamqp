@@ -548,3 +548,129 @@ func TestAccIntegrationMetricPrometheusSplunkV2_Update(t *testing.T) {
 		},
 	})
 }
+
+// TestAccIntegrationMetricPrometheusDynatrace_Basic: Add Dynatrace prometheus metric integration and import.
+func TestAccIntegrationMetricPrometheusDynatrace_Basic(t *testing.T) {
+	var (
+		fileNames                       = []string{"instance", "integrations/metrics/integration_metric_prometheus_dynatrace"}
+		instanceResourceName            = "cloudamqp_instance.instance"
+		prometheusDynatraceResourceName = "cloudamqp_integration_metric_prometheus.dynatrace"
+
+		params = map[string]string{
+			"InstanceName":           "TestAccIntegrationMetricPrometheusDynatrace_Basic",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"DynatraceEnvironmentID": "abc12345",
+			"DynatraceAccessToken":   "dt0c01.ST2EY72KQINMH574WMNVI7YN.G3DFPBEJYMODIDAEX4KTJHQB",
+			"DynatraceTags":          "env=prod,service=rabbitmq",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.#", "1"),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.environment_id", params["DynatraceEnvironmentID"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.tags", params["DynatraceTags"]),
+				),
+			},
+			{
+				ResourceName:      prometheusDynatraceResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusDynatraceResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusDynatrace_WithoutTags: Test Dynatrace prometheus integration without optional tags.
+func TestAccIntegrationMetricPrometheusDynatrace_WithoutTags(t *testing.T) {
+	var (
+		fileNames                       = []string{"instance", "integrations/metrics/integration_metric_prometheus_dynatrace_notags"}
+		instanceResourceName            = "cloudamqp_instance.instance"
+		prometheusDynatraceResourceName = "cloudamqp_integration_metric_prometheus.dynatrace_notags"
+
+		params = map[string]string{
+			"InstanceName":           "TestAccIntegrationMetricPrometheusDynatrace_WithoutTags",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"DynatraceEnvironmentID": "abc12345",
+			"DynatraceAccessToken":   "dt0c01.ST2EY72KQINMH574WMNVI7YN.G3DFPBEJYMODIDAEX4KTJHQB",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.#", "1"),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.environment_id", params["DynatraceEnvironmentID"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.tags", ""),
+				),
+			},
+			{
+				ResourceName:      prometheusDynatraceResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusDynatraceResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusDynatrace_Update: Test updating Dynatrace prometheus integration.
+func TestAccIntegrationMetricPrometheusDynatrace_Update(t *testing.T) {
+	var (
+		fileNames                       = []string{"instance", "integrations/metrics/integration_metric_prometheus_dynatrace"}
+		instanceResourceName            = "cloudamqp_instance.instance"
+		prometheusDynatraceResourceName = "cloudamqp_integration_metric_prometheus.dynatrace"
+
+		params = map[string]string{
+			"InstanceName":           "TestAccIntegrationMetricPrometheusDynatrace_Update",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"DynatraceEnvironmentID": "abc12345",
+			"DynatraceAccessToken":   "dt0c01.ST2EY72KQINMH574WMNVI7YN.G3DFPBEJYMODIDAEX4KTJHQB",
+			"DynatraceTags":          "env=prod,service=rabbitmq",
+		}
+
+		paramsUpdate = map[string]string{
+			"InstanceName":           "TestAccIntegrationMetricPrometheusDynatrace_Update",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"DynatraceEnvironmentID": "xyz67890",
+			"DynatraceAccessToken":   "dt0c01.ABCDEFGHIJKLMNOPQRSTUV.WXYZ123456789ABCDEFGHIJKLMN",
+			"DynatraceTags":          "env=staging,service=messaging,team=platform",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.environment_id", params["DynatraceEnvironmentID"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.tags", params["DynatraceTags"]),
+				),
+			},
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.environment_id", paramsUpdate["DynatraceEnvironmentID"]),
+					resource.TestCheckResourceAttr(prometheusDynatraceResourceName, "dynatrace.0.tags", paramsUpdate["DynatraceTags"]),
+				),
+			},
+		},
+	})
+}

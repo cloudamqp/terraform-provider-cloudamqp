@@ -1,0 +1,7 @@
+resource "cloudamqp_integration_metric_prometheus" "dynatrace_notags" {
+  instance_id = {{.InstanceID}}
+  dynatrace {
+    environment_id = "{{.DynatraceEnvironmentID}}"
+    access_token   = "{{.DynatraceAccessToken}}"
+  }
+}

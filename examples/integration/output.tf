@@ -50,3 +50,7 @@ output "datadog_v3_integration_id" {
 output "splunk_v2_integration_id" {
   value = cloudamqp_integration_metric_prometheus.splunk_v2.id
 }
+
+output "dynatrace_integration_id" {
+  value = cloudamqp_integration_metric_prometheus.dynatrace.id
+}
