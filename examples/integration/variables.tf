@@ -102,3 +102,10 @@ variable "cloudwatch_region" {
   type        = string
   description = "AWS region for CloudWatch metrics"
 }
+
+// Stackdriver v2
+variable "stackdriver_credentials" {
+  type        = string
+  description = "Base64-encoded Google service account key JSON file"
+  sensitive   = true
+}

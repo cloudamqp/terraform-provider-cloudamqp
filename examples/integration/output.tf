@@ -42,3 +42,7 @@ output "dynatrace_integration_id" {
 output "cloudwatch_v3_integration_id" {
   value = cloudamqp_integration_metric_prometheus.cloudwatch_v3.id
 }
+
+output "stackdriver_v2_integration_id" {
+  value = cloudamqp_integration_metric_prometheus.stackdriver_v2.id
+}
