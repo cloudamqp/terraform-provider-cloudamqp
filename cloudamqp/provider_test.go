@@ -73,7 +73,7 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		return nil
 	}
 	rec.SetMatcher(requestURIMatcher)
-	rec.AddHook(sanitizeHook, recorder.AfterCaptureHook)
+	rec.AddHook(sanitizeHook, recorder.BeforeSaveHook)
 
 	shouldSaveHook := func(i *cassette.Interaction) error {
 		if t.Failed() {
