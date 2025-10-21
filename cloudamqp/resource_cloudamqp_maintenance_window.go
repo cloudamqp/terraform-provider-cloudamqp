@@ -12,6 +12,7 @@ import (
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/utils"
 
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -132,6 +133,13 @@ func resourceMaintenanceWindowRead(ctx context.Context, d *schema.ResourceData,
 	data, err := api.ReadMaintenance(ctx, instanceID)
 	if err != nil {
 		return diag.FromErr(err)
+	}
+
+	// Resource drift: instance or resource not found, trigger re-creation
+	if data == nil {
+		tflog.Info(ctx, fmt.Sprintf("maintenance window not found, resource will be recreated: %s", d.Id()))
+		d.SetId("")
+		return nil
 	}
 
 	d.Set("preferred_day", data.PreferredDay)

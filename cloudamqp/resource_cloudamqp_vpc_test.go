@@ -12,6 +12,8 @@ import (
 
 // TestAccVpc_Import: Test VPC creation and import
 func TestAccVpc_Import(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames       = []string{"vpc"}
 		vpcResourceName = "cloudamqp_vpc.vpc"
@@ -50,6 +52,8 @@ func TestAccVpc_Import(t *testing.T) {
 
 // TestAccVpc_DifferentRegions: Test VPC creation in different regions.
 func TestAccVpc_DifferentRegions(t *testing.T) {
+	t.Parallel()
+
 	regions := []string{
 		"amazon-web-services::us-east-1",
 		"amazon-web-services::us-west-2",
@@ -85,6 +89,8 @@ func TestAccVpc_DifferentRegions(t *testing.T) {
 
 // TestAccVpc_DifferentSubnets: Test VPC creation with different CIDR blocks.
 func TestAccVpc_DifferentSubnets(t *testing.T) {
+	t.Parallel()
+
 	subnets := []string{
 		"10.0.0.0/24",
 		"172.16.0.0/24",
@@ -120,6 +126,8 @@ func TestAccVpc_DifferentSubnets(t *testing.T) {
 
 // TestAccVpc_TagsUpdate: Test updating VPC tags.
 func TestAccVpc_TagsUpdate(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames       = []string{"vpc"}
 		vpcResourceName = "cloudamqp_vpc.vpc"
@@ -172,6 +180,8 @@ func TestAccVpc_TagsUpdate(t *testing.T) {
 
 // TestAccVpc_NoTags: Test VPC creation without tags.
 func TestAccVpc_NoTags(t *testing.T) {
+	t.Parallel()
+
 	params := map[string]string{
 		"VpcName":   "TestAccVpc_NoTags",
 		"VpcRegion": "amazon-web-services::us-east-1",
@@ -196,6 +206,8 @@ func TestAccVpc_NoTags(t *testing.T) {
 
 // TestAccVpc_NameUpdate: Test updating VPC name only.
 func TestAccVpc_NameUpdate(t *testing.T) {
+	t.Parallel()
+
 	initialParams := map[string]string{
 		"VpcName":   "TestAccVpc_NameUpdate_Initial",
 		"VpcRegion": "amazon-web-services::us-east-1",
@@ -232,6 +244,8 @@ func TestAccVpc_NameUpdate(t *testing.T) {
 
 // TestAccVpc_InvalidCIDR: Test VPC creation with invalid CIDR blocks.
 func TestAccVpc_InvalidCIDR(t *testing.T) {
+	t.Parallel()
+
 	invalidCIDRs := []string{
 		"invalid-cidr",
 		"10.0.0.0/33",
@@ -265,6 +279,8 @@ func TestAccVpc_InvalidCIDR(t *testing.T) {
 
 // TestAccVpc_ReplacementOnRegionChange: Test VPC replacement when region changes.
 func TestAccVpc_ReplacementOnRegionChange(t *testing.T) {
+	t.Parallel()
+
 	initialParams := map[string]string{
 		"VpcName":   "TestAccVpc_Replacement",
 		"VpcRegion": "amazon-web-services::us-east-1",

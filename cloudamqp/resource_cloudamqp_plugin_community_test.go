@@ -14,6 +14,8 @@ import (
 
 // TestAccPluginCommunity_Basic: Install community plugin and check then disable it.
 func TestAccPluginCommunity_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                      = []string{"instance", "plugin_community", "data_source/plugins_community"}
 		instanceResourceName           = "cloudamqp_instance.instance"

@@ -10,6 +10,8 @@ import (
 
 // TestAccVpcPeering_Basic: Accept VPC peering and import.
 func TestAccVpcPeering_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames              = []string{"vpc_peering"}
 		vpcPeeringResourceName = "cloudamqp_vpc_peering.accepter"
