@@ -111,3 +111,12 @@ resource "cloudamqp_integration_metric_prometheus" "dynatrace" {
     access_token   = var.dynatrace_access_token
   }
 }
+
+resource "cloudamqp_integration_metric_prometheus" "cloudwatch_v3" {
+  instance_id = cloudamqp_instance.instance.id
+  cloudwatch_v3 {
+    iam_role        = var.cloudwatch_iam_role
+    iam_external_id = var.cloudwatch_iam_external_id
+    region          = var.cloudwatch_region
+  }
+}

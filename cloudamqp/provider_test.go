@@ -215,6 +215,8 @@ func sanitizeSensistiveData(body string) string {
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("CLOUDWATCH_SECRET_ACCESS_KEY"), "CLOUDWATCH_SECRET_ACCESS_KEY")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("CORALOGIX_SEND_DATA_KEY"), "CORALOGIX_SEND_DATA_KEY")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("DATADOG_APIKEY"), "DATADOG_APIKEY")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("DYNATRACE_TOKEN"), "DYNATRACE_TOKEN")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("DYNATRACE_TOKEN_2"), "DYNATRACE_TOKEN_2")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("LIBRATO_APIKEY"), "LIBRATO_APIKEY")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("LOGENTIRES_TOKEN"), "LOGENTIRES_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("LOGGLY_TOKEN"), "LOGGLY_TOKEN")
