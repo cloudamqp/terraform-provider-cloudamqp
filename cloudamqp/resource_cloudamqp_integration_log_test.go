@@ -13,6 +13,28 @@ import (
 func TestAccIntegrationLog_Basic(t *testing.T) {
 	t.Parallel()
 
+	// Set sanitized value for playback and use real value for recording
+	testAzmSecret := "AZM_APPLICATION_SECRET"
+	testCloudwatchKey := "CLOUDWATCH_ACCESS_KEY_ID"
+	testCloudwatchSecret := "CLOUDWATCH_SECRET_ACCESS_KEY"
+	testCoralogixKey := "CORALOGIX_SEND_DATA_KEY"
+	testDatadogKey := "DATADOG_APIKEY"
+	testLogentriesKey := "LOGENTIRES_TOKEN"
+	testLogglyKey := "LOGGLY_TOKEN"
+	testScalyrKey := "SCALYR_TOKEN"
+	testSplunkKey := "SPLUNK_TOKEN"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testAzmSecret = os.Getenv("AZM_APPLICATION_SECRET")
+		testCloudwatchKey = os.Getenv("CLOUDWATCH_ACCESS_KEY_ID")
+		testCloudwatchSecret = os.Getenv("CLOUDWATCH_SECRET_ACCESS_KEY")
+		testCoralogixKey = os.Getenv("CORALOGIX_SEND_DATA_KEY")
+		testDatadogKey = os.Getenv("DATADOG_APIKEY")
+		testLogentriesKey = os.Getenv("LOGENTIRES_TOKEN")
+		testLogglyKey = os.Getenv("LOGGLY_TOKEN")
+		testScalyrKey = os.Getenv("SCALYR_TOKEN")
+		testSplunkKey = os.Getenv("SPLUNK_TOKEN")
+	}
+
 	var (
 		fileNames              = []string{"instance", "integration_log"}
 		instanceResourceName   = "cloudamqp_instance.instance"
@@ -33,25 +55,25 @@ func TestAccIntegrationLog_Basic(t *testing.T) {
 			"InstanceHost":              fmt.Sprintf("%s.host", instanceResourceName),
 			"AzmTentantId":              "71e89a32-14f3-4458-b136-7395bb6d1969", // Randomized token
 			"AzmApplicationId":          "3e303e72-4024-494c-b5f6-f5ffbe8139de", // Randomized token
-			"AzmApplicationSecret":      os.Getenv("AZM_APPLICATION_SECRET"),
+			"AzmApplicationSecret":      testAzmSecret,
 			"AzmDcrId":                  "dcr-7cae904d070344d7ace2b8b33b743c84",
 			"AzmDceUri":                 "https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com",
 			"AzmTable":                  "cloudamqp_CL",
-			"CloudwatchAccessKeyId":     os.Getenv("CLOUDWATCH_ACCESS_KEY_ID"),
-			"CloudwatchSecretAccessKey": os.Getenv("CLOUDWATCH_SECRET_ACCESS_KEY"),
+			"CloudwatchAccessKeyId":     testCloudwatchKey,
+			"CloudwatchSecretAccessKey": testCloudwatchSecret,
 			"CloudwatchRegion":          "us-east-1",
-			"CoralogixSendDataKey":      os.Getenv("CORALOGIX_SEND_DATA_KEY"),
+			"CoralogixSendDataKey":      testCoralogixKey,
 			"CoralogixEndpoint":         "syslog.cx498.coralogix.com:6514",
 			"CoralogixApplication":      "playground",
 			"DataDogRegion":             "us1",
-			"DataDogApiKey":             os.Getenv("DATADOG_APIKEY"),
+			"DataDogApiKey":             testDatadogKey,
 			"DataDogTags":               "env=test,region=us1",
-			"LogEntriesToken":           os.Getenv("LOGENTIRES_TOKEN"),
-			"LogglyToken":               os.Getenv("LOGGLY_TOKEN"),
+			"LogEntriesToken":           testLogentriesKey,
+			"LogglyToken":               testLogglyKey,
 			"PapertrailUrl":             "logs.papertrailapp.com:11111",
-			"ScalyrToken":               os.Getenv("SCALYR_TOKEN"),
+			"ScalyrToken":               testScalyrKey,
 			"ScalyrHost":                "app.scalyr.com",
-			"SplunkToken":               os.Getenv("SPLUNK_TOKEN"),
+			"SplunkToken":               testSplunkKey,
 			"SplunkHostPort":            "logs.splunk.com:11111",
 		}
 	)
@@ -60,8 +82,7 @@ func TestAccIntegrationLog_Basic(t *testing.T) {
 		PreCheck: func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				ExpectNonEmptyPlan: true,
-				Config:             configuration.GetTemplatedConfig(t, fileNames, params),
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(azmResourceName, "name", "azure_monitor"),
