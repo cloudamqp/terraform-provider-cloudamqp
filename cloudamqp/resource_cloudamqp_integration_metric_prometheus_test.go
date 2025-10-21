@@ -703,6 +703,8 @@ func TestAccIntegrationMetricPrometheusDynatrace_Update(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusCloudwatchV3_Basic: Add CloudWatch v3 prometheus metric integration and import.
 func TestAccIntegrationMetricPrometheusCloudwatchV3_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                        = []string{"instance", "integrations/metrics/integration_metric_prometheus_cloudwatch_v3"}
 		instanceResourceName             = "cloudamqp_instance.instance"
@@ -745,6 +747,8 @@ func TestAccIntegrationMetricPrometheusCloudwatchV3_Basic(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusCloudwatchV3_WithoutTags: Test CloudWatch v3 prometheus integration without optional tags.
 func TestAccIntegrationMetricPrometheusCloudwatchV3_WithoutTags(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                        = []string{"instance", "integrations/metrics/integration_metric_prometheus_cloudwatch_v3_notags"}
 		instanceResourceName             = "cloudamqp_instance.instance"
@@ -786,6 +790,8 @@ func TestAccIntegrationMetricPrometheusCloudwatchV3_WithoutTags(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusCloudwatchV3_Update: Test updating CloudWatch v3 prometheus integration.
 func TestAccIntegrationMetricPrometheusCloudwatchV3_Update(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                        = []string{"instance", "integrations/metrics/integration_metric_prometheus_cloudwatch_v3"}
 		instanceResourceName             = "cloudamqp_instance.instance"
