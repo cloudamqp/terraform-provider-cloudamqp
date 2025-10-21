@@ -95,3 +95,11 @@ resource "cloudamqp_integration_metric_prometheus" "datadog_v3" {
     api_key = var.datadog_apikey
   }
 }
+
+resource "cloudamqp_integration_metric_prometheus" "splunk_v2" {
+  instance_id = cloudamqp_instance.instance.id
+  splunk_v2 {
+    token    = var.splunk_token
+    endpoint = var.splunk_endpoint
+  }
+}
