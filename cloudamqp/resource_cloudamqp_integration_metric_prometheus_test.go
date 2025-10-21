@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
@@ -12,6 +13,12 @@ import (
 func TestAccIntegrationMetricPrometheusNewRelicV3_Basic(t *testing.T) {
 	t.Parallel()
 
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "NEWRELIC_APIKEY"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("NEWRELIC_APIKEY")
+	}
+
 	var (
 		fileNames                      = []string{"instance", "integrations/metrics/integration_metric_prometheus_newrelic_v3"}
 		instanceResourceName           = "cloudamqp_instance.instance"
@@ -21,7 +28,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Basic(t *testing.T) {
 			"InstanceName":   "TestAccIntegrationMetricPrometheusNewRelicV3_Basic",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"NewRelicApiKey": "NEWRELIC_APIKEY",
+			"NewRelicApiKey": testApiKey,
 			"NewRelicTags":   "key=value,key2=value2",
 		}
 	)
@@ -51,6 +58,12 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Basic(t *testing.T) {
 func TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags(t *testing.T) {
 	t.Parallel()
 
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "NEWRELIC_APIKEY"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("NEWRELIC_APIKEY")
+	}
+
 	var (
 		fileNames                      = []string{"instance", "integrations/metrics/integration_metric_prometheus_newrelic_v3_notags"}
 		instanceResourceName           = "cloudamqp_instance.instance"
@@ -60,7 +73,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags(t *testing.T) {
 			"InstanceName":   "TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"NewRelicApiKey": "NEWRELIC_APIKEY",
+			"NewRelicApiKey": testApiKey,
 		}
 	)
 
@@ -89,6 +102,12 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags(t *testing.T) {
 func TestAccIntegrationMetricPrometheusNewRelicV3_Update(t *testing.T) {
 	t.Parallel()
 
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "NEWRELIC_APIKEY"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("NEWRELIC_APIKEY")
+	}
+
 	var (
 		fileNames                      = []string{"instance", "integrations/metrics/integration_metric_prometheus_newrelic_v3"}
 		instanceResourceName           = "cloudamqp_instance.instance"
@@ -98,7 +117,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Update(t *testing.T) {
 			"InstanceName":   "TestAccIntegrationMetricPrometheusNewRelicV3_Update",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"NewRelicApiKey": "NEWRELIC_APIKEY",
+			"NewRelicApiKey": testApiKey,
 			"NewRelicTags":   "key=value,key2=value2",
 		}
 
@@ -106,7 +125,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Update(t *testing.T) {
 			"InstanceName":   "TestAccIntegrationMetricPrometheusNewRelicV3_Update",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"NewRelicApiKey": "NEWRELIC_APIKEY",
+			"NewRelicApiKey": testApiKey,
 			"NewRelicTags":   "key=value2,key2=value3",
 		}
 	)
@@ -136,6 +155,12 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Update(t *testing.T) {
 func TestAccIntegrationMetricPrometheusDatadogV3_Basic(t *testing.T) {
 	t.Parallel()
 
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "DATADOG_APIKEY"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("DATADOG_APIKEY")
+	}
+
 	var (
 		fileNames                     = []string{"instance", "integrations/metrics/integration_metric_prometheus_datadog_v3"}
 		instanceResourceName          = "cloudamqp_instance.instance"
@@ -145,7 +170,7 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Basic(t *testing.T) {
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Basic",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": "DATADOG_APIKEY",
+			"DatadogApiKey": testApiKey,
 			"DatadogRegion": "us1",
 			"DatadogTags":   "key=value,key2=value2",
 		}
@@ -177,6 +202,12 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Basic(t *testing.T) {
 func TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags(t *testing.T) {
 	t.Parallel()
 
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "DATADOG_APIKEY"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("DATADOG_APIKEY")
+	}
+
 	var (
 		fileNames                     = []string{"instance", "integrations/metrics/integration_metric_prometheus_datadog_v3_notags"}
 		instanceResourceName          = "cloudamqp_instance.instance"
@@ -186,7 +217,7 @@ func TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags(t *testing.T) {
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": "DATADOG_APIKEY",
+			"DatadogApiKey": testApiKey,
 			"DatadogRegion": "us1",
 		}
 	)
@@ -217,6 +248,12 @@ func TestAccIntegrationMetricPrometheusDatadogV3_WithoutTags(t *testing.T) {
 func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
 	t.Parallel()
 
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "DATADOG_APIKEY"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("DATADOG_APIKEY")
+	}
+
 	var (
 		fileNames                     = []string{"instance", "integrations/metrics/integration_metric_prometheus_datadog_v3"}
 		instanceResourceName          = "cloudamqp_instance.instance"
@@ -226,7 +263,7 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Update",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": "DATADOG_APIKEY",
+			"DatadogApiKey": testApiKey,
 			"DatadogRegion": "us1",
 			"DatadogTags":   "key=value,key2=value2",
 		}
@@ -235,7 +272,7 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
 			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Update",
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": "DATADOG_APIKEY",
+			"DatadogApiKey": testApiKey,
 			"DatadogRegion": "us1",
 			"DatadogTags":   "key=value2,key2=value3",
 		}
@@ -268,6 +305,12 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
 func TestAccIntegrationMetricPrometheusAzureMonitor_Basic(t *testing.T) {
 	t.Parallel()
 
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "AZM_INSTRUMENTATION_KEY"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("AZM_INSTRUMENTATION_KEY")
+	}
+
 	var (
 		fileNames                          = []string{"instance", "integrations/metrics/integration_metric_prometheus_azure_monitor"}
 		instanceResourceName               = "cloudamqp_instance.instance"
@@ -277,7 +320,7 @@ func TestAccIntegrationMetricPrometheusAzureMonitor_Basic(t *testing.T) {
 			"InstanceName":                 "TestAccIntegrationMetricPrometheusAzureMonitor_Basic",
 			"InstanceID":                   fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":                 "bunny-1",
-			"AzureMonitorConnectionString": "InstrumentationKey=fa485c4f-2a6f-496b-8d04-9048b824f242;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f",
+			"AzureMonitorConnectionString": fmt.Sprintf("InstrumentationKey=%s;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f", testApiKey),
 		}
 	)
 
@@ -305,6 +348,14 @@ func TestAccIntegrationMetricPrometheusAzureMonitor_Basic(t *testing.T) {
 func TestAccIntegrationMetricPrometheusAzureMonitor_Update(t *testing.T) {
 	t.Parallel()
 
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "AZM_INSTRUMENTATION_KEY"
+	testApiKey2 := "AZM_INSTRUMENTATION_KEY_2"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("AZM_INSTRUMENTATION_KEY")
+		testApiKey2 = os.Getenv("AZM_INSTRUMENTATION_KEY_2")
+	}
+
 	var (
 		fileNames                          = []string{"instance", "integrations/metrics/integration_metric_prometheus_azure_monitor"}
 		instanceResourceName               = "cloudamqp_instance.instance"
@@ -314,14 +365,14 @@ func TestAccIntegrationMetricPrometheusAzureMonitor_Update(t *testing.T) {
 			"InstanceName":                 "TestAccIntegrationMetricPrometheusAzureMonitor_Update",
 			"InstanceID":                   fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":                 "bunny-1",
-			"AzureMonitorConnectionString": "InstrumentationKey=11111111-1111-1111-1111-111111111111;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f",
+			"AzureMonitorConnectionString": fmt.Sprintf("InstrumentationKey=%s;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f", testApiKey),
 		}
 
 		paramsUpdate = map[string]string{
 			"InstanceName":                 "TestAccIntegrationMetricPrometheusAzureMonitor_Update",
 			"InstanceID":                   fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":                 "bunny-1",
-			"AzureMonitorConnectionString": "InstrumentationKey=22222222-2222-2222-2222-222222222222;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f",
+			"AzureMonitorConnectionString": fmt.Sprintf("InstrumentationKey=%s;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=3c2ad7f7-65d0-4e39-ae82-8d2fd7b6f69f", testApiKey2),
 		}
 	)
 
