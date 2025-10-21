@@ -213,7 +213,7 @@ The following arguments are supported:
                           the block documented below.
 * `preferred_az`        - (Optional) The AZs to place your nodes in. Each entry corresponds to a server in your cluster, so for a 3 node cluster, provide 3 AZs in the list.
 
-  ***Note:*** Preferred_az can only be set upon instance creation as of now and the result is not guaranteed, on eventual failed resource allocation in the Zone, CloudAMQP will fallback to a different zone.
+  ***Note:*** `preferred_az` can only be set upon instance creation as of now and the result is not guaranteed. On eventual failed resource allocation in the zone, CloudAMQP will fallback to a different zone.
 
 ___
 
