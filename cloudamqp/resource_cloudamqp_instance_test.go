@@ -13,6 +13,8 @@ import (
 // TestAccInstance_Basic: Creating dedicated AWS instance, do some minor updates, import and read
 // nodes data source.
 func TestAccInstance_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames            = []string{"instance", "data_source/nodes"}
 		instanceResourceName = "cloudamqp_instance.instance"
@@ -77,6 +79,8 @@ func TestAccInstance_Basic(t *testing.T) {
 
 // TestAccInstance_Upgrade: Creating dedicated AWS instance, upgrade plan and verify.
 func TestAccInstance_Upgrade(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames            = []string{"instance", "data_source/nodes"}
 		instanceResourceName = "cloudamqp_instance.instance"
@@ -128,6 +132,8 @@ func TestAccInstance_Upgrade(t *testing.T) {
 
 // TestAccInstance_PlanChange: Creating dedicated AWS instance, change plan and verify.
 func TestAccInstance_PlanChange(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames            = []string{"instance"}
 		instanceResourceName = "cloudamqp_instance.instance"
@@ -167,6 +173,8 @@ func TestAccInstance_PlanChange(t *testing.T) {
 
 // TestAccInstance_Downgrade: Creating dedicated AWS instance, downgrade plan and verify.
 func TestAccInstance_Downgrade(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames            = []string{"instance", "data_source/nodes"}
 		instanceResourceName = "cloudamqp_instance.instance"

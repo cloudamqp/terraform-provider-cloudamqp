@@ -1,0 +1,9 @@
+resource "cloudamqp_integration_metric" "librato" {
+  instance_id = {{.InstanceID}}
+  name        = "librato"
+  email       = "{{.LibratoEmail}}"
+  api_key     = "{{.LibratoApiKey}}"
+  {{if .LibratoTags}}tags = "{{.LibratoTags}}"{{end}}
+  {{if .LibratoQueueAllowList}}queue_allowlist = "{{.LibratoAllowList}}"{{end}}
+  {{if .LibratoVhostAllowList}}vhost_allowlist = "{{.LibratoVhostAllowList}}"{{end}}
+}

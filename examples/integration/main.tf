@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     cloudamqp = {
-      source = "cloudamqp/cloudamqp"
+      source  = "cloudamqp/cloudamqp"
       version = "~>1.0"
     }
   }
@@ -12,9 +12,9 @@ provider "cloudamqp" {
 }
 
 resource "cloudamqp_instance" "instance" {
-  name    = "terraform-integration-test"
-  plan    = "bunny-1"
-  region  = "amazon-web-services::us-east-1"
+  name   = "terraform-integration-test"
+  plan   = "bunny-1"
+  region = "amazon-web-services::us-east-1"
 }
 
 // LOG INTEGRATION
@@ -79,4 +79,44 @@ resource "cloudamqp_integration_metric" "newrelic_v2" {
   name        = "newrelic_v2"
   region      = var.newrelic_region
   api_key     = var.newrelic_apikey
+}
+
+resource "cloudamqp_integration_metric_prometheus" "newrelic_v3" {
+  instance_id = cloudamqp_instance.instance.id
+  newrelic_v3 {
+    api_key = var.newrelic_apikey
+  }
+}
+
+resource "cloudamqp_integration_metric_prometheus" "datadog_v3" {
+  instance_id = cloudamqp_instance.instance.id
+  datadog_v3 {
+    region  = var.datadog_region
+    api_key = var.datadog_apikey
+  }
+}
+
+resource "cloudamqp_integration_metric_prometheus" "splunk_v2" {
+  instance_id = cloudamqp_instance.instance.id
+  splunk_v2 {
+    token    = var.splunk_token
+    endpoint = var.splunk_endpoint
+  }
+}
+
+resource "cloudamqp_integration_metric_prometheus" "dynatrace" {
+  instance_id = cloudamqp_instance.instance.id
+  dynatrace {
+    environment_id = var.dynatrace_environment_id
+    access_token   = var.dynatrace_access_token
+  }
+}
+
+resource "cloudamqp_integration_metric_prometheus" "cloudwatch_v3" {
+  instance_id = cloudamqp_instance.instance.id
+  cloudwatch_v3 {
+    iam_role        = var.cloudwatch_iam_role
+    iam_external_id = var.cloudwatch_iam_external_id
+    region          = var.cloudwatch_region
+  }
 }

@@ -1,0 +1,1122 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/plans
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 8216
+        uncompressed: false
+        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"ducky","price":0,"backend":"kafka","shared":true},{"name":"turtle","price":0,"backend":"postgresql","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"spider","price":5,"backend":"postgresql","shared":true},{"name":"hedgehog","price":5,"backend":"mosquitto","shared":true},{"name":"cat","price":10,"backend":"postgresql","shared":true},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"koala","price":19,"backend":"mosquitto","shared":false},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"butterfly","price":49,"backend":"postgresql","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"addons_2-1","price":79,"backend":"addons","shared":false},{"name":"dedicated_2-1","price":95,"backend":"kafka","shared":false},{"name":"butterfly-follower","price":98,"backend":"postgresql","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"mouse","price":99,"backend":"kafka","shared":false},{"name":"leopard","price":99,"backend":"mosquitto","shared":false},{"name":"mouse-1","price":99,"backend":"kafka","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"addons_4-1","price":158,"backend":"addons","shared":false},{"name":"dedicated_4-1","price":165,"backend":"kafka","shared":false},{"name":"bat-1","price":175,"backend":"kafka","shared":false},{"name":"hippo-follower","price":198,"backend":"postgresql","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"elephant","price":199,"backend":"postgresql","shared":false},{"name":"puffin-5","price":245,"backend":"lavinmq","shared":false},{"name":"dedicated_2-3","price":285,"backend":"kafka","shared":false},{"name":"mouse-3","price":297,"backend":"kafka","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"pug","price":299,"backend":"mosquitto","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"elephant-follower","price":398,"backend":"postgresql","shared":false},{"name":"pigeon","price":399,"backend":"postgresql","shared":false},{"name":"penguin-5","price":495,"backend":"lavinmq","shared":false},{"name":"dedicated_4-3","price":495,"backend":"kafka","shared":false},{"name":"mouse-5","price":495,"backend":"kafka","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"bat","price":499,"backend":"kafka","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"bat-3","price":525,"backend":"kafka","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"mouse-7","price":693,"backend":"kafka","shared":false},{"name":"dolphin","price":749,"backend":"postgresql","shared":false},{"name":"pigeon-follower","price":798,"backend":"postgresql","shared":false},{"name":"bat-5","price":875,"backend":"kafka","shared":false},{"name":"dedicated_8-3","price":885,"backend":"kafka","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"lynx-5","price":995,"backend":"lavinmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"fox","price":999,"backend":"kafka","shared":false},{"name":"fox-3","price":1005,"backend":"kafka","shared":false},{"name":"dedicated_8-4","price":1180,"backend":"kafka","shared":false},{"name":"bat-7","price":1225,"backend":"kafka","shared":false},{"name":"dedicated_16-3","price":1335,"backend":"kafka","shared":false},{"name":"rat","price":1399,"backend":"postgresql","shared":false},{"name":"dedicated_8-5","price":1475,"backend":"kafka","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"dolphin-follower","price":1498,"backend":"postgresql","shared":false},{"name":"fox-5","price":1675,"backend":"kafka","shared":false},{"name":"dedicated_8-6","price":1770,"backend":"kafka","shared":false},{"name":"dedicated_16-4","price":1780,"backend":"kafka","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-7","price":2065,"backend":"kafka","shared":false},{"name":"dedicated_16-5","price":2225,"backend":"kafka","shared":false},{"name":"fox-7","price":2345,"backend":"kafka","shared":false},{"name":"dedicated_8-8","price":2360,"backend":"kafka","shared":false},{"name":"dedicated_32-3","price":2385,"backend":"kafka","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"wolverine-5","price":2495,"backend":"lavinmq","shared":false},{"name":"dedicated_8-9","price":2655,"backend":"kafka","shared":false},{"name":"dedicated_16-6","price":2670,"backend":"kafka","shared":false},{"name":"rat-follower","price":2798,"backend":"postgresql","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"dedicated_16-7","price":3115,"backend":"kafka","shared":false},{"name":"dedicated_32-4","price":3180,"backend":"kafka","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"dedicated_16-8","price":3560,"backend":"kafka","shared":false},{"name":"dedicated_32-5","price":3975,"backend":"kafka","shared":false},{"name":"dedicated_16-9","price":4005,"backend":"kafka","shared":false},{"name":"dedicated_64-3","price":4185,"backend":"kafka","shared":false},{"name":"dedicated_32-6","price":4770,"backend":"kafka","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"reindeer-5","price":4995,"backend":"lavinmq","shared":false},{"name":"lion-7","price":5250,"backend":"kafka","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-7","price":5565,"backend":"kafka","shared":false},{"name":"dedicated_64-4","price":5580,"backend":"kafka","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-8","price":6360,"backend":"kafka","shared":false},{"name":"dedicated_64-5","price":6975,"backend":"kafka","shared":false},{"name":"dedicated_32-9","price":7155,"backend":"kafka","shared":false},{"name":"dedicated_64-6","price":8370,"backend":"kafka","shared":false},{"name":"penguin-7","price":8400,"backend":"kafka","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"dedicated_64-7","price":9765,"backend":"kafka","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"bear-5","price":9995,"backend":"lavinmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"dedicated_64-8","price":11160,"backend":"kafka","shared":false},{"name":"dedicated_64-9","price":12555,"backend":"kafka","shared":false},{"name":"orca-5","price":14995,"backend":"lavinmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "8216"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 055e0d29-5e2a-4e3a-bbf4-fdb12b613cac
+        status: 200 OK
+        code: 200
+        duration: 25.444584ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/regions
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 15840
+        uncompressed: false
+        body: '[{"provider":"amazon-web-services","region":"us-east-1","name":"Amazon Web Services - US-East-1 (Northern Virginia)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-2","name":"Amazon Web Services - US-West-2 (Oregon)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-east-2","name":"Amazon Web Services - US-East-2 (Ohio)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-1","name":"Amazon Web Services - US-West-1 (Northern California)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-north-1","name":"Amazon Web Services - EU-North-1 (Stockholm)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-1","name":"Amazon Web Services - EU-West-1 (Ireland)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-2","name":"Amazon Web Services - EU-West-2 (London)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-3","name":"Amazon Web Services - EU-West-3 (Paris)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-south-1","name":"Amazon Web Services - EU-South-1 (Milan)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-south-2","name":"Amazon Web Services - EU-South-2 (Spain)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-central-1","name":"Amazon Web Services - EU-Central-1 (Frankfurt)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-central-2","name":"Amazon Web Services - EU-Central-2 (Zurich)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ca-central-1","name":"Amazon Web Services - CA-Central-1 (Canada)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ca-west-1","name":"Amazon Web Services - CA-West-1 (Calgary)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-1","name":"Amazon Web Services - AP-SouthEast-1 (Singapore)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-2","name":"Amazon Web Services - AP-SouthEast-2 (Sydney)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-3","name":"Amazon Web Services - AP-SouthEast-3 (Jakarta)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-4","name":"Amazon Web Services - AP-SouthEast-4 (Melbourne)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-5","name":"Amazon Web Services - AP-SouthEast-5 (Malaysia)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-7","name":"Amazon Web Services - AP-SouthEast-7 (Thailand)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-northeast-1","name":"Amazon Web Services - AP-NorthEast-1 (Tokyo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-2","name":"Amazon Web Services - AP-NorthEast-2 (Seoul)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-3","name":"Amazon Web Services - AP-NorthEast-3 (Osaka)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-south-1","name":"Amazon Web Services - AP-South-1 (Mumbai)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-south-2","name":"Amazon Web Services - AP-South-2 (Hyderabad)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-east-1","name":"Amazon Web Services - AP-East-1 (Hong Kong)","has_shared_plans":true},{"provider":"amazon-web-services","region":"sa-east-1","name":"Amazon Web Services - SA-East-1 (São Paulo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-south-1","name":"Amazon Web Services - ME-South-1 (Bahrain)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-central-1","name":"Amazon Web Services - ME-Central-1 (UAE)","has_shared_plans":false},{"provider":"amazon-web-services","region":"af-south-1","name":"Amazon Web Services - AF-South-1 (Cape Town)","has_shared_plans":false},{"provider":"amazon-web-services","region":"il-central-1","name":"Amazon Web Services - IL-Central-1 (Tel Aviv)","has_shared_plans":false},{"provider":"amazon-web-services","region":"mx-central-1","name":"Amazon Web Services - MX-Central-1 (Mexico)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast2","name":"Google Compute Engine - northamerica-northeast2 (Toronto, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east1","name":"Google Compute Engine - us-east1 (South Carolina)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east4","name":"Google Compute Engine - us-east4 (North Virginia)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east5","name":"Google Compute Engine - us-east5 (Columbus)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west1","name":"Google Compute Engine - us-west1 (Oregon)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west2","name":"Google Compute Engine - us-west2 (Los Angeles)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west3","name":"Google Compute Engine - us-west3 (Salt Lake City)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west4","name":"Google Compute Engine - us-west4 (Las Vegas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-south1","name":"Google Compute Engine - us-south1 (Dallas, Texas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-east1","name":"Google Compute Engine - southamerica-east1 (São Paulo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-west1","name":"Google Compute Engine - southamerica-west1 (Santiago)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north1","name":"Google Compute Engine - europe-north1 (Finland)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north2","name":"Google Compute Engine - europe-north2 (Sweden)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west1","name":"Google Compute Engine - europe-west1 (Belgium)","has_shared_plans":true},{"provider":"google-compute-engine","region":"europe-west2","name":"Google Compute Engine - europe-west2 (London)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west3","name":"Google Compute Engine - europe-west3 (Frankfurt)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west4","name":"Google Compute Engine - europe-west4 (Netherlands)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west6","name":"Google Compute Engine - europe-west6 (Zürich)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west8","name":"Google Compute Engine - europe-west8 (Milan)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west9","name":"Google Compute Engine - europe-west9 (Paris)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west10","name":"Google Compute Engine - europe-west10 (Berlin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west12","name":"Google Compute Engine - europe-west12 (Turin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-central2","name":"Google Compute Engine - europe-central2 (Warsaw)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-southwest1","name":"Google Compute Engine - europe-southwest1 (Madrid)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-west1","name":"Google Compute Engine - me-west1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central1","name":"Google Compute Engine - me-central1 (Doha)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central2","name":"Google Compute Engine - me-central2 (Dammam)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-east1","name":"Google Compute Engine - asia-east1 (Taiwan)","has_shared_plans":true},{"provider":"google-compute-engine","region":"asia-east2","name":"Google Compute Engine - asia-east2 (Hong Kong)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast1","name":"Google Compute Engine - asia-northeast1 (Tokyo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast2","name":"Google Compute Engine - asia-northeast2 (Osaka)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast3","name":"Google Compute Engine - asia-northeast3 (Seoul)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast1","name":"Google Compute Engine - asia-southeast1 (Singapore)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast2","name":"Google Compute Engine - asia-southeast2 (Jakarta)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south1","name":"Google Compute Engine - asia-south1 (Mumbai)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south2","name":"Google Compute Engine - asia-south2 (Delhi)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast1","name":"Google Compute Engine - australia-southeast1 (Sydney)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast2","name":"Google Compute Engine - australia-southeast2 (Melbourne)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast1","name":"Google Compute Engine - northamerica-northeast1 (Montréal, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-central1","name":"Google Compute Engine - us-central1 (Iowa)","has_shared_plans":true},{"provider":"digital-ocean","region":"syd1","name":"DigitalOcean - Sydney 1","has_shared_plans":false},{"provider":"digital-ocean","region":"ams3","name":"DigitalOcean - Amsterdam 3","has_shared_plans":false},{"provider":"digital-ocean","region":"sgp1","name":"DigitalOcean - Singapore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"lon1","name":"DigitalOcean - London 1","has_shared_plans":false},{"provider":"digital-ocean","region":"fra1","name":"DigitalOcean - Frankfurt 1","has_shared_plans":false},{"provider":"digital-ocean","region":"tor1","name":"DigitalOcean - Toronto 1","has_shared_plans":false},{"provider":"digital-ocean","region":"sfo3","name":"DigitalOcean - San Francisco 3","has_shared_plans":false},{"provider":"digital-ocean","region":"blr1","name":"DigitalOcean - Bangalore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"nyc3","name":"DigitalOcean - New York 3","has_shared_plans":false},{"provider":"azure-arm","region":"westus3","name":"Azure - West US 3","has_shared_plans":false},{"provider":"azure-arm","region":"australiaeast","name":"Azure - Australia East","has_shared_plans":false},{"provider":"azure-arm","region":"australiasoutheast","name":"Azure - Australia Southeast","has_shared_plans":false},{"provider":"azure-arm","region":"brazilsouth","name":"Azure - Brazil South","has_shared_plans":false},{"provider":"azure-arm","region":"canadacentral","name":"Azure - Canada Central","has_shared_plans":false},{"provider":"azure-arm","region":"canadaeast","name":"Azure - Canada East","has_shared_plans":false},{"provider":"azure-arm","region":"centralindia","name":"Azure - Central India","has_shared_plans":false},{"provider":"azure-arm","region":"centralus","name":"Azure - Central US","has_shared_plans":false},{"provider":"azure-arm","region":"eastasia","name":"Azure - East Asia","has_shared_plans":false},{"provider":"azure-arm","region":"eastus","name":"Azure - East US","has_shared_plans":true},{"provider":"azure-arm","region":"eastus2","name":"Azure - East US 2","has_shared_plans":true},{"provider":"azure-arm","region":"francecentral","name":"Azure - France Central","has_shared_plans":false},{"provider":"azure-arm","region":"germanywestcentral","name":"Azure - Germany West Central","has_shared_plans":false},{"provider":"azure-arm","region":"indonesiacentral","name":"Azure - Indonesia Central","has_shared_plans":false},{"provider":"azure-arm","region":"israelcentral","name":"Azure - Israel Central","has_shared_plans":false},{"provider":"azure-arm","region":"italynorth","name":"Azure - Italy North","has_shared_plans":false},{"provider":"azure-arm","region":"japaneast","name":"Azure - Japan East","has_shared_plans":false},{"provider":"azure-arm","region":"japanwest","name":"Azure - Japan West","has_shared_plans":false},{"provider":"azure-arm","region":"koreacentral","name":"Azure - Korea Central","has_shared_plans":false},{"provider":"azure-arm","region":"koreasouth","name":"Azure - Korea South","has_shared_plans":false},{"provider":"azure-arm","region":"mexicocentral","name":"Azure - Mexico Central","has_shared_plans":false},{"provider":"azure-arm","region":"newzealandnorth","name":"Azure - New Zealand North","has_shared_plans":false},{"provider":"azure-arm","region":"northcentralus","name":"Azure - North Central US","has_shared_plans":false},{"provider":"azure-arm","region":"northeurope","name":"Azure - North Europe","has_shared_plans":false},{"provider":"azure-arm","region":"norwayeast","name":"Azure - Norway East","has_shared_plans":false},{"provider":"azure-arm","region":"polandcentral","name":"Azure - Poland Central","has_shared_plans":false},{"provider":"azure-arm","region":"qatarcentral","name":"Azure - Qatar Central","has_shared_plans":false},{"provider":"azure-arm","region":"southafricanorth","name":"Azure - South Africa North","has_shared_plans":false},{"provider":"azure-arm","region":"southcentralus","name":"Azure - South Central US","has_shared_plans":false},{"provider":"azure-arm","region":"southeastasia","name":"Azure - Southeast Asia","has_shared_plans":false},{"provider":"azure-arm","region":"southindia","name":"Azure - South India","has_shared_plans":false},{"provider":"azure-arm","region":"spaincentral","name":"Azure - Spain Central","has_shared_plans":false},{"provider":"azure-arm","region":"swedencentral","name":"Azure - Sweden Central","has_shared_plans":true},{"provider":"azure-arm","region":"switzerlandnorth","name":"Azure - Switzerland North","has_shared_plans":false},{"provider":"azure-arm","region":"uaenorth","name":"Azure - UAE North","has_shared_plans":false},{"provider":"azure-arm","region":"uksouth","name":"Azure - UK South","has_shared_plans":false},{"provider":"azure-arm","region":"ukwest","name":"Azure - UK West","has_shared_plans":false},{"provider":"azure-arm","region":"westcentralus","name":"Azure - West Central US","has_shared_plans":false},{"provider":"azure-arm","region":"westeurope","name":"Azure - West Europe","has_shared_plans":true},{"provider":"azure-arm","region":"westindia","name":"Azure - West India","has_shared_plans":false},{"provider":"azure-arm","region":"westus","name":"Azure - West US","has_shared_plans":true},{"provider":"azure-arm","region":"westus2","name":"Azure - West US 2","has_shared_plans":false},{"provider":"azure-arm","region":"australiacentral","name":"Azure - Australia Central","has_shared_plans":false},{"provider":"scaleway","region":"nl-ams","name":"Scaleway - Amsterdam","has_shared_plans":false},{"provider":"scaleway","region":"fr-par","name":"Scaleway - Paris","has_shared_plans":false},{"provider":"scaleway","region":"pl-waw","name":"Scaleway - Warsaw","has_shared_plans":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "15840"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 6e338409-06f4-4a58-9ac8-c21de654fc60
+        status: 200 OK
+        code: 200
+        duration: 6.077875ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/plans
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 8216
+        uncompressed: false
+        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"ducky","price":0,"backend":"kafka","shared":true},{"name":"turtle","price":0,"backend":"postgresql","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"spider","price":5,"backend":"postgresql","shared":true},{"name":"hedgehog","price":5,"backend":"mosquitto","shared":true},{"name":"cat","price":10,"backend":"postgresql","shared":true},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"koala","price":19,"backend":"mosquitto","shared":false},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"butterfly","price":49,"backend":"postgresql","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"addons_2-1","price":79,"backend":"addons","shared":false},{"name":"dedicated_2-1","price":95,"backend":"kafka","shared":false},{"name":"butterfly-follower","price":98,"backend":"postgresql","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"mouse","price":99,"backend":"kafka","shared":false},{"name":"leopard","price":99,"backend":"mosquitto","shared":false},{"name":"mouse-1","price":99,"backend":"kafka","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"addons_4-1","price":158,"backend":"addons","shared":false},{"name":"dedicated_4-1","price":165,"backend":"kafka","shared":false},{"name":"bat-1","price":175,"backend":"kafka","shared":false},{"name":"hippo-follower","price":198,"backend":"postgresql","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"elephant","price":199,"backend":"postgresql","shared":false},{"name":"puffin-5","price":245,"backend":"lavinmq","shared":false},{"name":"dedicated_2-3","price":285,"backend":"kafka","shared":false},{"name":"mouse-3","price":297,"backend":"kafka","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"pug","price":299,"backend":"mosquitto","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"elephant-follower","price":398,"backend":"postgresql","shared":false},{"name":"pigeon","price":399,"backend":"postgresql","shared":false},{"name":"penguin-5","price":495,"backend":"lavinmq","shared":false},{"name":"dedicated_4-3","price":495,"backend":"kafka","shared":false},{"name":"mouse-5","price":495,"backend":"kafka","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"bat","price":499,"backend":"kafka","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"bat-3","price":525,"backend":"kafka","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"mouse-7","price":693,"backend":"kafka","shared":false},{"name":"dolphin","price":749,"backend":"postgresql","shared":false},{"name":"pigeon-follower","price":798,"backend":"postgresql","shared":false},{"name":"bat-5","price":875,"backend":"kafka","shared":false},{"name":"dedicated_8-3","price":885,"backend":"kafka","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"lynx-5","price":995,"backend":"lavinmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"fox","price":999,"backend":"kafka","shared":false},{"name":"fox-3","price":1005,"backend":"kafka","shared":false},{"name":"dedicated_8-4","price":1180,"backend":"kafka","shared":false},{"name":"bat-7","price":1225,"backend":"kafka","shared":false},{"name":"dedicated_16-3","price":1335,"backend":"kafka","shared":false},{"name":"rat","price":1399,"backend":"postgresql","shared":false},{"name":"dedicated_8-5","price":1475,"backend":"kafka","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"dolphin-follower","price":1498,"backend":"postgresql","shared":false},{"name":"fox-5","price":1675,"backend":"kafka","shared":false},{"name":"dedicated_8-6","price":1770,"backend":"kafka","shared":false},{"name":"dedicated_16-4","price":1780,"backend":"kafka","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-7","price":2065,"backend":"kafka","shared":false},{"name":"dedicated_16-5","price":2225,"backend":"kafka","shared":false},{"name":"fox-7","price":2345,"backend":"kafka","shared":false},{"name":"dedicated_8-8","price":2360,"backend":"kafka","shared":false},{"name":"dedicated_32-3","price":2385,"backend":"kafka","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"wolverine-5","price":2495,"backend":"lavinmq","shared":false},{"name":"dedicated_8-9","price":2655,"backend":"kafka","shared":false},{"name":"dedicated_16-6","price":2670,"backend":"kafka","shared":false},{"name":"rat-follower","price":2798,"backend":"postgresql","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"dedicated_16-7","price":3115,"backend":"kafka","shared":false},{"name":"dedicated_32-4","price":3180,"backend":"kafka","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"dedicated_16-8","price":3560,"backend":"kafka","shared":false},{"name":"dedicated_32-5","price":3975,"backend":"kafka","shared":false},{"name":"dedicated_16-9","price":4005,"backend":"kafka","shared":false},{"name":"dedicated_64-3","price":4185,"backend":"kafka","shared":false},{"name":"dedicated_32-6","price":4770,"backend":"kafka","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"reindeer-5","price":4995,"backend":"lavinmq","shared":false},{"name":"lion-7","price":5250,"backend":"kafka","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-7","price":5565,"backend":"kafka","shared":false},{"name":"dedicated_64-4","price":5580,"backend":"kafka","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-8","price":6360,"backend":"kafka","shared":false},{"name":"dedicated_64-5","price":6975,"backend":"kafka","shared":false},{"name":"dedicated_32-9","price":7155,"backend":"kafka","shared":false},{"name":"dedicated_64-6","price":8370,"backend":"kafka","shared":false},{"name":"penguin-7","price":8400,"backend":"kafka","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"dedicated_64-7","price":9765,"backend":"kafka","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"bear-5","price":9995,"backend":"lavinmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"dedicated_64-8","price":11160,"backend":"kafka","shared":false},{"name":"dedicated_64-9","price":12555,"backend":"kafka","shared":false},{"name":"orca-5","price":14995,"backend":"lavinmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "8216"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - c744fc41-f0c7-4a9f-ab59-f0b5a2086be3
+        status: 200 OK
+        code: 200
+        duration: 20.015791ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/regions
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 15840
+        uncompressed: false
+        body: '[{"provider":"amazon-web-services","region":"us-east-1","name":"Amazon Web Services - US-East-1 (Northern Virginia)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-2","name":"Amazon Web Services - US-West-2 (Oregon)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-east-2","name":"Amazon Web Services - US-East-2 (Ohio)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-1","name":"Amazon Web Services - US-West-1 (Northern California)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-north-1","name":"Amazon Web Services - EU-North-1 (Stockholm)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-1","name":"Amazon Web Services - EU-West-1 (Ireland)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-2","name":"Amazon Web Services - EU-West-2 (London)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-3","name":"Amazon Web Services - EU-West-3 (Paris)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-south-1","name":"Amazon Web Services - EU-South-1 (Milan)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-south-2","name":"Amazon Web Services - EU-South-2 (Spain)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-central-1","name":"Amazon Web Services - EU-Central-1 (Frankfurt)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-central-2","name":"Amazon Web Services - EU-Central-2 (Zurich)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ca-central-1","name":"Amazon Web Services - CA-Central-1 (Canada)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ca-west-1","name":"Amazon Web Services - CA-West-1 (Calgary)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-1","name":"Amazon Web Services - AP-SouthEast-1 (Singapore)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-2","name":"Amazon Web Services - AP-SouthEast-2 (Sydney)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-3","name":"Amazon Web Services - AP-SouthEast-3 (Jakarta)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-4","name":"Amazon Web Services - AP-SouthEast-4 (Melbourne)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-5","name":"Amazon Web Services - AP-SouthEast-5 (Malaysia)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-7","name":"Amazon Web Services - AP-SouthEast-7 (Thailand)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-northeast-1","name":"Amazon Web Services - AP-NorthEast-1 (Tokyo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-2","name":"Amazon Web Services - AP-NorthEast-2 (Seoul)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-3","name":"Amazon Web Services - AP-NorthEast-3 (Osaka)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-south-1","name":"Amazon Web Services - AP-South-1 (Mumbai)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-south-2","name":"Amazon Web Services - AP-South-2 (Hyderabad)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-east-1","name":"Amazon Web Services - AP-East-1 (Hong Kong)","has_shared_plans":true},{"provider":"amazon-web-services","region":"sa-east-1","name":"Amazon Web Services - SA-East-1 (São Paulo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-south-1","name":"Amazon Web Services - ME-South-1 (Bahrain)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-central-1","name":"Amazon Web Services - ME-Central-1 (UAE)","has_shared_plans":false},{"provider":"amazon-web-services","region":"af-south-1","name":"Amazon Web Services - AF-South-1 (Cape Town)","has_shared_plans":false},{"provider":"amazon-web-services","region":"il-central-1","name":"Amazon Web Services - IL-Central-1 (Tel Aviv)","has_shared_plans":false},{"provider":"amazon-web-services","region":"mx-central-1","name":"Amazon Web Services - MX-Central-1 (Mexico)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast2","name":"Google Compute Engine - northamerica-northeast2 (Toronto, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east1","name":"Google Compute Engine - us-east1 (South Carolina)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east4","name":"Google Compute Engine - us-east4 (North Virginia)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east5","name":"Google Compute Engine - us-east5 (Columbus)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west1","name":"Google Compute Engine - us-west1 (Oregon)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west2","name":"Google Compute Engine - us-west2 (Los Angeles)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west3","name":"Google Compute Engine - us-west3 (Salt Lake City)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west4","name":"Google Compute Engine - us-west4 (Las Vegas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-south1","name":"Google Compute Engine - us-south1 (Dallas, Texas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-east1","name":"Google Compute Engine - southamerica-east1 (São Paulo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-west1","name":"Google Compute Engine - southamerica-west1 (Santiago)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north1","name":"Google Compute Engine - europe-north1 (Finland)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north2","name":"Google Compute Engine - europe-north2 (Sweden)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west1","name":"Google Compute Engine - europe-west1 (Belgium)","has_shared_plans":true},{"provider":"google-compute-engine","region":"europe-west2","name":"Google Compute Engine - europe-west2 (London)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west3","name":"Google Compute Engine - europe-west3 (Frankfurt)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west4","name":"Google Compute Engine - europe-west4 (Netherlands)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west6","name":"Google Compute Engine - europe-west6 (Zürich)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west8","name":"Google Compute Engine - europe-west8 (Milan)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west9","name":"Google Compute Engine - europe-west9 (Paris)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west10","name":"Google Compute Engine - europe-west10 (Berlin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west12","name":"Google Compute Engine - europe-west12 (Turin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-central2","name":"Google Compute Engine - europe-central2 (Warsaw)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-southwest1","name":"Google Compute Engine - europe-southwest1 (Madrid)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-west1","name":"Google Compute Engine - me-west1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central1","name":"Google Compute Engine - me-central1 (Doha)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central2","name":"Google Compute Engine - me-central2 (Dammam)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-east1","name":"Google Compute Engine - asia-east1 (Taiwan)","has_shared_plans":true},{"provider":"google-compute-engine","region":"asia-east2","name":"Google Compute Engine - asia-east2 (Hong Kong)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast1","name":"Google Compute Engine - asia-northeast1 (Tokyo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast2","name":"Google Compute Engine - asia-northeast2 (Osaka)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast3","name":"Google Compute Engine - asia-northeast3 (Seoul)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast1","name":"Google Compute Engine - asia-southeast1 (Singapore)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast2","name":"Google Compute Engine - asia-southeast2 (Jakarta)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south1","name":"Google Compute Engine - asia-south1 (Mumbai)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south2","name":"Google Compute Engine - asia-south2 (Delhi)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast1","name":"Google Compute Engine - australia-southeast1 (Sydney)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast2","name":"Google Compute Engine - australia-southeast2 (Melbourne)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast1","name":"Google Compute Engine - northamerica-northeast1 (Montréal, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-central1","name":"Google Compute Engine - us-central1 (Iowa)","has_shared_plans":true},{"provider":"digital-ocean","region":"syd1","name":"DigitalOcean - Sydney 1","has_shared_plans":false},{"provider":"digital-ocean","region":"ams3","name":"DigitalOcean - Amsterdam 3","has_shared_plans":false},{"provider":"digital-ocean","region":"sgp1","name":"DigitalOcean - Singapore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"lon1","name":"DigitalOcean - London 1","has_shared_plans":false},{"provider":"digital-ocean","region":"fra1","name":"DigitalOcean - Frankfurt 1","has_shared_plans":false},{"provider":"digital-ocean","region":"tor1","name":"DigitalOcean - Toronto 1","has_shared_plans":false},{"provider":"digital-ocean","region":"sfo3","name":"DigitalOcean - San Francisco 3","has_shared_plans":false},{"provider":"digital-ocean","region":"blr1","name":"DigitalOcean - Bangalore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"nyc3","name":"DigitalOcean - New York 3","has_shared_plans":false},{"provider":"azure-arm","region":"westus3","name":"Azure - West US 3","has_shared_plans":false},{"provider":"azure-arm","region":"australiaeast","name":"Azure - Australia East","has_shared_plans":false},{"provider":"azure-arm","region":"australiasoutheast","name":"Azure - Australia Southeast","has_shared_plans":false},{"provider":"azure-arm","region":"brazilsouth","name":"Azure - Brazil South","has_shared_plans":false},{"provider":"azure-arm","region":"canadacentral","name":"Azure - Canada Central","has_shared_plans":false},{"provider":"azure-arm","region":"canadaeast","name":"Azure - Canada East","has_shared_plans":false},{"provider":"azure-arm","region":"centralindia","name":"Azure - Central India","has_shared_plans":false},{"provider":"azure-arm","region":"centralus","name":"Azure - Central US","has_shared_plans":false},{"provider":"azure-arm","region":"eastasia","name":"Azure - East Asia","has_shared_plans":false},{"provider":"azure-arm","region":"eastus","name":"Azure - East US","has_shared_plans":true},{"provider":"azure-arm","region":"eastus2","name":"Azure - East US 2","has_shared_plans":true},{"provider":"azure-arm","region":"francecentral","name":"Azure - France Central","has_shared_plans":false},{"provider":"azure-arm","region":"germanywestcentral","name":"Azure - Germany West Central","has_shared_plans":false},{"provider":"azure-arm","region":"indonesiacentral","name":"Azure - Indonesia Central","has_shared_plans":false},{"provider":"azure-arm","region":"israelcentral","name":"Azure - Israel Central","has_shared_plans":false},{"provider":"azure-arm","region":"italynorth","name":"Azure - Italy North","has_shared_plans":false},{"provider":"azure-arm","region":"japaneast","name":"Azure - Japan East","has_shared_plans":false},{"provider":"azure-arm","region":"japanwest","name":"Azure - Japan West","has_shared_plans":false},{"provider":"azure-arm","region":"koreacentral","name":"Azure - Korea Central","has_shared_plans":false},{"provider":"azure-arm","region":"koreasouth","name":"Azure - Korea South","has_shared_plans":false},{"provider":"azure-arm","region":"mexicocentral","name":"Azure - Mexico Central","has_shared_plans":false},{"provider":"azure-arm","region":"newzealandnorth","name":"Azure - New Zealand North","has_shared_plans":false},{"provider":"azure-arm","region":"northcentralus","name":"Azure - North Central US","has_shared_plans":false},{"provider":"azure-arm","region":"northeurope","name":"Azure - North Europe","has_shared_plans":false},{"provider":"azure-arm","region":"norwayeast","name":"Azure - Norway East","has_shared_plans":false},{"provider":"azure-arm","region":"polandcentral","name":"Azure - Poland Central","has_shared_plans":false},{"provider":"azure-arm","region":"qatarcentral","name":"Azure - Qatar Central","has_shared_plans":false},{"provider":"azure-arm","region":"southafricanorth","name":"Azure - South Africa North","has_shared_plans":false},{"provider":"azure-arm","region":"southcentralus","name":"Azure - South Central US","has_shared_plans":false},{"provider":"azure-arm","region":"southeastasia","name":"Azure - Southeast Asia","has_shared_plans":false},{"provider":"azure-arm","region":"southindia","name":"Azure - South India","has_shared_plans":false},{"provider":"azure-arm","region":"spaincentral","name":"Azure - Spain Central","has_shared_plans":false},{"provider":"azure-arm","region":"swedencentral","name":"Azure - Sweden Central","has_shared_plans":true},{"provider":"azure-arm","region":"switzerlandnorth","name":"Azure - Switzerland North","has_shared_plans":false},{"provider":"azure-arm","region":"uaenorth","name":"Azure - UAE North","has_shared_plans":false},{"provider":"azure-arm","region":"uksouth","name":"Azure - UK South","has_shared_plans":false},{"provider":"azure-arm","region":"ukwest","name":"Azure - UK West","has_shared_plans":false},{"provider":"azure-arm","region":"westcentralus","name":"Azure - West Central US","has_shared_plans":false},{"provider":"azure-arm","region":"westeurope","name":"Azure - West Europe","has_shared_plans":true},{"provider":"azure-arm","region":"westindia","name":"Azure - West India","has_shared_plans":false},{"provider":"azure-arm","region":"westus","name":"Azure - West US","has_shared_plans":true},{"provider":"azure-arm","region":"westus2","name":"Azure - West US 2","has_shared_plans":false},{"provider":"azure-arm","region":"australiacentral","name":"Azure - Australia Central","has_shared_plans":false},{"provider":"scaleway","region":"nl-ams","name":"Scaleway - Amsterdam","has_shared_plans":false},{"provider":"scaleway","region":"fr-par","name":"Scaleway - Paris","has_shared_plans":false},{"provider":"scaleway","region":"pl-waw","name":"Scaleway - Warsaw","has_shared_plans":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "15840"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - e1e16c13-ee0a-43c7-b4c9-0595b15595cd
+        status: 200 OK
+        code: 200
+        duration: 5.904334ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/plans
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 8216
+        uncompressed: false
+        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"ducky","price":0,"backend":"kafka","shared":true},{"name":"turtle","price":0,"backend":"postgresql","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"spider","price":5,"backend":"postgresql","shared":true},{"name":"hedgehog","price":5,"backend":"mosquitto","shared":true},{"name":"cat","price":10,"backend":"postgresql","shared":true},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"koala","price":19,"backend":"mosquitto","shared":false},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"butterfly","price":49,"backend":"postgresql","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"addons_2-1","price":79,"backend":"addons","shared":false},{"name":"dedicated_2-1","price":95,"backend":"kafka","shared":false},{"name":"butterfly-follower","price":98,"backend":"postgresql","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"mouse","price":99,"backend":"kafka","shared":false},{"name":"leopard","price":99,"backend":"mosquitto","shared":false},{"name":"mouse-1","price":99,"backend":"kafka","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"addons_4-1","price":158,"backend":"addons","shared":false},{"name":"dedicated_4-1","price":165,"backend":"kafka","shared":false},{"name":"bat-1","price":175,"backend":"kafka","shared":false},{"name":"hippo-follower","price":198,"backend":"postgresql","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"elephant","price":199,"backend":"postgresql","shared":false},{"name":"puffin-5","price":245,"backend":"lavinmq","shared":false},{"name":"dedicated_2-3","price":285,"backend":"kafka","shared":false},{"name":"mouse-3","price":297,"backend":"kafka","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"pug","price":299,"backend":"mosquitto","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"elephant-follower","price":398,"backend":"postgresql","shared":false},{"name":"pigeon","price":399,"backend":"postgresql","shared":false},{"name":"penguin-5","price":495,"backend":"lavinmq","shared":false},{"name":"dedicated_4-3","price":495,"backend":"kafka","shared":false},{"name":"mouse-5","price":495,"backend":"kafka","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"bat","price":499,"backend":"kafka","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"bat-3","price":525,"backend":"kafka","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"mouse-7","price":693,"backend":"kafka","shared":false},{"name":"dolphin","price":749,"backend":"postgresql","shared":false},{"name":"pigeon-follower","price":798,"backend":"postgresql","shared":false},{"name":"bat-5","price":875,"backend":"kafka","shared":false},{"name":"dedicated_8-3","price":885,"backend":"kafka","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"lynx-5","price":995,"backend":"lavinmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"fox","price":999,"backend":"kafka","shared":false},{"name":"fox-3","price":1005,"backend":"kafka","shared":false},{"name":"dedicated_8-4","price":1180,"backend":"kafka","shared":false},{"name":"bat-7","price":1225,"backend":"kafka","shared":false},{"name":"dedicated_16-3","price":1335,"backend":"kafka","shared":false},{"name":"rat","price":1399,"backend":"postgresql","shared":false},{"name":"dedicated_8-5","price":1475,"backend":"kafka","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"dolphin-follower","price":1498,"backend":"postgresql","shared":false},{"name":"fox-5","price":1675,"backend":"kafka","shared":false},{"name":"dedicated_8-6","price":1770,"backend":"kafka","shared":false},{"name":"dedicated_16-4","price":1780,"backend":"kafka","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-7","price":2065,"backend":"kafka","shared":false},{"name":"dedicated_16-5","price":2225,"backend":"kafka","shared":false},{"name":"fox-7","price":2345,"backend":"kafka","shared":false},{"name":"dedicated_8-8","price":2360,"backend":"kafka","shared":false},{"name":"dedicated_32-3","price":2385,"backend":"kafka","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"wolverine-5","price":2495,"backend":"lavinmq","shared":false},{"name":"dedicated_8-9","price":2655,"backend":"kafka","shared":false},{"name":"dedicated_16-6","price":2670,"backend":"kafka","shared":false},{"name":"rat-follower","price":2798,"backend":"postgresql","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"dedicated_16-7","price":3115,"backend":"kafka","shared":false},{"name":"dedicated_32-4","price":3180,"backend":"kafka","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"dedicated_16-8","price":3560,"backend":"kafka","shared":false},{"name":"dedicated_32-5","price":3975,"backend":"kafka","shared":false},{"name":"dedicated_16-9","price":4005,"backend":"kafka","shared":false},{"name":"dedicated_64-3","price":4185,"backend":"kafka","shared":false},{"name":"dedicated_32-6","price":4770,"backend":"kafka","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"reindeer-5","price":4995,"backend":"lavinmq","shared":false},{"name":"lion-7","price":5250,"backend":"kafka","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-7","price":5565,"backend":"kafka","shared":false},{"name":"dedicated_64-4","price":5580,"backend":"kafka","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-8","price":6360,"backend":"kafka","shared":false},{"name":"dedicated_64-5","price":6975,"backend":"kafka","shared":false},{"name":"dedicated_32-9","price":7155,"backend":"kafka","shared":false},{"name":"dedicated_64-6","price":8370,"backend":"kafka","shared":false},{"name":"penguin-7","price":8400,"backend":"kafka","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"dedicated_64-7","price":9765,"backend":"kafka","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"bear-5","price":9995,"backend":"lavinmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"dedicated_64-8","price":11160,"backend":"kafka","shared":false},{"name":"dedicated_64-9","price":12555,"backend":"kafka","shared":false},{"name":"orca-5","price":14995,"backend":"lavinmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "8216"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - bab59607-0d11-41ac-8c85-1a4ec9fdf01c
+        status: 200 OK
+        code: 200
+        duration: 21.9535ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/regions
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 15840
+        uncompressed: false
+        body: '[{"provider":"amazon-web-services","region":"us-east-1","name":"Amazon Web Services - US-East-1 (Northern Virginia)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-2","name":"Amazon Web Services - US-West-2 (Oregon)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-east-2","name":"Amazon Web Services - US-East-2 (Ohio)","has_shared_plans":true},{"provider":"amazon-web-services","region":"us-west-1","name":"Amazon Web Services - US-West-1 (Northern California)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-north-1","name":"Amazon Web Services - EU-North-1 (Stockholm)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-1","name":"Amazon Web Services - EU-West-1 (Ireland)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-2","name":"Amazon Web Services - EU-West-2 (London)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-west-3","name":"Amazon Web Services - EU-West-3 (Paris)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-south-1","name":"Amazon Web Services - EU-South-1 (Milan)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-south-2","name":"Amazon Web Services - EU-South-2 (Spain)","has_shared_plans":false},{"provider":"amazon-web-services","region":"eu-central-1","name":"Amazon Web Services - EU-Central-1 (Frankfurt)","has_shared_plans":true},{"provider":"amazon-web-services","region":"eu-central-2","name":"Amazon Web Services - EU-Central-2 (Zurich)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ca-central-1","name":"Amazon Web Services - CA-Central-1 (Canada)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ca-west-1","name":"Amazon Web Services - CA-West-1 (Calgary)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-1","name":"Amazon Web Services - AP-SouthEast-1 (Singapore)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-2","name":"Amazon Web Services - AP-SouthEast-2 (Sydney)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-southeast-3","name":"Amazon Web Services - AP-SouthEast-3 (Jakarta)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-4","name":"Amazon Web Services - AP-SouthEast-4 (Melbourne)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-5","name":"Amazon Web Services - AP-SouthEast-5 (Malaysia)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-southeast-7","name":"Amazon Web Services - AP-SouthEast-7 (Thailand)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-northeast-1","name":"Amazon Web Services - AP-NorthEast-1 (Tokyo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-2","name":"Amazon Web Services - AP-NorthEast-2 (Seoul)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-northeast-3","name":"Amazon Web Services - AP-NorthEast-3 (Osaka)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-south-1","name":"Amazon Web Services - AP-South-1 (Mumbai)","has_shared_plans":true},{"provider":"amazon-web-services","region":"ap-south-2","name":"Amazon Web Services - AP-South-2 (Hyderabad)","has_shared_plans":false},{"provider":"amazon-web-services","region":"ap-east-1","name":"Amazon Web Services - AP-East-1 (Hong Kong)","has_shared_plans":true},{"provider":"amazon-web-services","region":"sa-east-1","name":"Amazon Web Services - SA-East-1 (São Paulo)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-south-1","name":"Amazon Web Services - ME-South-1 (Bahrain)","has_shared_plans":true},{"provider":"amazon-web-services","region":"me-central-1","name":"Amazon Web Services - ME-Central-1 (UAE)","has_shared_plans":false},{"provider":"amazon-web-services","region":"af-south-1","name":"Amazon Web Services - AF-South-1 (Cape Town)","has_shared_plans":false},{"provider":"amazon-web-services","region":"il-central-1","name":"Amazon Web Services - IL-Central-1 (Tel Aviv)","has_shared_plans":false},{"provider":"amazon-web-services","region":"mx-central-1","name":"Amazon Web Services - MX-Central-1 (Mexico)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast2","name":"Google Compute Engine - northamerica-northeast2 (Toronto, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east1","name":"Google Compute Engine - us-east1 (South Carolina)","has_shared_plans":true},{"provider":"google-compute-engine","region":"us-east4","name":"Google Compute Engine - us-east4 (North Virginia)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-east5","name":"Google Compute Engine - us-east5 (Columbus)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west1","name":"Google Compute Engine - us-west1 (Oregon)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west2","name":"Google Compute Engine - us-west2 (Los Angeles)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west3","name":"Google Compute Engine - us-west3 (Salt Lake City)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-west4","name":"Google Compute Engine - us-west4 (Las Vegas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-south1","name":"Google Compute Engine - us-south1 (Dallas, Texas)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-east1","name":"Google Compute Engine - southamerica-east1 (São Paulo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"southamerica-west1","name":"Google Compute Engine - southamerica-west1 (Santiago)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north1","name":"Google Compute Engine - europe-north1 (Finland)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-north2","name":"Google Compute Engine - europe-north2 (Sweden)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west1","name":"Google Compute Engine - europe-west1 (Belgium)","has_shared_plans":true},{"provider":"google-compute-engine","region":"europe-west2","name":"Google Compute Engine - europe-west2 (London)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west3","name":"Google Compute Engine - europe-west3 (Frankfurt)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west4","name":"Google Compute Engine - europe-west4 (Netherlands)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west6","name":"Google Compute Engine - europe-west6 (Zürich)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west8","name":"Google Compute Engine - europe-west8 (Milan)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west9","name":"Google Compute Engine - europe-west9 (Paris)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west10","name":"Google Compute Engine - europe-west10 (Berlin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-west12","name":"Google Compute Engine - europe-west12 (Turin)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-central2","name":"Google Compute Engine - europe-central2 (Warsaw)","has_shared_plans":false},{"provider":"google-compute-engine","region":"europe-southwest1","name":"Google Compute Engine - europe-southwest1 (Madrid)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-west1","name":"Google Compute Engine - me-west1 (Tel Aviv)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central1","name":"Google Compute Engine - me-central1 (Doha)","has_shared_plans":false},{"provider":"google-compute-engine","region":"me-central2","name":"Google Compute Engine - me-central2 (Dammam)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-east1","name":"Google Compute Engine - asia-east1 (Taiwan)","has_shared_plans":true},{"provider":"google-compute-engine","region":"asia-east2","name":"Google Compute Engine - asia-east2 (Hong Kong)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast1","name":"Google Compute Engine - asia-northeast1 (Tokyo)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast2","name":"Google Compute Engine - asia-northeast2 (Osaka)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-northeast3","name":"Google Compute Engine - asia-northeast3 (Seoul)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast1","name":"Google Compute Engine - asia-southeast1 (Singapore)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-southeast2","name":"Google Compute Engine - asia-southeast2 (Jakarta)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south1","name":"Google Compute Engine - asia-south1 (Mumbai)","has_shared_plans":false},{"provider":"google-compute-engine","region":"asia-south2","name":"Google Compute Engine - asia-south2 (Delhi)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast1","name":"Google Compute Engine - australia-southeast1 (Sydney)","has_shared_plans":false},{"provider":"google-compute-engine","region":"australia-southeast2","name":"Google Compute Engine - australia-southeast2 (Melbourne)","has_shared_plans":false},{"provider":"google-compute-engine","region":"northamerica-northeast1","name":"Google Compute Engine - northamerica-northeast1 (Montréal, Canada)","has_shared_plans":false},{"provider":"google-compute-engine","region":"us-central1","name":"Google Compute Engine - us-central1 (Iowa)","has_shared_plans":true},{"provider":"digital-ocean","region":"syd1","name":"DigitalOcean - Sydney 1","has_shared_plans":false},{"provider":"digital-ocean","region":"ams3","name":"DigitalOcean - Amsterdam 3","has_shared_plans":false},{"provider":"digital-ocean","region":"sgp1","name":"DigitalOcean - Singapore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"lon1","name":"DigitalOcean - London 1","has_shared_plans":false},{"provider":"digital-ocean","region":"fra1","name":"DigitalOcean - Frankfurt 1","has_shared_plans":false},{"provider":"digital-ocean","region":"tor1","name":"DigitalOcean - Toronto 1","has_shared_plans":false},{"provider":"digital-ocean","region":"sfo3","name":"DigitalOcean - San Francisco 3","has_shared_plans":false},{"provider":"digital-ocean","region":"blr1","name":"DigitalOcean - Bangalore 1","has_shared_plans":false},{"provider":"digital-ocean","region":"nyc3","name":"DigitalOcean - New York 3","has_shared_plans":false},{"provider":"azure-arm","region":"westus3","name":"Azure - West US 3","has_shared_plans":false},{"provider":"azure-arm","region":"australiaeast","name":"Azure - Australia East","has_shared_plans":false},{"provider":"azure-arm","region":"australiasoutheast","name":"Azure - Australia Southeast","has_shared_plans":false},{"provider":"azure-arm","region":"brazilsouth","name":"Azure - Brazil South","has_shared_plans":false},{"provider":"azure-arm","region":"canadacentral","name":"Azure - Canada Central","has_shared_plans":false},{"provider":"azure-arm","region":"canadaeast","name":"Azure - Canada East","has_shared_plans":false},{"provider":"azure-arm","region":"centralindia","name":"Azure - Central India","has_shared_plans":false},{"provider":"azure-arm","region":"centralus","name":"Azure - Central US","has_shared_plans":false},{"provider":"azure-arm","region":"eastasia","name":"Azure - East Asia","has_shared_plans":false},{"provider":"azure-arm","region":"eastus","name":"Azure - East US","has_shared_plans":true},{"provider":"azure-arm","region":"eastus2","name":"Azure - East US 2","has_shared_plans":true},{"provider":"azure-arm","region":"francecentral","name":"Azure - France Central","has_shared_plans":false},{"provider":"azure-arm","region":"germanywestcentral","name":"Azure - Germany West Central","has_shared_plans":false},{"provider":"azure-arm","region":"indonesiacentral","name":"Azure - Indonesia Central","has_shared_plans":false},{"provider":"azure-arm","region":"israelcentral","name":"Azure - Israel Central","has_shared_plans":false},{"provider":"azure-arm","region":"italynorth","name":"Azure - Italy North","has_shared_plans":false},{"provider":"azure-arm","region":"japaneast","name":"Azure - Japan East","has_shared_plans":false},{"provider":"azure-arm","region":"japanwest","name":"Azure - Japan West","has_shared_plans":false},{"provider":"azure-arm","region":"koreacentral","name":"Azure - Korea Central","has_shared_plans":false},{"provider":"azure-arm","region":"koreasouth","name":"Azure - Korea South","has_shared_plans":false},{"provider":"azure-arm","region":"mexicocentral","name":"Azure - Mexico Central","has_shared_plans":false},{"provider":"azure-arm","region":"newzealandnorth","name":"Azure - New Zealand North","has_shared_plans":false},{"provider":"azure-arm","region":"northcentralus","name":"Azure - North Central US","has_shared_plans":false},{"provider":"azure-arm","region":"northeurope","name":"Azure - North Europe","has_shared_plans":false},{"provider":"azure-arm","region":"norwayeast","name":"Azure - Norway East","has_shared_plans":false},{"provider":"azure-arm","region":"polandcentral","name":"Azure - Poland Central","has_shared_plans":false},{"provider":"azure-arm","region":"qatarcentral","name":"Azure - Qatar Central","has_shared_plans":false},{"provider":"azure-arm","region":"southafricanorth","name":"Azure - South Africa North","has_shared_plans":false},{"provider":"azure-arm","region":"southcentralus","name":"Azure - South Central US","has_shared_plans":false},{"provider":"azure-arm","region":"southeastasia","name":"Azure - Southeast Asia","has_shared_plans":false},{"provider":"azure-arm","region":"southindia","name":"Azure - South India","has_shared_plans":false},{"provider":"azure-arm","region":"spaincentral","name":"Azure - Spain Central","has_shared_plans":false},{"provider":"azure-arm","region":"swedencentral","name":"Azure - Sweden Central","has_shared_plans":true},{"provider":"azure-arm","region":"switzerlandnorth","name":"Azure - Switzerland North","has_shared_plans":false},{"provider":"azure-arm","region":"uaenorth","name":"Azure - UAE North","has_shared_plans":false},{"provider":"azure-arm","region":"uksouth","name":"Azure - UK South","has_shared_plans":false},{"provider":"azure-arm","region":"ukwest","name":"Azure - UK West","has_shared_plans":false},{"provider":"azure-arm","region":"westcentralus","name":"Azure - West Central US","has_shared_plans":false},{"provider":"azure-arm","region":"westeurope","name":"Azure - West Europe","has_shared_plans":true},{"provider":"azure-arm","region":"westindia","name":"Azure - West India","has_shared_plans":false},{"provider":"azure-arm","region":"westus","name":"Azure - West US","has_shared_plans":true},{"provider":"azure-arm","region":"westus2","name":"Azure - West US 2","has_shared_plans":false},{"provider":"azure-arm","region":"australiacentral","name":"Azure - Australia Central","has_shared_plans":false},{"provider":"scaleway","region":"nl-ams","name":"Scaleway - Amsterdam","has_shared_plans":false},{"provider":"scaleway","region":"fr-par","name":"Scaleway - Paris","has_shared_plans":false},{"provider":"scaleway","region":"pl-waw","name":"Scaleway - Warsaw","has_shared_plans":false}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "15840"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - c2ca04c0-c11b-4796-b8ca-b7c9e3b0654c
+        status: 200 OK
+        code: 200
+        duration: 6.140625ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 168
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"TestAccIntegrationMetricPrometheusDynatrace_Update","no_default_alarms":false,"plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"]}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 253
+        uncompressed: false
+        body: '{"id":487,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"64b092cf-2328-4b19-b20f-f5ddae115b31","url":"amqps://tvwokeea:***@dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com/tvwokeea"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "253"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - bb5bb546-c796-4d01-b6b0-a9cb49c3d6c3
+        status: 200 OK
+        code: 200
+        duration: 121.782209ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/487
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 820
+        uncompressed: false
+        body: '{"id":487,"name":"TestAccIntegrationMetricPrometheusDynatrace_Update","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"c5646913-b923-4c54-a479-40f5514dab20","url":"amqps://tvwokeea:***@dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com/tvwokeea","ready":true,"apikey":"64b092cf-2328-4b19-b20f-f5ddae115b31","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://tvwokeea:***@dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com/tvwokeea","internal":"amqp://tvwokeea:***@dev-feisty-cobalt-sheep.in.rmq3.dev.cloudamqp.com/tvwokeea"},"rmq_version":"4.1.4","hostname_external":"dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com","hostname_internal":"dev-feisty-cobalt-sheep.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "820"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 2331a99e-68d3-4c65-b0bd-8c6f0b7b5c31
+        status: 200 OK
+        code: 200
+        duration: 34.635875ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/487
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 820
+        uncompressed: false
+        body: '{"id":487,"name":"TestAccIntegrationMetricPrometheusDynatrace_Update","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"c5646913-b923-4c54-a479-40f5514dab20","url":"amqps://tvwokeea:***@dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com/tvwokeea","ready":true,"apikey":"64b092cf-2328-4b19-b20f-f5ddae115b31","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://tvwokeea:***@dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com/tvwokeea","internal":"amqp://tvwokeea:***@dev-feisty-cobalt-sheep.in.rmq3.dev.cloudamqp.com/tvwokeea"},"rmq_version":"4.1.4","hostname_external":"dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com","hostname_internal":"dev-feisty-cobalt-sheep.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "820"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 9e6ea3dc-1303-4631-9540-4a1d7bf72e06
+        status: 200 OK
+        code: 200
+        duration: 25.093333ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 139
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"access_token":"DYNATRACE_TOKEN","environment_id":"abc12345","tags":"env=prod,service=rabbitmq"}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/487/integrations/metrics/dynatrace
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 10
+        uncompressed: false
+        body: '{"id":244}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "10"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 6797f5a8-bf81-4be1-8164-4bc60e548db1
+        status: 201 Created
+        code: 201
+        duration: 50.426917ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/487/integrations/metrics/244
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 1687
+        uncompressed: false
+        body: '{"id":244,"type":"dynatrace","config":{"tags":"env=prod,service=rabbitmq","access_token":"DYNATRACE_TOKEN","environment_id":"abc12345"},"account_id":"c5646913-b923-4c54-a479-40f5514dab20","error":null,"created_at":"2025-10-07 11:26:53 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked","rabbitmq_queue_head_message_timestamp"]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "1687"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f458980c-2a34-476f-8500-9a0e1194be47
+        status: 200 OK
+        code: 200
+        duration: 18.678875ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/487
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 820
+        uncompressed: false
+        body: '{"id":487,"name":"TestAccIntegrationMetricPrometheusDynatrace_Update","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"c5646913-b923-4c54-a479-40f5514dab20","url":"amqps://tvwokeea:***@dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com/tvwokeea","ready":true,"apikey":"64b092cf-2328-4b19-b20f-f5ddae115b31","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://tvwokeea:***@dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com/tvwokeea","internal":"amqp://tvwokeea:***@dev-feisty-cobalt-sheep.in.rmq3.dev.cloudamqp.com/tvwokeea"},"rmq_version":"4.1.4","hostname_external":"dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com","hostname_internal":"dev-feisty-cobalt-sheep.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "820"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 65f5e17b-eca5-48e7-a8ff-ea20b7461ea5
+        status: 200 OK
+        code: 200
+        duration: 13.91475ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/487/integrations/metrics/244
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 1687
+        uncompressed: false
+        body: '{"id":244,"type":"dynatrace","config":{"tags":"env=prod,service=rabbitmq","access_token":"DYNATRACE_TOKEN","environment_id":"abc12345"},"account_id":"c5646913-b923-4c54-a479-40f5514dab20","error":null,"created_at":"2025-10-07 11:26:53 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked","rabbitmq_queue_head_message_timestamp"]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "1687"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - cab87763-7914-403b-8db6-0f6e9bf030c7
+        status: 200 OK
+        code: 200
+        duration: 19.659792ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/487
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 820
+        uncompressed: false
+        body: '{"id":487,"name":"TestAccIntegrationMetricPrometheusDynatrace_Update","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"c5646913-b923-4c54-a479-40f5514dab20","url":"amqps://tvwokeea:***@dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com/tvwokeea","ready":true,"apikey":"64b092cf-2328-4b19-b20f-f5ddae115b31","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://tvwokeea:***@dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com/tvwokeea","internal":"amqp://tvwokeea:***@dev-feisty-cobalt-sheep.in.rmq3.dev.cloudamqp.com/tvwokeea"},"rmq_version":"4.1.4","hostname_external":"dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com","hostname_internal":"dev-feisty-cobalt-sheep.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "820"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - bcf3c2ea-5c7b-4f44-8bd2-bf0f0175b8e3
+        status: 200 OK
+        code: 200
+        duration: 16.01575ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/487/integrations/metrics/244
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 1687
+        uncompressed: false
+        body: '{"id":244,"type":"dynatrace","config":{"tags":"env=prod,service=rabbitmq","access_token":"DYNATRACE_TOKEN","environment_id":"abc12345"},"account_id":"c5646913-b923-4c54-a479-40f5514dab20","error":null,"created_at":"2025-10-07 11:26:53 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked","rabbitmq_queue_head_message_timestamp"]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "1687"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 5d2ca477-96ff-4fa1-96c4-860be2bcc8a9
+        status: 200 OK
+        code: 200
+        duration: 14.86375ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 158
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"access_token":"DYNATRACE_TOKEN_2","environment_id":"xyz67890","tags":"env=staging,service=messaging,team=platform"}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/487/integrations/metrics/244
+        method: PUT
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 16968e92-7de6-44be-a807-2a46ece7afb5
+        status: 204 No Content
+        code: 204
+        duration: 26.59775ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/487/integrations/metrics/244
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 1706
+        uncompressed: false
+        body: '{"id":244,"type":"dynatrace","config":{"tags":"env=staging,service=messaging,team=platform","access_token":"DYNATRACE_TOKEN_2","environment_id":"xyz67890"},"account_id":"c5646913-b923-4c54-a479-40f5514dab20","error":null,"created_at":"2025-10-07 11:26:53 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked","rabbitmq_queue_head_message_timestamp"]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "1706"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - c3b848d0-5cdb-41d9-a222-a4c5e87867a1
+        status: 200 OK
+        code: 200
+        duration: 16.073125ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/487
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 820
+        uncompressed: false
+        body: '{"id":487,"name":"TestAccIntegrationMetricPrometheusDynatrace_Update","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"c5646913-b923-4c54-a479-40f5514dab20","url":"amqps://tvwokeea:***@dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com/tvwokeea","ready":true,"apikey":"64b092cf-2328-4b19-b20f-f5ddae115b31","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://tvwokeea:***@dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com/tvwokeea","internal":"amqp://tvwokeea:***@dev-feisty-cobalt-sheep.in.rmq3.dev.cloudamqp.com/tvwokeea"},"rmq_version":"4.1.4","hostname_external":"dev-feisty-cobalt-sheep.rmq3.dev.cloudamqp.com","hostname_internal":"dev-feisty-cobalt-sheep.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "820"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 72b7f18b-d111-4e23-a11d-44d772483972
+        status: 200 OK
+        code: 200
+        duration: 15.343625ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/487/integrations/metrics/244
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 1706
+        uncompressed: false
+        body: '{"id":244,"type":"dynatrace","config":{"tags":"env=staging,service=messaging,team=platform","access_token":"DYNATRACE_TOKEN_2","environment_id":"xyz67890"},"account_id":"c5646913-b923-4c54-a479-40f5514dab20","error":null,"created_at":"2025-10-07 11:26:53 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked","rabbitmq_queue_head_message_timestamp"]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "1706"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - b0a97485-4330-4dcb-ba92-ed67e38517c0
+        status: 200 OK
+        code: 200
+        duration: 14.058334ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/487/integrations/metrics/244
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f73c4acd-34ee-4517-8952-ea41ae9fc193
+        status: 204 No Content
+        code: 204
+        duration: 26.058083ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/487?keep_vpc=false
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - b185bf3f-a965-4bcd-b2fe-0c2b7553373f
+        status: 204 No Content
+        code: 204
+        duration: 69.043875ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/487
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 22
+        uncompressed: false
+        body: '{"error":"Invalid ID"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "22"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 0aa31cfc-dc16-41c3-9702-1e4e463993db
+        status: 404 Not Found
+        code: 404
+        duration: 6.051916ms

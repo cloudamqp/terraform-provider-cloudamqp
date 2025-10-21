@@ -59,6 +59,10 @@ func (api *API) ReadIntegrationLog(ctx context.Context, instanceID int64, logID 
 
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s data=%+v ", path, data))
 
+	// Handle resource drift
+	if data.ID == 0 {
+		return nil, nil
+	}
 	return &data, nil
 }
 

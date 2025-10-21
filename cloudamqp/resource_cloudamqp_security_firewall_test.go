@@ -14,6 +14,8 @@ import (
 
 // TestAccFirewall_Basic: Create standalone VPC and instance with firewall rule, import and update rules.
 func TestAccFirewall_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames            = []string{"vpc_and_instance", "firewall"}
 		vpcResourceName      = "cloudamqp_vpc.vpc"

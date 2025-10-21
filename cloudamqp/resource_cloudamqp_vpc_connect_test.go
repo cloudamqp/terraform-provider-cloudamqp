@@ -12,6 +12,8 @@ import (
 
 // TestAccVpcConnect_AWS_Basic: Create standalone VPC and instance, enable VPC Connect and import.
 func TestAccVpcConnect_AWS_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames              = []string{"vpc_and_instance", "vpc_connect"}
 		vpcResourceName        = "cloudamqp_vpc.vpc"
@@ -78,6 +80,8 @@ func TestAccVpcConnect_AWS_Basic(t *testing.T) {
 
 // TestAccVpcConnect_Azure_Basic: Create standalone VPC and instance, enable VPC Connect and import.
 func TestAccVpcConnect_Azure_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames              = []string{"vpc_and_instance", "vpc_connect"}
 		vpcResourceName        = "cloudamqp_vpc.vpc"
@@ -121,6 +125,8 @@ func TestAccVpcConnect_Azure_Basic(t *testing.T) {
 
 // TestAccVpcConnect_GCP_Basic: Create standalone VPC and instance, enable VPC Connect and import.
 func TestAccVpcConnect_GCP_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames              = []string{"vpc_and_instance", "vpc_connect"}
 		vpcResourceName        = "cloudamqp_vpc.vpc"

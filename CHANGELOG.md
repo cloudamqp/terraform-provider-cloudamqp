@@ -1,18 +1,42 @@
-## 1.37.0 (Unreleased)
+## 1.38.0 (Unreleased)
+
+FEATIRES:
+
+* Added Oauth2 configuration resource ([#385])
+
+BUG FIXES:
+
+*  Fixed plugins error if instance manually deleted ([#401]) 
+
+[#385]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/385
+[#401]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/401
+
+## 1.37.0 (02 Oct, 2025)
 
 NOTES:
+
+* Bump github.com/hashicorp/terraform-plugin-mux from 0.20.0 to 0.21.0 ([#373])
+* Bump github.com/hashicorp/terraform-plugin-sdk/v2 from 2.37.0 to 2.38.1 ([#375], [#378])
+* Bump github.com/hashicorp/terraform-plugin-framework from 1.15.1 to 1.16.1 ([#376], [#382])
 
 FEATURES:
 
 * Added new account action to enable VPC feature ([#371])
+* Support Prometheus metrics integrations ([#380])
+  * Azure monitor
+  * Datadog v3
+  * New Relic v3
 
 IMPROVEMENTS:
 
 * Client library: Added generic retry ([#362])
+* Migrated `cloudamqp_integration_log` towards Terraform plugin framework ([#377])
+* Migrated `cloudamqp_integration_metric` towards Terraform plugin framework ([#383])
 * Migrated `cloudamqp_vpc` towards Terraform plugin framework ([#363])
 * Migrated `cloudamqp_webhook` towards Terraform plugin framework ([#364])
 * Handled resource drift `cloudamqp_rabbitmq_configuration` ([#366])
 * Default values drift ([#372])
+* Updated test cases for VPC ([#384])
 
 [#362]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/362
 [#363]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/363
@@ -20,6 +44,15 @@ IMPROVEMENTS:
 [#366]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/366
 [#371]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/371
 [#372]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/372
+[#373]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/373
+[#375]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/375
+[#376]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/376
+[#377]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/377
+[#378]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/378
+[#380]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/380
+[#382]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/382
+[#383]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/383
+[#384]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/384
 
 ## 1.36.0 (29 Aug, 2025)
 

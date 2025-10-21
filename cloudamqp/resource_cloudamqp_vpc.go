@@ -184,6 +184,12 @@ func (r *vpcResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 		return
 	}
 
+	// Resource drift: resource not found, trigger re-creation
+	if data == nil {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+
 	state.Name = types.StringValue(data.Name)
 	state.Region = types.StringValue(data.Region)
 	state.Subnet = types.StringValue(data.Subnet)

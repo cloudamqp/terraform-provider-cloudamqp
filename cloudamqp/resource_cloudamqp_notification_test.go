@@ -10,6 +10,8 @@ import (
 
 // TestAccNotification_Basic: Create CPU alarm, import and change values.
 func TestAccNotification_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                = []string{"instance", "notification"}
 		instanceResourceName     = "cloudamqp_instance.instance"

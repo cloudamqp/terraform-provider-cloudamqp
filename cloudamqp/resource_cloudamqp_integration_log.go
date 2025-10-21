@@ -329,8 +329,9 @@ func (r *integrationLogResource) Read(ctx context.Context, req resource.ReadRequ
 		return
 	}
 
-	// Handle resource drift and trigger re-creation if resource been deleted outside the provider
+	// Resource drift: instance or resource not found, trigger re-creation
 	if data == nil {
+		tflog.Info(ctx, fmt.Sprintf("log integration not found, resource will be recreated: %s", state.ID.ValueString()))
 		resp.State.RemoveResource(ctx)
 		return
 	}

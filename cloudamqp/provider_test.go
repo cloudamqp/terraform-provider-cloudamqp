@@ -73,7 +73,7 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		return nil
 	}
 	rec.SetMatcher(requestURIMatcher)
-	rec.AddHook(sanitizeHook, recorder.AfterCaptureHook)
+	rec.AddHook(sanitizeHook, recorder.BeforeSaveHook)
 
 	shouldSaveHook := func(i *cassette.Interaction) error {
 		if t.Failed() {
@@ -125,6 +125,14 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 			status := gjson.Get(i.Response.Body, "status").String()
 			if status == "pending" {
 				fmt.Println("SKIP: GET /api/instances/{id}/vpc_connects", i.Request.URL, "status:", status)
+				i.DiscardOnSave = true
+			}
+		case i.Response.Code == 200 && i.Request.Method == "GET" &&
+			regexp.MustCompile(`/api/instances/\d+/jobs/[a-f0-9-]{36}$`).MatchString(i.Request.URL):
+			// Filter polling for Job state, skip pending response
+			status := gjson.Get(i.Response.Body, "status").String()
+			if status == "pending" {
+				fmt.Println("SKIP: GET /api/instances/{id}/jobs/{id}", i.Request.URL, "status:", status)
 				i.DiscardOnSave = true
 			}
 		case i.Response.Code == 400 && i.Request.Method == "GET" &&
@@ -201,15 +209,20 @@ func requestURIMatcher(request *http.Request, interaction cassette.Request) bool
 
 func sanitizeSensistiveData(body string) string {
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("AZM_APPLICATION_SECRET"), "AZM_APPLICATION_SECRET")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("AZM_INSTRUMENTATION_KEY"), "AZM_INSTRUMENTATION_KEY")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("AZM_INSTRUMENTATION_KEY_2"), "AZM_INSTRUMENTATION_KEY_2")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("CLOUDWATCH_ACCESS_KEY_ID"), "CLOUDWATCH_ACCESS_KEY_ID")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("CLOUDWATCH_SECRET_ACCESS_KEY"), "CLOUDWATCH_SECRET_ACCESS_KEY")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("CORALOGIX_SEND_DATA_KEY"), "CORALOGIX_SEND_DATA_KEY")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("DATADOG_APIKEY"), "DATADOG_APIKEY")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("DYNATRACE_TOKEN"), "DYNATRACE_TOKEN")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("DYNATRACE_TOKEN_2"), "DYNATRACE_TOKEN_2")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("LIBRATO_APIKEY"), "LIBRATO_APIKEY")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("LOGENTIRES_TOKEN"), "LOGENTIRES_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("LOGGLY_TOKEN"), "LOGGLY_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("NEWRELIC_APIKEY"), "NEWRELIC_APIKEY")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("SCALYR_TOKEN"), "SCALYR_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("SPLUNK_TOKEN"), "SPLUNK_TOKEN")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("SPLUNK_TOKEN_2"), "SPLUNK_TOKEN_2")
 	return body
 }

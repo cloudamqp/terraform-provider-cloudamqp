@@ -14,6 +14,8 @@ import (
 
 // TestAccPlugin_Basic: Enabled plugin, import and disable it.
 func TestAccPlugin_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames             = []string{"instance", "plugin", "data_source/plugins"}
 		instanceResourceName  = "cloudamqp_instance.instance"
