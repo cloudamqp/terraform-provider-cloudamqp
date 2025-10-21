@@ -13,6 +13,14 @@ import (
 func TestAccIntegrationMetric_CloudWatch(t *testing.T) {
 	t.Parallel()
 
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "CLOUDWATCH_ACCESS_KEY_ID"
+	testSecretKey := "CLOUDWATCH_SECRET_ACCESS_KEY"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("CLOUDWATCH_ACCESS_KEY_ID")
+		testSecretKey = os.Getenv("CLOUDWATCH_SECRET_ACCESS_KEY")
+	}
+
 	var (
 		fileNames              = []string{"instance", "integrations/metrics/cloudwatch_v2"}
 		instanceResourceName   = "cloudamqp_instance.instance"
@@ -22,8 +30,8 @@ func TestAccIntegrationMetric_CloudWatch(t *testing.T) {
 			"InstanceName":              "TestAccIntegrationMetric_CloudWatch",
 			"InstanceID":                fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":              "bunny-1",
-			"CloudwatchAccessKeyId":     os.Getenv("CLOUDWATCH_ACCESS_KEY_ID"),
-			"CloudwatchSecretAccessKey": os.Getenv("CLOUDWATCH_SECRET_ACCESS_KEY"),
+			"CloudwatchAccessKeyId":     testApiKey,
+			"CloudwatchSecretAccessKey": testSecretKey,
 			"CloudwatchRegion":          "us-east-1",
 			"CloudwatchTags":            "env=test,region=us-east-1",
 		}
@@ -33,8 +41,7 @@ func TestAccIntegrationMetric_CloudWatch(t *testing.T) {
 		PreCheck: func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config:             configuration.GetTemplatedConfig(t, fileNames, params),
-				ExpectNonEmptyPlan: true,
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(cloudwatchResourceName, "name", "cloudwatch_v2"),
@@ -56,6 +63,12 @@ func TestAccIntegrationMetric_CloudWatch(t *testing.T) {
 func TestAccIntegrationMetric_DataDog(t *testing.T) {
 	t.Parallel()
 
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "DATADOG_APIKEY"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("DATADOG_APIKEY")
+	}
+
 	var (
 		fileNames            = []string{"instance", "integrations/metrics/datadog_v2"}
 		instanceResourceName = "cloudamqp_instance.instance"
@@ -66,7 +79,7 @@ func TestAccIntegrationMetric_DataDog(t *testing.T) {
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
 			"DataDogRegion": "us1",
-			"DataDogApiKey": os.Getenv("DATADOG_APIKEY"),
+			"DataDogApiKey": testApiKey,
 			"DataDogTags":   "env=test,region=us1",
 		}
 	)
@@ -75,8 +88,7 @@ func TestAccIntegrationMetric_DataDog(t *testing.T) {
 		PreCheck: func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config:             configuration.GetTemplatedConfig(t, fileNames, params),
-				ExpectNonEmptyPlan: true,
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(dataDogResourceName, "name", "datadog_v2"),
@@ -98,6 +110,12 @@ func TestAccIntegrationMetric_DataDog(t *testing.T) {
 func TestAccIntegrationMetric_Librato(t *testing.T) {
 	t.Parallel()
 
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "LIBRATO_APIKEY"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("LIBRATO_APIKEY")
+	}
+
 	var (
 		fileNames            = []string{"instance", "integrations/metrics/librato"}
 		instanceResourceName = "cloudamqp_instance.instance"
@@ -108,7 +126,7 @@ func TestAccIntegrationMetric_Librato(t *testing.T) {
 			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":  "bunny-1",
 			"LibratoEmail":  "test@example.com",
-			"LibratoApiKey": os.Getenv("LIBRATO_APIKEY"),
+			"LibratoApiKey": testApiKey,
 			"LibratoTags":   "env=test",
 		}
 	)
@@ -117,8 +135,7 @@ func TestAccIntegrationMetric_Librato(t *testing.T) {
 		PreCheck: func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config:             configuration.GetTemplatedConfig(t, fileNames, params),
-				ExpectNonEmptyPlan: true,
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(libratoResourceName, "name", "librato"),
@@ -140,6 +157,12 @@ func TestAccIntegrationMetric_Librato(t *testing.T) {
 func TestAccIntegrationMetric_NewRelic(t *testing.T) {
 	t.Parallel()
 
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "NEWRELIC_APIKEY"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("NEWRELIC_APIKEY")
+	}
+
 	var (
 		fileNames            = []string{"instance", "integrations/metrics/newrelic_v2"}
 		instanceResourceName = "cloudamqp_instance.instance"
@@ -149,7 +172,7 @@ func TestAccIntegrationMetric_NewRelic(t *testing.T) {
 			"InstanceName":   "TestAccIntegrationMetric_NewRelic",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"NewRelicApiKey": os.Getenv("NEWRELIC_APIKEY"),
+			"NewRelicApiKey": testApiKey,
 			"NewRelicRegion": "us",
 			"NewRelicTags":   "env=test,region=us1",
 		}
@@ -159,8 +182,7 @@ func TestAccIntegrationMetric_NewRelic(t *testing.T) {
 		PreCheck: func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config:             configuration.GetTemplatedConfig(t, fileNames, params),
-				ExpectNonEmptyPlan: true,
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(newrelicResourceName, "name", "newrelic_v2"),
