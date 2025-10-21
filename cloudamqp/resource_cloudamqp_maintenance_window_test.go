@@ -9,6 +9,8 @@ import (
 )
 
 func TestAccMaintenanceWindow_LavinMQ(t *testing.T) {
+	t.Parallel()
+
 	var (
 		instanceResourceName          = "cloudamqp_instance.instance"
 		maintenanceWindowResourceName = "cloudamqp_maintenance_window.this"
@@ -103,6 +105,8 @@ func TestAccMaintenanceWindow_LavinMQ(t *testing.T) {
 }
 
 func TestAccMaintenanceWindow_RabbitMQ(t *testing.T) {
+	t.Parallel()
+
 	var (
 		instanceResourceName          = "cloudamqp_instance.instance"
 		maintenanceWindowResourceName = "cloudamqp_maintenance_window.this"

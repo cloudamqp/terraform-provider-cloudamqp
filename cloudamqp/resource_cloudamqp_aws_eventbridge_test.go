@@ -10,6 +10,8 @@ import (
 
 // TestAccIntegrationAwsEventbridge_Basic: Enabled AWS eventbridge integration and import.
 func TestAccIntegrationAwsEventbridge_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames               = []string{"instance", "integration_aws_eventbridge"}
 		instanceResourceName    = "cloudamqp_instance.instance"

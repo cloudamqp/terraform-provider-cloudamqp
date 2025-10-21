@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -122,6 +123,13 @@ func resourcePrivateLinkAwsRead(ctx context.Context, d *schema.ResourceData, met
 	data, err := api.ReadPrivatelink(ctx, instanceID, sleep, timeout)
 	if err != nil {
 		return diag.FromErr(err)
+	}
+
+	// Resource drift: instance or resource not found, trigger re-creation
+	if data == nil {
+		tflog.Info(ctx, fmt.Sprintf("privatelink not found, resource will be recreated: %s", d.Id()))
+		d.SetId("")
+		return nil
 	}
 
 	for k, v := range data {

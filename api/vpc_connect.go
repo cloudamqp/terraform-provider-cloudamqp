@@ -57,6 +57,9 @@ func (api *API) ReadVpcConnect(ctx context.Context, instanceID int) (map[string]
 	case 200:
 		tflog.Debug(ctx, "response data", data)
 		return data, nil
+	case 404:
+		tflog.Warn(ctx, "VPC Connect not found")
+		return nil, nil
 	default:
 		return nil, fmt.Errorf("failed to read VPC connect, status=%d message=%s ",
 			response.StatusCode, failed)
