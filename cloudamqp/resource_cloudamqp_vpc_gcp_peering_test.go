@@ -11,6 +11,8 @@ import (
 
 // TestAccVpcGcpPeering_Basic: Create standalone VPC and instance, enable VPC Connect and import.
 func TestAccVpcGcpPeering_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                 = []string{"vpc_and_instance", "vpc_gcp_peering"}
 		vpcResourceName           = "cloudamqp_vpc.vpc"

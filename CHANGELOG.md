@@ -1,3 +1,16 @@
+## 1.38.0 (Unreleased)
+
+FEATIRES:
+
+* Added Oauth2 configuration resource ([#385])
+
+BUG FIXES:
+
+*  Fixed plugins error if instance manually deleted ([#401]) 
+
+[#385]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/385
+[#401]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/401
+
 ## 1.37.0 (02 Oct, 2025)
 
 NOTES:
@@ -17,7 +30,7 @@ FEATURES:
 IMPROVEMENTS:
 
 * Client library: Added generic retry ([#362])
-* Migrated `cloudamqp_integration_log` towards plugin framework ([#377])
+* Migrated `cloudamqp_integration_log` towards Terraform plugin framework ([#377])
 * Migrated `cloudamqp_integration_metric` towards Terraform plugin framework ([#383])
 * Migrated `cloudamqp_vpc` towards Terraform plugin framework ([#363])
 * Migrated `cloudamqp_webhook` towards Terraform plugin framework ([#364])

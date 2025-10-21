@@ -10,6 +10,8 @@ import (
 
 // TestAccRabbitMqConfiguration_Basic: Update RabbitMQ configuration and import.
 func TestAccRabbitMqConfiguration_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames            = []string{"instance", "rabbitmq_configuration/config"}
 		instanceResourceName = "cloudamqp_instance.instance"
@@ -51,6 +53,8 @@ func TestAccRabbitMqConfiguration_Basic(t *testing.T) {
 }
 
 func TestAccRabbitMqConfiguration_LogExhangeLevel(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames                  = []string{"instance", "rabbitmq_configuration/config", "data_source/nodes", "node_actions"}
 		instanceResourceName       = "cloudamqp_instance.instance"
@@ -90,6 +94,8 @@ func TestAccRabbitMqConfiguration_LogExhangeLevel(t *testing.T) {
 // TestAccRabbitMqConfiguration_ZeroValue: While using Framework 0 int values can be detected correctly.
 // Issue in Terraform SDK v2, where 0 value cannot be detected due to default int value being 0.
 func TestAccRabbitMqConfiguration_ZeroValue(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames            = []string{"instance", "rabbitmq_configuration/zero_value"}
 		instanceResourceName = "cloudamqp_instance.instance"

@@ -211,7 +211,7 @@ func (r *webhookResource) Read(ctx context.Context, req resource.ReadRequest, re
 		return
 	}
 
-	// Handle resource drift and trigger re-creation if resource been deleted outside the provider
+	// Resource drift: instance or resource not found, trigger re-creation
 	if data == nil {
 		resp.State.RemoveResource(ctx)
 		return

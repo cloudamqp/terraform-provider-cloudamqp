@@ -91,6 +91,10 @@ func (api *API) listPluginsWithRetry(ctx context.Context, path string, attempt, 
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.listPluginsWithRetry(ctx, path, attempt, sleep, timeout)
 		}
+	case 404:
+		// Instance not found - likely manually deleted
+		tflog.Debug(ctx, fmt.Sprintf("instance not found (404), likely manually deleted: %s", path))
+		return nil, fmt.Errorf("instance not found, status=404 message=%s", failed)
 	}
 	return nil, fmt.Errorf("failed to list plugins, status=%d message=%s ",
 		response.StatusCode, failed)
@@ -167,6 +171,10 @@ func (api *API) DeletePlugin(ctx context.Context, instanceID int, pluginName str
 	case 204:
 		_, err = api.waitUntilPluginChanged(ctx, instanceID, pluginName, false, 1, sleep, timeout)
 		return err
+	case 404:
+		// Instance not found - likely manually deleted
+		tflog.Debug(ctx, fmt.Sprintf("instance not found (404) during plugin deletion: %s", path))
+		return fmt.Errorf("instance not found, status=404 message=%s", failed)
 	default:
 		return fmt.Errorf("failed to delete plugin, status=%d message=%s ", response.StatusCode, failed)
 	}
