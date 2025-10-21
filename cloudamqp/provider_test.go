@@ -73,7 +73,7 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		return nil
 	}
 	rec.SetMatcher(requestURIMatcher)
-	rec.AddHook(sanitizeHook, recorder.AfterCaptureHook)
+	rec.AddHook(sanitizeHook, recorder.BeforeSaveHook)
 
 	shouldSaveHook := func(i *cassette.Interaction) error {
 		if t.Failed() {
@@ -209,6 +209,8 @@ func requestURIMatcher(request *http.Request, interaction cassette.Request) bool
 
 func sanitizeSensistiveData(body string) string {
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("AZM_APPLICATION_SECRET"), "AZM_APPLICATION_SECRET")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("AZM_INSTRUMENTATION_KEY"), "AZM_INSTRUMENTATION_KEY")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("AZM_INSTRUMENTATION_KEY_2"), "AZM_INSTRUMENTATION_KEY_2")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("CLOUDWATCH_ACCESS_KEY_ID"), "CLOUDWATCH_ACCESS_KEY_ID")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("CLOUDWATCH_SECRET_ACCESS_KEY"), "CLOUDWATCH_SECRET_ACCESS_KEY")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("CORALOGIX_SEND_DATA_KEY"), "CORALOGIX_SEND_DATA_KEY")
