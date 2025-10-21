@@ -551,6 +551,14 @@ func TestAccIntegrationMetricPrometheusSplunkV2_Update(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusDynatrace_Basic: Add Dynatrace prometheus metric integration and import.
 func TestAccIntegrationMetricPrometheusDynatrace_Basic(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "DYNATRACE_TOKEN"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("DYNATRACE_TOKEN")
+	}
+
 	var (
 		fileNames                       = []string{"instance", "integrations/metrics/integration_metric_prometheus_dynatrace"}
 		instanceResourceName            = "cloudamqp_instance.instance"
@@ -561,7 +569,7 @@ func TestAccIntegrationMetricPrometheusDynatrace_Basic(t *testing.T) {
 			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":           "bunny-1",
 			"DynatraceEnvironmentID": "abc12345",
-			"DynatraceAccessToken":   "dt0c01.ST2EY72KQINMH574WMNVI7YN.G3DFPBEJYMODIDAEX4KTJHQB",
+			"DynatraceAccessToken":   testApiKey,
 			"DynatraceTags":          "env=prod,service=rabbitmq",
 		}
 	)
@@ -590,6 +598,14 @@ func TestAccIntegrationMetricPrometheusDynatrace_Basic(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusDynatrace_WithoutTags: Test Dynatrace prometheus integration without optional tags.
 func TestAccIntegrationMetricPrometheusDynatrace_WithoutTags(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "DYNATRACE_TOKEN"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("DYNATRACE_TOKEN")
+	}
+
 	var (
 		fileNames                       = []string{"instance", "integrations/metrics/integration_metric_prometheus_dynatrace_notags"}
 		instanceResourceName            = "cloudamqp_instance.instance"
@@ -600,7 +616,7 @@ func TestAccIntegrationMetricPrometheusDynatrace_WithoutTags(t *testing.T) {
 			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":           "bunny-1",
 			"DynatraceEnvironmentID": "abc12345",
-			"DynatraceAccessToken":   "dt0c01.ST2EY72KQINMH574WMNVI7YN.G3DFPBEJYMODIDAEX4KTJHQB",
+			"DynatraceAccessToken":   testApiKey,
 		}
 	)
 
@@ -628,6 +644,16 @@ func TestAccIntegrationMetricPrometheusDynatrace_WithoutTags(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusDynatrace_Update: Test updating Dynatrace prometheus integration.
 func TestAccIntegrationMetricPrometheusDynatrace_Update(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "DYNATRACE_TOKEN"
+	testApiKey_2 := "DYNATRACE_TOKEN_2"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("DYNATRACE_TOKEN")
+		testApiKey_2 = os.Getenv("DYNATRACE_TOKEN_2")
+	}
+
 	var (
 		fileNames                       = []string{"instance", "integrations/metrics/integration_metric_prometheus_dynatrace"}
 		instanceResourceName            = "cloudamqp_instance.instance"
@@ -638,7 +664,7 @@ func TestAccIntegrationMetricPrometheusDynatrace_Update(t *testing.T) {
 			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":           "bunny-1",
 			"DynatraceEnvironmentID": "abc12345",
-			"DynatraceAccessToken":   "dt0c01.ST2EY72KQINMH574WMNVI7YN.G3DFPBEJYMODIDAEX4KTJHQB",
+			"DynatraceAccessToken":   testApiKey,
 			"DynatraceTags":          "env=prod,service=rabbitmq",
 		}
 
@@ -647,7 +673,7 @@ func TestAccIntegrationMetricPrometheusDynatrace_Update(t *testing.T) {
 			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":           "bunny-1",
 			"DynatraceEnvironmentID": "xyz67890",
-			"DynatraceAccessToken":   "dt0c01.ABCDEFGHIJKLMNOPQRSTUV.WXYZ123456789ABCDEFGHIJKLMN",
+			"DynatraceAccessToken":   testApiKey_2,
 			"DynatraceTags":          "env=staging,service=messaging,team=platform",
 		}
 	)
