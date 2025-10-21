@@ -399,16 +399,24 @@ func TestAccIntegrationMetricPrometheusAzureMonitor_Update(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusSplunkV2_Basic: Add Splunk v2 prometheus metric integration and import.
 func TestAccIntegrationMetricPrometheusSplunkV2_Basic(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "SPLUNK_TOKEN"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("SPLUNK_TOKEN")
+	}
+
 	var (
-		fileNames                   = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2"}
-		instanceResourceName        = "cloudamqp_instance.instance"
+		fileNames                    = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2"}
+		instanceResourceName         = "cloudamqp_instance.instance"
 		prometheusSplunkResourceName = "cloudamqp_integration_metric_prometheus.splunk_v2"
 
 		params = map[string]string{
 			"InstanceName":   "TestAccIntegrationMetricPrometheusSplunkV2_Basic",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"SplunkToken":    "12345678-1234-1234-1234-123456789012",
+			"SplunkToken":    testApiKey,
 			"SplunkEndpoint": "https://prd-p-abcde.splunkcloud.com:8088/services/collector",
 			"SplunkTags":     "key=value,key2=value2",
 		}
@@ -438,16 +446,24 @@ func TestAccIntegrationMetricPrometheusSplunkV2_Basic(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusSplunkV2_WithoutTags: Test Splunk v2 prometheus integration without optional tags.
 func TestAccIntegrationMetricPrometheusSplunkV2_WithoutTags(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "SPLUNK_TOKEN"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("SPLUNK_TOKEN")
+	}
+
 	var (
-		fileNames                   = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2_notags"}
-		instanceResourceName        = "cloudamqp_instance.instance"
+		fileNames                    = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2_notags"}
+		instanceResourceName         = "cloudamqp_instance.instance"
 		prometheusSplunkResourceName = "cloudamqp_integration_metric_prometheus.splunk_v2_notags"
 
 		params = map[string]string{
 			"InstanceName":   "TestAccIntegrationMetricPrometheusSplunkV2_WithoutTags",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"SplunkToken":    "12345678-1234-1234-1234-123456789012",
+			"SplunkToken":    testApiKey,
 			"SplunkEndpoint": "https://prd-p-abcde.splunkcloud.com:8088/services/collector",
 		}
 	)
@@ -476,16 +492,26 @@ func TestAccIntegrationMetricPrometheusSplunkV2_WithoutTags(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusSplunkV2_Update: Test updating Splunk v2 prometheus integration.
 func TestAccIntegrationMetricPrometheusSplunkV2_Update(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "SPLUNK_TOKEN"
+	testApiKey2 := "SPLUNK_TOKEN_2"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("SPLUNK_TOKEN")
+		testApiKey2 = os.Getenv("SPLUNK_TOKEN_2")
+	}
+
 	var (
-		fileNames                   = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2"}
-		instanceResourceName        = "cloudamqp_instance.instance"
+		fileNames                    = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2"}
+		instanceResourceName         = "cloudamqp_instance.instance"
 		prometheusSplunkResourceName = "cloudamqp_integration_metric_prometheus.splunk_v2"
 
 		paramsCreate = map[string]string{
 			"InstanceName":   "TestAccIntegrationMetricPrometheusSplunkV2_Update",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"SplunkToken":    "12345678-1234-1234-1234-123456789012",
+			"SplunkToken":    testApiKey,
 			"SplunkEndpoint": "https://prd-p-abcde.splunkcloud.com:8088/services/collector",
 			"SplunkTags":     "key=value,key2=value2",
 		}
@@ -494,7 +520,7 @@ func TestAccIntegrationMetricPrometheusSplunkV2_Update(t *testing.T) {
 			"InstanceName":   "TestAccIntegrationMetricPrometheusSplunkV2_Update",
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
-			"SplunkToken":    "87654321-4321-4321-4321-210987654321",
+			"SplunkToken":    testApiKey2,
 			"SplunkEndpoint": "https://prd-p-fghij.splunkcloud.com:8088/services/collector",
 			"SplunkTags":     "key=value2,key2=value3",
 		}
