@@ -10,6 +10,8 @@ import (
 
 // TestAccWebhook_Basic: Creating dedicated AWS instance, enable webhook integration and import.
 func TestAccWebhook_Basic(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames            = []string{"instance", "webhook"}
 		instanceResourceName = "cloudamqp_instance.instance"

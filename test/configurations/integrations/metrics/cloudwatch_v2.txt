@@ -1,0 +1,10 @@
+resource "cloudamqp_integration_metric" "cloudwatch_v2" {
+  instance_id       = {{.InstanceID}}
+  name              = "cloudwatch_v2"
+  access_key_id     = "{{.CloudwatchAccessKeyId}}"
+  secret_access_key = "{{.CloudwatchSecretAccessKey}}"
+  region            = "{{.CloudwatchRegion}}"
+  {{if .CloudwatchTags}}tags = "{{.CloudwatchTags}}"{{end}}
+  {{if .CloudwatchQueueAllowList}}queue_allowlist = "{{.CloudwatchQueueAllowList}}"{{end}}
+  {{if .CloudwatchVhostAllowList}}vhost_allowlist = "{{.CloudwatchVhostAllowList}}"{{end}}
+}

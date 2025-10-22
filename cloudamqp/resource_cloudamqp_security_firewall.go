@@ -147,6 +147,13 @@ func resourceSecurityFirewallRead(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(err)
 	}
 
+	// Resource drift: instance or resource not found, trigger re-creation
+	if data == nil {
+		tflog.Info(ctx, fmt.Sprintf("firewall settings not found, resource will be recreated: %d", instanceID))
+		d.SetId("")
+		return diag.Diagnostics{}
+	}
+
 	rules := make([]map[string]any, len(data))
 	for k, v := range data {
 		rules[k] = readRule(v)

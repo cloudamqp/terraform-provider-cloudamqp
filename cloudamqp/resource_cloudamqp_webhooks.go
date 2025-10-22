@@ -211,6 +211,12 @@ func (r *webhookResource) Read(ctx context.Context, req resource.ReadRequest, re
 		return
 	}
 
+	// Resource drift: instance or resource not found, trigger re-creation
+	if data == nil {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+
 	state.ID = types.StringValue(strconv.FormatInt(data.ID, 10))
 	state.Concurrency = types.Int64Value(data.Concurrency)
 	state.Queue = types.StringValue(data.Queue)

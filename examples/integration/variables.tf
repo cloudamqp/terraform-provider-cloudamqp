@@ -34,6 +34,14 @@ variable "splunk_host_port" {
   type = string
 }
 
+variable "splunk_endpoint" {
+  type = string
+}
+
+variable "splunk_token" {
+  type = string
+}
+
 // Datadog
 variable "datadog_apikey" {
   type = string
@@ -43,8 +51,8 @@ variable "datadog_region" {
   type = string
 
   validation {
-    condition     = var.newrelic_region == "us" || var.newrelic_region == "eu"
-    error_message = "Available regions are, us and eu"
+    condition     = var.datadog_region == "us1" || var.datadog_region == "us3" || var.datadog_region == "us5" || var.datadog_region == "eu"
+    error_message = "Available regions are, us1, us3, us5 and eu"
   }
 }
 
@@ -65,4 +73,32 @@ variable "newrelic_region" {
     condition     = var.newrelic_region == "us" || var.newrelic_region == "eu"
     error_message = "Available regions are, us and eu"
   }
+}
+
+// Dynatrace
+variable "dynatrace_environment_id" {
+  type        = string
+  description = "Dynatrace environment ID"
+}
+
+variable "dynatrace_access_token" {
+  type        = string
+  description = "Dynatrace access token with 'Ingest metrics' permission"
+  sensitive   = true
+}
+
+// CloudWatch v3
+variable "cloudwatch_iam_role" {
+  type        = string
+  description = "AWS IAM role ARN with PutMetricData permission"
+}
+
+variable "cloudwatch_iam_external_id" {
+  type        = string
+  description = "AWS IAM external ID for role assumption"
+}
+
+variable "cloudwatch_region" {
+  type        = string
+  description = "AWS region for CloudWatch metrics"
 }

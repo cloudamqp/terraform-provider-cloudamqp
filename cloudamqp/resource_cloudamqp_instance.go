@@ -234,7 +234,7 @@ func resourceRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Di
 		return diag.FromErr(err)
 	}
 
-	// Handle resource drift and trigger re-creation if resource been deleted outside the provider
+	// Resource drift: instance not found, trigger re-creation
 	if data == nil {
 		d.SetId("")
 		return nil

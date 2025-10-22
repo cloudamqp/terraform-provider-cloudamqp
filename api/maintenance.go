@@ -30,7 +30,7 @@ func (api *API) SetMaintenance(ctx context.Context, instanceID int, data model.M
 	}
 }
 
-func (api *API) ReadMaintenance(ctx context.Context, instanceID int) (model.Maintenance, error) {
+func (api *API) ReadMaintenance(ctx context.Context, instanceID int) (*model.Maintenance, error) {
 	var (
 		data   model.Maintenance
 		failed map[string]any
@@ -39,16 +39,19 @@ func (api *API) ReadMaintenance(ctx context.Context, instanceID int) (model.Main
 
 	response, err := api.sling.New().Get(path).Receive(&data, &failed)
 	if err != nil {
-		return model.Maintenance{}, err
+		return nil, err
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
 
 	switch response.StatusCode {
 	case 200:
-		return data, nil
+		return &data, nil
+	case 404:
+		tflog.Warn(ctx, "Maintenance settings not found")
+		return nil, nil
 	default:
-		return model.Maintenance{},
+		return nil,
 			fmt.Errorf("read maintenance settings failed, status: %d, message: %s",
 				response.StatusCode, failed)
 	}
