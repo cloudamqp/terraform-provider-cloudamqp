@@ -233,6 +233,10 @@ The following arguments are supported:
 * `preferred_az`        - (Optional) The AZs to place your nodes in. Each entry corresponds to a server in your cluster, so for a 3 node cluster, provide 3 AZs in the list.
 
   ***Note:*** `preferred_az` can only be set upon instance creation as of now and the result is not guaranteed. On eventual failed resource allocation in the zone, CloudAMQP will fallback to a different zone.
+  * AWS: AZ id in [aws-availability-zones]
+  * Azure: 1,2 or 3 in supported regions [azure-region-list]
+  * GCP: zones in [gcp-region-zones]
+  * Digital Ocean: Slug in [do-regional-availability]
 
 ___
 
@@ -419,3 +423,7 @@ resource "cloudamqp_instance" "bunny_instance" {
 [plans]: ../guides/info_plan.md
 [**RabbitMQ**]: https://www.rabbitmq.com
 [instance regions]: ../guides/info_region.md
+[aws-availability-zones]: https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html
+[azure-region-list]: https://learn.microsoft.com/en-us/azure/reliability/regions-list
+[gcp-region-zones]: https://cloud.google.com/compute/docs/regions-zones#available
+[do-regional-availability]: https://docs.digitalocean.com/platform/regional-availability/
