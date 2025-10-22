@@ -120,7 +120,7 @@ resource "cloudamqp_integration_log" "datadog" {
 <details>
   <summary>
     <b>
-      <i>Logentries log integration</i>
+      <i>Log entries log integration</i>
     </b>
   </summary>
 
@@ -309,7 +309,10 @@ The following arguments are supported:
 Valid arguments for each third party log integrations below. Corresponding API backend documentation can be
 found here [CloudAMQP API add integration].
 
-### Azure monitoring
+<details>
+  <summary>
+    <b>Azure monitoring</b>
+  </summary>
 
 The following arguments used by Azure monitoring.
 
@@ -321,7 +324,14 @@ The following arguments used by Azure monitoring.
 * `tenant_id`          - (Required) The tenant identifier.
 * `table`              - (Required) The table name.
 
-### CloudWatch
+Use Azure portal to configure external access for Azure Monitor. [Tutorial to find/create all arguments]
+
+</details>
+
+<details>
+  <summary>
+    <b>Cloudwatch</b>
+  </summary>
 
 The following arguments used by CloudWatch.
 
@@ -348,7 +358,12 @@ Create an IAM user with programmatic access and the following permissions: `Crea
 
 Optional arguments requires IAM permission: `PutRetentionPolicy`, `DeleteRetentionPolicy` and `TagResource`.
 
-### Coralogix
+</details>
+
+<details>
+  <summary>
+    <b>Coralogix</b>
+  </summary>
 
 The following arguments used by Coralogix.
 
@@ -358,44 +373,80 @@ The following arguments used by Coralogix.
 * `private_key` - (Required/Sensitive) The private access key.
 * `subsystem`   - (Required) The subsystem name for Coralogix.
 
-### Data dog
+Create a 'Send-Your-Data' private API key, [Coralogix documentation]
+
+</details>
+
+<details>
+  <summary>
+    <b>Datadog</b>
+  </summary>
 
 The following arguments used by Data dog.
 
 * `name`    - (Required) The name of the third party log integration (`datadog`).
 * `api_key` - (Required/Sensitive) The API key.
+
+  ***Note:*** Create a Datadog API key at, [app.datadoghq.com]
+
 * `region`  - (Required) Region hosting the integration service. Valid regions, `us1`, `us3`, `us5`
               and `eu`.
 
-Optional arguments
+Optional arguments:
 
 * `tags` - (Optional) Tags. e.g. `env=prod,region=europe`.
 
   ***Note:*** If tags are used with Datadog. The value part (prod, europe, ...) must start with a
               letter, read more about tags format in the [Datadog documentation].
 
-### Log Entries
+</details>
+
+<details>
+  <summary>
+    <b>Log Entries</b>
+  </summary>
 
 The following arguments used by Log entries.
 
 * `name`  - (Required) The name of the third party log integration (`logentries`).
 * `token` - (Required/Sensitive) Token used for authentication.
 
-### Loggly
+Create a Logentries token at [logentries add-log]
+
+</details>
+
+<details>
+  <summary>
+    <b>Loggly</b>
+  </summary>
 
 The following arguments used by Loggly.
 
 * `name`  - (Required) The name of the third party log integration (`loggly`).
 * `token` - (Required/Sensitive) Token used for authentication.
 
-### Papertrail
+Create a Loggly token at `https://{your-company}.loggly.com/tokens`
+
+</details>
+
+<details>
+  <summary>
+    <b>Papertrail</b>
+  </summary>
 
 The following arguments used by Papertrail.
 
 * `name` - (Required) The name of the third party log integration (`papertrail`).
 * `url`  - (Required) Endpoint to log integration.
 
-### Scalyr
+Create a Papertrail endpoint at [papertrail setup]
+
+</details>
+
+<details>
+  <summary>
+    <b>Scalyr</b>
+  </summary>
 
 The following arguments used by Scalyr.
 
@@ -404,7 +455,14 @@ The following arguments used by Scalyr.
 * `host`  - (Required) The host for Scalyr integration. Valid hosts `app.scalyr.com` and
             `app.eu.scalyr.com`
 
-### Splunk
+Create a Log write token at [Scalyr keys]
+
+</details>
+
+<details>
+  <summary>
+    <b>Splunk</b>
+  </summary>
 
 The following arguments used by Splunk.
 
@@ -413,18 +471,29 @@ The following arguments used by Splunk.
 * `host_port`  - (Required) Destination to send the logs.
 * `sourcetype` - (Required) Assign source type to the data exported, eg. generic_single_line.
 
-### Stackdriver
+Create a HTTP Event Collector token at `https://<your-splunk>.cloud.splunk.com/en-US/manager/search/http-eventcollector`
+
+</details>
+
+<details>
+  <summary>
+    <b>Stackdriver</b>
+  </summary>
 
 The following arguments used by Stackdriver.
 
 * `name`        - (Required) The name of the third party log integration (`stackdriver`).
 * `credentials` - (Required/Sensitive) Google Service Account private key credentials.
 
+  ***Note:*** The service Account needs to have `log writer` role added.
+
 Optional arguments for older provider versions.
 
 * `project_id`   - (Optional/Computed) The project identifier.
 * `private_key`  - (Optional/Computed/Sensitive) The private access key.
 * `client_email` - (Optional/Computed) The client email registered for the integration service.
+
+</details>
 
 ## Attributes Reference
 
@@ -453,9 +522,13 @@ import {
 
 `terraform import cloudamqp_integration_log.this <id>,<instance_id>`
 
-[CloudAMQP API add integration]: https://docs.cloudamqp.com/cloudamqp_api.html#add-log-integration
-[CloudAMQP API list integration]: https://docs.cloudamqp.com/cloudamqp_api.html#list-log-integrations
-[Datadog documentation]: https://docs.datadoghq.com/getting_started/tagging/#define-tags
 [v1.38.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.38.0
+[CloudAMQP API add integration]: https://docs.cloudamqp.com/cloudamqp_api.html#add-log-integration
+[Tutorial to find/create all arguments]: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/tutorial-logs-ingestion-portal
 [Cloudwatch Log retention]: https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutRetentionPolicy.html#API_PutRetentionPolicy_RequestSyntax
 [Cloudwatch Log tags]: https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_TagLogGroup.html#API_TagLogGroup_RequestSyntax
+[Coralogix documentation]: https://coralogix.com/docs/send-your-data-api-key/
+[app.datadoghq.com]: https://app.datadoghq.com/
+[Datadog documentation]: https://docs.datadoghq.com/getting_started/tagging/#define-tags
+[logentries add-log]: https://logentries.com/app#/add-log/manual
+[CloudAMQP API list integration]: https://docs.cloudamqp.com/cloudamqp_api.html#list-log-integrations
