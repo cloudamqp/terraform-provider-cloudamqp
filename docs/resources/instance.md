@@ -169,6 +169,25 @@ Set attribute `keep_associated_vpc` to true, will keep managed VPC when deleting
 
 </details>
 
+<details>
+  <summary>
+    <b>
+      <i>Dedicated instances with preferred AZ</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_instance" "instance" {
+  name         = "terraform-cloudamqp-instance"
+  plan         = "penguin-3"
+  region       = "amazon-web-services::us-east-1"
+  tags         = ["terraform"]
+  preferred_az = ["use1-az1", "use1-az2", "use1-az3"]
+}
+```
+
+</details>
+
 ## Argument Reference
 
 The following arguments are supported:
