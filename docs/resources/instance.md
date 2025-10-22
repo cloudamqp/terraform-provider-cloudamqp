@@ -172,7 +172,7 @@ Set attribute `keep_associated_vpc` to true, will keep managed VPC when deleting
 <details>
   <summary>
     <b>
-      <i>Dedicated instances with preferred AZ</i>
+      <i>Dedicated instance with preferred AZs</i>
     </b>
   </summary>
 
