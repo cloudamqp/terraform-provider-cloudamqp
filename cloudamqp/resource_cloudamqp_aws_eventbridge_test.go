@@ -40,6 +40,7 @@ func TestAccIntegrationAwsEventbridge_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(eventbridgeResourceName, "aws_account_id", params["AwsEventbridgeAccountID"]),
 					resource.TestCheckResourceAttr(eventbridgeResourceName, "aws_region", params["AwsEventbridgeRegion"]),
 					resource.TestCheckResourceAttr(eventbridgeResourceName, "with_headers", "true"),
+					resource.TestCheckResourceAttr(eventbridgeResourceName, "prefetch", "1"),
 				),
 			},
 			{
