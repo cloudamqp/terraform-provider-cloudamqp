@@ -169,6 +169,25 @@ Set attribute `keep_associated_vpc` to true, will keep managed VPC when deleting
 
 </details>
 
+<details>
+  <summary>
+    <b>
+      <i>Dedicated instance with preferred AZs</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_instance" "instance" {
+  name         = "terraform-cloudamqp-instance"
+  plan         = "penguin-3"
+  region       = "amazon-web-services::us-east-1"
+  tags         = ["terraform"]
+  preferred_az = ["use1-az1", "use1-az2", "use1-az3"]
+}
+```
+
+</details>
+
 ## Argument Reference
 
 The following arguments are supported:
@@ -211,6 +230,13 @@ The following arguments are supported:
                           false.
 * `copy_settings`       - (Optional) Copy settings from one CloudAMQP instance to a new. Consists of
                           the block documented below.
+* `preferred_az`        - (Optional) The AZs to place your nodes in. Each entry corresponds to a server in your cluster, so for a 3 node cluster, provide 3 AZs in the list.
+
+  ***Note:*** `preferred_az` can only be set upon instance creation as of now and the result is not guaranteed. On eventual failed resource allocation in the zone, CloudAMQP will fallback to a different zone.
+  * AWS: AZ id in [aws-availability-zones]
+  * Azure: 1,2 or 3 in supported regions [azure-region-list]
+  * GCP: zones in [gcp-region-zones]
+  * Digital Ocean: Slug in [do-regional-availability]
 
 ___
 
@@ -397,3 +423,7 @@ resource "cloudamqp_instance" "bunny_instance" {
 [plans]: ../guides/info_plan.md
 [**RabbitMQ**]: https://www.rabbitmq.com
 [instance regions]: ../guides/info_region.md
+[aws-availability-zones]: https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html
+[azure-region-list]: https://learn.microsoft.com/en-us/azure/reliability/regions-list
+[gcp-region-zones]: https://cloud.google.com/compute/docs/regions-zones#available
+[do-regional-availability]: https://docs.digitalocean.com/platform/regional-availability/

@@ -14,6 +14,8 @@ import (
 // Extra checks are needed when comparing versions, because next step is executed before backend
 // have been updated.
 func TestAccUpgradeLavinMQ(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames            = []string{"instance_with_version", "data_source/nodes"}
 		instanceResourceName = "cloudamqp_instance.instance"

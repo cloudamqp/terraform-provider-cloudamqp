@@ -58,6 +58,29 @@ resource "cloudamqp_integration_log" "cloudwatch" {
 <details>
   <summary>
     <b>
+      <i>Cloudwatch log integration with retention and tags (from [v1.38.0])</i>
+    </b>
+  </summary>
+
+Use retention and/or tags on the integration to make changes to `CloudAMQP` Log Group.
+
+```hcl
+resource "cloudamqp_integration_log" "cloudwatch" {
+  instance_id       = cloudamqp_instance.instance.id
+  name              = "cloudwatchlog"
+  access_key_id     = var.aws_access_key_id
+  secret_access_key = var.aws_secret_access_key
+  region            = var.aws_region
+  retention         = 14
+  tags              = "Project=A,Environment=Development"
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
       <i>Coralogix log integration</i>
     </b>
   </summary>
@@ -97,7 +120,7 @@ resource "cloudamqp_integration_log" "datadog" {
 <details>
   <summary>
     <b>
-      <i>Logentries log integration</i>
+      <i>Log entries log integration</i>
     </b>
   </summary>
 
@@ -281,64 +304,196 @@ resource "cloudamqp_integration_log" "stackdriver" {
 
 The following arguments are supported:
 
-* `name`              - (Required) The name of the third party log integration. See
-                        [integration type reference]
-* `url`               - (Optional) Endpoint to log integration.
-* `host_port`         - (Optional) Destination to send the logs.
-* `token`             - (Optional/Sensitive) Token used for authentication.
-* `region`            - (Optional) Region hosting the integration service.
-* `access_key_id`     - (Optional/Sensitive) AWS access key identifier.
-* `secret_access_key` - (Optional/Sensitive) AWS secret access key.
-* `api_key`           - (Optional/Sensitive) The API key.
-* `tags`              - (Optional) Tags. e.g. `env=prod,region=europe`.
+* `instance_id` -  (Required) Instance identifier for the CloudAMQP instance.
+
+Valid arguments for each third party log integrations below. Corresponding API backend documentation can be
+found here [CloudAMQP API add integration].
+
+<details>
+  <summary>
+    <b>Azure monitoring</b>
+  </summary>
+
+The following arguments used by Azure monitoring.
+
+* `name`               - (Required) The name of the third party log integration (`azure_monitoring`).
+* `application_id`     - (Required) The application identifier.
+* `application_secret` - (Required/Sensitive) The application secret.
+* `dcr_id`             - (Required) ID of data collection rule that your DCE is linked to.
+* `dce_uri`            - (Required) The data collection endpoint.
+* `tenant_id`          - (Required) The tenant identifier.
+* `table`              - (Required) The table name.
+
+Use Azure portal to configure external access for Azure Monitor. [Tutorial to find/create all arguments]
+
+</details>
+
+<details>
+  <summary>
+    <b>Cloudwatch</b>
+  </summary>
+
+The following arguments used by CloudWatch.
+
+* `name`              - (Required) The name of the third party log integration (`cloudwatchlog`).
+* `access_key_id`     - (Required/Sensitive) AWS access key identifier.
+* `secret_access_key` - (Required/Sensitive) AWS secret access key.
+* `region`            - (Required) AWS region hosting the integration service.
+
+Optional arguments introduced in version [v1.38.0].
+
+* `retention` - (Optional) Number of days to retain log events in `CloudAMQP` log group.
+
+  ***Note:*** Possible values are: 0 (never expire) or between 1-3653, read more about valid values in
+  the [Cloudwatch Log retention].
+
+* `tags` - (Optional) Enter tags to `CloudAMQP` log group like this: `Project=A,Environment=Development`.
+
+  ***Note:*** Tags are only added, unwanted tags needs to be removed manually in the AWS console.
+  Read more about tags format in the [Cloudwatch Log tags]
+
+#### IAM permissions
+
+Create an IAM user with programmatic access and the following permissions: `CreateLogGroup`, `CreateLogStream`, `DescribeLogGroups`, `DescribeLogStreams` and `PutLogEvents`.
+
+Optional arguments requires IAM permission: `PutRetentionPolicy`, `DeleteRetentionPolicy` and `TagResource`.
+
+</details>
+
+<details>
+  <summary>
+    <b>Coralogix</b>
+  </summary>
+
+The following arguments used by Coralogix.
+
+* `name`        - (Required) The name of the third party log integration (`coralogix`).
+* `application` - (Required) The application name for Coralogix.
+* `endpoint`    - (Required) The syslog destination to send the logs to for Coralogix.
+* `private_key` - (Required/Sensitive) The private access key.
+* `subsystem`   - (Required) The subsystem name for Coralogix.
+
+Create a 'Send-Your-Data' private API key, [Coralogix documentation]
+
+</details>
+
+<details>
+  <summary>
+    <b>Datadog</b>
+  </summary>
+
+The following arguments used by Data dog.
+
+* `name`    - (Required) The name of the third party log integration (`datadog`).
+* `api_key` - (Required/Sensitive) The API key.
+
+  ***Note:*** Create a Datadog API key at, [app.datadoghq.com]
+
+* `region`  - (Required) Region hosting the integration service. Valid regions, `us1`, `us3`, `us5`
+              and `eu`.
+
+Optional arguments:
+
+* `tags` - (Optional) Tags. e.g. `env=prod,region=europe`.
 
   ***Note:*** If tags are used with Datadog. The value part (prod, europe, ...) must start with a
               letter, read more about tags format in the [Datadog documentation].
 
-* `credentials`       - (Optional/Sensitive) Google Service Account private key credentials.
-* `project_id`        - (Optional/Computed) The project identifier.
-* `private_key`       - (Optional/Computed/Sensitive) The private access key.
-* `client_email`      - (Optional/Computed) The client email registered for the integration service.
-* `host`              - (Optional) The host for Scalyr integration. (app.scalyr.com,
-                        app.eu.scalyr.com)
-* `sourcetype`        - (Optional) Assign source type to the data exported, eg. generic_single_line.
-                        (Splunk)
-* `endpoint`          - (Optional) The syslog destination to send the logs to for Coralogix.
-* `application`       - (Optional) The application name for Coralogix.
-* `subsystem`         - (Optional) The subsystem name for Coralogix.
-* `tenant_id`         - (Optional) The tenant identifier for Azure monitor.
-* `application_id`    - (Optional) The application identifier for Azure monitor.
-* `application_secret` - (Optional/Sensitive) The application secret for Azure monitor.
-* `dce_uri`           - (Optional) The data collection endpoint for Azure monitor.
-* `table`             - (Optional) The table name for Azure monitor.
-* `dcr_id`            - (Optional) ID of data collection rule that your DCE is linked to for Azure
-                        Monitor.
+</details>
 
-This is the full list of all arguments. Only a subset of arguments are used based on which type of
-integration used. See [integration type reference] table below for more information.
+<details>
+  <summary>
+    <b>Log Entries</b>
+  </summary>
 
-## Integration type reference
+The following arguments used by Log entries.
 
-Valid arguments for third party log integrations. See more information at
-[CloudAMQP API add integration].
+* `name`  - (Required) The name of the third party log integration (`logentries`).
+* `token` - (Required/Sensitive) Token used for authentication.
 
-Required arguments for all integrations: name
+Create a Logentries token at [logentries add-log]
 
-| Integration | name | Required arguments |
-| ---- | ---- | ---- |
-| Azure monitor | azure_monitor | tenant_id, application_id, application_secret, dce_uri, table, dcr_id |
-| CloudWatch | cloudwatchlog | access_key_id, secret_access_key, region |
-| Coralogix | coralogix | private_key, endpoint, application, subsystem |
-| Data Dog | datadog | region, api_keys, tags |
-| Log Entries | logentries | token |
-| Loggly | loggly | token |
-| Papertrail | papertrail | url |
-| Scalyr | scalyr | token, host |
-| Splunk | splunk | token, host_port, sourcetype |
-| Stackdriver | stackdriver | credentials |
+</details>
 
-***Note:*** Stackdriver (v1.20.2 or earlier versions) required arguments: project_id, private_key,
-            client_email
+<details>
+  <summary>
+    <b>Loggly</b>
+  </summary>
+
+The following arguments used by Loggly.
+
+* `name`  - (Required) The name of the third party log integration (`loggly`).
+* `token` - (Required/Sensitive) Token used for authentication.
+
+Create a Loggly token at `https://{your-company}.loggly.com/tokens`
+
+</details>
+
+<details>
+  <summary>
+    <b>Papertrail</b>
+  </summary>
+
+The following arguments used by Papertrail.
+
+* `name` - (Required) The name of the third party log integration (`papertrail`).
+* `url`  - (Required) Endpoint to log integration.
+
+Create a Papertrail endpoint at [papertrail setup]
+
+</details>
+
+<details>
+  <summary>
+    <b>Scalyr</b>
+  </summary>
+
+The following arguments used by Scalyr.
+
+* `name`  - (Required) The name of the third party log integration (`scalyr`).
+* `token` - (Required/Sensitive) Token used for authentication.
+* `host`  - (Required) The host for Scalyr integration. Valid hosts `app.scalyr.com` and
+            `app.eu.scalyr.com`
+
+Create a Log write token at [Scalyr keys]
+
+</details>
+
+<details>
+  <summary>
+    <b>Splunk</b>
+  </summary>
+
+The following arguments used by Splunk.
+
+* `name`       - (Required) The name of the third party log integration (`splunk`).
+* `token`      - (Required/Sensitive) Token used for authentication.
+* `host_port`  - (Required) Destination to send the logs.
+* `sourcetype` - (Required) Assign source type to the data exported, eg. generic_single_line.
+
+Create a HTTP Event Collector token at `https://<your-splunk>.cloud.splunk.com/en-US/manager/search/http-eventcollector`
+
+</details>
+
+<details>
+  <summary>
+    <b>Stackdriver</b>
+  </summary>
+
+The following arguments used by Stackdriver.
+
+* `name`        - (Required) The name of the third party log integration (`stackdriver`).
+* `credentials` - (Required/Sensitive) Google Service Account private key credentials.
+
+  ***Note:*** The service Account needs to have `log writer` role added.
+
+Optional arguments for older provider versions.
+
+* `project_id`   - (Optional/Computed) The project identifier.
+* `private_key`  - (Optional/Computed/Sensitive) The private access key.
+* `client_email` - (Optional/Computed) The client email registered for the integration service.
+
+</details>
 
 ## Attributes Reference
 
@@ -367,7 +522,13 @@ import {
 
 `terraform import cloudamqp_integration_log.this <id>,<instance_id>`
 
+[v1.38.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.38.0
 [CloudAMQP API add integration]: https://docs.cloudamqp.com/cloudamqp_api.html#add-log-integration
-[CloudAMQP API list integration]: https://docs.cloudamqp.com/cloudamqp_api.html#list-log-integrations
+[Tutorial to find/create all arguments]: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/tutorial-logs-ingestion-portal
+[Cloudwatch Log retention]: https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutRetentionPolicy.html#API_PutRetentionPolicy_RequestSyntax
+[Cloudwatch Log tags]: https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_TagLogGroup.html#API_TagLogGroup_RequestSyntax
+[Coralogix documentation]: https://coralogix.com/docs/send-your-data-api-key/
+[app.datadoghq.com]: https://app.datadoghq.com/
 [Datadog documentation]: https://docs.datadoghq.com/getting_started/tagging/#define-tags
-[integration type reference]: #integration-type-reference
+[logentries add-log]: https://logentries.com/app#/add-log/manual
+[CloudAMQP API list integration]: https://docs.cloudamqp.com/cloudamqp_api.html#list-log-integrations

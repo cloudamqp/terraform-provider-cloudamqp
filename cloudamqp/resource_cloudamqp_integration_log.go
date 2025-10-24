@@ -65,6 +65,7 @@ type integrationLogResourceModel struct {
 	DceURI            types.String `tfsdk:"dce_uri"`
 	Table             types.String `tfsdk:"table"`
 	DcrID             types.String `tfsdk:"dcr_id"`
+	Retention         types.Int64  `tfsdk:"retention"`
 }
 
 func (r *integrationLogResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -155,7 +156,7 @@ func (r *integrationLogResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"tags": schema.StringAttribute{
 				Optional:    true,
-				Description: "Optional tags. E.g. env=prod,region=europe. (Datadog)",
+				Description: "Optional tags. E.g. env=prod,region=europe. (Cloudwatch, Datadog)",
 			},
 			"project_id": schema.StringAttribute{
 				Optional:    true,
@@ -247,6 +248,10 @@ func (r *integrationLogResource) Schema(ctx context.Context, req resource.Schema
 				Optional:    true,
 				Description: "The DCR ID. (Coralogix)",
 			},
+			"retention": schema.Int64Attribute{
+				Optional:    true,
+				Description: "The number of days to retain logs. (Cloudwatch)",
+			},
 		},
 	}
 }
@@ -324,8 +329,9 @@ func (r *integrationLogResource) Read(ctx context.Context, req resource.ReadRequ
 		return
 	}
 
-	// Handle resource drift and trigger re-creation if resource been deleted outside the provider
+	// Resource drift: instance or resource not found, trigger re-creation
 	if data == nil {
+		tflog.Info(ctx, fmt.Sprintf("log integration not found, resource will be recreated: %s", state.ID.ValueString()))
 		resp.State.RemoveResource(ctx)
 		return
 	}
@@ -428,6 +434,16 @@ func (r *integrationLogResource) populateResourceModel(resourceModel *integratio
 		resourceModel.Region = types.StringValue(*data.Config.Region)
 		resourceModel.AccessKeyID = types.StringValue(*data.Config.AccessKeyID)
 		resourceModel.SecretAccessKey = types.StringValue(*data.Config.SecretAccessKey)
+		if data.Config.Retention != nil {
+			resourceModel.Retention = types.Int64Value(*data.Config.Retention)
+		} else {
+			resourceModel.Retention = types.Int64Null()
+		}
+		if data.Config.Tags != nil {
+			resourceModel.Tags = types.StringValue(*data.Config.Tags)
+		} else {
+			resourceModel.Tags = types.StringNull()
+		}
 	case "coralogix":
 		resourceModel.PrivateKey = types.StringValue(*data.Config.PrivateKey)
 		resourceModel.Endpoint = types.StringValue(*data.Config.Endpoint)
@@ -482,6 +498,12 @@ func (r *integrationLogResource) populateRequest(plan *integrationLogResourceMod
 			Region:          plan.Region.ValueString(),
 			AccessKeyID:     plan.AccessKeyID.ValueString(),
 			SecretAccessKey: plan.SecretAccessKey.ValueString(),
+		}
+		if !plan.Retention.IsNull() {
+			request.Retention = plan.Retention.ValueInt64()
+		}
+		if !plan.Tags.IsNull() {
+			request.Tags = plan.Tags.ValueString()
 		}
 	case "coralogix":
 		request = model.LogRequest{

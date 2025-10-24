@@ -14,6 +14,8 @@ import (
 // Extra checks are needed when comparing versions, because next step is executed before backend
 // have been updated. Same reason unable to use cloudamqp_upgradable_versions data source correctly.
 func TestAccUpgradeRabbitMQ_Latest(t *testing.T) {
+	t.Parallel()
+
 	var (
 		fileNames            = []string{"instance_with_version", "data_source/nodes"}
 		instanceResourceName = "cloudamqp_instance.instance"

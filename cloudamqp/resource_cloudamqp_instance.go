@@ -124,6 +124,14 @@ func resourceInstance() *schema.Resource {
 				Computed:    true,
 				Description: "Software backend used, determined by subscription plan",
 			},
+			"preferred_az": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Description: "Preferred availability zone for the instance(s), one entry per node in the cluster",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
 			"copy_settings": {
 				Type:     schema.TypeSet,
 				Optional: true,
@@ -225,7 +233,7 @@ func resourceRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Di
 		return diag.FromErr(err)
 	}
 
-	// Handle resource drift and trigger re-creation if resource been deleted outside the provider
+	// Resource drift: instance not found, trigger re-creation
 	if data == nil {
 		d.SetId("")
 		return nil
@@ -360,6 +368,7 @@ func instanceCreateAttributeKeys() []string {
 		"vpc_subnet",
 		"no_default_alarms",
 		"copy_settings",
+		"preferred_az",
 	}
 }
 

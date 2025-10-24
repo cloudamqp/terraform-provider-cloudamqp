@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -182,6 +183,13 @@ func resourceVpcConnectRead(ctx context.Context, d *schema.ResourceData,
 	data, err := api.ReadVpcConnect(ctx, instanceID)
 	if err != nil {
 		return diag.FromErr(err)
+	}
+
+	// Resource drift: instance or resource not found, trigger re-creation
+	if data == nil {
+		tflog.Info(ctx, fmt.Sprintf("vpc connect not found, resource will be recreated: %s", d.Id()))
+		d.SetId("")
+		return nil
 	}
 
 	d.Set("active_zones", []string{})

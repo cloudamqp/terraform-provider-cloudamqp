@@ -1,3 +1,38 @@
+## 1.38.0 (Unreleased)
+
+FEATURES:
+
+* Integration: Added retention and tags to Cloudwatch logs ([#379])
+* Resource: Added `preferred_az` to `cloudamqp_instance` ([#381])
+* Resource: Added Oauth2 configuration resource ([#385])
+* Integration: Support more Prometheus metrics integrations
+  * Cloudwatch ([#398])
+  * Dynatrace ([#388])
+  * Splunk ([#386])
+
+IMPROVEMENTS:
+
+* VCR-test: Speed up testing by enable parallelism ([#403])
+
+BUG FIXES:
+
+* Resource drift: Fixed plugins error if instance manually deleted ([#401])
+* Resource drift: Fixed for multiple resources if instance or resource manually deleted ([#402])
+  * `cloudamqp_maintenance_window`
+  * `cloudamqp_privatelink_aws/azure`
+  * `cloudamqp_security_firewall`
+  * `cloudamqp_vpc_connect`
+
+[#379]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/379
+[#381]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/381
+[#385]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/385
+[#386]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/386
+[#388]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/388
+[#398]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/398
+[#401]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/401
+[#402]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/402
+[#403]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/403
+
 ## 1.37.0 (02 Oct, 2025)
 
 NOTES:
@@ -17,7 +52,7 @@ FEATURES:
 IMPROVEMENTS:
 
 * Client library: Added generic retry ([#362])
-* Migrated `cloudamqp_integration_log` towards plugin framework ([#377])
+* Migrated `cloudamqp_integration_log` towards Terraform plugin framework ([#377])
 * Migrated `cloudamqp_integration_metric` towards Terraform plugin framework ([#383])
 * Migrated `cloudamqp_vpc` towards Terraform plugin framework ([#363])
 * Migrated `cloudamqp_webhook` towards Terraform plugin framework ([#364])
