@@ -364,9 +364,9 @@ func (r *oauth2ConfigurationResource) Delete(ctx context.Context, req resource.D
 
 // Private methods
 func populateOAuth2ConfigurationStateModel(ctx context.Context, state *oauth2ConfigurationResourceModel, data *model.OAuth2ConfigResponse) {
-	state.ID = types.StringValue(*data.ConfigurationId)
-	state.ResourceServerId = types.StringValue(*data.ResourceServerId)
-	state.Issuer = types.StringValue(*data.Issuer)
+	state.ID = types.StringValue(data.ConfigurationId)
+	state.ResourceServerId = types.StringValue(data.ResourceServerId)
+	state.Issuer = types.StringValue(data.Issuer)
 
 	state.PreferredUsernameClaims, _ = types.ListValueFrom(ctx, types.StringType, data.PreferredUsernameClaims)
 	state.ScopeAliases, _ = types.MapValueFrom(ctx, types.StringType, data.ScopeAliases)
