@@ -31,7 +31,7 @@ func (api *API) ReadOAuth2Configuration(ctx context.Context, instanceID int, sle
 		return nil, err
 	}
 	// Handle resource drift
-	if data.ClusterId == nil {
+	if data.ConfigurationId == "" {
 		return nil, nil
 	}
 
