@@ -298,18 +298,14 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 	} else if stackdriverList := d.Get("stackdriver_v2").([]any); len(stackdriverList) > 0 {
 		intName = "stackdriver_v2"
 		stackdriverConfig := stackdriverList[0].(map[string]any)
+		credentials := stackdriverConfig["credentials_file"].(string)
 
-		credentials, ok := stackdriverConfig["credentials_file"].(string)
-		if !ok || credentials == "" {
-			return diag.Errorf("credentials_file is required for stackdriver_v2 integration")
-		}
-		extractedCreds, err := extractStackdriverCredentials(credentials)
+		extractedCredentials, err := extractStackdriverCredentials(credentials)
 		if err != nil {
 			return diag.FromErr(err)
 		}
 
-		// Set extracted fields for API
-		for key, value := range extractedCreds {
+		for key, value := range extractedCredentials {
 			params[key] = value
 		}
 
