@@ -188,22 +188,22 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 							Sensitive:   true,
 							Description: "Base64-encoded Google service account key JSON file",
 							DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-								// credentials_file is not returned by API (old will always be empty).
-								// Suppress diff only if the new credentials would produce the same computed values.
-								if d.Id() != "" && old == "" && new != "" {
-									if stackdriver := d.Get("stackdriver_v2").([]any); len(stackdriver) > 0 {
-										config := stackdriver[0].(map[string]any)
-										newCreds, err := extractStackdriverCredentials(new)
-										if err != nil {
-											// If we can't parse new credentials, don't suppress (show the diff)
-											return false
-										}
-										// Suppress diff if new credentials match current state
-										return newCreds["project_id"] == config["project_id"] &&
-											newCreds["client_email"] == config["client_email"] &&
-											newCreds["private_key_id"] == config["private_key_id"] &&
-											newCreds["private_key"] == config["private_key"]
+								// Only suppress for existing resources
+								if d.Id() == "" {
+									return false
+								}
+
+								if stackdriver := d.Get("stackdriver_v2").([]any); len(stackdriver) > 0 {
+									config := stackdriver[0].(map[string]any)
+									newCreds, err := extractStackdriverCredentials(new)
+									if err != nil {
+										return false
 									}
+									// Suppress diff if new credentials match current state
+									return newCreds["project_id"] == config["project_id"] &&
+										newCreds["client_email"] == config["client_email"] &&
+										newCreds["private_key_id"] == config["private_key_id"] &&
+										newCreds["private_key"] == config["private_key"]
 								}
 								return false
 							},
