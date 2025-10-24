@@ -3,10 +3,9 @@ package configuration
 import "time"
 
 type OAuth2ConfigResponse struct {
-	ConfigurationId         *string            `json:"id"`
-	ClusterId               *int               `json:"cluster_id"`
-	ResourceServerId        *string            `json:"resource_server_id"`
-	Issuer                  *string            `json:"issuer"`
+	ConfigurationId         string             `json:"id"`
+	ResourceServerId        string             `json:"resource_server_id"`
+	Issuer                  string             `json:"issuer"`
 	PreferredUsernameClaims *[]string          `json:"preferred_username_claims,omitempty"`
 	AdditionalScopesKey     *[]string          `json:"additional_scopes_key,omitempty"`
 	ScopePrefix             *string            `json:"scope_prefix,omitempty"`
