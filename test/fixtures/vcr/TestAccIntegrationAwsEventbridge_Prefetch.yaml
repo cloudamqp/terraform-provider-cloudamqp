@@ -48,10 +48,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 180869a4-1b97-430f-af1a-f1ada83c0587
+                - 71d6bd87-b7b4-4c78-98e1-df7db23d52f4
         status: 200 OK
         code: 200
-        duration: 17.136971ms
+        duration: 21.546014ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -99,10 +99,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - f1a4b4d2-324e-461c-bc53-57dc621e783e
+                - dc3fa4a7-2620-453f-a99b-4022a980b977
         status: 200 OK
         code: 200
-        duration: 3.411818ms
+        duration: 3.509968ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -150,10 +150,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 5a871da0-2940-4cfd-847b-7fc25a78242e
+                - 09db0f25-700b-40d2-96c4-1aedeb397ff4
         status: 200 OK
         code: 200
-        duration: 22.130465ms
+        duration: 17.914391ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -201,10 +201,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - ecdeddaa-fc2f-46a2-b463-e71d6fdb2ed4
+                - de842d6b-de5b-4224-8333-ca0624ab990f
         status: 200 OK
         code: 200
-        duration: 5.686085ms
+        duration: 3.656636ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -252,10 +252,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 384a01fc-00ae-469c-9e4c-5a643bfa986c
+                - 771a77df-2213-4a8c-afb1-dacf739fcdb5
         status: 200 OK
         code: 200
-        duration: 17.193331ms
+        duration: 21.33145ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -303,10 +303,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - d405a257-1526-4f54-8518-6af8a276b64e
+                - 70f16adc-08eb-4a3e-ae63-0f89b10d2b28
         status: 200 OK
         code: 200
-        duration: 3.308282ms
+        duration: 4.254219ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -336,14 +336,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 254
+        content_length: 250
         uncompressed: false
-        body: '{"id":717,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"f166368c-44ed-42ad-ae87-d76a7d5d43be","url":"amqps://unyuuelq:***@dev-blossom-cobalt-heron.rmq3.dev.cloudamqp.com/unyuuelq"}'
+        body: '{"id":719,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"6b274c97-56a5-4b12-b357-4ab78323c32a","url":"amqps://peaqswhi:***@dev-clever-red-tiger.rmq4.dev.cloudamqp.com/peaqswhi"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "254"
+                - "250"
             Content-Type:
                 - application/json
             Nel:
@@ -357,10 +357,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - b64bae56-7e2a-4092-bace-320b549a73d1
+                - fb48b139-925a-46b6-bfe0-25e32d74bda6
         status: 200 OK
         code: 200
-        duration: 117.767032ms
+        duration: 106.207444ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -379,7 +379,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/717
+        url: http://localhost:9393/api/instances/719
         method: GET
       response:
         proto: HTTP/1.1
@@ -387,14 +387,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 813
+        content_length: 793
         uncompressed: false
-        body: '{"id":717,"name":"TestAccIntegrationAwsEventbridge_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"32818ec2-a935-44ab-8db1-be6a706ad3f9","url":"amqps://unyuuelq:***@dev-blossom-cobalt-heron.rmq3.dev.cloudamqp.com/unyuuelq","ready":true,"apikey":"f166368c-44ed-42ad-ae87-d76a7d5d43be","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://unyuuelq:***@dev-blossom-cobalt-heron.rmq3.dev.cloudamqp.com/unyuuelq","internal":"amqp://unyuuelq:***@dev-blossom-cobalt-heron.in.rmq3.dev.cloudamqp.com/unyuuelq"},"rmq_version":"4.1.4","hostname_external":"dev-blossom-cobalt-heron.rmq3.dev.cloudamqp.com","hostname_internal":"dev-blossom-cobalt-heron.in.rmq3.dev.cloudamqp.com"}'
+        body: '{"id":719,"name":"TestAccIntegrationAwsEventbridge_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"f86764ef-d490-4f66-bfef-a8261c6224b9","url":"amqps://peaqswhi:***@dev-clever-red-tiger.rmq4.dev.cloudamqp.com/peaqswhi","ready":true,"apikey":"6b274c97-56a5-4b12-b357-4ab78323c32a","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://peaqswhi:***@dev-clever-red-tiger.rmq4.dev.cloudamqp.com/peaqswhi","internal":"amqp://peaqswhi:***@dev-clever-red-tiger.in.rmq4.dev.cloudamqp.com/peaqswhi"},"rmq_version":"4.1.4","hostname_external":"dev-clever-red-tiger.rmq4.dev.cloudamqp.com","hostname_internal":"dev-clever-red-tiger.in.rmq4.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "813"
+                - "793"
             Content-Type:
                 - application/json
             Nel:
@@ -408,10 +408,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 4b81807c-5955-41ee-aa7b-5389ee2a64f2
+                - e2f0f5d0-b41c-4eb1-a8ca-b64cca2ca9cb
         status: 200 OK
         code: 200
-        duration: 27.102581ms
+        duration: 18.721451ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -430,7 +430,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/717
+        url: http://localhost:9393/api/instances/719
         method: GET
       response:
         proto: HTTP/1.1
@@ -438,14 +438,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 813
+        content_length: 793
         uncompressed: false
-        body: '{"id":717,"name":"TestAccIntegrationAwsEventbridge_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"32818ec2-a935-44ab-8db1-be6a706ad3f9","url":"amqps://unyuuelq:***@dev-blossom-cobalt-heron.rmq3.dev.cloudamqp.com/unyuuelq","ready":true,"apikey":"f166368c-44ed-42ad-ae87-d76a7d5d43be","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://unyuuelq:***@dev-blossom-cobalt-heron.rmq3.dev.cloudamqp.com/unyuuelq","internal":"amqp://unyuuelq:***@dev-blossom-cobalt-heron.in.rmq3.dev.cloudamqp.com/unyuuelq"},"rmq_version":"4.1.4","hostname_external":"dev-blossom-cobalt-heron.rmq3.dev.cloudamqp.com","hostname_internal":"dev-blossom-cobalt-heron.in.rmq3.dev.cloudamqp.com"}'
+        body: '{"id":719,"name":"TestAccIntegrationAwsEventbridge_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"f86764ef-d490-4f66-bfef-a8261c6224b9","url":"amqps://peaqswhi:***@dev-clever-red-tiger.rmq4.dev.cloudamqp.com/peaqswhi","ready":true,"apikey":"6b274c97-56a5-4b12-b357-4ab78323c32a","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://peaqswhi:***@dev-clever-red-tiger.rmq4.dev.cloudamqp.com/peaqswhi","internal":"amqp://peaqswhi:***@dev-clever-red-tiger.in.rmq4.dev.cloudamqp.com/peaqswhi"},"rmq_version":"4.1.4","hostname_external":"dev-clever-red-tiger.rmq4.dev.cloudamqp.com","hostname_internal":"dev-clever-red-tiger.in.rmq4.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "813"
+                - "793"
             Content-Type:
                 - application/json
             Nel:
@@ -459,23 +459,23 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 7997c38d-19b4-41b8-9d18-65123eceb2aa
+                - ccc7950e-c32b-49e1-8679-e3845c71aba7
         status: 200 OK
         code: 200
-        duration: 22.579268ms
+        duration: 18.821564ms
     - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 128
+        content_length: 129
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"aws_account_id":"012345678910","aws_region":"us-east-1","vhost":"myvhost","queue":"myqueue","with_headers":true,"prefetch":1}
+            {"aws_account_id":"012345678910","aws_region":"us-east-1","vhost":"myvhost","queue":"myqueue","with_headers":true,"prefetch":10}
         form: {}
         headers:
             Authorization:
@@ -484,7 +484,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/717/eventbridges
+        url: http://localhost:9393/api/instances/719/eventbridges
         method: POST
       response:
         proto: HTTP/1.1
@@ -494,7 +494,7 @@ interactions:
         trailer: {}
         content_length: 9
         uncompressed: false
-        body: '{"id":14}'
+        body: '{"id":16}'
         headers:
             Cache-Control:
                 - no-cache
@@ -513,10 +513,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - fee36518-9f32-4132-a335-17d70fa753c0
+                - dda6663f-5fb7-4ae8-a3f9-6626c95d8b5e
         status: 201 Created
         code: 201
-        duration: 20.688919ms
+        duration: 22.537417ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -535,7 +535,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/717
+        url: http://localhost:9393/api/instances/719
         method: GET
       response:
         proto: HTTP/1.1
@@ -543,14 +543,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 813
+        content_length: 793
         uncompressed: false
-        body: '{"id":717,"name":"TestAccIntegrationAwsEventbridge_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"32818ec2-a935-44ab-8db1-be6a706ad3f9","url":"amqps://unyuuelq:***@dev-blossom-cobalt-heron.rmq3.dev.cloudamqp.com/unyuuelq","ready":true,"apikey":"f166368c-44ed-42ad-ae87-d76a7d5d43be","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://unyuuelq:***@dev-blossom-cobalt-heron.rmq3.dev.cloudamqp.com/unyuuelq","internal":"amqp://unyuuelq:***@dev-blossom-cobalt-heron.in.rmq3.dev.cloudamqp.com/unyuuelq"},"rmq_version":"4.1.4","hostname_external":"dev-blossom-cobalt-heron.rmq3.dev.cloudamqp.com","hostname_internal":"dev-blossom-cobalt-heron.in.rmq3.dev.cloudamqp.com"}'
+        body: '{"id":719,"name":"TestAccIntegrationAwsEventbridge_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"f86764ef-d490-4f66-bfef-a8261c6224b9","url":"amqps://peaqswhi:***@dev-clever-red-tiger.rmq4.dev.cloudamqp.com/peaqswhi","ready":true,"apikey":"6b274c97-56a5-4b12-b357-4ab78323c32a","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://peaqswhi:***@dev-clever-red-tiger.rmq4.dev.cloudamqp.com/peaqswhi","internal":"amqp://peaqswhi:***@dev-clever-red-tiger.in.rmq4.dev.cloudamqp.com/peaqswhi"},"rmq_version":"4.1.4","hostname_external":"dev-clever-red-tiger.rmq4.dev.cloudamqp.com","hostname_internal":"dev-clever-red-tiger.in.rmq4.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "813"
+                - "793"
             Content-Type:
                 - application/json
             Nel:
@@ -564,10 +564,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 0b48e80a-1770-46d8-95c6-a2a0f15c4e13
+                - dcd843cf-4953-4deb-8017-dc0f24cc6264
         status: 200 OK
         code: 200
-        duration: 15.904184ms
+        duration: 22.713174ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -586,7 +586,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/717/eventbridges/14
+        url: http://localhost:9393/api/instances/719/eventbridges/16
         method: GET
       response:
         proto: HTTP/1.1
@@ -594,14 +594,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 227
+        content_length: 228
         uncompressed: false
-        body: '{"id":14,"account_id":"32818ec2-a935-44ab-8db1-be6a706ad3f9","aws_region":"us-east-1","aws_account_id":"012345678910","vhost":"myvhost","queue":"myqueue","status":null,"with_headers":true,"exclusive_consumer":true,"prefetch":1}'
+        body: '{"id":16,"account_id":"f86764ef-d490-4f66-bfef-a8261c6224b9","aws_region":"us-east-1","aws_account_id":"012345678910","vhost":"myvhost","queue":"myqueue","status":null,"with_headers":true,"exclusive_consumer":true,"prefetch":10}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "227"
+                - "228"
             Content-Type:
                 - application/json
             Nel:
@@ -615,10 +615,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 0120849e-ef1c-41e6-9cda-718f8f9101ec
+                - 54f8ecbb-f98e-460e-941a-61cf8aa2f2fb
         status: 200 OK
         code: 200
-        duration: 16.6412ms
+        duration: 16.434814ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -637,24 +637,20 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/717/eventbridges/14
-        method: GET
+        url: http://localhost:9393/api/instances/719/eventbridges/16
+        method: DELETE
       response:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 227
+        content_length: 0
         uncompressed: false
-        body: '{"id":14,"account_id":"32818ec2-a935-44ab-8db1-be6a706ad3f9","aws_region":"us-east-1","aws_account_id":"012345678910","vhost":"myvhost","queue":"myqueue","status":null,"with_headers":true,"exclusive_consumer":true,"prefetch":1}'
+        body: ""
         headers:
             Cache-Control:
                 - no-cache
-            Content-Length:
-                - "227"
-            Content-Type:
-                - application/json
             Nel:
                 - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
@@ -666,10 +662,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 8feb2214-55a0-4297-80ec-6ea8eba543bc
-        status: 200 OK
-        code: 200
-        duration: 18.978856ms
+                - 969e5394-a766-407c-9490-543edf769be8
+        status: 204 No Content
+        code: 204
+        duration: 22.47726ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -688,7 +684,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/717/eventbridges/14
+        url: http://localhost:9393/api/instances/719?keep_vpc=false
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -713,10 +709,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 18799249-6feb-44f2-b503-680023a6e7e5
+                - d90ddb65-73f3-4ca6-b6cc-d21217f782a4
         status: 204 No Content
         code: 204
-        duration: 23.187261ms
+        duration: 56.680265ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -735,54 +731,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/717?keep_vpc=false
-        method: DELETE
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
-        headers:
-            Cache-Control:
-                - no-cache
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 1604080f-e4f3-4d24-8e7b-d3cf502dee88
-        status: 204 No Content
-        code: 204
-        duration: 69.331225ms
-    - id: 15
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/717
+        url: http://localhost:9393/api/instances/719
         method: GET
       response:
         proto: HTTP/1.1
@@ -811,7 +760,7 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - eb5bdbcf-badb-4702-86cc-043c53ca7f5d
+                - e229b5bf-f0f3-4c6b-94be-7e9a4ba5bcb7
         status: 404 Not Found
         code: 404
-        duration: 5.231304ms
+        duration: 9.248478ms

@@ -2,20 +2,23 @@ package cloudamqp
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/integrations"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -42,15 +45,8 @@ type awsEventBridgeResourceModel struct {
 	Vhost        types.String `tfsdk:"vhost"`
 	QueueName    types.String `tfsdk:"queue"`
 	WithHeaders  types.Bool   `tfsdk:"with_headers"`
+	Prefetch     types.Int64  `tfsdk:"prefetch"`
 	Status       types.String `tfsdk:"status"`
-}
-
-type awsEventBridgeResourceApiModel struct {
-	AwsAccountId string `json:"aws_account_id"`
-	AwsRegion    string `json:"aws_region"`
-	Vhost        string `json:"vhost"`
-	QueueName    string `json:"queue"`
-	WithHeaders  bool   `json:"with_headers"`
 }
 
 func (r *awsEventBridgeResource) Configure(ctx context.Context, request resource.ConfigureRequest, response *resource.ConfigureResponse) {
@@ -94,6 +90,9 @@ func (r *awsEventBridgeResource) Schema(ctx context.Context, request resource.Sc
 			"aws_account_id": schema.StringAttribute{
 				Required:    true,
 				Description: "The 12 digit AWS Account ID where you want the events to be sent to.",
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(12, 12),
+				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
@@ -126,6 +125,15 @@ func (r *awsEventBridgeResource) Schema(ctx context.Context, request resource.Sc
 					boolplanmodifier.RequiresReplace(),
 				},
 			},
+			"prefetch": schema.Int64Attribute{
+				Optional:    true,
+				Default:     int64default.StaticInt64(1),
+				Computed:    true,
+				Description: "Number of messages to prefetch. Default set to 1.",
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.RequiresReplace(),
+				},
+			},
 			"status": schema.StringAttribute{
 				Computed:    true,
 				Description: "Always set to null, unless there is an error starting the EventBridge",
@@ -134,123 +142,127 @@ func (r *awsEventBridgeResource) Schema(ctx context.Context, request resource.Sc
 	}
 }
 
-func (r *awsEventBridgeResource) Create(ctx context.Context, request resource.CreateRequest, response *resource.CreateResponse) {
-	var data awsEventBridgeResourceModel
-
-	// Read Terraform plan data into the model
-	response.Diagnostics.Append(request.Plan.Get(ctx, &data)...)
-
-	if response.Diagnostics.HasError() {
+func (r *awsEventBridgeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan awsEventBridgeResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	apiModel := awsEventBridgeResourceApiModel{
-		AwsAccountId: data.AwsAccountId.ValueString(),
-		AwsRegion:    data.AwsRegion.ValueString(),
-		Vhost:        data.Vhost.ValueString(),
-		QueueName:    data.QueueName.ValueString(),
-		WithHeaders:  data.WithHeaders.ValueBool(),
+	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
+	defer cancel()
+
+	request := model.AwsEventBridgeRequest{
+		AwsAccountId: plan.AwsAccountId.ValueString(),
+		AwsRegion:    plan.AwsRegion.ValueString(),
+		Vhost:        plan.Vhost.ValueString(),
+		QueueName:    plan.QueueName.ValueString(),
+		WithHeaders:  plan.WithHeaders.ValueBool(),
+		Prefetch:     plan.Prefetch.ValueInt64Pointer(),
 	}
 
-	var params map[string]interface{}
-	temp, err := json.Marshal(apiModel)
+	id, err := r.client.CreateAwsEventBridge(timeoutCtx, plan.InstanceID.ValueInt64(), request)
 	if err != nil {
-		response.Diagnostics.AddError(
-			"Unable to Create Resource",
-			"An unexpected error occurred while creating the resource create request. "+
-				"Please report this issue to the provider developers.\n\n"+
-				"JSON Error: "+err.Error(),
-		)
-		return
-	}
-	// TODO: This is totally a hack to get the struct into a map[string]interface{}
-	// It is very unlikely this will fail after the first one succeeds, so it should be fine to ignore the error
-	// Maybe after the api is moved into the repo we can improve the interface
-	_ = json.Unmarshal(temp, &params)
-
-	apiResponse, err := r.client.CreateAwsEventBridge(ctx, int(data.InstanceID.ValueInt64()), params)
-	if err != nil {
-		response.Diagnostics.AddError(
-			"Failed to Create Resource",
-			"An error occurred while calling the api to create the surface, verify your permissions are correct.\n\n"+
-				"JSON Error: "+err.Error(),
+		resp.Diagnostics.AddError(
+			"Failed to create AWS EventBridge integration",
+			fmt.Sprintf("Could not create AWS EventBridge integration: %s", err),
 		)
 		return
 	}
 
-	data.Id = types.StringValue(apiResponse["id"].(string))
-	data.Status = types.StringNull()
+	plan.Id = types.StringValue(id)
+	plan.Status = types.StringNull()
 
-	// Save data into Terraform state
-	response.Diagnostics.Append(response.State.Set(ctx, &data)...)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 }
 
-func (r *awsEventBridgeResource) Read(ctx context.Context, request resource.ReadRequest, response *resource.ReadResponse) {
+func (r *awsEventBridgeResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state awsEventBridgeResourceModel
-
-	// Read Terraform plan data into the model
-	response.Diagnostics.Append(request.State.Get(ctx, &state)...)
-
-	if strings.Contains(state.Id.ValueString(), ",") {
-		log.Printf("[DEBUG] cloudamqp::resource::aws-eventbridge::read id contains : %v", state.Id.String())
-		s := strings.Split(state.Id.ValueString(), ",")
-		log.Printf("[DEBUG] cloudamqp::resource::aws-eventbridge::read split ids: %v, %v", s[0], s[1])
-		state.Id = types.StringValue(s[0])
-		instanceID, _ := strconv.Atoi(s[1])
-		state.InstanceID = types.Int64Value(int64(instanceID))
-	}
-	if state.InstanceID.ValueInt64() == 0 {
-		response.Diagnostics.AddError("Missing instance identifier {resource_id},{instance_id}", "")
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	var (
-		id         = state.Id.ValueString()
-		instanceID = int(state.InstanceID.ValueInt64())
-	)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
+	defer cancel()
 
-	data, err := r.client.ReadAwsEventBridge(ctx, instanceID, id)
+	id := state.Id.ValueString()
+	instanceID := state.InstanceID.ValueInt64()
+
+	data, err := r.client.ReadAwsEventBridge(timeoutCtx, instanceID, id)
 	if err != nil {
-		response.Diagnostics.AddError("Something went wrong while reading the aws event bridge", fmt.Sprintf("%v", err))
+		resp.Diagnostics.AddError(
+			"Failed to read AWS EventBridge integration",
+			fmt.Sprintf("Could not read AWS EventBridge integration with ID %s: %s", id, err),
+		)
 		return
 	}
 
 	// Resource drift: instance or resource not found, trigger re-creation
 	if data == nil {
-		tflog.Info(ctx, fmt.Sprintf("oauth2 configuration not found, resource will be recreated: %s", state.Id.ValueString()))
-		response.State.RemoveResource(ctx)
+		tflog.Info(ctx, fmt.Sprintf("AWS EventBridge integration not found, resource will be recreated: %s", state.Id.ValueString()))
+		resp.State.RemoveResource(ctx)
 		return
 	}
 
-	state.AwsAccountId = types.StringValue(data["aws_account_id"].(string))
-	state.AwsRegion = types.StringValue(data["aws_region"].(string))
-	state.Vhost = types.StringValue(data["vhost"].(string))
-	state.QueueName = types.StringValue(data["queue"].(string))
-	state.WithHeaders = types.BoolValue(data["with_headers"].(bool))
+	state.AwsAccountId = types.StringValue(data.AwsAccountId)
+	state.AwsRegion = types.StringValue(data.AwsRegion)
+	state.Vhost = types.StringValue(data.Vhost)
+	state.QueueName = types.StringValue(data.QueueName)
+	state.WithHeaders = types.BoolValue(data.WithHeaders)
+	state.Prefetch = types.Int64Value(data.Prefetch)
+	state.Status = types.StringPointerValue(data.Status)
 
-	// Save data into Terraform state
-	response.Diagnostics.Append(response.State.Set(ctx, &state)...)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 }
 
-func (r *awsEventBridgeResource) Update(ctx context.Context, request resource.UpdateRequest, response *resource.UpdateResponse) {
+func (r *awsEventBridgeResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	// This resource does not implement the Update function
 }
 
-func (r *awsEventBridgeResource) Delete(ctx context.Context, request resource.DeleteRequest, response *resource.DeleteResponse) {
+func (r *awsEventBridgeResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var data awsEventBridgeResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
-	// Read Terraform plan data into the model
-	response.Diagnostics.Append(request.State.Get(ctx, &data)...)
-	var id = data.Id.ValueString()
-	err := r.client.DeleteAwsEventBridge(ctx, int(data.InstanceID.ValueInt64()), id)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
+	defer cancel()
 
+	err := r.client.DeleteAwsEventBridge(timeoutCtx, data.InstanceID.ValueInt64(), data.Id.ValueString())
 	if err != nil {
-		response.Diagnostics.AddError("An error occurred while deleting cloudamqp_integration_aws_eventbridge",
-			fmt.Sprintf("Error deleting Cloudamqp event bridge %s: %s", id, err),
+		resp.Diagnostics.AddError(
+			"Failed to delete AWS EventBridge integration",
+			fmt.Sprintf("Could not delete AWS EventBridge integration with ID %s: %s", data.Id.ValueString(), err),
 		)
 	}
 }
 
-func (r *awsEventBridgeResource) ImportState(ctx context.Context, request resource.ImportStateRequest, response *resource.ImportStateResponse) {
-	resource.ImportStatePassthroughID(ctx, path.Root("id"), request, response)
+func (r *awsEventBridgeResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	tflog.Info(ctx, fmt.Sprintf("ImportState: ID=%s", req.ID))
+	if !strings.Contains(req.ID, ",") {
+		resp.Diagnostics.AddError("Invalid import ID format", "Expected format: {resource_id},{instance_id}")
+		return
+	}
+
+	idSplit := strings.Split(req.ID, ",")
+	if len(idSplit) != 2 {
+		resp.Diagnostics.AddError("Invalid import ID format", "Expected format: {resource_id},{instance_id}")
+		return
+	}
+	instanceID, err := strconv.Atoi(idSplit[1])
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid instance_id in import ID", fmt.Sprintf("Could not convert instance_id to int: %s", err))
+		return
+	}
+
+	resp.State.SetAttribute(ctx, path.Root("id"), idSplit[0])
+	resp.State.SetAttribute(ctx, path.Root("instance_id"), int64(instanceID))
 }

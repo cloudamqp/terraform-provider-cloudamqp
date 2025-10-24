@@ -4,111 +4,82 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"time"
 
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/integrations"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func (api *API) CreateAwsEventBridge(ctx context.Context, instanceID int, params map[string]any) (
-	map[string]any, error) {
+// CreateAwsEventBridge - create an AWS EventBridge for a vhost and a specific queue
+func (api *API) CreateAwsEventBridge(ctx context.Context, instanceID int64, params model.AwsEventBridgeRequest) (string, error) {
 
 	var (
-		data   map[string]any
+		data   model.AwsEventBridgeResponse
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/eventbridges", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s ", path), params)
-	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%v ", path, params))
+	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
+		functionName: "CreateAwsEventBridge",
+		resourceName: "AwsEventBridge",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	switch response.StatusCode {
-	case 201:
-		tflog.Debug(ctx, "response data", data)
-		if id, ok := data["id"]; ok {
-			data["id"] = strconv.FormatFloat(id.(float64), 'f', 0, 64)
-		} else {
-			return nil, fmt.Errorf("invalid identifier=%v ", data["id"])
-		}
-		return data, nil
-	default:
-		return nil, fmt.Errorf("failed to create AWS EventBridge, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	id := strconv.FormatInt(data.Id, 10)
+	return id, nil
 }
 
-func (api *API) ReadAwsEventBridge(ctx context.Context, instanceID int, eventbridgeID string) (
-	map[string]any, error) {
+// ReadAwsEventBridge - read an AWS EventBridge by its and instance identifiers
+func (api *API) ReadAwsEventBridge(ctx context.Context, instanceID int64, eventbridgeID string) (*model.AwsEventBridgeResponse, error) {
 
 	var (
-		data   map[string]any
+		data   model.AwsEventBridgeResponse
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/eventbridges/%s", instanceID, eventbridgeID)
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
-	response, err := api.sling.New().Get(path).Receive(&data, &failed)
+	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+		functionName: "ReadAwsEventBridge",
+		resourceName: "AwsEventBridge",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to read AWS EventBridge: %w", err)
 	}
 
-	switch response.StatusCode {
-	case 200:
-		tflog.Debug(ctx, "response data", data)
-		return data, nil
-	case 404:
-		tflog.Warn(ctx, "AWS EventBridge not found")
+	// Handle resource drift
+	if data.Id == 0 {
 		return nil, nil
-	default:
-		return nil, fmt.Errorf("failed to read AWS EventBridge, status=%d message=%s ",
-			response.StatusCode, failed)
 	}
+
+	return &data, nil
 }
 
-func (api *API) ReadAwsEventBridges(ctx context.Context, instanceID int) (map[string]any, error) {
-	var (
-		data   map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("/api/instances/%d/eventbridges", instanceID)
-	)
-
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
-	response, err := api.sling.New().Get(path).Receive(&data, &failed)
-	if err != nil {
-		return nil, err
-	}
-
-	switch response.StatusCode {
-	case 200:
-		tflog.Debug(ctx, "response data", data)
-		return data, nil
-	default:
-		return nil, fmt.Errorf("failed to read AWS EventBridges, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
-}
-
-func (api *API) DeleteAwsEventBridge(ctx context.Context, instanceID int, eventbridgeID string) error {
+// DeleteAwsEventBridge - delete an AWS EventBridge by its and instance identifiers
+func (api *API) DeleteAwsEventBridge(ctx context.Context, instanceID int64, eventbridgeID string) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/eventbridges/%s", instanceID, eventbridgeID)
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
-	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
-	if err != nil {
-		return err
-	}
-
-	switch response.StatusCode {
-	case 204:
-		return nil
-	case 404:
-		// AWS EventBridge not found in the backend. Silent let the resource be deleted.
-		return nil
-	default:
-		return fmt.Errorf("failed to delete AWS EventBridge, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	return api.callWithRetry(ctx, api.sling.New().Delete(path), retryRequest{
+		functionName: "DeleteAwsEventBridge",
+		resourceName: "AwsEventBridge",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 }

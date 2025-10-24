@@ -22,6 +22,13 @@ Only available for dedicated subscription plans.
 
 ## Example Usage
 
+<details>
+  <summary>
+    <b>
+      <i>AWS Eventbridge integration</i>
+    </b>
+  </summary>
+
 ```hcl
 resource "cloudamqp_instance" "instance" {
   name        = "Test instance"
@@ -41,6 +48,37 @@ resource "cloudamqp_integration_aws_eventbridge" "this" {
 }
 ```
 
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>AWS Eventbridge integration with prefetch from [v1.38.0]</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_instance" "instance" {
+  name        = "Test instance"
+  plan        = "penguin-1"
+  region      = "amazon-web-services::us-west-1"
+  rmq_version = "3.11.5"
+  tags        = ["aws"]
+}
+
+resource "cloudamqp_integration_aws_eventbridge" "this" {
+  instance_id     = cloudamqp_instance.instance.id
+  vhost           = cloudamqp_instance.instance.vhost
+  queue           = "<QUEUE-NAME>"
+  aws_account_id  = "<AWS-ACCOUNT-ID>"
+  aws_region      = "us-west-1"
+  with_headers    = true
+  prefetch        = 100
+}
+```
+
+</details>
+
 ## Argument References
 
 The following arguments are supported:
@@ -53,6 +91,8 @@ The following arguments are supported:
 * `queue`           - (ForceNew/Required) A (durable) queue on your RabbitMQ instance.
 * `with_headers`    - (ForceNew/Required) Include message headers in the event data.
                       `({ "headers": { }, "body": { "your": "message" } })`
+* `prefetch`        - (ForceNew/Optional) Set the prefetch for the Eventbrigde consumer to increase
+                      throughput.
 
 ## Attributes Reference
 
@@ -86,4 +126,5 @@ Or with Terraform CLI:
 
 [AWS EventBridge]: https://aws.amazon.com/eventbridge
 [AWS Eventbridge console]: https://console.aws.amazon.com/events/home
+[v1.38.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.38.0
 [CloudAMQP API list eventbridges]: https://docs.cloudamqp.com/cloudamqp_api.html#list-eventbridges
