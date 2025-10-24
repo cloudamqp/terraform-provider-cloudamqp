@@ -848,6 +848,8 @@ func TestAccIntegrationMetricPrometheusCloudwatchV3_Update(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusStackdriverV2_Basic: Add Stackdriver v2 prometheus metric integration and import.
 func TestAccIntegrationMetricPrometheusStackdriverV2_Basic(t *testing.T) {
+	t.Parallel()
+
 	// Read and encode the credentials file
 	credentialsJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials.json")
 	if err != nil {
@@ -897,6 +899,8 @@ func TestAccIntegrationMetricPrometheusStackdriverV2_Basic(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags: Test Stackdriver v2 prometheus integration without optional tags.
 func TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags(t *testing.T) {
+	t.Parallel()
+
 	// Read and encode the credentials file
 	credentialsJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials_notags.json")
 	if err != nil {
@@ -938,6 +942,8 @@ func TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusStackdriverV2_Update: Test updating Stackdriver v2 prometheus integration.
 func TestAccIntegrationMetricPrometheusStackdriverV2_Update(t *testing.T) {
+	t.Parallel()
+
 	// Read and encode the credentials files
 	credentialsCreateJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials.json")
 	if err != nil {
