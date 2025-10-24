@@ -899,7 +899,6 @@ func TestAccIntegrationMetricPrometheusStackdriverV2_Basic(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags: Test Stackdriver v2 prometheus integration without optional tags.
 func TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags(t *testing.T) {
-	t.Parallel()
 
 	// Read and encode the credentials file
 	credentialsJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials_notags.json")
@@ -942,7 +941,6 @@ func TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusStackdriverV2_Update: Test updating Stackdriver v2 prometheus integration.
 func TestAccIntegrationMetricPrometheusStackdriverV2_Update(t *testing.T) {
-	t.Parallel()
 
 	// Read and encode the credentials files
 	credentialsCreateJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials.json")
