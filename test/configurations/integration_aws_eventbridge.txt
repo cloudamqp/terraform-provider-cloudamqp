@@ -1,8 +1,9 @@
 resource "cloudamqp_integration_aws_eventbridge" "aws_eventbridge" {
-  instance_id = {{.InstanceID}}
-  vhost = "{{.AwsEventbridgeVhost}}"
-  queue = "{{.AwsEventbridgeQueue}}"
+  instance_id    = {{.InstanceID}}
+  vhost          = "{{.AwsEventbridgeVhost}}"
+  queue          = "{{.AwsEventbridgeQueue}}"
   aws_account_id = "{{.AwsEventbridgeAccountID}}"
-  aws_region = "{{.AwsEventbridgeRegion}}"
-  with_headers = true
+  aws_region     = "{{.AwsEventbridgeRegion}}"
+  with_headers   = true
+  {{if .AwsEventbridgePrefetch}}prefetch = {{.AwsEventbridgePrefetch}}{{end}}
 }
