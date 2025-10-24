@@ -195,15 +195,15 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 
 								if stackdriver := d.Get("stackdriver_v2").([]any); len(stackdriver) > 0 {
 									config := stackdriver[0].(map[string]any)
-									newCreds, err := extractStackdriverCredentials(new)
+									newCredentials, err := extractStackdriverCredentials(new)
 									if err != nil {
 										return false
 									}
 									// Suppress diff if new credentials match current state
-									return newCreds["project_id"] == config["project_id"] &&
-										newCreds["client_email"] == config["client_email"] &&
-										newCreds["private_key_id"] == config["private_key_id"] &&
-										newCreds["private_key"] == config["private_key"]
+									return newCredentials["project_id"] == config["project_id"] &&
+										newCredentials["client_email"] == config["client_email"] &&
+										newCredentials["private_key_id"] == config["private_key_id"] &&
+										newCredentials["private_key"] == config["private_key"]
 								}
 								return false
 							},
