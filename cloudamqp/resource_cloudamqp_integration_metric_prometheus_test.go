@@ -1,7 +1,9 @@
 package cloudamqp
 
 import (
+	"encoding/base64"
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
@@ -722,6 +724,13 @@ func TestAccIntegrationMetricPrometheusCloudwatchV3_Update(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusStackdriverV2_Basic: Add Stackdriver v2 prometheus metric integration and import.
 func TestAccIntegrationMetricPrometheusStackdriverV2_Basic(t *testing.T) {
+	// Read and encode the credentials file
+	credentialsJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials.json")
+	if err != nil {
+		t.Fatalf("Failed to read credentials file: %v", err)
+	}
+	encodedCredentials := base64.StdEncoding.EncodeToString(credentialsJSON)
+
 	var (
 		fileNames                         = []string{"instance", "integrations/metrics/integration_metric_prometheus_stackdriver_v2"}
 		instanceResourceName              = "cloudamqp_instance.instance"
@@ -731,7 +740,7 @@ func TestAccIntegrationMetricPrometheusStackdriverV2_Basic(t *testing.T) {
 			"InstanceName":           "TestAccIntegrationMetricPrometheusStackdriverV2_Basic",
 			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":           "bunny-1",
-			"StackdriverCredentials": "stackdriver_test_credentials.json",
+			"StackdriverCredentials": encodedCredentials,
 			"StackdriverTags":        "env=test,service=rabbitmq",
 		}
 	)
@@ -764,6 +773,13 @@ func TestAccIntegrationMetricPrometheusStackdriverV2_Basic(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags: Test Stackdriver v2 prometheus integration without optional tags.
 func TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags(t *testing.T) {
+	// Read and encode the credentials file
+	credentialsJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials_notags.json")
+	if err != nil {
+		t.Fatalf("Failed to read credentials file: %v", err)
+	}
+	encodedCredentials := base64.StdEncoding.EncodeToString(credentialsJSON)
+
 	var (
 		fileNames                         = []string{"instance", "integrations/metrics/integration_metric_prometheus_stackdriver_v2_notags"}
 		instanceResourceName              = "cloudamqp_instance.instance"
@@ -773,7 +789,7 @@ func TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags(t *testing.T) {
 			"InstanceName":           "TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags",
 			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":           "bunny-1",
-			"StackdriverCredentials": "stackdriver_test_credentials_notags.json",
+			"StackdriverCredentials": encodedCredentials,
 		}
 	)
 
@@ -786,9 +802,9 @@ func TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags(t *testing.T) {
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.#", "1"),
 					// Check that individual credential fields are populated from API response
-					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.project_id", "test-project"),
-					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.client_email", "test@serviceaccount.com"),
-					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key_id", "test-key-id"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.project_id", "test-project-notags"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.client_email", "test-notags@serviceaccount.com"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key_id", "test-key-id-notags"),
 					resource.TestCheckResourceAttrSet(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key"),
 				),
 			},
@@ -798,6 +814,19 @@ func TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags(t *testing.T) {
 
 // TestAccIntegrationMetricPrometheusStackdriverV2_Update: Test updating Stackdriver v2 prometheus integration.
 func TestAccIntegrationMetricPrometheusStackdriverV2_Update(t *testing.T) {
+	// Read and encode the credentials files
+	credentialsCreateJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials.json")
+	if err != nil {
+		t.Fatalf("Failed to read credentials file: %v", err)
+	}
+	encodedCredentialsCreate := base64.StdEncoding.EncodeToString(credentialsCreateJSON)
+
+	credentialsUpdateJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials_update.json")
+	if err != nil {
+		t.Fatalf("Failed to read update credentials file: %v", err)
+	}
+	encodedCredentialsUpdate := base64.StdEncoding.EncodeToString(credentialsUpdateJSON)
+
 	var (
 		fileNames                         = []string{"instance", "integrations/metrics/integration_metric_prometheus_stackdriver_v2"}
 		instanceResourceName              = "cloudamqp_instance.instance"
@@ -807,7 +836,7 @@ func TestAccIntegrationMetricPrometheusStackdriverV2_Update(t *testing.T) {
 			"InstanceName":           "TestAccIntegrationMetricPrometheusStackdriverV2_Update",
 			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":           "bunny-1",
-			"StackdriverCredentials": "stackdriver_test_credentials_create.json",
+			"StackdriverCredentials": encodedCredentialsCreate,
 			"StackdriverTags":        "env=test,service=rabbitmq",
 		}
 
@@ -815,7 +844,7 @@ func TestAccIntegrationMetricPrometheusStackdriverV2_Update(t *testing.T) {
 			"InstanceName":           "TestAccIntegrationMetricPrometheusStackdriverV2_Update",
 			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":           "bunny-1",
-			"StackdriverCredentials": "stackdriver_test_credentials_update.json",
+			"StackdriverCredentials": encodedCredentialsUpdate,
 			"StackdriverTags":        "env=production,service=messaging,team=platform",
 		}
 	)

@@ -176,7 +176,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				},
 			},
 			"stackdriver_v2": {
-				Type:          schema.TypeSet,
+				Type:          schema.TypeList,
 				Optional:      true,
 				MaxItems:      1,
 				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3"},
@@ -187,6 +187,26 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 							Required:    true,
 							Sensitive:   true,
 							Description: "Base64-encoded Google service account key JSON file",
+							DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+								// credentials_file is not returned by API (old will always be empty).
+								// Suppress diff only if the new credentials would produce the same computed values.
+								if d.Id() != "" && old == "" && new != "" {
+									if stackdriver := d.Get("stackdriver_v2").([]any); len(stackdriver) > 0 {
+										config := stackdriver[0].(map[string]any)
+										newCreds, err := extractStackdriverCredentials(new)
+										if err != nil {
+											// If we can't parse new credentials, don't suppress (show the diff)
+											return false
+										}
+										// Suppress diff if new credentials match current state
+										return newCreds["project_id"] == config["project_id"] &&
+											newCreds["client_email"] == config["client_email"] &&
+											newCreds["private_key_id"] == config["private_key_id"] &&
+											newCreds["private_key"] == config["private_key"]
+									}
+								}
+								return false
+							},
 						},
 						"project_id": {
 							Type:        schema.TypeString,
@@ -275,17 +295,15 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		if tags := cloudwatchConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}
-	} else if stackdriverList := d.Get("stackdriver_v2").(*schema.Set).List(); len(stackdriverList) > 0 {
+	} else if stackdriverList := d.Get("stackdriver_v2").([]any); len(stackdriverList) > 0 {
 		intName = "stackdriver_v2"
 		stackdriverConfig := stackdriverList[0].(map[string]any)
 
-		// Extract credentials from service account JSON file
-		credentials, ok := stackdriverConfig["credentials_file"]
-		if !ok {
-			return diag.Errorf("credentials_file field is required for stackdriver_v2 integration")
+		credentials, ok := stackdriverConfig["credentials_file"].(string)
+		if !ok || credentials == "" {
+			return diag.Errorf("credentials_file is required for stackdriver_v2 integration")
 		}
-
-		extractedCreds, err := extractStackdriverCredentials(credentials.(string))
+		extractedCreds, err := extractStackdriverCredentials(credentials)
 		if err != nil {
 			return diag.FromErr(err)
 		}
@@ -316,17 +334,13 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 }
 
 func extractStackdriverCredentials(credentials string) (map[string]string, error) {
-	if credentials == "" {
-		return nil, fmt.Errorf("credentials_file field is required for stackdriver_v2 integration")
-	}
-
-	uDec, err := base64.URLEncoding.DecodeString(credentials)
+	decoded, err := base64.StdEncoding.DecodeString(credentials)
 	if err != nil {
 		return nil, fmt.Errorf("failed to decode stackdriver credentials: %s", err)
 	}
 
 	var jsonMap map[string]any
-	if err := json.Unmarshal([]byte(uDec), &jsonMap); err != nil {
+	if err := json.Unmarshal(decoded, &jsonMap); err != nil {
 		return nil, fmt.Errorf("failed to parse stackdriver credentials JSON: %s", err)
 	}
 
@@ -460,13 +474,6 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 	} else if name == "stackdriver_v2" {
 		stackdriverV2 := []map[string]any{{}}
 
-		if currentStackdriver := d.Get("stackdriver_v2").(*schema.Set).List(); len(currentStackdriver) > 0 {
-			currentConfig := currentStackdriver[0].(map[string]any)
-			if credentials, ok := currentConfig["credentials_file"]; ok {
-				stackdriverV2[0]["credentials_file"] = credentials
-			}
-		}
-
 		if project_id, ok := data["project_id"]; ok {
 			stackdriverV2[0]["project_id"] = project_id
 		}
@@ -479,8 +486,6 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		if private_key_id, ok := data["private_key_id"]; ok {
 			stackdriverV2[0]["private_key_id"] = private_key_id
 		}
-
-		// Set tags from API response
 		if tags, ok := data["tags"]; ok {
 			stackdriverV2[0]["tags"] = tags
 		}
@@ -539,15 +544,11 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 		if tags := cloudwatchConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}
-	} else if stackdriverList := d.Get("stackdriver_v2").(*schema.Set).List(); len(stackdriverList) > 0 {
+	} else if stackdriverList := d.Get("stackdriver_v2").([]interface{}); len(stackdriverList) > 0 {
 		stackdriverConfig := stackdriverList[0].(map[string]any)
 
-		credentials, ok := stackdriverConfig["credentials_file"]
-		if !ok {
-			return diag.Errorf("credentials_file field is required for stackdriver_v2 integration")
-		}
-
-		extractedCreds, err := extractStackdriverCredentials(credentials.(string))
+		credentials := stackdriverConfig["credentials_file"].(string)
+		extractedCreds, err := extractStackdriverCredentials(credentials)
 		if err != nil {
 			return diag.FromErr(err)
 		}
