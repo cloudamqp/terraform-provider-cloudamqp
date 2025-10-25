@@ -260,21 +260,23 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
 		prometheusDatadogResourceName = "cloudamqp_integration_metric_prometheus.datadog_v3"
 
 		paramsCreate = map[string]string{
-			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Update",
-			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
-			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": testApiKey,
-			"DatadogRegion": "us1",
-			"DatadogTags":   "key=value,key2=value2",
+			"InstanceName":                          "TestAccIntegrationMetricPrometheusDatadogV3_Update",
+			"InstanceID":                            fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":                          "bunny-1",
+			"DatadogApiKey":                         testApiKey,
+			"DatadogRegion":                         "us1",
+			"DatadogTags":                           "key=value,key2=value2",
+			"DatadogRabbitmqDashboardMetricsFormat": "false",
 		}
 
 		paramsUpdate = map[string]string{
-			"InstanceName":  "TestAccIntegrationMetricPrometheusDatadogV3_Update",
-			"InstanceID":    fmt.Sprintf("%s.id", instanceResourceName),
-			"InstancePlan":  "bunny-1",
-			"DatadogApiKey": testApiKey,
-			"DatadogRegion": "us1",
-			"DatadogTags":   "key=value2,key2=value3",
+			"InstanceName":                          "TestAccIntegrationMetricPrometheusDatadogV3_Update",
+			"InstanceID":                            fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":                          "bunny-1",
+			"DatadogApiKey":                         testApiKey,
+			"DatadogRegion":                         "us1",
+			"DatadogTags":                           "key=value2,key2=value3",
+			"DatadogRabbitmqDashboardMetricsFormat": "true",
 		}
 	)
 
@@ -287,6 +289,7 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
 					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsCreate["InstanceName"]),
 					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.0.region", paramsCreate["DatadogRegion"]),
 					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.0.tags", paramsCreate["DatadogTags"]),
+					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.0.rabbitmq_dashboard_metrics_format", "false"),
 				),
 			},
 			{
@@ -295,6 +298,7 @@ func TestAccIntegrationMetricPrometheusDatadogV3_Update(t *testing.T) {
 					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdate["InstanceName"]),
 					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.0.region", paramsUpdate["DatadogRegion"]),
 					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.0.tags", paramsUpdate["DatadogTags"]),
+					resource.TestCheckResourceAttr(prometheusDatadogResourceName, "datadog_v3.0.rabbitmq_dashboard_metrics_format", "true"),
 				),
 			},
 		},
