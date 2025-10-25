@@ -29,6 +29,15 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				ForceNew:    true,
 				Description: "Instance identifier",
 			},
+			"metrics_filter": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				Description: "List of metrics to include. If not specified, default metrics are used. See https://www.cloudamqp.com/docs/monitoring_metrics_splunk_v2.html#metrics-filtering for more information",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
 			"newrelic_v3": {
 				Type:          schema.TypeSet,
 				Optional:      true,
@@ -256,6 +265,16 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		d.SetId(data["id"].(string))
 	}
 
+	if metricsFilter := d.Get("metrics_filter").([]any); len(metricsFilter) > 0 {
+		filters := make([]string, len(metricsFilter))
+		for i, v := range metricsFilter {
+			filters[i] = v.(string)
+		}
+		if err := api.UpdateMetricsFilter(ctx, d.Get("instance_id").(int), d.Id(), filters); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
 	return resourceIntegrationMetricPrometheusRead(ctx, d, meta)
 }
 
@@ -291,6 +310,12 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 	d.Set("splunk_v2", nil)
 	d.Set("dynatrace", nil)
 	d.Set("cloudwatch_v3", nil)
+
+	if metricsFilter, ok := data["metrics_filter"]; ok && metricsFilter != nil {
+		if filterSlice, ok := metricsFilter.([]any); ok {
+			d.Set("metrics_filter", filterSlice)
+		}
+	}
 
 	name := strings.ToLower(data["type"].(string))
 	if name == "newrelic_v3" {
@@ -437,6 +462,17 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 	err := api.UpdateIntegration(ctx, d.Get("instance_id").(int), "metrics", d.Id(), params)
 	if err != nil {
 		return diag.FromErr(err)
+	}
+
+	if d.HasChange("metrics_filter") {
+		metricsFilter := d.Get("metrics_filter").([]any)
+		filters := make([]string, len(metricsFilter))
+		for i, v := range metricsFilter {
+			filters[i] = v.(string)
+		}
+		if err := api.UpdateMetricsFilter(ctx, d.Get("instance_id").(int), d.Id(), filters); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return resourceIntegrationMetricPrometheusRead(ctx, d, meta)

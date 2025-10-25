@@ -1,0 +1,9 @@
+resource "cloudamqp_integration_metric_prometheus" "splunk_v2_metrics_filter" {
+  instance_id = {{.InstanceID}}
+  {{if .MetricsFilter}}metrics_filter = {{.MetricsFilter}}{{end}}
+  splunk_v2 {
+    token    = "{{.SplunkToken}}"
+    endpoint = "{{.SplunkEndpoint}}"
+  }
+}
+

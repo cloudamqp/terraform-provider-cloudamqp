@@ -70,6 +70,8 @@ func (api *API) ReadIntegration(ctx context.Context, instanceID int, intType, in
 				convertedData[k] = v
 			} else if k == "type" {
 				convertedData[k] = v
+			} else if k == "metrics_filter" {
+				convertedData[k] = v
 			} else if k == "config" {
 				for configK, configV := range data["config"].(map[string]any) {
 					convertedData[configK] = configV
@@ -131,6 +133,31 @@ func (api *API) DeleteIntegration(ctx context.Context, instanceID int, intType, 
 		return nil
 	default:
 		return fmt.Errorf("failed to delete integration, status=%d message=%s ",
+			response.StatusCode, failed)
+	}
+}
+
+// UpdateMetricsFilter updates the metrics filter for a prometheus integration
+func (api *API) UpdateMetricsFilter(ctx context.Context, instanceID int, intID string, filter []string) error {
+	var (
+		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%d/integrations/metrics/%s/metrics_filter", instanceID, intID)
+		params = map[string]any{"metrics_filter": filter}
+	)
+
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s ", path), params)
+	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
+	if err != nil {
+		return err
+	}
+
+	switch response.StatusCode {
+	case 204:
+		return nil
+	case 200:
+		return nil
+	default:
+		return fmt.Errorf("failed to update metrics filter, status=%d message=%s ",
 			response.StatusCode, failed)
 	}
 }

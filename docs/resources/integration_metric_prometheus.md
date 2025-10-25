@@ -92,6 +92,8 @@ resource "cloudamqp_integration_metric_prometheus" "cloudwatch_v3" {
 The following arguments are supported:
 
 * `instance_id` - (Required) Instance identifier for the CloudAMQP instance.
+* `metrics_filter` - (Optional) List of metrics to include in the integration. If not specified, default metrics are included.
+  For more information about metrics filtering, see the [metrics filtering documentation](https://www.cloudamqp.com/docs/monitoring_metrics_splunk_v2.html#metrics-filtering).
 
 Exactly one of the following integration blocks must be specified:
 
