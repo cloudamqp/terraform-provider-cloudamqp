@@ -81,5 +81,5 @@ Or with Terraform CLI:
 
 `terraform import cloudamqp_vpc.vpc <vpc_id>`
 
-[CloudAMQP API list vpcs]: https://docs.cloudamqp.com/#list-vpcs
-[CloudAMQP plans]: https://www.cloudamqp.com/plans.html
+[CloudAMQP API list vpcs]: https://docs.cloudamqp.com/index.html#tag/vpcs/get/vpcs
+[CloudAMQP plans]: https://docs.cloudamqp.com/index.html#tag/plans/get/plans

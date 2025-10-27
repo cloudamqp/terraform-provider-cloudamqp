@@ -30,7 +30,7 @@ Golang, make, Terraform
   * Go to API access (https://customer.cloudamqp.com/apikeys) and create a key. (note that this is the API key for one of the two APIs CloudAMQP supports.)
 
 `
-The two APIs supported can be found at https://docs.cloudamqp.com (called customer) and https://docs.cloudamqp.com/cloudamqp_api.html (called api). The API key created gain access to the customer API (used to handle the instance). While the second API handles different resources on the instace (such as alarms, notification etc.). The customer API also has a proxy service, which makes it possible for the provider to access the second API through customer API using the same created API key.
+The two APIs supported can be found at https://docs.cloudamqp.com (called customer) and https://docs.cloudamqp.com/instance-api.html (called api). The API key created gain access to the customer API (used to handle the instance). While the second API handles different resources on the instace (such as alarms, notification etc.). The customer API also has a proxy service, which makes it possible for the provider to access the second API through customer API using the same created API key.
 `
 
 ## Install the CloudAMQP Terraform Provider
@@ -78,7 +78,7 @@ When this is setup you can just run `plan` or `apply` and terraform will use you
 
 *To change the provider now you can just update the code and hit `go build` and then rerun your terraform command.*
 
-More detailed documentation of the provider can be found at: https://docs.cloudamqp.com/cloudamqp_terraform.html
+More detailed documentation of the provider can be found at: https://docs.cloudamqp.com/terraform.html
 
 ### Example Usage: Deploying a First CloudAMQP RMQ server
 
@@ -113,7 +113,7 @@ To enable Terraform debug logging.
 
 ## Resources
 
-Resource documentation can be found [here](https://docs.cloudamqp.com/cloudamqp_terraform.html)
+Resource documentation can be found [here](https://docs.cloudamqp.com/terraform.html)
 
 ### Instance ###
 
@@ -126,7 +126,7 @@ It’s possible to change between shared and dedicated plans (or vice versa). Th
 
 Import existing infrastructure into state and bring the resource under Terraform management. Information about the resource will be added to the terraform.state file. Then add manually the given information to the .tf file. Once this is done, run terraform plan to see that the resource is under Terraform management. From here it's possible to add more resources such as alarm.
 
-You'll need to determine the `resource_id` and other identifiers for the items you intend to import. You can do this using the CloudAMQP API, which is documented here https://docs.cloudamqp.com/#instances. Use a token found on this page https://customer.cloudamqp.com/apikeys.
+You'll need to determine the `resource_id` and other identifiers for the items you intend to import. You can do this using the CloudAMQP API, which is documented here https://docs.cloudamqp.com/index.html#tag/instances. Use a token found on this page https://customer.cloudamqp.com/apikeys.
 
 ### Instance:
 
@@ -170,7 +170,7 @@ Generic form of terraform import command
 terraform import {resource_type}.{resource_name} {resource_id},{instance_id}
 ```
 
-You can find `{instance_id}` through [the API](https://docs.cloudamqp.com/#instances)
+You can find `{instance_id}` through [the API](https://docs.cloudamqp.com/index.html#tag/instances/get/instances)
 
 Example of terraform import command (with instance_id=80)
 

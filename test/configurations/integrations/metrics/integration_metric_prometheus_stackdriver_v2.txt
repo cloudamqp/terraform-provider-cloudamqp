@@ -1,0 +1,7 @@
+resource "cloudamqp_integration_metric_prometheus" "stackdriver_v2" {
+  instance_id = {{.InstanceID}}
+  stackdriver_v2 {
+    credentials_file = "{{.StackdriverCredentials}}"
+    tags             = "{{.StackdriverTags}}"
+  }
+}

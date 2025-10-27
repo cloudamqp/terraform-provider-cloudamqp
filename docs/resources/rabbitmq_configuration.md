@@ -266,5 +266,5 @@ Will be solved once we migrate the current provider to `Terraform Plugin Framewo
 
 </details>
 
-[CloudAMQP API list intances]: https://docs.cloudamqp.com/#list-instances
+[CloudAMQP API list intances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
 [v1.35.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.35.0

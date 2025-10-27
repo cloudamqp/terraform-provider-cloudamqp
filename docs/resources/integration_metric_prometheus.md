@@ -1,6 +1,6 @@
 # cloudamqp_integration_metric_prometheus
 
-This resource allows you to create and manage Prometheus-compatible metric integrations for CloudAMQP instances. Currently supported integrations include New Relic v3, Datadog v3, Azure Monitor, Splunk v2, Dynatrace, and CloudWatch v3.
+This resource allows you to create and manage Prometheus-compatible metric integrations for CloudAMQP instances. Currently supported integrations include New Relic v3, Datadog v3, Azure Monitor, Splunk v2, Dynatrace, CloudWatch v3, and Stackdriver v2.
 
 ## Example Usage
 
@@ -87,6 +87,25 @@ resource "cloudamqp_integration_metric_prometheus" "cloudwatch_v3" {
 }
 ```
 
+### Stackdriver v2
+
+```hcl
+resource "cloudamqp_integration_metric_prometheus" "stackdriver_v2" {
+  instance_id = cloudamqp_instance.instance.id
+
+  stackdriver_v2 {
+    credentials_file = var.google_service_account_key
+    tags             = "key=value,key2=value2"
+  }
+}
+```
+
+**Note:** The `credentials_file` should contain a Base64-encoded Google service account key JSON file. You can create a service account in Google Cloud Console with the "Monitoring Metric Writer" role and download the key file. Then encode it with:
+
+```bash
+base64 -i /path/to/service-account-key.json
+```
+
 ## Argument Reference
 
 The following arguments are supported:
@@ -142,11 +161,32 @@ The following arguments are supported:
 * `region` - (Required) AWS region for CloudWatch metrics.
 * `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
 
+### stackdriver_v2
+
+The following arguments are supported:
+
+* `credentials_file` - (Required) Base64-encoded Google service account key JSON file with 'Monitoring Metric Writer' permission.
+* `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
+
+The following computed attributes are available:
+
+* `project_id` - Google Cloud project ID (extracted from credentials file).
+* `client_email` - Google service account client email (extracted from credentials file).
+* `private_key` - Google service account private key (extracted from credentials file).
+* `private_key_id` - Google service account private key ID (extracted from credentials file).
+
 ## Attributes Reference
 
 In addition to all arguments above, the following attributes are exported:
 
 * `id` - The integration identifier.
+
+For `stackdriver_v2` integrations, the following computed attributes are also available:
+
+* `stackdriver_v2.0.project_id` - Google Cloud project ID extracted from the credentials file.
+* `stackdriver_v2.0.client_email` - Google service account client email extracted from the credentials file.
+* `stackdriver_v2.0.private_key` - Google service account private key extracted from the credentials file.
+* `stackdriver_v2.0.private_key_id` - Google service account private key ID extracted from the credentials file.
 
 ## Import
 
@@ -208,6 +248,15 @@ import {
 }
 ```
 
+### Stackdriver v2
+
+```hcl
+import {
+  to = cloudamqp_integration_metric_prometheus.stackdriver_v2
+  id = format("<integration_id>,%s", cloudamqp_instance.instance.id)
+}
+```
+
 Or use Terraform CLI:
 
 ```
@@ -217,6 +266,7 @@ $ terraform import cloudamqp_integration_metric_prometheus.azure_monitor <integr
 $ terraform import cloudamqp_integration_metric_prometheus.splunk_v2 <integration_id>,<instance_id>
 $ terraform import cloudamqp_integration_metric_prometheus.dynatrace <integration_id>,<instance_id>
 $ terraform import cloudamqp_integration_metric_prometheus.cloudwatch_v3 <integration_id>,<instance_id>
+$ terraform import cloudamqp_integration_metric_prometheus.stackdriver_v2 <integration_id>,<instance_id>
 ```
 
 ## Dependency

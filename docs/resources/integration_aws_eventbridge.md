@@ -92,7 +92,7 @@ The following arguments are supported:
 * `with_headers`    - (ForceNew/Required) Include message headers in the event data.
                       `({ "headers": { }, "body": { "your": "message" } })`
 * `prefetch`        - (ForceNew/Optional) Set the prefetch for the Eventbrigde consumer to increase
-                      throughput.
+                      throughput. Supported from [v1.38.0].
 
 ## Attributes Reference
 
@@ -127,4 +127,4 @@ Or with Terraform CLI:
 [AWS EventBridge]: https://aws.amazon.com/eventbridge
 [AWS Eventbridge console]: https://console.aws.amazon.com/events/home
 [v1.38.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.38.0
-[CloudAMQP API list eventbridges]: https://docs.cloudamqp.com/cloudamqp_api.html#list-eventbridges
+[CloudAMQP API list eventbridges]: https://docs.cloudamqp.com/instance-api.html#tag/eventbridge/get/eventbridges

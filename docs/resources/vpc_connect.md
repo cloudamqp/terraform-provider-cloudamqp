@@ -341,7 +341,7 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 
 </details>
 
-[CloudAMQP API list intances]: https://docs.cloudamqp.com/#list-instances
+[CloudAMQP API list intances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
 [CloudAMQP VPC Connect]: https://www.cloudamqp.com/docs/cloudamqp-vpc-connect.html
 [cloudamqp_security_firewall]: https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall
 [Google docs]: https://cloud.google.com/resource-manager/reference/rest/v1/projects

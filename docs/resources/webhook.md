@@ -137,4 +137,4 @@ Information for older versions
 
 </details>
 
-[CloudAMQP API list webhooks]: https://docs.cloudamqp.com/cloudamqp_api.html#list-webhooks
+[CloudAMQP API list webhooks]: https://docs.cloudamqp.com/instance-api.html#tag/webhooks/get/webhooks

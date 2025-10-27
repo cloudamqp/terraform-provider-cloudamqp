@@ -1,6 +1,7 @@
 package cloudamqp
 
 import (
+	"encoding/base64"
 	"fmt"
 	"os"
 	"testing"
@@ -843,6 +844,170 @@ func TestAccIntegrationMetricPrometheusCloudwatchV3_Update(t *testing.T) {
 					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.iam_external_id", paramsUpdate["CloudwatchIAMExternalID"]),
 					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.region", paramsUpdate["CloudwatchRegion"]),
 					resource.TestCheckResourceAttr(prometheusCloudwatchResourceName, "cloudwatch_v3.0.tags", paramsUpdate["CloudwatchTags"]),
+				),
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusStackdriverV2_Basic: Add Stackdriver v2 prometheus metric integration and import.
+func TestAccIntegrationMetricPrometheusStackdriverV2_Basic(t *testing.T) {
+	t.Parallel()
+
+	// Read and encode the credentials file
+	credentialsJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials.json")
+	if err != nil {
+		t.Fatalf("Failed to read credentials file: %v", err)
+	}
+	encodedCredentials := base64.StdEncoding.EncodeToString(credentialsJSON)
+
+	var (
+		fileNames                         = []string{"instance", "integrations/metrics/integration_metric_prometheus_stackdriver_v2"}
+		instanceResourceName              = "cloudamqp_instance.instance"
+		prometheusStackdriverResourceName = "cloudamqp_integration_metric_prometheus.stackdriver_v2"
+
+		params = map[string]string{
+			"InstanceName":           "TestAccIntegrationMetricPrometheusStackdriverV2_Basic",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"StackdriverCredentials": encodedCredentials,
+			"StackdriverTags":        "env=test,service=rabbitmq",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.#", "1"),
+					// Check that individual credential fields are populated from API response
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.project_id", "test-project"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.client_email", "test@serviceaccount.com"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key_id", "test-key-id"),
+					resource.TestCheckResourceAttrSet(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.tags", params["StackdriverTags"]),
+				),
+			},
+			{
+				ResourceName:      prometheusStackdriverResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusStackdriverResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags: Test Stackdriver v2 prometheus integration without optional tags.
+func TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags(t *testing.T) {
+
+	// Read and encode the credentials file
+	credentialsJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials_notags.json")
+	if err != nil {
+		t.Fatalf("Failed to read credentials file: %v", err)
+	}
+	encodedCredentials := base64.StdEncoding.EncodeToString(credentialsJSON)
+
+	var (
+		fileNames                         = []string{"instance", "integrations/metrics/integration_metric_prometheus_stackdriver_v2_notags"}
+		instanceResourceName              = "cloudamqp_instance.instance"
+		prometheusStackdriverResourceName = "cloudamqp_integration_metric_prometheus.stackdriver_v2_notags"
+
+		params = map[string]string{
+			"InstanceName":           "TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"StackdriverCredentials": encodedCredentials,
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.#", "1"),
+					// Check that individual credential fields are populated from API response
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.project_id", "test-project-notags"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.client_email", "test-notags@serviceaccount.com"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key_id", "test-key-id-notags"),
+					resource.TestCheckResourceAttrSet(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key"),
+				),
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusStackdriverV2_Update: Test updating Stackdriver v2 prometheus integration.
+func TestAccIntegrationMetricPrometheusStackdriverV2_Update(t *testing.T) {
+
+	// Read and encode the credentials files
+	credentialsCreateJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials.json")
+	if err != nil {
+		t.Fatalf("Failed to read credentials file: %v", err)
+	}
+	encodedCredentialsCreate := base64.StdEncoding.EncodeToString(credentialsCreateJSON)
+
+	credentialsUpdateJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials_update.json")
+	if err != nil {
+		t.Fatalf("Failed to read update credentials file: %v", err)
+	}
+	encodedCredentialsUpdate := base64.StdEncoding.EncodeToString(credentialsUpdateJSON)
+
+	var (
+		fileNames                         = []string{"instance", "integrations/metrics/integration_metric_prometheus_stackdriver_v2"}
+		instanceResourceName              = "cloudamqp_instance.instance"
+		prometheusStackdriverResourceName = "cloudamqp_integration_metric_prometheus.stackdriver_v2"
+
+		paramsCreate = map[string]string{
+			"InstanceName":           "TestAccIntegrationMetricPrometheusStackdriverV2_Update",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"StackdriverCredentials": encodedCredentialsCreate,
+			"StackdriverTags":        "env=test,service=rabbitmq",
+		}
+
+		paramsUpdate = map[string]string{
+			"InstanceName":           "TestAccIntegrationMetricPrometheusStackdriverV2_Update",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"StackdriverCredentials": encodedCredentialsUpdate,
+			"StackdriverTags":        "env=production,service=messaging,team=platform",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsCreate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsCreate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.#", "1"),
+					// Check that individual credential fields are populated from API response
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.project_id", "test-project"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.client_email", "test@serviceaccount.com"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key_id", "test-key-id"),
+					resource.TestCheckResourceAttrSet(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.tags", paramsCreate["StackdriverTags"]),
+				),
+			},
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.#", "1"),
+					// Check that individual credential fields are updated from API response
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.project_id", "updated-project"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.client_email", "updated@serviceaccount.com"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key_id", "updated-key-id"),
+					resource.TestCheckResourceAttrSet(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.tags", paramsUpdate["StackdriverTags"]),
 				),
 			},
 		},

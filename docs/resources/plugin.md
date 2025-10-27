@@ -187,7 +187,7 @@ deleting `cloudamqp_instance`. This is not necessary since the servers will be d
 
 Set `enable_faster_instance_destroy` to ***true*** in the provider configuration to skip this.
 
-[CloudAMQP API list plugins]: https://docs.cloudamqp.com/cloudamqp_api.html#list-plugins
+[CloudAMQP API list plugins]: https://docs.cloudamqp.com/instance-api.html#tag/plugins/get/plugins
 [v1.19.2]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.19.2
 [v1.27.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0
 [v1.29.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.0

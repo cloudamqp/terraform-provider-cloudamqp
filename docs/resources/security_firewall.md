@@ -241,7 +241,7 @@ The provider from [v1.15.2] will start to warn about using this.
 
  </details>
 
-[CloudAMQP API list intances]: https://docs.cloudamqp.com/#list-instances
+[CloudAMQP API list intances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
 [v1.15.1]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.15.1
 [v1.15.2]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.15.2
 [v1.27.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0

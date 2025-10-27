@@ -328,7 +328,7 @@ Or use Terraform CLI:
 
 `terraform import cloudamqp_integration_metric.<resource_name> <resource_id>,<instance_id>`
 
-[CloudAMQP API add integrations]: https://docs.cloudamqp.com/cloudamqp_api.html#add-metrics-integration
-[CloudAMQP API list integrations]: https://docs.cloudamqp.com/cloudamqp_api.html#list-metrics-integrations
+[CloudAMQP API add integrations]: https://docs.cloudamqp.com/instance-api.html#tag/integrations/post/integrations/metrics/{system}
+[CloudAMQP API list integrations]: https://docs.cloudamqp.com/instance-api.html#tag/integrations/get/integrations/metrics
 [Datadog documentation]: https://docs.datadoghq.com/getting_started/tagging/#define-tags
 [integration type reference]: #integration-type-reference
