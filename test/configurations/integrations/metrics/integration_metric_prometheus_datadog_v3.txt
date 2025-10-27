@@ -1,8 +1,9 @@
 resource "cloudamqp_integration_metric_prometheus" "datadog_v3" {
   instance_id = {{.InstanceID}}
   datadog_v3 {
-    api_key = "{{.DatadogApiKey}}"
-    region  = "{{.DatadogRegion}}"
-    tags    = "{{.DatadogTags}}"
+    api_key                           = "{{.DatadogApiKey}}"
+    region                            = "{{.DatadogRegion}}"
+    tags                              = "{{.DatadogTags}}"
+    {{if .DatadogRabbitmqDashboardMetricsFormat}}rabbitmq_dashboard_metrics_format = {{.DatadogRabbitmqDashboardMetricsFormat}}{{end}}
   }
 }

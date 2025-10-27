@@ -74,6 +74,11 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 							Optional:    true,
 							Description: "tags. E.g. env=prod,service=web",
 						},
+						"rabbitmq_dashboard_metrics_format": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: "Enable metric name transformation to match Datadog's RabbitMQ dashboard format",
+						},
 					},
 				},
 			},
@@ -266,6 +271,13 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		if tags := datadogConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}
+		if format, ok := datadogConfig["rabbitmq_dashboard_metrics_format"].(bool); ok {
+			if format {
+				params["rabbitmq_dashboard_metrics_format"] = "true"
+			} else {
+				params["rabbitmq_dashboard_metrics_format"] = "false"
+			}
+		}
 	} else if azureMonitorList := d.Get("azure_monitor").(*schema.Set).List(); len(azureMonitorList) > 0 {
 		intName = "azure_monitor"
 		azureMonitorConfig := azureMonitorList[0].(map[string]any)
@@ -412,6 +424,9 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		if tags, ok := data["tags"]; ok {
 			datadogV3[0]["tags"] = tags
 		}
+		if format, ok := data["rabbitmq_dashboard_metrics_format"]; ok {
+			datadogV3[0]["rabbitmq_dashboard_metrics_format"] = format == "true"
+		}
 		if err := d.Set("datadog_v3", datadogV3); err != nil {
 			return diag.Errorf("error setting datadog_v3 for resource %s: %s", d.Id(), err)
 		}
@@ -515,6 +530,13 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 		}
 		if tags := datadogConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
+		}
+		if format, ok := datadogConfig["rabbitmq_dashboard_metrics_format"].(bool); ok {
+			if format {
+				params["rabbitmq_dashboard_metrics_format"] = "true"
+			} else {
+				params["rabbitmq_dashboard_metrics_format"] = "false"
+			}
 		}
 	} else if azureMonitorList := d.Get("azure_monitor").(*schema.Set).List(); len(azureMonitorList) > 0 {
 		azureMonitorConfig := azureMonitorList[0].(map[string]any)

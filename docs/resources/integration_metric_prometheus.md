@@ -24,9 +24,10 @@ resource "cloudamqp_integration_metric_prometheus" "datadog_v3" {
   instance_id = cloudamqp_instance.instance.id
 
   datadog_v3 {
-    api_key = var.datadog_api_key
-    region  = "us1"
-    tags    = "key=value,key2=value2"
+    api_key                            = var.datadog_api_key
+    region                             = "us1"
+    tags                               = "key=value,key2=value2"
+    rabbitmq_dashboard_metrics_format  = true
   }
 }
 ```
@@ -127,6 +128,7 @@ The following arguments are supported:
 * `api_key` - (Required) Datadog API key for authentication.
 * `region` - (Required) Datadog region code. Valid values: `us1`, `us3`, `us5`, `eu1`.
 * `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
+* `rabbitmq_dashboard_metrics_format` - (Optional) Enable metric name transformation to match Datadog's RabbitMQ dashboard format. Default: `false`. **Note:** This option is only available for RabbitMQ clusters, not LavinMQ clusters.
 
 ### azure_monitor
 
