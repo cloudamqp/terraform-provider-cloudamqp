@@ -1013,3 +1013,100 @@ func TestAccIntegrationMetricPrometheusStackdriverV2_Update(t *testing.T) {
 		},
 	})
 }
+
+// TestAccIntegrationMetricPrometheusMetricsFilter_Default: Test prometheus integration with default metrics (no metrics_filter specified).
+func TestAccIntegrationMetricPrometheusMetricsFilter_Default(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "SPLUNK_TOKEN"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("SPLUNK_TOKEN")
+	}
+
+	var (
+		fileNames                    = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2"}
+		instanceResourceName         = "cloudamqp_instance.instance"
+		prometheusSplunkResourceName = "cloudamqp_integration_metric_prometheus.splunk_v2"
+
+		params = map[string]string{
+			"InstanceName":   "TestAccIntegrationMetricPrometheusMetricsFilter_Default",
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
+			"SplunkToken":    testApiKey,
+			"SplunkEndpoint": "https://prd-p-abcde.splunkcloud.com:8088/services/collector",
+			"SplunkTags":     "key=value,key2=value2",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.#", "1"),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.endpoint", params["SplunkEndpoint"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "metrics_filter.#", "37"),
+				),
+			},
+			{
+				ResourceName:      prometheusSplunkResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusSplunkResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusMetricsFilter_Custom: Test prometheus integration with custom metrics_filter.
+func TestAccIntegrationMetricPrometheusMetricsFilter_Custom(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized value for playback and use real value for recording
+	testApiKey := "SPLUNK_TOKEN"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiKey = os.Getenv("SPLUNK_TOKEN")
+	}
+
+	var (
+		fileNames                    = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2_metrics_filter"}
+		instanceResourceName         = "cloudamqp_instance.instance"
+		prometheusSplunkResourceName = "cloudamqp_integration_metric_prometheus.splunk_v2_metrics_filter"
+
+		params = map[string]string{
+			"InstanceName":   "TestAccIntegrationMetricPrometheusMetricsFilter_Custom",
+			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":   "bunny-1",
+			"SplunkToken":    testApiKey,
+			"SplunkEndpoint": "https://prd-p-abcde.splunkcloud.com:8088/services/collector",
+			"MetricsFilter":  `["rabbitmq_connections", "rabbitmq_detailed_queue_messages", "system_cpu_utilization_ratio"]`,
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.#", "1"),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.endpoint", params["SplunkEndpoint"]),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "metrics_filter.#", "3"),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "metrics_filter.0", "rabbitmq_connections"),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "metrics_filter.1", "rabbitmq_detailed_queue_messages"),
+					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "metrics_filter.2", "system_cpu_utilization_ratio"),
+				),
+			},
+			{
+				ResourceName:      prometheusSplunkResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusSplunkResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
