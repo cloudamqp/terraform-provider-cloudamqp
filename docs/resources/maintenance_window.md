@@ -136,5 +136,5 @@ Or with Terraform CLI:
 
 `terraform import cloudamqp_maintenance_window.this <id>`
 
-[CloudAMQP API list instances]: https://docs.cloudamqp.com/#list-instances
+[CloudAMQP API list instances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
 [format]: https://developer.hashicorp.com/terraform/language/functions/formatdate#specification-syntax

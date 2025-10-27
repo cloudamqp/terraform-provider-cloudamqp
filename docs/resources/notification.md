@@ -233,4 +233,4 @@ Or use Terraform CLI:
 
 `terraform import cloudamqp_notification.recipient <id>,<instance_id>`
 
-[CloudAMQP API list recipients]: https://docs.cloudamqp.com/cloudamqp_api.html#list-recipients
+[CloudAMQP API list recipients]: https://docs.cloudamqp.com/instance-api.html#tag/alarms/get/alarms/recipients

@@ -64,5 +64,5 @@ Or use Terraform CLI:
 
 `terraform import cloudamqp_custom_domain.settings <instance_id>`
 
-[CloudAMQP API list instances]: https://docs.cloudamqp.com/#list-instances
+[CloudAMQP API list instances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
 [Let's Encrypt]: https://letsencrypt.org/
