@@ -2,6 +2,8 @@ package cloudamqp
 
 import (
 	"context"
+	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
@@ -33,7 +35,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3"},
+				ConflictsWith: []string{"datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
@@ -53,7 +55,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3"},
+				ConflictsWith: []string{"newrelic_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
@@ -79,7 +81,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "splunk_v2", "dynatrace", "cloudwatch_v3"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"connection_string": {
@@ -95,7 +97,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "dynatrace", "cloudwatch_v3"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "dynatrace", "cloudwatch_v3", "stackdriver_v2"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"token": {
@@ -121,7 +123,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "cloudwatch_v3"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "cloudwatch_v3", "stackdriver_v2"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"environment_id": {
@@ -147,7 +149,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "stackdriver_v2"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"iam_role": {
@@ -164,6 +166,69 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 							Type:        schema.TypeString,
 							Required:    true,
 							Description: "AWS region",
+						},
+						"tags": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "tags. E.g. env=prod,service=web",
+						},
+					},
+				},
+			},
+			"stackdriver_v2": {
+				Type:          schema.TypeList,
+				Optional:      true,
+				MaxItems:      1,
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3"},
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"credentials_file": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Sensitive:   true,
+							Description: "Base64-encoded Google service account key JSON file",
+							DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+								// Only suppress for existing resources
+								if d.Id() == "" {
+									return false
+								}
+
+								if stackdriver := d.Get("stackdriver_v2").([]any); len(stackdriver) > 0 {
+									config := stackdriver[0].(map[string]any)
+									newCredentials, err := extractStackdriverCredentials(new)
+									if err != nil {
+										return false
+									}
+									// Suppress diff if new credentials match current state
+									return newCredentials["project_id"] == config["project_id"] &&
+										newCredentials["client_email"] == config["client_email"] &&
+										newCredentials["private_key_id"] == config["private_key_id"] &&
+										newCredentials["private_key"] == config["private_key"]
+								}
+								return false
+							},
+						},
+						"project_id": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Google Cloud project ID (computed from credentials file)",
+						},
+						"client_email": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Google service account client email (computed from credentials file)",
+						},
+						"private_key": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Sensitive:   true,
+							Description: "Google service account private key (computed from credentials file)",
+						},
+						"private_key_id": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Sensitive:   true,
+							Description: "Google service account private key ID (computed from credentials file)",
 						},
 						"tags": {
 							Type:        schema.TypeString,
@@ -230,6 +295,23 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		if tags := cloudwatchConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}
+	} else if stackdriverList := d.Get("stackdriver_v2").([]any); len(stackdriverList) > 0 {
+		intName = "stackdriver_v2"
+		stackdriverConfig := stackdriverList[0].(map[string]any)
+		credentials := stackdriverConfig["credentials_file"].(string)
+
+		extractedCredentials, err := extractStackdriverCredentials(credentials)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+
+		for key, value := range extractedCredentials {
+			params[key] = value
+		}
+
+		if tags := stackdriverConfig["tags"]; tags != nil && tags != "" {
+			params["tags"] = tags
+		}
 	}
 
 	if intName == "" {
@@ -245,6 +327,32 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 	}
 
 	return resourceIntegrationMetricPrometheusRead(ctx, d, meta)
+}
+
+func extractStackdriverCredentials(credentials string) (map[string]string, error) {
+	decoded, err := base64.StdEncoding.DecodeString(credentials)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode stackdriver credentials: %s", err)
+	}
+
+	var jsonMap map[string]any
+	if err := json.Unmarshal(decoded, &jsonMap); err != nil {
+		return nil, fmt.Errorf("failed to parse stackdriver credentials JSON: %s", err)
+	}
+
+	requiredFields := []string{"client_email", "private_key_id", "private_key", "project_id"}
+	for _, field := range requiredFields {
+		if jsonMap[field] == nil || jsonMap[field] == "" {
+			return nil, fmt.Errorf("required field '%s' is missing from credentials JSON", field)
+		}
+	}
+
+	return map[string]string{
+		"client_email":   jsonMap["client_email"].(string),
+		"private_key_id": jsonMap["private_key_id"].(string),
+		"private_key":    jsonMap["private_key"].(string),
+		"project_id":     jsonMap["project_id"].(string),
+	}, nil
 }
 
 func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
@@ -279,6 +387,7 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 	d.Set("splunk_v2", nil)
 	d.Set("dynatrace", nil)
 	d.Set("cloudwatch_v3", nil)
+	d.Set("stackdriver_v2", nil)
 
 	name := strings.ToLower(data["type"].(string))
 	if name == "newrelic_v3" {
@@ -359,6 +468,28 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		if err := d.Set("cloudwatch_v3", cloudwatchV3); err != nil {
 			return diag.Errorf("error setting cloudwatch_v3 for resource %s: %s", d.Id(), err)
 		}
+	} else if name == "stackdriver_v2" {
+		stackdriverV2 := []map[string]any{{}}
+
+		if project_id, ok := data["project_id"]; ok {
+			stackdriverV2[0]["project_id"] = project_id
+		}
+		if client_email, ok := data["client_email"]; ok {
+			stackdriverV2[0]["client_email"] = client_email
+		}
+		if private_key, ok := data["private_key"]; ok {
+			stackdriverV2[0]["private_key"] = private_key
+		}
+		if private_key_id, ok := data["private_key_id"]; ok {
+			stackdriverV2[0]["private_key_id"] = private_key_id
+		}
+		if tags, ok := data["tags"]; ok {
+			stackdriverV2[0]["tags"] = tags
+		}
+
+		if err := d.Set("stackdriver_v2", stackdriverV2); err != nil {
+			return diag.Errorf("error setting stackdriver_v2 for resource %s: %s", d.Id(), err)
+		}
 	}
 
 	return nil
@@ -408,6 +539,22 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 		params["iam_external_id"] = cloudwatchConfig["iam_external_id"]
 		params["region"] = cloudwatchConfig["region"]
 		if tags := cloudwatchConfig["tags"]; tags != nil && tags != "" {
+			params["tags"] = tags
+		}
+	} else if stackdriverList := d.Get("stackdriver_v2").([]interface{}); len(stackdriverList) > 0 {
+		stackdriverConfig := stackdriverList[0].(map[string]any)
+
+		credentials := stackdriverConfig["credentials_file"].(string)
+		extractedCreds, err := extractStackdriverCredentials(credentials)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+
+		for key, value := range extractedCreds {
+			params[key] = value
+		}
+
+		if tags := stackdriverConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}
 	}
