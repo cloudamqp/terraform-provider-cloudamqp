@@ -216,7 +216,7 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 
 </details>
 
-[CloudAMQP API list intances]: https://docs.cloudamqp.com/#list-instances
+[CloudAMQP API list intances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
 [CloudAMQP plans]: https://www.cloudamqp.com/plans.html
 [CloudAMQP PrivateLink]: https://www.cloudamqp.com/docs/cloudamqp-privatelink.html#azure-privatelink
 [cloudamqp_security_firewall]: ./security_firewall.md

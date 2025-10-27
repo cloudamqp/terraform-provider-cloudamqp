@@ -42,4 +42,4 @@ digital-ocean::sgp1
 ```
 
 [CloudAMQP plans]: https://www.cloudamqp.com/plans.html
-[CloudAMQP API regions]: https://docs.cloudamqp.com/#regions
+[CloudAMQP API regions]: https://docs.cloudamqp.com/index.html#tag/regions

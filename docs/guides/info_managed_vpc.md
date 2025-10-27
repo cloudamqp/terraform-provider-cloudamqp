@@ -136,4 +136,4 @@ In order to keep the associated VPC the attribute `keep_associated_vpc` must be 
 Run `terraform apply` to update the state file with the correct data, then the instance can be
 deleted.
 
-[CloudAMQP API list vpcs]: https://docs.cloudamqp.com/#list-vpcs
+[CloudAMQP API list vpcs]: https://docs.cloudamqp.com/index.html#tag/vpcs/get/vpcs
