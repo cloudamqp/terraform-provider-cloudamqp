@@ -120,3 +120,10 @@ resource "cloudamqp_integration_metric_prometheus" "cloudwatch_v3" {
     region          = var.cloudwatch_region
   }
 }
+
+resource "cloudamqp_integration_metric_prometheus" "stackdriver_v2" {
+  instance_id = cloudamqp_instance.instance.id
+  stackdriver_v2 {
+    credentials = filebase64("${path.module}/stackdriver-credentials.json")
+  }
+}

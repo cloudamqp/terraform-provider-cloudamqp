@@ -54,5 +54,5 @@ Not possible to import this resource.
 > * All single node upgrades will require some downtime since LavinMQ needs a restart.
 > * Auto delete queues (queues that are marked AD) will be deleted during the update.
 
-[CloudAMQP API available versions]: https://docs.cloudamqp.com/cloudamqp_api.html#get-available-versions
+[CloudAMQP API available versions]: https://docs.cloudamqp.com/instance-api.html#tag/nodes/get/nodes/available-versions
 [v1.32.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.32.0

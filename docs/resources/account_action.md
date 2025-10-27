@@ -118,7 +118,7 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 Not possible to import this resource.
 
-[list-instances]: https://docs.cloudamqp.com/#list-instances
-[list-vpcs]: https://docs.cloudamqp.com/#list-vpcs
-[HTTP API]: https://docs.cloudamqp.com/cloudamqp_api.html
+[list-instances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
+[list-vpcs]: https://docs.cloudamqp.com/index.html#tag/vpcs/get/vpcs
+[HTTP API]: https://docs.cloudamqp.com/instance-api.html
 [CloudAMQP extra plans]: https://www.cloudamqp.com/plans.html#xtr

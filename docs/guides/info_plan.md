@@ -76,7 +76,7 @@ Awesome Ape     | ape     | dedicated
 Heavy Hippo     | hippo   | dedicated
 Loud Lion       | lion    | dedicated
 
-[CloudAMQP API plans]: https://docs.cloudamqp.com/#plans
+[CloudAMQP API plans]: https://docs.cloudamqp.com/index.html#tag/plans
 [CloudAMQP plans]: https://www.cloudamqp.com/plans.html
 [clustering]: https://lavinmq.com/documentation/clustering
 [**LavinMQ**]: https://lavinmq.com/

@@ -1,6 +1,7 @@
 package cloudamqp
 
 import (
+	"encoding/base64"
 	"fmt"
 	"os"
 	"testing"
@@ -849,28 +850,28 @@ func TestAccIntegrationMetricPrometheusCloudwatchV3_Update(t *testing.T) {
 	})
 }
 
-// TestAccIntegrationMetricPrometheusMetricsFilter_Default: Test prometheus integration with default metrics (no metrics_filter specified).
-func TestAccIntegrationMetricPrometheusMetricsFilter_Default(t *testing.T) {
+// TestAccIntegrationMetricPrometheusStackdriverV2_Basic: Add Stackdriver v2 prometheus metric integration and import.
+func TestAccIntegrationMetricPrometheusStackdriverV2_Basic(t *testing.T) {
 	t.Parallel()
 
-	// Set sanitized value for playback and use real value for recording
-	testApiKey := "SPLUNK_TOKEN"
-	if os.Getenv("CLOUDAMQP_RECORD") != "" {
-		testApiKey = os.Getenv("SPLUNK_TOKEN")
+	// Read and encode the credentials file
+	credentialsJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials.json")
+	if err != nil {
+		t.Fatalf("Failed to read credentials file: %v", err)
 	}
+	encodedCredentials := base64.StdEncoding.EncodeToString(credentialsJSON)
 
 	var (
-		fileNames                    = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2"}
-		instanceResourceName         = "cloudamqp_instance.instance"
-		prometheusSplunkResourceName = "cloudamqp_integration_metric_prometheus.splunk_v2"
+		fileNames                         = []string{"instance", "integrations/metrics/integration_metric_prometheus_stackdriver_v2"}
+		instanceResourceName              = "cloudamqp_instance.instance"
+		prometheusStackdriverResourceName = "cloudamqp_integration_metric_prometheus.stackdriver_v2"
 
 		params = map[string]string{
-			"InstanceName":   "TestAccIntegrationMetricPrometheusMetricsFilter_Default",
-			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
-			"InstancePlan":   "bunny-1",
-			"SplunkToken":    testApiKey,
-			"SplunkEndpoint": "https://prd-p-abcde.splunkcloud.com:8088/services/collector",
-			"SplunkTags":     "key=value,key2=value2",
+			"InstanceName":           "TestAccIntegrationMetricPrometheusStackdriverV2_Basic",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"StackdriverCredentials": encodedCredentials,
+			"StackdriverTags":        "env=test,service=rabbitmq",
 		}
 	)
 
@@ -881,14 +882,18 @@ func TestAccIntegrationMetricPrometheusMetricsFilter_Default(t *testing.T) {
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.#", "1"),
-					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.endpoint", params["SplunkEndpoint"]),
-					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "metrics_filter.#", "37"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.#", "1"),
+					// Check that individual credential fields are populated from API response
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.project_id", "test-project"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.client_email", "test@serviceaccount.com"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key_id", "test-key-id"),
+					resource.TestCheckResourceAttrSet(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.tags", params["StackdriverTags"]),
 				),
 			},
 			{
-				ResourceName:      prometheusSplunkResourceName,
-				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusSplunkResourceName),
+				ResourceName:      prometheusStackdriverResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusStackdriverResourceName),
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
@@ -896,28 +901,26 @@ func TestAccIntegrationMetricPrometheusMetricsFilter_Default(t *testing.T) {
 	})
 }
 
-// TestAccIntegrationMetricPrometheusMetricsFilter_Custom: Test prometheus integration with custom metrics_filter.
-func TestAccIntegrationMetricPrometheusMetricsFilter_Custom(t *testing.T) {
-	t.Parallel()
+// TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags: Test Stackdriver v2 prometheus integration without optional tags.
+func TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags(t *testing.T) {
 
-	// Set sanitized value for playback and use real value for recording
-	testApiKey := "SPLUNK_TOKEN"
-	if os.Getenv("CLOUDAMQP_RECORD") != "" {
-		testApiKey = os.Getenv("SPLUNK_TOKEN")
+	// Read and encode the credentials file
+	credentialsJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials_notags.json")
+	if err != nil {
+		t.Fatalf("Failed to read credentials file: %v", err)
 	}
+	encodedCredentials := base64.StdEncoding.EncodeToString(credentialsJSON)
 
 	var (
-		fileNames                    = []string{"instance", "integrations/metrics/integration_metric_prometheus_splunk_v2_metrics_filter"}
-		instanceResourceName         = "cloudamqp_instance.instance"
-		prometheusSplunkResourceName = "cloudamqp_integration_metric_prometheus.splunk_v2_metrics_filter"
+		fileNames                         = []string{"instance", "integrations/metrics/integration_metric_prometheus_stackdriver_v2_notags"}
+		instanceResourceName              = "cloudamqp_instance.instance"
+		prometheusStackdriverResourceName = "cloudamqp_integration_metric_prometheus.stackdriver_v2_notags"
 
 		params = map[string]string{
-			"InstanceName":   "TestAccIntegrationMetricPrometheusMetricsFilter_Custom",
-			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
-			"InstancePlan":   "bunny-1",
-			"SplunkToken":    testApiKey,
-			"SplunkEndpoint": "https://prd-p-abcde.splunkcloud.com:8088/services/collector",
-			"MetricsFilter":  `["rabbitmq_connections", "rabbitmq_detailed_queue_messages", "system_cpu_utilization_ratio"]`,
+			"InstanceName":           "TestAccIntegrationMetricPrometheusStackdriverV2_WithoutTags",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"StackdriverCredentials": encodedCredentials,
 		}
 	)
 
@@ -928,19 +931,84 @@ func TestAccIntegrationMetricPrometheusMetricsFilter_Custom(t *testing.T) {
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.#", "1"),
-					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "splunk_v2.0.endpoint", params["SplunkEndpoint"]),
-					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "metrics_filter.#", "3"),
-					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "metrics_filter.0", "rabbitmq_connections"),
-					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "metrics_filter.1", "rabbitmq_detailed_queue_messages"),
-					resource.TestCheckResourceAttr(prometheusSplunkResourceName, "metrics_filter.2", "system_cpu_utilization_ratio"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.#", "1"),
+					// Check that individual credential fields are populated from API response
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.project_id", "test-project-notags"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.client_email", "test-notags@serviceaccount.com"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key_id", "test-key-id-notags"),
+					resource.TestCheckResourceAttrSet(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key"),
+				),
+			},
+		},
+	})
+}
+
+// TestAccIntegrationMetricPrometheusStackdriverV2_Update: Test updating Stackdriver v2 prometheus integration.
+func TestAccIntegrationMetricPrometheusStackdriverV2_Update(t *testing.T) {
+
+	// Read and encode the credentials files
+	credentialsCreateJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials.json")
+	if err != nil {
+		t.Fatalf("Failed to read credentials file: %v", err)
+	}
+	encodedCredentialsCreate := base64.StdEncoding.EncodeToString(credentialsCreateJSON)
+
+	credentialsUpdateJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials_update.json")
+	if err != nil {
+		t.Fatalf("Failed to read update credentials file: %v", err)
+	}
+	encodedCredentialsUpdate := base64.StdEncoding.EncodeToString(credentialsUpdateJSON)
+
+	var (
+		fileNames                         = []string{"instance", "integrations/metrics/integration_metric_prometheus_stackdriver_v2"}
+		instanceResourceName              = "cloudamqp_instance.instance"
+		prometheusStackdriverResourceName = "cloudamqp_integration_metric_prometheus.stackdriver_v2"
+
+		paramsCreate = map[string]string{
+			"InstanceName":           "TestAccIntegrationMetricPrometheusStackdriverV2_Update",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"StackdriverCredentials": encodedCredentialsCreate,
+			"StackdriverTags":        "env=test,service=rabbitmq",
+		}
+
+		paramsUpdate = map[string]string{
+			"InstanceName":           "TestAccIntegrationMetricPrometheusStackdriverV2_Update",
+			"InstanceID":             fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":           "bunny-1",
+			"StackdriverCredentials": encodedCredentialsUpdate,
+			"StackdriverTags":        "env=production,service=messaging,team=platform",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsCreate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsCreate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.#", "1"),
+					// Check that individual credential fields are populated from API response
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.project_id", "test-project"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.client_email", "test@serviceaccount.com"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key_id", "test-key-id"),
+					resource.TestCheckResourceAttrSet(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.tags", paramsCreate["StackdriverTags"]),
 				),
 			},
 			{
-				ResourceName:      prometheusSplunkResourceName,
-				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusSplunkResourceName),
-				ImportState:       true,
-				ImportStateVerify: true,
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdate),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.#", "1"),
+					// Check that individual credential fields are updated from API response
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.project_id", "updated-project"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.client_email", "updated@serviceaccount.com"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key_id", "updated-key-id"),
+					resource.TestCheckResourceAttrSet(prometheusStackdriverResourceName, "stackdriver_v2.0.private_key"),
+					resource.TestCheckResourceAttr(prometheusStackdriverResourceName, "stackdriver_v2.0.tags", paramsUpdate["StackdriverTags"]),
+				),
 			},
 		},
 	})

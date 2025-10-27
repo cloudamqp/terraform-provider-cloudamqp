@@ -168,5 +168,5 @@ Example steps needed when starting at RabbitMQ version 3.12.2
 | 3.12.13          | 3.13.2                                    | 3.13.2                        |
 | 3.13.2           | -                                         | -                             |
 
-[CloudAMQP API available versions]: https://docs.cloudamqp.com/cloudamqp_api.html#get-available-versions
+[CloudAMQP API available versions]: https://docs.cloudamqp.com/instance-api.html#tag/nodes/get/nodes/available-versions
 [v1.31.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.31.0 
