@@ -1,18 +1,27 @@
 ## 1.38.0 (Unreleased)
 
+NOTES:
+
+* More support for Prometheus metrics integrations
+* Bump github.com/hashicorp/terraform-plugin-framework-validators from 0.18.0 to 0.19.0 ([#396])
+
 FEATURES:
 
 * Integration: Added retention and tags to Cloudwatch logs ([#379])
 * Resource: Added `preferred_az` to `cloudamqp_instance` ([#381])
 * Resource: Added Oauth2 configuration resource ([#385])
-* Integration: Support more Prometheus metrics integrations
+* Integration: More support for Prometheus metrics integrations
   * Cloudwatch ([#398])
   * Dynatrace ([#388])
   * Splunk ([#386])
+  * Stackdriver ([#410])
+* Integration: Add `rabbitmq_dashboard_metrics_format` as option to Datadog prometheus integration ([#413])
+* Integration: Support metrics filter settings for prometheus integrations ([#414])
 
 IMPROVEMENTS:
 
 * VCR-test: Speed up testing by enable parallelism ([#403])
+* Docs: Update CloudAMQP API documentation links ([#415])
 
 BUG FIXES:
 
@@ -28,10 +37,15 @@ BUG FIXES:
 [#385]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/385
 [#386]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/386
 [#388]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/388
+[#396]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/396
 [#398]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/398
 [#401]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/401
 [#402]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/402
 [#403]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/403
+[#410]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/410
+[#413]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/413
+[#414]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/414
+[#415]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/415
 
 ## 1.37.0 (02 Oct, 2025)
 
