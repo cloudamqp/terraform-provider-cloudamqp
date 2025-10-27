@@ -412,8 +412,8 @@ resource "cloudamqp_instance" "bunny_instance" {
 </details>
 
 [CloudAMQP]: https://cloudamqp.com
-[CloudAMQP API]: https://docs.cloudamqp.com/cloudamqp_api.html
-[CloudAMQP API list instances]: https://docs.cloudamqp.com/#list-instances
+[CloudAMQP API]: https://docs.cloudamqp.com/instance-api.html
+[CloudAMQP API list instances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
 [CloudAMQP plans]: https://www.cloudamqp.com/plans.html
 [copy settings]: #copy-settings-to-a-new-dedicated-instance
 [example]: ../guides/info_vpc_existing.md

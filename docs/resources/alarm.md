@@ -181,6 +181,6 @@ If the alarm is deleted it will only be removed from the state file, but will st
 the backend.
 
 [Alarm Type Reference]: #alarm-type-reference
-[CloudAMQP API list alarms]: https://docs.cloudamqp.com/cloudamqp_api.html#list-alarms
+[CloudAMQP API list alarms]: https://docs.cloudamqp.com/instance-api.html#tag/alarms/get/alarms
 [notice alarm]: #notice-alarm
 [v1.29.5]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.29.5
