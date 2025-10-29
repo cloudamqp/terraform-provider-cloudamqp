@@ -84,7 +84,7 @@ provider "aws" {
   secret_key  = var.aws_secret_key
 }
 
-# AWS - retreive instance to get subnet identifier
+# AWS - retrieve instance to get subnet identifier
 data "aws_instance" "aws_instance" {
   provider = aws
 
@@ -180,7 +180,7 @@ provider "aws" {
   secret_key  = var.aws_secret_key
 }
 
-# AWS - retreive instance to get subnet identifier
+# AWS - retrieve instance to get subnet identifier
 data "aws_instance" "aws_instance" {
   provider = aws
 
@@ -258,7 +258,7 @@ All attributes reference are computed
 * `id`      - The identifier for this resource.
 * `status`  - VPC peering status
 
-## Depedency
+## Dependency
 
 ***Before v1.16.0:***
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.

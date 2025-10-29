@@ -125,7 +125,7 @@ All attributes reference are computed
 * `service_name`  - Service name of the PrivateLink used when creating the endpoint from other VPC.
 * `active_zones`  - Covering availability zones used when creating an Endpoint from other VPC.
 
-## Depedency
+## Dependency
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 

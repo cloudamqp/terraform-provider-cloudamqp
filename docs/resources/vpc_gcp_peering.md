@@ -199,7 +199,7 @@ All attributes reference are computed
 * `state_details`       - VPC peering state details
 * `auto_create_routes`  - VPC peering auto created routes
 
-## Depedency
+## Dependency
 
 ***From v1.16.0:***
 This resource depends on CloudAMQP managed VPC identifier, `cloudamqp_vpc.vpc.id` or instance

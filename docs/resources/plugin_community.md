@@ -78,7 +78,7 @@ The following arguments are supported:
 * `description` - The description of the plugin.
 * `require`     - Required version of RabbitMQ.
 
-## Depedency
+## Dependency
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
