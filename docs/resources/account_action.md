@@ -1,11 +1,11 @@
 ---
 layout: "cloudamqp"
-page_title: "CloudAMQP: cloudamqp_account_action"
+page_title: "CloudAMQP: cloudamqp_account_actions"
 description: |-
   Invoke account action
 ---
 
-# cloudamqp_account_action
+# cloudamqp_account_actions
 
 This resource allows you to invoke an account action. Current supported actions are
 
@@ -18,14 +18,14 @@ This resource allows you to invoke an account action. Current supported actions 
 Invoke one of the actions with `terraform apply`
 
 ```hcl
-resource "cloudamqp_account_action" "rotate-password" {
+resource "cloudamqp_account_actions" "rotate-password" {
   instance_id = cloudamqp_instance.instance.id
   action      = "rotate-password"
 } 
 ```
 
 ```hcl
-resource "cloudamqp_account_action" "rotate-apikey" {
+resource "cloudamqp_account_actions" "rotate-apikey" {
   instance_id = cloudamqp_instance.instance.id
   action      = "rotate-apikey"
 } 

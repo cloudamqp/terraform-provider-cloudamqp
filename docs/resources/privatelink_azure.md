@@ -124,7 +124,7 @@ All attributes reference are computed
 * `service_name` - Service name (alias) of the PrivateLink, needed when creating the endpoint.
 * `server_name` - Name of the server having the PrivateLink enabled.
 
-## Depedency
+## Dependency
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 

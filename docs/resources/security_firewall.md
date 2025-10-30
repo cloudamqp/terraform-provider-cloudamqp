@@ -141,7 +141,7 @@ All attributes reference are computed
 
 * `id`  - The identifier for this resource.
 
-## Depedency
+## Dependency
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
