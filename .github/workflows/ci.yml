@@ -13,7 +13,7 @@ jobs:
           # Allow goreleaser to access older tag information.
           fetch-depth: 0
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version-file: .go-version
 
