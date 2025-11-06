@@ -1,3 +1,20 @@
+## 1.38.1 (Unreleased)
+
+IMPROVEMENTS:
+
+* Docs: Fixed typos in documentation ([#417])
+* CI: Avoid parallel test race condition in CI ([#418])
+* Docs: Added missing header to Prometheus metrics integrations page ([#419])
+
+DEPENDENCIES:
+
+* Bump actions/setup-go from 5 to 6 ([#369])
+
+[#369]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/369
+[#417]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/417
+[#418]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/418
+[#419]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/419
+
 ## 1.38.0 (27 Oct, 2025)
 
 NOTES:
