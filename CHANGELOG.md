@@ -26,18 +26,18 @@ FEATURES:
 * Integration: Added retention and tags to Cloudwatch logs ([#379])
 * Resource: Added `preferred_az` to `cloudamqp_instance` ([#381])
 * Resource: Added Oauth2 configuration resource ([#385])
-* Integration: More support for Prometheus metrics integrations
+* Integration: Added more support for Prometheus metrics integrations
   * Cloudwatch ([#398])
   * Dynatrace ([#388])
   * Splunk ([#386])
   * Stackdriver ([#410])
-* Integration: Add `rabbitmq_dashboard_metrics_format` as option to Datadog prometheus integration ([#413])
-* Integration: Support metrics filter settings for prometheus integrations ([#414])
+* Integration: Added `rabbitmq_dashboard_metrics_format` as option to Datadog prometheus integration ([#413])
+* Integration: Added metrics filter settings for prometheus integrations ([#414])
 
 IMPROVEMENTS:
 
 * VCR-test: Speed up testing by enable parallelism ([#403])
-* Docs: Update CloudAMQP API documentation links ([#415])
+* Docs: Updated CloudAMQP API documentation links ([#415])
 
 BUG FIXES:
 
@@ -72,7 +72,7 @@ DEPENDENCIES:
 FEATURES:
 
 * Added new account action to enable VPC feature ([#371])
-* Support Prometheus metrics integrations ([#380])
+* Added support for Prometheus metrics integrations ([#380])
   * Azure monitor
   * Datadog v3
   * New Relic v3
@@ -118,7 +118,7 @@ NOTES:
 
 IMPROVEMENTS:
 
-* Handle deleted resource drift
+* Handled deleted resource drift
   * log/metric integration ([#359])
   * alarm, aws eventbridge, instance, notification, webhook ([#361])
 
@@ -139,7 +139,7 @@ DEPENDENCIES:
 
 BUG FIXES:
 
-* Fix provider schema mismatch ([#349])
+* Fixed provider schema mismatch ([#349])
 
 [#349]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/349
 
@@ -151,7 +151,7 @@ NOTES:
 
 FEATURES:
 
-* Serve the provider through a mux server ([#344])
+* Served the provider through a mux server ([#344])
 * Implemented skeleton of provider in the framework plugin ([#344])
 * Migrated `cloudamqp_integration_aws_eventbridge` towards Terraform plugin framework ([#344])
 * Migrated `cloudamqp_account_actions` towards Terraform plugin framework ([#345])
@@ -170,8 +170,8 @@ DEPENDENCIES:
 
 FEATURES:
 
-* Add new data source `cloudamqp_alarms` to fetch all alarms ([#335])
-* Add new data source `cloudamqp_notifications` to fetch all recipients ([#339])
+* Added new data source `cloudamqp_alarms` to fetch all alarms ([#335])
+* Added new data source `cloudamqp_notifications` to fetch all recipients ([#339])
 
 DEPENDENCIES:
 
@@ -238,8 +238,8 @@ BUG FIXES:
 
 IMPROVEMENTS:
 
-* Enable import of VPC peering resource for GCP ([#308])
-* Enable import of VPC peering resource for AWS ([#309])
+* Enabled import of VPC peering resource for GCP ([#308])
+* Enabled import of VPC peering resource for AWS ([#309])
 
 [#308]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/308
 [#309]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/309
@@ -374,9 +374,9 @@ FEATURES:
 
 IMPROVEMENTS:
 
-* Updated and clean up samples ([#235])
+* Updated and cleaned up samples ([#235])
 * Removed default RMQ version request when version left out ([#237])
-* Handles gone VPC resource ([#238])
+* Handled gone VPC resource ([#238])
 
 [#231]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/231
 [#235]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/235
@@ -395,8 +395,8 @@ NOTES:
 
 FEATURES:
 
-* Copy settings from another instance when creating a new. ([#218])
-* Configurable wait on GCP Peering status. ([#228])
+* Added support for "copy settings" from another instance when creating a new. ([#218])
+* Configured wait on GCP Peering status. ([#228])
 
 [#218]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/218
 [#228]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/228
@@ -410,7 +410,7 @@ NOTES:
 IMPROVEMENTS:
 
 * Cleanup RabbitMQ configuration resource ([#215])
-* Add ForceNew to resources with cloudamqp_instance dependency ([#222])
+* Added ForceNew to resources with cloudamqp_instance dependency ([#222])
 
 BUG FIXES:
 
@@ -428,14 +428,14 @@ NOTES:
 
 FEATURES:
 
-* Add assume role authentication for CloudWatch metrics integration ([#208])
+* Added assume role authentication for CloudWatch metrics integration ([#208])
 * Enable faster instance destroy options in provider configuration ([#209])
 
 IMPROVEMENTS:
 
-* Add missing `Happy Hare` plan to the docs ([#206])
-* Update firewall rules, PrivateLink and VPC Peering documentation ([#207])
-* Allow queue_index_embed_msgs_below to be set to 0 in RabbitMQ configuration.
+* Added missing `Happy Hare` plan to the docs ([#206])
+* Updated firewall rules, PrivateLink and VPC Peering documentation ([#207])
+* Allowed queue_index_embed_msgs_below to be set to 0 in RabbitMQ configuration.
 
 [#206]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/206
 [#207]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/207
@@ -471,7 +471,7 @@ NOTES:
 
 FEATURES:
 
-* Use the API backend to validate plans and regions ([#201])
+* Added support to use the API backend to validate plans and regions ([#201])
 
 IMPROVEMENTS:
 
@@ -502,7 +502,7 @@ FEATURES:
 
 NOTES:
 
-* Fix issues introduced in previous version 1.24.1
+* Fixed issues introduced in previous version 1.24.1
 
 BUG FIXES:
 
@@ -514,7 +514,7 @@ BUG FIXES:
 
 BUG FIXES:
 
-* Convert optional queue/vhost to correct JSON fields for metrics integration
+* Converted optional queue/vhost to correct JSON fields for metrics integration
 
 ## 1.24.0 (Mar 07, 2023)
 
@@ -579,7 +579,7 @@ IMPROVEMENTS:
 
 BUG FIXES:
 
-* Exclude additional parameters (tags, queue_allowlist, vhost_allowlist) from integrations when not used ([#184])
+* Excluded additional parameters (tags, queue_allowlist, vhost_allowlist) from integrations when not used ([#184])
 
 [#184]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/184
 
@@ -635,7 +635,7 @@ NOTES:
 
 BUG FIXES:
 
-* Add additional computed fields to plugins resources ([#170])
+* Added additional computed fields to plugins resources ([#170])
 
 [#170]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/170
 
@@ -644,7 +644,7 @@ BUG FIXES:
 NOTE:
 
 * Updated the API wrapper (go-api) dependecy with newer version (1.9.1).
-* Now support asynchronous request for plugin/community actions. Solve issues when enable multiple plugins.
+* Now supports asynchronous request for plugin/community actions. Solved issues when enabling multiple plugins.
 
 IMPROVEMENTS:
 
@@ -773,11 +773,11 @@ IMPROVEMENTS:
 IMPROVEMENTS:
 
 * Added new attribute, value_calculation, to alarms ([#138])
-* Added support for `CLOUDAMQP_BASEURL` in provider, make testing easier ([#143])
+* Added support for `CLOUDAMQP_BASEURL` in provider, made testing easier ([#143])
 
 BUG FIXES:
 
-* Correct validation for firewall rule attributes ([#141])
+* Corrected validation for firewall rule attributes ([#141])
 
 [#138]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/138
 [#141]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/141
@@ -818,7 +818,7 @@ Note:
 
 IMPROVEMENTS:
 
-* Add `STREAM`, `STREAM_SSL` as supported firewall services ([#128])
+* Added `STREAM`, `STREAM_SSL` as supported firewall services ([#128])
 
 [#128]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/128
 [#129]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/129
@@ -827,8 +827,8 @@ IMPROVEMENTS:
 
 IMPROVEMENTS:
 
-* Add attribute `host_internal` to instance resource ([#127])
-* Make the attribute `host` always return the external hostname ([#127])
+* Added attribute `host_internal` to instance resource ([#127])
+* Made the attribute `host` always return the external hostname ([#127])
 * Set `ForceNew` on `region` in instance resource ([#122]) (**Note**: when forcing a region change, the previous instance will be destroyed and a new one created)
 
 [#127]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/127
@@ -838,7 +838,7 @@ IMPROVEMENTS:
 
 Note:
 
-* Create instance in existing VPC
+* Created instance in existing VPC
 
 FEATURES:
 
@@ -867,7 +867,7 @@ IMPROVEMENTS:
 
 * Updated internal handling of provider version number
 * Updated handling of number of nodes
-* Indirect improve community plugin request that can fail due to backend being busy (go-api v1.5.0)
+* Indirectly improved community plugin request that can fail due to backend being busy (go-api v1.5.0)
 
 BUG FIXES:
 
@@ -875,11 +875,11 @@ BUG FIXES:
 
 ## 1.10.0 (Sep, 20 2021)
 
-Note: Update the API wrapper (go-api) dependency with newer version (1.4.0)
+Note: Updated the API wrapper (go-api) dependency with newer version (1.4.0)
 
 IMPORVEMENTS:
 
-* Indirect improve common request that can fail due to backend being busy.
+* Indirectly improved common request that can fail due to backend being busy.
 
 ## 1.9.4 (Sep, 16 2021)
 
@@ -889,9 +889,9 @@ Note: Re-release 1.9.3 with missing information
 
 IMPROVEMENTS:
 
-* Validate schema attributes when reading response from API calls.
+* Validated schema attributes when reading response from API calls.
 * Optional attributes changed to computed for data sources.
-* Alarm: Populate alarm_id with correct identifier.
+* Alarm: Populated alarm_id with correct identifier.
 * Documentation: Added identifier attribute reference to all resources and data source.
 
 BUG FIXES:
@@ -903,20 +903,20 @@ BUG FIXES:
 
 IMPROVEMENTS:
 
-* Add HTTPS as a supported firewall service
-* Allow MS Teams to be used as recipient type
+* Added HTTPS as a supported firewall service
+* Allowed MS Teams to be used as recipient type
 
 BUG FIXES:
 
 * Import of log intergration, corrected the identifiers needed to fetch integration
 * Import of metrics integration, corrected the identifier needed to fetch integration
-* Display of hostname and internal hostname
+* Displayed hostname and internal hostname correctly
 
 ## 1.9.1 (Feb 5, 2021)
 
 IMPROVEMENTS:
 
-* Validation of plan name before execution
+* Added validation of plan name before execution
 
 ## 1.9.0 (Feb 2, 2021)
 
@@ -945,7 +945,7 @@ IMPROVEMENTS:
 
 NOTES:
 
-* Cleanup of language used, deprecate white-/blacklist
+* Cleaned up language used, deprecated white-/blacklist
 
 IMPROVEMENTS:
 
@@ -955,7 +955,7 @@ IMPROVEMENTS:
 
 IMPROVEMENTS:
 
-* Remove some OS/arch combinations.
+* Removed some OS/arch combinations.
 
 ## 1.8.2 (Nov 12, 2020)
 
@@ -990,8 +990,8 @@ NOTES:
 IMPROVEMENTS:
 
 * README information about where to find instance info
-* Firewall: Handling updates in wrapper API (go-api 1.3.3), waiting on firewall changes.
-* Metrics integrations: Enable contributed Stackdriver functionality.
+* Firewall: Handled updates in wrapper API (go-api 1.3.3), waiting on firewall changes.
+* Metrics integrations: Enabled contributed Stackdriver functionality.
 
 ## 1.7.2 (Jun 15, 2020)
 
@@ -1023,11 +1023,11 @@ IMPROVEMENTS:
 * Added script for provider integration
 * Re-enabled vendor folder
 * Terraform.io website documentation
-* Updated changelog to make it readble for release bot
+* Updated changelog to make it readable for release bot
 * Updated samples with use of variables
 * Double checked data sources and resource for required, optional, computed and sensitive properties.
-* Trigger read resource information when the resource has been updated.
-* Lint: naming convetion
+* Triggered read resource information when the resource has been updated.
+* Lint: naming convention
 * Lint: error checks
 
 BUG FIXES:
@@ -1055,9 +1055,9 @@ FEATURES:
 
 IMPROVEMENTS:
 
-* Validating message type attribute when populating alarm schema
+* Added validation of message type attribute when populating alarm schema
 * Message type key in create and update for alarm
-* Validating attributes when populating instance schema
+* Added validation of attributes when populating instance schema
 
 ## 1.4.1 (Mar 6, 2020)
 
@@ -1114,14 +1114,14 @@ IMPROVEMENTS:
 
 IMPROVEMENTS:
 
-* Expose computed reference of host and vhost for CloudAMQP instances
+* Exposed computed reference of host and vhost for CloudAMQP instances
 
 ## 1.2.1 (Dec 9, 2019)
 
 IMPROVEMENTS:
 
 * Added debug logging through out data sources and resources
-* Validation of identifiers before internal assigning them
+* Added validation of identifiers before internal assigning them
 * Extended release support of cross compile GOOS and GOARCH
 
 ## 1.2.0 (Nov 26, 2019)
@@ -1136,11 +1136,11 @@ FEATURES:
 
 IMPROVEMENTS:
 
-* Restructure and move data source, resource and provider etc. files into cloudamqp sub-folder
-* Upgrade to Terraform version 0.12.9
+* Restructured and moved data source, resource and provider etc. files into cloudamqp sub-folder
+* Upgraded to Terraform version 0.12.9
 * Versioning on compiled provider.
 * Configurable Rabbit MQ version
-* Validation functions (alarm types, notifications types, firewall settings and ports).
+* Added validation of functions (alarm types, notifications types, firewall settings and ports).
 
 ## 1.1.3(Unreleased)
 
@@ -1153,14 +1153,14 @@ IMPROVEMENTS:
 
 IMPROVEMENTS:
 
-* Update of documentation. (Merge pull request [#28](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/28))
+* Updated of documentation. (Merge pull request [#28](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/28))
 * Install procedure for Linux. (Merge pull request [#27](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/27))
 
 ## 1.1.1 (Unreleased)
 
 IMPROVEMENTS:
 
-* Update examples to match Terraform 0.12.* (Merge pull request [#24](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/24))
+* Updated examples to match Terraform 0.12.* (Merge pull request [#24](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/24))
 
 ## 1.1.0 (Oct 8, 2019)
 
@@ -1172,7 +1172,7 @@ FEATURES:
 IMPROVEMENTS:
 
 * Tags on instances
-* Enable Terraform import on resources
+* Enabled Terraform import on resources
 * Cross-compile provider release as make command
 
 ## 1.0.0 (Sep 17, 2019)
@@ -1185,7 +1185,7 @@ IMPROVEMENTS:
 
 * Added tags to instance resource
 * Updated tags type
-* Update go-api branch depedency
+* Updated go-api branch depedency
 
 ## 0.4.1 (Unreleased)
 
@@ -1202,7 +1202,7 @@ FEATURES:
 
 IMPROVEMENTS:
 
-* Update API endpoints
+* Updated API endpoints
 * Documents and examples
 
 ## 0.3.2 (Unreleased)
@@ -1218,7 +1218,7 @@ IMPROVEMENTS
 
 * Additional .gitignore updates. (Merge pull request [#8](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/8))
 * Lemur example for newer users
-* Update and extending documentation.
+* Updated and extended documentation.
 
 ## 0.3.0 (Unreleased)
 
@@ -1228,7 +1228,7 @@ FEATURES:
 
 IMPROVEMENTS:
 
-* Update dependencies
+* Updated dependencies
 * Generic API for resources
 
 ## 0.2.0 (Unreleased)
@@ -1236,7 +1236,7 @@ IMPROVEMENTS:
 IMPROVEMENTS:
 
 * Instance update and delete
-* Support for vpc_subnet, nodes and rmq_versions
+* Added support for vpc_subnet, nodes and rmq_versions
 * Url and apikey set as sensitive
 
 ## 0.1.0 (Unreleased)
