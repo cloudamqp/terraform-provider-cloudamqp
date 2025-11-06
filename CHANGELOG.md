@@ -20,7 +20,6 @@ DEPENDENCIES:
 NOTES:
 
 * More support for Prometheus metrics integrations
-* Bump github.com/hashicorp/terraform-plugin-framework-validators from 0.18.0 to 0.19.0 ([#396])
 
 FEATURES:
 
@@ -49,6 +48,10 @@ BUG FIXES:
   * `cloudamqp_security_firewall`
   * `cloudamqp_vpc_connect`
 
+DEPENDENCIES:
+
+* Bump github.com/hashicorp/terraform-plugin-framework-validators from 0.18.0 to 0.19.0 ([#396])
+
 [#379]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/379
 [#381]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/381
 [#385]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/385
@@ -65,12 +68,6 @@ BUG FIXES:
 [#415]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/415
 
 ## 1.37.0 (02 Oct, 2025)
-
-NOTES:
-
-* Bump github.com/hashicorp/terraform-plugin-mux from 0.20.0 to 0.21.0 ([#373])
-* Bump github.com/hashicorp/terraform-plugin-sdk/v2 from 2.37.0 to 2.38.1 ([#375], [#378])
-* Bump github.com/hashicorp/terraform-plugin-framework from 1.15.1 to 1.16.1 ([#376], [#382])
 
 FEATURES:
 
@@ -90,6 +87,12 @@ IMPROVEMENTS:
 * Handled resource drift `cloudamqp_rabbitmq_configuration` ([#366])
 * Default values drift ([#372])
 * Updated test cases for VPC ([#384])
+
+DEPENDENCIES:
+
+* Bump github.com/hashicorp/terraform-plugin-mux from 0.20.0 to 0.21.0 ([#373])
+* Bump github.com/hashicorp/terraform-plugin-sdk/v2 from 2.37.0 to 2.38.1 ([#375], [#378])
+* Bump github.com/hashicorp/terraform-plugin-framework from 1.15.1 to 1.16.1 ([#376], [#382])
 
 [#362]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/362
 [#363]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/363
@@ -112,15 +115,18 @@ IMPROVEMENTS:
 NOTES:
 
 * Change of underlying maintenance for LavinMQ ([#351])
-* Bump github.com/hashicorp/terraform-plugin-framework from 1.15.0 to 1.15.1 ([#355])
-* Bump actions/checkout from 4 to 5 ([#357])
-* Bump goreleaser/goreleaser-action from 6.3.0 to 6.4.0 ([#358])
 
 IMPROVEMENTS:
 
 * Handle deleted resource drift
   * log/metric integration ([#359])
   * alarm, aws eventbridge, instance, notification, webhook ([#361])
+
+DEPENDENCIES:
+
+* Bump github.com/hashicorp/terraform-plugin-framework from 1.15.0 to 1.15.1 ([#355])
+* Bump actions/checkout from 4 to 5 ([#357])
+* Bump goreleaser/goreleaser-action from 6.3.0 to 6.4.0 ([#358])
 
 [#351]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/351
 [#355]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/355
@@ -142,7 +148,6 @@ BUG FIXES:
 NOTES:
 
 * Initial migration to Terraform Plugin Framework
-* Bump github.com/cloudflare/circl from 1.6.0 to 1.6.1 ([#342])
 
 FEATURES:
 
@@ -152,6 +157,10 @@ FEATURES:
 * Migrated `cloudamqp_account_actions` towards Terraform plugin framework ([#345])
 * Migrated `cloudamqp_rabbitmq_configuration` towards Terraform plugin framework ([#346])
 
+DEPENDENCIES:
+
+* Bump github.com/cloudflare/circl from 1.6.0 to 1.6.1 ([#342])
+
 [#342]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/342
 [#344]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/344
 [#345]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/345
@@ -159,14 +168,14 @@ FEATURES:
 
 ## 1.34.0 (May 2, 2025)
 
-NOTES:
-
-* Bump golang.org/x/net from 0.36.0 to 0.38.0 ([#338])
-
 FEATURES:
 
 * Add new data source `cloudamqp_alarms` to fetch all alarms ([#335])
 * Add new data source `cloudamqp_notifications` to fetch all recipients ([#339])
+
+DEPENDENCIES:
+
+* Bump golang.org/x/net from 0.36.0 to 0.38.0 ([#338])
 
 [#335]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/335
 [#338]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/338
@@ -176,10 +185,6 @@ FEATURES:
 
 NOTES:
 
-* Bump Go version to 1.24
-* Bump golang.org/x/net from 0.34.0 to 0.36.0 ([#325])
-* Bump crazy-max/ghaction-import-gpg from 6.2.0 to 6.3.0 ([#332])
-* Bump goreleaser/goreleaser-action from 6.2.1 to 6.3.0 ([#333])
 * Changed logging from legacy log to tflog
 * Documentation updates
 
@@ -194,6 +199,13 @@ IMPROVEMENTS:
 * Updated firewall destroy behavior ([#330])
 * Docs: Updated extra disk information for Azure ([#331])
 * Docs: Updated information about LavinMQ ([#334])
+
+DEPENDENCIES:
+
+* Bump Go version to 1.24
+* Bump golang.org/x/net from 0.34.0 to 0.36.0 ([#325])
+* Bump crazy-max/ghaction-import-gpg from 6.2.0 to 6.3.0 ([#332])
+* Bump goreleaser/goreleaser-action from 6.2.1 to 6.3.0 ([#333])
 
 [#325]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/325
 [#326]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/326
@@ -508,14 +520,17 @@ BUG FIXES:
 
 NOTES:
 
-* Bump github.com/hashicorp/go-getter from 1.6.1 to 1.7.0 ([#187])
-* Bump golang.org/x/net from 0.0.0-20210326060303-6b1517762897 to 0.7.0 ([#190])
-* Bump golang.org/x/crypto from 0.0.0-20210921155107-089bfa567519 to 0.1.0 ([#191])
 * Updated the API wrapper (go-api) dependecy with newer version (1.11.0)
 
 FEATURES:
 
 * Added support for AWS EventBridge integration ([#192])
+
+DEPENDENCIES:
+
+* Bump github.com/hashicorp/go-getter from 1.6.1 to 1.7.0 ([#187])
+* Bump golang.org/x/net from 0.0.0-20210326060303-6b1517762897 to 0.7.0 ([#190])
+* Bump golang.org/x/crypto from 0.0.0-20210921155107-089bfa567519 to 0.1.0 ([#191])
 
 [#187]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/187
 [#190]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/190
