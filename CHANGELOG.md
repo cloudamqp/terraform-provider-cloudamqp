@@ -1,4 +1,4 @@
-## 1.38.1 (Unreleased)
+## 1.38.1 (06 Nov, 2025)
 
 IMPROVEMENTS:
 
