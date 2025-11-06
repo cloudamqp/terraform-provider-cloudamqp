@@ -1,3 +1,10 @@
+---
+layout: "cloudamqp"
+page_title: "CloudAMQP: cloudamqp_integration_metric_prometheus"
+description: |-
+  Creates and manages third party prometheus metrics integration for a CloudAMQP instance.
+---
+
 # cloudamqp_integration_metric_prometheus
 
 This resource allows you to create and manage Prometheus-compatible metric integrations for CloudAMQP instances. Currently supported integrations include New Relic v3, Datadog v3, Azure Monitor, Splunk v2, Dynatrace, CloudWatch v3, and Stackdriver v2.
