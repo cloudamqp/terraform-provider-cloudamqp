@@ -161,81 +161,113 @@ FEATURES:
 
 NOTES:
 
-* Bump golang.org/x/net from 0.36.0 to 0.38.0 ([#338](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/338))
+* Bump golang.org/x/net from 0.36.0 to 0.38.0 ([#338])
 
 FEATURES:
 
-* Add new data source `cloudamqp_alarms` to fetch all alarms ([#335](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/335))
-* Add new data source `cloudamqp_notifications` to fetch all recipients ([#339](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/339))
+* Add new data source `cloudamqp_alarms` to fetch all alarms ([#335])
+* Add new data source `cloudamqp_notifications` to fetch all recipients ([#339])
+
+[#335]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/335
+[#338]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/338
+[#339]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/339
 
 ## 1.33.0 (Apr 7, 2025)
 
 NOTES:
 
 * Bump Go version to 1.24
-* Bump golang.org/x/net from 0.34.0 to 0.36.0 ([#325](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/325))
-* Bump crazy-max/ghaction-import-gpg from 6.2.0 to 6.3.0 ([#332](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/332))
-* Bump goreleaser/goreleaser-action from 6.2.1 to 6.3.0 ([#333](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/333))
+* Bump golang.org/x/net from 0.34.0 to 0.36.0 ([#325])
+* Bump crazy-max/ghaction-import-gpg from 6.2.0 to 6.3.0 ([#332])
+* Bump goreleaser/goreleaser-action from 6.2.1 to 6.3.0 ([#333])
 * Changed logging from legacy log to tflog
 * Documentation updates
 
 FEATURES:
 
-* Added support to managing maintenance window ([#326](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/326))
+* Added support to managing maintenance window ([#326])
 
 IMPROVEMENTS:
 
-* Removed legacy log and use tflog package ([#329](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/329))
-* Docs: LavinMQ supports MQTT and MQTTS ([#327](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/327))
-* Updated firewall destroy behavior ([#330](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/330))
-* Docs: Updated extra disk information for Azure ([#331](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/331))
-* Docs: Updated information about LavinMQ ([#334](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/334))
+* Removed legacy log and use tflog package ([#329])
+* Docs: LavinMQ supports MQTT and MQTTS ([#327])
+* Updated firewall destroy behavior ([#330])
+* Docs: Updated extra disk information for Azure ([#331])
+* Docs: Updated information about LavinMQ ([#334])
+
+[#325]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/325
+[#326]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/326
+[#327]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/327
+[#329]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/329
+[#330]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/330
+[#331]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/331
+[#332]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/332
+[#333]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/333
+[#334]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/334
 
 ## 1.32.3 (Mar 3, 2025)
 
 IMPROVEMENTS:
 
-* Docs: Updated VPC connect resource information when used for Azure ([#311](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/311))
-* Docs: Added guide page about Marketplace migration ([#312](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/312))
-* Added include auto delete queues to metric integration ([323](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/323))
+* Docs: Updated VPC connect resource information when used for Azure ([#311])
+* Docs: Added guide page about Marketplace migration ([#312])
+* Added include auto delete queues to metric integration ([#323])
 
 BUG FIXES:
 
-* Fixed throwing error when external VPC identifier cannot be found. ([#310](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/310))
+* Fixed throwing error when external VPC identifier cannot be found. ([#310])
+
+[#310]: https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/310
+[#311]: https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/311
+[#312]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/312
+[#323]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/323
 
 ## 1.32.2 (Dec 20, 2024)
 
 IMPROVEMENTS:
 
-* Enable import of VPC peering resource for GCP ([#308](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/308))
-* Enable import of VPC peering resource for AWS ([#309](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/309))
+* Enable import of VPC peering resource for GCP ([#308])
+* Enable import of VPC peering resource for AWS ([#309])
+
+[#308]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/308
+[#309]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/309
 
 ## 1.32.1 (Oct 28, 2024)
 
 BUG FIXES:
 
-* Fixed incorrect schemas in plugin data sources ([#300](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/300))
+* Fixed incorrect schemas in plugin data sources ([#300])
+
+[#300]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/300
 
 ## 1.32.0 (Sep 4, 2024)
 
 FEATURES:
 
-* Added support to upgrade LavinMQ instances ([#296](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/296))
+* Added support to upgrade LavinMQ instances ([#296])
+
+[#296]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/296
 
 ## 1.31.0 (Aug 19, 2024)
 
 FEATURES:
 
-* Added support to specify RabbitMQ version when upgrading ([#295](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/295))
-* Added support to use data source when upgrading RabbitMQ version ([#295](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/295))
+* Added support to specify RabbitMQ version when upgrading ([#295])
+* Added support to use data source when upgrading RabbitMQ version ([#295])
+
+[#295]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/295
 
 ## 1.30.1 (Jul 30, 2024)
 
 IMPROVEMENTS:
 
-* Docs: Added notification example for Slack ([#287](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/287))
-* Added internal hostname information to nodes data source ([#289](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/289))
-* Added availability zone information to nodes data source ([#290](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/291))
+* Docs: Added notification example for Slack ([#287])
+* Added internal hostname information to nodes data source ([#289])
+* Added availability zone information to nodes data source ([#290])
+
+[#287]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/287
+[#289]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/289
+[#290]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/291
 
 ## 1.30.0 (Jun 10, 2024)
 
@@ -247,49 +279,69 @@ NOTES:
 
 FEATURES:
 
-* Added Go VCR basic resource testing that extends acceptance test with stored fixtures ([#257](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/257))
-* Updated Terraform Plugin SDK to V2 ([#261](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/261))
+* Added Go VCR basic resource testing that extends acceptance test with stored fixtures ([#257])
+* Updated Terraform Plugin SDK to V2 ([#261])
 
 IMRPOVEMENTS:
 
-* Added support for updating webhook resource ([#268](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/268))
-* Added configurable retries for webhook resource ([#268](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/268))
-* Updated integration resource docs for Datadog tags ([#277](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/277))
-* Imported Go-API client library with history ([#282](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/282))
-* Posted Go-API import modifications ([#284](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/284))
+* Added support for updating webhook resource ([#268])
+* Added configurable retries for webhook resource ([#268])
+* Updated integration resource docs for Datadog tags ([#277])
+* Imported Go-API client library with history ([#282])
+* Posted Go-API import modifications ([#284])
+
+[#257]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/257
+[#261]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/261
+[#268]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/268
+[#277]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/277
+[#282]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/282
+[#284]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/284
 
 ## 1.29.5 (Apr 04, 2024)
 
 IMPROVEMENTS:
 
-* Fixed link to instance regions guide from instances page ([#263](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/263))
-* Added information on how to use Message Broker HTTP API ([#264](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/264))
-* Added handling of "creating/deleting" notice alarm ([#265](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/265))
+* Fixed link to instance regions guide from instances page ([#263])
+* Added information on how to use Message Broker HTTP API ([#264])
+* Added handling of "creating/deleting" notice alarm ([#265])
+
+[#263]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/263
+[#264]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/264
+[#265]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/265
 
 ## 1.29.4 (Feb 15, 2024)
 
 IMPROVEMENTS:
 
-* Added optional responders argument for OpsGenie recipient ([#258](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/258))
+* Added optional responders argument for OpsGenie recipient ([#258])
+
+[#258]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/258
 
 ## 1.29.3 (Jan 26, 2024)
 
 IMPROVEMENTS:
 
-* Added support for Azure monitor log integration ([#254](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/254))
-* Added support for signl4 alarms recipient ([#255](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/255))
+* Added support for Azure monitor log integration ([#254])
+* Added support for signl4 alarms recipient ([#255])
+
+[#254]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/254
+[#255]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/255
 
 ## 1.29.2 (Jan 17, 2024)
 
 IMPROVEMENTS:
 
-* Added support for the Coralogix log integration ([#253](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/253))
+* Added support for the Coralogix log integration ([#253])
+
+[#253]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/253
 
 ## 1.29.1 (Dec 21, 2023)
 
 BUG FIXES:
 
-* Fixed PrivateLink/Private Service Connect import ([#250](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/250))
+* Fixed PrivateLink/Private Service Connect import ([#250])
+
+[#250]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/250
 
 ## 1.29.0 (Dec 18, 2023)
 
@@ -299,20 +351,29 @@ NOTES:
 
 FEATURES:
 
-* Added resource that invoke account actions. ([#231](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/231))
-* Added new generic resource for VPC Connect ([#240](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/240))
-    - Enables GCP Private Service Connect
-    - Handles AWS PrivateLink
-    - Handles Azure PrivateLink
-* Added configurable retries for plugin resources ([#241](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/241))
-* Added configurable retry when reading PrivateLink information ([#246](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/246))
-* Added configurable retry for GCP VPC peering ([#247](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/247))
+* Added resource that invoke account actions. ([#231])
+* Added new generic resource for VPC Connect ([#240])
+  * Enables GCP Private Service Connect
+  * Handles AWS PrivateLink
+  * Handles Azure PrivateLink
+* Added configurable retries for plugin resources ([#241])
+* Added configurable retry when reading PrivateLink information ([#246])
+* Added configurable retry for GCP VPC peering ([#247])
 
 IMPROVEMENTS:
 
-* Updated and clean up samples ([#235](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/235))
-* Removed default RMQ version request when version left out ([#237](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/237))
-* Handles gone VPC resource ([#238](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/238))
+* Updated and clean up samples ([#235])
+* Removed default RMQ version request when version left out ([#237])
+* Handles gone VPC resource ([#238])
+
+[#231]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/231
+[#235]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/235
+[#237]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/237
+[#238]: https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/238
+[#240]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/240
+[#241]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/241
+[#246]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/246
+[#247]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/247
 
 ## 1.28.0 (Sep 27, 2023)
 
@@ -322,8 +383,11 @@ NOTES:
 
 FEATURES:
 
-* Copy settings from another instance when creating a new. ([#218](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/218))
-* Configurable wait on GCP Peering status. ([#228](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/228))
+* Copy settings from another instance when creating a new. ([#218])
+* Configurable wait on GCP Peering status. ([#228])
+
+[#218]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/218
+[#228]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/228
 
 ## 1.27.1 (Sep 08, 2023)
 
@@ -333,12 +397,16 @@ NOTES:
 
 IMPROVEMENTS:
 
-* Cleanup RabbitMQ configuration resource ([#215](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/215))
-* Add ForceNew to resources with cloudamqp_instance dependency ([#222](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/222))
+* Cleanup RabbitMQ configuration resource ([#215])
+* Add ForceNew to resources with cloudamqp_instance dependency ([#222])
 
 BUG FIXES:
 
-* Indirect handle managed required plugins failing to be destroyed. ([#227](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/227))
+* Indirect handle managed required plugins failing to be destroyed. ([#227])
+
+[#215]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/215
+[#222]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/222
+[#227]: https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/227
 
 ## 1.27.0 (Jun 12, 2023)
 
@@ -348,14 +416,19 @@ NOTES:
 
 FEATURES:
 
-* Add assume role authentication for CloudWatch metrics integration ([#208](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/208))
-* Enable faster instance destroy options in provider configuration ([#209](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/209))
+* Add assume role authentication for CloudWatch metrics integration ([#208])
+* Enable faster instance destroy options in provider configuration ([#209])
 
 IMPROVEMENTS:
 
-* Add missing `Happy Hare` plan to the docs ([#206](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/206))
-* Update firewall rules, PrivateLink and VPC Peering documentation ([#207](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/207))
+* Add missing `Happy Hare` plan to the docs ([#206])
+* Update firewall rules, PrivateLink and VPC Peering documentation ([#207])
 * Allow queue_index_embed_msgs_below to be set to 0 in RabbitMQ configuration.
+
+[#206]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/206
+[#207]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/207
+[#208]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/208
+[#209]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/209
 
 ## 1.26.2 (May 12, 2023)
 
@@ -386,15 +459,19 @@ NOTES:
 
 FEATURES:
 
-* Use the API backend to validate plans and regions ([#201](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/201))
+* Use the API backend to validate plans and regions ([#201])
 
 IMPROVEMENTS:
 
-* Added support to configure cluster_partition_handling ([#200](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/200))
+* Added support to configure cluster_partition_handling ([#200])
 
 BUG FIXES:
 
-* Added missing options attribute for notification data source ([#199](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/199))
+* Added missing options attribute for notification data source ([#199])
+
+[#199]: https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/199
+[#200]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/200
+[#201]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/201
 
 ## 1.25.0 (Apr 03, 2023)
 
@@ -405,7 +482,9 @@ NOTES:
 
 FEATURES:
 
-* Resize disk with for more platforms and using new optional argument allow_downtime ([#194](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/194))
+* Resize disk with for more platforms and using new optional argument allow_downtime ([#194])
+
+[#194]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/194
 
 ## 1.24.2 (Mar 30, 2023)
 
@@ -415,7 +494,9 @@ NOTES:
 
 BUG FIXES:
 
-* Stackdriver optional arguments assignments ([#198](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/198))
+* Stackdriver optional arguments assignments ([#198])
+
+[#198]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/198
 
 ## 1.24.1 (Mar 14, 2023)
 
@@ -427,14 +508,19 @@ BUG FIXES:
 
 NOTES:
 
-* Bump github.com/hashicorp/go-getter from 1.6.1 to 1.7.0 ([#187](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/187))
-* Bump golang.org/x/net from 0.0.0-20210326060303-6b1517762897 to 0.7.0 ([#190](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/190))
-* Bump golang.org/x/crypto from 0.0.0-20210921155107-089bfa567519 to 0.1.0 ([#191](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/191))
+* Bump github.com/hashicorp/go-getter from 1.6.1 to 1.7.0 ([#187])
+* Bump golang.org/x/net from 0.0.0-20210326060303-6b1517762897 to 0.7.0 ([#190])
+* Bump golang.org/x/crypto from 0.0.0-20210921155107-089bfa567519 to 0.1.0 ([#191])
 * Updated the API wrapper (go-api) dependecy with newer version (1.11.0)
 
 FEATURES:
 
-* Added support for AWS EventBridge integration ([192](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/192))
+* Added support for AWS EventBridge integration ([#192])
+
+[#187]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/187
+[#190]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/190
+[#191]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/191
+[#192]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/192
 
 ## 1.23.0 (Jan 26, 2023)
 
@@ -444,7 +530,9 @@ NOTES:
 
 IMPROVEMENTS:
 
-* Added LavinMQ lemming ([#182](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/182))
+* Added LavinMQ lemming ([#182])
+
+[#182]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/182
 
 ## 1.22.1 (Jan 18, 2023)
 
@@ -460,7 +548,9 @@ NOTES:
 
 IMPROVEMENTS:
 
-* Optional options key-value pair argument for alarm notification/recipient ([#185](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/185))
+* Optional options key-value pair argument for alarm notification/recipient ([#185])
+
+[#185]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/185
 
 ## 1.21.0 (Dec 21, 2022)
 
@@ -470,11 +560,13 @@ NOTES:
 
 IMPROVEMENTS:
 
-* Updated Stackdriver integrations to use raw Google Service Account key credentials ([#184](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/184))
+* Updated Stackdriver integrations to use raw Google Service Account key credentials ([#184])
 
 BUG FIXES:
 
-* Exclude additional parameters (tags, queue_allowlist, vhost_allowlist) from integrations when not used ([#184](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/184))
+* Exclude additional parameters (tags, queue_allowlist, vhost_allowlist) from integrations when not used ([#184])
+
+[#184]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/184
 
 ## 1.20.2 (Dec 14, 2022)
 
@@ -484,7 +576,9 @@ NOTES:
 
 IMPROVEMENTS:
 
-* Added configurable sleep and timeout for firewall configuration ([#183](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/183))
+* Added configurable sleep and timeout for firewall configuration ([#183])
+
+[#183]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/183
 
 ## 1.20.1 (Dec 07, 2022)
 
@@ -506,12 +600,16 @@ NOTES:
 
 FEATURES:
 
-* Added support for PrivateLink for AWS and Azure ([#173](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/173))
+* Added support for PrivateLink for AWS and Azure ([#173])
 
 BUG FIXES:
 
-* Updated minimum value of heartbeat to 0 ([#176](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/176))
-* Missing required splunk integration parameter ([#177](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/177))
+* Updated minimum value of heartbeat to 0 ([#176])
+* Missing required splunk integration parameter ([#177])
+
+[#173]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/173
+[#176]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/176
+[#177]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/177
 
 ## 1.19.3 (Oct 07, 2022)
 
@@ -522,7 +620,9 @@ NOTES:
 
 BUG FIXES:
 
-* Add additional computed fields to plugins resources ([#170](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/170))
+* Add additional computed fields to plugins resources ([#170])
+
+[#170]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/170
 
 ## 1.19.2 (Sep 14, 2022)
 
@@ -533,9 +633,12 @@ NOTE:
 
 IMPROVEMENTS:
 
-* Added CIDR address validation ([#168](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/168))
+* Added CIDR address validation ([#168])
 * Updated workflow for updating RabbitMQ configuration
-([#166](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/166))
+([#166])
+
+[#166]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/166
+[#168]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/168
 
 ## 1.19.1 (Aug 04, 2022)
 
@@ -553,11 +656,13 @@ NOTE:
 
 FEATURES:
 
-* Added support for resize disk ([#162](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/162))
+* Added support for resize disk ([#162])
 
 IMPROVEMENTS:
 
-* Updated nodes data source with original and additional disk sizes ([#162](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/162))
+* Updated nodes data source with original and additional disk sizes ([#162])
+
+[#162]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/162
 
 ## 1.18.0 (Jun 08, 2022)
 
@@ -568,12 +673,14 @@ NOTE:
 
 FEATURES:
 
-* Added support for updating RabbitMQ config ([#150](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/150))
-* Added support for invoking node actions ([#150](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/150))
+* Added support for updating RabbitMQ config ([#150])
+* Added support for invoking node actions ([#150])
 
 IMPROVEMENTS:
 
 * Updated wrong information in documentation for VPC peering.
+
+[#150]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/150
 
 ## 1.17.2 (May 27, 2022)
 
@@ -596,22 +703,25 @@ NOTE:
 
 FEATURES:
 
-* Added support to upgrade to latest possible versions for RabbitMQ and Erlang ([#151](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/151))
+* Added support to upgrade to latest possible versions for RabbitMQ and Erlang ([#151])
 
 IMPROVEMENTS:
 
-* Added configurable timeout/sleep for accept/remove VPC peering. ([#153](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/153))
+* Added configurable timeout/sleep for accept/remove VPC peering. ([#153])
+
+[#151]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/151
+[#153]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/153
 
 ## 1.16.0 (May 09, 2022)
 
 NOTE:
 
 * Updated the API wrapper (go-api) dependency with newer version (1.6.0)
-* Introducing managed VPC resource to decouple VPC from instance. ([#148](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/148))
+* Introducing managed VPC resource to decouple VPC from instance. ([#148])
 * To avoid breaking changes
-    * It's still possible to create VPC from instance with vpc_subnet, but is discouraged.
-    * Default behaviour for instance is still to delete associated VPC.
-    * To keep managed VPC, set attribute *keep_associated_vpc = true* on each instance resource. This will override the default behaviour when deleting an instance.
+  * It's still possible to create VPC from instance with vpc_subnet, but is discouraged.
+  * Default behaviour for instance is still to delete associated VPC.
+  * To keep managed VPC, set attribute *keep_associated_vpc = true* on each instance resource. This will override the default behaviour when deleting an instance.
 
 FEATURES:
 
@@ -633,22 +743,30 @@ DEPRECATED:
 * resource/vpc_gcp_peering, intance_id use vpc_id instead
 * resource/vpc_peering, intance_id use vpc_id instead
 
+[#148]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/148
+
 ## 1.15.3 (Apr 06, 2022)
 
 IMPROVEMENTS:
 
-* Added support for Scalyr log integrations ([#147](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/147))
+* Added support for Scalyr log integrations ([#147])
+
+[#147]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/147
 
 ## 1.15.2 (Mar 29, 2022)
 
 IMPROVEMENTS:
 
-* Added new attribute, value_calculation, to alarms ([#138](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/138))
-* Added support for `CLOUDAMQP_BASEURL` in provider, make testing easier ([#143](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/143))
+* Added new attribute, value_calculation, to alarms ([#138])
+* Added support for `CLOUDAMQP_BASEURL` in provider, make testing easier ([#143])
 
 BUG FIXES:
 
-* Correct validation for firewall rule attributes ([#141](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/141))
+* Correct validation for firewall rule attributes ([#141])
+
+[#138]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/138
+[#141]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/141
+[#143]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/143
 
 ## 1.15.1 (Dec 21, 2021)
 
@@ -671,18 +789,24 @@ NOTE:
 
 FEATURES:
 
-* Added VPC information for Google Cloud Platform ([#131](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/131))
-* Added VPC peer configuration for Google Cloud Platform ([#74](https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/74))
+* Added VPC information for Google Cloud Platform ([#131])
+* Added VPC peer configuration for Google Cloud Platform ([#74])
+
+[#74]: https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/74
+[#131]: https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/131
 
 ## 1.14.0 (Dec 3, 2021)
 
 Note:
 
-* Updated the API wrapper (go-api) dependency with newer version (1.5.2) ([#129](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/129))
+* Updated the API wrapper (go-api) dependency with newer version (1.5.2) ([#129])
 
 IMPROVEMENTS:
 
-* Add `STREAM`, `STREAM_SSL` as supported firewall services ([#128](https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/128))
+* Add `STREAM`, `STREAM_SSL` as supported firewall services ([#128])
+
+[#128]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/128
+[#129]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/129
 
 ## 1.13.0 (Nov 15, 2021)
 
