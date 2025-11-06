@@ -2,7 +2,7 @@
 layout: "cloudamqp"
 page_title: "CloudAMQP: cloudamqp_integration_metric_prometheus"
 description: |-
-  Creates and manages third party prometheus metrics integration for a CloudAMQP instance.
+  Creates and manages third party Prometheus metrics integrations for a CloudAMQP instance.
 ---
 
 # cloudamqp_integration_metric_prometheus
@@ -268,14 +268,14 @@ import {
 
 Or use Terraform CLI:
 
-```
-$ terraform import cloudamqp_integration_metric_prometheus.newrelic_v3 <integration_id>,<instance_id>
-$ terraform import cloudamqp_integration_metric_prometheus.datadog_v3 <integration_id>,<instance_id>
-$ terraform import cloudamqp_integration_metric_prometheus.azure_monitor <integration_id>,<instance_id>
-$ terraform import cloudamqp_integration_metric_prometheus.splunk_v2 <integration_id>,<instance_id>
-$ terraform import cloudamqp_integration_metric_prometheus.dynatrace <integration_id>,<instance_id>
-$ terraform import cloudamqp_integration_metric_prometheus.cloudwatch_v3 <integration_id>,<instance_id>
-$ terraform import cloudamqp_integration_metric_prometheus.stackdriver_v2 <integration_id>,<instance_id>
+```sh
+terraform import cloudamqp_integration_metric_prometheus.newrelic_v3 <integration_id>,<instance_id>
+terraform import cloudamqp_integration_metric_prometheus.datadog_v3 <integration_id>,<instance_id>
+terraform import cloudamqp_integration_metric_prometheus.azure_monitor <integration_id>,<instance_id>
+terraform import cloudamqp_integration_metric_prometheus.splunk_v2 <integration_id>,<instance_id>
+terraform import cloudamqp_integration_metric_prometheus.dynatrace <integration_id>,<instance_id>
+terraform import cloudamqp_integration_metric_prometheus.cloudwatch_v3 <integration_id>,<instance_id>
+terraform import cloudamqp_integration_metric_prometheus.stackdriver_v2 <integration_id>,<instance_id>
 ```
 
 ## Dependency
