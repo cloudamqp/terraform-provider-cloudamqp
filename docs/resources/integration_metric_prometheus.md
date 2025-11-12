@@ -19,6 +19,7 @@ resource "cloudamqp_integration_metric_prometheus" "newrelic_v3" {
 
   newrelic_v3 {
     api_key = var.newrelic_api_key
+    region  = "us"
     tags    = "key=value,key2=value2"
   }
 }
@@ -128,6 +129,7 @@ Exactly one of the following integration blocks must be specified:
 The following arguments are supported:
 
 * `api_key` - (Required) New Relic API key for authentication.
+* `region` - (Required) New Relic region code. Valid values: `eu`, `us`.
 * `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
 
 ### datadog_v3
