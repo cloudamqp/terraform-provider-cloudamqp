@@ -94,8 +94,22 @@ func (api *API) requestVpcGcpPeeringWithRetry(ctx context.Context, path string, 
 	case 200:
 		return attempt, data, nil
 	case 400:
-		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
+		if strings.Contains(failed["error"].(string), "Timeout talking to backend") {
 			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
+				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
+			attempt++
+			time.Sleep(time.Duration(sleep) * time.Second)
+			return api.requestVpcGcpPeeringWithRetry(ctx, path, params, waitOnStatus, attempt, sleep,
+				timeout)
+		} else if strings.Contains(failed["error"].(string), "firewall rules that have not finished configuring yet") {
+			tflog.Debug(ctx, fmt.Sprintf("firewall rules not finished configuring yet, will try again, "+
+				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
+			attempt++
+			time.Sleep(time.Duration(sleep) * time.Second)
+			return api.requestVpcGcpPeeringWithRetry(ctx, path, params, waitOnStatus, attempt, sleep,
+				timeout)
+		} else if strings.Contains(failed["error"].(string), "peering operation in progress") {
+			tflog.Debug(ctx, fmt.Sprintf("another peering operation in progress, will try again, "+
 				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
 			attempt++
 			time.Sleep(time.Duration(sleep) * time.Second)
@@ -159,25 +173,45 @@ func (api *API) UpdateVpcGcpPeering(ctx context.Context, instanceID int, sleep, 
 }
 
 // RemoveVpcGcpPeering: removes a VPC peering from an instance.
-func (api *API) RemoveVpcGcpPeering(ctx context.Context, instanceID int, peerID string) error {
-	var (
-		failed map[string]any
-		path   = fmt.Sprintf("/api/instances/%d/vpc-peering/%s", instanceID, peerID)
-	)
+func (api *API) RemoveVpcGcpPeering(ctx context.Context, instanceID int, peerID string, sleep,
+	timeout int) error {
 
-	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
+	path := fmt.Sprintf("/api/instances/%d/vpc-peering/%s", instanceID, peerID)
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d ", path, sleep, timeout))
+	return api.removeVpcGcpPeeringWithRetry(ctx, path, 1, sleep, timeout)
+}
+
+// removeVpcGcpPeeringWithRetry: remove the VPC peering from the API with retry logic
+func (api *API) removeVpcGcpPeeringWithRetry(ctx context.Context, path string, attempt, sleep,
+	timeout int) error {
+
+	var failed map[string]any
 	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
 	if err != nil {
 		return err
+	} else if attempt*sleep > timeout {
+		return fmt.Errorf("timeout reached after %d seconds, while reading VPC peering", timeout)
 	}
 
 	switch response.StatusCode {
 	case 204:
 		return nil
-	default:
-		return fmt.Errorf("failed to remove VPC peering, status=%d message=%s",
-			response.StatusCode, failed)
+	case 400:
+		if strings.Contains(failed["error"].(string), "Timeout talking to backend") {
+			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
+				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
+			attempt++
+			time.Sleep(time.Duration(sleep) * time.Second)
+			return api.removeVpcGcpPeeringWithRetry(ctx, path, attempt, sleep, timeout)
+		} else if strings.Contains(failed["error"].(string), "firewall rules that have not finished configuring yet") {
+			tflog.Debug(ctx, fmt.Sprintf("firewall rules not finished configuring yet, will try again, "+
+				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
+			attempt++
+			time.Sleep(time.Duration(sleep) * time.Second)
+			return api.removeVpcGcpPeeringWithRetry(ctx, path, attempt, sleep, timeout)
+		}
 	}
+	return fmt.Errorf("failed to remove VPC peering, status=%d message=%s", response.StatusCode, failed)
 }
 
 // ReadVpcGcpInfo: reads the VPC info from the API
@@ -185,7 +219,7 @@ func (api *API) ReadVpcGcpInfo(ctx context.Context, instanceID, sleep, timeout i
 	map[string]any, error) {
 
 	path := fmt.Sprintf("/api/instances/%d/vpc-peering/info", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s, sleep=%d, timeout=%d ", path))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s, sleep=%d, timeout=%d ", path, sleep, timeout))
 	return api.readVpcGcpInfoWithRetry(ctx, path, 1, sleep, timeout)
 }
 
