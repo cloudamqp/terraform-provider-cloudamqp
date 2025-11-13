@@ -1,4 +1,4 @@
-## 1.38.2 (Unreleased)
+## 1.38.2 (13 Nov, 2025)
 
 BUG FIXES:
 
