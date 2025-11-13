@@ -244,16 +244,18 @@ func resourceDeleteVpcGcpPeering(ctx context.Context, d *schema.ResourceData, me
 		api        = meta.(*api.API)
 		instanceID = d.Get("instance_id").(int)
 		vpcID      = d.Get("vpc_id").(string)
+		sleep      = d.Get("sleep").(int)
+		timeout    = d.Get("timeout").(int)
 	)
 
 	if instanceID == 0 && vpcID == "" {
 		return diag.Errorf("you need to specify either instance_id or vpc_id")
 	} else if instanceID != 0 {
-		if err := api.RemoveVpcGcpPeering(ctx, instanceID, d.Id()); err != nil {
+		if err := api.RemoveVpcGcpPeering(ctx, instanceID, d.Id(), sleep, timeout); err != nil {
 			return diag.FromErr(err)
 		}
 	} else if vpcID != "" {
-		if err := api.RemoveVpcGcpPeeringWithVpcId(ctx, vpcID, d.Id()); err != nil {
+		if err := api.RemoveVpcGcpPeeringWithVpcId(ctx, vpcID, d.Id(), sleep, timeout); err != nil {
 			return diag.FromErr(err)
 		}
 	} else {
