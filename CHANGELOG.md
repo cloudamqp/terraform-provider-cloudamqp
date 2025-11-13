@@ -1,3 +1,11 @@
+## 1.38.2 (Unreleased)
+
+BUG FIXES:
+
+* VPC-peering: Handle more 400 responses with retry (GCE)
+
+[#423]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/423
+
 ## 1.38.1 (06 Nov, 2025)
 
 IMPROVEMENTS:
