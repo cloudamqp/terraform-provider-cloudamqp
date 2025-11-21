@@ -2,7 +2,7 @@
 
 BUG FIXES:
 
-* VPC-peering: Handle more 400 responses with retry (GCE)
+* VPC-peering: Handled more 400 responses with retry (GCE) ([#423])
 
 [#423]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/423
 
