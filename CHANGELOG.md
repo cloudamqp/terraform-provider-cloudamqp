@@ -1,3 +1,27 @@
+## 1.38.3 (Unreleased)
+
+NOTES:
+
+* Changelog: Cleaned up and make more consistent ([#421])
+
+IMPROVEMENTS:
+
+* Integration: Added region argument to New Relic V3 metrics integration ([#422])
+* VCR-test: Renamed fixture filenames containing `::` characters ([#429])
+
+DEPENDENCIES:
+
+* Bump github.com/hashicorp/terraform-plugin-log from 0.9.0 to 0.10.0 ([#424])
+* Bump golang.org/x/crypto from 0.42.0 to 0.45.0 ([#426])
+* Bump actions/checkout from 5 to 6 ([#427])
+
+[#421]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/421
+[#422]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/422
+[#424]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/424
+[#426]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/426
+[#427]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/427
+[#429]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/429
+
 ## 1.38.2 (13 Nov, 2025)
 
 BUG FIXES:
