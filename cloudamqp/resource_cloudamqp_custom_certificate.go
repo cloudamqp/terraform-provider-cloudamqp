@@ -55,21 +55,21 @@ func (r *customCertificateResource) Schema(ctx context.Context, req resource.Sch
 			"ca": schema.StringAttribute{
 				Required:    true,
 				WriteOnly:   true,
-				Description: "Certificate Authority certificate",
+				Description: "The PEM-encoded Certificate Authority (CA).",
 			},
 			"cert": schema.StringAttribute{
 				Required:    true,
 				WriteOnly:   true,
-				Description: "Certificate",
+				Description: "The PEM-encoded certificate.",
 			},
 			"private_key": schema.StringAttribute{
 				Required:    true,
 				WriteOnly:   true,
-				Description: "Private key",
+				Description: "The PEM-encoded private key.",
 			},
 			"sni_hosts": schema.StringAttribute{
 				Required:    true,
-				Description: "SNI hosts",
+				Description: "A hostname (Server Name Indication) that this certificate applies to.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
@@ -78,7 +78,7 @@ func (r *customCertificateResource) Schema(ctx context.Context, req resource.Sch
 				Optional:    true,
 				Computed:    true,
 				Default:     int64default.StaticInt64(1),
-				Description: "Version to trigger force new (default: 1)",
+				Description: " An argument to trigger force new (default: 1)",
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.UseStateForUnknown(),
 					int64planmodifier.RequiresReplace(),
