@@ -103,6 +103,7 @@ func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resou
 	return []func() resource.Resource{
 		NewAccountActionsResource,
 		NewAwsEventBridgeResource,
+		NewCustomCertificateResource,
 		NewIntegrationLogResource,
 		NewIntegrationMetricResource,
 		NewRabbitMqConfigurationResource,
