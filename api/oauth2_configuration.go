@@ -9,11 +9,11 @@ import (
 	job "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/job"
 )
 
-func getPath(instanceID int) string {
+func getPath(instanceID int64) string {
 	return fmt.Sprintf("/api/instances/%d/oauth2-configurations", instanceID)
 }
 
-func (api *API) ReadOAuth2Configuration(ctx context.Context, instanceID int, sleep time.Duration) (*model.OAuth2ConfigResponse, error) {
+func (api *API) ReadOAuth2Configuration(ctx context.Context, instanceID int64, sleep time.Duration) (*model.OAuth2ConfigResponse, error) {
 	var (
 		data   model.OAuth2ConfigResponse
 		failed map[string]any
@@ -38,7 +38,7 @@ func (api *API) ReadOAuth2Configuration(ctx context.Context, instanceID int, sle
 	return &data, nil
 }
 
-func (api *API) CreateOAuth2Configuration(ctx context.Context, instanceID int, sleep time.Duration, params model.OAuth2ConfigRequest) (job.JobCreationResponse, error) {
+func (api *API) CreateOAuth2Configuration(ctx context.Context, instanceID int64, sleep time.Duration, params model.OAuth2ConfigRequest) (job.JobCreationResponse, error) {
 
 	var (
 		data   job.JobCreationResponse
@@ -60,7 +60,7 @@ func (api *API) CreateOAuth2Configuration(ctx context.Context, instanceID int, s
 	return data, nil
 }
 
-func (api *API) UpdateOAuth2Configuration(ctx context.Context, instanceID int, sleep time.Duration, params model.OAuth2ConfigRequest) (job.JobCreationResponse, error) {
+func (api *API) UpdateOAuth2Configuration(ctx context.Context, instanceID int64, sleep time.Duration, params model.OAuth2ConfigRequest) (job.JobCreationResponse, error) {
 	var (
 		data   job.JobCreationResponse
 		failed map[string]any
@@ -81,7 +81,7 @@ func (api *API) UpdateOAuth2Configuration(ctx context.Context, instanceID int, s
 	return data, nil
 }
 
-func (api *API) DeleteOAuth2Configuration(ctx context.Context, instanceID int, sleep time.Duration) (job.JobCreationResponse, error) {
+func (api *API) DeleteOAuth2Configuration(ctx context.Context, instanceID int64, sleep time.Duration) (job.JobCreationResponse, error) {
 	var (
 		data   job.JobCreationResponse
 		failed map[string]any
