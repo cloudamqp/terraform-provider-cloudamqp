@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"time"
 
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -14,20 +15,15 @@ func (api *API) SetMaintenance(ctx context.Context, instanceID int, data model.M
 		path   = fmt.Sprintf("/api/instances/%d/maintenance/settings", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
-
-	response, err := api.sling.New().Post(path).BodyJSON(data).Receive(nil, &failed)
-	if err != nil {
-		return err
-	}
-
-	switch response.StatusCode {
-	case 200:
-		return nil
-	default:
-		return fmt.Errorf("failed to update maintenance window, status: %d, message: %s",
-			response.StatusCode, failed)
-	}
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%v", path, data))
+	return api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(data), retryRequest{
+		functionName: "SetMaintenance",
+		resourceName: "maintenance window",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 }
 
 func (api *API) ReadMaintenance(ctx context.Context, instanceID int) (*model.Maintenance, error) {
@@ -37,22 +33,23 @@ func (api *API) ReadMaintenance(ctx context.Context, instanceID int) (*model.Mai
 		path   = fmt.Sprintf("/api/instances/%d/maintenance/settings", instanceID)
 	)
 
-	response, err := api.sling.New().Get(path).Receive(&data, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
+	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+		functionName: "ReadMaintenance",
+		resourceName: "maintenance window",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to read maintenance window: %w", err)
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
-
-	switch response.StatusCode {
-	case 200:
-		return &data, nil
-	case 404:
-		tflog.Warn(ctx, "Maintenance settings not found")
+	// Handle resource drift (404/410 returns nil from callWithRetry)
+	if data.PreferredDay == "" && data.PreferredTime == "" {
 		return nil, nil
-	default:
-		return nil,
-			fmt.Errorf("read maintenance settings failed, status: %d, message: %s",
-				response.StatusCode, failed)
 	}
+
+	return &data, nil
 }
