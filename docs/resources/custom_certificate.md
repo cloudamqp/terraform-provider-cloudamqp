@@ -75,12 +75,18 @@ resource "cloudamqp_custom_certificate" "cert" {
 
 The following arguments are supported:
 
-* `instance_id` - (Required/ForceNew) The CloudAMQP instance ID.
+* `instance_id` - (Required/ForceNew) The CloudAMQP instance identifier.
 * `ca` - (Required/WriteOnly) The PEM-encoded Certificate Authority (CA).
 * `cert` - (Required/WriteOnly) The PEM-encoded server certificate.
 * `private_key` - (Required/WriteOnly) The PEM-encoded private key corresponding to the certificate.
-* `sni_hosts` - (Required/ForceNew) A hostname or comma-separated list of hostnames (Server Name Indication) that this certificate applies to. Supports wildcards (e.g., `*.example.com`).
+* `sni_hosts` - (Required/ForceNew) A hostname (Server Name Indication) that this certificate applies to.
 * `version` - (Optional/Computed/ForceNew) An argument to trigger force new (default: 1).
+
+## Attributes Reference
+
+All attributes reference are computed
+
+* `id`  - The identifier for this resource.
 
 ## Dependency
 
