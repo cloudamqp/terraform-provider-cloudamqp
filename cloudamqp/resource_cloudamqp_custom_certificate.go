@@ -172,6 +172,12 @@ func (r *customCertificateResource) Delete(ctx context.Context, req resource.Del
 		return
 	}
 
+	// Resource drift: instance or resource not found, trigger re-creation
+	if jobResponse == nil {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+
 	_, err = r.client.PollForJobCompleted(timeoutCtx, instanceID, *jobResponse.ID, 10*time.Second)
 	if err != nil {
 		resp.Diagnostics.AddError("Error polling for custom certificate deletion", err.Error())
