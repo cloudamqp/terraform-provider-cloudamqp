@@ -30,6 +30,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Basic(t *testing.T) {
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
 			"NewRelicApiKey": testApiKey,
+			"NewRelicRegion": "us",
 			"NewRelicTags":   "key=value,key2=value2",
 		}
 	)
@@ -42,6 +43,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Basic(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(prometheusNewRelicResourceName, "newrelic_v3.#", "1"),
+					resource.TestCheckResourceAttr(prometheusNewRelicResourceName, "newrelic_v3.0.region", params["NewRelicRegion"]),
 					resource.TestCheckResourceAttr(prometheusNewRelicResourceName, "newrelic_v3.0.tags", params["NewRelicTags"]),
 				),
 			},
@@ -75,6 +77,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags(t *testing.T) {
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
 			"NewRelicApiKey": testApiKey,
+			"NewRelicRegion": "eu",
 		}
 	)
 
@@ -86,6 +89,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
 					resource.TestCheckResourceAttr(prometheusNewRelicResourceName, "newrelic_v3.#", "1"),
+					resource.TestCheckResourceAttr(prometheusNewRelicResourceName, "newrelic_v3.0.region", params["NewRelicRegion"]),
 					resource.TestCheckResourceAttr(prometheusNewRelicResourceName, "newrelic_v3.0.tags", ""),
 				),
 			},
@@ -119,6 +123,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Update(t *testing.T) {
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
 			"NewRelicApiKey": testApiKey,
+			"NewRelicRegion": "us",
 			"NewRelicTags":   "key=value,key2=value2",
 		}
 
@@ -127,6 +132,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Update(t *testing.T) {
 			"InstanceID":     fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":   "bunny-1",
 			"NewRelicApiKey": testApiKey,
+			"NewRelicRegion": "eu",
 			"NewRelicTags":   "key=value2,key2=value3",
 		}
 	)
@@ -138,6 +144,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Update(t *testing.T) {
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsCreate),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsCreate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusNewRelicResourceName, "newrelic_v3.0.region", paramsCreate["NewRelicRegion"]),
 					resource.TestCheckResourceAttr(prometheusNewRelicResourceName, "newrelic_v3.0.tags", paramsCreate["NewRelicTags"]),
 				),
 			},
@@ -145,6 +152,7 @@ func TestAccIntegrationMetricPrometheusNewRelicV3_Update(t *testing.T) {
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdate),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", paramsUpdate["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusNewRelicResourceName, "newrelic_v3.0.region", paramsUpdate["NewRelicRegion"]),
 					resource.TestCheckResourceAttr(prometheusNewRelicResourceName, "newrelic_v3.0.tags", paramsUpdate["NewRelicTags"]),
 				),
 			},

@@ -8,7 +8,7 @@ import (
 	job "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/job"
 )
 
-func (api *API) PollForJobCompleted(ctx context.Context, instanceID int, jobID string, sleep time.Duration) (job.JobResponse, error) {
+func (api *API) PollForJobCompleted(ctx context.Context, instanceID int64, jobID string, sleep time.Duration) (job.JobResponse, error) {
 	const interval = 5 * time.Second
 
 	_, ok := ctx.Deadline()
@@ -42,7 +42,7 @@ func (api *API) PollForJobCompleted(ctx context.Context, instanceID int, jobID s
 	}
 }
 
-func (api *API) ReadJob(ctx context.Context, instanceID int, jobID string, sleep time.Duration) (job.JobResponse, error) {
+func (api *API) ReadJob(ctx context.Context, instanceID int64, jobID string, sleep time.Duration) (job.JobResponse, error) {
 	path := fmt.Sprintf("/api/instances/%d/jobs/%s", instanceID, jobID)
 	var (
 		data   job.JobResponse

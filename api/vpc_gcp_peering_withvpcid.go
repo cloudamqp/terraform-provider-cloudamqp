@@ -50,25 +50,11 @@ func (api *API) UpdateVpcGcpPeeringWithVpcId(ctx context.Context, vpcID string, 
 }
 
 // RemoveVpcGcpPeeringWithVpcId: removes the VPC peering from the API
-func (api *API) RemoveVpcGcpPeeringWithVpcId(ctx context.Context, vpcID, peerID string) error {
-	var (
-		failed map[string]any
-		path   = fmt.Sprintf("/api/vpcs/%s/vpc-peering/%s", vpcID, peerID)
-	)
+func (api *API) RemoveVpcGcpPeeringWithVpcId(ctx context.Context, vpcID, peerID string, sleep, timeout int) error {
 
-	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
-	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
-	if err != nil {
-		return err
-	}
-
-	switch response.StatusCode {
-	case 204:
-		return nil
-	default:
-		return fmt.Errorf("failed to remove VPC peering, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	path := fmt.Sprintf("/api/vpcs/%s/vpc-peering/%s", vpcID, peerID)
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d ", path, sleep, timeout))
+	return api.removeVpcGcpPeeringWithRetry(ctx, path, 1, sleep, timeout)
 }
 
 // ReadVpcGcpInfoWithVpcId: reads the VPC info from the API

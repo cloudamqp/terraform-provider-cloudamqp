@@ -52,6 +52,12 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 							Required:  true,
 							Sensitive: true,
 						},
+						"region": {
+							Type:         schema.TypeString,
+							Required:     true,
+							Description:  "New Relic region; eu or us",
+							ValidateFunc: validation.StringInSlice([]string{"eu", "us"}, true),
+						},
 						"tags": {
 							Type:        schema.TypeString,
 							Optional:    true,
@@ -267,6 +273,9 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		intName = "newrelic_v3"
 		newrelicConfig := newrelicList[0].(map[string]any)
 		params["api_key"] = newrelicConfig["api_key"]
+		if region := newrelicConfig["region"]; region != nil && region != "" {
+			params["region"] = region
+		}
 		if tags := newrelicConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}
@@ -432,6 +441,9 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		if _, ok := data["api_key"]; ok {
 			newRelicV3[0]["api_key"] = data["api_key"]
 		}
+		if region, ok := data["region"]; ok {
+			newRelicV3[0]["region"] = region
+		}
 		if tags, ok := data["tags"]; ok {
 			newRelicV3[0]["tags"] = tags
 		}
@@ -544,6 +556,9 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 	if newrelicList := d.Get("newrelic_v3").(*schema.Set).List(); len(newrelicList) > 0 {
 		newrelicConfig := newrelicList[0].(map[string]any)
 		params["api_key"] = newrelicConfig["api_key"]
+		if region := newrelicConfig["region"]; region != nil && region != "" {
+			params["region"] = region
+		}
 		if tags := newrelicConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}

@@ -207,7 +207,7 @@ func (r *oauth2ConfigurationResource) Create(ctx context.Context, req resource.C
 		return
 	}
 
-	instanceID := int(plan.InstanceID.ValueInt64())
+	instanceID := plan.InstanceID.ValueInt64()
 	sleep, timeout := extractSleepAndTimeout(&plan)
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
@@ -244,7 +244,7 @@ func (r *oauth2ConfigurationResource) Read(ctx context.Context, req resource.Rea
 		return
 	}
 
-	instanceID := int(state.InstanceID.ValueInt64())
+	instanceID := state.InstanceID.ValueInt64()
 	sleep, timeout := extractSleepAndTimeout(&state)
 
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
@@ -282,7 +282,7 @@ func (r *oauth2ConfigurationResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	instanceID := int(plan.InstanceID.ValueInt64())
+	instanceID := plan.InstanceID.ValueInt64()
 
 	preferredUsernameClaims := make([]string, 0)
 	plan.PreferredUsernameClaims.ElementsAs(ctx, &preferredUsernameClaims, false)
@@ -344,7 +344,7 @@ func (r *oauth2ConfigurationResource) Delete(ctx context.Context, req resource.D
 		return
 	}
 
-	instanceID := int(state.InstanceID.ValueInt64())
+	instanceID := state.InstanceID.ValueInt64()
 	sleep, timeout := extractSleepAndTimeout(&state)
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()

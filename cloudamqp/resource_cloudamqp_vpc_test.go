@@ -63,9 +63,10 @@ func TestAccVpc_DifferentRegions(t *testing.T) {
 	}
 
 	for _, region := range regions {
-		t.Run(region, func(t *testing.T) {
+		replacedRegion := strings.ReplaceAll(region, "::", "_")
+		t.Run(replacedRegion, func(t *testing.T) {
 			params := map[string]string{
-				"VpcName":   "TestAccVpc_Region_" + strings.ReplaceAll(region, "::", "_"),
+				"VpcName":   "TestAccVpc_Region_" + replacedRegion,
 				"VpcRegion": region,
 				"VpcSubnet": "10.56.72.0/24",
 				"VpcTags":   `["Terraform", "Region-Test"]`,
