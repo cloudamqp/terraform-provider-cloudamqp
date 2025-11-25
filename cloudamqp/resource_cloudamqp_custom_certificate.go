@@ -30,6 +30,7 @@ func NewCustomCertificateResource() resource.Resource {
 }
 
 type customCertificateResourceModel struct {
+	ID         types.Int64  `tfsdk:"id"`
 	InstanceID types.Int64  `tfsdk:"instance_id"`
 	CA         types.String `tfsdk:"ca"`
 	Cert       types.String `tfsdk:"cert"`
@@ -45,9 +46,16 @@ func (r *customCertificateResource) Metadata(ctx context.Context, req resource.M
 func (r *customCertificateResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
+			"id": schema.Int64Attribute{
+				Computed:    true,
+				Description: "The identifier for this resource",
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.UseStateForUnknown(),
+				},
+			},
 			"instance_id": schema.Int64Attribute{
 				Required:    true,
-				Description: "Instance identifier",
+				Description: "The CloudAMQP instance identifier.",
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplace(),
 				},
@@ -135,6 +143,7 @@ func (r *customCertificateResource) Create(ctx context.Context, req resource.Cre
 		return
 	}
 
+	plan.ID = types.Int64Value(instanceID)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
