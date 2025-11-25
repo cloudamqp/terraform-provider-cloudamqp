@@ -60,7 +60,7 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 		}
 		tflog.Debug(ctx, fmt.Sprintf("custom retry logic, will try again, attempt=%d", request.attempt))
 		// Intentionally fall through to retry logic below
-	case 200, 201, 204:
+	case 200, 201, 202, 204:
 		return nil
 	case 400, 409:
 		if errStr, ok := (*request.failed)["error"].(string); ok && errStr == "Timeout talking to backend" {

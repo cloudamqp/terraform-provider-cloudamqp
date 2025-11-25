@@ -224,5 +224,8 @@ func sanitizeSensistiveData(body string) string {
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("SCALYR_TOKEN"), "SCALYR_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("SPLUNK_TOKEN"), "SPLUNK_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("SPLUNK_TOKEN_2"), "SPLUNK_TOKEN_2")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_CERTIFICATE_CA"), "TEST_CERTIFICATE_CA")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_CERTIFICATE_CERT"), "TEST_CERTIFICATE_CERT")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_CERTIFICATE_PRIVATE_KEY"), "TEST_CERTIFICATE_PRIVATE_KEY")
 	return body
 }
