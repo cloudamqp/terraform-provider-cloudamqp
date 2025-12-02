@@ -1,3 +1,15 @@
+## 1.39.0 (Unreleased)
+
+NOTES:
+
+* Support added for custom certificate, "Bring your own certificate"
+
+FEATURES:
+
+* Resource: Added `cloudamqp_custom_certificate` resource ([#430])
+
+[#430]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/430
+
 ## 1.38.3 (21 Nov, 2025)
 
 NOTES:
