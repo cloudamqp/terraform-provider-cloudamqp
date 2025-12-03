@@ -29,7 +29,7 @@ interactions:
         trailer: {}
         content_length: 8216
         uncompressed: false
-        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"turtle","price":0,"backend":"postgresql","shared":true},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"ducky","price":0,"backend":"kafka","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"hedgehog","price":5,"backend":"mosquitto","shared":true},{"name":"spider","price":5,"backend":"postgresql","shared":true},{"name":"cat","price":10,"backend":"postgresql","shared":true},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"koala","price":19,"backend":"mosquitto","shared":false},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"butterfly","price":49,"backend":"postgresql","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"addons_2-1","price":79,"backend":"addons","shared":false},{"name":"dedicated_2-1","price":95,"backend":"kafka","shared":false},{"name":"butterfly-follower","price":98,"backend":"postgresql","shared":false},{"name":"mouse","price":99,"backend":"kafka","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"leopard","price":99,"backend":"mosquitto","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"mouse-1","price":99,"backend":"kafka","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"addons_4-1","price":158,"backend":"addons","shared":false},{"name":"dedicated_4-1","price":165,"backend":"kafka","shared":false},{"name":"bat-1","price":175,"backend":"kafka","shared":false},{"name":"hippo-follower","price":198,"backend":"postgresql","shared":false},{"name":"elephant","price":199,"backend":"postgresql","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"puffin-5","price":245,"backend":"lavinmq","shared":false},{"name":"dedicated_2-3","price":285,"backend":"kafka","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"mouse-3","price":297,"backend":"kafka","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"pug","price":299,"backend":"mosquitto","shared":false},{"name":"elephant-follower","price":398,"backend":"postgresql","shared":false},{"name":"pigeon","price":399,"backend":"postgresql","shared":false},{"name":"mouse-5","price":495,"backend":"kafka","shared":false},{"name":"dedicated_4-3","price":495,"backend":"kafka","shared":false},{"name":"penguin-5","price":495,"backend":"lavinmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"bat","price":499,"backend":"kafka","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"bat-3","price":525,"backend":"kafka","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"mouse-7","price":693,"backend":"kafka","shared":false},{"name":"dolphin","price":749,"backend":"postgresql","shared":false},{"name":"pigeon-follower","price":798,"backend":"postgresql","shared":false},{"name":"bat-5","price":875,"backend":"kafka","shared":false},{"name":"dedicated_8-3","price":885,"backend":"kafka","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"lynx-5","price":995,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"fox","price":999,"backend":"kafka","shared":false},{"name":"fox-3","price":1005,"backend":"kafka","shared":false},{"name":"dedicated_8-4","price":1180,"backend":"kafka","shared":false},{"name":"bat-7","price":1225,"backend":"kafka","shared":false},{"name":"dedicated_16-3","price":1335,"backend":"kafka","shared":false},{"name":"rat","price":1399,"backend":"postgresql","shared":false},{"name":"dedicated_8-5","price":1475,"backend":"kafka","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"dolphin-follower","price":1498,"backend":"postgresql","shared":false},{"name":"fox-5","price":1675,"backend":"kafka","shared":false},{"name":"dedicated_8-6","price":1770,"backend":"kafka","shared":false},{"name":"dedicated_16-4","price":1780,"backend":"kafka","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"dedicated_8-7","price":2065,"backend":"kafka","shared":false},{"name":"dedicated_16-5","price":2225,"backend":"kafka","shared":false},{"name":"fox-7","price":2345,"backend":"kafka","shared":false},{"name":"dedicated_8-8","price":2360,"backend":"kafka","shared":false},{"name":"dedicated_32-3","price":2385,"backend":"kafka","shared":false},{"name":"wolverine-5","price":2495,"backend":"lavinmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-9","price":2655,"backend":"kafka","shared":false},{"name":"dedicated_16-6","price":2670,"backend":"kafka","shared":false},{"name":"rat-follower","price":2798,"backend":"postgresql","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"dedicated_16-7","price":3115,"backend":"kafka","shared":false},{"name":"dedicated_32-4","price":3180,"backend":"kafka","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"dedicated_16-8","price":3560,"backend":"kafka","shared":false},{"name":"dedicated_32-5","price":3975,"backend":"kafka","shared":false},{"name":"dedicated_16-9","price":4005,"backend":"kafka","shared":false},{"name":"dedicated_64-3","price":4185,"backend":"kafka","shared":false},{"name":"dedicated_32-6","price":4770,"backend":"kafka","shared":false},{"name":"reindeer-5","price":4995,"backend":"lavinmq","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"lion-7","price":5250,"backend":"kafka","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-7","price":5565,"backend":"kafka","shared":false},{"name":"dedicated_64-4","price":5580,"backend":"kafka","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"dedicated_32-8","price":6360,"backend":"kafka","shared":false},{"name":"dedicated_64-5","price":6975,"backend":"kafka","shared":false},{"name":"dedicated_32-9","price":7155,"backend":"kafka","shared":false},{"name":"dedicated_64-6","price":8370,"backend":"kafka","shared":false},{"name":"penguin-7","price":8400,"backend":"kafka","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"dedicated_64-7","price":9765,"backend":"kafka","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"bear-5","price":9995,"backend":"lavinmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"dedicated_64-8","price":11160,"backend":"kafka","shared":false},{"name":"dedicated_64-9","price":12555,"backend":"kafka","shared":false},{"name":"orca-5","price":14995,"backend":"lavinmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        body: '[{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"turtle","price":0,"backend":"postgresql","shared":true},{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"ducky","price":0,"backend":"kafka","shared":true},{"name":"spider","price":5,"backend":"postgresql","shared":true},{"name":"hedgehog","price":5,"backend":"mosquitto","shared":true},{"name":"cat","price":10,"backend":"postgresql","shared":true},{"name":"koala","price":19,"backend":"mosquitto","shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"butterfly","price":49,"backend":"postgresql","shared":false},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"addons_2-1","price":79,"backend":"addons","shared":false},{"name":"dedicated_2-1","price":95,"backend":"kafka","shared":false},{"name":"butterfly-follower","price":98,"backend":"postgresql","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"mouse-1","price":99,"backend":"kafka","shared":false},{"name":"leopard","price":99,"backend":"mosquitto","shared":false},{"name":"mouse","price":99,"backend":"kafka","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"addons_4-1","price":158,"backend":"addons","shared":false},{"name":"dedicated_4-1","price":165,"backend":"kafka","shared":false},{"name":"bat-1","price":175,"backend":"kafka","shared":false},{"name":"hippo-follower","price":198,"backend":"postgresql","shared":false},{"name":"elephant","price":199,"backend":"postgresql","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"puffin-5","price":245,"backend":"lavinmq","shared":false},{"name":"dedicated_2-3","price":285,"backend":"kafka","shared":false},{"name":"mouse-3","price":297,"backend":"kafka","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"pug","price":299,"backend":"mosquitto","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"elephant-follower","price":398,"backend":"postgresql","shared":false},{"name":"pigeon","price":399,"backend":"postgresql","shared":false},{"name":"penguin-5","price":495,"backend":"lavinmq","shared":false},{"name":"mouse-5","price":495,"backend":"kafka","shared":false},{"name":"dedicated_4-3","price":495,"backend":"kafka","shared":false},{"name":"bat","price":499,"backend":"kafka","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"bat-3","price":525,"backend":"kafka","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"mouse-7","price":693,"backend":"kafka","shared":false},{"name":"dolphin","price":749,"backend":"postgresql","shared":false},{"name":"pigeon-follower","price":798,"backend":"postgresql","shared":false},{"name":"bat-5","price":875,"backend":"kafka","shared":false},{"name":"dedicated_8-3","price":885,"backend":"kafka","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"lynx-5","price":995,"backend":"lavinmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"fox","price":999,"backend":"kafka","shared":false},{"name":"fox-3","price":1005,"backend":"kafka","shared":false},{"name":"dedicated_8-4","price":1180,"backend":"kafka","shared":false},{"name":"bat-7","price":1225,"backend":"kafka","shared":false},{"name":"dedicated_16-3","price":1335,"backend":"kafka","shared":false},{"name":"rat","price":1399,"backend":"postgresql","shared":false},{"name":"dedicated_8-5","price":1475,"backend":"kafka","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"dolphin-follower","price":1498,"backend":"postgresql","shared":false},{"name":"fox-5","price":1675,"backend":"kafka","shared":false},{"name":"dedicated_8-6","price":1770,"backend":"kafka","shared":false},{"name":"dedicated_16-4","price":1780,"backend":"kafka","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-7","price":2065,"backend":"kafka","shared":false},{"name":"dedicated_16-5","price":2225,"backend":"kafka","shared":false},{"name":"fox-7","price":2345,"backend":"kafka","shared":false},{"name":"dedicated_8-8","price":2360,"backend":"kafka","shared":false},{"name":"dedicated_32-3","price":2385,"backend":"kafka","shared":false},{"name":"wolverine-5","price":2495,"backend":"lavinmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-9","price":2655,"backend":"kafka","shared":false},{"name":"dedicated_16-6","price":2670,"backend":"kafka","shared":false},{"name":"rat-follower","price":2798,"backend":"postgresql","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"dedicated_16-7","price":3115,"backend":"kafka","shared":false},{"name":"dedicated_32-4","price":3180,"backend":"kafka","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"dedicated_16-8","price":3560,"backend":"kafka","shared":false},{"name":"dedicated_32-5","price":3975,"backend":"kafka","shared":false},{"name":"dedicated_16-9","price":4005,"backend":"kafka","shared":false},{"name":"dedicated_64-3","price":4185,"backend":"kafka","shared":false},{"name":"dedicated_32-6","price":4770,"backend":"kafka","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"reindeer-5","price":4995,"backend":"lavinmq","shared":false},{"name":"lion-7","price":5250,"backend":"kafka","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-7","price":5565,"backend":"kafka","shared":false},{"name":"dedicated_64-4","price":5580,"backend":"kafka","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"dedicated_32-8","price":6360,"backend":"kafka","shared":false},{"name":"dedicated_64-5","price":6975,"backend":"kafka","shared":false},{"name":"dedicated_32-9","price":7155,"backend":"kafka","shared":false},{"name":"dedicated_64-6","price":8370,"backend":"kafka","shared":false},{"name":"penguin-7","price":8400,"backend":"kafka","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"dedicated_64-7","price":9765,"backend":"kafka","shared":false},{"name":"bear-5","price":9995,"backend":"lavinmq","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"dedicated_64-8","price":11160,"backend":"kafka","shared":false},{"name":"dedicated_64-9","price":12555,"backend":"kafka","shared":false},{"name":"orca-5","price":14995,"backend":"lavinmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
         headers:
             Cache-Control:
                 - no-cache
@@ -48,10 +48,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 4122cd55-f0b6-427f-9c98-ae7cc770926b
+                - e484c031-abf0-48c8-a74f-6db8e74d8130
         status: 200 OK
         code: 200
-        duration: 19.393292ms
+        duration: 17.648771ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -99,10 +99,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 11285495-108e-40e4-919b-79181c264671
+                - 2664d4e7-baea-4846-9558-707c23e70d9a
         status: 200 OK
         code: 200
-        duration: 5.131583ms
+        duration: 5.350353ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -131,7 +131,7 @@ interactions:
         trailer: {}
         content_length: 8216
         uncompressed: false
-        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"turtle","price":0,"backend":"postgresql","shared":true},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"ducky","price":0,"backend":"kafka","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"hedgehog","price":5,"backend":"mosquitto","shared":true},{"name":"spider","price":5,"backend":"postgresql","shared":true},{"name":"cat","price":10,"backend":"postgresql","shared":true},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"koala","price":19,"backend":"mosquitto","shared":false},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"butterfly","price":49,"backend":"postgresql","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"addons_2-1","price":79,"backend":"addons","shared":false},{"name":"dedicated_2-1","price":95,"backend":"kafka","shared":false},{"name":"butterfly-follower","price":98,"backend":"postgresql","shared":false},{"name":"mouse","price":99,"backend":"kafka","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"leopard","price":99,"backend":"mosquitto","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"mouse-1","price":99,"backend":"kafka","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"addons_4-1","price":158,"backend":"addons","shared":false},{"name":"dedicated_4-1","price":165,"backend":"kafka","shared":false},{"name":"bat-1","price":175,"backend":"kafka","shared":false},{"name":"hippo-follower","price":198,"backend":"postgresql","shared":false},{"name":"elephant","price":199,"backend":"postgresql","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"puffin-5","price":245,"backend":"lavinmq","shared":false},{"name":"dedicated_2-3","price":285,"backend":"kafka","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"mouse-3","price":297,"backend":"kafka","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"pug","price":299,"backend":"mosquitto","shared":false},{"name":"elephant-follower","price":398,"backend":"postgresql","shared":false},{"name":"pigeon","price":399,"backend":"postgresql","shared":false},{"name":"mouse-5","price":495,"backend":"kafka","shared":false},{"name":"dedicated_4-3","price":495,"backend":"kafka","shared":false},{"name":"penguin-5","price":495,"backend":"lavinmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"bat","price":499,"backend":"kafka","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"bat-3","price":525,"backend":"kafka","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"mouse-7","price":693,"backend":"kafka","shared":false},{"name":"dolphin","price":749,"backend":"postgresql","shared":false},{"name":"pigeon-follower","price":798,"backend":"postgresql","shared":false},{"name":"bat-5","price":875,"backend":"kafka","shared":false},{"name":"dedicated_8-3","price":885,"backend":"kafka","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"lynx-5","price":995,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"fox","price":999,"backend":"kafka","shared":false},{"name":"fox-3","price":1005,"backend":"kafka","shared":false},{"name":"dedicated_8-4","price":1180,"backend":"kafka","shared":false},{"name":"bat-7","price":1225,"backend":"kafka","shared":false},{"name":"dedicated_16-3","price":1335,"backend":"kafka","shared":false},{"name":"rat","price":1399,"backend":"postgresql","shared":false},{"name":"dedicated_8-5","price":1475,"backend":"kafka","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"dolphin-follower","price":1498,"backend":"postgresql","shared":false},{"name":"fox-5","price":1675,"backend":"kafka","shared":false},{"name":"dedicated_8-6","price":1770,"backend":"kafka","shared":false},{"name":"dedicated_16-4","price":1780,"backend":"kafka","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"dedicated_8-7","price":2065,"backend":"kafka","shared":false},{"name":"dedicated_16-5","price":2225,"backend":"kafka","shared":false},{"name":"fox-7","price":2345,"backend":"kafka","shared":false},{"name":"dedicated_8-8","price":2360,"backend":"kafka","shared":false},{"name":"dedicated_32-3","price":2385,"backend":"kafka","shared":false},{"name":"wolverine-5","price":2495,"backend":"lavinmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-9","price":2655,"backend":"kafka","shared":false},{"name":"dedicated_16-6","price":2670,"backend":"kafka","shared":false},{"name":"rat-follower","price":2798,"backend":"postgresql","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"dedicated_16-7","price":3115,"backend":"kafka","shared":false},{"name":"dedicated_32-4","price":3180,"backend":"kafka","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"dedicated_16-8","price":3560,"backend":"kafka","shared":false},{"name":"dedicated_32-5","price":3975,"backend":"kafka","shared":false},{"name":"dedicated_16-9","price":4005,"backend":"kafka","shared":false},{"name":"dedicated_64-3","price":4185,"backend":"kafka","shared":false},{"name":"dedicated_32-6","price":4770,"backend":"kafka","shared":false},{"name":"reindeer-5","price":4995,"backend":"lavinmq","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"lion-7","price":5250,"backend":"kafka","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-7","price":5565,"backend":"kafka","shared":false},{"name":"dedicated_64-4","price":5580,"backend":"kafka","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"dedicated_32-8","price":6360,"backend":"kafka","shared":false},{"name":"dedicated_64-5","price":6975,"backend":"kafka","shared":false},{"name":"dedicated_32-9","price":7155,"backend":"kafka","shared":false},{"name":"dedicated_64-6","price":8370,"backend":"kafka","shared":false},{"name":"penguin-7","price":8400,"backend":"kafka","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"dedicated_64-7","price":9765,"backend":"kafka","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"bear-5","price":9995,"backend":"lavinmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"dedicated_64-8","price":11160,"backend":"kafka","shared":false},{"name":"dedicated_64-9","price":12555,"backend":"kafka","shared":false},{"name":"orca-5","price":14995,"backend":"lavinmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        body: '[{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"turtle","price":0,"backend":"postgresql","shared":true},{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"ducky","price":0,"backend":"kafka","shared":true},{"name":"spider","price":5,"backend":"postgresql","shared":true},{"name":"hedgehog","price":5,"backend":"mosquitto","shared":true},{"name":"cat","price":10,"backend":"postgresql","shared":true},{"name":"koala","price":19,"backend":"mosquitto","shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"butterfly","price":49,"backend":"postgresql","shared":false},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"addons_2-1","price":79,"backend":"addons","shared":false},{"name":"dedicated_2-1","price":95,"backend":"kafka","shared":false},{"name":"butterfly-follower","price":98,"backend":"postgresql","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"mouse-1","price":99,"backend":"kafka","shared":false},{"name":"leopard","price":99,"backend":"mosquitto","shared":false},{"name":"mouse","price":99,"backend":"kafka","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"addons_4-1","price":158,"backend":"addons","shared":false},{"name":"dedicated_4-1","price":165,"backend":"kafka","shared":false},{"name":"bat-1","price":175,"backend":"kafka","shared":false},{"name":"hippo-follower","price":198,"backend":"postgresql","shared":false},{"name":"elephant","price":199,"backend":"postgresql","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"puffin-5","price":245,"backend":"lavinmq","shared":false},{"name":"dedicated_2-3","price":285,"backend":"kafka","shared":false},{"name":"mouse-3","price":297,"backend":"kafka","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"pug","price":299,"backend":"mosquitto","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"elephant-follower","price":398,"backend":"postgresql","shared":false},{"name":"pigeon","price":399,"backend":"postgresql","shared":false},{"name":"penguin-5","price":495,"backend":"lavinmq","shared":false},{"name":"mouse-5","price":495,"backend":"kafka","shared":false},{"name":"dedicated_4-3","price":495,"backend":"kafka","shared":false},{"name":"bat","price":499,"backend":"kafka","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"bat-3","price":525,"backend":"kafka","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"mouse-7","price":693,"backend":"kafka","shared":false},{"name":"dolphin","price":749,"backend":"postgresql","shared":false},{"name":"pigeon-follower","price":798,"backend":"postgresql","shared":false},{"name":"bat-5","price":875,"backend":"kafka","shared":false},{"name":"dedicated_8-3","price":885,"backend":"kafka","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"lynx-5","price":995,"backend":"lavinmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"fox","price":999,"backend":"kafka","shared":false},{"name":"fox-3","price":1005,"backend":"kafka","shared":false},{"name":"dedicated_8-4","price":1180,"backend":"kafka","shared":false},{"name":"bat-7","price":1225,"backend":"kafka","shared":false},{"name":"dedicated_16-3","price":1335,"backend":"kafka","shared":false},{"name":"rat","price":1399,"backend":"postgresql","shared":false},{"name":"dedicated_8-5","price":1475,"backend":"kafka","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"dolphin-follower","price":1498,"backend":"postgresql","shared":false},{"name":"fox-5","price":1675,"backend":"kafka","shared":false},{"name":"dedicated_8-6","price":1770,"backend":"kafka","shared":false},{"name":"dedicated_16-4","price":1780,"backend":"kafka","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-7","price":2065,"backend":"kafka","shared":false},{"name":"dedicated_16-5","price":2225,"backend":"kafka","shared":false},{"name":"fox-7","price":2345,"backend":"kafka","shared":false},{"name":"dedicated_8-8","price":2360,"backend":"kafka","shared":false},{"name":"dedicated_32-3","price":2385,"backend":"kafka","shared":false},{"name":"wolverine-5","price":2495,"backend":"lavinmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-9","price":2655,"backend":"kafka","shared":false},{"name":"dedicated_16-6","price":2670,"backend":"kafka","shared":false},{"name":"rat-follower","price":2798,"backend":"postgresql","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"dedicated_16-7","price":3115,"backend":"kafka","shared":false},{"name":"dedicated_32-4","price":3180,"backend":"kafka","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"dedicated_16-8","price":3560,"backend":"kafka","shared":false},{"name":"dedicated_32-5","price":3975,"backend":"kafka","shared":false},{"name":"dedicated_16-9","price":4005,"backend":"kafka","shared":false},{"name":"dedicated_64-3","price":4185,"backend":"kafka","shared":false},{"name":"dedicated_32-6","price":4770,"backend":"kafka","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"reindeer-5","price":4995,"backend":"lavinmq","shared":false},{"name":"lion-7","price":5250,"backend":"kafka","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-7","price":5565,"backend":"kafka","shared":false},{"name":"dedicated_64-4","price":5580,"backend":"kafka","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"dedicated_32-8","price":6360,"backend":"kafka","shared":false},{"name":"dedicated_64-5","price":6975,"backend":"kafka","shared":false},{"name":"dedicated_32-9","price":7155,"backend":"kafka","shared":false},{"name":"dedicated_64-6","price":8370,"backend":"kafka","shared":false},{"name":"penguin-7","price":8400,"backend":"kafka","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"dedicated_64-7","price":9765,"backend":"kafka","shared":false},{"name":"bear-5","price":9995,"backend":"lavinmq","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"dedicated_64-8","price":11160,"backend":"kafka","shared":false},{"name":"dedicated_64-9","price":12555,"backend":"kafka","shared":false},{"name":"orca-5","price":14995,"backend":"lavinmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
         headers:
             Cache-Control:
                 - no-cache
@@ -150,10 +150,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - fc5cee14-b02f-4533-b595-826c5fc11d0a
+                - 38f68995-33dc-46a5-a9cf-e2779c4f181f
         status: 200 OK
         code: 200
-        duration: 24.771875ms
+        duration: 19.034137ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -201,10 +201,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 24e39f27-0415-437f-8437-607e78061d32
+                - b403cba5-b9ea-48f1-84d9-59ac2229d59f
         status: 200 OK
         code: 200
-        duration: 4.759708ms
+        duration: 2.602715ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -233,7 +233,7 @@ interactions:
         trailer: {}
         content_length: 8216
         uncompressed: false
-        body: '[{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"turtle","price":0,"backend":"postgresql","shared":true},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"ducky","price":0,"backend":"kafka","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"hedgehog","price":5,"backend":"mosquitto","shared":true},{"name":"spider","price":5,"backend":"postgresql","shared":true},{"name":"cat","price":10,"backend":"postgresql","shared":true},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"koala","price":19,"backend":"mosquitto","shared":false},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"butterfly","price":49,"backend":"postgresql","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"addons_2-1","price":79,"backend":"addons","shared":false},{"name":"dedicated_2-1","price":95,"backend":"kafka","shared":false},{"name":"butterfly-follower","price":98,"backend":"postgresql","shared":false},{"name":"mouse","price":99,"backend":"kafka","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"leopard","price":99,"backend":"mosquitto","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"mouse-1","price":99,"backend":"kafka","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"addons_4-1","price":158,"backend":"addons","shared":false},{"name":"dedicated_4-1","price":165,"backend":"kafka","shared":false},{"name":"bat-1","price":175,"backend":"kafka","shared":false},{"name":"hippo-follower","price":198,"backend":"postgresql","shared":false},{"name":"elephant","price":199,"backend":"postgresql","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"puffin-5","price":245,"backend":"lavinmq","shared":false},{"name":"dedicated_2-3","price":285,"backend":"kafka","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"mouse-3","price":297,"backend":"kafka","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"pug","price":299,"backend":"mosquitto","shared":false},{"name":"elephant-follower","price":398,"backend":"postgresql","shared":false},{"name":"pigeon","price":399,"backend":"postgresql","shared":false},{"name":"mouse-5","price":495,"backend":"kafka","shared":false},{"name":"dedicated_4-3","price":495,"backend":"kafka","shared":false},{"name":"penguin-5","price":495,"backend":"lavinmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"bat","price":499,"backend":"kafka","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"bat-3","price":525,"backend":"kafka","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"mouse-7","price":693,"backend":"kafka","shared":false},{"name":"dolphin","price":749,"backend":"postgresql","shared":false},{"name":"pigeon-follower","price":798,"backend":"postgresql","shared":false},{"name":"bat-5","price":875,"backend":"kafka","shared":false},{"name":"dedicated_8-3","price":885,"backend":"kafka","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"lynx-5","price":995,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"fox","price":999,"backend":"kafka","shared":false},{"name":"fox-3","price":1005,"backend":"kafka","shared":false},{"name":"dedicated_8-4","price":1180,"backend":"kafka","shared":false},{"name":"bat-7","price":1225,"backend":"kafka","shared":false},{"name":"dedicated_16-3","price":1335,"backend":"kafka","shared":false},{"name":"rat","price":1399,"backend":"postgresql","shared":false},{"name":"dedicated_8-5","price":1475,"backend":"kafka","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"dolphin-follower","price":1498,"backend":"postgresql","shared":false},{"name":"fox-5","price":1675,"backend":"kafka","shared":false},{"name":"dedicated_8-6","price":1770,"backend":"kafka","shared":false},{"name":"dedicated_16-4","price":1780,"backend":"kafka","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"dedicated_8-7","price":2065,"backend":"kafka","shared":false},{"name":"dedicated_16-5","price":2225,"backend":"kafka","shared":false},{"name":"fox-7","price":2345,"backend":"kafka","shared":false},{"name":"dedicated_8-8","price":2360,"backend":"kafka","shared":false},{"name":"dedicated_32-3","price":2385,"backend":"kafka","shared":false},{"name":"wolverine-5","price":2495,"backend":"lavinmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-9","price":2655,"backend":"kafka","shared":false},{"name":"dedicated_16-6","price":2670,"backend":"kafka","shared":false},{"name":"rat-follower","price":2798,"backend":"postgresql","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"dedicated_16-7","price":3115,"backend":"kafka","shared":false},{"name":"dedicated_32-4","price":3180,"backend":"kafka","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"dedicated_16-8","price":3560,"backend":"kafka","shared":false},{"name":"dedicated_32-5","price":3975,"backend":"kafka","shared":false},{"name":"dedicated_16-9","price":4005,"backend":"kafka","shared":false},{"name":"dedicated_64-3","price":4185,"backend":"kafka","shared":false},{"name":"dedicated_32-6","price":4770,"backend":"kafka","shared":false},{"name":"reindeer-5","price":4995,"backend":"lavinmq","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"lion-7","price":5250,"backend":"kafka","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-7","price":5565,"backend":"kafka","shared":false},{"name":"dedicated_64-4","price":5580,"backend":"kafka","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"dedicated_32-8","price":6360,"backend":"kafka","shared":false},{"name":"dedicated_64-5","price":6975,"backend":"kafka","shared":false},{"name":"dedicated_32-9","price":7155,"backend":"kafka","shared":false},{"name":"dedicated_64-6","price":8370,"backend":"kafka","shared":false},{"name":"penguin-7","price":8400,"backend":"kafka","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"dedicated_64-7","price":9765,"backend":"kafka","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"bear-5","price":9995,"backend":"lavinmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"dedicated_64-8","price":11160,"backend":"kafka","shared":false},{"name":"dedicated_64-9","price":12555,"backend":"kafka","shared":false},{"name":"orca-5","price":14995,"backend":"lavinmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        body: '[{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"turtle","price":0,"backend":"postgresql","shared":true},{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"ducky","price":0,"backend":"kafka","shared":true},{"name":"spider","price":5,"backend":"postgresql","shared":true},{"name":"hedgehog","price":5,"backend":"mosquitto","shared":true},{"name":"cat","price":10,"backend":"postgresql","shared":true},{"name":"koala","price":19,"backend":"mosquitto","shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"butterfly","price":49,"backend":"postgresql","shared":false},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"addons_2-1","price":79,"backend":"addons","shared":false},{"name":"dedicated_2-1","price":95,"backend":"kafka","shared":false},{"name":"butterfly-follower","price":98,"backend":"postgresql","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"mouse-1","price":99,"backend":"kafka","shared":false},{"name":"leopard","price":99,"backend":"mosquitto","shared":false},{"name":"mouse","price":99,"backend":"kafka","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"addons_4-1","price":158,"backend":"addons","shared":false},{"name":"dedicated_4-1","price":165,"backend":"kafka","shared":false},{"name":"bat-1","price":175,"backend":"kafka","shared":false},{"name":"hippo-follower","price":198,"backend":"postgresql","shared":false},{"name":"elephant","price":199,"backend":"postgresql","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"puffin-5","price":245,"backend":"lavinmq","shared":false},{"name":"dedicated_2-3","price":285,"backend":"kafka","shared":false},{"name":"mouse-3","price":297,"backend":"kafka","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"pug","price":299,"backend":"mosquitto","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"elephant-follower","price":398,"backend":"postgresql","shared":false},{"name":"pigeon","price":399,"backend":"postgresql","shared":false},{"name":"penguin-5","price":495,"backend":"lavinmq","shared":false},{"name":"mouse-5","price":495,"backend":"kafka","shared":false},{"name":"dedicated_4-3","price":495,"backend":"kafka","shared":false},{"name":"bat","price":499,"backend":"kafka","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"bat-3","price":525,"backend":"kafka","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"mouse-7","price":693,"backend":"kafka","shared":false},{"name":"dolphin","price":749,"backend":"postgresql","shared":false},{"name":"pigeon-follower","price":798,"backend":"postgresql","shared":false},{"name":"bat-5","price":875,"backend":"kafka","shared":false},{"name":"dedicated_8-3","price":885,"backend":"kafka","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"lynx-5","price":995,"backend":"lavinmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"fox","price":999,"backend":"kafka","shared":false},{"name":"fox-3","price":1005,"backend":"kafka","shared":false},{"name":"dedicated_8-4","price":1180,"backend":"kafka","shared":false},{"name":"bat-7","price":1225,"backend":"kafka","shared":false},{"name":"dedicated_16-3","price":1335,"backend":"kafka","shared":false},{"name":"rat","price":1399,"backend":"postgresql","shared":false},{"name":"dedicated_8-5","price":1475,"backend":"kafka","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"dolphin-follower","price":1498,"backend":"postgresql","shared":false},{"name":"fox-5","price":1675,"backend":"kafka","shared":false},{"name":"dedicated_8-6","price":1770,"backend":"kafka","shared":false},{"name":"dedicated_16-4","price":1780,"backend":"kafka","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-7","price":2065,"backend":"kafka","shared":false},{"name":"dedicated_16-5","price":2225,"backend":"kafka","shared":false},{"name":"fox-7","price":2345,"backend":"kafka","shared":false},{"name":"dedicated_8-8","price":2360,"backend":"kafka","shared":false},{"name":"dedicated_32-3","price":2385,"backend":"kafka","shared":false},{"name":"wolverine-5","price":2495,"backend":"lavinmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-9","price":2655,"backend":"kafka","shared":false},{"name":"dedicated_16-6","price":2670,"backend":"kafka","shared":false},{"name":"rat-follower","price":2798,"backend":"postgresql","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"dedicated_16-7","price":3115,"backend":"kafka","shared":false},{"name":"dedicated_32-4","price":3180,"backend":"kafka","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"dedicated_16-8","price":3560,"backend":"kafka","shared":false},{"name":"dedicated_32-5","price":3975,"backend":"kafka","shared":false},{"name":"dedicated_16-9","price":4005,"backend":"kafka","shared":false},{"name":"dedicated_64-3","price":4185,"backend":"kafka","shared":false},{"name":"dedicated_32-6","price":4770,"backend":"kafka","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"reindeer-5","price":4995,"backend":"lavinmq","shared":false},{"name":"lion-7","price":5250,"backend":"kafka","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-7","price":5565,"backend":"kafka","shared":false},{"name":"dedicated_64-4","price":5580,"backend":"kafka","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"dedicated_32-8","price":6360,"backend":"kafka","shared":false},{"name":"dedicated_64-5","price":6975,"backend":"kafka","shared":false},{"name":"dedicated_32-9","price":7155,"backend":"kafka","shared":false},{"name":"dedicated_64-6","price":8370,"backend":"kafka","shared":false},{"name":"penguin-7","price":8400,"backend":"kafka","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"dedicated_64-7","price":9765,"backend":"kafka","shared":false},{"name":"bear-5","price":9995,"backend":"lavinmq","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"dedicated_64-8","price":11160,"backend":"kafka","shared":false},{"name":"dedicated_64-9","price":12555,"backend":"kafka","shared":false},{"name":"orca-5","price":14995,"backend":"lavinmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
         headers:
             Cache-Control:
                 - no-cache
@@ -252,10 +252,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - eb05387b-762d-4326-9a0f-4939632803d2
+                - db4f90c6-9fd7-4e8c-b31a-5ba51652668a
         status: 200 OK
         code: 200
-        duration: 19.657167ms
+        duration: 13.491404ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -303,23 +303,23 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - a7d234cc-9d55-440a-84ad-259484369370
+                - 99adc134-3bdc-4ae5-be8c-5c5937f269d4
         status: 200 OK
         code: 200
-        duration: 6.754125ms
+        duration: 2.987232ms
     - id: 6
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 192
+        content_length: 155
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags","no_default_alarms":false,"plan":"bunny-1","preferred_az":[],"region":"amazon-web-services::us-east-1","tags":["terraform"]}
+            {"name":"TestAccCustomCertificate_Basic","no_default_alarms":false,"plan":"bunny-1","preferred_az":[],"region":"amazon-web-services::us-east-1","tags":[]}
         form: {}
         headers:
             Authorization:
@@ -336,14 +336,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 252
+        content_length: 253
         uncompressed: false
-        body: '{"id":581,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"a8d35e39-19fe-4f3d-b2b2-3896f3223802","url":"amqps://auepwhfu:***@dev-striped-gray-hound.rmq4.dev.cloudamqp.com/auepwhfu"}'
+        body: '{"id":838,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "252"
+                - "253"
             Content-Type:
                 - application/json
             Nel:
@@ -357,10 +357,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - faf65205-966c-445a-a8ec-e236cf9a525d
+                - 24de96fc-ab66-4bf6-9009-83b745254439
         status: 200 OK
         code: 200
-        duration: 109.420167ms
+        duration: 125.836894ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -379,7 +379,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/581
+        url: http://localhost:9393/api/instances/838
         method: GET
       response:
         proto: HTTP/1.1
@@ -387,14 +387,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 821
+        content_length: 789
         uncompressed: false
-        body: '{"id":581,"name":"TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"1f02efea-054b-4a25-8475-596c0fe2f099","url":"amqps://auepwhfu:***@dev-striped-gray-hound.rmq4.dev.cloudamqp.com/auepwhfu","ready":true,"apikey":"a8d35e39-19fe-4f3d-b2b2-3896f3223802","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://auepwhfu:***@dev-striped-gray-hound.rmq4.dev.cloudamqp.com/auepwhfu","internal":"amqp://auepwhfu:***@dev-striped-gray-hound.in.rmq4.dev.cloudamqp.com/auepwhfu"},"rmq_version":"4.1.4","hostname_external":"dev-striped-gray-hound.rmq4.dev.cloudamqp.com","hostname_internal":"dev-striped-gray-hound.in.rmq4.dev.cloudamqp.com"}'
+        body: '{"id":838,"name":"TestAccCustomCertificate_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","ready":true,"apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","internal":"amqp://suchsqmw:***@dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com/suchsqmw"},"rmq_version":"4.1.4","hostname_external":"dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com","hostname_internal":"dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "821"
+                - "789"
             Content-Type:
                 - application/json
             Nel:
@@ -408,10 +408,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - ebc01517-2bd9-4bde-b9fa-4d0400727fa6
+                - 71df5909-593f-4a82-9e73-b1c8e755c58e
         status: 200 OK
         code: 200
-        duration: 13.434166ms
+        duration: 24.754194ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -430,7 +430,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/581
+        url: http://localhost:9393/api/instances/838
         method: GET
       response:
         proto: HTTP/1.1
@@ -438,14 +438,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 821
+        content_length: 789
         uncompressed: false
-        body: '{"id":581,"name":"TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"1f02efea-054b-4a25-8475-596c0fe2f099","url":"amqps://auepwhfu:***@dev-striped-gray-hound.rmq4.dev.cloudamqp.com/auepwhfu","ready":true,"apikey":"a8d35e39-19fe-4f3d-b2b2-3896f3223802","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://auepwhfu:***@dev-striped-gray-hound.rmq4.dev.cloudamqp.com/auepwhfu","internal":"amqp://auepwhfu:***@dev-striped-gray-hound.in.rmq4.dev.cloudamqp.com/auepwhfu"},"rmq_version":"4.1.4","hostname_external":"dev-striped-gray-hound.rmq4.dev.cloudamqp.com","hostname_internal":"dev-striped-gray-hound.in.rmq4.dev.cloudamqp.com"}'
+        body: '{"id":838,"name":"TestAccCustomCertificate_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","ready":true,"apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","internal":"amqp://suchsqmw:***@dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com/suchsqmw"},"rmq_version":"4.1.4","hostname_external":"dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com","hostname_internal":"dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "821"
+                - "789"
             Content-Type:
                 - application/json
             Nel:
@@ -459,23 +459,23 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 173d6a61-9190-48b9-a781-1eefce0ceff1
+                - e0a38781-6daf-4b60-86ff-718eb26d2f4c
         status: 200 OK
         code: 200
-        duration: 29.087958ms
+        duration: 18.809832ms
     - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 44
+        content_length: 7684
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"api_key":"NEWRELIC_APIKEY","region":"eu"}
+            {"ca":"TEST_CERTIFICATE_CA","cert":"TEST_CERTIFICATE_CERT","private_key":"TEST_CERTIFICATE_PRIVATE_KEY","sni_hosts":"my.custom.domain"}
         form: {}
         headers:
             Authorization:
@@ -484,7 +484,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/581/integrations/metrics/newrelic_v3
+        url: http://localhost:9393/api/instances/838/custom-cert
         method: POST
       response:
         proto: HTTP/1.1
@@ -492,14 +492,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 10
+        content_length: 131
         uncompressed: false
-        body: '{"id":322}'
+        body: '{"message":"Uploading custom certificate to server, this might take a few minutes","job_id":"99195c17-6dd6-4593-a260-8e454122ee46"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "10"
+                - "131"
             Content-Type:
                 - application/json
             Nel:
@@ -513,10 +513,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 17197a7d-f24e-40ca-a6b0-cfec1cdad079
-        status: 201 Created
-        code: 201
-        duration: 35.919ms
+                - 426d10a1-0c13-4be4-9094-b228108f2de8
+        status: 202 Accepted
+        code: 202
+        duration: 58.748568ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -535,7 +535,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/581/integrations/metrics/322
+        url: http://localhost:9393/api/instances/838/jobs/99195c17-6dd6-4593-a260-8e454122ee46
         method: GET
       response:
         proto: HTTP/1.1
@@ -543,14 +543,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 1554
+        content_length: 294
         uncompressed: false
-        body: '{"id":322,"type":"newrelic_v3","config":{"region":"eu","api_key":"NEWRELIC_APIKEY"},"account_id":"1f02efea-054b-4a25-8475-596c0fe2f099","error":null,"created_at":"2025-11-12 14:17:05 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked"]}'
+        body: '{"id":"99195c17-6dd6-4593-a260-8e454122ee46","account_id":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","resource_type":"certificate_upload","resource_id":null,"resource_action":"create","status":"completed","created_at":"2025-11-25T09:23:23Z","updated_at":"2025-11-25T09:23:45Z","error_message":null}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "1554"
+                - "294"
             Content-Type:
                 - application/json
             Nel:
@@ -564,10 +564,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - d866e1ae-5f0f-43fb-af68-c3cb3fc880bb
+                - 97cc16a7-ef32-4799-9d96-5a95f0d70d77
         status: 200 OK
         code: 200
-        duration: 19.520791ms
+        duration: 29.829172ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -586,7 +586,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/581
+        url: http://localhost:9393/api/instances/838
         method: GET
       response:
         proto: HTTP/1.1
@@ -594,14 +594,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 821
+        content_length: 789
         uncompressed: false
-        body: '{"id":581,"name":"TestAccIntegrationMetricPrometheusNewRelicV3_WithoutTags","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"1f02efea-054b-4a25-8475-596c0fe2f099","url":"amqps://auepwhfu:***@dev-striped-gray-hound.rmq4.dev.cloudamqp.com/auepwhfu","ready":true,"apikey":"a8d35e39-19fe-4f3d-b2b2-3896f3223802","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://auepwhfu:***@dev-striped-gray-hound.rmq4.dev.cloudamqp.com/auepwhfu","internal":"amqp://auepwhfu:***@dev-striped-gray-hound.in.rmq4.dev.cloudamqp.com/auepwhfu"},"rmq_version":"4.1.4","hostname_external":"dev-striped-gray-hound.rmq4.dev.cloudamqp.com","hostname_internal":"dev-striped-gray-hound.in.rmq4.dev.cloudamqp.com"}'
+        body: '{"id":838,"name":"TestAccCustomCertificate_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","ready":true,"apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","internal":"amqp://suchsqmw:***@dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com/suchsqmw"},"rmq_version":"4.1.4","hostname_external":"dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com","hostname_internal":"dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "821"
+                - "789"
             Content-Type:
                 - application/json
             Nel:
@@ -615,10 +615,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - b4658d62-72f1-4d8c-9be8-091a0ca19bdf
+                - 419d06e0-ad16-4296-ba7e-842d9c8462a9
         status: 200 OK
         code: 200
-        duration: 15.157458ms
+        duration: 18.348662ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -637,7 +637,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/581/integrations/metrics/322
+        url: http://localhost:9393/api/instances/838
         method: GET
       response:
         proto: HTTP/1.1
@@ -645,14 +645,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 1554
+        content_length: 789
         uncompressed: false
-        body: '{"id":322,"type":"newrelic_v3","config":{"region":"eu","api_key":"NEWRELIC_APIKEY"},"account_id":"1f02efea-054b-4a25-8475-596c0fe2f099","error":null,"created_at":"2025-11-12 14:17:05 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked"]}'
+        body: '{"id":838,"name":"TestAccCustomCertificate_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","ready":true,"apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","internal":"amqp://suchsqmw:***@dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com/suchsqmw"},"rmq_version":"4.1.4","hostname_external":"dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com","hostname_internal":"dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "1554"
+                - "789"
             Content-Type:
                 - application/json
             Nel:
@@ -666,10 +666,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - afa21c68-c55f-4015-994e-0e305ea75a49
+                - d9ceb05b-b5fa-4cea-b6ec-08abcd7e3568
         status: 200 OK
         code: 200
-        duration: 16.81ms
+        duration: 20.784975ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -688,22 +688,22 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/581/integrations/metrics/322
-        method: GET
+        url: http://localhost:9393/api/instances/838/custom-cert
+        method: DELETE
       response:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 1554
+        content_length: 125
         uncompressed: false
-        body: '{"id":322,"type":"newrelic_v3","config":{"region":"eu","api_key":"NEWRELIC_APIKEY"},"account_id":"1f02efea-054b-4a25-8475-596c0fe2f099","error":null,"created_at":"2025-11-12 14:17:05 UTC","metrics_filter":["system_cpu_utilization_ratio","system_disk_io_bytes_total","system_disk_operation_time_seconds_total","system_disk_operations_total","system_filesystem_usage_bytes","system_filesystem_utilization_ratio","system_memory_limit_bytes","system_memory_usage_bytes","system_network_io_bytes_total","system_paging_usage_bytes","rabbitmq_alarms_memory_used_watermark","rabbitmq_alarms_free_disk_space_watermark","rabbitmq_connections","rabbitmq_channels","rabbitmq_consumers","rabbitmq_disk_space_available_bytes","rabbitmq_exchange_messages_published_total","rabbitmq_global_messages_acknowledged_total","rabbitmq_global_messages_confirmed_total","rabbitmq_global_messages_delivered_total","rabbitmq_global_messages_delivered_get_manual_ack_total","rabbitmq_global_messages_delivered_get_auto_ack_total","rabbitmq_global_messages_redelivered_total","rabbitmq_global_messages_unroutable_dropped_total","rabbitmq_global_messages_unroutable_returned_total","rabbitmq_process_open_fds","rabbitmq_process_resident_memory_bytes","rabbitmq_queues","rabbitmq_queue_get_total","rabbitmq_queue_get_ack_total","rabbitmq_queue_messages","rabbitmq_queue_messages_acked_total","rabbitmq_queue_messages_delivered_ack_total","rabbitmq_queue_messages_persistent","rabbitmq_queue_messages_published_total","rabbitmq_queue_messages_ready","rabbitmq_queue_messages_unacked"]}'
+        body: '{"message":"Restoring to default certificate, this might take a few minutes","job_id":"4de550a8-cb7c-4f12-a1a3-d3378b5b0480"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "1554"
+                - "125"
             Content-Type:
                 - application/json
             Nel:
@@ -717,10 +717,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 9e55ffa4-3509-47aa-8bc3-09fa47eec32c
-        status: 200 OK
-        code: 200
-        duration: 15.988083ms
+                - d4998f3f-c740-4351-97aa-3b1df8f5c2ab
+        status: 202 Accepted
+        code: 202
+        duration: 36.650058ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -739,20 +739,24 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/581/integrations/metrics/322
-        method: DELETE
+        url: http://localhost:9393/api/instances/838/jobs/4de550a8-cb7c-4f12-a1a3-d3378b5b0480
+        method: GET
       response:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 0
+        content_length: 294
         uncompressed: false
-        body: ""
+        body: '{"id":"4de550a8-cb7c-4f12-a1a3-d3378b5b0480","account_id":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","resource_type":"certificate_upload","resource_id":null,"resource_action":"delete","status":"completed","created_at":"2025-11-25T09:23:48Z","updated_at":"2025-11-25T09:23:58Z","error_message":null}'
         headers:
             Cache-Control:
                 - no-cache
+            Content-Length:
+                - "294"
+            Content-Type:
+                - application/json
             Nel:
                 - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
@@ -764,42 +768,49 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - f67d9fa0-4425-49b8-87fe-b70882f374a3
-        status: 204 No Content
-        code: 204
-        duration: 32.235667ms
+                - 96fbcb29-75c4-4daa-afd9-34c9ffbd4d2a
+        status: 200 OK
+        code: 200
+        duration: 24.207776ms
     - id: 15
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 7684
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"ca":"TEST_CERTIFICATE_CA","cert":"TEST_CERTIFICATE_CERT","private_key":"TEST_CERTIFICATE_PRIVATE_KEY","sni_hosts":"my.custom.domain"}
         form: {}
         headers:
             Authorization:
                 - REDACTED
+            Content-Type:
+                - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/581?keep_vpc=false
-        method: DELETE
+        url: http://localhost:9393/api/instances/838/custom-cert
+        method: POST
       response:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 0
+        content_length: 131
         uncompressed: false
-        body: ""
+        body: '{"message":"Uploading custom certificate to server, this might take a few minutes","job_id":"a56ad1aa-7f61-4b75-ab85-684b50780293"}'
         headers:
             Cache-Control:
                 - no-cache
+            Content-Length:
+                - "131"
+            Content-Type:
+                - application/json
             Nel:
                 - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
@@ -811,10 +822,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 8e93f5db-414c-4e40-9aa5-1a7198f5cfb6
-        status: 204 No Content
-        code: 204
-        duration: 52.932375ms
+                - 6d889ba9-dd81-4340-80fc-daf9f530fae3
+        status: 202 Accepted
+        code: 202
+        duration: 41.978153ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -833,7 +844,258 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/581
+        url: http://localhost:9393/api/instances/838/jobs/a56ad1aa-7f61-4b75-ab85-684b50780293
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 294
+        uncompressed: false
+        body: '{"id":"a56ad1aa-7f61-4b75-ab85-684b50780293","account_id":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","resource_type":"certificate_upload","resource_id":null,"resource_action":"create","status":"completed","created_at":"2025-11-25T09:23:58Z","updated_at":"2025-11-25T09:24:20Z","error_message":null}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "294"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 65b69e45-e2e6-44b8-a30d-544545f37b33
+        status: 200 OK
+        code: 200
+        duration: 31.915736ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/838
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 789
+        uncompressed: false
+        body: '{"id":838,"name":"TestAccCustomCertificate_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","ready":true,"apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","internal":"amqp://suchsqmw:***@dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com/suchsqmw"},"rmq_version":"4.1.4","hostname_external":"dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com","hostname_internal":"dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "789"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 21cd845b-7258-448f-9dd8-6b09c81c1b71
+        status: 200 OK
+        code: 200
+        duration: 17.577877ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/838/custom-cert
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 125
+        uncompressed: false
+        body: '{"message":"Restoring to default certificate, this might take a few minutes","job_id":"d26c857d-9153-484a-a8aa-3ed0288deacc"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "125"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - db7ac586-810d-4b54-a18b-354844c9af0a
+        status: 202 Accepted
+        code: 202
+        duration: 40.363574ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/838/jobs/d26c857d-9153-484a-a8aa-3ed0288deacc
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 294
+        uncompressed: false
+        body: '{"id":"d26c857d-9153-484a-a8aa-3ed0288deacc","account_id":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","resource_type":"certificate_upload","resource_id":null,"resource_action":"delete","status":"completed","created_at":"2025-11-25T09:24:24Z","updated_at":"2025-11-25T09:24:33Z","error_message":null}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "294"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 2335daa5-31d1-4219-9238-a0f47b04dae5
+        status: 200 OK
+        code: 200
+        duration: 29.944461ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/838?keep_vpc=false
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 35eb3a42-1e8a-4cf7-abe9-e88b16c5f12a
+        status: 204 No Content
+        code: 204
+        duration: 81.455977ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/838
         method: GET
       response:
         proto: HTTP/1.1
@@ -862,7 +1124,7 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - f85044d5-f342-48b5-b4c9-ffc6f2ce1975
+                - b3a7b0c0-1034-4d6a-8d26-462c76466852
         status: 404 Not Found
         code: 404
-        duration: 5.970166ms
+        duration: 5.766101ms

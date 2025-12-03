@@ -2,6 +2,7 @@ resource "cloudamqp_integration_metric_prometheus" "newrelic_v3" {
   instance_id = {{.InstanceID}}
   newrelic_v3 {
     api_key = "{{.NewRelicApiKey}}"
+    region  = "{{.NewRelicRegion}}"
     tags    = "{{.NewRelicTags}}"
   }
 }

@@ -1,3 +1,10 @@
+---
+layout: "cloudamqp"
+page_title: "CloudAMQP: cloudamqp_integration_metric_prometheus"
+description: |-
+  Creates and manages third party Prometheus metrics integrations for a CloudAMQP instance.
+---
+
 # cloudamqp_integration_metric_prometheus
 
 This resource allows you to create and manage Prometheus-compatible metric integrations for CloudAMQP instances. Currently supported integrations include New Relic v3, Datadog v3, Azure Monitor, Splunk v2, Dynatrace, CloudWatch v3, and Stackdriver v2.
@@ -12,6 +19,7 @@ resource "cloudamqp_integration_metric_prometheus" "newrelic_v3" {
 
   newrelic_v3 {
     api_key = var.newrelic_api_key
+    region  = "us"
     tags    = "key=value,key2=value2"
   }
 }
@@ -121,6 +129,7 @@ Exactly one of the following integration blocks must be specified:
 The following arguments are supported:
 
 * `api_key` - (Required) New Relic API key for authentication.
+* `region` - (Required) New Relic region code. Valid values: `eu`, `us`.
 * `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
 
 ### datadog_v3
@@ -261,14 +270,14 @@ import {
 
 Or use Terraform CLI:
 
-```
-$ terraform import cloudamqp_integration_metric_prometheus.newrelic_v3 <integration_id>,<instance_id>
-$ terraform import cloudamqp_integration_metric_prometheus.datadog_v3 <integration_id>,<instance_id>
-$ terraform import cloudamqp_integration_metric_prometheus.azure_monitor <integration_id>,<instance_id>
-$ terraform import cloudamqp_integration_metric_prometheus.splunk_v2 <integration_id>,<instance_id>
-$ terraform import cloudamqp_integration_metric_prometheus.dynatrace <integration_id>,<instance_id>
-$ terraform import cloudamqp_integration_metric_prometheus.cloudwatch_v3 <integration_id>,<instance_id>
-$ terraform import cloudamqp_integration_metric_prometheus.stackdriver_v2 <integration_id>,<instance_id>
+```sh
+terraform import cloudamqp_integration_metric_prometheus.newrelic_v3 <integration_id>,<instance_id>
+terraform import cloudamqp_integration_metric_prometheus.datadog_v3 <integration_id>,<instance_id>
+terraform import cloudamqp_integration_metric_prometheus.azure_monitor <integration_id>,<instance_id>
+terraform import cloudamqp_integration_metric_prometheus.splunk_v2 <integration_id>,<instance_id>
+terraform import cloudamqp_integration_metric_prometheus.dynatrace <integration_id>,<instance_id>
+terraform import cloudamqp_integration_metric_prometheus.cloudwatch_v3 <integration_id>,<instance_id>
+terraform import cloudamqp_integration_metric_prometheus.stackdriver_v2 <integration_id>,<instance_id>
 ```
 
 ## Dependency
