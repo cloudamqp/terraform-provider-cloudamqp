@@ -96,6 +96,16 @@ func (api *API) listPluginsCommunityWithRetry(ctx context.Context, path string,
 		// Instance not found - likely manually deleted
 		tflog.Debug(ctx, fmt.Sprintf("instance not found (404), likely manually deleted: %s", path))
 		return nil, fmt.Errorf("instance not found, status=404 message=%s", failed)
+	case 423:
+		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.listPluginsCommunityWithRetry(ctx, path, attempt, sleep, timeout)
+	case 503:
+		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.listPluginsCommunityWithRetry(ctx, path, attempt, sleep, timeout)
 	}
 	return nil, fmt.Errorf("failed to list communit plugins, status=%d message=%s ",
 		response.StatusCode, failed)

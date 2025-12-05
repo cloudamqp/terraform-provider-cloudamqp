@@ -78,6 +78,16 @@ func (api *API) readPrivateLinkWithRetry(ctx context.Context, path string, attem
 	case 404:
 		tflog.Warn(ctx, "Privatelink not found")
 		return nil, nil
+	case 423:
+		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.readPrivateLinkWithRetry(ctx, path, attempt, sleep, timeout)
+	case 503:
+		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.readPrivateLinkWithRetry(ctx, path, attempt, sleep, timeout)
 	}
 
 	return nil, fmt.Errorf("failed to read PrivateLink, status=%d message=%s ",
@@ -160,6 +170,16 @@ func (api *API) waitForEnablePrivatelinkWithRetry(ctx context.Context, instanceI
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.waitForEnablePrivatelinkWithRetry(ctx, instanceID, attempt, sleep, timeout)
 		}
+	case 423:
+		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.waitForEnablePrivatelinkWithRetry(ctx, instanceID, attempt, sleep, timeout)
+	case 503:
+		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.waitForEnablePrivatelinkWithRetry(ctx, instanceID, attempt, sleep, timeout)
 	}
 
 	return fmt.Errorf("failed to enable PrivateLink, status=%d message=%s ",
