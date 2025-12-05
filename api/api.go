@@ -79,11 +79,15 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 	case 410:
 		tflog.Warn(ctx, fmt.Sprintf("the %s has been deleted", request.resourceName))
 		return nil
+	case 423:
+		tflog.Debug(ctx, fmt.Sprintf("resource %s is locked, will try again, attempt=%d", request.resourceName, request.attempt))
+		// Intentionally fall through to retry logic below
 	case 503:
 		if _, ok := ctx.Deadline(); !ok {
 			return fmt.Errorf("context has no deadline")
 		}
 		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d", request.attempt))
+		// Intentionally fall through to retry logic below
 	default:
 		return fmt.Errorf("unexpected status code: %d", response.StatusCode)
 	}

@@ -91,6 +91,16 @@ func (api *API) retryAcceptVpcPeering(ctx context.Context, path string, attempt,
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.retryAcceptVpcPeering(ctx, path, attempt, sleep, timeout)
 		}
+	case 423:
+		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.retryAcceptVpcPeering(ctx, path, attempt, sleep, timeout)
+	case 503:
+		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.retryAcceptVpcPeering(ctx, path, attempt, sleep, timeout)
 	}
 
 	return nil, fmt.Errorf("failed to accept VPC peering, status=%d message=%s ",
@@ -125,6 +135,14 @@ func (api *API) readVpcInfoWithRetry(ctx context.Context, path string, attempts,
 			return nil, fmt.Errorf("failed to read VPC info, status=%d message=%s ",
 				response.StatusCode, failed)
 		}
+	case 423:
+		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, after=%d ", sleep))
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.readVpcInfoWithRetry(ctx, path, attempts, 2*sleep)
+	case 503:
+		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, after=%d ", sleep))
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.readVpcInfoWithRetry(ctx, path, attempts, 2*sleep)
 	}
 
 	return nil, fmt.Errorf("failed to read VPC info, status=%d message=%s ",
@@ -157,6 +175,16 @@ func (api *API) retryRemoveVpcPeering(ctx context.Context, path string, attempt,
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.retryRemoveVpcPeering(ctx, path, attempt, sleep, timeout)
 		}
+	case 423:
+		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.retryRemoveVpcPeering(ctx, path, attempt, sleep, timeout)
+	case 503:
+		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.retryRemoveVpcPeering(ctx, path, attempt, sleep, timeout)
 	}
 
 	return fmt.Errorf("failed to remove VPC peering, status=%d message=%s ",
@@ -207,6 +235,16 @@ func (api *API) waitForPeeringStatusWithRetry(ctx context.Context, path, peering
 			time.Sleep(time.Duration(sleep) * time.Second)
 			return api.waitForPeeringStatusWithRetry(ctx, path, peeringID, attempt, sleep, timeout)
 		}
+	case 423:
+		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.waitForPeeringStatusWithRetry(ctx, path, peeringID, attempt, sleep, timeout)
+	case 503:
+		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.waitForPeeringStatusWithRetry(ctx, path, peeringID, attempt, sleep, timeout)
 	}
 
 	return attempt, fmt.Errorf("failed to accept VPC peering, status=%d message=%s ",

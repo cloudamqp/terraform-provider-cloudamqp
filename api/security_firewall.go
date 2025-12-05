@@ -75,10 +75,10 @@ func (api *API) createFirewallSettingsWithRetry(ctx context.Context, path string
 			"settings", timeout)
 	}
 
-	switch {
-	case response.StatusCode == 201:
+	switch response.StatusCode {
+	case 201:
 		return attempt, nil
-	case response.StatusCode == 400:
+	case 400:
 		switch {
 		case failed["error_code"] == nil:
 			break
@@ -92,6 +92,16 @@ func (api *API) createFirewallSettingsWithRetry(ctx context.Context, path string
 			return attempt, fmt.Errorf("firewall rules validation failed due to: %s",
 				failed["error"].(string))
 		}
+	case 423:
+		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.createFirewallSettingsWithRetry(ctx, path, params, attempt, sleep, timeout)
+	case 503:
+		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.createFirewallSettingsWithRetry(ctx, path, params, attempt, sleep, timeout)
 	}
 	return attempt, fmt.Errorf("failed to create new firewall, status=%d message=%s ",
 		response.StatusCode, failed)
@@ -170,6 +180,16 @@ func (api *API) updateFirewallSettingsWithRetry(ctx context.Context, path string
 			return attempt, fmt.Errorf("firewall rules validation failed due to: %s",
 				failed["error"].(string))
 		}
+	case 423:
+		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.updateFirewallSettingsWithRetry(ctx, path, params, attempt, sleep, timeout)
+	case 503:
+		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.updateFirewallSettingsWithRetry(ctx, path, params, attempt, sleep, timeout)
 	}
 	return attempt, fmt.Errorf("failed to update firewall settings, status=%d message=%s ",
 		response.StatusCode, failed)
@@ -226,6 +246,16 @@ func (api *API) deleteFirewallSettingsWithRetry(ctx context.Context, path string
 			return attempt, fmt.Errorf("firewall rules validation failed due to: %s",
 				failed["error"].(string))
 		}
+	case 423:
+		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.deleteFirewallSettingsWithRetry(ctx, path, attempt, sleep, timeout)
+	case 503:
+		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.deleteFirewallSettingsWithRetry(ctx, path, attempt, sleep, timeout)
 	}
 	return attempt, fmt.Errorf("failed to reset firewall, status=%d message=%s ",
 		response.StatusCode, failed)
