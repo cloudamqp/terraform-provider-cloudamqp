@@ -10,7 +10,7 @@ import (
 )
 
 // ReadRabbitMqConfiguration - retrieves the RabbitMQ configuration for an instance
-func (api *API) ReadRabbitMqConfiguration(ctx context.Context, instanceID, sleep int) (*model.RabbitMqConfigResponse, error) {
+func (api *API) ReadRabbitMqConfiguration(ctx context.Context, instanceID, sleep int64) (*model.RabbitMqConfigResponse, error) {
 
 	var (
 		data   model.RabbitMqConfigResponse
@@ -36,8 +36,8 @@ func (api *API) ReadRabbitMqConfiguration(ctx context.Context, instanceID, sleep
 }
 
 // UpdateRabbitMqConfiguration - updates the RabbitMQ configuration for an instance
-func (api *API) UpdateRabbitMqConfiguration(ctx context.Context, instanceID int,
-	params model.RabbitMqConfigRequest, sleep int) error {
+func (api *API) UpdateRabbitMqConfiguration(ctx context.Context, instanceID int64,
+	params model.RabbitMqConfigRequest, sleep int64) error {
 
 	var (
 		failed map[string]any

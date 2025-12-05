@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
@@ -15,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
@@ -22,6 +24,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 var (
@@ -50,8 +53,19 @@ type rabbitMqConfigurationResourceModel struct {
 	MaxMessageSize           types.Int64   `tfsdk:"max_message_size"`
 	LogExchangeLevel         types.String  `tfsdk:"log_exchange_level"`
 	ClusterPartitionHandling types.String  `tfsdk:"cluster_partition_handling"`
-	Sleep                    types.Int64   `tfsdk:"sleep"`
-	Timeout                  types.Int64   `tfsdk:"timeout"`
+	// MQTT settings
+	MQTTVhost        types.String `tfsdk:"mqtt_vhost"`
+	MQTTExchange     types.String `tfsdk:"mqtt_exchange"`
+	MQTTSSLCertLogin types.Bool   `tfsdk:"mqtt_ssl_cert_login"`
+	// SSL settings
+	SSLCertLoginFrom           types.String `tfsdk:"ssl_cert_login_from"`
+	SSLOptionsFailIfNoPeerCert types.Bool   `tfsdk:"ssl_options_fail_if_no_peer_cert"`
+	SSLOptionsVerify           types.String `tfsdk:"ssl_options_verify"`
+	// Message interceptor settings
+	MessageInterceptorsTimestampOverwrite types.String `tfsdk:"message_interceptors_timestamp_overwrite"`
+	// Sleep/timeout for retries
+	Sleep   types.Int64 `tfsdk:"sleep"`
+	Timeout types.Int64 `tfsdk:"timeout"`
 }
 
 func (r *rabbitMqConfigurationResource) Metadata(ctx context.Context, req resource.MetadataRequest,
@@ -185,6 +199,72 @@ func (r *rabbitMqConfigurationResource) Schema(ctx context.Context, req resource
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"mqtt_vhost": schema.StringAttribute{
+				Optional:    true,
+				Computed:    true,
+				Description: "Virtual host for MQTT connections.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"mqtt_exchange": schema.StringAttribute{
+				Optional:    true,
+				Computed:    true,
+				Description: "The exchange option determines which exchange messages from MQTT clients are published to.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"mqtt_ssl_cert_login": schema.BoolAttribute{
+				Optional:    true,
+				Computed:    true,
+				Description: "Enable SSL certificate-based authentication for MQTT connections.",
+				PlanModifiers: []planmodifier.Bool{
+					boolplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"ssl_cert_login_from": schema.StringAttribute{
+				Optional:    true,
+				Computed:    true,
+				Description: "Determines which certificate field to use as the username for TLS-based authentication.",
+				Validators: []validator.String{
+					stringvalidator.OneOfCaseInsensitive("common_name", "distinguished_name"),
+				},
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"ssl_options_fail_if_no_peer_cert": schema.BoolAttribute{
+				Optional:    true,
+				Computed:    true,
+				Description: "When set to true, TLS connections will fail if the client does not provide a certificate.",
+				PlanModifiers: []planmodifier.Bool{
+					boolplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"ssl_options_verify": schema.StringAttribute{
+				Optional:    true,
+				Computed:    true,
+				Description: "Controls peer certificate verification for TLS connections.",
+				Validators: []validator.String{
+					stringvalidator.OneOfCaseInsensitive("verify_none", "verify_peer"),
+				},
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"message_interceptors_timestamp_overwrite": schema.StringAttribute{
+				Optional: true,
+				Computed: true,
+				Description: "Sets a timestamp header on incoming messages. enabled_with_overwrite will " +
+					"overwrite any existing timestamps in the header.",
+				Validators: []validator.String{
+					stringvalidator.OneOfCaseInsensitive("enabled", "enabled_with_overwrite", "disabled"),
+				},
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
 			"sleep": schema.Int64Attribute{
 				Optional:    true,
 				Default:     int64default.StaticInt64(60),
@@ -223,13 +303,13 @@ func (r *rabbitMqConfigurationResource) Create(ctx context.Context, req resource
 		return
 	}
 
-	instanceID := int(plan.InstanceID.ValueInt64())
-	data := r.populateCreateRequest(&plan)
-
-	sleep := int(plan.Sleep.ValueInt64())
-	timeout := int(plan.Timeout.ValueInt64())
+	sleep := plan.Sleep.ValueInt64()
+	timeout := plan.Timeout.ValueInt64()
 	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
 	defer cancel()
+
+	instanceID := plan.InstanceID.ValueInt64()
+	data := r.populateCreateRequest(ctx, &plan)
 
 	err := r.client.UpdateRabbitMqConfiguration(timeoutCtx, instanceID, data, sleep)
 	if err != nil {
@@ -259,28 +339,27 @@ func (r *rabbitMqConfigurationResource) Read(ctx context.Context, req resource.R
 		return
 	}
 
-	instanceID := int(state.InstanceID.ValueInt64())
-	sleep := int(state.Sleep.ValueInt64())
+	// Sleep/timeout with default values
+	sleep := state.Sleep.ValueInt64()
 	if sleep == 0 {
-		sleep = 60 // fallback default
+		sleep = 60
 	}
-
-	timeout := int(state.Timeout.ValueInt64())
+	timeout := state.Timeout.ValueInt64()
 	if timeout == 0 {
-		timeout = 3600 // fallback default
+		timeout = 3600
 	}
-
 	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
 	defer cancel()
+
+	instanceID := state.InstanceID.ValueInt64()
 
 	data, err := r.client.ReadRabbitMqConfiguration(timeoutCtx, instanceID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("API Error", err.Error())
 		return
 	}
-
-	// Resource drift: instance or resource not found, trigger re-creation
 	if data == nil {
+		tflog.Warn(ctx, fmt.Sprintf("RabbitMQ configuration resource drift for instance ID %d, trigger re-create", instanceID))
 		resp.State.RemoveResource(ctx)
 		return
 	}
@@ -298,12 +377,19 @@ func (r *rabbitMqConfigurationResource) Update(ctx context.Context, req resource
 		return
 	}
 
-	instanceID := int(plan.InstanceID.ValueInt64())
-	sleep := int(plan.Sleep.ValueInt64())
-	timeout := int(plan.Timeout.ValueInt64())
+	sleep := plan.Sleep.ValueInt64()
+	timeout := plan.Timeout.ValueInt64()
 	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
 	defer cancel()
-	data := r.populateUpdateRequest(&plan)
+
+	instanceID := plan.InstanceID.ValueInt64()
+	data, changed := r.populateUpdateRequest(ctx, plan, state)
+
+	if !changed {
+		// No changes detected, skip update
+		resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+		return
+	}
 
 	err := r.client.UpdateRabbitMqConfiguration(timeoutCtx, instanceID, data, sleep)
 	if err != nil {
@@ -344,19 +430,40 @@ func (r *rabbitMqConfigurationResource) ImportState(ctx context.Context, req res
 
 // Handle data conversion from API response to resource model
 func (r *rabbitMqConfigurationResource) populateRabbitMqConfigModel(resourceModel *rabbitMqConfigurationResourceModel,
-	data *model.RabbitMqConfigResponse, instanceID, sleep, timeout int) {
+	data *model.RabbitMqConfigResponse, instanceID, sleep, timeout int64) {
 
-	resourceModel.ID = types.StringValue(strconv.Itoa(instanceID))
-	resourceModel.InstanceID = types.Int64Value(int64(instanceID))
-	resourceModel.Sleep = types.Int64Value(int64(sleep))
-	resourceModel.Timeout = types.Int64Value(int64(timeout))
+	resourceModel.ID = types.StringValue(strconv.Itoa(int(instanceID)))
+	resourceModel.InstanceID = types.Int64Value(instanceID)
+	resourceModel.Sleep = types.Int64Value(sleep)
+	resourceModel.Timeout = types.Int64Value(timeout)
 	resourceModel.Heartbeat = types.Int64Value(data.Heartbeat)
 	resourceModel.ChannelMax = types.Int64Value(data.ChannelMax)
 	resourceModel.MaxMessageSize = types.Int64Value(data.MaxMessageSize)
 	resourceModel.LogExchangeLevel = types.StringValue(data.LogExchangeLevel)
 	resourceModel.ClusterPartitionHandling = types.StringValue(data.ClusterPartitionHandling)
 	resourceModel.VmMemoryHighWatermark = types.Float64Value(data.VmMemoryHighWatermark)
+	// MQTT settings
+	resourceModel.MQTTVhost = types.StringValue(data.MQTTVhost)
+	resourceModel.MQTTExchange = types.StringValue(data.MQTTExchange)
+	resourceModel.MQTTSSLCertLogin = types.BoolValue(bool(data.MQTTSSLCertLogin))
+	// SSL settings
+	resourceModel.SSLCertLoginFrom = types.StringValue(data.SSLCertLoginFrom)
+	resourceModel.SSLOptionsFailIfNoPeerCert = types.BoolValue(bool(data.SSLOptionsFailIfNoPeerCert))
+	if data.SSLOptionsVerify == nil {
+		resourceModel.SSLOptionsVerify = types.StringValue("verify_none")
+	} else {
+		resourceModel.SSLOptionsVerify = types.StringValue(*data.SSLOptionsVerify)
+	}
+	// Message interceptor settings
+	if data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite == nil {
+		resourceModel.MessageInterceptorsTimestampOverwrite = types.StringValue("disabled")
+	} else if *data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite == "true" {
+		resourceModel.MessageInterceptorsTimestampOverwrite = types.StringValue("enabled_with_overwrite")
+	} else if *data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite == "false" {
+		resourceModel.MessageInterceptorsTimestampOverwrite = types.StringValue("enabled")
+	}
 
+	// Handle special cases for pointer and custom types
 	if data.ConnectionMax == nil {
 		resourceModel.ConnectionMax = types.Int64Value(-1) // Default value when not set
 	} else if data.ConnectionMax.IsInfinity {
@@ -379,9 +486,12 @@ func (r *rabbitMqConfigurationResource) populateRabbitMqConfigModel(resourceMode
 }
 
 // Handle data conversion from resource model to create API request
-func (r *rabbitMqConfigurationResource) populateCreateRequest(plan *rabbitMqConfigurationResourceModel) model.RabbitMqConfigRequest {
+func (r *rabbitMqConfigurationResource) populateCreateRequest(ctx context.Context, plan *rabbitMqConfigurationResourceModel) model.RabbitMqConfigRequest {
 	data := model.RabbitMqConfigRequest{}
 
+	tflog.Info(ctx, fmt.Sprintf("Populating RabbitMQ configuration create request, plan: %+v", plan))
+
+	// TODO: Can plan.Heartbeat.ValueInt64Pointer() be used instead? Same goes for the rest of the fields.
 	if !plan.Heartbeat.IsUnknown() {
 		data.Heartbeat = utils.Pointer(plan.Heartbeat.ValueInt64())
 	}
@@ -426,56 +536,177 @@ func (r *rabbitMqConfigurationResource) populateCreateRequest(plan *rabbitMqConf
 		data.ClusterPartitionHandling = plan.ClusterPartitionHandling.ValueString()
 	}
 
+	if !plan.MQTTVhost.IsUnknown() {
+		data.MQTTVhost = utils.Pointer(plan.MQTTVhost.ValueString())
+	}
+
+	if !plan.MQTTExchange.IsUnknown() {
+		data.MQTTExchange = utils.Pointer(plan.MQTTExchange.ValueString())
+	}
+
+	if !plan.MQTTSSLCertLogin.IsUnknown() {
+		data.MQTTSSLCertLogin = utils.Pointer(bool(plan.MQTTSSLCertLogin.ValueBool()))
+	}
+
+	if !plan.SSLCertLoginFrom.IsUnknown() {
+		data.SSLCertLoginFrom = utils.Pointer(plan.SSLCertLoginFrom.ValueString())
+	}
+
+	if !plan.SSLOptionsFailIfNoPeerCert.IsUnknown() {
+		data.SSLOptionsFailIfNoPeerCert = utils.Pointer(bool(plan.SSLOptionsFailIfNoPeerCert.ValueBool()))
+	}
+
+	if !plan.SSLOptionsVerify.IsUnknown() {
+		data.SSLOptionsVerify = utils.Pointer(plan.SSLOptionsVerify.ValueString())
+	}
+
+	if !plan.MessageInterceptorsTimestampOverwrite.IsUnknown() {
+		value := plan.MessageInterceptorsTimestampOverwrite.ValueString()
+		switch strings.ToLower(value) {
+		case "disabled":
+			data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite = nil
+		case "enabled_with_overwrite":
+			data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite = utils.Pointer("true")
+		case "enabled":
+			data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite = utils.Pointer("false")
+		}
+	}
+
 	return data
 }
 
 // Handle data conversion from resource model to update API request
-func (r *rabbitMqConfigurationResource) populateUpdateRequest(plan *rabbitMqConfigurationResourceModel) model.RabbitMqConfigRequest {
+func (r *rabbitMqConfigurationResource) populateUpdateRequest(ctx context.Context, plan, state rabbitMqConfigurationResourceModel) (model.RabbitMqConfigRequest, bool) {
 	data := model.RabbitMqConfigRequest{}
+	changed := false
+	tflog.Info(ctx, fmt.Sprintf("Populating RabbitMQ configuration update request, plan: %+v", plan))
 
 	if !plan.Heartbeat.IsNull() {
-		data.Heartbeat = utils.Pointer(plan.Heartbeat.ValueInt64())
+		if plan.Heartbeat.ValueInt64() != state.Heartbeat.ValueInt64() {
+			data.Heartbeat = utils.Pointer(plan.Heartbeat.ValueInt64())
+		}
 	}
 
 	if !plan.ConnectionMax.IsNull() {
-		if plan.ConnectionMax.ValueInt64() == -1 {
-			data.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: true})
-		} else {
-			data.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: false, Value: plan.ConnectionMax.ValueInt64()})
+		if plan.ConnectionMax.ValueInt64() != state.ConnectionMax.ValueInt64() {
+			if plan.ConnectionMax.ValueInt64() == -1 {
+				data.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: true})
+			} else {
+				data.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: false, Value: plan.ConnectionMax.ValueInt64()})
+			}
+			changed = true
 		}
 	}
 
 	if !plan.ChannelMax.IsNull() {
-		data.ChannelMax = utils.Pointer(plan.ChannelMax.ValueInt64())
+		if plan.ChannelMax.ValueInt64() != state.ChannelMax.ValueInt64() {
+			data.ChannelMax = utils.Pointer(plan.ChannelMax.ValueInt64())
+			changed = true
+		}
 	}
 
 	if !plan.ConsumerTimeout.IsNull() {
-		if plan.ConsumerTimeout.ValueInt64() == -1 {
-			data.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: false})
-		} else {
-			data.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: true, Value: plan.ConsumerTimeout.ValueInt64()})
+		if plan.ConsumerTimeout.ValueInt64() != state.ConsumerTimeout.ValueInt64() {
+			if plan.ConsumerTimeout.ValueInt64() == -1 {
+				data.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: false})
+			} else {
+				data.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: true, Value: plan.ConsumerTimeout.ValueInt64()})
+			}
+			changed = true
 		}
 	}
 
 	if !plan.VmMemoryHighWatermark.IsNull() {
-		data.VmMemoryHighWatermark = utils.Pointer(plan.VmMemoryHighWatermark.ValueFloat64())
+		if plan.VmMemoryHighWatermark.ValueFloat64() != state.VmMemoryHighWatermark.ValueFloat64() {
+			data.VmMemoryHighWatermark = utils.Pointer(plan.VmMemoryHighWatermark.ValueFloat64())
+			changed = true
+		}
 	}
 
 	if !plan.QueueIndexEmbedMsgsBelow.IsNull() {
-		data.QueueIndexEmbedMsgsBelow = utils.Pointer(plan.QueueIndexEmbedMsgsBelow.ValueInt64())
+		if plan.QueueIndexEmbedMsgsBelow.ValueInt64() != state.QueueIndexEmbedMsgsBelow.ValueInt64() {
+			data.QueueIndexEmbedMsgsBelow = utils.Pointer(plan.QueueIndexEmbedMsgsBelow.ValueInt64())
+			changed = true
+		}
 	}
 
 	if !plan.MaxMessageSize.IsNull() {
-		data.MaxMessageSize = utils.Pointer(plan.MaxMessageSize.ValueInt64())
+		if plan.MaxMessageSize.ValueInt64() != state.MaxMessageSize.ValueInt64() {
+			data.MaxMessageSize = utils.Pointer(plan.MaxMessageSize.ValueInt64())
+			changed = true
+		}
 	}
 
 	if !plan.LogExchangeLevel.IsNull() {
-		data.LogExchangeLevel = plan.LogExchangeLevel.ValueString()
+		if plan.LogExchangeLevel.ValueString() != state.LogExchangeLevel.ValueString() {
+			data.LogExchangeLevel = plan.LogExchangeLevel.ValueString()
+			changed = true
+		}
 	}
 
 	if !plan.ClusterPartitionHandling.IsNull() {
-		data.ClusterPartitionHandling = plan.ClusterPartitionHandling.ValueString()
+		if plan.ClusterPartitionHandling.ValueString() != state.ClusterPartitionHandling.ValueString() {
+			data.ClusterPartitionHandling = plan.ClusterPartitionHandling.ValueString()
+			changed = true
+		}
 	}
 
-	return data
+	if !plan.MQTTVhost.IsNull() {
+		if plan.MQTTVhost.ValueString() != state.MQTTVhost.ValueString() {
+			data.MQTTVhost = utils.Pointer(plan.MQTTVhost.ValueString())
+			changed = true
+		}
+	}
+
+	if !plan.MQTTExchange.IsNull() {
+		if plan.MQTTExchange.ValueString() != state.MQTTExchange.ValueString() {
+			data.MQTTExchange = utils.Pointer(plan.MQTTExchange.ValueString())
+			changed = true
+		}
+	}
+
+	if !plan.MQTTSSLCertLogin.IsNull() {
+		if plan.MQTTSSLCertLogin.ValueBool() != state.MQTTSSLCertLogin.ValueBool() {
+			data.MQTTSSLCertLogin = utils.Pointer(bool(plan.MQTTSSLCertLogin.ValueBool()))
+			changed = true
+		}
+	}
+
+	if !plan.SSLCertLoginFrom.IsNull() {
+		if plan.SSLCertLoginFrom.ValueString() != state.SSLCertLoginFrom.ValueString() {
+			data.SSLCertLoginFrom = utils.Pointer(plan.SSLCertLoginFrom.ValueString())
+			changed = true
+		}
+	}
+
+	if !plan.SSLOptionsFailIfNoPeerCert.IsNull() {
+		if plan.SSLOptionsFailIfNoPeerCert.ValueBool() != state.SSLOptionsFailIfNoPeerCert.ValueBool() {
+			data.SSLOptionsFailIfNoPeerCert = utils.Pointer(bool(plan.SSLOptionsFailIfNoPeerCert.ValueBool()))
+			changed = true
+		}
+	}
+
+	if !plan.SSLOptionsVerify.IsNull() {
+		if plan.SSLOptionsVerify.ValueString() != state.SSLOptionsVerify.ValueString() {
+			data.SSLOptionsVerify = utils.Pointer(plan.SSLOptionsVerify.ValueString())
+			changed = true
+		}
+	}
+
+	if !plan.MessageInterceptorsTimestampOverwrite.IsNull() {
+		if plan.MessageInterceptorsTimestampOverwrite.ValueString() != state.MessageInterceptorsTimestampOverwrite.ValueString() {
+			value := plan.MessageInterceptorsTimestampOverwrite.ValueString()
+			switch strings.ToLower(value) {
+			case "enabled_with_overwrite":
+				data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite = utils.Pointer("true")
+			case "enabled":
+				data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite = utils.Pointer("false")
+			case "disabled":
+				data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite = nil
+			}
+			changed = true
+		}
+	}
+
+	return data, changed
 }
