@@ -1,0 +1,6 @@
+resource "cloudamqp_custom_domain" "custom_domain" {
+  instance_id = {{.InstanceID}}
+  hostname    = "{{.CustomDomainHostname}}"
+  {{if .CustomDomainSleep}}sleep     = {{.CustomDomainSleep}}{{end}}
+  {{if .CustomDomainTimeout}}timeout = {{.CustomDomainTimeout}}{{end}}
+}

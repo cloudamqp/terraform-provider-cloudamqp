@@ -14,6 +14,7 @@ func (api *API) waitUntilCustomDomainConfigured(ctx context.Context, instanceID 
 	for {
 		select {
 		case <-ctx.Done():
+			tflog.Debug(ctx, "Timeout reached while waiting on custom domain configuration")
 			return nil, ctx.Err()
 		default:
 		}

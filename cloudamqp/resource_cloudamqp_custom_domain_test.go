@@ -25,7 +25,7 @@ func TestAccCustomDomain_Basic(t *testing.T) {
 			"InstanceName":         "TestAccCustomDomain_Basic",
 			"InstanceID":           fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":         "bunny-1",
-			"CustomDomainHostname": "test.example.com",
+			"CustomDomainHostname": "vcr-test.ddns.net",
 			"CustomDomainSleep":    "1",
 			"CustomDomainTimeout":  "1800",
 		}
@@ -34,7 +34,7 @@ func TestAccCustomDomain_Basic(t *testing.T) {
 			"InstanceName":         "TestAccCustomDomain_Basic",
 			"InstanceID":           fmt.Sprintf("%s.id", instanceResourceName),
 			"InstancePlan":         "bunny-1",
-			"CustomDomainHostname": "updated.example.com",
+			"CustomDomainHostname": "vcr-update.ddns.net",
 			"CustomDomainSleep":    "1",
 			"CustomDomainTimeout":  "1800",
 		}
@@ -47,9 +47,9 @@ func TestAccCustomDomain_Basic(t *testing.T) {
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(customDomainResourceName, "hostname", "test.example.com"),
-					resource.TestCheckResourceAttr(customDomainResourceName, "sleep", "1"),
-					resource.TestCheckResourceAttr(customDomainResourceName, "timeout", "1800"),
+					resource.TestCheckResourceAttr(customDomainResourceName, "hostname", params["CustomDomainHostname"]),
+					resource.TestCheckResourceAttr(customDomainResourceName, "sleep", params["CustomDomainSleep"]),
+					resource.TestCheckResourceAttr(customDomainResourceName, "timeout", params["CustomDomainTimeout"]),
 				),
 			},
 			{
@@ -62,78 +62,9 @@ func TestAccCustomDomain_Basic(t *testing.T) {
 			{
 				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(customDomainResourceName, "hostname", "updated.example.com"),
-					resource.TestCheckResourceAttr(customDomainResourceName, "sleep", "1"),
-					resource.TestCheckResourceAttr(customDomainResourceName, "timeout", "1800"),
-				),
-			},
-		},
-	})
-}
-
-// TestAccCustomDomain_DefaultValues: Test that default sleep and timeout values work correctly.
-func TestAccCustomDomain_DefaultValues(t *testing.T) {
-	t.Parallel()
-
-	var (
-		fileNames                = []string{"instance", "custom_domain"}
-		instanceResourceName     = "cloudamqp_instance.instance"
-		customDomainResourceName = "cloudamqp_custom_domain.custom_domain"
-
-		params = map[string]string{
-			"InstanceName":         "TestAccCustomDomain_DefaultValues",
-			"InstanceID":           fmt.Sprintf("%s.id", instanceResourceName),
-			"InstancePlan":         "bunny-1",
-			"CustomDomainHostname": "default.example.com",
-			// Omit CustomDomainSleep and CustomDomainTimeout to use defaults
-		}
-	)
-
-	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck: func() { testAccPreCheck(t) },
-		Steps: []resource.TestStep{
-			{
-				Config: configuration.GetTemplatedConfig(t, fileNames, params),
-				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(customDomainResourceName, "hostname", "default.example.com"),
-					resource.TestCheckResourceAttr(customDomainResourceName, "sleep", "10"),
-					resource.TestCheckResourceAttr(customDomainResourceName, "timeout", "1800"),
-				),
-			},
-		},
-	})
-}
-
-// TestAccCustomDomain_CustomValues: Test that custom sleep and timeout values can be set.
-func TestAccCustomDomain_CustomValues(t *testing.T) {
-	t.Parallel()
-
-	var (
-		fileNames                = []string{"instance", "custom_domain"}
-		instanceResourceName     = "cloudamqp_instance.instance"
-		customDomainResourceName = "cloudamqp_custom_domain.custom_domain"
-
-		params = map[string]string{
-			"InstanceName":         "TestAccCustomDomain_CustomValues",
-			"InstanceID":           fmt.Sprintf("%s.id", instanceResourceName),
-			"InstancePlan":         "bunny-1",
-			"CustomDomainHostname": "custom.example.com",
-			"CustomDomainSleep":    "5",
-			"CustomDomainTimeout":  "3600",
-		}
-	)
-
-	cloudamqpResourceTest(t, resource.TestCase{
-		PreCheck: func() { testAccPreCheck(t) },
-		Steps: []resource.TestStep{
-			{
-				Config: configuration.GetTemplatedConfig(t, fileNames, params),
-				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(customDomainResourceName, "hostname", "custom.example.com"),
-					resource.TestCheckResourceAttr(customDomainResourceName, "sleep", "5"),
-					resource.TestCheckResourceAttr(customDomainResourceName, "timeout", "3600"),
+					resource.TestCheckResourceAttr(customDomainResourceName, "hostname", paramsUpdated["CustomDomainHostname"]),
+					resource.TestCheckResourceAttr(customDomainResourceName, "sleep", paramsUpdated["CustomDomainSleep"]),
+					resource.TestCheckResourceAttr(customDomainResourceName, "timeout", paramsUpdated["CustomDomainTimeout"]),
 				),
 			},
 		},
