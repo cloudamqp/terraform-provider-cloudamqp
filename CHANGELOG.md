@@ -1,4 +1,4 @@
-## 1.40.0 (Unreleased)
+## 1.40.0 (11 Dec, 2025)
 
 IMPROVEMENTS:
 
