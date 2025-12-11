@@ -80,7 +80,11 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 		tflog.Warn(ctx, fmt.Sprintf("the %s has been deleted", request.resourceName))
 		return nil
 	case 423:
-		tflog.Debug(ctx, fmt.Sprintf("resource %s is locked, will try again, attempt=%d", request.resourceName, request.attempt))
+		if msg, ok := (*request.failed)["message"].(string); ok {
+			tflog.Warn(ctx, fmt.Sprintf("resource %s is locked: %s. Will try again, attempt=%d", request.resourceName, msg, request.attempt))
+		} else {
+			tflog.Warn(ctx, fmt.Sprintf("resource %s is locked. Will try again, attempt=%d", request.resourceName, request.attempt))
+		}
 		// Intentionally fall through to retry logic below
 	case 503:
 		if _, ok := ctx.Deadline(); !ok {
