@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
@@ -61,16 +60,12 @@ type rabbitMqConfigurationResourceModel struct {
 	SSLCertLoginFrom           types.String `tfsdk:"ssl_cert_login_from"`
 	SSLOptionsFailIfNoPeerCert types.Bool   `tfsdk:"ssl_options_fail_if_no_peer_cert"`
 	SSLOptionsVerify           types.String `tfsdk:"ssl_options_verify"`
-	// Message interceptor settings
-	MessageInterceptorsTimestampOverwrite types.String `tfsdk:"message_interceptors_timestamp_overwrite"`
 	// Sleep/timeout for retries
 	Sleep   types.Int64 `tfsdk:"sleep"`
 	Timeout types.Int64 `tfsdk:"timeout"`
 }
 
-func (r *rabbitMqConfigurationResource) Metadata(ctx context.Context, req resource.MetadataRequest,
-	resp *resource.MetadataResponse) {
-
+func (r *rabbitMqConfigurationResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = "cloudamqp_rabbitmq_configuration"
 }
 
@@ -253,18 +248,6 @@ func (r *rabbitMqConfigurationResource) Schema(ctx context.Context, req resource
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"message_interceptors_timestamp_overwrite": schema.StringAttribute{
-				Optional: true,
-				Computed: true,
-				Description: "Sets a timestamp header on incoming messages. enabled_with_overwrite will " +
-					"overwrite any existing timestamps in the header.",
-				Validators: []validator.String{
-					stringvalidator.OneOfCaseInsensitive("enabled", "enabled_with_overwrite", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.UseStateForUnknown(),
-				},
-			},
 			"sleep": schema.Int64Attribute{
 				Optional:    true,
 				Default:     int64default.StaticInt64(60),
@@ -309,9 +292,9 @@ func (r *rabbitMqConfigurationResource) Create(ctx context.Context, req resource
 	defer cancel()
 
 	instanceID := plan.InstanceID.ValueInt64()
-	data := r.populateCreateRequest(ctx, &plan)
+	request := r.populateCreateRequest(plan)
 
-	err := r.client.UpdateRabbitMqConfiguration(timeoutCtx, instanceID, data, sleep)
+	err := r.client.UpdateRabbitMqConfiguration(timeoutCtx, instanceID, request, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("API Error", fmt.Sprintf("Failed to create RabbitMQ configuration: %s", err.Error()))
 		return
@@ -328,7 +311,7 @@ func (r *rabbitMqConfigurationResource) Create(ctx context.Context, req resource
 		return
 	}
 
-	r.populateRabbitMqConfigModel(&plan, dataResp, instanceID, sleep, timeout)
+	r.populateResourceModel(&plan, dataResp, instanceID)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
@@ -341,11 +324,9 @@ func (r *rabbitMqConfigurationResource) Read(ctx context.Context, req resource.R
 
 	// Sleep/timeout with default values
 	sleep := state.Sleep.ValueInt64()
-	if sleep == 0 {
-		sleep = 60
-	}
 	timeout := state.Timeout.ValueInt64()
-	if timeout == 0 {
+	if sleep == 0 && timeout == 0 {
+		sleep = 60
 		timeout = 3600
 	}
 	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
@@ -364,13 +345,12 @@ func (r *rabbitMqConfigurationResource) Read(ctx context.Context, req resource.R
 		return
 	}
 
-	r.populateRabbitMqConfigModel(&state, data, instanceID, sleep, timeout)
+	r.populateResourceModel(&state, data, instanceID)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
 func (r *rabbitMqConfigurationResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan rabbitMqConfigurationResourceModel
-	var state rabbitMqConfigurationResourceModel
+	var plan, state rabbitMqConfigurationResourceModel
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
@@ -383,15 +363,15 @@ func (r *rabbitMqConfigurationResource) Update(ctx context.Context, req resource
 	defer cancel()
 
 	instanceID := plan.InstanceID.ValueInt64()
-	data, changed := r.populateUpdateRequest(ctx, plan, state)
+	request, changed := r.populateUpdateRequest(ctx, plan, state)
 
 	if !changed {
-		// No changes detected, skip update
+		// No rabbitmq configuration changes detected, only save the state
 		resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 		return
 	}
 
-	err := r.client.UpdateRabbitMqConfiguration(timeoutCtx, instanceID, data, sleep)
+	err := r.client.UpdateRabbitMqConfiguration(timeoutCtx, instanceID, request, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("API Error", fmt.Sprintf("Failed to update RabbitMQ configuration: %s", err.Error()))
 		return
@@ -408,7 +388,7 @@ func (r *rabbitMqConfigurationResource) Update(ctx context.Context, req resource
 		return
 	}
 
-	r.populateRabbitMqConfigModel(&plan, dataResp, instanceID, sleep, timeout)
+	r.populateResourceModel(&plan, dataResp, instanceID)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
@@ -426,16 +406,15 @@ func (r *rabbitMqConfigurationResource) ImportState(ctx context.Context, req res
 	}
 	resp.State.SetAttribute(ctx, path.Root("id"), id)
 	resp.State.SetAttribute(ctx, path.Root("instance_id"), instanceID)
+	resp.State.SetAttribute(ctx, path.Root("sleep"), 60)     // default value
+	resp.State.SetAttribute(ctx, path.Root("timeout"), 3600) // default value
 }
 
-// Handle data conversion from API response to resource model
-func (r *rabbitMqConfigurationResource) populateRabbitMqConfigModel(resourceModel *rabbitMqConfigurationResourceModel,
-	data *model.RabbitMqConfigResponse, instanceID, sleep, timeout int64) {
+// Convert API response to resource model
+func (r *rabbitMqConfigurationResource) populateResourceModel(resourceModel *rabbitMqConfigurationResourceModel, data *model.RabbitMqConfigResponse, instanceID int64) {
 
 	resourceModel.ID = types.StringValue(strconv.Itoa(int(instanceID)))
 	resourceModel.InstanceID = types.Int64Value(instanceID)
-	resourceModel.Sleep = types.Int64Value(sleep)
-	resourceModel.Timeout = types.Int64Value(timeout)
 	resourceModel.Heartbeat = types.Int64Value(data.Heartbeat)
 	resourceModel.ChannelMax = types.Int64Value(data.ChannelMax)
 	resourceModel.MaxMessageSize = types.Int64Value(data.MaxMessageSize)
@@ -453,14 +432,6 @@ func (r *rabbitMqConfigurationResource) populateRabbitMqConfigModel(resourceMode
 		resourceModel.SSLOptionsVerify = types.StringValue("verify_none")
 	} else {
 		resourceModel.SSLOptionsVerify = types.StringValue(*data.SSLOptionsVerify)
-	}
-	// Message interceptor settings
-	if data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite == nil {
-		resourceModel.MessageInterceptorsTimestampOverwrite = types.StringValue("disabled")
-	} else if *data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite == "true" {
-		resourceModel.MessageInterceptorsTimestampOverwrite = types.StringValue("enabled_with_overwrite")
-	} else if *data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite == "false" {
-		resourceModel.MessageInterceptorsTimestampOverwrite = types.StringValue("enabled")
 	}
 
 	// Handle special cases for pointer and custom types
@@ -485,228 +456,172 @@ func (r *rabbitMqConfigurationResource) populateRabbitMqConfigModel(resourceMode
 	}
 }
 
-// Handle data conversion from resource model to create API request
-func (r *rabbitMqConfigurationResource) populateCreateRequest(ctx context.Context, plan *rabbitMqConfigurationResourceModel) model.RabbitMqConfigRequest {
-	data := model.RabbitMqConfigRequest{}
+// Populate API create request from resource model
+func (r *rabbitMqConfigurationResource) populateCreateRequest(plan rabbitMqConfigurationResourceModel) model.RabbitMqConfigRequest {
+	request := model.RabbitMqConfigRequest{}
 
-	tflog.Info(ctx, fmt.Sprintf("Populating RabbitMQ configuration create request, plan: %+v", plan))
-
-	// TODO: Can plan.Heartbeat.ValueInt64Pointer() be used instead? Same goes for the rest of the fields.
 	if !plan.Heartbeat.IsUnknown() {
-		data.Heartbeat = utils.Pointer(plan.Heartbeat.ValueInt64())
+		request.Heartbeat = plan.Heartbeat.ValueInt64Pointer()
 	}
 
 	if !plan.ConnectionMax.IsUnknown() {
 		if plan.ConnectionMax.ValueInt64() == -1 {
-			data.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: true})
+			request.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: true})
 		} else {
-			data.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: false, Value: plan.ConnectionMax.ValueInt64()})
+			request.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: false, Value: plan.ConnectionMax.ValueInt64()})
 		}
 	}
 
 	if !plan.ChannelMax.IsUnknown() {
-		data.ChannelMax = utils.Pointer(plan.ChannelMax.ValueInt64())
+		request.ChannelMax = plan.ChannelMax.ValueInt64Pointer()
 	}
 
 	if !plan.ConsumerTimeout.IsUnknown() {
 		if plan.ConsumerTimeout.ValueInt64() == -1 {
-			data.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: false})
+			request.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: false})
 		} else {
-			data.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: true, Value: plan.ConsumerTimeout.ValueInt64()})
+			request.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: true, Value: plan.ConsumerTimeout.ValueInt64()})
 		}
 	}
 
 	if !plan.VmMemoryHighWatermark.IsUnknown() {
-		data.VmMemoryHighWatermark = utils.Pointer(plan.VmMemoryHighWatermark.ValueFloat64())
+		request.VmMemoryHighWatermark = plan.VmMemoryHighWatermark.ValueFloat64Pointer()
 	}
 
 	if !plan.QueueIndexEmbedMsgsBelow.IsUnknown() {
-		data.QueueIndexEmbedMsgsBelow = utils.Pointer(plan.QueueIndexEmbedMsgsBelow.ValueInt64())
+		request.QueueIndexEmbedMsgsBelow = plan.QueueIndexEmbedMsgsBelow.ValueInt64Pointer()
 	}
 
 	if !plan.MaxMessageSize.IsUnknown() {
-		data.MaxMessageSize = utils.Pointer(plan.MaxMessageSize.ValueInt64())
+		request.MaxMessageSize = plan.MaxMessageSize.ValueInt64Pointer()
 	}
 
 	if !plan.LogExchangeLevel.IsUnknown() {
-		data.LogExchangeLevel = plan.LogExchangeLevel.ValueString()
+		request.LogExchangeLevel = plan.LogExchangeLevel.ValueString()
 	}
 
 	if !plan.ClusterPartitionHandling.IsUnknown() {
-		data.ClusterPartitionHandling = plan.ClusterPartitionHandling.ValueString()
+		request.ClusterPartitionHandling = plan.ClusterPartitionHandling.ValueString()
 	}
 
+	// MQTT settings
 	if !plan.MQTTVhost.IsUnknown() {
-		data.MQTTVhost = utils.Pointer(plan.MQTTVhost.ValueString())
+		request.MQTTVhost = plan.MQTTVhost.ValueStringPointer()
 	}
 
 	if !plan.MQTTExchange.IsUnknown() {
-		data.MQTTExchange = utils.Pointer(plan.MQTTExchange.ValueString())
+		request.MQTTExchange = plan.MQTTExchange.ValueStringPointer()
 	}
 
 	if !plan.MQTTSSLCertLogin.IsUnknown() {
-		data.MQTTSSLCertLogin = utils.Pointer(bool(plan.MQTTSSLCertLogin.ValueBool()))
+		request.MQTTSSLCertLogin = plan.MQTTSSLCertLogin.ValueBoolPointer()
 	}
 
+	// SSL settings
 	if !plan.SSLCertLoginFrom.IsUnknown() {
-		data.SSLCertLoginFrom = utils.Pointer(plan.SSLCertLoginFrom.ValueString())
+		request.SSLCertLoginFrom = plan.SSLCertLoginFrom.ValueStringPointer()
 	}
 
 	if !plan.SSLOptionsFailIfNoPeerCert.IsUnknown() {
-		data.SSLOptionsFailIfNoPeerCert = utils.Pointer(bool(plan.SSLOptionsFailIfNoPeerCert.ValueBool()))
+		request.SSLOptionsFailIfNoPeerCert = plan.SSLOptionsFailIfNoPeerCert.ValueBoolPointer()
 	}
 
 	if !plan.SSLOptionsVerify.IsUnknown() {
-		data.SSLOptionsVerify = utils.Pointer(plan.SSLOptionsVerify.ValueString())
+		request.SSLOptionsVerify = plan.SSLOptionsVerify.ValueStringPointer()
 	}
 
-	if !plan.MessageInterceptorsTimestampOverwrite.IsUnknown() {
-		value := plan.MessageInterceptorsTimestampOverwrite.ValueString()
-		switch strings.ToLower(value) {
-		case "disabled":
-			data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite = nil
-		case "enabled_with_overwrite":
-			data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite = utils.Pointer("true")
-		case "enabled":
-			data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite = utils.Pointer("false")
-		}
-	}
-
-	return data
+	return request
 }
 
-// Handle data conversion from resource model to update API request
+// Populate API update request from resource model
 func (r *rabbitMqConfigurationResource) populateUpdateRequest(ctx context.Context, plan, state rabbitMqConfigurationResourceModel) (model.RabbitMqConfigRequest, bool) {
-	data := model.RabbitMqConfigRequest{}
+	request := model.RabbitMqConfigRequest{}
 	changed := false
-	tflog.Info(ctx, fmt.Sprintf("Populating RabbitMQ configuration update request, plan: %+v", plan))
 
-	if !plan.Heartbeat.IsNull() {
-		if plan.Heartbeat.ValueInt64() != state.Heartbeat.ValueInt64() {
-			data.Heartbeat = utils.Pointer(plan.Heartbeat.ValueInt64())
-		}
+	if !plan.Heartbeat.IsNull() && !plan.Heartbeat.Equal(state.Heartbeat) {
+		request.Heartbeat = plan.Heartbeat.ValueInt64Pointer()
+		changed = true
 	}
 
-	if !plan.ConnectionMax.IsNull() {
-		if plan.ConnectionMax.ValueInt64() != state.ConnectionMax.ValueInt64() {
-			if plan.ConnectionMax.ValueInt64() == -1 {
-				data.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: true})
-			} else {
-				data.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: false, Value: plan.ConnectionMax.ValueInt64()})
-			}
-			changed = true
+	if !plan.ConnectionMax.IsNull() && !plan.ConnectionMax.Equal(state.ConnectionMax) {
+		if plan.ConnectionMax.ValueInt64() == -1 {
+			request.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: true})
+		} else {
+			request.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: false, Value: plan.ConnectionMax.ValueInt64()})
 		}
+		changed = true
 	}
 
-	if !plan.ChannelMax.IsNull() {
-		if plan.ChannelMax.ValueInt64() != state.ChannelMax.ValueInt64() {
-			data.ChannelMax = utils.Pointer(plan.ChannelMax.ValueInt64())
-			changed = true
-		}
+	if !plan.ChannelMax.IsNull() && !plan.ChannelMax.Equal(state.ChannelMax) {
+		request.ChannelMax = plan.ChannelMax.ValueInt64Pointer()
+		changed = true
 	}
 
-	if !plan.ConsumerTimeout.IsNull() {
-		if plan.ConsumerTimeout.ValueInt64() != state.ConsumerTimeout.ValueInt64() {
-			if plan.ConsumerTimeout.ValueInt64() == -1 {
-				data.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: false})
-			} else {
-				data.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: true, Value: plan.ConsumerTimeout.ValueInt64()})
-			}
-			changed = true
+	if !plan.ConsumerTimeout.IsNull() && !plan.ConsumerTimeout.Equal(state.ConsumerTimeout) {
+		if plan.ConsumerTimeout.ValueInt64() == -1 {
+			request.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: false})
+		} else {
+			request.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: true, Value: plan.ConsumerTimeout.ValueInt64()})
 		}
+		changed = true
 	}
 
-	if !plan.VmMemoryHighWatermark.IsNull() {
-		if plan.VmMemoryHighWatermark.ValueFloat64() != state.VmMemoryHighWatermark.ValueFloat64() {
-			data.VmMemoryHighWatermark = utils.Pointer(plan.VmMemoryHighWatermark.ValueFloat64())
-			changed = true
-		}
+	if !plan.VmMemoryHighWatermark.IsNull() && !plan.VmMemoryHighWatermark.Equal(state.VmMemoryHighWatermark) {
+		request.VmMemoryHighWatermark = plan.VmMemoryHighWatermark.ValueFloat64Pointer()
+		changed = true
 	}
 
-	if !plan.QueueIndexEmbedMsgsBelow.IsNull() {
-		if plan.QueueIndexEmbedMsgsBelow.ValueInt64() != state.QueueIndexEmbedMsgsBelow.ValueInt64() {
-			data.QueueIndexEmbedMsgsBelow = utils.Pointer(plan.QueueIndexEmbedMsgsBelow.ValueInt64())
-			changed = true
-		}
+	if !plan.QueueIndexEmbedMsgsBelow.IsNull() && !plan.QueueIndexEmbedMsgsBelow.Equal(state.QueueIndexEmbedMsgsBelow) {
+		request.QueueIndexEmbedMsgsBelow = plan.QueueIndexEmbedMsgsBelow.ValueInt64Pointer()
+		changed = true
 	}
 
-	if !plan.MaxMessageSize.IsNull() {
-		if plan.MaxMessageSize.ValueInt64() != state.MaxMessageSize.ValueInt64() {
-			data.MaxMessageSize = utils.Pointer(plan.MaxMessageSize.ValueInt64())
-			changed = true
-		}
+	if !plan.MaxMessageSize.IsNull() && !plan.MaxMessageSize.Equal(state.MaxMessageSize) {
+		request.MaxMessageSize = plan.MaxMessageSize.ValueInt64Pointer()
+		changed = true
 	}
 
-	if !plan.LogExchangeLevel.IsNull() {
-		if plan.LogExchangeLevel.ValueString() != state.LogExchangeLevel.ValueString() {
-			data.LogExchangeLevel = plan.LogExchangeLevel.ValueString()
-			changed = true
-		}
+	if !plan.LogExchangeLevel.IsNull() && !plan.LogExchangeLevel.Equal(state.LogExchangeLevel) {
+		request.LogExchangeLevel = plan.LogExchangeLevel.ValueString()
+		changed = true
 	}
 
-	if !plan.ClusterPartitionHandling.IsNull() {
-		if plan.ClusterPartitionHandling.ValueString() != state.ClusterPartitionHandling.ValueString() {
-			data.ClusterPartitionHandling = plan.ClusterPartitionHandling.ValueString()
-			changed = true
-		}
+	if !plan.ClusterPartitionHandling.IsNull() && !plan.ClusterPartitionHandling.Equal(state.ClusterPartitionHandling) {
+		request.ClusterPartitionHandling = plan.ClusterPartitionHandling.ValueString()
+		changed = true
 	}
 
-	if !plan.MQTTVhost.IsNull() {
-		if plan.MQTTVhost.ValueString() != state.MQTTVhost.ValueString() {
-			data.MQTTVhost = utils.Pointer(plan.MQTTVhost.ValueString())
-			changed = true
-		}
+	// MQTT settings
+	if !plan.MQTTVhost.IsNull() && !plan.MQTTVhost.Equal(state.MQTTVhost) {
+		request.MQTTVhost = plan.MQTTVhost.ValueStringPointer()
+		changed = true
 	}
 
-	if !plan.MQTTExchange.IsNull() {
-		if plan.MQTTExchange.ValueString() != state.MQTTExchange.ValueString() {
-			data.MQTTExchange = utils.Pointer(plan.MQTTExchange.ValueString())
-			changed = true
-		}
+	if !plan.MQTTExchange.IsNull() && !plan.MQTTExchange.Equal(state.MQTTExchange) {
+		request.MQTTExchange = plan.MQTTExchange.ValueStringPointer()
+		changed = true
 	}
 
-	if !plan.MQTTSSLCertLogin.IsNull() {
-		if plan.MQTTSSLCertLogin.ValueBool() != state.MQTTSSLCertLogin.ValueBool() {
-			data.MQTTSSLCertLogin = utils.Pointer(bool(plan.MQTTSSLCertLogin.ValueBool()))
-			changed = true
-		}
+	if !plan.MQTTSSLCertLogin.IsNull() && !plan.MQTTSSLCertLogin.Equal(state.MQTTSSLCertLogin) {
+		request.MQTTSSLCertLogin = plan.MQTTSSLCertLogin.ValueBoolPointer()
+		changed = true
 	}
 
-	if !plan.SSLCertLoginFrom.IsNull() {
-		if plan.SSLCertLoginFrom.ValueString() != state.SSLCertLoginFrom.ValueString() {
-			data.SSLCertLoginFrom = utils.Pointer(plan.SSLCertLoginFrom.ValueString())
-			changed = true
-		}
+	// SSL settings
+	if !plan.SSLCertLoginFrom.IsNull() && !plan.SSLCertLoginFrom.Equal(state.SSLCertLoginFrom) {
+		request.SSLCertLoginFrom = plan.SSLCertLoginFrom.ValueStringPointer()
+		changed = true
 	}
 
-	if !plan.SSLOptionsFailIfNoPeerCert.IsNull() {
-		if plan.SSLOptionsFailIfNoPeerCert.ValueBool() != state.SSLOptionsFailIfNoPeerCert.ValueBool() {
-			data.SSLOptionsFailIfNoPeerCert = utils.Pointer(bool(plan.SSLOptionsFailIfNoPeerCert.ValueBool()))
-			changed = true
-		}
+	if !plan.SSLOptionsFailIfNoPeerCert.IsNull() && !plan.SSLOptionsFailIfNoPeerCert.Equal(state.SSLOptionsFailIfNoPeerCert) {
+		request.SSLOptionsFailIfNoPeerCert = plan.SSLOptionsFailIfNoPeerCert.ValueBoolPointer()
+		changed = true
 	}
 
-	if !plan.SSLOptionsVerify.IsNull() {
-		if plan.SSLOptionsVerify.ValueString() != state.SSLOptionsVerify.ValueString() {
-			data.SSLOptionsVerify = utils.Pointer(plan.SSLOptionsVerify.ValueString())
-			changed = true
-		}
+	if !plan.SSLOptionsVerify.IsNull() && !plan.SSLOptionsVerify.Equal(state.SSLOptionsVerify) {
+		request.SSLOptionsVerify = plan.SSLOptionsVerify.ValueStringPointer()
+		changed = true
 	}
 
-	if !plan.MessageInterceptorsTimestampOverwrite.IsNull() {
-		if plan.MessageInterceptorsTimestampOverwrite.ValueString() != state.MessageInterceptorsTimestampOverwrite.ValueString() {
-			value := plan.MessageInterceptorsTimestampOverwrite.ValueString()
-			switch strings.ToLower(value) {
-			case "enabled_with_overwrite":
-				data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite = utils.Pointer("true")
-			case "enabled":
-				data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite = utils.Pointer("false")
-			case "disabled":
-				data.MessageInterceptorsIncomingSetHeaderTimestampOverwrite = nil
-			}
-			changed = true
-		}
-	}
-
-	return data, changed
+	return request, changed
 }

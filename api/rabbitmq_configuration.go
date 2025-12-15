@@ -44,7 +44,7 @@ func (api *API) UpdateRabbitMqConfiguration(ctx context.Context, instanceID int6
 		path   = fmt.Sprintf("/api/instances/%d/config", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v ", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%+v ", path, params))
 	return api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
 		functionName: "UpdateRabbitMqConfiguration",
 		resourceName: "RabbitMQConfiguration",
