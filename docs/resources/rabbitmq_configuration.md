@@ -115,41 +115,64 @@ resource "cloudamqp_rabbitmq_configuration" "rabbit_config" {
 
 </details>
 
+<details>
+  <summary>
+    <b>
+      <i>
+        MQTT and SSL configuration
+      </i>
+    </b>
+  </summary>
+
+For it to work properly when setting `mqtt_ssl_cert_login` to ***true***, also change
+
+- `rabbit.ssl_options.fail_if_no_peer_cert` to ***true***
+- `ssl_options_verify` to ***verify_peer***
+
+```hcl
+resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
+  instance_id                       = cloudamqp_instance.instance.id
+  mqtt_vhost                        = cloudamqp_instance.instance.vhost
+  mqtt_exchange                     = "amq.topic"
+  mqtt_ssl_cert_login               = true
+  ssl_options_fail_if_no_peer_cert  = true
+  ssl_options_verify                = "verify_peer"
+}
+```
+
+</details>
+
 ## Argument Reference
 
 The following arguments are supported:
 
-* `instance_id`                   - (Required) The CloudAMQP instance ID.
-* `heartbeat`                     - (Optional/Computed) Set the server AMQP 0-9-1 heartbeat timeout
-                                    in seconds.
-* `connection_max`                - (Optional/Computed) Set the maximum permissible number of
-                                    connection.
-* `channel_max`                   - (Optional/Computed) Set the maximum permissible number of
-                                    channels per connection.
-* `consumer_timeout`              - (Optional/Computed) A consumer that has recevied a message and
-                                    does not acknowledge that message within the timeout in
-                                    milliseconds
-* `vm_memory_high_watermark`      - (Optional/Computed) When the server will enter memory based
-                                    flow-control as relative to the maximum available memory.
-* `queue_index_embed_msgs_below`  - (Optional/Computed) Size in bytes below which to embed messages
-                                    in the queue index. 0 will turn off payload embedding in the
-                                    queue index.
-* `max_message_size`              - (Optional/Computed) The largest allowed message payload size in
-                                    bytes.
-* `log_exchange_level`            - (Optional/Computed) Log level for the logger used for log
-                                    integrations and the CloudAMQP Console log view.
-* `cluster_partition_handling`    - (Optional/Computed) Set how the cluster should handle network
-                                    partition.
-* `sleep`                         - (Optional) Configurable sleep time in seconds between retries
-                                    for RabbitMQ configuration. Default set to 60 seconds.
-* `timeout`                       - (Optional) - Configurable timeout time in seconds for RabbitMQ
-                                    configuration. Default set to 3600 seconds.
+- `instance_id`                   - (Required) The CloudAMQP instance ID.
+- `heartbeat`                     - (Optional/Computed) Set the server AMQP 0-9-1 heartbeat timeout in seconds.
+- `connection_max`                - (Optional/Computed) Set the maximum permissible number of connection.
+- `channel_max`                   - (Optional/Computed) Set the maximum permissible number of channels per connection.
+- `consumer_timeout`              - (Optional/Computed) A consumer that has recevied a message and does not acknowledge that message within the timeout in milliseconds
+- `vm_memory_high_watermark`      - (Optional/Computed) When the server will enter memory based flow-control as relative to the maximum available memory.
+- `queue_index_embed_msgs_below`  - (Optional/Computed) Size in bytes below which to embed messages in the queue index. 0 will turn off payload embedding in the queue index.
+- `max_message_size`              - (Optional/Computed) The largest allowed message payload size in bytes.
+- `log_exchange_level`            - (Optional/Computed) Log level for the logger used for log integrations and the CloudAMQP Console log view.
+- `cluster_partition_handling`    - (Optional/Computed) Set how the cluster should handle network partition.
+- `mqtt_vhost`                    - (Optional/Computed) Virtual host for MQTT connections.
+- `mqtt_exchange`                 - (Optional/Computed) The exchange option determines which exchange messages from MQTT clients are published to.
+- `mqtt_ssl_cert_login`           - (Optional/Computed) Enable SSL certificate-based authentication for MQTT connections.
+- `ssl_cert_login_from`           - (Optional/Computed) Determines which certificate field to use as the username for TLS-based authentication.
+- `ssl_options_fail_if_no_peer_cert` - (Optional/Computed) When set to true, TLS connections will fail if the client does not provide a certificate.
+- `ssl_options_verify`            - (Optional/Computed) Controls peer certificate verification for TLS connections.
+
+Configure sleep and timeout for API requests retries
+
+- `sleep`                         - (Optional) Configurable sleep time in seconds between retries for RabbitMQ configuration. Default set to 60 seconds.
+- `timeout`                       - (Optional) - Configurable timeout time in seconds for RabbitMQ configuration. Default set to 3600 seconds.
 
 ## Attributes Reference
 
 All attributes reference are computed
 
-* `id`  - The identifier for this resource.
+- `id`  - The identifier for this resource.
 
 ## Argument threshold values
 
@@ -205,20 +228,61 @@ Note: Existing queues requires restart
 
 ### log_exchange_level
 
-| Type | Default | Affect |
-|---|---|---|
-| string | error | RabbitMQ restart required |
-
-Note: `debug, info, warning, error, critical, none`
+| Type | Default | Affect | Allowed values |
+|---|---|---| --- |
+| string | error | RabbitMQ restart required | `debug, info, warning, error, critical, none` |
 
 ### cluster_partition_handling
 
-| Type  | Affect | Note |
+| Type  | Affect | Allowed values |
 |---|---|---|
 | string | Applied immediately | `autoheal, pause_minority, ignore` |
 
 Recommended setting for cluster_partition_handling: `autoheal` for cluster with 1-2
 nodes, `pause_minority` for cluster with 3 or more nodes. While `ignore` setting is not recommended.
+
+### mqtt_vhost
+
+| Type  | Affect |
+| --- | --- |
+| string | Only affects new connections |
+
+### mqtt_exchange
+
+| Type  | Affect |
+| --- | --- |
+| string | Only affects new connections |
+
+### mqtt_ssl_cert_login
+
+| Type  | Affect |
+| --- | --- |
+| bool | RabbitMQ restart required |
+
+Note: `rabbit.ssl_options.fail_if_no_peer_cert` should be set to ***true*** and `rabbit.ssl_options.verify`
+should be set to ***verify_peer*** for it to work properly.
+
+### ssl_cert_login_from
+
+| Type  | Affect | Allowed values |
+| --- | --- | --- |
+| string | Only affects new connections | `common_name`, `distinguished_name` |
+
+### ssl_options_fail_if_no_peer_cert
+
+| Type  | Affect |
+| --- | --- |
+| string | RabbitMQ restart required |
+
+Note: `rabbit.ssl_options.verify` must be set to ***verify_peer***.
+
+### ssl_options_verify
+
+| Type  | Affect | Allowed values |
+| --- | --- | --- |
+| string | RabbitMQ restart required | `verify_none`, `verify_peer` |
+
+Note: `verify_peer` validates the client's certificate chain, `verify_none` disables verification.
 
 ## Dependency
 
