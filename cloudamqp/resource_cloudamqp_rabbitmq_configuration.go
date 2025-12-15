@@ -325,10 +325,6 @@ func (r *rabbitMqConfigurationResource) Read(ctx context.Context, req resource.R
 	// Sleep/timeout with default values
 	sleep := state.Sleep.ValueInt64()
 	timeout := state.Timeout.ValueInt64()
-	if sleep == 0 && timeout == 0 {
-		sleep = 60
-		timeout = 3600
-	}
 	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
 	defer cancel()
 
