@@ -142,7 +142,7 @@ func TestAccRabbitMqConfiguration_MqttConfiguration(t *testing.T) {
 					}
 
 					resource "cloudamqp_rabbitmq_configuration" "config" {
-						instance_id 										 = cloudamqp_instance.instance.id
+						instance_id                      = cloudamqp_instance.instance.id
 						mqtt_vhost                       = cloudamqp_instance.instance.vhost
 						mqtt_exchange                    = "amq.topic"
 						mqtt_ssl_cert_login              = false
