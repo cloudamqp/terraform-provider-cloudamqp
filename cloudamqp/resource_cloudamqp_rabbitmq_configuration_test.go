@@ -127,7 +127,8 @@ func TestAccRabbitMqConfiguration_MqttConfiguration(t *testing.T) {
 	t.Parallel()
 
 	instanceResourceName := "cloudamqp_instance.instance"
-	rabbitmqConfigResourceName := "cloudamqp_rabbitmq_configuration.config"
+	rabbitmqConfigResourceName := "cloudamqp_rabbitmq_configuration.rabbitmq_config"
+	dataSourceNodesName := "data.cloudamqp_nodes.nodes"
 
 	cloudamqpResourceTest(t, resource.TestCase{
 		PreCheck: func() { testAccPreCheck(t) },
@@ -141,25 +142,42 @@ func TestAccRabbitMqConfiguration_MqttConfiguration(t *testing.T) {
 						tags   = []
 					}
 
-					resource "cloudamqp_rabbitmq_configuration" "config" {
+					resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
 						instance_id                      = cloudamqp_instance.instance.id
 						mqtt_vhost                       = cloudamqp_instance.instance.vhost
 						mqtt_exchange                    = "amq.topic"
-						mqtt_ssl_cert_login              = false
-						ssl_options_fail_if_no_peer_cert = false
+						mqtt_ssl_cert_login              = true
+						ssl_options_fail_if_no_peer_cert = true
 						ssl_options_verify               = "verify_peer"
+					}
+
+					data "cloudamqp_nodes" "nodes" {
+						instance_id = cloudamqp_instance.instance.id
+					}
+
+					resource "cloudamqp_node_actions" "node_action" {
+						instance_id = cloudamqp_instance.instance.id
+						node_name   = data.cloudamqp_nodes.nodes.nodes[0].name
+						action      = "restart"
+
+						depends_on = [
+							cloudamqp_rabbitmq_configuration.rabbitmq_config,
+						]
 					}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccRabbitMqConfiguration_MqttConfiguration"),
 					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "mqtt_exchange", "amq.topic"),
-					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "mqtt_ssl_cert_login", "false"),
-					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "ssl_options_fail_if_no_peer_cert", "false"),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "mqtt_ssl_cert_login", "true"),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "ssl_options_fail_if_no_peer_cert", "true"),
 					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "ssl_options_verify", "verify_peer"),
 					resource.TestCheckResourceAttrPair(
 						rabbitmqConfigResourceName, "mqtt_vhost",
 						instanceResourceName, "vhost",
 					),
+					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.#", "1"),
+					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.running", "true"),
+					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.configured", "true"),
 				),
 			},
 		},
