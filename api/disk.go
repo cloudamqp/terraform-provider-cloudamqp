@@ -59,6 +59,16 @@ func (api *API) resizeDiskWithRetry(ctx context.Context, id string, params map[s
 		default:
 			return nil, fmt.Errorf("failed to resize disk: %s", failed["error"].(string))
 		}
+	case 423:
+		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.resizeDiskWithRetry(ctx, id, params, attempt, sleep, timeout)
+	case 503:
+		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
+		attempt++
+		time.Sleep(time.Duration(sleep) * time.Second)
+		return api.resizeDiskWithRetry(ctx, id, params, attempt, sleep, timeout)
 	}
 	return nil, fmt.Errorf("failed to resize disk, status=%d message=%s ",
 		response.StatusCode, failed["error"].(string))
