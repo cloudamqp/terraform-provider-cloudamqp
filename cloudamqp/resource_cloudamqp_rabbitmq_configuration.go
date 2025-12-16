@@ -359,7 +359,7 @@ func (r *rabbitMqConfigurationResource) Update(ctx context.Context, req resource
 	defer cancel()
 
 	instanceID := plan.InstanceID.ValueInt64()
-	request, changed := r.populateUpdateRequest(ctx, plan, state)
+	request, changed := r.populateUpdateRequest(plan, state)
 
 	if !changed {
 		// No rabbitmq configuration changes detected, only save the state
@@ -424,11 +424,7 @@ func (r *rabbitMqConfigurationResource) populateResourceModel(resourceModel *rab
 	// SSL settings
 	resourceModel.SSLCertLoginFrom = types.StringValue(data.SSLCertLoginFrom)
 	resourceModel.SSLOptionsFailIfNoPeerCert = types.BoolValue(bool(data.SSLOptionsFailIfNoPeerCert))
-	if data.SSLOptionsVerify == nil {
-		resourceModel.SSLOptionsVerify = types.StringValue("verify_none")
-	} else {
-		resourceModel.SSLOptionsVerify = types.StringValue(*data.SSLOptionsVerify)
-	}
+	resourceModel.SSLOptionsVerify = types.StringValue(data.SSLOptionsVerify)
 
 	// Handle special cases for pointer and custom types
 	if data.ConnectionMax == nil {
@@ -530,7 +526,7 @@ func (r *rabbitMqConfigurationResource) populateCreateRequest(plan rabbitMqConfi
 }
 
 // Populate API update request from resource model
-func (r *rabbitMqConfigurationResource) populateUpdateRequest(ctx context.Context, plan, state rabbitMqConfigurationResourceModel) (model.RabbitMqConfigRequest, bool) {
+func (r *rabbitMqConfigurationResource) populateUpdateRequest(plan, state rabbitMqConfigurationResourceModel) (model.RabbitMqConfigRequest, bool) {
 	request := model.RabbitMqConfigRequest{}
 	changed := false
 

@@ -119,7 +119,7 @@ resource "cloudamqp_rabbitmq_configuration" "rabbit_config" {
   <summary>
     <b>
       <i>
-        MQTT and SSL configuration
+        MQTT and SSL configuration and combine `cloudamqp_node_actions` for RabbitMQ restart
       </i>
     </b>
   </summary>
@@ -138,6 +138,19 @@ resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
   ssl_options_fail_if_no_peer_cert  = true
   ssl_options_verify                = "verify_peer"
 }
+
+data "cloudamqp_nodes" "nodes" {
+  instance_id = cloudamqp_instance.instance.id
+}
+
+resource "cloudamqp_node_actions" "node_action" {
+  instance_id = cloudamqp_instance.instance.id
+  node_name   = data.cloudamqp_nodes.nodes.nodes[0].name
+  action      = "restart"
+  depends_on = [
+    cloudamqp_rabbitmq_configuration.rabbitmq_config,
+  ]
+}
 ```
 
 </details>
@@ -150,7 +163,7 @@ The following arguments are supported:
 - `heartbeat`                     - (Optional/Computed) Set the server AMQP 0-9-1 heartbeat timeout in seconds.
 - `connection_max`                - (Optional/Computed) Set the maximum permissible number of connection.
 - `channel_max`                   - (Optional/Computed) Set the maximum permissible number of channels per connection.
-- `consumer_timeout`              - (Optional/Computed) A consumer that has recevied a message and does not acknowledge that message within the timeout in milliseconds
+- `consumer_timeout`              - (Optional/Computed) A consumer that has received a message and does not acknowledge that message within the timeout in milliseconds
 - `vm_memory_high_watermark`      - (Optional/Computed) When the server will enter memory based flow-control as relative to the maximum available memory.
 - `queue_index_embed_msgs_below`  - (Optional/Computed) Size in bytes below which to embed messages in the queue index. 0 will turn off payload embedding in the queue index.
 - `max_message_size`              - (Optional/Computed) The largest allowed message payload size in bytes.

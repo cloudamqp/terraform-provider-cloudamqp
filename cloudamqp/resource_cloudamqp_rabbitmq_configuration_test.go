@@ -149,6 +149,7 @@ func TestAccRabbitMqConfiguration_MqttConfiguration(t *testing.T) {
 						mqtt_ssl_cert_login              = true
 						ssl_options_fail_if_no_peer_cert = true
 						ssl_options_verify               = "verify_peer"
+						ssl_cert_login_from              = "common_name"
 					}
 
 					data "cloudamqp_nodes" "nodes" {
@@ -171,6 +172,7 @@ func TestAccRabbitMqConfiguration_MqttConfiguration(t *testing.T) {
 					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "mqtt_ssl_cert_login", "true"),
 					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "ssl_options_fail_if_no_peer_cert", "true"),
 					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "ssl_options_verify", "verify_peer"),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "ssl_cert_login_from", "common_name"),
 					resource.TestCheckResourceAttrPair(
 						rabbitmqConfigResourceName, "mqtt_vhost",
 						instanceResourceName, "vhost",

@@ -38,7 +38,7 @@ type RabbitMqConfigResponse struct {
 	MQTTSSLCertLogin           BooleanString        `json:"rabbitmq_mqtt.ssl_cert_login"`
 	SSLCertLoginFrom           string               `json:"rabbit.ssl_cert_login_from"`
 	SSLOptionsFailIfNoPeerCert BooleanString        `json:"rabbit.ssl_options.fail_if_no_peer_cert"`
-	SSLOptionsVerify           *string              `json:"rabbit.ssl_options.verify"`
+	SSLOptionsVerify           string               `json:"rabbit.ssl_options.verify"`
 }
 
 // Custom type for ConnectionMax
