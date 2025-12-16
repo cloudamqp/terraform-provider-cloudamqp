@@ -124,10 +124,11 @@ resource "cloudamqp_rabbitmq_configuration" "rabbit_config" {
     </b>
   </summary>
 
-For it to work properly when setting `mqtt_ssl_cert_login` to ***true***, also change
+SSL certificate-based authentication for MQTT connections requires peer certificate verification.
+Set the following when enabling `mqtt_ssl_cert_login`:
 
-- `rabbit.ssl_options.fail_if_no_peer_cert` to ***true***
-- `ssl_options_verify` to ***verify_peer***
+- `ssl_options_fail_if_no_peer_cert` = ***true***
+- `ssl_options_verify` = ***verify_peer***
 
 ```hcl
 resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
@@ -272,8 +273,8 @@ nodes, `pause_minority` for cluster with 3 or more nodes. While `ignore` setting
 | --- | --- |
 | bool | RabbitMQ restart required |
 
-Note: `rabbit.ssl_options.fail_if_no_peer_cert` should be set to ***true*** and `rabbit.ssl_options.verify`
-should be set to ***verify_peer*** for it to work properly.
+Note: When enabled, `rabbit.ssl_options.fail_if_no_peer_cert` should be set to ***true*** and
+`rabbit.ssl_options.verify` should be set to ***verify_peer*** for it to work properly.
 
 ### ssl_cert_login_from
 
@@ -287,7 +288,7 @@ should be set to ***verify_peer*** for it to work properly.
 | --- | --- |
 | string | RabbitMQ restart required |
 
-Note: `rabbit.ssl_options.verify` must be set to ***verify_peer***.
+Note: When enabled, `rabbit.ssl_options.verify` must be set to ***verify_peer***.
 
 ### ssl_options_verify
 
