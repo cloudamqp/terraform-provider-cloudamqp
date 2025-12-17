@@ -31,7 +31,7 @@ func (api *API) ReadRabbitMqConfiguration(ctx context.Context, instanceID, sleep
 		return nil, err
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s data=%v ", path, data))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s data=%+v ", path, data))
 	return &data, nil
 }
 

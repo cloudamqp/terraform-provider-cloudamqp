@@ -41,17 +41,18 @@ func NewRabbitMqConfigurationResource() resource.Resource {
 }
 
 type rabbitMqConfigurationResourceModel struct {
-	ID                       types.String  `tfsdk:"id"`
-	InstanceID               types.Int64   `tfsdk:"instance_id"`
-	Heartbeat                types.Int64   `tfsdk:"heartbeat"`
-	ConnectionMax            types.Int64   `tfsdk:"connection_max"`
-	ChannelMax               types.Int64   `tfsdk:"channel_max"`
-	ConsumerTimeout          types.Int64   `tfsdk:"consumer_timeout"`
-	VmMemoryHighWatermark    types.Float64 `tfsdk:"vm_memory_high_watermark"`
-	QueueIndexEmbedMsgsBelow types.Int64   `tfsdk:"queue_index_embed_msgs_below"`
-	MaxMessageSize           types.Int64   `tfsdk:"max_message_size"`
-	LogExchangeLevel         types.String  `tfsdk:"log_exchange_level"`
-	ClusterPartitionHandling types.String  `tfsdk:"cluster_partition_handling"`
+	ID                                    types.String  `tfsdk:"id"`
+	InstanceID                            types.Int64   `tfsdk:"instance_id"`
+	Heartbeat                             types.Int64   `tfsdk:"heartbeat"`
+	ConnectionMax                         types.Int64   `tfsdk:"connection_max"`
+	ChannelMax                            types.Int64   `tfsdk:"channel_max"`
+	ConsumerTimeout                       types.Int64   `tfsdk:"consumer_timeout"`
+	VmMemoryHighWatermark                 types.Float64 `tfsdk:"vm_memory_high_watermark"`
+	QueueIndexEmbedMsgsBelow              types.Int64   `tfsdk:"queue_index_embed_msgs_below"`
+	MaxMessageSize                        types.Int64   `tfsdk:"max_message_size"`
+	LogExchangeLevel                      types.String  `tfsdk:"log_exchange_level"`
+	ClusterPartitionHandling              types.String  `tfsdk:"cluster_partition_handling"`
+	MessageInterceptorsTimestampOverwrite types.String  `tfsdk:"message_interceptors_timestamp_overwrite"`
 	// MQTT settings
 	MQTTVhost        types.String `tfsdk:"mqtt_vhost"`
 	MQTTExchange     types.String `tfsdk:"mqtt_exchange"`
@@ -189,6 +190,18 @@ func (r *rabbitMqConfigurationResource) Schema(ctx context.Context, req resource
 				Description: "Set how the cluster should handle network partition.",
 				Validators: []validator.String{
 					stringvalidator.OneOf("autoheal", "pause_minority", "ignore"),
+				},
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"message_interceptors_timestamp_overwrite": schema.StringAttribute{
+				Optional: true,
+				Computed: true,
+				Description: "Sets a timestamp header on incoming messages. enabled_with_overwrite will " +
+					"overwrite any existing timestamps in the header.",
+				Validators: []validator.String{
+					stringvalidator.OneOfCaseInsensitive("enabled_with_overwrite", "enabled", "disabled"),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
@@ -417,6 +430,7 @@ func (r *rabbitMqConfigurationResource) populateResourceModel(resourceModel *rab
 	resourceModel.LogExchangeLevel = types.StringValue(data.LogExchangeLevel)
 	resourceModel.ClusterPartitionHandling = types.StringValue(data.ClusterPartitionHandling)
 	resourceModel.VmMemoryHighWatermark = types.Float64Value(data.VmMemoryHighWatermark)
+	resourceModel.MessageInterceptorsTimestampOverwrite = types.StringValue(data.MessageInterceptorsTimestampOverwrite)
 	// MQTT settings
 	resourceModel.MQTTVhost = types.StringValue(data.MQTTVhost)
 	resourceModel.MQTTExchange = types.StringValue(data.MQTTExchange)
@@ -494,6 +508,10 @@ func (r *rabbitMqConfigurationResource) populateCreateRequest(plan rabbitMqConfi
 
 	if !plan.ClusterPartitionHandling.IsUnknown() {
 		request.ClusterPartitionHandling = plan.ClusterPartitionHandling.ValueString()
+	}
+
+	if !plan.MessageInterceptorsTimestampOverwrite.IsUnknown() {
+		request.MessageInterceptorsTimestampOverwrite = plan.MessageInterceptorsTimestampOverwrite.ValueStringPointer()
 	}
 
 	// MQTT settings
@@ -580,6 +598,11 @@ func (r *rabbitMqConfigurationResource) populateUpdateRequest(plan, state rabbit
 
 	if !plan.ClusterPartitionHandling.IsNull() && !plan.ClusterPartitionHandling.Equal(state.ClusterPartitionHandling) {
 		request.ClusterPartitionHandling = plan.ClusterPartitionHandling.ValueString()
+		changed = true
+	}
+
+	if !plan.MessageInterceptorsTimestampOverwrite.IsNull() && !plan.MessageInterceptorsTimestampOverwrite.Equal(state.MessageInterceptorsTimestampOverwrite) {
+		request.MessageInterceptorsTimestampOverwrite = plan.MessageInterceptorsTimestampOverwrite.ValueStringPointer()
 		changed = true
 	}
 

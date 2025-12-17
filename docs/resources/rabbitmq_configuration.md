@@ -170,6 +170,7 @@ The following arguments are supported:
 - `max_message_size`              - (Optional/Computed) The largest allowed message payload size in bytes.
 - `log_exchange_level`            - (Optional/Computed) Log level for the logger used for log integrations and the CloudAMQP Console log view.
 - `cluster_partition_handling`    - (Optional/Computed) Set how the cluster should handle network partition.
+- `message_interceptors_timestamp_overwrite` (Optional/Computed) Sets a timestamp header on incoming messages. ***enabled_with_overwrite*** will overwrite any existing timestamps in the header.
 - `mqtt_vhost`                    - (Optional/Computed) Virtual host for MQTT connections.
 - `mqtt_exchange`                 - (Optional/Computed) The exchange option determines which exchange messages from MQTT clients are published to.
 - `mqtt_ssl_cert_login`           - (Optional/Computed) Enable SSL certificate-based authentication for MQTT connections.
@@ -254,6 +255,14 @@ Note: Existing queues requires restart
 
 Recommended setting for cluster_partition_handling: `autoheal` for cluster with 1-2
 nodes, `pause_minority` for cluster with 3 or more nodes. While `ignore` setting is not recommended.
+
+### message_interceptors_timestamp_overwrite
+
+| Type  | Affect | Allowed values |
+|---|---|---|
+| string | RabbitMQ restart required | `enabled_with_overwrite, enabled, disabled` |
+
+Note: Corresponds to setting `message_interceptors.incoming.set_header_timestamp.overwrite`
 
 ### mqtt_vhost
 
