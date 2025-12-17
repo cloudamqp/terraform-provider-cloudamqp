@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
@@ -22,6 +23,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 var (
@@ -50,13 +52,20 @@ type rabbitMqConfigurationResourceModel struct {
 	MaxMessageSize           types.Int64   `tfsdk:"max_message_size"`
 	LogExchangeLevel         types.String  `tfsdk:"log_exchange_level"`
 	ClusterPartitionHandling types.String  `tfsdk:"cluster_partition_handling"`
-	Sleep                    types.Int64   `tfsdk:"sleep"`
-	Timeout                  types.Int64   `tfsdk:"timeout"`
+	// MQTT settings
+	MQTTVhost        types.String `tfsdk:"mqtt_vhost"`
+	MQTTExchange     types.String `tfsdk:"mqtt_exchange"`
+	MQTTSSLCertLogin types.Bool   `tfsdk:"mqtt_ssl_cert_login"`
+	// SSL settings
+	SSLCertLoginFrom           types.String `tfsdk:"ssl_cert_login_from"`
+	SSLOptionsFailIfNoPeerCert types.Bool   `tfsdk:"ssl_options_fail_if_no_peer_cert"`
+	SSLOptionsVerify           types.String `tfsdk:"ssl_options_verify"`
+	// Sleep/timeout for retries
+	Sleep   types.Int64 `tfsdk:"sleep"`
+	Timeout types.Int64 `tfsdk:"timeout"`
 }
 
-func (r *rabbitMqConfigurationResource) Metadata(ctx context.Context, req resource.MetadataRequest,
-	resp *resource.MetadataResponse) {
-
+func (r *rabbitMqConfigurationResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = "cloudamqp_rabbitmq_configuration"
 }
 
@@ -185,6 +194,60 @@ func (r *rabbitMqConfigurationResource) Schema(ctx context.Context, req resource
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"mqtt_vhost": schema.StringAttribute{
+				Optional:    true,
+				Computed:    true,
+				Description: "Virtual host for MQTT connections.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"mqtt_exchange": schema.StringAttribute{
+				Optional:    true,
+				Computed:    true,
+				Description: "The exchange option determines which exchange messages from MQTT clients are published to.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"mqtt_ssl_cert_login": schema.BoolAttribute{
+				Optional:    true,
+				Computed:    true,
+				Description: "Enable SSL certificate-based authentication for MQTT connections.",
+				PlanModifiers: []planmodifier.Bool{
+					boolplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"ssl_cert_login_from": schema.StringAttribute{
+				Optional:    true,
+				Computed:    true,
+				Description: "Determines which certificate field to use as the username for TLS-based authentication.",
+				Validators: []validator.String{
+					stringvalidator.OneOfCaseInsensitive("common_name", "distinguished_name"),
+				},
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"ssl_options_fail_if_no_peer_cert": schema.BoolAttribute{
+				Optional:    true,
+				Computed:    true,
+				Description: "When set to true, TLS connections will fail if the client does not provide a certificate.",
+				PlanModifiers: []planmodifier.Bool{
+					boolplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"ssl_options_verify": schema.StringAttribute{
+				Optional:    true,
+				Computed:    true,
+				Description: "Controls peer certificate verification for TLS connections.",
+				Validators: []validator.String{
+					stringvalidator.OneOfCaseInsensitive("verify_none", "verify_peer"),
+				},
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
 			"sleep": schema.Int64Attribute{
 				Optional:    true,
 				Default:     int64default.StaticInt64(60),
@@ -223,15 +286,15 @@ func (r *rabbitMqConfigurationResource) Create(ctx context.Context, req resource
 		return
 	}
 
-	instanceID := int(plan.InstanceID.ValueInt64())
-	data := r.populateCreateRequest(&plan)
-
-	sleep := int(plan.Sleep.ValueInt64())
-	timeout := int(plan.Timeout.ValueInt64())
+	sleep := plan.Sleep.ValueInt64()
+	timeout := plan.Timeout.ValueInt64()
 	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
 	defer cancel()
 
-	err := r.client.UpdateRabbitMqConfiguration(timeoutCtx, instanceID, data, sleep)
+	instanceID := plan.InstanceID.ValueInt64()
+	request := r.populateCreateRequest(plan)
+
+	err := r.client.UpdateRabbitMqConfiguration(timeoutCtx, instanceID, request, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("API Error", fmt.Sprintf("Failed to create RabbitMQ configuration: %s", err.Error()))
 		return
@@ -248,7 +311,7 @@ func (r *rabbitMqConfigurationResource) Create(ctx context.Context, req resource
 		return
 	}
 
-	r.populateRabbitMqConfigModel(&plan, dataResp, instanceID, sleep, timeout)
+	r.populateResourceModel(&plan, dataResp, instanceID)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
@@ -259,53 +322,52 @@ func (r *rabbitMqConfigurationResource) Read(ctx context.Context, req resource.R
 		return
 	}
 
-	instanceID := int(state.InstanceID.ValueInt64())
-	sleep := int(state.Sleep.ValueInt64())
-	if sleep == 0 {
-		sleep = 60 // fallback default
-	}
-
-	timeout := int(state.Timeout.ValueInt64())
-	if timeout == 0 {
-		timeout = 3600 // fallback default
-	}
-
+	// Sleep/timeout with default values
+	sleep := state.Sleep.ValueInt64()
+	timeout := state.Timeout.ValueInt64()
 	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
 	defer cancel()
+
+	instanceID := state.InstanceID.ValueInt64()
 
 	data, err := r.client.ReadRabbitMqConfiguration(timeoutCtx, instanceID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("API Error", err.Error())
 		return
 	}
-
-	// Resource drift: instance or resource not found, trigger re-creation
 	if data == nil {
+		tflog.Warn(ctx, fmt.Sprintf("RabbitMQ configuration resource drift for instance ID %d, trigger re-create", instanceID))
 		resp.State.RemoveResource(ctx)
 		return
 	}
 
-	r.populateRabbitMqConfigModel(&state, data, instanceID, sleep, timeout)
+	r.populateResourceModel(&state, data, instanceID)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
 func (r *rabbitMqConfigurationResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan rabbitMqConfigurationResourceModel
-	var state rabbitMqConfigurationResourceModel
+	var plan, state rabbitMqConfigurationResourceModel
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	instanceID := int(plan.InstanceID.ValueInt64())
-	sleep := int(plan.Sleep.ValueInt64())
-	timeout := int(plan.Timeout.ValueInt64())
+	sleep := plan.Sleep.ValueInt64()
+	timeout := plan.Timeout.ValueInt64()
 	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
 	defer cancel()
-	data := r.populateUpdateRequest(&plan)
 
-	err := r.client.UpdateRabbitMqConfiguration(timeoutCtx, instanceID, data, sleep)
+	instanceID := plan.InstanceID.ValueInt64()
+	request, changed := r.populateUpdateRequest(plan, state)
+
+	if !changed {
+		// No rabbitmq configuration changes detected, only save the state
+		resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+		return
+	}
+
+	err := r.client.UpdateRabbitMqConfiguration(timeoutCtx, instanceID, request, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("API Error", fmt.Sprintf("Failed to update RabbitMQ configuration: %s", err.Error()))
 		return
@@ -322,7 +384,7 @@ func (r *rabbitMqConfigurationResource) Update(ctx context.Context, req resource
 		return
 	}
 
-	r.populateRabbitMqConfigModel(&plan, dataResp, instanceID, sleep, timeout)
+	r.populateResourceModel(&plan, dataResp, instanceID)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
@@ -340,23 +402,31 @@ func (r *rabbitMqConfigurationResource) ImportState(ctx context.Context, req res
 	}
 	resp.State.SetAttribute(ctx, path.Root("id"), id)
 	resp.State.SetAttribute(ctx, path.Root("instance_id"), instanceID)
+	resp.State.SetAttribute(ctx, path.Root("sleep"), 60)     // default value
+	resp.State.SetAttribute(ctx, path.Root("timeout"), 3600) // default value
 }
 
-// Handle data conversion from API response to resource model
-func (r *rabbitMqConfigurationResource) populateRabbitMqConfigModel(resourceModel *rabbitMqConfigurationResourceModel,
-	data *model.RabbitMqConfigResponse, instanceID, sleep, timeout int) {
+// Convert API response to resource model
+func (r *rabbitMqConfigurationResource) populateResourceModel(resourceModel *rabbitMqConfigurationResourceModel, data *model.RabbitMqConfigResponse, instanceID int64) {
 
-	resourceModel.ID = types.StringValue(strconv.Itoa(instanceID))
-	resourceModel.InstanceID = types.Int64Value(int64(instanceID))
-	resourceModel.Sleep = types.Int64Value(int64(sleep))
-	resourceModel.Timeout = types.Int64Value(int64(timeout))
+	resourceModel.ID = types.StringValue(strconv.Itoa(int(instanceID)))
+	resourceModel.InstanceID = types.Int64Value(instanceID)
 	resourceModel.Heartbeat = types.Int64Value(data.Heartbeat)
 	resourceModel.ChannelMax = types.Int64Value(data.ChannelMax)
 	resourceModel.MaxMessageSize = types.Int64Value(data.MaxMessageSize)
 	resourceModel.LogExchangeLevel = types.StringValue(data.LogExchangeLevel)
 	resourceModel.ClusterPartitionHandling = types.StringValue(data.ClusterPartitionHandling)
 	resourceModel.VmMemoryHighWatermark = types.Float64Value(data.VmMemoryHighWatermark)
+	// MQTT settings
+	resourceModel.MQTTVhost = types.StringValue(data.MQTTVhost)
+	resourceModel.MQTTExchange = types.StringValue(data.MQTTExchange)
+	resourceModel.MQTTSSLCertLogin = types.BoolValue(bool(data.MQTTSSLCertLogin))
+	// SSL settings
+	resourceModel.SSLCertLoginFrom = types.StringValue(data.SSLCertLoginFrom)
+	resourceModel.SSLOptionsFailIfNoPeerCert = types.BoolValue(bool(data.SSLOptionsFailIfNoPeerCert))
+	resourceModel.SSLOptionsVerify = types.StringValue(data.SSLOptionsVerify)
 
+	// Handle special cases for pointer and custom types
 	if data.ConnectionMax == nil {
 		resourceModel.ConnectionMax = types.Int64Value(-1) // Default value when not set
 	} else if data.ConnectionMax.IsInfinity {
@@ -378,104 +448,172 @@ func (r *rabbitMqConfigurationResource) populateRabbitMqConfigModel(resourceMode
 	}
 }
 
-// Handle data conversion from resource model to create API request
-func (r *rabbitMqConfigurationResource) populateCreateRequest(plan *rabbitMqConfigurationResourceModel) model.RabbitMqConfigRequest {
-	data := model.RabbitMqConfigRequest{}
+// Populate API create request from resource model
+func (r *rabbitMqConfigurationResource) populateCreateRequest(plan rabbitMqConfigurationResourceModel) model.RabbitMqConfigRequest {
+	request := model.RabbitMqConfigRequest{}
 
 	if !plan.Heartbeat.IsUnknown() {
-		data.Heartbeat = utils.Pointer(plan.Heartbeat.ValueInt64())
+		request.Heartbeat = plan.Heartbeat.ValueInt64Pointer()
 	}
 
 	if !plan.ConnectionMax.IsUnknown() {
 		if plan.ConnectionMax.ValueInt64() == -1 {
-			data.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: true})
+			request.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: true})
 		} else {
-			data.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: false, Value: plan.ConnectionMax.ValueInt64()})
+			request.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: false, Value: plan.ConnectionMax.ValueInt64()})
 		}
 	}
 
 	if !plan.ChannelMax.IsUnknown() {
-		data.ChannelMax = utils.Pointer(plan.ChannelMax.ValueInt64())
+		request.ChannelMax = plan.ChannelMax.ValueInt64Pointer()
 	}
 
 	if !plan.ConsumerTimeout.IsUnknown() {
 		if plan.ConsumerTimeout.ValueInt64() == -1 {
-			data.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: false})
+			request.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: false})
 		} else {
-			data.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: true, Value: plan.ConsumerTimeout.ValueInt64()})
+			request.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: true, Value: plan.ConsumerTimeout.ValueInt64()})
 		}
 	}
 
 	if !plan.VmMemoryHighWatermark.IsUnknown() {
-		data.VmMemoryHighWatermark = utils.Pointer(plan.VmMemoryHighWatermark.ValueFloat64())
+		request.VmMemoryHighWatermark = plan.VmMemoryHighWatermark.ValueFloat64Pointer()
 	}
 
 	if !plan.QueueIndexEmbedMsgsBelow.IsUnknown() {
-		data.QueueIndexEmbedMsgsBelow = utils.Pointer(plan.QueueIndexEmbedMsgsBelow.ValueInt64())
+		request.QueueIndexEmbedMsgsBelow = plan.QueueIndexEmbedMsgsBelow.ValueInt64Pointer()
 	}
 
 	if !plan.MaxMessageSize.IsUnknown() {
-		data.MaxMessageSize = utils.Pointer(plan.MaxMessageSize.ValueInt64())
+		request.MaxMessageSize = plan.MaxMessageSize.ValueInt64Pointer()
 	}
 
 	if !plan.LogExchangeLevel.IsUnknown() {
-		data.LogExchangeLevel = plan.LogExchangeLevel.ValueString()
+		request.LogExchangeLevel = plan.LogExchangeLevel.ValueString()
 	}
 
 	if !plan.ClusterPartitionHandling.IsUnknown() {
-		data.ClusterPartitionHandling = plan.ClusterPartitionHandling.ValueString()
+		request.ClusterPartitionHandling = plan.ClusterPartitionHandling.ValueString()
 	}
 
-	return data
+	// MQTT settings
+	if !plan.MQTTVhost.IsUnknown() {
+		request.MQTTVhost = plan.MQTTVhost.ValueStringPointer()
+	}
+
+	if !plan.MQTTExchange.IsUnknown() {
+		request.MQTTExchange = plan.MQTTExchange.ValueStringPointer()
+	}
+
+	if !plan.MQTTSSLCertLogin.IsUnknown() {
+		request.MQTTSSLCertLogin = plan.MQTTSSLCertLogin.ValueBoolPointer()
+	}
+
+	// SSL settings
+	if !plan.SSLCertLoginFrom.IsUnknown() {
+		request.SSLCertLoginFrom = plan.SSLCertLoginFrom.ValueStringPointer()
+	}
+
+	if !plan.SSLOptionsFailIfNoPeerCert.IsUnknown() {
+		request.SSLOptionsFailIfNoPeerCert = plan.SSLOptionsFailIfNoPeerCert.ValueBoolPointer()
+	}
+
+	if !plan.SSLOptionsVerify.IsUnknown() {
+		request.SSLOptionsVerify = plan.SSLOptionsVerify.ValueStringPointer()
+	}
+
+	return request
 }
 
-// Handle data conversion from resource model to update API request
-func (r *rabbitMqConfigurationResource) populateUpdateRequest(plan *rabbitMqConfigurationResourceModel) model.RabbitMqConfigRequest {
-	data := model.RabbitMqConfigRequest{}
+// Populate API update request from resource model
+func (r *rabbitMqConfigurationResource) populateUpdateRequest(plan, state rabbitMqConfigurationResourceModel) (model.RabbitMqConfigRequest, bool) {
+	request := model.RabbitMqConfigRequest{}
+	changed := false
 
-	if !plan.Heartbeat.IsNull() {
-		data.Heartbeat = utils.Pointer(plan.Heartbeat.ValueInt64())
+	if !plan.Heartbeat.IsNull() && !plan.Heartbeat.Equal(state.Heartbeat) {
+		request.Heartbeat = plan.Heartbeat.ValueInt64Pointer()
+		changed = true
 	}
 
-	if !plan.ConnectionMax.IsNull() {
+	if !plan.ConnectionMax.IsNull() && !plan.ConnectionMax.Equal(state.ConnectionMax) {
 		if plan.ConnectionMax.ValueInt64() == -1 {
-			data.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: true})
+			request.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: true})
 		} else {
-			data.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: false, Value: plan.ConnectionMax.ValueInt64()})
+			request.ConnectionMax = utils.Pointer(model.ConnectionMaxValue{IsInfinity: false, Value: plan.ConnectionMax.ValueInt64()})
 		}
+		changed = true
 	}
 
-	if !plan.ChannelMax.IsNull() {
-		data.ChannelMax = utils.Pointer(plan.ChannelMax.ValueInt64())
+	if !plan.ChannelMax.IsNull() && !plan.ChannelMax.Equal(state.ChannelMax) {
+		request.ChannelMax = plan.ChannelMax.ValueInt64Pointer()
+		changed = true
 	}
 
-	if !plan.ConsumerTimeout.IsNull() {
+	if !plan.ConsumerTimeout.IsNull() && !plan.ConsumerTimeout.Equal(state.ConsumerTimeout) {
 		if plan.ConsumerTimeout.ValueInt64() == -1 {
-			data.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: false})
+			request.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: false})
 		} else {
-			data.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: true, Value: plan.ConsumerTimeout.ValueInt64()})
+			request.ConsumerTimeout = utils.Pointer(model.ConsumerTimeoutValue{IsEnabled: true, Value: plan.ConsumerTimeout.ValueInt64()})
 		}
+		changed = true
 	}
 
-	if !plan.VmMemoryHighWatermark.IsNull() {
-		data.VmMemoryHighWatermark = utils.Pointer(plan.VmMemoryHighWatermark.ValueFloat64())
+	if !plan.VmMemoryHighWatermark.IsNull() && !plan.VmMemoryHighWatermark.Equal(state.VmMemoryHighWatermark) {
+		request.VmMemoryHighWatermark = plan.VmMemoryHighWatermark.ValueFloat64Pointer()
+		changed = true
 	}
 
-	if !plan.QueueIndexEmbedMsgsBelow.IsNull() {
-		data.QueueIndexEmbedMsgsBelow = utils.Pointer(plan.QueueIndexEmbedMsgsBelow.ValueInt64())
+	if !plan.QueueIndexEmbedMsgsBelow.IsNull() && !plan.QueueIndexEmbedMsgsBelow.Equal(state.QueueIndexEmbedMsgsBelow) {
+		request.QueueIndexEmbedMsgsBelow = plan.QueueIndexEmbedMsgsBelow.ValueInt64Pointer()
+		changed = true
 	}
 
-	if !plan.MaxMessageSize.IsNull() {
-		data.MaxMessageSize = utils.Pointer(plan.MaxMessageSize.ValueInt64())
+	if !plan.MaxMessageSize.IsNull() && !plan.MaxMessageSize.Equal(state.MaxMessageSize) {
+		request.MaxMessageSize = plan.MaxMessageSize.ValueInt64Pointer()
+		changed = true
 	}
 
-	if !plan.LogExchangeLevel.IsNull() {
-		data.LogExchangeLevel = plan.LogExchangeLevel.ValueString()
+	if !plan.LogExchangeLevel.IsNull() && !plan.LogExchangeLevel.Equal(state.LogExchangeLevel) {
+		request.LogExchangeLevel = plan.LogExchangeLevel.ValueString()
+		changed = true
 	}
 
-	if !plan.ClusterPartitionHandling.IsNull() {
-		data.ClusterPartitionHandling = plan.ClusterPartitionHandling.ValueString()
+	if !plan.ClusterPartitionHandling.IsNull() && !plan.ClusterPartitionHandling.Equal(state.ClusterPartitionHandling) {
+		request.ClusterPartitionHandling = plan.ClusterPartitionHandling.ValueString()
+		changed = true
 	}
 
-	return data
+	// MQTT settings
+	if !plan.MQTTVhost.IsNull() && !plan.MQTTVhost.Equal(state.MQTTVhost) {
+		request.MQTTVhost = plan.MQTTVhost.ValueStringPointer()
+		changed = true
+	}
+
+	if !plan.MQTTExchange.IsNull() && !plan.MQTTExchange.Equal(state.MQTTExchange) {
+		request.MQTTExchange = plan.MQTTExchange.ValueStringPointer()
+		changed = true
+	}
+
+	if !plan.MQTTSSLCertLogin.IsNull() && !plan.MQTTSSLCertLogin.Equal(state.MQTTSSLCertLogin) {
+		request.MQTTSSLCertLogin = plan.MQTTSSLCertLogin.ValueBoolPointer()
+		changed = true
+	}
+
+	// SSL settings
+	if !plan.SSLCertLoginFrom.IsNull() && !plan.SSLCertLoginFrom.Equal(state.SSLCertLoginFrom) {
+		request.SSLCertLoginFrom = plan.SSLCertLoginFrom.ValueStringPointer()
+		changed = true
+	}
+
+	if !plan.SSLOptionsFailIfNoPeerCert.IsNull() && !plan.SSLOptionsFailIfNoPeerCert.Equal(state.SSLOptionsFailIfNoPeerCert) {
+		request.SSLOptionsFailIfNoPeerCert = plan.SSLOptionsFailIfNoPeerCert.ValueBoolPointer()
+		changed = true
+	}
+
+	if !plan.SSLOptionsVerify.IsNull() && !plan.SSLOptionsVerify.Equal(state.SSLOptionsVerify) {
+		request.SSLOptionsVerify = plan.SSLOptionsVerify.ValueStringPointer()
+		changed = true
+	}
+
+	return request, changed
 }
