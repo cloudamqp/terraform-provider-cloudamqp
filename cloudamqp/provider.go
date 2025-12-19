@@ -106,11 +106,11 @@ func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resou
 		NewCustomCertificateResource,
 		NewIntegrationLogResource,
 		NewIntegrationMetricResource,
+		NewOAuth2ConfigurationResource,
 		NewRabbitMqConfigurationResource,
+		NewTrustStoreResource,
 		NewVpcResource,
 		NewWebhookResource,
-		NewOAuth2ConfigurationResource,
-		NewTrustStoreResource,
 	}
 }
 
