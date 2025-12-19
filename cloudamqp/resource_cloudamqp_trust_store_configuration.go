@@ -35,23 +35,18 @@ func NewTrustStoreConfigurationResource() resource.Resource {
 }
 
 type trustStoreConfigurationResourceModel struct {
-	ID              types.String                            `tfsdk:"id"`
-	InstanceID      types.Int64                             `tfsdk:"instance_id"`
-	RefreshInterval types.Int64                             `tfsdk:"refresh_interval"`
-	Http            *httpTrustStoreConfigurationBlock       `tfsdk:"http"`
-	Filesystem      *filesystemTrustStoreConfigurationBlock `tfsdk:"filesystem"`
-	Version         types.Int64                             `tfsdk:"version"`
-	Sleep           types.Int64                             `tfsdk:"sleep"`
-	Timeout         types.Int64                             `tfsdk:"timeout"`
+	ID              types.String                      `tfsdk:"id"`
+	InstanceID      types.Int64                       `tfsdk:"instance_id"`
+	RefreshInterval types.Int64                       `tfsdk:"refresh_interval"`
+	Http            *httpTrustStoreConfigurationBlock `tfsdk:"http"`
+	Version         types.Int64                       `tfsdk:"version"`
+	Sleep           types.Int64                       `tfsdk:"sleep"`
+	Timeout         types.Int64                       `tfsdk:"timeout"`
 }
 
 type httpTrustStoreConfigurationBlock struct {
 	Url    types.String `tfsdk:"url"`
 	Cacert types.String `tfsdk:"cacert"`
-}
-
-type filesystemTrustStoreConfigurationBlock struct {
-	Certs types.List `tfsdk:"certs"`
 }
 
 func (r *trustStoreConfigurationResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -133,17 +128,6 @@ func (r *trustStoreConfigurationResource) Schema(ctx context.Context, req resour
 					},
 				},
 			},
-			"filesystem": schema.SingleNestedBlock{
-				Description: "Filesystem trust store configuration",
-				Attributes: map[string]schema.Attribute{
-					"certs": schema.ListAttribute{
-						Optional:    true,
-						WriteOnly:   true,
-						ElementType: types.StringType,
-						Description: "Path to the trust store files (CA, cert, key)",
-					},
-				},
-			},
 		},
 	}
 }
@@ -193,8 +177,8 @@ func (r *trustStoreConfigurationResource) Create(ctx context.Context, req resour
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	if plan.Http == nil && plan.Filesystem == nil {
-		resp.Diagnostics.AddError("Missing trust store configuration", "Either 'http' or 'filesystem' block must be provided")
+	if plan.Http == nil {
+		resp.Diagnostics.AddError("Missing trust store configuration", "The 'http' block must be provided")
 		return
 	}
 
@@ -204,16 +188,6 @@ func (r *trustStoreConfigurationResource) Create(ctx context.Context, req resour
 		params.Url = plan.Http.Url.ValueString()
 		if !config.Http.Cacert.IsNull() {
 			params.CACert = config.Http.Cacert.ValueString()
-		}
-	} else if plan.Filesystem != nil {
-		if !config.Filesystem.Certs.IsNull() {
-			certs := make([]string, len(config.Filesystem.Certs.Elements()))
-			diag := config.Filesystem.Certs.ElementsAs(ctx, &certs, false)
-			resp.Diagnostics.Append(diag...)
-			if resp.Diagnostics.HasError() {
-				return
-			}
-			params.Certs = certs
 		}
 	}
 
@@ -270,9 +244,6 @@ func (r *trustStoreConfigurationResource) Read(ctx context.Context, req resource
 		state.Http = &httpTrustStoreConfigurationBlock{
 			Url: types.StringValue(*data.Url),
 		}
-		state.Filesystem = nil
-	case "filesystem":
-		state.Http = nil
 	default:
 		resp.Diagnostics.AddError("Unknown trust store provider", fmt.Sprintf("The trust store provider %q is not recognized.", data.Provider))
 		return
@@ -303,17 +274,6 @@ func (r *trustStoreConfigurationResource) Update(ctx context.Context, req resour
 		params.Url = plan.Http.Url.ValueString()
 		if !config.Http.Cacert.IsNull() && plan.Version.ValueInt64() != state.Version.ValueInt64() {
 			params.CACert = config.Http.Cacert.ValueString()
-			changed = true
-		}
-	} else if plan.Filesystem != nil {
-		if !config.Filesystem.Certs.IsNull() && plan.Version.ValueInt64() != state.Version.ValueInt64() {
-			certs := make([]string, len(config.Filesystem.Certs.Elements()))
-			diag := config.Filesystem.Certs.ElementsAs(ctx, &certs, false)
-			resp.Diagnostics.Append(diag...)
-			if resp.Diagnostics.HasError() {
-				return
-			}
-			params.Certs = certs
 			changed = true
 		}
 	}
