@@ -90,7 +90,7 @@ func (r *trustStoreResource) Schema(ctx context.Context, req resource.SchemaRequ
 			},
 			"sleep": schema.Int64Attribute{
 				Optional:    true,
-				Default:     int64default.StaticInt64(30),
+				Default:     int64default.StaticInt64(10),
 				Computed:    true,
 				Description: "Configurable sleep time in seconds between retries for trust store operations",
 				PlanModifiers: []planmodifier.Int64{
