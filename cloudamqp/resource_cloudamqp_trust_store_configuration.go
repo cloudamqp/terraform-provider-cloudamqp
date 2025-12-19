@@ -15,7 +15,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -36,13 +35,23 @@ func NewTrustStoreConfigurationResource() resource.Resource {
 }
 
 type trustStoreConfigurationResourceModel struct {
-	ID              types.String `tfsdk:"id"`
-	InstanceID      types.Int64  `tfsdk:"instance_id"`
-	Url             types.String `tfsdk:"url"`
-	RefreshInterval types.Int64  `tfsdk:"refresh_interval"`
-	Provider        types.String `tfsdk:"provider"`
-	Sleep           types.Int64  `tfsdk:"sleep"`
-	Timeout         types.Int64  `tfsdk:"timeout"`
+	ID              types.String                            `tfsdk:"id"`
+	InstanceID      types.Int64                             `tfsdk:"instance_id"`
+	RefreshInterval types.Int64                             `tfsdk:"refresh_interval"`
+	Http            *httpTrustStoreConfigurationBlock       `tfsdk:"http"`
+	Filesystem      *filesystemTrustStoreConfigurationBlock `tfsdk:"filesystem"`
+	Version         types.Int64                             `tfsdk:"version"`
+	Sleep           types.Int64                             `tfsdk:"sleep"`
+	Timeout         types.Int64                             `tfsdk:"timeout"`
+}
+
+type httpTrustStoreConfigurationBlock struct {
+	Url    types.String `tfsdk:"url"`
+	Cacert types.String `tfsdk:"cacert"`
+}
+
+type filesystemTrustStoreConfigurationBlock struct {
+	Certs types.List `tfsdk:"certs"`
 }
 
 func (r *trustStoreConfigurationResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -54,7 +63,6 @@ func (r *trustStoreConfigurationResource) Schema(ctx context.Context, req resour
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Computed:    true,
-				Required:    false,
 				Description: "Resource ID",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
@@ -67,13 +75,6 @@ func (r *trustStoreConfigurationResource) Schema(ctx context.Context, req resour
 					int64planmodifier.RequiresReplace(),
 				},
 			},
-			"url": schema.StringAttribute{
-				Required:    true,
-				Description: "URL to fetch trust store certificates from",
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.UseStateForUnknown(),
-				},
-			},
 			"refresh_interval": schema.Int64Attribute{
 				Optional:    true,
 				Default:     int64default.StaticInt64(30),
@@ -83,13 +84,13 @@ func (r *trustStoreConfigurationResource) Schema(ctx context.Context, req resour
 					int64planmodifier.UseStateForUnknown(),
 				},
 			},
-			"provider": schema.StringAttribute{
+			"version": schema.Int64Attribute{
+				Description: "Version of write only certificates. Increment to force update of write only fields",
 				Optional:    true,
-				Default:     stringdefault.StaticString("http"),
 				Computed:    true,
-				Description: "Trust store provider (currently only 'http' is supported)",
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.UseStateForUnknown(),
+				Default:     int64default.StaticInt64(1),
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.UseStateForUnknown(),
 				},
 			},
 			"sleep": schema.Int64Attribute{
@@ -108,6 +109,39 @@ func (r *trustStoreConfigurationResource) Schema(ctx context.Context, req resour
 				Description: "Configurable timeout time in seconds for trust store configuration",
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.UseStateForUnknown(),
+				},
+			},
+		},
+		Blocks: map[string]schema.Block{
+			"http": schema.SingleNestedBlock{
+				Description: "HTTP trust store configuration",
+				Attributes: map[string]schema.Attribute{
+					"url": schema.StringAttribute{
+						Required:    true,
+						Description: "URL to fetch trust store certificates from",
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
+					},
+					"cacert": schema.StringAttribute{
+						Optional:    true,
+						WriteOnly:   true,
+						Description: "PEM encoded CA certificates",
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
+					},
+				},
+			},
+			"filesystem": schema.SingleNestedBlock{
+				Description: "Filesystem trust store configuration",
+				Attributes: map[string]schema.Attribute{
+					"certs": schema.ListAttribute{
+						Optional:    true,
+						WriteOnly:   true,
+						ElementType: types.StringType,
+						Description: "Path to the trust store files (CA, cert, key)",
+					},
 				},
 			},
 		},
@@ -140,13 +174,14 @@ func (r *trustStoreConfigurationResource) ImportState(ctx context.Context, req r
 	resp.State.SetAttribute(ctx, path.Root("instance_id"), instanceID)
 	// Set default values for optional/computed attributes
 	resp.State.SetAttribute(ctx, path.Root("refresh_interval"), 30)
-	resp.State.SetAttribute(ctx, path.Root("provider"), "http")
+	resp.State.SetAttribute(ctx, path.Root("version"), 1)
 	resp.State.SetAttribute(ctx, path.Root("sleep"), 30)
 	resp.State.SetAttribute(ctx, path.Root("timeout"), 1800)
 }
 
 func (r *trustStoreConfigurationResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan trustStoreConfigurationResourceModel
+	var config, plan trustStoreConfigurationResourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -158,13 +193,31 @@ func (r *trustStoreConfigurationResource) Create(ctx context.Context, req resour
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	request := model.TrustStoreRequest{
-		Url:             plan.Url.ValueString(),
-		RefreshInterval: plan.RefreshInterval.ValueInt64(),
-		Provider:        plan.Provider.ValueString(),
+	if plan.Http == nil && plan.Filesystem == nil {
+		resp.Diagnostics.AddError("Missing trust store configuration", "Either 'http' or 'filesystem' block must be provided")
+		return
 	}
 
-	job, err := r.client.CreateTrustStoreConfiguration(timeoutCtx, instanceID, sleep, request)
+	params := model.TrustStoreRequest{}
+	params.RefreshInterval = plan.RefreshInterval.ValueInt64()
+	if plan.Http != nil {
+		params.Url = plan.Http.Url.ValueString()
+		if !config.Http.Cacert.IsNull() {
+			params.CACert = config.Http.Cacert.ValueString()
+		}
+	} else if plan.Filesystem != nil {
+		if !config.Filesystem.Certs.IsNull() {
+			certs := make([]string, len(config.Filesystem.Certs.Elements()))
+			diag := config.Filesystem.Certs.ElementsAs(ctx, &certs, false)
+			resp.Diagnostics.Append(diag...)
+			if resp.Diagnostics.HasError() {
+				return
+			}
+			params.Certs = certs
+		}
+	}
+
+	job, err := r.client.CreateTrustStoreConfiguration(timeoutCtx, instanceID, sleep, params)
 	if err != nil {
 		resp.Diagnostics.AddError("Error creating trust store configuration", err.Error())
 		return
@@ -212,14 +265,24 @@ func (r *trustStoreConfigurationResource) Read(ctx context.Context, req resource
 		return
 	}
 
-	state.Url = types.StringValue(data.Url)
-	state.RefreshInterval = types.Int64Value(data.RefreshInterval)
-	state.Provider = types.StringValue(data.Provider)
+	switch data.Provider {
+	case "http":
+		state.Http = &httpTrustStoreConfigurationBlock{
+			Url: types.StringValue(*data.Url),
+		}
+		state.Filesystem = nil
+	case "filesystem":
+		state.Http = nil
+	default:
+		resp.Diagnostics.AddError("Unknown trust store provider", fmt.Sprintf("The trust store provider %q is not recognized.", data.Provider))
+		return
+	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
 func (r *trustStoreConfigurationResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state trustStoreConfigurationResourceModel
+	var config, plan, state trustStoreConfigurationResourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
@@ -228,22 +291,36 @@ func (r *trustStoreConfigurationResource) Update(ctx context.Context, req resour
 
 	changed := false
 	params := model.TrustStoreRequest{}
-	if plan.Url.ValueString() != state.Url.ValueString() {
-		params.Url = plan.Url.ValueString()
-		changed = true
-	}
 	if plan.RefreshInterval.ValueInt64() != state.RefreshInterval.ValueInt64() {
-		params.RefreshInterval = plan.RefreshInterval.ValueInt64()
 		changed = true
 	}
-	if plan.Provider.ValueString() != state.Provider.ValueString() {
-		params.Provider = plan.Provider.ValueString()
-		changed = true
+	params.RefreshInterval = plan.RefreshInterval.ValueInt64()
+
+	if plan.Http != nil {
+		if plan.Http.Url.ValueString() != state.Http.Url.ValueString() {
+			changed = true
+		}
+		params.Url = plan.Http.Url.ValueString()
+		if !config.Http.Cacert.IsNull() && plan.Version.ValueInt64() != state.Version.ValueInt64() {
+			params.CACert = config.Http.Cacert.ValueString()
+			changed = true
+		}
+	} else if plan.Filesystem != nil {
+		if !config.Filesystem.Certs.IsNull() && plan.Version.ValueInt64() != state.Version.ValueInt64() {
+			certs := make([]string, len(config.Filesystem.Certs.Elements()))
+			diag := config.Filesystem.Certs.ElementsAs(ctx, &certs, false)
+			resp.Diagnostics.Append(diag...)
+			if resp.Diagnostics.HasError() {
+				return
+			}
+			params.Certs = certs
+			changed = true
+		}
 	}
 
 	if !changed {
-		tflog.Info(ctx, "No changes detected for trust store configuration, skipping update")
-		resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
+		tflog.Info(ctx, "No changes detected for trust store configuration, only save to state")
+		resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 		return
 	}
 
