@@ -21,39 +21,39 @@ import (
 )
 
 var (
-	_ resource.Resource                = &trustStoreConfigurationResource{}
-	_ resource.ResourceWithConfigure   = &trustStoreConfigurationResource{}
-	_ resource.ResourceWithImportState = &trustStoreConfigurationResource{}
+	_ resource.Resource                = &trustStoreResource{}
+	_ resource.ResourceWithConfigure   = &trustStoreResource{}
+	_ resource.ResourceWithImportState = &trustStoreResource{}
 )
 
-type trustStoreConfigurationResource struct {
+type trustStoreResource struct {
 	client *api.API
 }
 
-func NewTrustStoreConfigurationResource() resource.Resource {
-	return &trustStoreConfigurationResource{}
+func NewTrustStoreResource() resource.Resource {
+	return &trustStoreResource{}
 }
 
-type trustStoreConfigurationResourceModel struct {
-	ID              types.String                      `tfsdk:"id"`
-	InstanceID      types.Int64                       `tfsdk:"instance_id"`
-	RefreshInterval types.Int64                       `tfsdk:"refresh_interval"`
-	Http            *httpTrustStoreConfigurationBlock `tfsdk:"http"`
-	Version         types.Int64                       `tfsdk:"version"`
-	Sleep           types.Int64                       `tfsdk:"sleep"`
-	Timeout         types.Int64                       `tfsdk:"timeout"`
+type trustStoreResourceModel struct {
+	ID              types.String         `tfsdk:"id"`
+	InstanceID      types.Int64          `tfsdk:"instance_id"`
+	RefreshInterval types.Int64          `tfsdk:"refresh_interval"`
+	Http            *httpTrustStoreBlock `tfsdk:"http"`
+	Version         types.Int64          `tfsdk:"version"`
+	Sleep           types.Int64          `tfsdk:"sleep"`
+	Timeout         types.Int64          `tfsdk:"timeout"`
 }
 
-type httpTrustStoreConfigurationBlock struct {
+type httpTrustStoreBlock struct {
 	Url    types.String `tfsdk:"url"`
 	Cacert types.String `tfsdk:"cacert"`
 }
 
-func (r *trustStoreConfigurationResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = "cloudamqp_trust_store_configuration"
+func (r *trustStoreResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = "cloudamqp_trust_store"
 }
 
-func (r *trustStoreConfigurationResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *trustStoreResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
@@ -92,7 +92,7 @@ func (r *trustStoreConfigurationResource) Schema(ctx context.Context, req resour
 				Optional:    true,
 				Default:     int64default.StaticInt64(30),
 				Computed:    true,
-				Description: "Configurable sleep time in seconds between retries for trust store configuration",
+				Description: "Configurable sleep time in seconds between retries for trust store operations",
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.UseStateForUnknown(),
 				},
@@ -101,7 +101,7 @@ func (r *trustStoreConfigurationResource) Schema(ctx context.Context, req resour
 				Optional:    true,
 				Default:     int64default.StaticInt64(1800),
 				Computed:    true,
-				Description: "Configurable timeout time in seconds for trust store configuration",
+				Description: "Configurable timeout time in seconds for trust store operations",
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.UseStateForUnknown(),
 				},
@@ -109,7 +109,7 @@ func (r *trustStoreConfigurationResource) Schema(ctx context.Context, req resour
 		},
 		Blocks: map[string]schema.Block{
 			"http": schema.SingleNestedBlock{
-				Description: "HTTP trust store configuration",
+				Description: "HTTP trust store",
 				Attributes: map[string]schema.Attribute{
 					"url": schema.StringAttribute{
 						Required:    true,
@@ -132,7 +132,7 @@ func (r *trustStoreConfigurationResource) Schema(ctx context.Context, req resour
 	}
 }
 
-func (r *trustStoreConfigurationResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *trustStoreResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -147,7 +147,7 @@ func (r *trustStoreConfigurationResource) Configure(ctx context.Context, req res
 	r.client = client
 }
 
-func (r *trustStoreConfigurationResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *trustStoreResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	tflog.Info(ctx, fmt.Sprintf("ImportState: ID=%s", req.ID))
 	instanceID, err := strconv.ParseInt(req.ID, 10, 64)
 	if err != nil {
@@ -163,8 +163,8 @@ func (r *trustStoreConfigurationResource) ImportState(ctx context.Context, req r
 	resp.State.SetAttribute(ctx, path.Root("timeout"), 1800)
 }
 
-func (r *trustStoreConfigurationResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var config, plan trustStoreConfigurationResourceModel
+func (r *trustStoreResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var config, plan trustStoreResourceModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -207,8 +207,8 @@ func (r *trustStoreConfigurationResource) Create(ctx context.Context, req resour
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
-func (r *trustStoreConfigurationResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state trustStoreConfigurationResourceModel
+func (r *trustStoreResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state trustStoreResourceModel
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -223,25 +223,25 @@ func (r *trustStoreConfigurationResource) Read(ctx context.Context, req resource
 	data, err := r.client.ReadTrustStoreConfiguration(timeoutCtx, instanceID, sleep)
 	if err != nil {
 		if strings.Contains(strings.ToLower(err.Error()), "not found") {
-			tflog.Info(ctx, "Trust store configuration not found, removing resource")
+			tflog.Info(ctx, "Trust store not found, removing resource")
 			resp.State.RemoveResource(ctx)
 			return
 		}
 
-		resp.Diagnostics.AddError("Error reading trust store configuration", err.Error())
+		resp.Diagnostics.AddError("Error reading trust store", err.Error())
 		return
 	}
 
 	// Resource drift: instance or resource not found, trigger re-creation
 	if data == nil {
-		tflog.Info(ctx, fmt.Sprintf("trust store configuration not found, resource will be recreated: %s", state.ID.ValueString()))
+		tflog.Info(ctx, fmt.Sprintf("trust store not found, resource will be recreated: %s", state.ID.ValueString()))
 		resp.State.RemoveResource(ctx)
 		return
 	}
 
 	switch data.Provider {
 	case "http":
-		state.Http = &httpTrustStoreConfigurationBlock{
+		state.Http = &httpTrustStoreBlock{
 			Url: types.StringValue(*data.Url),
 		}
 	default:
@@ -251,8 +251,8 @@ func (r *trustStoreConfigurationResource) Read(ctx context.Context, req resource
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
-func (r *trustStoreConfigurationResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var config, plan, state trustStoreConfigurationResourceModel
+func (r *trustStoreResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var config, plan, state trustStoreResourceModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
@@ -279,7 +279,7 @@ func (r *trustStoreConfigurationResource) Update(ctx context.Context, req resour
 	}
 
 	if !changed {
-		tflog.Info(ctx, "No changes detected for trust store configuration, only save to state")
+		tflog.Info(ctx, "No changes detected for trust store, only save to state")
 		resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 		return
 	}
@@ -292,21 +292,21 @@ func (r *trustStoreConfigurationResource) Update(ctx context.Context, req resour
 
 	job, err := r.client.UpdateTrustStoreConfiguration(timeoutCtx, instanceID, sleep, params)
 	if err != nil {
-		resp.Diagnostics.AddError("Error updating trust store configuration", err.Error())
+		resp.Diagnostics.AddError("Error updating trust store", err.Error())
 		return
 	}
 
 	_, err = r.client.PollForJobCompleted(timeoutCtx, instanceID, *job.ID, sleep)
 	if err != nil {
-		resp.Diagnostics.AddError("Error polling for trust store configuration", err.Error())
+		resp.Diagnostics.AddError("Error polling for trust store", err.Error())
 		return
 	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
-func (r *trustStoreConfigurationResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state trustStoreConfigurationResourceModel
+func (r *trustStoreResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state trustStoreResourceModel
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -320,13 +320,13 @@ func (r *trustStoreConfigurationResource) Delete(ctx context.Context, req resour
 
 	job, err := r.client.DeleteTrustStoreConfiguration(timeoutCtx, instanceID, sleep)
 	if err != nil {
-		resp.Diagnostics.AddError("Error deleting trust store configuration", err.Error())
+		resp.Diagnostics.AddError("Error deleting trust store", err.Error())
 		return
 	}
 
 	_, err = r.client.PollForJobCompleted(timeoutCtx, instanceID, *job.ID, sleep)
 	if err != nil {
-		resp.Diagnostics.AddError("Error polling for deleted trust store configuration", err.Error())
+		resp.Diagnostics.AddError("Error polling for deleted trust store", err.Error())
 		return
 	}
 }
