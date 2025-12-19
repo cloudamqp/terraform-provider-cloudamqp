@@ -18,7 +18,7 @@ func (api *API) CreateTrustStoreConfiguration(ctx context.Context, instanceID in
 		path   = fmt.Sprintf("/api/instances/%d/trust-store-configuration", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%+v", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%+v", path, params.Sanitized()))
 	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(&params), retryRequest{
 		functionName: "CreateTrustStoreConfiguration",
 		resourceName: "TrustStoreConfiguration",
@@ -69,7 +69,7 @@ func (api *API) UpdateTrustStoreConfiguration(ctx context.Context, instanceID in
 		path   = fmt.Sprintf("/api/instances/%d/trust-store-configuration", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%+v", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%+v", path, params.Sanitized()))
 	err := api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(&params), retryRequest{
 		functionName: "UpdateTrustStoreConfiguration",
 		resourceName: "TrustStoreConfiguration",
