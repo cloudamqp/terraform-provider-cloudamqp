@@ -1,3 +1,31 @@
+## 1.40.0 (11 Dec, 2025)
+
+IMPROVEMENTS:
+
+* ClientLibrary: Added retries for status code 423 and 503 ([#437])
+* ClientLibrary: Added retry for custom domain requests ([#438])
+* Resource: Added sleep/timeout for `cloudamqp_custom_domain` ([#438])
+
+DEPENDENCIES:
+
+* Bump github.com/hashicorp/terraform-plugin-framework from 1.16.1 to 1.17.0 ([#435])
+
+[#435]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/435
+[#437]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/437
+[#438]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/438
+
+## 1.39.0 (02 Dec, 2025)
+
+NOTES:
+
+* Support added for custom certificate, "Bring your own certificate"
+
+FEATURES:
+
+* Resource: Added `cloudamqp_custom_certificate` resource ([#430])
+
+[#430]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/430
+
 ## 1.38.3 (21 Nov, 2025)
 
 NOTES:
