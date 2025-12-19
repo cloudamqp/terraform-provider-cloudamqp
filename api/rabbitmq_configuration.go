@@ -10,7 +10,7 @@ import (
 )
 
 // ReadRabbitMqConfiguration - retrieves the RabbitMQ configuration for an instance
-func (api *API) ReadRabbitMqConfiguration(ctx context.Context, instanceID, sleep int) (*model.RabbitMqConfigResponse, error) {
+func (api *API) ReadRabbitMqConfiguration(ctx context.Context, instanceID, sleep int64) (*model.RabbitMqConfigResponse, error) {
 
 	var (
 		data   model.RabbitMqConfigResponse
@@ -31,20 +31,20 @@ func (api *API) ReadRabbitMqConfiguration(ctx context.Context, instanceID, sleep
 		return nil, err
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s data=%v ", path, data))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s data=%+v ", path, data))
 	return &data, nil
 }
 
 // UpdateRabbitMqConfiguration - updates the RabbitMQ configuration for an instance
-func (api *API) UpdateRabbitMqConfiguration(ctx context.Context, instanceID int,
-	params model.RabbitMqConfigRequest, sleep int) error {
+func (api *API) UpdateRabbitMqConfiguration(ctx context.Context, instanceID int64,
+	params model.RabbitMqConfigRequest, sleep int64) error {
 
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/config", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v ", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%+v ", path, params))
 	return api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
 		functionName: "UpdateRabbitMqConfiguration",
 		resourceName: "RabbitMQConfiguration",

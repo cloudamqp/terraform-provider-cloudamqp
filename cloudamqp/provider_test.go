@@ -167,6 +167,14 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 			regexp.MustCompile(`api/vpcs/\d+/vpc-peering/pcx-[0-9].*$`).MatchString(i.Request.URL):
 			fmt.Println("SKIP: GET /api/vpcs/{id}/security/vpc-peering/request", i.Request.URL)
 			i.DiscardOnSave = true
+		case i.Response.Code == 200 && i.Request.Method == "GET" &&
+			regexp.MustCompile(`/api/instances/\d+/custom-domains$`).MatchString(i.Request.URL):
+			// Filter polling for custom domain configure state, only store configured response
+			configured := gjson.Get(i.Response.Body, "configured").Bool()
+			if configured != true {
+				fmt.Println("SKIP: GET /api/instances/{id}/custom-domains", i.Request.URL, "configured:", configured)
+				i.DiscardOnSave = true
+			}
 		}
 		return nil
 	}
@@ -224,5 +232,8 @@ func sanitizeSensistiveData(body string) string {
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("SCALYR_TOKEN"), "SCALYR_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("SPLUNK_TOKEN"), "SPLUNK_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("SPLUNK_TOKEN_2"), "SPLUNK_TOKEN_2")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_CERTIFICATE_CA"), "TEST_CERTIFICATE_CA")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_CERTIFICATE_CERT"), "TEST_CERTIFICATE_CERT")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_CERTIFICATE_PRIVATE_KEY"), "TEST_CERTIFICATE_PRIVATE_KEY")
 	return body
 }

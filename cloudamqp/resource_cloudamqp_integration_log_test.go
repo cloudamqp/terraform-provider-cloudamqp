@@ -63,7 +63,7 @@ func TestAccIntegrationLog_Basic(t *testing.T) {
 			"CloudwatchSecretAccessKey": testCloudwatchSecret,
 			"CloudwatchRegion":          "us-east-1",
 			"CoralogixSendDataKey":      testCoralogixKey,
-			"CoralogixEndpoint":         "syslog.cx498.coralogix.com:6514",
+			"CoralogixEndpoint":         "syslog.us2.coralogix.com:6514",
 			"CoralogixApplication":      "playground",
 			"DataDogRegion":             "us1",
 			"DataDogApiKey":             testDatadogKey,
