@@ -170,7 +170,7 @@ The following arguments are supported:
 - `log_exchange_level`            - (Optional/Computed) Log level for the logger used for log integrations and the CloudAMQP Console log view.
 - `cluster_partition_handling`    - (Optional/Computed) Set how the cluster should handle network partition.
 - `message_interceptors_timestamp_overwrite` (Optional/Computed) Sets a timestamp header on incoming messages. ***enabled_with_overwrite*** will overwrite any existing timestamps in the header.
-- `mqtt_vhost`                    - (Optional/Computed) Virtual host for MQTT connections.
+- `mqtt_vhost`                    - (Optional/Computed) Virtual host for MQTT connections. Default set to newly created vhost, same as `cloudamqp_instance.instance.vhost`.
 - `mqtt_exchange`                 - (Optional/Computed) The exchange option determines which exchange messages from MQTT clients are published to.
 - `mqtt_ssl_cert_login`           - (Optional/Computed) Enable SSL certificate-based authentication for MQTT connections.
 - `ssl_cert_login_from`           - (Optional/Computed) Determines which certificate field to use as the username for TLS-based authentication.
@@ -268,6 +268,8 @@ Note: Corresponds to setting `message_interceptors.incoming.set_header_timestamp
 | Type  | Affect |
 | --- | --- |
 | string | Only affects new connections |
+
+Note: A vhost is automatically created when `cloudamqp_instance` is created. This attribute defaults to that vhost (I.e. `cloudamqp_instance.instance.vhost`).
 
 ### mqtt_exchange
 
