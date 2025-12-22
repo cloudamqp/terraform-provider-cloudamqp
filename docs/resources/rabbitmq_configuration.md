@@ -85,8 +85,7 @@ data "cloudamqp_nodes" "list_nodes" {
 
 resource "cloudamqp_node_actions" "node_action" {
   instance_id = cloudamqp_instance.instance.id
-  node_name   = data.cloudamqp_nodes.list_nodes.nodes[0].name
-  action      = "restart"
+  action      = "cluster.restart"
 
   depends_on = [
     cloudamqp_rabbitmq_configuration.rabbitmq_config,

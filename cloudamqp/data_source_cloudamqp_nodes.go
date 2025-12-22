@@ -77,7 +77,7 @@ func dataSourceNodes() *schema.Resource {
 
 func dataSourceNodesRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
-	data, err := api.ListNodes(ctx, d.Get("instance_id").(int))
+	data, err := api.ListNodes(ctx, int64(d.Get("instance_id").(int)))
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -86,7 +86,19 @@ func dataSourceNodesRead(ctx context.Context, d *schema.ResourceData, meta any) 
 
 	nodes := make([]map[string]any, len(data))
 	for k, v := range data {
-		nodes[k] = readNode(v)
+		node := map[string]any{}
+		node["additional_disk_size"] = v.AdditionalDiskSize
+		node["availability_zone"] = v.AvailabilityZone
+		node["configured"] = v.Configured
+		node["disk_size"] = v.DiskSize
+		node["erlang_version"] = v.ErlangVersion
+		node["hostname"] = v.Hostname
+		node["hostname_internal"] = v.HostnameInternal
+		node["hipe"] = v.Hipe
+		node["name"] = v.Name
+		node["rabbitmq_version"] = v.RabbitMqVersion
+		node["running"] = v.Running
+		nodes[k] = node
 	}
 
 	if err = d.Set("nodes", nodes); err != nil {
@@ -94,33 +106,4 @@ func dataSourceNodesRead(ctx context.Context, d *schema.ResourceData, meta any) 
 	}
 
 	return diag.Diagnostics{}
-}
-
-func readNode(data map[string]any) map[string]any {
-	node := make(map[string]any)
-	for k, v := range data {
-		if validateNodesSchemaAttribute(k) {
-			node[k] = v
-		}
-	}
-	return node
-}
-
-func validateNodesSchemaAttribute(key string) bool {
-	switch key {
-	case "hostname",
-		"name",
-		"running",
-		"rabbitmq_version",
-		"erlang_version",
-		"hipe",
-		"configured",
-		"rmq_version",
-		"disk_size",
-		"additional_disk_size",
-		"hostname_internal",
-		"availability_zone":
-		return true
-	}
-	return false
 }
