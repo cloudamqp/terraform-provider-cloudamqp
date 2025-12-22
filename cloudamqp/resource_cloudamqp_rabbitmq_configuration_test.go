@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
@@ -13,9 +14,9 @@ func TestAccRabbitMqConfiguration_Basic(t *testing.T) {
 	t.Parallel()
 
 	var (
-		fileNames            = []string{"instance", "rabbitmq_configuration/config"}
-		instanceResourceName = "cloudamqp_instance.instance"
-		pluginResourceName   = "cloudamqp_rabbitmq_configuration.rabbitmq_config"
+		fileNames                  = []string{"instance", "rabbitmq_configuration/config"}
+		instanceResourceName       = "cloudamqp_instance.instance"
+		rabbitmqConfigResourceName = "cloudamqp_rabbitmq_configuration.rabbitmq_config"
 
 		params = map[string]string{
 			"InstanceName":    "TestAccRabbitMqConfiguration_Basic",
@@ -35,14 +36,14 @@ func TestAccRabbitMqConfiguration_Basic(t *testing.T) {
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(pluginResourceName, "channel_max", params["ChannelMax"]),
-					resource.TestCheckResourceAttr(pluginResourceName, "connection_max", params["ConnectionMax"]),
-					resource.TestCheckResourceAttr(pluginResourceName, "consumer_timeout", params["ConsumerTimeout"]),
-					resource.TestCheckResourceAttr(pluginResourceName, "heartbeat", params["Heartbeat"]),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "channel_max", params["ChannelMax"]),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "connection_max", params["ConnectionMax"]),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "consumer_timeout", params["ConsumerTimeout"]),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "heartbeat", params["Heartbeat"]),
 				),
 			},
 			{
-				ResourceName:            pluginResourceName,
+				ResourceName:            rabbitmqConfigResourceName,
 				ImportStateIdFunc:       testAccImportStateIdFunc(instanceResourceName),
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -97,9 +98,9 @@ func TestAccRabbitMqConfiguration_ZeroValue(t *testing.T) {
 	t.Parallel()
 
 	var (
-		fileNames            = []string{"instance", "rabbitmq_configuration/zero_value"}
-		instanceResourceName = "cloudamqp_instance.instance"
-		pluginResourceName   = "cloudamqp_rabbitmq_configuration.rabbitmq_config"
+		fileNames                  = []string{"instance", "rabbitmq_configuration/zero_value"}
+		instanceResourceName       = "cloudamqp_instance.instance"
+		rabbitmqConfigResourceName = "cloudamqp_rabbitmq_configuration.rabbitmq_config"
 
 		params = map[string]string{
 			"InstanceName": "TestAccRabbitMqConfiguration_ZeroValue",
@@ -116,8 +117,199 @@ func TestAccRabbitMqConfiguration_ZeroValue(t *testing.T) {
 				Config: configuration.GetTemplatedConfig(t, fileNames, params),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(pluginResourceName, "heartbeat", params["Heartbeat"]),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "heartbeat", params["Heartbeat"]),
 				),
+			},
+		},
+	})
+}
+
+func TestAccRabbitMqConfiguration_MqttConfiguration(t *testing.T) {
+	t.Parallel()
+
+	instanceResourceName := "cloudamqp_instance.instance"
+	rabbitmqConfigResourceName := "cloudamqp_rabbitmq_configuration.rabbitmq_config"
+	dataSourceNodesName := "data.cloudamqp_nodes.nodes"
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: `
+					resource "cloudamqp_instance" "instance" {
+						name   = "TestAccRabbitMqConfiguration_MqttConfiguration"
+						plan   = "bunny-1"
+						region = "amazon-web-services::eu-central-1"
+						tags   = []
+					}
+
+					resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
+						instance_id                      = cloudamqp_instance.instance.id
+						mqtt_vhost                       = cloudamqp_instance.instance.vhost
+						mqtt_exchange                    = "amq.topic"
+						mqtt_ssl_cert_login              = true
+						ssl_options_fail_if_no_peer_cert = true
+						ssl_options_verify               = "verify_peer"
+						ssl_cert_login_from              = "common_name"
+					}
+
+					data "cloudamqp_nodes" "nodes" {
+						instance_id = cloudamqp_instance.instance.id
+					}
+
+					resource "cloudamqp_node_actions" "node_action" {
+						instance_id = cloudamqp_instance.instance.id
+						node_name   = data.cloudamqp_nodes.nodes.nodes[0].name
+						action      = "restart"
+
+						depends_on = [
+							cloudamqp_rabbitmq_configuration.rabbitmq_config,
+						]
+					}
+				`,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccRabbitMqConfiguration_MqttConfiguration"),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "mqtt_exchange", "amq.topic"),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "mqtt_ssl_cert_login", "true"),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "ssl_options_fail_if_no_peer_cert", "true"),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "ssl_options_verify", "verify_peer"),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "ssl_cert_login_from", "common_name"),
+					resource.TestCheckResourceAttrPair(
+						rabbitmqConfigResourceName, "mqtt_vhost",
+						instanceResourceName, "vhost",
+					),
+					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.#", "1"),
+					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.running", "true"),
+					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.configured", "true"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccRabbitMqConfiguration_MessageInterceptors(t *testing.T) {
+	t.Parallel()
+
+	instanceResourceName := "cloudamqp_instance.instance"
+	rabbitmqConfigResourceName := "cloudamqp_rabbitmq_configuration.rabbitmq_config"
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: `
+					resource "cloudamqp_instance" "instance" {
+						name   = "TestAccRabbitMqConfiguration_MessageInterceptors"
+						plan   = "bunny-1"
+						region = "amazon-web-services::us-east-1"
+						tags   = []
+					}
+
+					resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
+						instance_id                              = cloudamqp_instance.instance.id
+						message_interceptors_timestamp_overwrite = "enabled"
+					}
+				`,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccRabbitMqConfiguration_MessageInterceptors"),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "message_interceptors_timestamp_overwrite", "enabled"),
+				),
+			},
+			{
+				Config: `
+					resource "cloudamqp_instance" "instance" {
+						name   = "TestAccRabbitMqConfiguration_MessageInterceptors"
+						plan   = "bunny-1"
+						region = "amazon-web-services::us-east-1"
+						tags   = []
+					}
+
+					resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
+						instance_id                              = cloudamqp_instance.instance.id
+						message_interceptors_timestamp_overwrite = "enabled_with_overwrite"
+					}
+				`,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccRabbitMqConfiguration_MessageInterceptors"),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "message_interceptors_timestamp_overwrite", "enabled_with_overwrite"),
+				),
+			},
+			{
+				Config: `
+					resource "cloudamqp_instance" "instance" {
+						name   = "TestAccRabbitMqConfiguration_MessageInterceptors"
+						plan   = "bunny-1"
+						region = "amazon-web-services::us-east-1"
+						tags   = []
+					}
+
+					resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
+						instance_id                              = cloudamqp_instance.instance.id
+						message_interceptors_timestamp_overwrite = "disabled"
+					}
+				`,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccRabbitMqConfiguration_MessageInterceptors"),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "message_interceptors_timestamp_overwrite", "disabled"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccRabbitMqConfiguration_InvalidValues(t *testing.T) {
+	t.Parallel()
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: `
+					resource "cloudamqp_instance" "instance" {
+						name   = "TestAccRabbitMqConfiguration_InvalidValues"
+						plan   = "bunny-1"
+						region = "amazon-web-services::us-east-1"
+						tags   = []
+					}
+
+					resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
+						instance_id                              = cloudamqp_instance.instance.id
+						message_interceptors_timestamp_overwrite = "invalid"
+					}
+				`,
+				ExpectError: regexp.MustCompile("Invalid Attribute Value Match"),
+			},
+			{
+				Config: `
+					resource "cloudamqp_instance" "instance" {
+						name   = "TestAccRabbitMqConfiguration_InvalidValues"
+						plan   = "bunny-1"
+						region = "amazon-web-services::us-east-1"
+						tags   = []
+					}
+
+					resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
+						instance_id                              = cloudamqp_instance.instance.id
+						ssl_options_verify                       = "invalid_verify"
+					}
+				`,
+				ExpectError: regexp.MustCompile("Invalid Attribute Value Match"),
+			},
+			{
+				Config: `
+					resource "cloudamqp_instance" "instance" {
+						name   = "TestAccRabbitMqConfiguration_InvalidValues"
+						plan   = "bunny-1"
+						region = "amazon-web-services::us-east-1"
+						tags   = []
+					}
+
+					resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
+						instance_id                              = cloudamqp_instance.instance.id
+						ssl_cert_login_from                      = "invalid_name"
+					}
+				`,
+				ExpectError: regexp.MustCompile("Invalid Attribute Value Match"),
 			},
 		},
 	})
