@@ -1,3 +1,25 @@
+## 1.41.0 (Unreleased)
+
+NOTES:
+
+* Added `Claude.md` and `AGENTS.md` files with AI agent instructions.
+
+FEATURES:
+
+* Resource: Added new `cloudamqp_trust_store` resource ([#443])
+* Migrated `cloudamqp_node_actions` towards Terraform plugin framework ([#445])
+
+IMPROVEMENTS:
+
+* Resource: Added additional MQTT/SSL settings to `cloudamqp_rabbitmq_configuration` ([#440])
+* Resource: Added message interceptos setting to `cloudamqp_rabbitmq_configuration` ([#442])
+* Resource: Added cluster actions to `cloudamqp_node_actions` ([#445])
+
+[#440]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/440
+[#442]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/442
+[#443]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/443
+[#445]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/445
+
 ## 1.40.0 (11 Dec, 2025)
 
 IMPROVEMENTS:
