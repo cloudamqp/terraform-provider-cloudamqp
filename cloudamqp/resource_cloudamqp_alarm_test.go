@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
@@ -14,65 +13,67 @@ func TestAccAlarm_Basic(t *testing.T) {
 	t.Parallel()
 
 	var (
-		fileNames                  = []string{"instance", "notification", "data_source/notification_default", "alarm"}
 		instanceResourceName       = "cloudamqp_instance.instance"
-		dataSourceNotificationName = "data.cloudamqp_notification.default_recipient"
-		recipientResourceName      = "cloudamqp_notification.recipient"
+		notificationDataSourceName = "data.cloudamqp_notification.default_recipient"
+		notificationResourceName   = "cloudamqp_notification.recipient"
 		noticeAlarmResourceName    = "cloudamqp_alarm.notice"
 		cpuAlarmResourceName       = "cloudamqp_alarm.cpu"
-		dataSourceCpuAlarmName     = "data.cloudamqp_alarm.cpu"
-
-		params = map[string]string{
-			"InstanceName":             "TestAccAlarm_Basic",
-			"InstanceID":               fmt.Sprintf("%s.id", instanceResourceName),
-			"InstancePlan":             "bunny-1",
-			"RecipientName":            "test",
-			"RecipientType":            "email",
-			"RecipientValue":           "test@example.com",
-			"NoticeRecipients":         fmt.Sprintf("%s.id", dataSourceNotificationName),
-			"CPUAlarmEnabled":          "true",
-			"CPUAlarmTimeThreshold":    "600",
-			"CPUAlarmValueThreshold":   "90",
-			"CPUAlarmReminderInterval": "0",
-			"CPUAlarmRecipients":       fmt.Sprintf("%s.id", recipientResourceName),
-		}
-
-		fileNamesUpdated = []string{"instance", "notification", "data_source/notification_default", "alarm", "data_source/alarm"}
-		paramsUpdated    = map[string]string{
-			"InstanceName":             "TestAccAlarm_Basic",
-			"InstanceID":               fmt.Sprintf("%s.id", instanceResourceName),
-			"InstancePlan":             "bunny-1",
-			"RecipientName":            "test",
-			"RecipientType":            "email",
-			"RecipientValue":           "test@example.com",
-			"NoticeRecipients":         fmt.Sprintf("%s.id", dataSourceNotificationName),
-			"AlarmType":                "cpu",
-			"AlarmResourceName":        "cpu",
-			"CPUAlarmEnabled":          "true",
-			"CPUAlarmTimeThreshold":    "450",
-			"CPUAlarmValueThreshold":   "50",
-			"CPUAlarmReminderInterval": "0",
-			"CPUAlarmRecipients":       fmt.Sprintf("%s.id", recipientResourceName),
-		}
+		cpuAlarmDataSourceName     = "data.cloudamqp_alarm.cpu"
 	)
 
 	cloudamqpResourceTest(t, resource.TestCase{
 		PreCheck: func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Config: `
+				  resource "cloudamqp_instance" "instance" {
+				    name              = "TestAccAlarm_Basic"
+						region            = "amazon-web-services::us-east-1"
+				    plan              = "penguin-1"
+						tags              = ["vcr-test"]
+				  }
+
+					data "cloudamqp_notification" "default_recipient" {
+					  instance_id = cloudamqp_instance.instance.id
+					  name        = "Default"
+					}
+
+				  resource "cloudamqp_notification" "recipient" {
+				    instance_id = cloudamqp_instance.instance.id
+				    type        = "email"
+				    value       = "test@example.com"
+						name        = "test"
+					}
+
+					resource "cloudamqp_alarm" "notice" {
+					  instance_id = cloudamqp_instance.instance.id
+					  type        = "notice"
+					  enabled     = true
+					  recipients  = [data.cloudamqp_notification.default_recipient.id]
+					}
+
+					resource "cloudamqp_alarm" "cpu" {
+					  instance_id       = cloudamqp_instance.instance.id
+					  type              = "cpu"
+					  enabled           = true
+					  time_threshold    = 600
+					  value_threshold   = 90
+					  reminder_interval = 0
+					  recipients        = [cloudamqp_notification.recipient.id]
+					}
+				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(recipientResourceName, "name", params["RecipientName"]),
-					resource.TestCheckResourceAttr(recipientResourceName, "type", params["RecipientType"]),
-					resource.TestCheckResourceAttr(recipientResourceName, "value", params["RecipientValue"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccAlarm_Basic"),
+					resource.TestCheckResourceAttr(notificationResourceName, "name", "test"),
+					resource.TestCheckResourceAttr(notificationResourceName, "type", "email"),
+					resource.TestCheckResourceAttr(notificationResourceName, "value", "test@example.com"),
 					resource.TestCheckResourceAttr(noticeAlarmResourceName, "type", "notice"),
 					resource.TestCheckResourceAttr(noticeAlarmResourceName, "recipients.#", "1"),
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "type", "cpu"),
-					resource.TestCheckResourceAttr(cpuAlarmResourceName, "enabled", params["CPUAlarmEnabled"]),
-					resource.TestCheckResourceAttr(cpuAlarmResourceName, "time_threshold", params["CPUAlarmTimeThreshold"]),
-					resource.TestCheckResourceAttr(cpuAlarmResourceName, "value_threshold", params["CPUAlarmValueThreshold"]),
-					resource.TestCheckResourceAttr(cpuAlarmResourceName, "reminder_interval", params["CPUAlarmReminderInterval"]),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "enabled", "true"),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "time_threshold", "600"),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "value_threshold", "90"),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "reminder_interval", "0"),
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "recipients.#", "1"),
 				),
 			},
@@ -83,26 +84,122 @@ func TestAccAlarm_Basic(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: configuration.GetTemplatedConfig(t, fileNamesUpdated, paramsUpdated),
+				Config: `
+				resource "cloudamqp_instance" "instance" {
+				    name              = "TestAccAlarm_Basic"
+						region            = "amazon-web-services::us-east-1"
+				    plan              = "penguin-1"
+						tags              = ["vcr-test"]
+				  }
+
+					data "cloudamqp_notification" "default_recipient" {
+					  instance_id = cloudamqp_instance.instance.id
+					  name        = "Default"
+					}
+
+				  resource "cloudamqp_notification" "recipient" {
+				    instance_id = cloudamqp_instance.instance.id
+				    type        = "email"
+				    value       = "test@example.com"
+						name        = "test"
+					}
+
+					resource "cloudamqp_alarm" "notice" {
+					  instance_id = cloudamqp_instance.instance.id
+					  type        = "notice"
+					  enabled     = true
+					  recipients  = [data.cloudamqp_notification.default_recipient.id]
+					}
+
+					resource "cloudamqp_alarm" "cpu" {
+					  instance_id       = cloudamqp_instance.instance.id
+					  type              = "cpu"
+					  enabled           = true
+					  time_threshold    = 450
+					  value_threshold   = 50
+					  reminder_interval = 0
+					  recipients        = [cloudamqp_notification.recipient.id]
+					}
+						
+					data "cloudamqp_alarm" "cpu" {
+					  instance_id = cloudamqp_instance.instance.id
+					  type        = "cpu"
+
+						depends_on = [
+							cloudamqp_alarm.cpu,
+						]
+					}
+				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(noticeAlarmResourceName, "type", "notice"),
 					resource.TestCheckResourceAttr(noticeAlarmResourceName, "recipients.#", "1"),
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "type", "cpu"),
-					resource.TestCheckResourceAttr(cpuAlarmResourceName, "enabled", paramsUpdated["CPUAlarmEnabled"]),
-					resource.TestCheckResourceAttr(cpuAlarmResourceName, "time_threshold", paramsUpdated["CPUAlarmTimeThreshold"]),
-					resource.TestCheckResourceAttr(cpuAlarmResourceName, "value_threshold", paramsUpdated["CPUAlarmValueThreshold"]),
-					resource.TestCheckResourceAttr(cpuAlarmResourceName, "reminder_interval", paramsUpdated["CPUAlarmReminderInterval"]),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "enabled", "true"),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "time_threshold", "450"),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "value_threshold", "50"),
+					resource.TestCheckResourceAttr(cpuAlarmResourceName, "reminder_interval", "0"),
 					resource.TestCheckResourceAttr(cpuAlarmResourceName, "recipients.#", "1"),
 					// validate data sources
-					resource.TestCheckResourceAttr(dataSourceNotificationName, "name", "Default"),
-					resource.TestCheckResourceAttr(dataSourceNotificationName, "type", "email"),
-					resource.TestCheckResourceAttr(dataSourceCpuAlarmName, "type", "cpu"),
-					resource.TestCheckResourceAttr(dataSourceCpuAlarmName, "enabled", params["CPUAlarmEnabled"]),
-					resource.TestCheckResourceAttr(dataSourceCpuAlarmName, "time_threshold", params["CPUAlarmTimeThreshold"]),
-					resource.TestCheckResourceAttr(dataSourceCpuAlarmName, "value_threshold", params["CPUAlarmValueThreshold"]),
-					resource.TestCheckResourceAttr(dataSourceCpuAlarmName, "reminder_interval", params["CPUAlarmReminderInterval"]),
-					resource.TestCheckResourceAttr(dataSourceCpuAlarmName, "recipients.#", "1"),
+					resource.TestCheckResourceAttr(notificationDataSourceName, "name", "Default"),
+					resource.TestCheckResourceAttr(notificationDataSourceName, "type", "email"),
+					resource.TestCheckResourceAttr(cpuAlarmDataSourceName, "type", "cpu"),
+					resource.TestCheckResourceAttr(cpuAlarmDataSourceName, "enabled", "true"),
+					resource.TestCheckResourceAttr(cpuAlarmDataSourceName, "time_threshold", "450"),
+					resource.TestCheckResourceAttr(cpuAlarmDataSourceName, "value_threshold", "50"),
+					resource.TestCheckResourceAttr(cpuAlarmDataSourceName, "reminder_interval", "0"),
+					resource.TestCheckResourceAttr(cpuAlarmDataSourceName, "recipients.#", "1"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccAlarm_Notice(t *testing.T) {
+	t.Parallel()
+
+	var (
+		instanceResourceName       = "cloudamqp_instance.instance"
+		notificationDataSourceName = "data.cloudamqp_notification.default_recipient"
+		noticeAlarmResourceName    = "cloudamqp_alarm.notice"
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: `
+				  resource "cloudamqp_instance" "instance" {
+				    name              = "TestAccAlarm_Basic"
+						region            = "amazon-web-services::us-east-1"
+				    plan              = "penguin-1"
+						tags              = ["vcr-test"]
+				  }
+
+					data "cloudamqp_notification" "default_recipient" {
+					  instance_id = cloudamqp_instance.instance.id
+					  name        = "Default"
+					}
+
+					resource "cloudamqp_alarm" "notice" {
+					  instance_id = cloudamqp_instance.instance.id
+					  type        = "notice"
+					  enabled     = true
+					  recipients  = [data.cloudamqp_notification.default_recipient.id]
+					}
+				`,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccAlarm_Basic"),
+					resource.TestCheckResourceAttr(notificationDataSourceName, "name", "Default"),
+					resource.TestCheckResourceAttr(notificationDataSourceName, "type", "email"),
+					resource.TestCheckResourceAttr(noticeAlarmResourceName, "type", "notice"),
+					resource.TestCheckResourceAttr(noticeAlarmResourceName, "recipients.#", "1"),
+				),
+			},
+			{
+				ResourceName:      noticeAlarmResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, noticeAlarmResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
 			},
 		},
 	})
