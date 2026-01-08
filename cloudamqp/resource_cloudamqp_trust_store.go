@@ -10,6 +10,7 @@ import (
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance/configuration"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -135,6 +136,10 @@ func (r *trustStoreResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 					},
 				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.MatchRoot("file")),
+					objectvalidator.AtLeastOneOf(path.MatchRoot("file")),
+				},
 			},
 			"file": schema.SingleNestedBlock{
 				Description: "File trust store",
@@ -151,6 +156,10 @@ func (r *trustStoreResource) Schema(ctx context.Context, req resource.SchemaRequ
 							listvalidator.SizeBetween(1, 100),
 						},
 					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.MatchRoot("http")),
+					objectvalidator.AtLeastOneOf(path.MatchRoot("http")),
 				},
 			},
 		},
@@ -201,11 +210,6 @@ func (r *trustStoreResource) Create(ctx context.Context, req resource.CreateRequ
 	timeout := time.Duration(plan.Timeout.ValueInt64()) * time.Second
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
-
-	if plan.Http == nil && plan.File == nil {
-		resp.Diagnostics.AddError("Missing trust store configuration", "The 'http' or 'file' block must be provided")
-		return
-	}
 
 	params := model.TrustStoreRequest{}
 	params.RefreshInterval = plan.RefreshInterval.ValueInt64()
