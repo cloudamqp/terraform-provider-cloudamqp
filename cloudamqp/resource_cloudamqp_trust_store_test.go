@@ -3,6 +3,7 @@ package cloudamqp
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -216,6 +217,36 @@ func TestAccTrustStore_File(t *testing.T) {
 					resource.TestCheckResourceAttr(trustStoreResourceName, "sleep", "10"),
 					resource.TestCheckResourceAttr(trustStoreResourceName, "timeout", "1800"),
 				),
+			},
+		},
+	})
+}
+
+// TestAccTrustStore_MissingProvider: Test missing provider block error handling.
+func TestAccTrustStore_MissingProvider(t *testing.T) {
+	t.Parallel()
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: `
+					resource "cloudamqp_instance" "instance" {
+						name   = "TestAccTrustStore_MissingProvider"
+						plan   = "bunny-1"
+						region = "amazon-web-services::us-east-1"
+						tags   = []
+					}
+
+					resource "cloudamqp_trust_store" "trust_store" {
+						instance_id      = cloudamqp_instance.instance.id
+						refresh_interval = 60
+						version          = 1
+						sleep            = 10
+						timeout          = 1800
+					}
+				`,
+				ExpectError: regexp.MustCompile("Invalid Attribute Combination"),
 			},
 		},
 	})
