@@ -12,9 +12,9 @@ import (
 // them into environment variables for recording.
 // export TEST_TRUST_STORE_CA=$(awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' certs/ca.pem)
 
-// TestAccTrustStore_Basic: Creating dedicated AWS instance and configure trust store with minimal
-// required values and import.
-func TestAccTrustStore_Basic(t *testing.T) {
+// TestAccTrustStore_Http: Creating dedicated AWS instance and configure trust store with http
+// provider, minimal required values and import.
+func TestAccTrustStore_Http(t *testing.T) {
 	t.Parallel()
 
 	instanceResourceName := "cloudamqp_instance.instance"
@@ -26,7 +26,7 @@ func TestAccTrustStore_Basic(t *testing.T) {
 			{
 				Config: `
 					resource "cloudamqp_instance" "instance" {
-						name   = "TestAccTrustStore_Basic"
+						name   = "TestAccTrustStore_Http"
 						plan   = "bunny-1"
 						region = "amazon-web-services::us-east-1"
 						tags   = []
@@ -40,7 +40,7 @@ func TestAccTrustStore_Basic(t *testing.T) {
 					}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccTrustStore_Basic"),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccTrustStore_Http"),
 					resource.TestCheckResourceAttr(trustStoreResourceName, "http.url", "https://valid.example.com/trust-store"),
 					resource.TestCheckResourceAttr(trustStoreResourceName, "refresh_interval", "30"),
 					resource.TestCheckResourceAttr(trustStoreResourceName, "sleep", "10"),
@@ -60,8 +60,9 @@ func TestAccTrustStore_Basic(t *testing.T) {
 	})
 }
 
-// TestAccTrustStore_WithCA: Creating dedicated AWS instance and configure trust store with CA certificate.
-func TestAccTrustStore_WithCA(t *testing.T) {
+// TestAccTrustStore_HttpWithCA: Creating dedicated AWS instance and configure trust store with http
+// provider and CA certificate.
+func TestAccTrustStore_HttpWithCA(t *testing.T) {
 	t.Parallel()
 
 	instanceResourceName := "cloudamqp_instance.instance"
@@ -79,7 +80,7 @@ func TestAccTrustStore_WithCA(t *testing.T) {
 			{
 				Config: fmt.Sprintf(`
 					resource "cloudamqp_instance" "instance" {
-						name   = "TestAccTrustStore_WithCA"
+						name   = "TestAccTrustStore_HttpWithCA"
 						plan   = "bunny-1"
 						region = "amazon-web-services::us-east-1"
 						tags   = []
@@ -98,7 +99,7 @@ func TestAccTrustStore_WithCA(t *testing.T) {
 					}
 				`, testTrustStoreCA),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccTrustStore_WithCA"),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccTrustStore_HttpWithCA"),
 					resource.TestCheckResourceAttr(trustStoreResourceName, "http.url", "https://trust-store.example.com/certs"),
 					resource.TestCheckResourceAttr(trustStoreResourceName, "refresh_interval", "60"),
 					resource.TestCheckResourceAttr(trustStoreResourceName, "version", "1"),
@@ -109,7 +110,7 @@ func TestAccTrustStore_WithCA(t *testing.T) {
 			{
 				Config: fmt.Sprintf(`
 					resource "cloudamqp_instance" "instance" {
-						name   = "TestAccTrustStore_WithCA"
+						name   = "TestAccTrustStore_HttpWithCA"
 						plan   = "bunny-1"
 						region = "amazon-web-services::us-east-1"
 						tags   = []
@@ -129,7 +130,7 @@ func TestAccTrustStore_WithCA(t *testing.T) {
 					}
 				`, testTrustStoreCA),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccTrustStore_WithCA"),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccTrustStore_HttpWithCA"),
 					resource.TestCheckResourceAttr(trustStoreResourceName, "http.url", "https://trust-store.example.com/certs"),
 					resource.TestCheckResourceAttr(trustStoreResourceName, "refresh_interval", "60"),
 					resource.TestCheckResourceAttr(trustStoreResourceName, "version", "2"),

@@ -48,10 +48,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 498c5c94-8f25-4c98-b962-61cacc747129
+                - 20d2bb39-ef5d-4076-87eb-34d57170bfdf
         status: 200 OK
         code: 200
-        duration: 39.425072ms
+        duration: 22.007106ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -99,10 +99,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - b56d7995-02f9-4e6a-8c99-307d1a58622b
+                - e89ab17c-def0-4711-993e-2b083998631a
         status: 200 OK
         code: 200
-        duration: 4.23325ms
+        duration: 6.970731ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -150,10 +150,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - d5992402-9b23-4c78-a402-13c15fa75719
+                - 402d36f2-a283-46dd-9b8e-77b80e1c42a5
         status: 200 OK
         code: 200
-        duration: 18.883592ms
+        duration: 23.166252ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -201,10 +201,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 9a17068b-d08c-4192-afdc-f03a23c3c182
+                - e7bd1d99-61dc-479f-9e7f-fa6d29b4c0da
         status: 200 OK
         code: 200
-        duration: 5.921623ms
+        duration: 19.809271ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -252,10 +252,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 106edb94-effd-4d2a-849d-ff1561af6d9e
+                - c8303cc5-e39e-4b7a-a0d3-3cd4d801ab8f
         status: 200 OK
         code: 200
-        duration: 18.33406ms
+        duration: 13.662924ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -303,23 +303,23 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 51de4363-e1ed-4285-9619-255c3041ae4f
+                - f010b431-edfe-4d54-8cb4-4833ce4d2583
         status: 200 OK
         code: 200
-        duration: 3.379072ms
+        duration: 3.959563ms
     - id: 6
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 149
+        content_length: 153
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"TestAccTrustStore_WithCA","no_default_alarms":false,"plan":"bunny-1","preferred_az":[],"region":"amazon-web-services::us-east-1","tags":[]}
+            {"name":"TestAccTrustStore_HttpWithCA","no_default_alarms":false,"plan":"bunny-1","preferred_az":[],"region":"amazon-web-services::us-east-1","tags":[]}
         form: {}
         headers:
             Authorization:
@@ -336,14 +336,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 250
+        content_length: 253
         uncompressed: false
-        body: '{"id":881,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"af69c8ff-b673-4f18-ab88-130f2345a74f","url":"amqps://pufvpfeq:***@dev-frizzy-green-ram.rmq5.dev.cloudamqp.com/pufvpfeq"}'
+        body: '{"id":909,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"328f8778-faaa-471d-a8b1-813dbf50f4ac","url":"amqps://wxnlmcks:***@dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com/wxnlmcks"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "250"
+                - "253"
             Content-Type:
                 - application/json
             Nel:
@@ -357,10 +357,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 50b811c2-ec38-4127-a9ba-5a7040faa888
+                - c41068f5-d4e0-4621-8e64-63f09378ee19
         status: 200 OK
         code: 200
-        duration: 121.901994ms
+        duration: 104.895713ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -379,7 +379,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881
+        url: http://localhost:9393/api/instances/909
         method: GET
       response:
         proto: HTTP/1.1
@@ -387,14 +387,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 768
+        content_length: 787
         uncompressed: false
-        body: '{"id":881,"name":"TestAccTrustStore_WithCA","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"971de974-af3d-4968-be7a-c2f3d3dbcb1b","url":"amqps://pufvpfeq:***@dev-frizzy-green-ram.rmq5.dev.cloudamqp.com/pufvpfeq","ready":true,"apikey":"af69c8ff-b673-4f18-ab88-130f2345a74f","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://pufvpfeq:***@dev-frizzy-green-ram.rmq5.dev.cloudamqp.com/pufvpfeq","internal":"amqp://pufvpfeq:***@dev-frizzy-green-ram.in.rmq5.dev.cloudamqp.com/pufvpfeq"},"rmq_version":"4.1.6","hostname_external":"dev-frizzy-green-ram.rmq5.dev.cloudamqp.com","hostname_internal":"dev-frizzy-green-ram.in.rmq5.dev.cloudamqp.com"}'
+        body: '{"id":909,"name":"TestAccTrustStore_HttpWithCA","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"831cb602-3853-4de7-aff2-3c5c0914eea0","url":"amqps://wxnlmcks:***@dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com/wxnlmcks","ready":true,"apikey":"328f8778-faaa-471d-a8b1-813dbf50f4ac","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://wxnlmcks:***@dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com/wxnlmcks","internal":"amqp://wxnlmcks:***@dev-glad-olive-reindeer.in.rmq6.dev.cloudamqp.com/wxnlmcks"},"rmq_version":"4.1.6","hostname_external":"dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com","hostname_internal":"dev-glad-olive-reindeer.in.rmq6.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "768"
+                - "787"
             Content-Type:
                 - application/json
             Nel:
@@ -408,10 +408,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 21d1b2f8-4f3e-4f48-9e3e-ff602fa82210
+                - aa0d4e21-361b-49b9-a28b-387fcd40e936
         status: 200 OK
         code: 200
-        duration: 25.165801ms
+        duration: 25.736017ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -430,7 +430,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881
+        url: http://localhost:9393/api/instances/909
         method: GET
       response:
         proto: HTTP/1.1
@@ -438,14 +438,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 768
+        content_length: 787
         uncompressed: false
-        body: '{"id":881,"name":"TestAccTrustStore_WithCA","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"971de974-af3d-4968-be7a-c2f3d3dbcb1b","url":"amqps://pufvpfeq:***@dev-frizzy-green-ram.rmq5.dev.cloudamqp.com/pufvpfeq","ready":true,"apikey":"af69c8ff-b673-4f18-ab88-130f2345a74f","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://pufvpfeq:***@dev-frizzy-green-ram.rmq5.dev.cloudamqp.com/pufvpfeq","internal":"amqp://pufvpfeq:***@dev-frizzy-green-ram.in.rmq5.dev.cloudamqp.com/pufvpfeq"},"rmq_version":"4.1.6","hostname_external":"dev-frizzy-green-ram.rmq5.dev.cloudamqp.com","hostname_internal":"dev-frizzy-green-ram.in.rmq5.dev.cloudamqp.com"}'
+        body: '{"id":909,"name":"TestAccTrustStore_HttpWithCA","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"831cb602-3853-4de7-aff2-3c5c0914eea0","url":"amqps://wxnlmcks:***@dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com/wxnlmcks","ready":true,"apikey":"328f8778-faaa-471d-a8b1-813dbf50f4ac","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://wxnlmcks:***@dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com/wxnlmcks","internal":"amqp://wxnlmcks:***@dev-glad-olive-reindeer.in.rmq6.dev.cloudamqp.com/wxnlmcks"},"rmq_version":"4.1.6","hostname_external":"dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com","hostname_internal":"dev-glad-olive-reindeer.in.rmq6.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "768"
+                - "787"
             Content-Type:
                 - application/json
             Nel:
@@ -459,23 +459,23 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 5fd8b403-1d13-4955-8c72-a1ceea1c7d24
+                - 02435403-fbed-4333-bc03-b551b0e505b4
         status: 200 OK
         code: 200
-        duration: 18.438516ms
+        duration: 18.573055ms
     - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 70
+        content_length: 2178
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"refresh_interval":60,"url":"https://trust-store.example.com/certs"}
+            {"provider":"http","refresh_interval":60,"url":"https://trust-store.example.com/certs","cacertfile":"TEST_TRUST_STORE_CA"}
         form: {}
         headers:
             Authorization:
@@ -484,7 +484,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881/trust-store-configuration
+        url: http://localhost:9393/api/instances/909/trust-store-configuration
         method: POST
       response:
         proto: HTTP/1.1
@@ -494,7 +494,7 @@ interactions:
         trailer: {}
         content_length: 49
         uncompressed: false
-        body: '{"job_id":"7fdbc5c8-24d5-4edf-91e4-39a719c3b188"}'
+        body: '{"job_id":"732d876e-5b08-466a-8b39-9b11e35c35cd"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -513,10 +513,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 4807413f-f5ca-41a6-99c2-07c9d29e1190
+                - c4b54cdc-f9bf-4ed0-8e83-1713722cddee
         status: 200 OK
         code: 200
-        duration: 45.63168ms
+        duration: 38.62704ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -535,7 +535,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881/jobs/7fdbc5c8-24d5-4edf-91e4-39a719c3b188
+        url: http://localhost:9393/api/instances/909/jobs/732d876e-5b08-466a-8b39-9b11e35c35cd
         method: GET
       response:
         proto: HTTP/1.1
@@ -545,7 +545,7 @@ interactions:
         trailer: {}
         content_length: 335
         uncompressed: false
-        body: '{"id":"7fdbc5c8-24d5-4edf-91e4-39a719c3b188","account_id":"971de974-af3d-4968-be7a-c2f3d3dbcb1b","resource_type":"trust_store_configuration","resource_id":"8a4621bb-c5ff-4b99-992e-efd51122b255","resource_action":"create","status":"completed","created_at":"2025-12-19T14:02:58Z","updated_at":"2025-12-19T14:03:15Z","error_message":null}'
+        body: '{"id":"732d876e-5b08-466a-8b39-9b11e35c35cd","account_id":"831cb602-3853-4de7-aff2-3c5c0914eea0","resource_type":"trust_store_configuration","resource_id":"7efae8b1-186c-4320-a569-ce46d682811d","resource_action":"create","status":"completed","created_at":"2026-01-08T11:05:54Z","updated_at":"2026-01-08T11:06:09Z","error_message":null}'
         headers:
             Cache-Control:
                 - no-cache
@@ -564,10 +564,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - ba4e97d0-9e21-40c6-9fc6-afe440e77c4c
+                - 5eed11bd-a4aa-4396-9a1e-4a2933de0665
         status: 200 OK
         code: 200
-        duration: 22.178287ms
+        duration: 26.153687ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -586,7 +586,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881
+        url: http://localhost:9393/api/instances/909
         method: GET
       response:
         proto: HTTP/1.1
@@ -594,14 +594,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 768
+        content_length: 787
         uncompressed: false
-        body: '{"id":881,"name":"TestAccTrustStore_WithCA","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"971de974-af3d-4968-be7a-c2f3d3dbcb1b","url":"amqps://pufvpfeq:***@dev-frizzy-green-ram.rmq5.dev.cloudamqp.com/pufvpfeq","ready":true,"apikey":"af69c8ff-b673-4f18-ab88-130f2345a74f","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://pufvpfeq:***@dev-frizzy-green-ram.rmq5.dev.cloudamqp.com/pufvpfeq","internal":"amqp://pufvpfeq:***@dev-frizzy-green-ram.in.rmq5.dev.cloudamqp.com/pufvpfeq"},"rmq_version":"4.1.6","hostname_external":"dev-frizzy-green-ram.rmq5.dev.cloudamqp.com","hostname_internal":"dev-frizzy-green-ram.in.rmq5.dev.cloudamqp.com"}'
+        body: '{"id":909,"name":"TestAccTrustStore_HttpWithCA","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"831cb602-3853-4de7-aff2-3c5c0914eea0","url":"amqps://wxnlmcks:***@dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com/wxnlmcks","ready":true,"apikey":"328f8778-faaa-471d-a8b1-813dbf50f4ac","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://wxnlmcks:***@dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com/wxnlmcks","internal":"amqp://wxnlmcks:***@dev-glad-olive-reindeer.in.rmq6.dev.cloudamqp.com/wxnlmcks"},"rmq_version":"4.1.6","hostname_external":"dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com","hostname_internal":"dev-glad-olive-reindeer.in.rmq6.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "768"
+                - "787"
             Content-Type:
                 - application/json
             Nel:
@@ -615,10 +615,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 86ee1c64-42eb-4b10-aff5-404a2f8cd558
+                - be5bd98f-fe8c-4dae-a6d6-b4f939fe6f7c
         status: 200 OK
         code: 200
-        duration: 14.957381ms
+        duration: 17.998069ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -637,7 +637,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881/trust-store-configuration
+        url: http://localhost:9393/api/instances/909/trust-store-configuration
         method: GET
       response:
         proto: HTTP/1.1
@@ -645,14 +645,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 221
+        content_length: 2313
         uncompressed: false
-        body: '{"id":"8a4621bb-c5ff-4b99-992e-efd51122b255","created_at":"2025-12-19T14:03:15Z","updated_at":"2025-12-19T14:03:15Z","provider":"http","refresh_interval":60,"url":"https://trust-store.example.com/certs","cacertfile":null}'
+        body: '{"id":"7efae8b1-186c-4320-a569-ce46d682811d","created_at":"2026-01-08T11:06:09Z","updated_at":"2026-01-08T11:06:09Z","provider":"http","refresh_interval":60,"url":"https://:***@trust-store.example.com/certs","cacertfile":"TEST_TRUST_STORE_CA","certificates":null}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "221"
+                - "2313"
             Content-Type:
                 - application/json
             Nel:
@@ -666,10 +666,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 24987023-9c3a-4179-99e0-267c46ab9abd
+                - c57f3d7c-892b-47b9-adf2-a51985caafa4
         status: 200 OK
         code: 200
-        duration: 16.707915ms
+        duration: 18.557628ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -688,7 +688,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881
+        url: http://localhost:9393/api/instances/909
         method: GET
       response:
         proto: HTTP/1.1
@@ -696,14 +696,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 768
+        content_length: 787
         uncompressed: false
-        body: '{"id":881,"name":"TestAccTrustStore_WithCA","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"971de974-af3d-4968-be7a-c2f3d3dbcb1b","url":"amqps://pufvpfeq:***@dev-frizzy-green-ram.rmq5.dev.cloudamqp.com/pufvpfeq","ready":true,"apikey":"af69c8ff-b673-4f18-ab88-130f2345a74f","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://pufvpfeq:***@dev-frizzy-green-ram.rmq5.dev.cloudamqp.com/pufvpfeq","internal":"amqp://pufvpfeq:***@dev-frizzy-green-ram.in.rmq5.dev.cloudamqp.com/pufvpfeq"},"rmq_version":"4.1.6","hostname_external":"dev-frizzy-green-ram.rmq5.dev.cloudamqp.com","hostname_internal":"dev-frizzy-green-ram.in.rmq5.dev.cloudamqp.com"}'
+        body: '{"id":909,"name":"TestAccTrustStore_HttpWithCA","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"831cb602-3853-4de7-aff2-3c5c0914eea0","url":"amqps://wxnlmcks:***@dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com/wxnlmcks","ready":true,"apikey":"328f8778-faaa-471d-a8b1-813dbf50f4ac","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://wxnlmcks:***@dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com/wxnlmcks","internal":"amqp://wxnlmcks:***@dev-glad-olive-reindeer.in.rmq6.dev.cloudamqp.com/wxnlmcks"},"rmq_version":"4.1.6","hostname_external":"dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com","hostname_internal":"dev-glad-olive-reindeer.in.rmq6.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "768"
+                - "787"
             Content-Type:
                 - application/json
             Nel:
@@ -717,10 +717,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 349099cc-2e91-4c16-82f2-5b1e346c0e90
+                - 7882d187-30c5-4c34-a866-b0e5bf29908a
         status: 200 OK
         code: 200
-        duration: 13.518828ms
+        duration: 19.327254ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -739,7 +739,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881/trust-store-configuration
+        url: http://localhost:9393/api/instances/909/trust-store-configuration
         method: GET
       response:
         proto: HTTP/1.1
@@ -747,14 +747,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 221
+        content_length: 2313
         uncompressed: false
-        body: '{"id":"8a4621bb-c5ff-4b99-992e-efd51122b255","created_at":"2025-12-19T14:03:15Z","updated_at":"2025-12-19T14:03:15Z","provider":"http","refresh_interval":60,"url":"https://trust-store.example.com/certs","cacertfile":null}'
+        body: '{"id":"7efae8b1-186c-4320-a569-ce46d682811d","created_at":"2026-01-08T11:06:09Z","updated_at":"2026-01-08T11:06:09Z","provider":"http","refresh_interval":60,"url":"https://:***@trust-store.example.com/certs","cacertfile":"TEST_TRUST_STORE_CA","certificates":null}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "221"
+                - "2313"
             Content-Type:
                 - application/json
             Nel:
@@ -768,23 +768,23 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 44a69ad4-2aa2-4fe7-9718-dea07cd504c0
+                - 1eb429a8-d54a-46fd-a7db-e03596f79de6
         status: 200 OK
         code: 200
-        duration: 16.082114ms
+        duration: 18.279503ms
     - id: 15
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 70
+        content_length: 2178
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"refresh_interval":60,"url":"https://trust-store.example.com/certs"}
+            {"provider":"http","refresh_interval":60,"url":"https://trust-store.example.com/certs","cacertfile":"TEST_TRUST_STORE_CA"}
         form: {}
         headers:
             Authorization:
@@ -793,7 +793,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881/trust-store-configuration
+        url: http://localhost:9393/api/instances/909/trust-store-configuration
         method: PUT
       response:
         proto: HTTP/1.1
@@ -803,7 +803,7 @@ interactions:
         trailer: {}
         content_length: 49
         uncompressed: false
-        body: '{"job_id":"4f641504-a677-47f6-bc78-6df4b1e5e1c2"}'
+        body: '{"job_id":"6af64f75-2aee-40f5-8fc8-d01fd9d2d6c4"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -822,10 +822,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - e98de1d6-f047-4d76-87c8-c6b4ee2fb395
+                - af42fba7-ec07-4777-a32b-2acdba40b515
         status: 200 OK
         code: 200
-        duration: 38.164067ms
+        duration: 46.41073ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -844,7 +844,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881/jobs/4f641504-a677-47f6-bc78-6df4b1e5e1c2
+        url: http://localhost:9393/api/instances/909/jobs/6af64f75-2aee-40f5-8fc8-d01fd9d2d6c4
         method: GET
       response:
         proto: HTTP/1.1
@@ -854,7 +854,7 @@ interactions:
         trailer: {}
         content_length: 335
         uncompressed: false
-        body: '{"id":"4f641504-a677-47f6-bc78-6df4b1e5e1c2","account_id":"971de974-af3d-4968-be7a-c2f3d3dbcb1b","resource_type":"trust_store_configuration","resource_id":"8a4621bb-c5ff-4b99-992e-efd51122b255","resource_action":"update","status":"completed","created_at":"2025-12-19T14:03:19Z","updated_at":"2025-12-19T14:03:32Z","error_message":null}'
+        body: '{"id":"6af64f75-2aee-40f5-8fc8-d01fd9d2d6c4","account_id":"831cb602-3853-4de7-aff2-3c5c0914eea0","resource_type":"trust_store_configuration","resource_id":"7efae8b1-186c-4320-a569-ce46d682811d","resource_action":"update","status":"completed","created_at":"2026-01-08T11:06:10Z","updated_at":"2026-01-08T11:06:24Z","error_message":null}'
         headers:
             Cache-Control:
                 - no-cache
@@ -873,10 +873,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 7da20ab2-bd75-4e12-9e81-e18179cd2ded
+                - 16ecfe74-6e40-4249-90ed-3b0d1a56b19c
         status: 200 OK
         code: 200
-        duration: 25.830138ms
+        duration: 19.387567ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -895,7 +895,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881
+        url: http://localhost:9393/api/instances/909
         method: GET
       response:
         proto: HTTP/1.1
@@ -903,14 +903,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 768
+        content_length: 787
         uncompressed: false
-        body: '{"id":881,"name":"TestAccTrustStore_WithCA","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"971de974-af3d-4968-be7a-c2f3d3dbcb1b","url":"amqps://pufvpfeq:***@dev-frizzy-green-ram.rmq5.dev.cloudamqp.com/pufvpfeq","ready":true,"apikey":"af69c8ff-b673-4f18-ab88-130f2345a74f","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://pufvpfeq:***@dev-frizzy-green-ram.rmq5.dev.cloudamqp.com/pufvpfeq","internal":"amqp://pufvpfeq:***@dev-frizzy-green-ram.in.rmq5.dev.cloudamqp.com/pufvpfeq"},"rmq_version":"4.1.6","hostname_external":"dev-frizzy-green-ram.rmq5.dev.cloudamqp.com","hostname_internal":"dev-frizzy-green-ram.in.rmq5.dev.cloudamqp.com"}'
+        body: '{"id":909,"name":"TestAccTrustStore_HttpWithCA","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"831cb602-3853-4de7-aff2-3c5c0914eea0","url":"amqps://wxnlmcks:***@dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com/wxnlmcks","ready":true,"apikey":"328f8778-faaa-471d-a8b1-813dbf50f4ac","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://wxnlmcks:***@dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com/wxnlmcks","internal":"amqp://wxnlmcks:***@dev-glad-olive-reindeer.in.rmq6.dev.cloudamqp.com/wxnlmcks"},"rmq_version":"4.1.6","hostname_external":"dev-glad-olive-reindeer.rmq6.dev.cloudamqp.com","hostname_internal":"dev-glad-olive-reindeer.in.rmq6.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "768"
+                - "787"
             Content-Type:
                 - application/json
             Nel:
@@ -924,10 +924,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 6b84b697-3c56-4029-8f88-e6c76b39bc6f
+                - a5ceabd6-cf92-4cc4-bb34-914049061b4a
         status: 200 OK
         code: 200
-        duration: 15.745837ms
+        duration: 18.547994ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -946,7 +946,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881/trust-store-configuration
+        url: http://localhost:9393/api/instances/909/trust-store-configuration
         method: GET
       response:
         proto: HTTP/1.1
@@ -954,14 +954,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 221
+        content_length: 2313
         uncompressed: false
-        body: '{"id":"8a4621bb-c5ff-4b99-992e-efd51122b255","created_at":"2025-12-19T14:03:15Z","updated_at":"2025-12-19T14:03:15Z","provider":"http","refresh_interval":60,"url":"https://trust-store.example.com/certs","cacertfile":null}'
+        body: '{"id":"7efae8b1-186c-4320-a569-ce46d682811d","created_at":"2026-01-08T11:06:09Z","updated_at":"2026-01-08T11:06:09Z","provider":"http","refresh_interval":60,"url":"https://:***@trust-store.example.com/certs","cacertfile":"TEST_TRUST_STORE_CA","certificates":null}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "221"
+                - "2313"
             Content-Type:
                 - application/json
             Nel:
@@ -975,10 +975,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - fbc971e1-be39-484b-a7cf-4550745d8a1b
+                - 28754194-e9e2-491e-96bf-8c18471fb098
         status: 200 OK
         code: 200
-        duration: 18.637611ms
+        duration: 18.09366ms
     - id: 19
       request:
         proto: HTTP/1.1
@@ -997,7 +997,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881/trust-store-configuration
+        url: http://localhost:9393/api/instances/909/trust-store-configuration
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -1007,7 +1007,7 @@ interactions:
         trailer: {}
         content_length: 49
         uncompressed: false
-        body: '{"job_id":"4d690202-d760-4747-ba62-4458488ece77"}'
+        body: '{"job_id":"21168d74-211f-4475-9eab-3e5f4fc02e9d"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -1026,10 +1026,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - facb39c8-7abe-4d3a-9bad-b90c8b690636
+                - d39e104b-494d-48e0-a65b-66c8fee3e49e
         status: 200 OK
         code: 200
-        duration: 31.614348ms
+        duration: 42.14825ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -1048,7 +1048,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881/jobs/4d690202-d760-4747-ba62-4458488ece77
+        url: http://localhost:9393/api/instances/909/jobs/21168d74-211f-4475-9eab-3e5f4fc02e9d
         method: GET
       response:
         proto: HTTP/1.1
@@ -1058,7 +1058,7 @@ interactions:
         trailer: {}
         content_length: 335
         uncompressed: false
-        body: '{"id":"4d690202-d760-4747-ba62-4458488ece77","account_id":"971de974-af3d-4968-be7a-c2f3d3dbcb1b","resource_type":"trust_store_configuration","resource_id":"8a4621bb-c5ff-4b99-992e-efd51122b255","resource_action":"delete","status":"completed","created_at":"2025-12-19T14:03:34Z","updated_at":"2025-12-19T14:03:42Z","error_message":null}'
+        body: '{"id":"21168d74-211f-4475-9eab-3e5f4fc02e9d","account_id":"831cb602-3853-4de7-aff2-3c5c0914eea0","resource_type":"trust_store_configuration","resource_id":"7efae8b1-186c-4320-a569-ce46d682811d","resource_action":"delete","status":"completed","created_at":"2026-01-08T11:06:25Z","updated_at":"2026-01-08T11:06:33Z","error_message":null}'
         headers:
             Cache-Control:
                 - no-cache
@@ -1077,10 +1077,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - b35a37b1-2516-44b8-bba4-cf6718979fe6
+                - 68cf9b1b-b150-45dc-b08b-6004306a0152
         status: 200 OK
         code: 200
-        duration: 28.375168ms
+        duration: 24.909352ms
     - id: 21
       request:
         proto: HTTP/1.1
@@ -1099,7 +1099,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881?keep_vpc=false
+        url: http://localhost:9393/api/instances/909?keep_vpc=false
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -1124,10 +1124,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 266f876a-6875-4aae-a92d-4ef7a4f40366
+                - 22968944-daf7-44fb-aecf-262ca77dbf41
         status: 204 No Content
         code: 204
-        duration: 64.876446ms
+        duration: 68.109551ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -1146,7 +1146,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/881
+        url: http://localhost:9393/api/instances/909
         method: GET
       response:
         proto: HTTP/1.1
@@ -1175,7 +1175,7 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - fe085816-ece5-43a3-b2b3-94d046c3e875
+                - ea3420f9-7500-42e1-af5d-5ae73edfce8a
         status: 404 Not Found
         code: 404
-        duration: 7.113626ms
+        duration: 7.045025ms
