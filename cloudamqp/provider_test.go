@@ -235,5 +235,7 @@ func sanitizeSensistiveData(body string) string {
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_CERTIFICATE_CA"), "TEST_CERTIFICATE_CA")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_CERTIFICATE_CERT"), "TEST_CERTIFICATE_CERT")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_CERTIFICATE_PRIVATE_KEY"), "TEST_CERTIFICATE_PRIVATE_KEY")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_TRUST_STORE_CERT"), "TEST_TRUST_STORE_CERT")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_TRUST_STORE_CERT_2"), "TEST_TRUST_STORE_CERT_2")
 	return body
 }
