@@ -184,7 +184,7 @@ func (r *trustStoreResource) ImportState(ctx context.Context, req resource.Impor
 	// Set default values for optional/computed attributes
 	resp.State.SetAttribute(ctx, path.Root("refresh_interval"), 30)
 	resp.State.SetAttribute(ctx, path.Root("version"), 1)
-	resp.State.SetAttribute(ctx, path.Root("sleep"), 30)
+	resp.State.SetAttribute(ctx, path.Root("sleep"), 10)
 	resp.State.SetAttribute(ctx, path.Root("timeout"), 1800)
 }
 
