@@ -319,7 +319,7 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"TestAccCustomCertificate_Basic","no_default_alarms":false,"plan":"bunny-1","preferred_az":[],"region":"amazon-web-services::us-east-1","tags":[]}
+            {"name":"TestAccCustomCertificate_Version","no_default_alarms":false,"plan":"bunny-1","preferred_az":[],"region":"amazon-web-services::us-east-1","tags":[]}
         form: {}
         headers:
             Authorization:
@@ -389,7 +389,7 @@ interactions:
         trailer: {}
         content_length: 789
         uncompressed: false
-        body: '{"id":838,"name":"TestAccCustomCertificate_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","ready":true,"apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","internal":"amqp://suchsqmw:***@dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com/suchsqmw"},"rmq_version":"4.1.4","hostname_external":"dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com","hostname_internal":"dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com"}'
+        body: '{"id":838,"name":"TestAccCustomCertificate_Version","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","ready":true,"apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","internal":"amqp://suchsqmw:***@dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com/suchsqmw"},"rmq_version":"4.1.4","hostname_external":"dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com","hostname_internal":"dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -440,7 +440,7 @@ interactions:
         trailer: {}
         content_length: 789
         uncompressed: false
-        body: '{"id":838,"name":"TestAccCustomCertificate_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","ready":true,"apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","internal":"amqp://suchsqmw:***@dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com/suchsqmw"},"rmq_version":"4.1.4","hostname_external":"dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com","hostname_internal":"dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com"}'
+        body: '{"id":838,"name":"TestAccCustomCertificate_Version","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","ready":true,"apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","internal":"amqp://suchsqmw:***@dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com/suchsqmw"},"rmq_version":"4.1.4","hostname_external":"dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com","hostname_internal":"dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -596,7 +596,7 @@ interactions:
         trailer: {}
         content_length: 789
         uncompressed: false
-        body: '{"id":838,"name":"TestAccCustomCertificate_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","ready":true,"apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","internal":"amqp://suchsqmw:***@dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com/suchsqmw"},"rmq_version":"4.1.4","hostname_external":"dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com","hostname_internal":"dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com"}'
+        body: '{"id":838,"name":"TestAccCustomCertificate_Version","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","ready":true,"apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","internal":"amqp://suchsqmw:***@dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com/suchsqmw"},"rmq_version":"4.1.4","hostname_external":"dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com","hostname_internal":"dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -647,7 +647,7 @@ interactions:
         trailer: {}
         content_length: 789
         uncompressed: false
-        body: '{"id":838,"name":"TestAccCustomCertificate_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","ready":true,"apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","internal":"amqp://suchsqmw:***@dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com/suchsqmw"},"rmq_version":"4.1.4","hostname_external":"dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com","hostname_internal":"dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com"}'
+        body: '{"id":838,"name":"TestAccCustomCertificate_Version","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","ready":true,"apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","internal":"amqp://suchsqmw:***@dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com/suchsqmw"},"rmq_version":"4.1.4","hostname_external":"dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com","hostname_internal":"dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -905,7 +905,7 @@ interactions:
         trailer: {}
         content_length: 789
         uncompressed: false
-        body: '{"id":838,"name":"TestAccCustomCertificate_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","ready":true,"apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","internal":"amqp://suchsqmw:***@dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com/suchsqmw"},"rmq_version":"4.1.4","hostname_external":"dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com","hostname_internal":"dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com"}'
+        body: '{"id":838,"name":"TestAccCustomCertificate_Version","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":[],"providerid":"c41d59d3-6e1d-4318-8887-82a9a077fe7d","url":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","ready":true,"apikey":"6bcbe4ba-1240-40e4-a582-3a6b28700113","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://suchsqmw:***@dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com/suchsqmw","internal":"amqp://suchsqmw:***@dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com/suchsqmw"},"rmq_version":"4.1.4","hostname_external":"dev-acrobatic-dark-ibis.rmq7.dev.cloudamqp.com","hostname_internal":"dev-acrobatic-dark-ibis.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
