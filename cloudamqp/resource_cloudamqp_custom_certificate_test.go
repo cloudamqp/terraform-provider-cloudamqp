@@ -14,8 +14,9 @@ import (
 // export TEST_CERTIFICATE_CERT=$(awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' certs/server.crt)
 // export TEST_CERTIFICATE_PRIVATE_KEY=$(awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' certs/server.key)
 
-// TestAccCustomCertificate_Basic: Creating dedicated AWS instance and upload custom certificate.
-func TestAccCustomCertificate_Basic(t *testing.T) {
+// TestAccCustomCertificate_Version: Creating dedicated AWS instance, upload custom certificate and
+// trigger replacement with version change.
+func TestAccCustomCertificate_Version(t *testing.T) {
 	t.Parallel()
 
 	instanceResourceName := "cloudamqp_instance.instance"
@@ -37,7 +38,7 @@ func TestAccCustomCertificate_Basic(t *testing.T) {
 			{
 				Config: fmt.Sprintf(`
 					resource "cloudamqp_instance" "instance" {
-						name   = "TestAccCustomCertificate_Basic"
+						name   = "TestAccCustomCertificate_Version"
 						plan   = "bunny-1"
 						region = "amazon-web-services::us-east-1"
 						tags   = []
@@ -52,7 +53,7 @@ func TestAccCustomCertificate_Basic(t *testing.T) {
 					}
 				`, testCertificateCA, testCertificateCert, testCertificatePrivateKey),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccCustomCertificate_Basic"),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccCustomCertificate_Version"),
 					resource.TestCheckResourceAttr(customCertificateResourceName, "sni_hosts", "my.custom.domain"),
 					resource.TestCheckResourceAttr(customCertificateResourceName, "version", "1"),
 				),
@@ -60,7 +61,7 @@ func TestAccCustomCertificate_Basic(t *testing.T) {
 			{
 				Config: fmt.Sprintf(`
 					resource "cloudamqp_instance" "instance" {
-						name   = "TestAccCustomCertificate_Basic"
+						name   = "TestAccCustomCertificate_Version"
 						plan   = "bunny-1"
 						region = "amazon-web-services::us-east-1"
 						tags   = []
@@ -77,7 +78,7 @@ func TestAccCustomCertificate_Basic(t *testing.T) {
 					}
 				`, testCertificateCA, testCertificateCert, testCertificatePrivateKey),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccCustomCertificate_Basic"),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccCustomCertificate_Version"),
 					resource.TestCheckResourceAttr(customCertificateResourceName, "sni_hosts", "my.custom.domain"),
 					resource.TestCheckResourceAttr(customCertificateResourceName, "version", "2"),
 				),
@@ -87,7 +88,7 @@ func TestAccCustomCertificate_Basic(t *testing.T) {
 }
 
 // TestAccCustomCertificate_KeyID: Creating dedicated AWS instance, upload custom certificate and
-// update with key identifier.
+// trigger replacement with key identifier change.
 func TestAccCustomCertificate_KeyID(t *testing.T) {
 	t.Parallel()
 
