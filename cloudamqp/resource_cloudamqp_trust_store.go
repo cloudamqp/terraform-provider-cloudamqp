@@ -18,6 +18,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -45,6 +46,7 @@ type trustStoreResourceModel struct {
 	Http            *httpTrustStoreBlock `tfsdk:"http"`
 	File            *fileTrustStoreBlock `tfsdk:"file"`
 	Version         types.Int64          `tfsdk:"version"`
+	KeyID           types.String         `tfsdk:"key_id"`
 	Sleep           types.Int64          `tfsdk:"sleep"`
 	Timeout         types.Int64          `tfsdk:"timeout"`
 }
@@ -89,12 +91,21 @@ func (r *trustStoreResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"version": schema.Int64Attribute{
-				Description: "Version of write only certificates. Increment to force update of write only fields",
+				Description: "Version of write only certificates. Increment to force update of write only fields.",
 				Optional:    true,
 				Computed:    true,
 				Default:     int64default.StaticInt64(1),
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.UseStateForUnknown(),
+				},
+			},
+			"key_id": schema.StringAttribute{
+				Optional:    true,
+				Computed:    true,
+				Default:     stringdefault.StaticString(""),
+				Description: "Key identifier to trigger force update of write only fields (default: empty string)",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"sleep": schema.Int64Attribute{
@@ -193,6 +204,7 @@ func (r *trustStoreResource) ImportState(ctx context.Context, req resource.Impor
 	// Set default values for optional/computed attributes
 	resp.State.SetAttribute(ctx, path.Root("refresh_interval"), 30)
 	resp.State.SetAttribute(ctx, path.Root("version"), 1)
+	resp.State.SetAttribute(ctx, path.Root("key_id"), "")
 	resp.State.SetAttribute(ctx, path.Root("sleep"), 10)
 	resp.State.SetAttribute(ctx, path.Root("timeout"), 1800)
 }
@@ -309,20 +321,22 @@ func (r *trustStoreResource) Update(ctx context.Context, req resource.UpdateRequ
 	}
 	params.RefreshInterval = plan.RefreshInterval.ValueInt64()
 
+	updateWriteOnly := r.shouldUpdateWriteOnly(&plan, &state)
+
 	if plan.Http != nil {
 		params.Provider = "http"
 		if plan.Http.Url.ValueString() != state.Http.Url.ValueString() {
 			changed = true
 		}
 		params.Url = plan.Http.Url.ValueString()
-		if !config.Http.Cacert.IsNull() && plan.Version.ValueInt64() != state.Version.ValueInt64() {
+		if !config.Http.Cacert.IsNull() && updateWriteOnly {
 			params.CACert = config.Http.Cacert.ValueString()
 			changed = true
 		}
 	}
 	if plan.File != nil {
 		params.Provider = "file"
-		if !config.File.Certificates.IsNull() && plan.Version.ValueInt64() != state.Version.ValueInt64() {
+		if !config.File.Certificates.IsNull() && updateWriteOnly {
 			certList := []string{}
 			diag := config.File.Certificates.ElementsAs(ctx, &certList, false)
 			resp.Diagnostics.Append(diag...)
@@ -386,4 +400,23 @@ func (r *trustStoreResource) Delete(ctx context.Context, req resource.DeleteRequ
 		resp.Diagnostics.AddError("Error polling for deleted trust store", err.Error())
 		return
 	}
+}
+
+// shouldUpdateWriteOnly determines if write-only fields should be included in update
+// If refreshInterval is changed, write-only fields needs to be included as well
+// If version is incremented or key identifier changed, write-only fields should be updated
+func (r *trustStoreResource) shouldUpdateWriteOnly(plan, state *trustStoreResourceModel) bool {
+	if plan.RefreshInterval.ValueInt64() != state.RefreshInterval.ValueInt64() {
+		return true
+	}
+
+	if plan.Version.ValueInt64() != state.Version.ValueInt64() {
+		return true
+	}
+
+	if plan.KeyID.ValueString() != state.KeyID.ValueString() {
+		return true
+	}
+
+	return false
 }
