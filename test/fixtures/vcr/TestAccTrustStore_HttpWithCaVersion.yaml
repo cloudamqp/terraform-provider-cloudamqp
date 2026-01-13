@@ -1,0 +1,468 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 2178
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"provider":"http","refresh_interval":60,"url":"https://trust-store.example.com/certs","cacertfile":"TEST_TRUST_STORE_CA"}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/922/trust-store-configuration
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 49
+        uncompressed: false
+        body: '{"job_id":"acb62eb3-2f48-4cec-b242-a71d594f1093"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "49"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8b282ce8-2c60-43eb-94ed-dc432de73b5c
+        status: 200 OK
+        code: 200
+        duration: 31.243885ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/922/jobs/acb62eb3-2f48-4cec-b242-a71d594f1093
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 335
+        uncompressed: false
+        body: '{"id":"acb62eb3-2f48-4cec-b242-a71d594f1093","account_id":"fd81f899-015f-412f-b991-754bd0e098c0","resource_type":"trust_store_configuration","resource_id":"aaa61ef9-fce8-4845-8cbd-dd3c3397f372","resource_action":"create","status":"completed","created_at":"2026-01-13T08:58:41Z","updated_at":"2026-01-13T08:58:49Z","error_message":null}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "335"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 4b0ef640-387c-406b-8b84-0d41f2b02dcd
+        status: 200 OK
+        code: 200
+        duration: 27.777846ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/922/trust-store-configuration
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2313
+        uncompressed: false
+        body: '{"id":"aaa61ef9-fce8-4845-8cbd-dd3c3397f372","created_at":"2026-01-13T08:58:49Z","updated_at":"2026-01-13T08:58:49Z","provider":"http","refresh_interval":60,"url":"https://:***@trust-store.example.com/certs","cacertfile":"TEST_TRUST_STORE_CA","certificates":null}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "2313"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 5962b7a0-e7d5-4dd3-be50-92477fce0ce7
+        status: 200 OK
+        code: 200
+        duration: 22.898233ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/922/trust-store-configuration
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2313
+        uncompressed: false
+        body: '{"id":"aaa61ef9-fce8-4845-8cbd-dd3c3397f372","created_at":"2026-01-13T08:58:49Z","updated_at":"2026-01-13T08:58:49Z","provider":"http","refresh_interval":60,"url":"https://:***@trust-store.example.com/certs","cacertfile":"TEST_TRUST_STORE_CA","certificates":null}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "2313"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 42756206-7406-4ed6-a758-bb45041911df
+        status: 200 OK
+        code: 200
+        duration: 18.569153ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 2178
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"provider":"http","refresh_interval":60,"url":"https://trust-store.example.com/certs","cacertfile":"TEST_TRUST_STORE_CA"}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/922/trust-store-configuration
+        method: PUT
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 49
+        uncompressed: false
+        body: '{"job_id":"a9e9e2cd-ba48-4b76-a67b-f0dc5039dcab"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "49"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 14bdce06-8d44-4bd2-a1f8-1eda1b728806
+        status: 200 OK
+        code: 200
+        duration: 40.172782ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/922/jobs/a9e9e2cd-ba48-4b76-a67b-f0dc5039dcab
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 335
+        uncompressed: false
+        body: '{"id":"a9e9e2cd-ba48-4b76-a67b-f0dc5039dcab","account_id":"fd81f899-015f-412f-b991-754bd0e098c0","resource_type":"trust_store_configuration","resource_id":"aaa61ef9-fce8-4845-8cbd-dd3c3397f372","resource_action":"update","status":"completed","created_at":"2026-01-13T08:58:51Z","updated_at":"2026-01-13T08:58:58Z","error_message":null}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "335"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 383a2c24-d5c6-4922-bcd1-ff771926a553
+        status: 200 OK
+        code: 200
+        duration: 25.192134ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/922/trust-store-configuration
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2313
+        uncompressed: false
+        body: '{"id":"aaa61ef9-fce8-4845-8cbd-dd3c3397f372","created_at":"2026-01-13T08:58:49Z","updated_at":"2026-01-13T08:58:49Z","provider":"http","refresh_interval":60,"url":"https://:***@trust-store.example.com/certs","cacertfile":"TEST_TRUST_STORE_CA","certificates":null}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "2313"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 61968029-ae1b-43ab-a237-66d81583d730
+        status: 200 OK
+        code: 200
+        duration: 21.377833ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/922/trust-store-configuration
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 49
+        uncompressed: false
+        body: '{"job_id":"bf55c007-55d9-4ae0-bf9d-015b5755f0d9"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "49"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 1f21fc82-7e80-4ef1-bad9-1a5b54813449
+        status: 200 OK
+        code: 200
+        duration: 36.882862ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/922/jobs/bf55c007-55d9-4ae0-bf9d-015b5755f0d9
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 335
+        uncompressed: false
+        body: '{"id":"bf55c007-55d9-4ae0-bf9d-015b5755f0d9","account_id":"fd81f899-015f-412f-b991-754bd0e098c0","resource_type":"trust_store_configuration","resource_id":"aaa61ef9-fce8-4845-8cbd-dd3c3397f372","resource_action":"delete","status":"completed","created_at":"2026-01-13T08:59:02Z","updated_at":"2026-01-13T08:59:08Z","error_message":null}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "335"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 7482659b-6ebd-4976-8cee-688c55a5624f
+        status: 200 OK
+        code: 200
+        duration: 29.891579ms
