@@ -126,7 +126,7 @@ func TestAccTrustStore_HttpWithCaVersion(t *testing.T) {
 	})
 }
 
-// TestAccTrustStore_HttpWithCA: Pre-created dedicated instance, configure trust store with http
+// TestAccTrustStore_HttpWithCaKeyID: Pre-created dedicated instance, configure trust store with http
 // provider and CA certificate with key identifier trigger.
 func TestAccTrustStore_HttpWithCaKeyID(t *testing.T) {
 	t.Parallel()
