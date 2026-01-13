@@ -9,13 +9,18 @@ import (
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance/configuration"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -39,7 +44,9 @@ type trustStoreResourceModel struct {
 	InstanceID      types.Int64          `tfsdk:"instance_id"`
 	RefreshInterval types.Int64          `tfsdk:"refresh_interval"`
 	Http            *httpTrustStoreBlock `tfsdk:"http"`
+	File            *fileTrustStoreBlock `tfsdk:"file"`
 	Version         types.Int64          `tfsdk:"version"`
+	KeyID           types.String         `tfsdk:"key_id"`
 	Sleep           types.Int64          `tfsdk:"sleep"`
 	Timeout         types.Int64          `tfsdk:"timeout"`
 }
@@ -47,6 +54,10 @@ type trustStoreResourceModel struct {
 type httpTrustStoreBlock struct {
 	Url    types.String `tfsdk:"url"`
 	Cacert types.String `tfsdk:"cacert"`
+}
+
+type fileTrustStoreBlock struct {
+	Certificates types.List `tfsdk:"certificates"`
 }
 
 func (r *trustStoreResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -80,12 +91,21 @@ func (r *trustStoreResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"version": schema.Int64Attribute{
-				Description: "Version of write only certificates. Increment to force update of write only fields",
+				Description: "Version of write only certificates. Increment to force update of write only fields.",
 				Optional:    true,
 				Computed:    true,
 				Default:     int64default.StaticInt64(1),
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.UseStateForUnknown(),
+				},
+			},
+			"key_id": schema.StringAttribute{
+				Optional:    true,
+				Computed:    true,
+				Default:     stringdefault.StaticString(""),
+				Description: "Key identifier to trigger force update of write only fields (default: empty string)",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"sleep": schema.Int64Attribute{
@@ -112,7 +132,7 @@ func (r *trustStoreResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Description: "HTTP trust store",
 				Attributes: map[string]schema.Attribute{
 					"url": schema.StringAttribute{
-						Required:    true,
+						Optional:    true,
 						Description: "URL to fetch trust store certificates from",
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.UseStateForUnknown(),
@@ -126,6 +146,31 @@ func (r *trustStoreResource) Schema(ctx context.Context, req resource.SchemaRequ
 							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.MatchRoot("file")),
+					objectvalidator.AtLeastOneOf(path.MatchRoot("file")),
+				},
+			},
+			"file": schema.SingleNestedBlock{
+				Description: "File trust store",
+				Attributes: map[string]schema.Attribute{
+					"certificates": schema.ListAttribute{
+						ElementType: types.StringType,
+						Optional:    true,
+						WriteOnly:   true,
+						Description: "List of PEM encoded certificates",
+						PlanModifiers: []planmodifier.List{
+							listplanmodifier.UseStateForUnknown(),
+						},
+						Validators: []validator.List{
+							listvalidator.SizeBetween(1, 100),
+						},
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.MatchRoot("http")),
+					objectvalidator.AtLeastOneOf(path.MatchRoot("http")),
 				},
 			},
 		},
@@ -159,7 +204,8 @@ func (r *trustStoreResource) ImportState(ctx context.Context, req resource.Impor
 	// Set default values for optional/computed attributes
 	resp.State.SetAttribute(ctx, path.Root("refresh_interval"), 30)
 	resp.State.SetAttribute(ctx, path.Root("version"), 1)
-	resp.State.SetAttribute(ctx, path.Root("sleep"), 30)
+	resp.State.SetAttribute(ctx, path.Root("key_id"), "")
+	resp.State.SetAttribute(ctx, path.Root("sleep"), 10)
 	resp.State.SetAttribute(ctx, path.Root("timeout"), 1800)
 }
 
@@ -177,18 +223,24 @@ func (r *trustStoreResource) Create(ctx context.Context, req resource.CreateRequ
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	if plan.Http == nil {
-		resp.Diagnostics.AddError("Missing trust store configuration", "The 'http' block must be provided")
-		return
-	}
-
 	params := model.TrustStoreRequest{}
 	params.RefreshInterval = plan.RefreshInterval.ValueInt64()
 	if plan.Http != nil {
+		params.Provider = "http"
 		params.Url = plan.Http.Url.ValueString()
 		if !config.Http.Cacert.IsNull() {
 			params.CACert = config.Http.Cacert.ValueString()
 		}
+	}
+	if plan.File != nil {
+		params.Provider = "file"
+		certList := []string{}
+		diag := config.File.Certificates.ElementsAs(ctx, &certList, false)
+		resp.Diagnostics.Append(diag...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		params.Certificates = &certList
 	}
 
 	job, err := r.client.CreateTrustStoreConfiguration(timeoutCtx, instanceID, sleep, params)
@@ -244,6 +296,8 @@ func (r *trustStoreResource) Read(ctx context.Context, req resource.ReadRequest,
 		state.Http = &httpTrustStoreBlock{
 			Url: types.StringValue(*data.Url),
 		}
+	case "file":
+		break
 	default:
 		resp.Diagnostics.AddError("Unknown trust store provider", fmt.Sprintf("The trust store provider %q is not recognized.", data.Provider))
 		return
@@ -267,13 +321,30 @@ func (r *trustStoreResource) Update(ctx context.Context, req resource.UpdateRequ
 	}
 	params.RefreshInterval = plan.RefreshInterval.ValueInt64()
 
+	updateWriteOnly := r.shouldUpdateWriteOnly(&plan, &state)
+
 	if plan.Http != nil {
+		params.Provider = "http"
 		if plan.Http.Url.ValueString() != state.Http.Url.ValueString() {
 			changed = true
 		}
 		params.Url = plan.Http.Url.ValueString()
-		if !config.Http.Cacert.IsNull() && plan.Version.ValueInt64() != state.Version.ValueInt64() {
+		if !config.Http.Cacert.IsNull() && updateWriteOnly {
 			params.CACert = config.Http.Cacert.ValueString()
+			changed = true
+		}
+	}
+	if plan.File != nil {
+		params.Provider = "file"
+		if !config.File.Certificates.IsNull() && updateWriteOnly {
+			certList := []string{}
+			diag := config.File.Certificates.ElementsAs(ctx, &certList, false)
+			resp.Diagnostics.Append(diag...)
+			if resp.Diagnostics.HasError() {
+				return
+			}
+
+			params.Certificates = &certList
 			changed = true
 		}
 	}
@@ -329,4 +400,23 @@ func (r *trustStoreResource) Delete(ctx context.Context, req resource.DeleteRequ
 		resp.Diagnostics.AddError("Error polling for deleted trust store", err.Error())
 		return
 	}
+}
+
+// shouldUpdateWriteOnly determines if write-only fields should be included in update
+// If refreshInterval is changed, write-only fields needs to be included as well
+// If version is incremented or key identifier changed, write-only fields should be updated
+func (r *trustStoreResource) shouldUpdateWriteOnly(plan, state *trustStoreResourceModel) bool {
+	if plan.RefreshInterval.ValueInt64() != state.RefreshInterval.ValueInt64() {
+		return true
+	}
+
+	if plan.Version.ValueInt64() != state.Version.ValueInt64() {
+		return true
+	}
+
+	if plan.KeyID.ValueString() != state.KeyID.ValueString() {
+		return true
+	}
+
+	return false
 }
