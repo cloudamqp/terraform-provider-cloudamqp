@@ -1,3 +1,11 @@
+## 1.41.1 (12 Jan, 2026)
+
+IMPROVEMENTS:
+
+* Resource: Added additional argument "key_id" to `cloudamqp_custom_certificate` [#448]
+
+[#448]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/448
+
 ## 1.41.0 (22 Dec, 2025)
 
 NOTES:
