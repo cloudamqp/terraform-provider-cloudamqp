@@ -156,7 +156,7 @@ func (api *API) waitForEnableVpcConnectWithRetry(ctx context.Context, instanceID
 		response.StatusCode, failed)
 }
 
-// enableVPC: Enable VPC for an instance
+// EnableVPC: Enable VPC for an instance
 // Check if the instance already have a standalone VPC
 func (api *API) EnableVPC(ctx context.Context, instanceID int) error {
 	var (
@@ -164,8 +164,8 @@ func (api *API) EnableVPC(ctx context.Context, instanceID int) error {
 		path   = fmt.Sprintf("/api/instances/%d/vpc", instanceID)
 	)
 
-	data, _ := api.ReadInstance(ctx, fmt.Sprintf("%d", instanceID))
-	if data["vpc"] == nil {
+	data, _ := api.ReadInstance(ctx, fmt.Sprintf("%d", instanceID), time.Duration(10)*time.Second)
+	if data.VPC == nil {
 		tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s ", path))
 		response, err := api.sling.New().Put(path).Receive(nil, &failed)
 		if err != nil {

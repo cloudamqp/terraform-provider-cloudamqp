@@ -40,7 +40,7 @@ func (api *API) resizeDiskWithRetry(ctx context.Context, id string, params map[s
 
 	switch response.StatusCode {
 	case 200:
-		if err = api.waitUntilAllNodesConfigured(ctx, id, attempt, sleep, timeout); err != nil {
+		if err = api.pollForAllNodesConfigured(ctx, id, "disk_resize", time.Duration(sleep)*time.Second); err != nil {
 			return nil, err
 		}
 		tflog.Debug(ctx, "response data", data)
