@@ -96,7 +96,9 @@ func (p *cloudamqpProvider) Configure(ctx context.Context, request provider.Conf
 }
 
 func (p *cloudamqpProvider) DataSources(_ context.Context) []func() datasource.DataSource {
-	return []func() datasource.DataSource{}
+	return []func() datasource.DataSource{
+		NewInstanceDataSource,
+	}
 }
 
 func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resource {
@@ -104,10 +106,11 @@ func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resou
 		NewAccountActionsResource,
 		NewAwsEventBridgeResource,
 		NewCustomCertificateResource,
+		NewInstanceResource,
 		NewIntegrationLogResource,
 		NewIntegrationMetricResource,
 		NewNodeActionsResource,
-    NewOAuth2ConfigurationResource,
+		NewOAuth2ConfigurationResource,
 		NewRabbitMqConfigurationResource,
 		NewTrustStoreResource,
 		NewVpcResource,
@@ -150,7 +153,6 @@ func Provider(v string, client *http.Client) *schemaSdk.Provider {
 			"cloudamqp_alarm":               dataSourceAlarm(),
 			"cloudamqp_alarms":              dataSourceAlarms(),
 			"cloudamqp_credentials":         dataSourceCredentials(),
-			"cloudamqp_instance":            dataSourceInstance(),
 			"cloudamqp_nodes":               dataSourceNodes(),
 			"cloudamqp_notification":        dataSourceNotification(),
 			"cloudamqp_notifications":       dataSourceNotifications(),
@@ -164,7 +166,6 @@ func Provider(v string, client *http.Client) *schemaSdk.Provider {
 			"cloudamqp_alarm":                         resourceAlarm(),
 			"cloudamqp_custom_domain":                 resourceCustomDomain(),
 			"cloudamqp_extra_disk_size":               resourceExtraDiskSize(),
-			"cloudamqp_instance":                      resourceInstance(),
 			"cloudamqp_integration_metric_prometheus": resourceIntegrationMetricPrometheus(),
 			"cloudamqp_maintenance_window":            resourceMaintenanceWindow(),
 			"cloudamqp_notification":                  resourceNotification(),
