@@ -4,203 +4,80 @@ import (
 	"context"
 	"fmt"
 	"regexp"
-	"strconv"
 	"time"
 
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
+	"github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance/node"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func (api *API) waitUntilReady(ctx context.Context, instanceID string) (map[string]any, error) {
+func (api *API) CreateInstance(ctx context.Context, params model.InstanceCreateRequest, sleep time.Duration) (*model.InstanceResponse, error) {
 	var (
-		data   map[string]any
+		data   model.InstanceResponse
 		failed map[string]any
-		path   = fmt.Sprintf("/api/instances/%s", instanceID)
+		path   = "/api/instances"
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s wait until ready", path))
-	for {
-		response, err := api.sling.New().Path(path).Receive(&data, &failed)
-		if err != nil {
-			return nil, err
-		}
-
-		switch response.StatusCode {
-		case 200:
-			if data["ready"] == true {
-				data["id"] = instanceID
-				return data, nil
-			}
-		default:
-			return nil, fmt.Errorf("failed to wait until ready, status=%d message=%s ",
-				response.StatusCode, failed)
-		}
-		time.Sleep(10 * time.Second)
-	}
-}
-
-func (api *API) waitUntilAllNodesReady(ctx context.Context, instanceID string) error {
-	var (
-		data   []map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("api/instances/%s/nodes", instanceID)
-	)
-
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s wait until all nodes ready", path))
-	for {
-		_, err := api.sling.New().Path(path).Receive(&data, &failed)
-		if err != nil {
-			return err
-		}
-
-		tflog.Debug(ctx, fmt.Sprintf("response data=%v", data))
-		ready := true
-		for _, node := range data {
-			ready = ready && node["configured"].(bool)
-		}
-		if ready {
-			return nil
-		}
-		time.Sleep(15 * time.Second)
-	}
-}
-
-func (api *API) waitUntilAllNodesConfigured(ctx context.Context, instanceID string,
-	attempt, sleep, timeout int) error {
-
-	var (
-		data   []map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("api/instances/%s/nodes", instanceID)
-	)
-
-	tflog.Debug(ctx, fmt.Sprintf("wait until all nodes configured, attempt=%d until_timeout=%d ",
-		attempt, (timeout-(attempt*sleep))))
-	_, err := api.sling.New().Path(path).Receive(&data, &failed)
-	if err != nil {
-		return err
-	} else if attempt*sleep > timeout {
-		return fmt.Errorf("timeout reached after %d seconds, while waiting on all nodes configured",
-			timeout)
-	}
-
-	tflog.Debug(ctx, fmt.Sprintf("response data=%v", data))
-	ready := true
-	for _, node := range data {
-		ready = ready && node["configured"].(bool)
-	}
-	if ready {
-		return nil
-	}
-	attempt++
-	time.Sleep(time.Duration(sleep) * time.Second)
-	return api.waitUntilAllNodesConfigured(ctx, instanceID, attempt, sleep, timeout)
-}
-
-func (api *API) waitUntilDeletion(ctx context.Context, instanceID string) error {
-	var (
-		data   map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("/api/instances/%s", instanceID)
-	)
-
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s wait until deleted", path))
-	for {
-		response, err := api.sling.New().Path(path).Receive(&data, &failed)
-		if err != nil {
-			return fmt.Errorf("failed to be deleted, error=%v ", err)
-		}
-
-		switch response.StatusCode {
-		case 404:
-			return nil
-		case 410:
-			return nil
-		}
-		time.Sleep(10 * time.Second)
-	}
-}
-
-func (api *API) CreateInstance(ctx context.Context, params map[string]any) (map[string]any, error) {
-	var (
-		data         map[string]any
-		failed       map[string]any
-		path         = "/api/instances"
-		sensitiveCtx = tflog.MaskFieldValuesWithFieldKeys(ctx, "apikey", "url", "urls")
-	)
-
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s ", path), params)
-	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
+	tflog.Info(ctx, fmt.Sprintf("method=POST path=%s params=%+v", path, params))
+	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
+		functionName: "CreateInstance",
+		resourceName: "Instance",
+		attempt:      1,
+		sleep:        sleep,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	switch response.StatusCode {
-	case 200:
-		tflog.Debug(sensitiveCtx, "response data", data)
-		if id, ok := data["id"]; ok {
-			data["id"] = strconv.FormatFloat(id.(float64), 'f', 0, 64)
-		} else {
-			return nil, fmt.Errorf("invalid identifier=%v", data["id"])
-		}
-		return api.waitUntilReady(ctx, data["id"].(string))
-	default:
-		return nil, fmt.Errorf("failed to create instance, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	id := fmt.Sprintf("%d", data.ID)
+	return api.pollForInstanceReady(ctx, id, sleep)
 }
 
-func (api *API) ReadInstance(ctx context.Context, instanceID string) (map[string]any, error) {
+func (api *API) ReadInstance(ctx context.Context, instanceID string, sleep time.Duration) (*model.InstanceResponse, error) {
 	var (
-		data         map[string]any
-		failed       map[string]any
-		path         = fmt.Sprintf("/api/instances/%s", instanceID)
-		sensitiveCtx = tflog.MaskFieldValuesWithFieldKeys(ctx, "apikey", "url", "urls")
+		data   *model.InstanceResponse
+		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%s", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
-	response, err := api.sling.New().Path(path).Receive(&data, &failed)
+	tflog.Info(ctx, fmt.Sprintf("method=GET path=%s ", path))
+	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+		functionName: "ReadInstance",
+		resourceName: "Instance",
+		attempt:      1,
+		sleep:        sleep,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	switch response.StatusCode {
-	case 200:
-		tflog.Debug(sensitiveCtx, "response data", data)
-		return data, nil
-	case 404:
-		tflog.Warn(ctx, "instance not found")
-		return nil, nil
-	case 410:
-		tflog.Warn(ctx, "instance has been deleted")
-		return nil, nil
-	default:
-		return nil, fmt.Errorf("failed to read instance, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	return data, nil
 }
 
-func (api *API) UpdateInstance(ctx context.Context, instanceID string, params map[string]any) error {
+func (api *API) UpdateInstance(ctx context.Context, instanceID string, params model.InstanceUpdateRequest, sleep time.Duration) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("api/instances/%v", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s ", path), params)
-	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
+	tflog.Info(ctx, fmt.Sprintf("method=PUT path=%s params=%+v", path, params))
+	err := api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
+		functionName: "UpdateInstance",
+		resourceName: "Instance",
+		attempt:      1,
+		sleep:        sleep,
+		data:         nil,
+		failed:       &failed,
+	})
 	if err != nil {
 		return err
 	}
 
-	switch response.StatusCode {
-	case 200:
-		return api.waitUntilAllNodesReady(ctx, instanceID)
-	case 410:
-		tflog.Warn(ctx, "the instance has been deleted")
-		return nil
-	default:
-		return fmt.Errorf("failed to update instance, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	return api.pollForAllNodesConfigured(ctx, instanceID, "instance", sleep)
 }
 
 func (api *API) DeleteInstance(ctx context.Context, instanceID string, keep_vpc bool) error {
@@ -209,22 +86,15 @@ func (api *API) DeleteInstance(ctx context.Context, instanceID string, keep_vpc 
 		path   = fmt.Sprintf("api/instances/%s?keep_vpc=%t", instanceID, keep_vpc)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
-	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
-	if err != nil {
-		return err
-	}
-
-	switch response.StatusCode {
-	case 204:
-		return api.waitUntilDeletion(ctx, instanceID)
-	case 410:
-		tflog.Warn(ctx, "the instance has been deleted")
-		return nil
-	default:
-		return fmt.Errorf("failed to delete instance, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	tflog.Info(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
+	return api.callWithRetry(ctx, api.sling.New().Delete(path), retryRequest{
+		functionName: "DeleteInstance",
+		resourceName: "Instance",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 }
 
 func (api *API) UrlInformation(url string) map[string]any {
@@ -248,4 +118,106 @@ func (api *API) UrlInformation(url string) map[string]any {
 	}
 
 	return paramsMap
+}
+
+func (api *API) pollForInstanceReady(ctx context.Context, instanceID string, sleep time.Duration) (*model.InstanceResponse, error) {
+	var (
+		data    *model.InstanceResponse
+		failed  map[string]any
+		path    = fmt.Sprintf("/api/instances/%s", instanceID)
+		attempt = 1
+	)
+
+	_, ok := ctx.Deadline()
+	if !ok {
+		return nil, fmt.Errorf("context has no deadline")
+	}
+
+	ticker := time.NewTicker(sleep)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ctx.Done():
+			msg := "timeout reached while polling for instance readiness"
+			tflog.Error(ctx, msg)
+			return nil, fmt.Errorf("%s", msg)
+		case <-ticker.C:
+			tflog.Info(ctx, fmt.Sprintf("method=GET path=%s ", path))
+			err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+				functionName: "PollForInstanceReady",
+				resourceName: "Instance",
+				attempt:      attempt,
+				sleep:        10 * time.Second,
+				data:         &data,
+				failed:       &failed,
+			})
+			if err != nil {
+				tflog.Error(ctx, fmt.Sprintf("error reading instance: %v", err))
+				continue
+			}
+			if data.Ready {
+				tflog.Info(ctx, "instance is ready")
+				return data, nil
+			}
+			attempt++
+		case <-ctx.Done():
+			msg := "context cancelled while polling for instance readiness"
+			tflog.Error(ctx, msg)
+			return nil, fmt.Errorf("%s", msg)
+		}
+	}
+}
+
+func (api *API) pollForAllNodesConfigured(ctx context.Context, instanceID, resourceName string, sleep time.Duration) error {
+	var (
+		data    []node.NodeResponse
+		failed  map[string]any
+		path    = fmt.Sprintf("/api/instances/%s/nodes", instanceID)
+		attempt = 1
+	)
+
+	_, ok := ctx.Deadline()
+	if !ok {
+		return fmt.Errorf("context has no deadline")
+	}
+
+	ticker := time.NewTicker(sleep)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ctx.Done():
+			msg := "timeout reached while polling for nodes readiness"
+			tflog.Error(ctx, msg)
+			return fmt.Errorf("%s", msg)
+		case <-ticker.C:
+			tflog.Info(ctx, fmt.Sprintf("method=GET path=%s ", path))
+			err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+				functionName: "pollForAllNodesConfigured",
+				resourceName: resourceName,
+				attempt:      attempt,
+				sleep:        sleep,
+				data:         &data,
+				failed:       &failed,
+			})
+			if err != nil {
+				tflog.Error(ctx, fmt.Sprintf("error reading nodes: %v", err))
+				continue
+			}
+			tflog.Info(ctx, fmt.Sprintf("response data=%v", data))
+			ready := true
+			for _, node := range data {
+				ready = ready && node.Configured
+			}
+			if ready {
+				return nil
+			}
+			attempt++
+		case <-ctx.Done():
+			msg := "context cancelled while polling for nodes readiness"
+			tflog.Error(ctx, msg)
+			return fmt.Errorf("%s", msg)
+		}
+	}
 }
