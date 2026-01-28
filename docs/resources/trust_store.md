@@ -19,6 +19,8 @@ increment either the `version` or update the `key_id` attribute.
 when `version` is incremented or `key_id` is changed. This design allows you to manage certificate
 rotation explicitly.
 
+-> **Note:** After the trust store has been added, a restart of RabbitMQ is required for the changes to take effect.
+
 Only available for dedicated subscription plans running ***RabbitMQ***.
 
 ## Example Usage
@@ -77,10 +79,15 @@ resource "cloudamqp_trust_store" "trust_store" {
   instance_id = cloudamqp_instance.instance.id
 
   file {
-    certificates = [
-      file("${path.module}/certs/client1.pem"),
-      file("${path.module}/certs/client2.pem")
-    ]
+    certificates {
+      name    = "client1.pem"
+      content = file("${path.module}/certs/client1.pem")
+    }
+
+    certificates {
+      name    = "client2.pem"
+      content = file("${path.module}/certs/client2.pem")
+    }
   }
 
   refresh_interval = 30
@@ -138,9 +145,10 @@ resource "cloudamqp_trust_store" "trust_store" {
   instance_id = cloudamqp_instance.instance.id
 
   file {
-    certificates = [
-      file("${path.module}/certs/client-${local.cert_key_id}.pem")
-    ]
+    certificates {
+      name    = "client.pem"
+      content = file("${path.module}/certs/client-${local.cert_key_id}.pem")
+    }
   }
 
   refresh_interval = 30
@@ -183,8 +191,12 @@ The `http` block supports:
 
 The `file` block supports:
 
-* `certificates` - (Required/WriteOnly) List of PEM-encoded x.509 formatted leaf certificates
-                   (1-100 certificates). Updates require incrementing `version` or changing `key_id`.
+* `certificates` - (Required/WriteOnly) A list of certificate blocks (1-100 certificates). Each
+                   certificate block contains:
+  * `name` - (Required) A unique identifier for the certificate.
+  * `content` - (Required/WriteOnly) PEM-encoded x.509 formatted leaf certificate content.
+
+  Updates require incrementing `version` or changing `key_id`.
 
 ## Attributes Reference
 
