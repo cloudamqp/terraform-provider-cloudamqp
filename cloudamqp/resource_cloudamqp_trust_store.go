@@ -11,6 +11,7 @@ import (
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance/configuration"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -57,7 +58,12 @@ type httpTrustStoreBlock struct {
 }
 
 type fileTrustStoreBlock struct {
-	Certificates types.List `tfsdk:"certificates"`
+	Certificates []fileTrustStoreCertificate `tfsdk:"certificates"`
+}
+
+type fileTrustStoreCertificate struct {
+	Name    types.String `tfsdk:"name"`
+	Content types.String `tfsdk:"content"`
 }
 
 func (r *trustStoreResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -154,12 +160,23 @@ func (r *trustStoreResource) Schema(ctx context.Context, req resource.SchemaRequ
 			},
 			"file": schema.SingleNestedBlock{
 				Description: "File trust store",
-				Attributes: map[string]schema.Attribute{
-					"certificates": schema.ListAttribute{
-						ElementType: types.StringType,
-						Optional:    true,
-						WriteOnly:   true,
+				Blocks: map[string]schema.Block{
+					"certificates": schema.ListNestedBlock{
 						Description: "List of PEM encoded certificates",
+						NestedObject: schema.NestedBlockObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Optional:    true,
+									Description: "Certificate name", Validators: []validator.String{
+										stringvalidator.LengthAtLeast(1),
+									}},
+								"content": schema.StringAttribute{
+									Optional:    true,
+									WriteOnly:   true,
+									Description: "PEM encoded certificate content",
+								},
+							},
+						},
 						PlanModifiers: []planmodifier.List{
 							listplanmodifier.UseStateForUnknown(),
 						},
@@ -234,13 +251,15 @@ func (r *trustStoreResource) Create(ctx context.Context, req resource.CreateRequ
 	}
 	if plan.File != nil {
 		params.Provider = "file"
-		certList := []string{}
-		diag := config.File.Certificates.ElementsAs(ctx, &certList, false)
-		resp.Diagnostics.Append(diag...)
-		if resp.Diagnostics.HasError() {
-			return
+		certificates := config.File.Certificates
+		certificateList := make([]model.TrustStoreCertificateRequest, len(certificates))
+		for i, certificate := range certificates {
+			certificateList[i] = model.TrustStoreCertificateRequest{
+				Name:    certificate.Name.ValueString(),
+				Content: certificate.Content.ValueString(),
+			}
 		}
-		params.Certificates = &certList
+		params.Certificates = &certificateList
 	}
 
 	job, err := r.client.CreateTrustStoreConfiguration(timeoutCtx, instanceID, sleep, params)
@@ -336,15 +355,16 @@ func (r *trustStoreResource) Update(ctx context.Context, req resource.UpdateRequ
 	}
 	if plan.File != nil {
 		params.Provider = "file"
-		if !config.File.Certificates.IsNull() && updateWriteOnly {
-			certList := []string{}
-			diag := config.File.Certificates.ElementsAs(ctx, &certList, false)
-			resp.Diagnostics.Append(diag...)
-			if resp.Diagnostics.HasError() {
-				return
+		if len(config.File.Certificates) > 0 && updateWriteOnly {
+			certificates := config.File.Certificates
+			certificateList := make([]model.TrustStoreCertificateRequest, len(certificates))
+			for i, certificate := range certificates {
+				certificateList[i] = model.TrustStoreCertificateRequest{
+					Name:    certificate.Name.ValueString(),
+					Content: certificate.Content.ValueString(),
+				}
 			}
-
-			params.Certificates = &certList
+			params.Certificates = &certificateList
 			changed = true
 		}
 	}
