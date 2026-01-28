@@ -212,10 +212,19 @@ func TestAccTrustStore_FileVersion(t *testing.T) {
 			{
 				Config: fmt.Sprintf(`
 					resource "cloudamqp_trust_store" "trust_store" {
-						instance_id      = 922
+						instance_id      = 945
 						file {
-							certificates = ["%s", "%s"]
-						}
+    					certificates {
+      					name    = "client1.pem"
+      					content = "%s"
+    					}
+
+    					certificates {
+      					name    = "client2.pem"
+      					content = "%s"
+    					}
+  					}
+
 						refresh_interval = 60
 						version          = 1
 						sleep            = 10
@@ -233,10 +242,19 @@ func TestAccTrustStore_FileVersion(t *testing.T) {
 				Config: fmt.Sprintf(`
 					# Increment version to trigger update certificates.
 					resource "cloudamqp_trust_store" "trust_store" {
-						instance_id      = 922
+						instance_id      = 945
 						file {
-							certificates = ["%s", "%s"]
-						}
+    					certificates {
+      					name    = "client1.pem"
+      					content = "%s"
+    					}
+
+    					certificates {
+      					name    = "client2.pem"
+      					content = "%s"
+    					}
+  					}
+
 						refresh_interval = 60
 						version          = 2
 						sleep            = 10
@@ -275,10 +293,18 @@ func TestAccTrustStore_FileKeyID(t *testing.T) {
 			{
 				Config: fmt.Sprintf(`
 					resource "cloudamqp_trust_store" "trust_store" {
-						instance_id      = 922
+						instance_id      = 945
 						file {
-							certificates = ["%s", "%s"]
-						}
+    					certificates {
+      					name    = "client1.pem"
+      					content = "%s"
+    					}
+
+    					certificates {
+      					name    = "client2.pem"
+      					content = "%s"
+    					}
+  					}
 						refresh_interval = 60
 						key_id           = "d31cb790-a57b-400b-98cc-c13ad5a9e860"
 						sleep            = 10
@@ -296,10 +322,18 @@ func TestAccTrustStore_FileKeyID(t *testing.T) {
 				Config: fmt.Sprintf(`
 					# Update key identifier to trigger update of certificates.
 					resource "cloudamqp_trust_store" "trust_store" {
-						instance_id      = 922
+						instance_id      = 945
 						file {
-							certificates = ["%s", "%s"]
-						}
+    					certificates {
+      					name    = "client1.pem"
+      					content = "%s"
+    					}
+
+    					certificates {
+      					name    = "client2.pem"
+      					content = "%s"
+    					}
+  					}
 						refresh_interval = 60
 						key_id           = "6e0e9b7a-268a-4621-9cd8-1d66af48d045"
 						sleep            = 10

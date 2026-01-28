@@ -6,14 +6,14 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 4509
+        content_length: 4575
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"provider":"file","refresh_interval":60,"certificates":["TEST_TRUST_STORE_CERT","TEST_TRUST_STORE_CERT_2"]}
+            {"provider":"file","refresh_interval":60,"certificates":[{"name":"client1.pem","content":"TEST_TRUST_STORE_CERT"},{"name":"client2.pem","content":"TEST_TRUST_STORE_CERT_2"}]}
         form: {}
         headers:
             Authorization:
@@ -22,7 +22,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/922/trust-store-configuration
+        url: http://localhost:9393/api/instances/945/trust-store-configuration
         method: POST
       response:
         proto: HTTP/1.1
@@ -32,7 +32,7 @@ interactions:
         trailer: {}
         content_length: 49
         uncompressed: false
-        body: '{"job_id":"c621625c-35b8-45b7-9b27-54128722dadf"}'
+        body: '{"job_id":"5a2430d1-0377-4145-95bc-0f9049a889de"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -51,10 +51,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 2f920383-8492-4d2b-8749-4ee5898f3e1d
+                - 17adcf75-a5b8-4297-8066-e8e6ea813d34
         status: 200 OK
         code: 200
-        duration: 47.293815ms
+        duration: 42.210514ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -73,7 +73,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/922/jobs/c621625c-35b8-45b7-9b27-54128722dadf
+        url: http://localhost:9393/api/instances/945/jobs/5a2430d1-0377-4145-95bc-0f9049a889de
         method: GET
       response:
         proto: HTTP/1.1
@@ -83,7 +83,7 @@ interactions:
         trailer: {}
         content_length: 335
         uncompressed: false
-        body: '{"id":"c621625c-35b8-45b7-9b27-54128722dadf","account_id":"fd81f899-015f-412f-b991-754bd0e098c0","resource_type":"trust_store_configuration","resource_id":"1e0c5e3e-8910-402e-864a-b40c3c729850","resource_action":"create","status":"completed","created_at":"2026-01-13T08:46:04Z","updated_at":"2026-01-13T08:46:13Z","error_message":null}'
+        body: '{"id":"5a2430d1-0377-4145-95bc-0f9049a889de","account_id":"d120f329-5b47-4b61-9ed4-900a7beb3e2b","resource_type":"trust_store_configuration","resource_id":"505eb21a-5f0c-4d92-b374-0c796d33e87b","resource_action":"create","status":"completed","created_at":"2026-01-28T14:59:44Z","updated_at":"2026-01-28T14:59:53Z","error_message":null}'
         headers:
             Cache-Control:
                 - no-cache
@@ -102,10 +102,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 327523c1-6276-4ef5-a792-a18cf93d59bc
+                - 73f2b8a8-968b-44af-96f1-49cea032d127
         status: 200 OK
         code: 200
-        duration: 27.993069ms
+        duration: 25.013415ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -124,7 +124,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/922/trust-store-configuration
+        url: http://localhost:9393/api/instances/945/trust-store-configuration
         method: GET
       response:
         proto: HTTP/1.1
@@ -132,14 +132,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 4707
+        content_length: 4690
         uncompressed: false
-        body: '{"id":"1e0c5e3e-8910-402e-864a-b40c3c729850","created_at":"2026-01-13T08:46:13Z","updated_at":"2026-01-13T08:46:13Z","provider":"file","refresh_interval":60,"url":"://:***@","cacertfile":null,"certificates":[{"name":"1.pem","content":"TEST_TRUST_STORE_CERT"},{"name":"2.pem","content":"TEST_TRUST_STORE_CERT_2"}]}'
+        body: '{"id":"505eb21a-5f0c-4d92-b374-0c796d33e87b","created_at":"2026-01-28T14:59:53Z","updated_at":"2026-01-28T14:59:53Z","provider":"file","refresh_interval":60,"certificates":[{"name":"client1.pem","content":"TEST_TRUST_STORE_CERT"},{"name":"client2.pem","content":"TEST_TRUST_STORE_CERT_2"}]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "4707"
+                - "4690"
             Content-Type:
                 - application/json
             Nel:
@@ -153,10 +153,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 8791dfbc-4f04-493b-8f7f-c7a57867c6ad
+                - 8db2bac1-690e-4814-b945-d7a915ac677b
         status: 200 OK
         code: 200
-        duration: 18.172981ms
+        duration: 18.76344ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -175,7 +175,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/922/trust-store-configuration
+        url: http://localhost:9393/api/instances/945/trust-store-configuration
         method: GET
       response:
         proto: HTTP/1.1
@@ -183,14 +183,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 4707
+        content_length: 4690
         uncompressed: false
-        body: '{"id":"1e0c5e3e-8910-402e-864a-b40c3c729850","created_at":"2026-01-13T08:46:13Z","updated_at":"2026-01-13T08:46:13Z","provider":"file","refresh_interval":60,"url":"://:***@","cacertfile":null,"certificates":[{"name":"1.pem","content":"TEST_TRUST_STORE_CERT"},{"name":"2.pem","content":"TEST_TRUST_STORE_CERT_2"}]}'
+        body: '{"id":"505eb21a-5f0c-4d92-b374-0c796d33e87b","created_at":"2026-01-28T14:59:53Z","updated_at":"2026-01-28T14:59:53Z","provider":"file","refresh_interval":60,"certificates":[{"name":"client1.pem","content":"TEST_TRUST_STORE_CERT"},{"name":"client2.pem","content":"TEST_TRUST_STORE_CERT_2"}]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "4707"
+                - "4690"
             Content-Type:
                 - application/json
             Nel:
@@ -204,23 +204,23 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 13c34b5f-a879-4fd1-91c7-60dc7f5a1c00
+                - 4c8d9def-a98b-4642-9ac1-59c6e59a4fab
         status: 200 OK
         code: 200
-        duration: 17.880238ms
+        duration: 21.950309ms
     - id: 4
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 4509
+        content_length: 4575
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"provider":"file","refresh_interval":60,"certificates":["TEST_TRUST_STORE_CERT","TEST_TRUST_STORE_CERT_2"]}
+            {"provider":"file","refresh_interval":60,"certificates":[{"name":"client1.pem","content":"TEST_TRUST_STORE_CERT"},{"name":"client2.pem","content":"TEST_TRUST_STORE_CERT_2"}]}
         form: {}
         headers:
             Authorization:
@@ -229,7 +229,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/922/trust-store-configuration
+        url: http://localhost:9393/api/instances/945/trust-store-configuration
         method: PUT
       response:
         proto: HTTP/1.1
@@ -239,7 +239,7 @@ interactions:
         trailer: {}
         content_length: 49
         uncompressed: false
-        body: '{"job_id":"f3a8d569-cc0a-425f-af1e-8810a64d54c8"}'
+        body: '{"job_id":"18ad3e33-c715-484d-b820-85e0e72bd1d6"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -258,10 +258,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - fb674ced-c382-47be-8f14-c2c0935bcb7a
+                - 5ca51d5e-b869-4e78-ba61-6cddef8650e0
         status: 200 OK
         code: 200
-        duration: 41.432913ms
+        duration: 44.059834ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -280,7 +280,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/922/jobs/f3a8d569-cc0a-425f-af1e-8810a64d54c8
+        url: http://localhost:9393/api/instances/945/jobs/18ad3e33-c715-484d-b820-85e0e72bd1d6
         method: GET
       response:
         proto: HTTP/1.1
@@ -290,7 +290,7 @@ interactions:
         trailer: {}
         content_length: 335
         uncompressed: false
-        body: '{"id":"f3a8d569-cc0a-425f-af1e-8810a64d54c8","account_id":"fd81f899-015f-412f-b991-754bd0e098c0","resource_type":"trust_store_configuration","resource_id":"1e0c5e3e-8910-402e-864a-b40c3c729850","resource_action":"update","status":"completed","created_at":"2026-01-13T08:46:15Z","updated_at":"2026-01-13T08:46:22Z","error_message":null}'
+        body: '{"id":"18ad3e33-c715-484d-b820-85e0e72bd1d6","account_id":"d120f329-5b47-4b61-9ed4-900a7beb3e2b","resource_type":"trust_store_configuration","resource_id":"505eb21a-5f0c-4d92-b374-0c796d33e87b","resource_action":"update","status":"completed","created_at":"2026-01-28T14:59:55Z","updated_at":"2026-01-28T15:00:04Z","error_message":null}'
         headers:
             Cache-Control:
                 - no-cache
@@ -309,10 +309,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - afb4e22a-da48-40d2-830e-5fe1813316cf
+                - fee71280-0926-4d6e-b828-ae7f9eef05d9
         status: 200 OK
         code: 200
-        duration: 26.183735ms
+        duration: 27.614975ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -331,7 +331,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/922/trust-store-configuration
+        url: http://localhost:9393/api/instances/945/trust-store-configuration
         method: GET
       response:
         proto: HTTP/1.1
@@ -339,14 +339,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 4707
+        content_length: 4690
         uncompressed: false
-        body: '{"id":"1e0c5e3e-8910-402e-864a-b40c3c729850","created_at":"2026-01-13T08:46:13Z","updated_at":"2026-01-13T08:46:22Z","provider":"file","refresh_interval":60,"url":"://:***@","cacertfile":null,"certificates":[{"name":"1.pem","content":"TEST_TRUST_STORE_CERT"},{"name":"2.pem","content":"TEST_TRUST_STORE_CERT_2"}]}'
+        body: '{"id":"505eb21a-5f0c-4d92-b374-0c796d33e87b","created_at":"2026-01-28T14:59:53Z","updated_at":"2026-01-28T14:59:53Z","provider":"file","refresh_interval":60,"certificates":[{"name":"client1.pem","content":"TEST_TRUST_STORE_CERT"},{"name":"client2.pem","content":"TEST_TRUST_STORE_CERT_2"}]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "4707"
+                - "4690"
             Content-Type:
                 - application/json
             Nel:
@@ -360,10 +360,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 11e40ecb-bcea-4f3b-8939-c70cbcfc2dde
+                - 358be0a4-0462-4448-947d-4dce35de1a2e
         status: 200 OK
         code: 200
-        duration: 17.479884ms
+        duration: 21.821849ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -382,7 +382,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/922/trust-store-configuration
+        url: http://localhost:9393/api/instances/945/trust-store-configuration
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -392,7 +392,7 @@ interactions:
         trailer: {}
         content_length: 49
         uncompressed: false
-        body: '{"job_id":"57f2b05b-5fbf-4255-bec2-1880d8114ca6"}'
+        body: '{"job_id":"8a71a68c-2191-4c86-8fb5-951b3c5b2e6a"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -411,10 +411,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 3e74c8ee-fa81-46a6-ac04-d29ccf543fc1
+                - b628caab-1c0f-45bb-94a2-d4b16356559a
         status: 200 OK
         code: 200
-        duration: 35.695179ms
+        duration: 41.374609ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -433,7 +433,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/922/jobs/57f2b05b-5fbf-4255-bec2-1880d8114ca6
+        url: http://localhost:9393/api/instances/945/jobs/8a71a68c-2191-4c86-8fb5-951b3c5b2e6a
         method: GET
       response:
         proto: HTTP/1.1
@@ -443,7 +443,7 @@ interactions:
         trailer: {}
         content_length: 335
         uncompressed: false
-        body: '{"id":"57f2b05b-5fbf-4255-bec2-1880d8114ca6","account_id":"fd81f899-015f-412f-b991-754bd0e098c0","resource_type":"trust_store_configuration","resource_id":"1e0c5e3e-8910-402e-864a-b40c3c729850","resource_action":"delete","status":"completed","created_at":"2026-01-13T08:46:25Z","updated_at":"2026-01-13T08:46:32Z","error_message":null}'
+        body: '{"id":"8a71a68c-2191-4c86-8fb5-951b3c5b2e6a","account_id":"d120f329-5b47-4b61-9ed4-900a7beb3e2b","resource_type":"trust_store_configuration","resource_id":"505eb21a-5f0c-4d92-b374-0c796d33e87b","resource_action":"delete","status":"completed","created_at":"2026-01-28T15:00:05Z","updated_at":"2026-01-28T15:00:12Z","error_message":null}'
         headers:
             Cache-Control:
                 - no-cache
@@ -462,7 +462,7 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - aec0c254-6ad9-4a55-a3ca-c53f188f1e2d
+                - b19cb610-ef38-4825-b737-f477c84cd8a1
         status: 200 OK
         code: 200
-        duration: 28.794488ms
+        duration: 24.907726ms
