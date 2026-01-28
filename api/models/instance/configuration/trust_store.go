@@ -25,8 +25,5 @@ func (u TrustStoreRequest) Sanitized() TrustStoreRequest {
 	if sanitized.CACert != "" {
 		sanitized.CACert = "***"
 	}
-	if sanitized.Certificates != nil {
-		sanitized.Certificates = &[]string{"***"}
-	}
 	return sanitized
 }
