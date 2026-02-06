@@ -7,7 +7,19 @@ description: |-
 
 # cloudamqp_trust_store
 
-This resource allows you to configure a trust store for your RabbitMQ instance. The trust store enables RabbitMQ to fetch and use CA certificates from an external source for validating client certificates.
+This resource allows you to configure a trust store for your RabbitMQ broker. The trust store
+enables RabbitMQ to fetch and use CA certificates from an external source for validating client
+certificates, or upload multiple leaf certificates as an allow list.
+
+The `http.cacert` and `file.certificates` fields use **WriteOnly**, meaning no information is
+present in plan phase, logs or stored in the state for security purposes. To update these fields,
+increment either the `version` or update the `key_id` attribute.
+
+-> **Note:** Updates to write-only fields (`http.cacert` or `file.certificates`) are only applied
+when `version` is incremented or `key_id` is changed. This design allows you to manage certificate
+rotation explicitly.
+
+-> **Note:** After the trust store has been added, a restart of RabbitMQ is required for the changes to take effect.
 
 Only available for dedicated subscription plans running ***RabbitMQ***.
 
@@ -16,7 +28,7 @@ Only available for dedicated subscription plans running ***RabbitMQ***.
 <details>
   <summary>
     <b>
-      <i>Basic trust store configuration</i>
+      <i>Trust store configuration with HTTP provider</i>
     </b>
   </summary>
 
@@ -35,17 +47,19 @@ resource "cloudamqp_trust_store" "trust_store" {
 <details>
   <summary>
     <b>
-      <i>Trust store with CA certificate</i>
+      <i>Trust store with HTTP provider and CA certificate</i>
     </b>
   </summary>
 
 ```hcl
 resource "cloudamqp_trust_store" "trust_store" {
   instance_id = cloudamqp_instance.instance.id
+
   http {
     url    = "https://example.com/trust-store-certs"
     cacert = file("${path.module}/certs/ca.pem")
   }
+
   refresh_interval = 30
   version          = 1
 }
@@ -56,19 +70,89 @@ resource "cloudamqp_trust_store" "trust_store" {
 <details>
   <summary>
     <b>
-      <i>Trust store with custom sleep and timeout</i>
+      <i>Trust store with file provider</i>
     </b>
   </summary>
 
 ```hcl
 resource "cloudamqp_trust_store" "trust_store" {
   instance_id = cloudamqp_instance.instance.id
-  http {
-    url = "https://example.com/trust-store-certs"
+
+  file {
+    certificates {
+      name    = "client1.pem"
+      content = file("${path.module}/certs/client1.pem")
+    }
+
+    certificates {
+      name    = "client2.pem"
+      content = file("${path.module}/certs/client2.pem")
+    }
   }
-  refresh_interval = 60
-  sleep            = 30
-  timeout          = 3600
+
+  refresh_interval = 30
+  version          = 1
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>Certificate rotation with version management</i>
+    </b>
+  </summary>
+
+Example of incrementing version to trigger update of write-only certificate fields.
+
+```hcl
+locals {
+  cert_version = 2  # Increment this to update certificates
+}
+
+resource "cloudamqp_trust_store" "trust_store" {
+  instance_id = cloudamqp_instance.instance.id
+
+  http {
+    url    = "https://example.com/trust-store-certs"
+    cacert = file("${path.module}/certs/ca-${local.cert_version}.pem")
+  }
+
+  refresh_interval = 30
+  version          = local.cert_version
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>Certificate rotation with key identifier</i>
+    </b>
+  </summary>
+
+Example of using key_id to trigger update of write-only certificate fields. Useful when
+integrating with external key management systems like Azure Key Vault.
+
+```hcl
+locals {
+  cert_key_id = "a918beb8-fee4-4de1-b0d5-873e2cb0eba2"
+}
+
+resource "cloudamqp_trust_store" "trust_store" {
+  instance_id = cloudamqp_instance.instance.id
+
+  file {
+    certificates {
+      name    = "client.pem"
+      content = file("${path.module}/certs/client-${local.cert_key_id}.pem")
+    }
+  }
+
+  refresh_interval = 30
+  key_id           = local.cert_key_id
 }
 ```
 
@@ -78,25 +162,41 @@ resource "cloudamqp_trust_store" "trust_store" {
 
 The following arguments are supported:
 
-* `instance_id`      - (Required) The CloudAMQP instance ID.
-* `http`             - (Required) HTTP trust store configuration block. See [HTTP Block](#http-block) below.
-* `refresh_interval` - (Optional/Computed) Interval in seconds to refresh the trust store certificates. Defaults to 30 seconds.
-                       Defaults to 30 seconds.
-* `version`          - (Optional/Computed) Version of write-only certificates. Increment this value to force an update of write-only fields like `cacert`. Defaults to 1.
-* `sleep`            - (Optional/Computed) Configurable sleep time in seconds between retries for
-                       trust store operations. Defaults to 10 seconds.
-* `timeout`          - (Optional/Computed) Configurable timeout time in seconds for trust store
-                       operations. Defaults to 1800 seconds (30 minutes).
+* `instance_id` - (Required) The CloudAMQP instance identifier.
+* `http` - (Optional*) HTTP trust store configuration block. See [HTTP Block](#http-block) below.
+* `file` - (Optional*) File trust store configuration block. See [File Block](#file-block) below.
+* `refresh_interval` - (Optional/Computed) Interval in seconds for RabbitMQ to refresh the trust
+                       store certificates (default: 30).
+* `version` - (Optional/Computed) An integer to trigger updates of write-only certificate fields.
+              Increment this value to apply changes to ***http.cacert*** or ***file.certificates*** (default: 1).
+* `key_id` - (Optional/Computed) A string identifier to trigger updates of write-only certificate fields.
+              Change this value to apply changes to ***http.cacert*** or ***file.certificates*** (default: "").
+* `sleep`   - (Optional/Computed) Configurable sleep time in seconds between retries for trust store
+              operations (default: 10).
+* `timeout` - (Optional/Computed) Configurable timeout time in seconds for trust store operations
+              (default: 1800).
+
+***Note:*** Either `http` or `file` configuration block must be specified, but not both.
 
 ### HTTP Block
 
 The `http` block supports:
 
-* `url`    - (Required) URL to fetch trust store certificates from. RabbitMQ will periodically
-             fetch CA certificates from this URL.
-* `cacert` - (Optional) PEM encoded CA certificates used to verify the HTTPS connection to the
-             trust store URL. This is a write-only field - changes are only applied when `version`
-             is incremented.
+* `url`    - (Required) URL to fetch trust store certificates from. RabbitMQ will periodically fetch
+             CA certificates from this URL according to the `refresh_interval`.
+* `cacert` - (Optional/WriteOnly) PEM-encoded CA certificates used to verify the HTTPS connection to
+             the trust store URL. Updates require incrementing `version` or changing `key_id`.
+
+### File Block
+
+The `file` block supports:
+
+* `certificates` - (Required/WriteOnly) A list of certificate blocks (1-100 certificates). Each
+                   certificate block contains:
+  * `name` - (Required) A unique identifier for the certificate.
+  * `content` - (Required/WriteOnly) PEM-encoded x.509 formatted leaf certificate content.
+
+  Updates require incrementing `version` or changing `key_id`.
 
 ## Attributes Reference
 
@@ -111,6 +211,9 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 ## Import
 
 `cloudamqp_trust_store` can be imported using the CloudAMQP instance identifier.
+
+-> **Note:** Import will read the current trust store configuration but cannot retrieve write-only
+fields (`http.cacert` or `file.certificates`). You'll need to set these in your configuration.
 
 From Terraform v1.5.0, the `import` block can be used to import this resource:
 
@@ -132,8 +235,12 @@ Or use Terraform CLI:
   The resource will poll for job completion using the configured `sleep` and `timeout` values.
 * Only one trust store configuration can exist per instance. Creating a new configuration will
   replace any existing configuration.
-* The `cacert` field is write-only. To update the CA certificate, increment the `version` attribute. This triggers RabbitMQ to re-apply the certificate.
 * RabbitMQ will periodically fetch certificates from the configured URL according to the
   `refresh_interval` setting.
 * The trust store is useful for dynamic certificate management where CA certificates may be
   rotated or updated externally.
+* Either use `http` or `file` configuration block.
+* The `http.cacert` field is write-only. To update the CA certificate, increment the `version` or
+  change `key_id` attributes. This triggers the provider to re-apply the certificate.
+* The `file.certificates` field is write-only. To update the allow list with certificates, increment
+  the `version` or change `key_id` attributes. This triggers the provider to re-apply the certificates.

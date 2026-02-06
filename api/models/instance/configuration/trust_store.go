@@ -1,9 +1,16 @@
 package configuration
 
 type TrustStoreRequest struct {
-	RefreshInterval int64  `json:"refresh_interval"`
-	Url             string `json:"url"`
-	CACert          string `json:"cacertfile,omitempty"`
+	Provider        string                          `json:"provider"`
+	RefreshInterval int64                           `json:"refresh_interval"`
+	Url             string                          `json:"url,omitempty"`
+	CACert          string                          `json:"cacertfile,omitempty"`
+	Certificates    *[]TrustStoreCertificateRequest `json:"certificates,omitempty"`
+}
+
+type TrustStoreCertificateRequest struct {
+	Name    string `json:"name"`
+	Content string `json:"content"`
 }
 
 type TrustStoreResponse struct {
