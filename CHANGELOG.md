@@ -1,3 +1,16 @@
+## 1.42.0 (Unreleased)
+
+FEATURES:
+
+* Resource: Added support for file provider in `cloudamqp_trust_store` ([#446])
+
+DEPENDENCIES:
+
+* Bumped github.com/hashicorp/terraform-plugin-sdk/v2 from 2.38.1 to 2.38.2 ([#449])
+
+[#446]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/446
+[#449]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/449
+
 ## 1.41.1 (12 Jan, 2026)
 
 IMPROVEMENTS:
@@ -38,7 +51,7 @@ IMPROVEMENTS:
 
 DEPENDENCIES:
 
-* Bump github.com/hashicorp/terraform-plugin-framework from 1.16.1 to 1.17.0 ([#435])
+* Bumped github.com/hashicorp/terraform-plugin-framework from 1.16.1 to 1.17.0 ([#435])
 
 [#435]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/435
 [#437]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/437
@@ -69,9 +82,9 @@ IMPROVEMENTS:
 
 DEPENDENCIES:
 
-* Bump github.com/hashicorp/terraform-plugin-log from 0.9.0 to 0.10.0 ([#424])
-* Bump golang.org/x/crypto from 0.42.0 to 0.45.0 ([#426])
-* Bump actions/checkout from 5 to 6 ([#427])
+* Bumped github.com/hashicorp/terraform-plugin-log from 0.9.0 to 0.10.0 ([#424])
+* Bumped golang.org/x/crypto from 0.42.0 to 0.45.0 ([#426])
+* Bumped actions/checkout from 5 to 6 ([#427])
 
 [#421]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/421
 [#422]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/422
@@ -98,7 +111,7 @@ IMPROVEMENTS:
 
 DEPENDENCIES:
 
-* Bump actions/setup-go from 5 to 6 ([#369])
+* Bumped actions/setup-go from 5 to 6 ([#369])
 
 [#369]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/369
 [#417]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/417
@@ -140,7 +153,7 @@ BUG FIXES:
 
 DEPENDENCIES:
 
-* Bump github.com/hashicorp/terraform-plugin-framework-validators from 0.18.0 to 0.19.0 ([#396])
+* Bumped github.com/hashicorp/terraform-plugin-framework-validators from 0.18.0 to 0.19.0 ([#396])
 
 [#379]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/379
 [#381]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/381
@@ -180,9 +193,9 @@ IMPROVEMENTS:
 
 DEPENDENCIES:
 
-* Bump github.com/hashicorp/terraform-plugin-mux from 0.20.0 to 0.21.0 ([#373])
-* Bump github.com/hashicorp/terraform-plugin-sdk/v2 from 2.37.0 to 2.38.1 ([#375], [#378])
-* Bump github.com/hashicorp/terraform-plugin-framework from 1.15.1 to 1.16.1 ([#376], [#382])
+* Bumped github.com/hashicorp/terraform-plugin-mux from 0.20.0 to 0.21.0 ([#373])
+* Bumped github.com/hashicorp/terraform-plugin-sdk/v2 from 2.37.0 to 2.38.1 ([#375], [#378])
+* Bumped github.com/hashicorp/terraform-plugin-framework from 1.15.1 to 1.16.1 ([#376], [#382])
 
 [#362]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/362
 [#363]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/363
@@ -214,9 +227,9 @@ IMPROVEMENTS:
 
 DEPENDENCIES:
 
-* Bump github.com/hashicorp/terraform-plugin-framework from 1.15.0 to 1.15.1 ([#355])
-* Bump actions/checkout from 4 to 5 ([#357])
-* Bump goreleaser/goreleaser-action from 6.3.0 to 6.4.0 ([#358])
+* Bumped github.com/hashicorp/terraform-plugin-framework from 1.15.0 to 1.15.1 ([#355])
+* Bumped actions/checkout from 4 to 5 ([#357])
+* Bumped goreleaser/goreleaser-action from 6.3.0 to 6.4.0 ([#358])
 
 [#351]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/351
 [#355]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/355
@@ -249,7 +262,7 @@ FEATURES:
 
 DEPENDENCIES:
 
-* Bump github.com/cloudflare/circl from 1.6.0 to 1.6.1 ([#342])
+* Bumped github.com/cloudflare/circl from 1.6.0 to 1.6.1 ([#342])
 
 [#342]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/342
 [#344]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/344
@@ -265,7 +278,7 @@ FEATURES:
 
 DEPENDENCIES:
 
-* Bump golang.org/x/net from 0.36.0 to 0.38.0 ([#338])
+* Bumped golang.org/x/net from 0.36.0 to 0.38.0 ([#338])
 
 [#335]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/335
 [#338]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/338
@@ -292,10 +305,10 @@ IMPROVEMENTS:
 
 DEPENDENCIES:
 
-* Bump Go version to 1.24
-* Bump golang.org/x/net from 0.34.0 to 0.36.0 ([#325])
-* Bump crazy-max/ghaction-import-gpg from 6.2.0 to 6.3.0 ([#332])
-* Bump goreleaser/goreleaser-action from 6.2.1 to 6.3.0 ([#333])
+* Bumped Go version to 1.24
+* Bumped golang.org/x/net from 0.34.0 to 0.36.0 ([#325])
+* Bumped crazy-max/ghaction-import-gpg from 6.2.0 to 6.3.0 ([#332])
+* Bumped goreleaser/goreleaser-action from 6.2.1 to 6.3.0 ([#333])
 
 [#325]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/325
 [#326]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/326
@@ -618,9 +631,9 @@ FEATURES:
 
 DEPENDENCIES:
 
-* Bump github.com/hashicorp/go-getter from 1.6.1 to 1.7.0 ([#187])
-* Bump golang.org/x/net from 0.0.0-20210326060303-6b1517762897 to 0.7.0 ([#190])
-* Bump golang.org/x/crypto from 0.0.0-20210921155107-089bfa567519 to 0.1.0 ([#191])
+* Bumped github.com/hashicorp/go-getter from 1.6.1 to 1.7.0 ([#187])
+* Bumped golang.org/x/net from 0.0.0-20210326060303-6b1517762897 to 0.7.0 ([#190])
+* Bumped golang.org/x/crypto from 0.0.0-20210921155107-089bfa567519 to 0.1.0 ([#191])
 
 [#187]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/187
 [#190]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/190
