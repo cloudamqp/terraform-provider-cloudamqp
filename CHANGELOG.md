@@ -1,4 +1,4 @@
-## 1.42.0 (Unreleased)
+## 1.42.0 (06 Feb, 2026)
 
 FEATURES:
 
