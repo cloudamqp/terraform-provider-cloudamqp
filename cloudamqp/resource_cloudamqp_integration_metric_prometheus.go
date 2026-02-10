@@ -348,22 +348,20 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		return diag.Errorf("no integration configuration provided")
 	}
 
+	if metricsFilter := d.Get("metrics_filter").([]any); len(metricsFilter) > 0 {
+		filters := make([]string, len(metricsFilter))
+		for i, v := range metricsFilter {
+			filters[i] = v.(string)
+		}
+		params["metrics_filter"] = filters
+	}
+
 	data, err := api.CreateIntegration(ctx, d.Get("instance_id").(int), "metrics", intName, params)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 	if data["id"] != nil {
 		d.SetId(data["id"].(string))
-	}
-
-	if metricsFilter := d.Get("metrics_filter").([]any); len(metricsFilter) > 0 {
-		filters := make([]string, len(metricsFilter))
-		for i, v := range metricsFilter {
-			filters[i] = v.(string)
-		}
-		if err := api.UpdateMetricsFilter(ctx, d.Get("instance_id").(int), d.Id(), filters); err != nil {
-			return diag.FromErr(err)
-		}
 	}
 
 	return resourceIntegrationMetricPrometheusRead(ctx, d, meta)
@@ -621,20 +619,18 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 		}
 	}
 
-	err := api.UpdateIntegration(ctx, d.Get("instance_id").(int), "metrics", d.Id(), params)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
 	if d.HasChange("metrics_filter") {
 		metricsFilter := d.Get("metrics_filter").([]any)
 		filters := make([]string, len(metricsFilter))
 		for i, v := range metricsFilter {
 			filters[i] = v.(string)
 		}
-		if err := api.UpdateMetricsFilter(ctx, d.Get("instance_id").(int), d.Id(), filters); err != nil {
-			return diag.FromErr(err)
-		}
+		params["metrics_filter"] = filters
+	}
+
+	err := api.UpdateIntegration(ctx, d.Get("instance_id").(int), "metrics", d.Id(), params)
+	if err != nil {
+		return diag.FromErr(err)
 	}
 
 	return resourceIntegrationMetricPrometheusRead(ctx, d, meta)
