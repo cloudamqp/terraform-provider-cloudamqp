@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -20,20 +19,24 @@ func (api *API) EnablePlugin(ctx context.Context, instanceID int, pluginName str
 	)
 
 	params["plugin_name"] = pluginName
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d timeout=%d ", path, sleep, timeout),
-		params)
-	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(nil, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d timeout=%d", path, sleep, timeout), params)
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	err := api.callWithRetry(timeoutCtx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
+		functionName: "EnablePlugin",
+		resourceName: "Plugin",
+		attempt:      1,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	switch response.StatusCode {
-	case 204:
-		return api.waitUntilPluginChanged(ctx, instanceID, pluginName, true, 1, sleep, timeout)
-	default:
-		return nil, fmt.Errorf("failed to enable/disable plugin, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	return api.waitUntilPluginChanged(ctx, instanceID, pluginName, true, 1, sleep, timeout)
 }
 
 // ReadPlugin: reads a specific plugin from an instance.
@@ -59,55 +62,30 @@ func (api *API) ReadPlugin(ctx context.Context, instanceID int, pluginName strin
 func (api *API) ListPlugins(ctx context.Context, instanceID, sleep, timeout int) (
 	[]map[string]any, error) {
 
-	path := fmt.Sprintf("/api/instances/%d/plugins", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d ", path, sleep, timeout))
-	return api.listPluginsWithRetry(ctx, path, 1, sleep, timeout)
-}
-
-// listPluginsWithRetry: list plugins from an instance, with retry if backend is busy.
-func (api *API) listPluginsWithRetry(ctx context.Context, path string, attempt, sleep,
-	timeout int) ([]map[string]any, error) {
-
 	var (
 		data   []map[string]any
 		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%d/plugins", instanceID)
 	)
 
-	response, err := api.sling.New().Get(path).Receive(&data, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d", path, sleep, timeout))
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	err := api.callWithRetry(timeoutCtx, api.sling.New().Get(path), retryRequest{
+		functionName: "ListPlugins",
+		resourceName: "Plugin",
+		attempt:      1,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
-	} else if attempt*sleep > timeout {
-		return nil, fmt.Errorf("timeout reached after %d seconds, while reading plugins", timeout)
 	}
 
-	switch response.StatusCode {
-	case 200:
-		return data, nil
-	case 400:
-		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
-			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
-				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
-			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.listPluginsWithRetry(ctx, path, attempt, sleep, timeout)
-		}
-	case 404:
-		// Instance not found - likely manually deleted
-		tflog.Debug(ctx, fmt.Sprintf("instance not found (404), likely manually deleted: %s", path))
-		return nil, fmt.Errorf("instance not found, status=404 message=%s", failed)
-	case 423:
-		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.listPluginsWithRetry(ctx, path, attempt, sleep, timeout)
-	case 503:
-		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.listPluginsWithRetry(ctx, path, attempt, sleep, timeout)
-	}
-	return nil, fmt.Errorf("failed to list plugins, status=%d message=%s ",
-		response.StatusCode, failed)
+	return data, nil
 }
 
 // UpdatePlugin: updates a plugin from an instance.
@@ -122,20 +100,24 @@ func (api *API) UpdatePlugin(ctx context.Context, instanceID int, pluginName str
 
 	params["plugin_name"] = pluginName
 	params["enabled"] = enabled
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d timeout=%d ", path, sleep, timeout),
-		params)
-	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d timeout=%d", path, sleep, timeout), params)
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	err := api.callWithRetry(timeoutCtx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
+		functionName: "UpdatePlugin",
+		resourceName: "Plugin",
+		attempt:      1,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	switch response.StatusCode {
-	case 204:
-		return api.waitUntilPluginChanged(ctx, instanceID, pluginName, enabled, 1, sleep, timeout)
-	default:
-		return nil, fmt.Errorf("failed to update plugin, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	return api.waitUntilPluginChanged(ctx, instanceID, pluginName, enabled, 1, sleep, timeout)
 }
 
 // DisablePlugin: disables a plugin from an instance.
@@ -147,19 +129,24 @@ func (api *API) DisablePlugin(ctx context.Context, instanceID int, pluginName st
 		path   = fmt.Sprintf("/api/instances/%d/plugins/%s?async=true", instanceID, pluginName)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d ", path, sleep, timeout))
-	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d", path, sleep, timeout))
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	err := api.callWithRetry(timeoutCtx, api.sling.New().Delete(path), retryRequest{
+		functionName: "DisablePlugin",
+		resourceName: "Plugin",
+		attempt:      1,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	switch response.StatusCode {
-	case 204:
-		return api.waitUntilPluginChanged(ctx, instanceID, pluginName, false, 1, sleep, timeout)
-	default:
-		return nil, fmt.Errorf("failed to disable plugin, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	return api.waitUntilPluginChanged(ctx, instanceID, pluginName, false, 1, sleep, timeout)
 }
 
 // DeletePlugin: deletes a plugin from an instance.
@@ -171,23 +158,25 @@ func (api *API) DeletePlugin(ctx context.Context, instanceID int, pluginName str
 		path   = fmt.Sprintf("/api/instances/%d/plugins/%s?async=true", instanceID, pluginName)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d ", path, sleep, timeout))
-	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d", path, sleep, timeout))
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	err := api.callWithRetry(timeoutCtx, api.sling.New().Delete(path), retryRequest{
+		functionName: "DeletePlugin",
+		resourceName: "Plugin",
+		attempt:      1,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 	if err != nil {
 		return err
 	}
 
-	switch response.StatusCode {
-	case 204:
-		_, err = api.waitUntilPluginChanged(ctx, instanceID, pluginName, false, 1, sleep, timeout)
-		return err
-	case 404:
-		// Instance not found - likely manually deleted
-		tflog.Debug(ctx, fmt.Sprintf("instance not found (404) during plugin deletion: %s", path))
-		return fmt.Errorf("instance not found, status=404 message=%s", failed)
-	default:
-		return fmt.Errorf("failed to delete plugin, status=%d message=%s ", response.StatusCode, failed)
-	}
+	_, err = api.waitUntilPluginChanged(ctx, instanceID, pluginName, false, 1, sleep, timeout)
+	return err
 }
 
 // waitUntilPluginChanged: wait until plugin changed.

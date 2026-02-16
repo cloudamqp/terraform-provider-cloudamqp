@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -14,8 +13,8 @@ func (api *API) waitForGcpPeeringStatus(ctx context.Context, path, peerID string
 	attempt, sleep, timeout int) error {
 
 	var (
-		data map[string]any
-		err  error
+		data   map[string]any
+		failed map[string]any
 	)
 
 	tflog.Debug(ctx, "waiting for VPC peering status")
@@ -25,9 +24,14 @@ func (api *API) waitForGcpPeeringStatus(ctx context.Context, path, peerID string
 				timeout)
 		}
 
-		attempt, data, err = api.readVpcGcpPeeringWithRetry(ctx, path, attempt, sleep, timeout)
+		response, err := api.sling.New().Get(path).Receive(&data, &failed)
 		if err != nil {
 			return err
+		}
+
+		if response.StatusCode != 200 {
+			return fmt.Errorf("failed to read VPC peering status, status=%d message=%s",
+				response.StatusCode, failed)
 		}
 
 		rows := data["rows"].([]any)
@@ -42,7 +46,7 @@ func (api *API) waitForGcpPeeringStatus(ctx context.Context, path, peerID string
 				}
 			}
 		}
-		tflog.Debug(ctx, fmt.Sprintf("waiting for state set to ACTIVE, attemp=%d until_timeout=%d ",
+		tflog.Debug(ctx, fmt.Sprintf("waiting for state set to ACTIVE, attemp=%d until_timeout=%d",
 			attempt, (timeout-(attempt*sleep))))
 		attempt++
 		time.Sleep(time.Duration(sleep) * time.Second)
@@ -53,18 +57,33 @@ func (api *API) waitForGcpPeeringStatus(ctx context.Context, path, peerID string
 func (api *API) RequestVpcGcpPeering(ctx context.Context, instanceID int, params map[string]any,
 	waitOnStatus bool, sleep, timeout int) (map[string]any, error) {
 
-	path := fmt.Sprintf("api/instances/%d/vpc-peering", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s wait_on_status=%t sleep=%d timeout=%d ",
+	var (
+		data   map[string]any
+		failed map[string]any
+		path   = fmt.Sprintf("api/instances/%d/vpc-peering", instanceID)
+	)
+
+	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s wait_on_status=%t sleep=%d timeout=%d",
 		path, waitOnStatus, sleep, timeout), params)
-	attempt, data, err := api.requestVpcGcpPeeringWithRetry(ctx, path, params, waitOnStatus, 1, sleep,
-		timeout)
+	err := api.callWithRetry(ctxTimeout, api.sling.New().Post(path).BodyJSON(params), retryRequest{
+		functionName:    "RequestVpcGcpPeering",
+		resourceName:    "VPC GCP Peering",
+		attempt:         1,
+		sleep:           time.Duration(sleep) * time.Second,
+		data:            &data,
+		failed:          &failed,
+		customRetryCode: 400,
+	})
 	if err != nil {
 		return nil, err
 	}
 
 	if waitOnStatus {
 		tflog.Debug(ctx, "waiting for active state")
-		err = api.waitForGcpPeeringStatus(ctx, path, data["peering"].(string), attempt, sleep, timeout)
+		err = api.waitForGcpPeeringStatus(ctx, path, data["peering"].(string), 1, sleep, timeout)
 		if err != nil {
 			return nil, err
 		}
@@ -73,115 +92,38 @@ func (api *API) RequestVpcGcpPeering(ctx context.Context, instanceID int, params
 	return data, nil
 }
 
-// requestVpcGcpPeeringWithRetry: requests a VPC peering from a path with retry logic
-func (api *API) requestVpcGcpPeeringWithRetry(ctx context.Context, path string, params map[string]any,
-	waitOnStatus bool, attempt, sleep, timeout int) (int, map[string]any, error) {
-
-	var (
-		data   map[string]any
-		failed map[string]any
-	)
-
-	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
-	if err != nil {
-		return attempt, nil, err
-	} else if attempt*sleep > timeout {
-		return attempt, nil, fmt.Errorf("timeout reached after %d seconds, while requesting VPC "+
-			"peering", timeout)
-	}
-
-	switch response.StatusCode {
-	case 200:
-		return attempt, data, nil
-	case 400:
-		if strings.Contains(failed["error"].(string), "Timeout talking to backend") {
-			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
-				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
-			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.requestVpcGcpPeeringWithRetry(ctx, path, params, waitOnStatus, attempt, sleep,
-				timeout)
-		} else if strings.Contains(failed["error"].(string), "firewall rules that have not finished configuring yet") {
-			tflog.Debug(ctx, fmt.Sprintf("firewall rules not finished configuring yet, will try again, "+
-				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
-			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.requestVpcGcpPeeringWithRetry(ctx, path, params, waitOnStatus, attempt, sleep,
-				timeout)
-		} else if strings.Contains(failed["error"].(string), "peering operation in progress") {
-			tflog.Debug(ctx, fmt.Sprintf("another peering operation in progress, will try again, "+
-				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
-			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.requestVpcGcpPeeringWithRetry(ctx, path, params, waitOnStatus, attempt, sleep,
-				timeout)
-		}
-	case 423:
-		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.requestVpcGcpPeeringWithRetry(ctx, path, params, waitOnStatus, attempt, sleep, timeout)
-	case 503:
-		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.requestVpcGcpPeeringWithRetry(ctx, path, params, waitOnStatus, attempt, sleep, timeout)
-	}
-	return attempt, nil, fmt.Errorf("failed to request VPC peering, status=%d message=%s ",
-		response.StatusCode, failed)
-}
-
 // ReadVpcGcpPeering: reads the VPC peering from the API
 func (api *API) ReadVpcGcpPeering(ctx context.Context, instanceID, sleep, timeout int) (
 	map[string]any, error) {
 
-	path := fmt.Sprintf("/api/instances/%v/vpc-peering", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d ", path, sleep, timeout))
-	_, data, err := api.readVpcGcpPeeringWithRetry(ctx, path, 1, sleep, timeout)
-	return data, err
-}
-
-// readVpcGcpPeeringWithRetry: reads the VPC peering from the API with retry logic
-func (api *API) readVpcGcpPeeringWithRetry(ctx context.Context, path string, attempt, sleep,
-	timeout int) (int, map[string]any, error) {
-
 	var (
 		data   map[string]any
 		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%v/vpc-peering", instanceID)
 	)
 
-	response, err := api.sling.New().Get(path).Receive(&data, &failed)
+	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d", path, sleep, timeout))
+	err := api.callWithRetry(ctxTimeout, api.sling.New().Get(path), retryRequest{
+		functionName:    "ReadVpcGcpPeering",
+		resourceName:    "VPC GCP Peering",
+		attempt:         1,
+		sleep:           time.Duration(sleep) * time.Second,
+		data:            &data,
+		failed:          &failed,
+		customRetryCode: 400,
+	})
 	if err != nil {
-		return attempt, nil, err
-	} else if attempt*sleep > timeout {
-		return attempt, nil, fmt.Errorf("timeout reached after %d seconds, while reading VPC peering",
-			timeout)
+		return nil, err
 	}
 
-	switch response.StatusCode {
-	case 200:
-		return attempt, data, nil
-	case 400:
-		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
-			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
-				"attempt=%d until_timeout=%d", attempt, (timeout-(attempt*sleep))))
-			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.readVpcGcpPeeringWithRetry(ctx, path, attempt, sleep, timeout)
-		}
-	case 423:
-		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.readVpcGcpPeeringWithRetry(ctx, path, attempt, sleep, timeout)
-	case 503:
-		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.readVpcGcpPeeringWithRetry(ctx, path, attempt, sleep, timeout)
+	if len(data) == 0 {
+		return nil, nil
 	}
-	return attempt, nil, fmt.Errorf("failed to read VPC peering, status=%d message=%s ",
-		response.StatusCode, failed)
+
+	return data, nil
 }
 
 // UpdateVpcGcpPeering: updates a VPC peering from an instance.
@@ -196,101 +138,61 @@ func (api *API) UpdateVpcGcpPeering(ctx context.Context, instanceID int, sleep, 
 func (api *API) RemoveVpcGcpPeering(ctx context.Context, instanceID int, peerID string, sleep,
 	timeout int) error {
 
-	path := fmt.Sprintf("/api/instances/%d/vpc-peering/%s", instanceID, peerID)
-	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d ", path, sleep, timeout))
-	return api.removeVpcGcpPeeringWithRetry(ctx, path, 1, sleep, timeout)
-}
+	var (
+		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%d/vpc-peering/%s", instanceID, peerID)
+	)
 
-// removeVpcGcpPeeringWithRetry: remove the VPC peering from the API with retry logic
-func (api *API) removeVpcGcpPeeringWithRetry(ctx context.Context, path string, attempt, sleep,
-	timeout int) error {
+	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
 
-	var failed map[string]any
-	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d", path, sleep, timeout))
+	err := api.callWithRetry(ctxTimeout, api.sling.New().Delete(path), retryRequest{
+		functionName:    "RemoveVpcGcpPeering",
+		resourceName:    "VPC GCP Peering",
+		attempt:         1,
+		sleep:           time.Duration(sleep) * time.Second,
+		data:            nil,
+		failed:          &failed,
+		customRetryCode: 400,
+	})
 	if err != nil {
 		return err
-	} else if attempt*sleep > timeout {
-		return fmt.Errorf("timeout reached after %d seconds, while reading VPC peering", timeout)
 	}
 
-	switch response.StatusCode {
-	case 204:
-		return nil
-	case 400:
-		if strings.Contains(failed["error"].(string), "Timeout talking to backend") {
-			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
-				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
-			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.removeVpcGcpPeeringWithRetry(ctx, path, attempt, sleep, timeout)
-		} else if strings.Contains(failed["error"].(string), "firewall rules that have not finished configuring yet") {
-			tflog.Debug(ctx, fmt.Sprintf("firewall rules not finished configuring yet, will try again, "+
-				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
-			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.removeVpcGcpPeeringWithRetry(ctx, path, attempt, sleep, timeout)
-		}
-	case 423:
-		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.removeVpcGcpPeeringWithRetry(ctx, path, attempt, sleep, timeout)
-	case 503:
-		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.removeVpcGcpPeeringWithRetry(ctx, path, attempt, sleep, timeout)
-	}
-	return fmt.Errorf("failed to remove VPC peering, status=%d message=%s", response.StatusCode, failed)
+	return nil
 }
 
 // ReadVpcGcpInfo: reads the VPC info from the API
 func (api *API) ReadVpcGcpInfo(ctx context.Context, instanceID, sleep, timeout int) (
 	map[string]any, error) {
 
-	path := fmt.Sprintf("/api/instances/%d/vpc-peering/info", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s, sleep=%d, timeout=%d ", path, sleep, timeout))
-	return api.readVpcGcpInfoWithRetry(ctx, path, 1, sleep, timeout)
-}
-
-// readVpcGcpInfoWithRetry: reads the VPC info from the API with retry logic
-func (api *API) readVpcGcpInfoWithRetry(ctx context.Context, path string, attempt, sleep,
-	timeout int) (map[string]any, error) {
-
 	var (
 		data   map[string]any
 		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%d/vpc-peering/info", instanceID)
 	)
 
-	response, err := api.sling.New().Get(path).Receive(&data, &failed)
+	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s, sleep=%d, timeout=%d", path, sleep, timeout))
+	err := api.callWithRetry(ctxTimeout, api.sling.New().Get(path), retryRequest{
+		functionName:    "ReadVpcGcpInfo",
+		resourceName:    "VPC GCP Info",
+		attempt:         1,
+		sleep:           time.Duration(sleep) * time.Second,
+		data:            &data,
+		failed:          &failed,
+		customRetryCode: 400,
+	})
 	if err != nil {
 		return nil, err
-	} else if attempt*sleep > timeout {
-		return nil, fmt.Errorf("timeout reached after %d seconds, while reading VPC info", timeout)
 	}
 
-	switch response.StatusCode {
-	case 200:
-		return data, nil
-	case 400:
-		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
-			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
-				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
-			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.readVpcGcpInfoWithRetry(ctx, path, attempt, sleep, timeout)
-		}
-	case 423:
-		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.readVpcGcpInfoWithRetry(ctx, path, attempt, sleep, timeout)
-	case 503:
-		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.readVpcGcpInfoWithRetry(ctx, path, attempt, sleep, timeout)
+	if len(data) == 0 {
+		return nil, nil
 	}
-	return nil, fmt.Errorf("failed to read VPC info, status=%d message=%s ",
-		response.StatusCode, failed)
+
+	return data, nil
 }

@@ -13,63 +13,33 @@ func (api *API) ResizeDisk(ctx context.Context, instanceID int, params map[strin
 	sleep, timeout int) (map[string]any, error) {
 
 	var (
-		id   = strconv.Itoa(instanceID)
-		path = fmt.Sprintf("api/instances/%s/disk", id)
-	)
-
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d timeout=%d ", path, sleep, timeout),
-		params)
-	return api.resizeDiskWithRetry(ctx, id, params, 1, sleep, timeout)
-}
-
-func (api *API) resizeDiskWithRetry(ctx context.Context, id string, params map[string]any,
-	attempt, sleep, timeout int) (map[string]any, error) {
-
-	var (
 		data   map[string]any
 		failed map[string]any
+		id     = strconv.Itoa(instanceID)
 		path   = fmt.Sprintf("api/instances/%s/disk", id)
 	)
 
-	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(&data, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d timeout=%d", path, sleep, timeout), params)
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	err := api.callWithRetry(timeoutCtx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
+		functionName: "ResizeDisk",
+		resourceName: "Disk",
+		attempt:      1,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
-	} else if attempt*sleep > timeout {
-		return nil, fmt.Errorf("resize disk timeout reached after %d seconds", timeout)
 	}
 
-	switch response.StatusCode {
-	case 200:
-		if err = api.waitUntilAllNodesConfigured(ctx, id, attempt, sleep, timeout); err != nil {
-			return nil, err
-		}
-		tflog.Debug(ctx, "response data", data)
-		return data, nil
-	case 400:
-		tflog.Debug(ctx, "response failed", failed)
-		switch {
-		case failed["error_code"] == nil:
-			break
-		case failed["error_code"].(float64) == 40099:
-			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt=%d "+
-				"until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
-			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.resizeDiskWithRetry(ctx, id, params, attempt, sleep, timeout)
-		default:
-			return nil, fmt.Errorf("failed to resize disk: %s", failed["error"].(string))
-		}
-	case 423:
-		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.resizeDiskWithRetry(ctx, id, params, attempt, sleep, timeout)
-	case 503:
-		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.resizeDiskWithRetry(ctx, id, params, attempt, sleep, timeout)
+	// Wait for all nodes to be configured after successful resize
+	if err = api.waitUntilAllNodesConfigured(ctx, id, 1, sleep, timeout); err != nil {
+		return nil, err
 	}
-	return nil, fmt.Errorf("failed to resize disk, status=%d message=%s ",
-		response.StatusCode, failed["error"].(string))
+
+	return data, nil
 }
