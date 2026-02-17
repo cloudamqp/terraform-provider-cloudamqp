@@ -17,30 +17,19 @@ func (api *API) waitUntilFirewallConfigured(ctx context.Context, instanceID, att
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall/configured", instanceID)
 	)
 
-	tflog.Debug(ctx, "waiting until firewall configured")
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d ", path, sleep, timeout))
-	for {
-		response, err := api.sling.New().Path(path).Receive(&data, &failed)
-		if err != nil {
-			return err
-		} else if attempt*sleep > timeout {
-			return fmt.Errorf("timeout reached after %d seconds, while waiting until firewall configured",
-				timeout)
-		}
+	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
 
-		switch response.StatusCode {
-		case 200:
-			return nil
-		case 400:
-			tflog.Debug(ctx, fmt.Sprintf("firewall configuring, will try again, attempt=%d "+
-				"until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
-			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-		default:
-			return fmt.Errorf("failed to wait until firewall configured, status=%d message=%s ",
-				response.StatusCode, failed)
-		}
-	}
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d", path, sleep, timeout))
+	return api.callWithRetry(ctxTimeout, api.sling.New().Path(path), retryRequest{
+		functionName:    "waitUntilFirewallConfigured",
+		resourceName:    "Firewall",
+		attempt:         attempt,
+		sleep:           time.Duration(sleep) * time.Second,
+		data:            &data,
+		failed:          &failed,
+		customRetryCode: 400,
+	})
 }
 
 func (api *API) CreateFirewallSettings(ctx context.Context, instanceID int, params []map[string]any,
