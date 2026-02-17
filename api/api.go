@@ -40,6 +40,12 @@ type retryRequest struct {
 	customRetryCode int
 }
 
+type statusDecision struct {
+	shouldRetry bool
+	useBackoff  bool
+	err         error
+}
+
 func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request retryRequest) error {
 	if ctx.Err() != nil {
 		return ctx.Err()
@@ -51,61 +57,20 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 			request.attempt, err.Error()))
 	}
 
-	tflog.Info(ctx, fmt.Sprintf("callWithRetry function=%s attempt=%d status=%d", request.functionName,
+	tflog.Debug(ctx, fmt.Sprintf("callWithRetry function=%s attempt=%d status=%d", request.functionName,
 		request.attempt, response.StatusCode))
 
-	switch response.StatusCode {
-	case request.customRetryCode:
-		if _, ok := ctx.Deadline(); !ok {
-			return fmt.Errorf("context has no deadline")
-		}
-		tflog.Warn(ctx, fmt.Sprintf("custom retry logic, will try again, attempt=%d", request.attempt))
-		// Intentionally fall through to retry logic below
-	case 200, 201, 202, 204:
+	decision := api.handleStatusCode(ctx, response.StatusCode, request)
+	if decision.err != nil {
+		return decision.err
+	}
+	if !decision.shouldRetry {
 		return nil
-	case 400, 409:
-		if errStr, ok := (*request.failed)["error"].(string); ok && errStr == "Timeout talking to backend" {
-			if _, ok := ctx.Deadline(); !ok {
-				return fmt.Errorf("context has no deadline")
-			}
-			tflog.Warn(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt=%d", request.attempt))
-		} else if msg, ok := (*request.failed)["message"].(string); ok {
-			return fmt.Errorf("getting %s: %s", request.resourceName, msg)
-		} else {
-			return fmt.Errorf("getting %s: %v", request.resourceName, *request.failed)
-		}
-	case 404:
-		tflog.Warn(ctx, fmt.Sprintf("the %s was not found", request.resourceName))
-		return nil
-	case 410:
-		tflog.Warn(ctx, fmt.Sprintf("the %s has been deleted", request.resourceName))
-		return nil
-	case 429:
-		if _, ok := ctx.Deadline(); !ok {
-			return fmt.Errorf("context has no deadline")
-		}
-		tflog.Warn(ctx, fmt.Sprintf("rate limit exceeded for %s, will retry with backoff, attempt=%d", request.resourceName, request.attempt))
-		// Intentionally fall through to retry logic below
-	case 423:
-		if msg, ok := (*request.failed)["message"].(string); ok {
-			tflog.Warn(ctx, fmt.Sprintf("resource %s is locked: %s. Will try again, attempt=%d", request.resourceName, msg, request.attempt))
-		} else {
-			tflog.Warn(ctx, fmt.Sprintf("resource %s is locked. Will try again, attempt=%d", request.resourceName, request.attempt))
-		}
-		// Intentionally fall through to retry logic below
-	case 503:
-		if _, ok := ctx.Deadline(); !ok {
-			return fmt.Errorf("context has no deadline")
-		}
-		tflog.Warn(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d", request.attempt))
-		// Intentionally fall through to retry logic below
-	default:
-		return fmt.Errorf("unexpected status code: %d", response.StatusCode)
 	}
 
 	// Calculate sleep duration: use backoff for 429, fixed sleep for others
 	sleepDuration := request.sleep
-	if response.StatusCode == 429 {
+	if decision.useBackoff {
 		sleepDuration = calculateBackoffDuration(ctx, response, request)
 	}
 
@@ -117,6 +82,95 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 		request.attempt++
 		return api.callWithRetry(ctx, sling, request)
 	}
+}
+
+// handleStatusCode determines the action based on HTTP status code.
+// Returns a decision indicating whether to retry, use backoff, or return an error.
+func (api *API) handleStatusCode(ctx context.Context, statusCode int, request retryRequest) statusDecision {
+	switch statusCode {
+	case request.customRetryCode:
+		return api.handleCustomRetryCode(ctx, request)
+	case 200, 201, 202, 204:
+		return statusDecision{shouldRetry: false, err: nil}
+	case 400, 409:
+		return api.handleBadRequest(ctx, request)
+	case 404:
+		tflog.Warn(ctx, fmt.Sprintf("the %s was not found", request.resourceName))
+		return statusDecision{shouldRetry: false, err: nil}
+	case 410:
+		tflog.Warn(ctx, fmt.Sprintf("the %s has been deleted", request.resourceName))
+		return statusDecision{shouldRetry: false, err: nil}
+	case 423:
+		return api.handleResourceLocked(ctx, request)
+	case 429:
+		return api.handleRateLimit(ctx, request)
+	case 503:
+		return api.handleServiceUnavailable(ctx, request)
+	default:
+		return statusDecision{shouldRetry: false, err: fmt.Errorf("unexpected status code: %d", statusCode)}
+	}
+}
+
+func (api *API) handleCustomRetryCode(ctx context.Context, request retryRequest) statusDecision {
+	if _, ok := ctx.Deadline(); !ok {
+		return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
+	}
+	tflog.Warn(ctx, fmt.Sprintf("custom retry logic, will try again, attempt=%d", request.attempt))
+	return statusDecision{shouldRetry: true, useBackoff: false, err: nil}
+}
+
+func (api *API) handleBadRequest(ctx context.Context, request retryRequest) statusDecision {
+	if isBackendTimeout(request.failed) {
+		if _, ok := ctx.Deadline(); !ok {
+			return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
+		}
+		tflog.Warn(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt=%d", request.attempt))
+		return statusDecision{shouldRetry: true, useBackoff: false, err: nil}
+	}
+	return statusDecision{shouldRetry: false, err: extractErrorMessage(request.failed, request.resourceName)}
+}
+
+func (api *API) handleResourceLocked(ctx context.Context, request retryRequest) statusDecision {
+	if msg, ok := (*request.failed)["message"].(string); ok {
+		tflog.Warn(ctx, fmt.Sprintf("resource %s is locked: %s. Will try again, attempt=%d", request.resourceName, msg, request.attempt))
+	} else {
+		tflog.Warn(ctx, fmt.Sprintf("resource %s is locked. Will try again, attempt=%d", request.resourceName, request.attempt))
+	}
+	return statusDecision{shouldRetry: true, useBackoff: false, err: nil}
+}
+
+func (api *API) handleRateLimit(ctx context.Context, request retryRequest) statusDecision {
+	if _, ok := ctx.Deadline(); !ok {
+		return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
+	}
+	tflog.Warn(ctx, fmt.Sprintf("rate limit exceeded for %s, will retry with backoff, attempt=%d", request.resourceName, request.attempt))
+	return statusDecision{shouldRetry: true, useBackoff: true, err: nil}
+}
+
+func (api *API) handleServiceUnavailable(ctx context.Context, request retryRequest) statusDecision {
+	if _, ok := ctx.Deadline(); !ok {
+		return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
+	}
+	tflog.Warn(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d", request.attempt))
+	return statusDecision{shouldRetry: true, useBackoff: false, err: nil}
+}
+
+func isBackendTimeout(failed *map[string]any) bool {
+	if failed == nil {
+		return false
+	}
+	errStr, ok := (*failed)["error"].(string)
+	return ok && errStr == "Timeout talking to backend"
+}
+
+func extractErrorMessage(failed *map[string]any, resourceName string) error {
+	if failed == nil {
+		return fmt.Errorf("getting %s: unknown error", resourceName)
+	}
+	if msg, ok := (*failed)["message"].(string); ok {
+		return fmt.Errorf("getting %s: %s", resourceName, msg)
+	}
+	return fmt.Errorf("getting %s: %v", resourceName, *failed)
 }
 
 // calculateBackoffDuration calculates the backoff duration for rate limit retries.
@@ -131,10 +185,11 @@ func calculateBackoffDuration(ctx context.Context, response *http.Response, requ
 		if seconds, err := strconv.ParseInt(retryAfter, 10, 64); err == nil {
 			duration := time.Duration(seconds) * time.Second
 			if duration > maxBackoff {
-				tflog.Debug(ctx, fmt.Sprintf("Retry-After header specifies %ds, capping at %ds", seconds, int(maxBackoff.Seconds())))
+				tflog.Debug(ctx, fmt.Sprintf("Retry-After header specifies %ds, capping at %ds for resource %s",
+					seconds, int(maxBackoff.Seconds()), request.resourceName))
 				return maxBackoff
 			}
-			tflog.Debug(ctx, fmt.Sprintf("Using Retry-After header value: %ds", seconds))
+			tflog.Debug(ctx, fmt.Sprintf("Using Retry-After header value: %ds for resource %s", seconds, request.resourceName))
 			return duration
 		}
 
@@ -145,24 +200,29 @@ func calculateBackoffDuration(ctx context.Context, response *http.Response, requ
 				duration = 0
 			}
 			if duration > maxBackoff {
-				tflog.Debug(ctx, fmt.Sprintf("Retry-After header specifies %ds, capping at %ds", int(duration.Seconds()), int(maxBackoff.Seconds())))
+				tflog.Debug(ctx, fmt.Sprintf("Retry-After header specifies %ds, capping at %ds for resource %s",
+					int(duration.Seconds()), int(maxBackoff.Seconds()), request.resourceName))
 				return maxBackoff
 			}
-			tflog.Debug(ctx, fmt.Sprintf("Using Retry-After header date: %ds", int(duration.Seconds())))
+			tflog.Debug(ctx, fmt.Sprintf("Using Retry-After header date: %ds for resource %s", int(duration.Seconds()),
+				request.resourceName))
 			return duration
 		}
 
-		tflog.Debug(ctx, fmt.Sprintf("Failed to parse Retry-After header: %s, falling back to exponential backoff", retryAfter))
+		tflog.Debug(ctx, fmt.Sprintf("Failed to parse Retry-After header: %s, falling back to exponential backoff for "+
+			"resource %s", retryAfter, request.resourceName))
 	}
 
 	// Exponential backoff: sleep * 2^(attempt-1)
 	// attempt=1: sleep * 1, attempt=2: sleep * 2, attempt=3: sleep * 4, etc.
 	backoff := request.sleep * (1 << (request.attempt - 1))
 	if backoff > maxBackoff {
-		tflog.Debug(ctx, fmt.Sprintf("Exponential backoff would be %ds, capping at %ds", int(backoff.Seconds()), int(maxBackoff.Seconds())))
+		tflog.Debug(ctx, fmt.Sprintf("Exponential backoff would be %ds, capping at %ds for resource %s",
+			int(backoff.Seconds()), int(maxBackoff.Seconds()), request.resourceName))
 		return maxBackoff
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("Using exponential backoff: %ds (attempt=%d, base sleep=%ds)", int(backoff.Seconds()), request.attempt, int(request.sleep.Seconds())))
+	tflog.Debug(ctx, fmt.Sprintf("Using exponential backoff: %ds (attempt=%d, base sleep=%ds) for resource %s",
+		int(backoff.Seconds()), request.attempt, int(request.sleep.Seconds()), request.resourceName))
 	return backoff
 }
