@@ -90,10 +90,10 @@ func resourcePluginCreate(ctx context.Context, d *schema.ResourceData, meta any)
 func resourcePluginRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
-		instanceID = d.Get("instance_id").(int)
-		name       = d.Get("name").(string)
-		sleep      = d.Get("sleep").(int)
-		timeout    = d.Get("timeout").(int)
+		instanceID int
+		name       string
+		sleep      int
+		timeout    int
 	)
 
 	// Support for importing resource
@@ -109,6 +109,13 @@ func resourcePluginRead(ctx context.Context, d *schema.ResourceData, meta any) d
 		d.Set("sleep", 10)
 		d.Set("timeout", 1800)
 	}
+
+	// Read values after import setup to ensure defaults are applied
+	instanceID = d.Get("instance_id").(int)
+	name = d.Get("name").(string)
+	sleep = d.Get("sleep").(int)
+	timeout = d.Get("timeout").(int)
+
 	if instanceID == 0 {
 		return diag.Errorf("missing instance identifier: {resource_id},{instance_id}")
 	}

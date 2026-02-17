@@ -167,14 +167,14 @@ func resourceInstance() *schema.Resource {
 					return nil
 				}
 				api := meta.(*api.API)
-				return api.ValidatePlan(new.(string))
+				return api.ValidatePlan(ctx, new.(string))
 			}),
 			customdiff.ValidateChange("region", func(ctx context.Context, old, new, meta any) error {
 				if old == new {
 					return nil
 				}
 				api := meta.(*api.API)
-				return api.ValidateRegion(new.(string))
+				return api.ValidateRegion(ctx, new.(string))
 			}),
 		),
 	}

@@ -16,23 +16,20 @@ func (api *API) ListInstances(ctx context.Context) ([]map[string]any, error) {
 		path   = "api/instances"
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
-	response, err := api.sling.New().Path(path).Receive(&data, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
+	err := api.callWithRetry(ctx, api.sling.New().Path(path), retryRequest{
+		functionName: "ListInstances",
+		resourceName: "Instance",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	switch response.StatusCode {
-	case 200:
-		tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
-		return data, nil
-	case 410: // TODO: Remove should only be needed for a single instance or VPC.
-		tflog.Warn(ctx, "status=410 message=\"the instance has been deleted\" ")
-		return nil, nil
-	default:
-		return nil, fmt.Errorf("failed to list instaces, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	return data, nil
 }
 
 func (api *API) ListVpcs(ctx context.Context) ([]model.VpcResponse, error) {
@@ -71,21 +68,15 @@ func (api *API) RotatePassword(ctx context.Context, instanceID int) error {
 		path   = fmt.Sprintf("api/instances/%d/account/rotate-password", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s ", path))
-	response, err := api.sling.New().Post(path).Receive(nil, &failed)
-	if err != nil {
-		return err
-	}
-
-	switch response.StatusCode {
-	case 200:
-		return nil
-	case 204:
-		return nil
-	default:
-		return fmt.Errorf("failed to rotate api key, status=%d failed=%s ",
-			response.StatusCode, failed)
-	}
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s", path))
+	return api.callWithRetry(ctx, api.sling.New().Post(path), retryRequest{
+		functionName: "RotatePassword",
+		resourceName: "Password",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 }
 
 func (api *API) RotateApiKey(ctx context.Context, instanceID int) error {
@@ -94,19 +85,13 @@ func (api *API) RotateApiKey(ctx context.Context, instanceID int) error {
 		path   = fmt.Sprintf("api/instances/%d/account/rotate-apikey", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s ", path))
-	response, err := api.sling.New().Post(path).Receive(nil, &failed)
-	if err != nil {
-		return err
-	}
-
-	switch response.StatusCode {
-	case 200:
-		return nil
-	case 204:
-		return nil
-	default:
-		return fmt.Errorf("failed to rotate api key, status=%d failed=%s ",
-			response.StatusCode, failed)
-	}
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s", path))
+	return api.callWithRetry(ctx, api.sling.New().Post(path), retryRequest{
+		functionName: "RotateApiKey",
+		resourceName: "ApiKey",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 }

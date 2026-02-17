@@ -1,3 +1,11 @@
+## 1.42.1 (11 Feb, 2026)
+
+IMPROVEMENTS:
+
+* Integration: Updated how metrics filter is created/updated for `cloudamqp_integration_metric_prometheus` [#451]
+
+[#451]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/451
+
 ## 1.42.0 (06 Feb, 2026)
 
 FEATURES:
