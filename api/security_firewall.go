@@ -71,8 +71,12 @@ func (api *API) ReadFirewallSettings(ctx context.Context, instanceID int) ([]map
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	)
 
+	// Add timeout context for retries in case firewall is still configuring
+	ctxTimeout, cancel := context.WithTimeout(ctx, 300*time.Second)
+	defer cancel()
+
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
-	err := api.callWithRetry(ctx, api.sling.New().Path(path), retryRequest{
+	err := api.callWithRetry(ctxTimeout, api.sling.New().Path(path), retryRequest{
 		functionName: "ReadFirewallSettings",
 		resourceName: "Firewall",
 		attempt:      1,

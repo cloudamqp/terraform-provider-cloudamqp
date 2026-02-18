@@ -76,7 +76,7 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 				if _, ok := ctx.Deadline(); !ok {
 					return fmt.Errorf("context has no deadline")
 				}
-				tflog.Warn(ctx, fmt.Sprintf("firewall not finished configuring, will retry, attempt=%d", request.attempt))
+				tflog.Warn(ctx, fmt.Sprintf("firewall not finished configuring (error_code=%d), will retry, attempt=%d", int(errorCode), request.attempt))
 				// Intentionally fall through to retry logic below
 			case 40002: // Firewall rules validation failed
 				if errMsg, ok := (*request.failed)["error"].(string); ok {
@@ -86,19 +86,19 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 			default:
 				// Unknown error_code value - continue checking error/message fields
 			}
-		}
-
-		// If error_code is nil, doesn't exist, or is unrecognized, check error/message fields
-		if errStr, ok := (*request.failed)["error"].(string); ok && errStr == "Timeout talking to backend" {
-			if _, ok := ctx.Deadline(); !ok {
-				return fmt.Errorf("context has no deadline")
-			}
-			tflog.Warn(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt=%d", request.attempt))
-			// Intentionally fall through to retry logic below
-		} else if msg, ok := (*request.failed)["message"].(string); ok {
-			return fmt.Errorf("getting %s: %s", request.resourceName, msg)
 		} else {
-			return fmt.Errorf("getting %s: %v", request.resourceName, *request.failed)
+			// If error_code doesn't exist or type assertion fails, check error/message fields
+			if errStr, ok := (*request.failed)["error"].(string); ok && errStr == "Timeout talking to backend" {
+				if _, ok := ctx.Deadline(); !ok {
+					return fmt.Errorf("context has no deadline")
+				}
+				tflog.Warn(ctx, fmt.Sprintf("timeout talking to backend, will retry, attempt=%d", request.attempt))
+				// Intentionally fall through to retry logic below
+			} else if msg, ok := (*request.failed)["message"].(string); ok {
+				return fmt.Errorf("getting %s: %s", request.resourceName, msg)
+			} else {
+				return fmt.Errorf("getting %s: %v", request.resourceName, *request.failed)
+			}
 		}
 	case 404:
 		tflog.Warn(ctx, fmt.Sprintf("the %s was not found", request.resourceName))
