@@ -178,9 +178,21 @@ func calculateBackoffDuration(ctx context.Context, response *http.Response, requ
 
 	// Exponential backoff: sleep * 2^(attempt-1)
 	// attempt=1: sleep * 1, attempt=2: sleep * 2, attempt=3: sleep * 4, etc.
+	// Guard against overflow by checking if shift amount is too large
+	if request.attempt > 63 {
+		tflog.Debug(ctx, fmt.Sprintf("Attempt %d exceeds safe exponential backoff range, using max backoff", request.attempt))
+		return maxBackoff
+	}
+
 	backoff := request.sleep * (1 << (request.attempt - 1))
-	if backoff > maxBackoff {
-		tflog.Debug(ctx, fmt.Sprintf("Exponential backoff would be %ds, capping at %ds", int(backoff.Seconds()), int(maxBackoff.Seconds())))
+
+	// Check for overflow (negative duration) or exceeding max
+	if backoff < 0 || backoff > maxBackoff {
+		if backoff < 0 {
+			tflog.Debug(ctx, fmt.Sprintf("Exponential backoff overflow detected at attempt=%d, using max backoff", request.attempt))
+		} else {
+			tflog.Debug(ctx, fmt.Sprintf("Exponential backoff would be %ds, capping at %ds", int(backoff.Seconds()), int(maxBackoff.Seconds())))
+		}
 		return maxBackoff
 	}
 
