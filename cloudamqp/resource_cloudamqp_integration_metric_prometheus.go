@@ -81,8 +81,8 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 						"region": {
 							Type:         schema.TypeString,
 							Required:     true,
-							Description:  "Datadog region; us1, us3, us5, or eu1",
-							ValidateFunc: validation.StringInSlice([]string{"us1", "us3", "us5", "eu1"}, true),
+							Description:  "Datadog region; us1, us3, us5, eu1, or ap2",
+							ValidateFunc: validation.StringInSlice([]string{"us1", "us3", "us5", "eu1", "ap2"}, true),
 						},
 						"tags": {
 							Type:        schema.TypeString,
