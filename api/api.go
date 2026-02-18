@@ -38,6 +38,7 @@ type retryRequest struct {
 	data            any
 	failed          *map[string]any
 	customRetryCode int
+	statusCode      *int // Optional: populated with HTTP status code on success
 }
 
 func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request retryRequest) error {
@@ -62,6 +63,10 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 		tflog.Warn(ctx, fmt.Sprintf("custom retry logic, will try again, attempt=%d", request.attempt))
 		// Intentionally fall through to retry logic below
 	case 200, 201, 202, 204:
+		// Populate status code if requested
+		if request.statusCode != nil {
+			*request.statusCode = response.StatusCode
+		}
 		return nil
 	case 400, 409:
 		// Check for specific error codes first (e.g., firewall-specific errors)

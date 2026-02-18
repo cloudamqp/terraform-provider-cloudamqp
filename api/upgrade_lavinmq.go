@@ -47,10 +47,11 @@ func (api *API) UpgradeToSpecificLavinMQVersion(ctx context.Context, instanceID 
 	string, error) {
 
 	var (
-		data   map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("api/instances/%d/actions/upgrade-lavinmq", instanceID)
-		params = make(map[string]any)
+		data       map[string]any
+		failed     map[string]any
+		statusCode int
+		path       = fmt.Sprintf("api/instances/%d/actions/upgrade-lavinmq", instanceID)
+		params     = make(map[string]any)
 	)
 
 	params["version"] = version
@@ -63,20 +64,28 @@ func (api *API) UpgradeToSpecificLavinMQVersion(ctx context.Context, instanceID 
 		sleep:        5 * time.Second,
 		data:         &data,
 		failed:       &failed,
+		statusCode:   &statusCode,
 	})
 	if err != nil {
 		return "", err
 	}
 
 	tflog.Debug(ctx, "response data", data)
+
+	// Handle different success codes
+	if statusCode == 200 {
+		return "Already at highest possible version", nil
+	}
+
 	return api.waitUntilLavinMQUpgraded(ctx, instanceID)
 }
 
 func (api *API) UpgradeToLatestLavinMQVersion(ctx context.Context, instanceID int) (string, error) {
 	var (
-		data   map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("api/instances/%d/actions/upgrade-lavinmq", instanceID)
+		data       map[string]any
+		failed     map[string]any
+		statusCode int
+		path       = fmt.Sprintf("api/instances/%d/actions/upgrade-lavinmq", instanceID)
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s upgrade to latest version", path))
@@ -87,9 +96,15 @@ func (api *API) UpgradeToLatestLavinMQVersion(ctx context.Context, instanceID in
 		sleep:        5 * time.Second,
 		data:         &data,
 		failed:       &failed,
+		statusCode:   &statusCode,
 	})
 	if err != nil {
 		return "", err
+	}
+
+	// Handle different success codes
+	if statusCode == 200 {
+		return "Already at highest possible version", nil
 	}
 
 	return api.waitUntilLavinMQUpgraded(ctx, instanceID)
