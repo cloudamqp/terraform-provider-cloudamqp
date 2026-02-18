@@ -22,13 +22,12 @@ func (api *API) waitUntilFirewallConfigured(ctx context.Context, instanceID, att
 
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d", path, sleep, timeout))
 	return api.callWithRetry(ctxTimeout, api.sling.New().Path(path), retryRequest{
-		functionName:    "waitUntilFirewallConfigured",
-		resourceName:    "Firewall",
-		attempt:         attempt,
-		sleep:           time.Duration(sleep) * time.Second,
-		data:            &data,
-		failed:          &failed,
-		customRetryCode: 400,
+		functionName: "waitUntilFirewallConfigured",
+		resourceName: "Firewall",
+		attempt:      attempt,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         &data,
+		failed:       &failed,
 	})
 }
 
@@ -46,13 +45,12 @@ func (api *API) CreateFirewallSettings(ctx context.Context, instanceID int, para
 	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d timeout=%d params=%v", path, sleep,
 		timeout, params))
 	err := api.callWithRetry(ctxTimeout, api.sling.New().Post(path).BodyJSON(params), retryRequest{
-		functionName:    "CreateFirewallSettings",
-		resourceName:    "Firewall",
-		attempt:         1,
-		sleep:           time.Duration(sleep) * time.Second,
-		data:            nil,
-		failed:          &failed,
-		customRetryCode: 400,
+		functionName: "CreateFirewallSettings",
+		resourceName: "Firewall",
+		attempt:      1,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         nil,
+		failed:       &failed,
 	})
 	if err != nil {
 		return nil, err
@@ -107,13 +105,12 @@ func (api *API) UpdateFirewallSettings(ctx context.Context, instanceID int, para
 	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d timeout=%d params=%v", path, sleep,
 		timeout, params))
 	err := api.callWithRetry(ctxTimeout, api.sling.New().Put(path).BodyJSON(params), retryRequest{
-		functionName:    "UpdateFirewallSettings",
-		resourceName:    "Firewall",
-		attempt:         1,
-		sleep:           time.Duration(sleep) * time.Second,
-		data:            nil,
-		failed:          &failed,
-		customRetryCode: 400,
+		functionName: "UpdateFirewallSettings",
+		resourceName: "Firewall",
+		attempt:      1,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         nil,
+		failed:       &failed,
 	})
 	if err != nil {
 		return nil, err
@@ -141,13 +138,12 @@ func (api *API) DeleteFirewallSettings(ctx context.Context, instanceID, sleep, t
 
 	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d", path, sleep, timeout))
 	err := api.callWithRetry(ctxTimeout, api.sling.New().Put(path).BodyJSON(params), retryRequest{
-		functionName:    "DeleteFirewallSettings",
-		resourceName:    "Firewall",
-		attempt:         1,
-		sleep:           time.Duration(sleep) * time.Second,
-		data:            nil,
-		failed:          &failed,
-		customRetryCode: 400,
+		functionName: "DeleteFirewallSettings",
+		resourceName: "Firewall",
+		attempt:      1,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         nil,
+		failed:       &failed,
 	})
 	if err != nil {
 		return nil, err

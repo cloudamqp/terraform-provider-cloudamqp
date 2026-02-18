@@ -64,11 +64,32 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 	case 200, 201, 202, 204:
 		return nil
 	case 400, 409:
+		// Check for specific error codes first (e.g., firewall-specific errors)
+		if errorCode, ok := (*request.failed)["error_code"].(float64); ok {
+			switch errorCode {
+			case 40001: // Firewall not finished configuring
+				if _, ok := ctx.Deadline(); !ok {
+					return fmt.Errorf("context has no deadline")
+				}
+				tflog.Warn(ctx, fmt.Sprintf("firewall not finished configuring, will retry, attempt=%d", request.attempt))
+				// Intentionally fall through to retry logic below
+			case 40002: // Firewall rules validation failed
+				if errMsg, ok := (*request.failed)["error"].(string); ok {
+					return fmt.Errorf("firewall rules validation failed: %s", errMsg)
+				}
+				return fmt.Errorf("firewall rules validation failed")
+			default:
+				// Unknown error_code value - continue checking error/message fields
+			}
+		}
+
+		// If error_code is nil, doesn't exist, or is unrecognized, check error/message fields
 		if errStr, ok := (*request.failed)["error"].(string); ok && errStr == "Timeout talking to backend" {
 			if _, ok := ctx.Deadline(); !ok {
 				return fmt.Errorf("context has no deadline")
 			}
 			tflog.Warn(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt=%d", request.attempt))
+			// Intentionally fall through to retry logic below
 		} else if msg, ok := (*request.failed)["message"].(string); ok {
 			return fmt.Errorf("getting %s: %s", request.resourceName, msg)
 		} else {
