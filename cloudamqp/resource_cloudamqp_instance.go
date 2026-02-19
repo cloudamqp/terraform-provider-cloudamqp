@@ -157,10 +157,19 @@ func resourceInstance() *schema.Resource {
 		},
 		CustomizeDiff: customdiff.All(
 			customdiff.ForceNewIfChange("plan", func(ctx context.Context, old, new, meta any) bool {
-				// Recreate instance if changing plan type (from dedicated to shared or vice versa)
+				// Going between RabbitMQ shared and dedicated plans requires resource replacement
 				oldPlanType := isSharedPlan(old.(string))
 				newPlanType := isSharedPlan(new.(string))
-				return !(oldPlanType == newPlanType)
+
+				isOldLavinmqSharedPlan := isLavinmqSharedPlan(old.(string))
+				isNewSharedPlan := isSharedPlan(new.(string))
+
+				// We allow moving Lavin Shared to Lavin dedicated, but not reverse
+				if isOldLavinmqSharedPlan && !isNewSharedPlan {
+					return false
+				} else {
+					return !(oldPlanType == newPlanType)
+				}
 			}),
 			customdiff.ValidateChange("plan", func(ctx context.Context, old, new, meta any) error {
 				if old == new {
@@ -340,6 +349,16 @@ func isSharedPlan(plan string) bool {
 	case
 		"lemur",
 		"tiger",
+		"lemming",
+		"ermine":
+		return true
+	}
+	return false
+}
+
+func isLavinmqSharedPlan(plan string) bool {
+	switch plan {
+	case
 		"lemming",
 		"ermine":
 		return true
