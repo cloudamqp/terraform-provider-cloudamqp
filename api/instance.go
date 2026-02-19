@@ -182,8 +182,9 @@ func (api *API) ReadInstance(ctx context.Context, instanceID string) (map[string
 
 func (api *API) UpdateInstance(ctx context.Context, instanceID string, params map[string]any) error {
 	var (
-		failed map[string]any
-		path   = fmt.Sprintf("api/instances/%v", instanceID)
+		failed     map[string]any
+		statusCode int
+		path       = fmt.Sprintf("api/instances/%v", instanceID)
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s", path), params)
@@ -194,9 +195,16 @@ func (api *API) UpdateInstance(ctx context.Context, instanceID string, params ma
 		sleep:        5 * time.Second,
 		data:         nil,
 		failed:       &failed,
+		statusCode:   &statusCode,
 	})
 	if err != nil {
 		return err
+	}
+
+	// If resource was already deleted (410), skip waiting for nodes
+	if statusCode == 410 {
+		tflog.Debug(ctx, fmt.Sprintf("Instance already deleted (status=%d), skipping node readiness check", statusCode))
+		return nil
 	}
 
 	return api.waitUntilAllNodesReady(ctx, instanceID)
@@ -204,8 +212,9 @@ func (api *API) UpdateInstance(ctx context.Context, instanceID string, params ma
 
 func (api *API) DeleteInstance(ctx context.Context, instanceID string, keep_vpc bool) error {
 	var (
-		failed map[string]any
-		path   = fmt.Sprintf("api/instances/%s?keep_vpc=%t", instanceID, keep_vpc)
+		failed     map[string]any
+		statusCode int
+		path       = fmt.Sprintf("api/instances/%s?keep_vpc=%t", instanceID, keep_vpc)
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s", path))
@@ -216,9 +225,16 @@ func (api *API) DeleteInstance(ctx context.Context, instanceID string, keep_vpc 
 		sleep:        5 * time.Second,
 		data:         nil,
 		failed:       &failed,
+		statusCode:   &statusCode,
 	})
 	if err != nil {
 		return err
+	}
+
+	// If resource was already deleted (410), skip waiting for deletion
+	if statusCode == 410 {
+		tflog.Debug(ctx, fmt.Sprintf("Instance already deleted (status=%d), skipping deletion wait", statusCode))
+		return nil
 	}
 
 	return api.waitUntilDeletion(ctx, instanceID)

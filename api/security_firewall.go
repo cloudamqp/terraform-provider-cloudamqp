@@ -17,30 +17,18 @@ func (api *API) waitUntilFirewallConfigured(ctx context.Context, instanceID, att
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall/configured", instanceID)
 	)
 
-	tflog.Debug(ctx, "waiting until firewall configured")
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d ", path, sleep, timeout))
-	for {
-		response, err := api.sling.New().Path(path).Receive(&data, &failed)
-		if err != nil {
-			return err
-		} else if attempt*sleep > timeout {
-			return fmt.Errorf("timeout reached after %d seconds, while waiting until firewall configured",
-				timeout)
-		}
+	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
 
-		switch response.StatusCode {
-		case 200:
-			return nil
-		case 400:
-			tflog.Debug(ctx, fmt.Sprintf("firewall configuring, will try again, attempt=%d "+
-				"until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
-			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-		default:
-			return fmt.Errorf("failed to wait until firewall configured, status=%d message=%s ",
-				response.StatusCode, failed)
-		}
-	}
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d", path, sleep, timeout))
+	return api.callWithRetry(ctxTimeout, api.sling.New().Path(path), retryRequest{
+		functionName: "waitUntilFirewallConfigured",
+		resourceName: "Firewall",
+		attempt:      attempt,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 }
 
 func (api *API) CreateFirewallSettings(ctx context.Context, instanceID int, params []map[string]any,
@@ -57,13 +45,12 @@ func (api *API) CreateFirewallSettings(ctx context.Context, instanceID int, para
 	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d timeout=%d params=%v", path, sleep,
 		timeout, params))
 	err := api.callWithRetry(ctxTimeout, api.sling.New().Post(path).BodyJSON(params), retryRequest{
-		functionName:    "CreateFirewallSettings",
-		resourceName:    "Firewall",
-		attempt:         1,
-		sleep:           time.Duration(sleep) * time.Second,
-		data:            nil,
-		failed:          &failed,
-		customRetryCode: 400,
+		functionName: "CreateFirewallSettings",
+		resourceName: "Firewall",
+		attempt:      1,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         nil,
+		failed:       &failed,
 	})
 	if err != nil {
 		return nil, err
@@ -84,8 +71,12 @@ func (api *API) ReadFirewallSettings(ctx context.Context, instanceID int) ([]map
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	)
 
+	// Add timeout context for retries in case firewall is still configuring
+	ctxTimeout, cancel := context.WithTimeout(ctx, 300*time.Second)
+	defer cancel()
+
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
-	err := api.callWithRetry(ctx, api.sling.New().Path(path), retryRequest{
+	err := api.callWithRetry(ctxTimeout, api.sling.New().Path(path), retryRequest{
 		functionName: "ReadFirewallSettings",
 		resourceName: "Firewall",
 		attempt:      1,
@@ -118,13 +109,12 @@ func (api *API) UpdateFirewallSettings(ctx context.Context, instanceID int, para
 	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d timeout=%d params=%v", path, sleep,
 		timeout, params))
 	err := api.callWithRetry(ctxTimeout, api.sling.New().Put(path).BodyJSON(params), retryRequest{
-		functionName:    "UpdateFirewallSettings",
-		resourceName:    "Firewall",
-		attempt:         1,
-		sleep:           time.Duration(sleep) * time.Second,
-		data:            nil,
-		failed:          &failed,
-		customRetryCode: 400,
+		functionName: "UpdateFirewallSettings",
+		resourceName: "Firewall",
+		attempt:      1,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         nil,
+		failed:       &failed,
 	})
 	if err != nil {
 		return nil, err
@@ -152,13 +142,12 @@ func (api *API) DeleteFirewallSettings(ctx context.Context, instanceID, sleep, t
 
 	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d", path, sleep, timeout))
 	err := api.callWithRetry(ctxTimeout, api.sling.New().Put(path).BodyJSON(params), retryRequest{
-		functionName:    "DeleteFirewallSettings",
-		resourceName:    "Firewall",
-		attempt:         1,
-		sleep:           time.Duration(sleep) * time.Second,
-		data:            nil,
-		failed:          &failed,
-		customRetryCode: 400,
+		functionName: "DeleteFirewallSettings",
+		resourceName: "Firewall",
+		attempt:      1,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         nil,
+		failed:       &failed,
 	})
 	if err != nil {
 		return nil, err

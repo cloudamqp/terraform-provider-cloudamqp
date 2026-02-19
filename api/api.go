@@ -38,6 +38,7 @@ type retryRequest struct {
 	data            any
 	failed          *map[string]any
 	customRetryCode int
+	statusCode      *int // Optional: populated with HTTP status code on success
 }
 
 type statusDecision struct {
@@ -71,7 +72,7 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 	// Calculate sleep duration: use backoff for 429, fixed sleep for others
 	sleepDuration := request.sleep
 	if decision.useBackoff {
-		sleepDuration = calculateBackoffDuration(ctx, response, request)
+		sleepDuration = calculateBackoffDuration(ctx, request)
 	}
 
 	select {
@@ -173,56 +174,31 @@ func extractErrorMessage(failed *map[string]any, resourceName string) error {
 	return fmt.Errorf("getting %s: %v", resourceName, *failed)
 }
 
-// calculateBackoffDuration calculates the backoff duration for rate limit retries.
-// It respects the Retry-After header if present, otherwise uses exponential backoff
-// with a maximum cap of 60 seconds.
-func calculateBackoffDuration(ctx context.Context, response *http.Response, request retryRequest) time.Duration {
+// calculateBackoffDuration calculates the backoff duration for rate limit retries
+// using exponential backoff with a maximum cap of 60 seconds.
+func calculateBackoffDuration(ctx context.Context, request retryRequest) time.Duration {
 	const maxBackoff = 60 * time.Second
-
-	// Check for Retry-After header
-	if retryAfter := response.Header.Get("Retry-After"); retryAfter != "" {
-		// Try parsing as seconds (integer)
-		if seconds, err := strconv.ParseInt(retryAfter, 10, 64); err == nil {
-			duration := time.Duration(seconds) * time.Second
-			if duration > maxBackoff {
-				tflog.Debug(ctx, fmt.Sprintf("Retry-After header specifies %ds, capping at %ds for resource %s",
-					seconds, int(maxBackoff.Seconds()), request.resourceName))
-				return maxBackoff
-			}
-			tflog.Debug(ctx, fmt.Sprintf("Using Retry-After header value: %ds for resource %s", seconds, request.resourceName))
-			return duration
-		}
-
-		// Try parsing as HTTP-date format
-		if retryTime, err := http.ParseTime(retryAfter); err == nil {
-			duration := time.Until(retryTime)
-			if duration < 0 {
-				duration = 0
-			}
-			if duration > maxBackoff {
-				tflog.Debug(ctx, fmt.Sprintf("Retry-After header specifies %ds, capping at %ds for resource %s",
-					int(duration.Seconds()), int(maxBackoff.Seconds()), request.resourceName))
-				return maxBackoff
-			}
-			tflog.Debug(ctx, fmt.Sprintf("Using Retry-After header date: %ds for resource %s", int(duration.Seconds()),
-				request.resourceName))
-			return duration
-		}
-
-		tflog.Debug(ctx, fmt.Sprintf("Failed to parse Retry-After header: %s, falling back to exponential backoff for "+
-			"resource %s", retryAfter, request.resourceName))
-	}
 
 	// Exponential backoff: sleep * 2^(attempt-1)
 	// attempt=1: sleep * 1, attempt=2: sleep * 2, attempt=3: sleep * 4, etc.
-	backoff := request.sleep * (1 << (request.attempt - 1))
-	if backoff > maxBackoff {
-		tflog.Debug(ctx, fmt.Sprintf("Exponential backoff would be %ds, capping at %ds for resource %s",
-			int(backoff.Seconds()), int(maxBackoff.Seconds()), request.resourceName))
+	// Guard against overflow by checking if shift amount is too large
+	if request.attempt > 63 {
+		tflog.Debug(ctx, fmt.Sprintf("Attempt %d exceeds safe exponential backoff range, using max backoff", request.attempt))
 		return maxBackoff
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("Using exponential backoff: %ds (attempt=%d, base sleep=%ds) for resource %s",
-		int(backoff.Seconds()), request.attempt, int(request.sleep.Seconds()), request.resourceName))
+	backoff := request.sleep * (1 << (request.attempt - 1))
+
+	// Check for overflow (negative duration) or exceeding max
+	if backoff < 0 || backoff > maxBackoff {
+		if backoff < 0 {
+			tflog.Debug(ctx, fmt.Sprintf("Exponential backoff overflow detected at attempt=%d, using max backoff", request.attempt))
+		} else {
+			tflog.Debug(ctx, fmt.Sprintf("Exponential backoff would be %ds, capping at %ds", int(backoff.Seconds()), int(maxBackoff.Seconds())))
+		}
+		return maxBackoff
+	}
+
+	tflog.Debug(ctx, fmt.Sprintf("Using exponential backoff: %ds (attempt=%d, base sleep=%ds)", int(backoff.Seconds()), request.attempt, int(request.sleep.Seconds())))
 	return backoff
 }
