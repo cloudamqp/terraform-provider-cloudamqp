@@ -52,10 +52,11 @@ func (api *API) UpgradeToSpecificVersion(ctx context.Context, instanceID int, ve
 	string, error) {
 
 	var (
-		data   map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("api/instances/%d/actions/upgrade-rabbitmq", instanceID)
-		params = make(map[string]any)
+		data       map[string]any
+		failed     map[string]any
+		statusCode int
+		path       = fmt.Sprintf("api/instances/%d/actions/upgrade-rabbitmq", instanceID)
+		params     = make(map[string]any)
 	)
 
 	params["version"] = version
@@ -68,9 +69,15 @@ func (api *API) UpgradeToSpecificVersion(ctx context.Context, instanceID int, ve
 		sleep:        5 * time.Second,
 		data:         &data,
 		failed:       &failed,
+		statusCode:   &statusCode,
 	})
 	if err != nil {
 		return "", err
+	}
+
+	// Handle different success codes
+	if statusCode == 200 {
+		return "Already at highest possible version", nil
 	}
 
 	return api.waitUntilUpgraded(ctx, instanceID)
@@ -78,9 +85,10 @@ func (api *API) UpgradeToSpecificVersion(ctx context.Context, instanceID int, ve
 
 func (api *API) UpgradeToLatestVersion(ctx context.Context, instanceID int) (string, error) {
 	var (
-		data   map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("api/instances/%d/actions/upgrade-rabbitmq-erlang", instanceID)
+		data       map[string]any
+		failed     map[string]any
+		statusCode int
+		path       = fmt.Sprintf("api/instances/%d/actions/upgrade-rabbitmq-erlang", instanceID)
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s upgrade to latest version", path))
@@ -91,24 +99,39 @@ func (api *API) UpgradeToLatestVersion(ctx context.Context, instanceID int) (str
 		sleep:        5 * time.Second,
 		data:         &data,
 		failed:       &failed,
+		statusCode:   &statusCode,
 	})
 	if err != nil {
 		return "", err
+	}
+
+	// Handle different success codes
+	if statusCode == 200 {
+		return "Already at highest possible version", nil
 	}
 
 	return api.waitUntilUpgraded(ctx, instanceID)
 }
 
 func (api *API) waitUntilUpgraded(ctx context.Context, instanceID int) (string, error) {
-	var (
-		data   []map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("api/instances/%d/nodes", instanceID)
-	)
+	var path = fmt.Sprintf("api/instances/%d/nodes", instanceID)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s waiting until RabbitMQ been upgraded", path))
+	tflog.Debug(ctx, fmt.Sprintf("waiting until RabbitMQ been upgraded, method=GET path=%s", path))
+
 	for {
-		_, err := api.sling.New().Path(path).Receive(&data, &failed)
+		var (
+			data   []map[string]any
+			failed map[string]any
+		)
+
+		err := api.callWithRetry(ctx, api.sling.New().Path(path), retryRequest{
+			functionName: "waitUntilUpgraded",
+			resourceName: "RabbitMQ nodes",
+			attempt:      1,
+			sleep:        5 * time.Second,
+			data:         &data,
+			failed:       &failed,
+		})
 		if err != nil {
 			return "", err
 		}
@@ -121,6 +144,13 @@ func (api *API) waitUntilUpgraded(ctx context.Context, instanceID int) (string, 
 		if ready {
 			return "", nil
 		}
-		time.Sleep(10 * time.Second)
+
+		// Check context before sleeping
+		select {
+		case <-ctx.Done():
+			return "", ctx.Err()
+		case <-time.After(10 * time.Second):
+			// Continue polling
+		}
 	}
 }

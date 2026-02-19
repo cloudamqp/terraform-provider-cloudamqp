@@ -47,10 +47,11 @@ func (api *API) UpgradeToSpecificLavinMQVersion(ctx context.Context, instanceID 
 	string, error) {
 
 	var (
-		data   map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("api/instances/%d/actions/upgrade-lavinmq", instanceID)
-		params = make(map[string]any)
+		data       map[string]any
+		failed     map[string]any
+		statusCode int
+		path       = fmt.Sprintf("api/instances/%d/actions/upgrade-lavinmq", instanceID)
+		params     = make(map[string]any)
 	)
 
 	params["version"] = version
@@ -63,20 +64,28 @@ func (api *API) UpgradeToSpecificLavinMQVersion(ctx context.Context, instanceID 
 		sleep:        5 * time.Second,
 		data:         &data,
 		failed:       &failed,
+		statusCode:   &statusCode,
 	})
 	if err != nil {
 		return "", err
 	}
 
 	tflog.Debug(ctx, "response data", data)
+
+	// Handle different success codes
+	if statusCode == 200 {
+		return "Already at highest possible version", nil
+	}
+
 	return api.waitUntilLavinMQUpgraded(ctx, instanceID)
 }
 
 func (api *API) UpgradeToLatestLavinMQVersion(ctx context.Context, instanceID int) (string, error) {
 	var (
-		data   map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("api/instances/%d/actions/upgrade-lavinmq", instanceID)
+		data       map[string]any
+		failed     map[string]any
+		statusCode int
+		path       = fmt.Sprintf("api/instances/%d/actions/upgrade-lavinmq", instanceID)
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s upgrade to latest version", path))
@@ -87,24 +96,39 @@ func (api *API) UpgradeToLatestLavinMQVersion(ctx context.Context, instanceID in
 		sleep:        5 * time.Second,
 		data:         &data,
 		failed:       &failed,
+		statusCode:   &statusCode,
 	})
 	if err != nil {
 		return "", err
+	}
+
+	// Handle different success codes
+	if statusCode == 200 {
+		return "Already at highest possible version", nil
 	}
 
 	return api.waitUntilLavinMQUpgraded(ctx, instanceID)
 }
 
 func (api *API) waitUntilLavinMQUpgraded(ctx context.Context, instanceID int) (string, error) {
-	var (
-		data   []map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("api/instances/%d/nodes", instanceID)
-	)
+	var path = fmt.Sprintf("api/instances/%d/nodes", instanceID)
 
-	tflog.Debug(ctx, fmt.Sprintf("waiting until LavinMQ been upgraded, method=GET path=%s ", path))
+	tflog.Debug(ctx, fmt.Sprintf("waiting until LavinMQ been upgraded, method=GET path=%s", path))
+
 	for {
-		_, err := api.sling.New().Path(path).Receive(&data, &failed)
+		var (
+			data   []map[string]any
+			failed map[string]any
+		)
+
+		err := api.callWithRetry(ctx, api.sling.New().Path(path), retryRequest{
+			functionName: "waitUntilLavinMQUpgraded",
+			resourceName: "LavinMQ nodes",
+			attempt:      1,
+			sleep:        5 * time.Second,
+			data:         &data,
+			failed:       &failed,
+		})
 		if err != nil {
 			return "", err
 		}
@@ -117,6 +141,13 @@ func (api *API) waitUntilLavinMQUpgraded(ctx context.Context, instanceID int) (s
 		if ready {
 			return "", nil
 		}
-		time.Sleep(10 * time.Second)
+
+		// Check context before sleeping
+		select {
+		case <-ctx.Done():
+			return "", ctx.Err()
+		case <-time.After(10 * time.Second):
+			// Continue polling
+		}
 	}
 }
