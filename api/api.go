@@ -162,7 +162,16 @@ func (api *API) handleErrorCode(ctx context.Context, errorCode int, request retr
 			return statusDecision{shouldRetry: false, err: fmt.Errorf("firewall rules validation failed: %s", errMsg)}
 		}
 		return statusDecision{shouldRetry: false, err: fmt.Errorf("firewall rules validation failed")}
-	case 40003: // Peering not found / Disk usage exceeded or validation error
+	case 40003: // VPC peering and Disk operations
+		// For VPC peering not found, retry
+		if request.resourceName == "VPC peering" {
+			if _, ok := ctx.Deadline(); !ok {
+				return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
+			}
+			tflog.Warn(ctx, fmt.Sprintf("peering not found (error_code=%d), will retry, attempt=%d", errorCode, request.attempt))
+			return statusDecision{shouldRetry: true, useBackoff: false, err: nil}
+		}
+		// Disk usage exceeded - do not retry
 		return statusDecision{shouldRetry: false, err: extractErrorMessage(request.failed, request.resourceName)}
 	case 40005: // Account suspended
 		return statusDecision{shouldRetry: false, err: extractErrorMessage(request.failed, request.resourceName)}
