@@ -188,7 +188,8 @@ func calculateBackoffDuration(ctx context.Context, request retryRequest) time.Du
 	// attempt=1: sleep * 1, attempt=2: sleep * 2, attempt=3: sleep * 4, etc.
 	// Guard against overflow by checking if shift amount is too large
 	if request.attempt > 63 {
-		tflog.Debug(ctx, fmt.Sprintf("Attempt %d exceeds safe exponential backoff range, using max backoff", request.attempt))
+		tflog.Debug(ctx, fmt.Sprintf("Attempt %d exceeds safe exponential backoff range, using max backoff for resource %s",
+			request.attempt, request.resourceName))
 		return maxBackoff
 	}
 
@@ -196,14 +197,12 @@ func calculateBackoffDuration(ctx context.Context, request retryRequest) time.Du
 
 	// Check for overflow (negative duration) or exceeding max
 	if backoff < 0 || backoff > maxBackoff {
-		if backoff < 0 {
-			tflog.Debug(ctx, fmt.Sprintf("Exponential backoff overflow detected at attempt=%d, using max backoff", request.attempt))
-		} else {
-			tflog.Debug(ctx, fmt.Sprintf("Exponential backoff would be %ds, capping at %ds", int(backoff.Seconds()), int(maxBackoff.Seconds())))
-		}
+		tflog.Debug(ctx, fmt.Sprintf("Using exponential max backoff: %ds (attempt=%d, base sleep=%ds) for resource %s",
+			int(maxBackoff.Seconds()), request.attempt, int(request.sleep.Seconds()), request.resourceName))
 		return maxBackoff
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("Using exponential backoff: %ds (attempt=%d, base sleep=%ds)", int(backoff.Seconds()), request.attempt, int(request.sleep.Seconds())))
+	tflog.Debug(ctx, fmt.Sprintf("Using exponential backoff: %ds (attempt=%d, base sleep=%ds) for resource %s",
+		int(backoff.Seconds()), request.attempt, int(request.sleep.Seconds()), request.resourceName))
 	return backoff
 }
