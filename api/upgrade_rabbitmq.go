@@ -16,19 +16,20 @@ func (api *API) ReadVersions(ctx context.Context, instanceID int) (map[string]an
 		path   = fmt.Sprintf("api/instances/%d/actions/new-rabbitmq-erlang-versions", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
-	response, err := api.sling.New().Path(path).Receive(&data, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
+	err := api.callWithRetry(ctx, api.sling.New().Path(path), retryRequest{
+		functionName: "ReadVersions",
+		resourceName: "RabbitMQ versions",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	switch response.StatusCode {
-	case 200:
-		return data, nil
-	default:
-		return nil, fmt.Errorf("failed to read RabbitMQ versions, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	return data, nil
 }
 
 // UpgradeRabbitMQ - Upgrade to latest possible version or a specific available version
@@ -60,18 +61,19 @@ func (api *API) UpgradeToSpecificVersion(ctx context.Context, instanceID int, ve
 	params["version"] = version
 	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s version=%s upgrade to specific version",
 		path, version), params)
-	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
+	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
+		functionName: "UpgradeToSpecificVersion",
+		resourceName: "RabbitMQ",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return "", err
 	}
 
-	switch response.StatusCode {
-	case 200:
-		return api.waitUntilUpgraded(ctx, instanceID)
-	default:
-		return "", fmt.Errorf("failed to upgrade specific RabbitMQ version, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	return api.waitUntilUpgraded(ctx, instanceID)
 }
 
 func (api *API) UpgradeToLatestVersion(ctx context.Context, instanceID int) (string, error) {
@@ -82,20 +84,19 @@ func (api *API) UpgradeToLatestVersion(ctx context.Context, instanceID int) (str
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s upgrade to latest version", path))
-	response, err := api.sling.New().Post(path).Receive(&data, &failed)
+	err := api.callWithRetry(ctx, api.sling.New().Post(path), retryRequest{
+		functionName: "UpgradeToLatestVersion",
+		resourceName: "RabbitMQ",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return "", err
 	}
 
-	switch response.StatusCode {
-	case 200:
-		return "Already at highest possible version", nil
-	case 202:
-		return api.waitUntilUpgraded(ctx, instanceID)
-	default:
-		return "", fmt.Errorf("failed to upgrade to latest RabbitMQ version, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	return api.waitUntilUpgraded(ctx, instanceID)
 }
 
 func (api *API) waitUntilUpgraded(ctx context.Context, instanceID int) (string, error) {
