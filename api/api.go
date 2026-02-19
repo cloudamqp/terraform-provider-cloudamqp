@@ -115,6 +115,16 @@ func (api *API) handleStatusCode(ctx context.Context, statusCode int, request re
 	}
 }
 
+// handleCustomRetryCode handles retry logic for custom status codes specified in retryRequest.
+// Used for polling operations where non-success status codes indicate temporary states.
+//
+// Example use case: Polling for VPC readiness where 400 means "still provisioning"
+// and 200 means "ready". Set customRetryCode to 400 and the function will retry
+// until the API returns 200 or the context deadline is exceeded.
+//
+// Requirements:
+//   - Context must have a deadline (use context.WithTimeout or context.WithDeadline)
+//   - Returns error if context has no deadline to prevent infinite retries
 func (api *API) handleCustomRetryCode(ctx context.Context, request retryRequest) statusDecision {
 	if _, ok := ctx.Deadline(); !ok {
 		return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
