@@ -87,13 +87,14 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 // handleStatusCode determines the action based on HTTP status code.
 // Returns a decision indicating whether to retry, use backoff, or return an error.
 func (api *API) handleStatusCode(ctx context.Context, statusCode int, request retryRequest) statusDecision {
+	if request.statusCode != nil {
+		*request.statusCode = statusCode
+	}
+
 	switch statusCode {
 	case request.customRetryCode:
 		return api.handleCustomRetryCode(ctx, request)
 	case 200, 201, 202, 204:
-		if request.statusCode != nil {
-			*request.statusCode = statusCode
-		}
 		return statusDecision{shouldRetry: false, err: nil}
 	case 400, 409:
 		return api.handleBadRequest(ctx, request)
@@ -102,9 +103,6 @@ func (api *API) handleStatusCode(ctx context.Context, statusCode int, request re
 		return statusDecision{shouldRetry: false, err: nil}
 	case 410:
 		tflog.Warn(ctx, fmt.Sprintf("the %s has been deleted", request.resourceName))
-		if request.statusCode != nil {
-			*request.statusCode = statusCode
-		}
 		return statusDecision{shouldRetry: false, err: nil}
 	case 423:
 		return api.handleResourceLocked(ctx, request)
@@ -164,7 +162,7 @@ func (api *API) handleErrorCode(ctx context.Context, errorCode int, request retr
 		return statusDecision{shouldRetry: false, err: fmt.Errorf("firewall rules validation failed")}
 	case 40003: // VPC peering and Disk operations
 		// For VPC peering not found, retry
-		if request.resourceName == "VPC peering" {
+		if request.resourceName == "VPC Peering" {
 			if _, ok := ctx.Deadline(); !ok {
 				return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
 			}
