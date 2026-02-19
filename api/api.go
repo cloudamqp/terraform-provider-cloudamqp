@@ -91,6 +91,9 @@ func (api *API) handleStatusCode(ctx context.Context, statusCode int, request re
 	case request.customRetryCode:
 		return api.handleCustomRetryCode(ctx, request)
 	case 200, 201, 202, 204:
+		if request.statusCode != nil {
+			*request.statusCode = statusCode
+		}
 		return statusDecision{shouldRetry: false, err: nil}
 	case 400, 409:
 		return api.handleBadRequest(ctx, request)
@@ -99,6 +102,9 @@ func (api *API) handleStatusCode(ctx context.Context, statusCode int, request re
 		return statusDecision{shouldRetry: false, err: nil}
 	case 410:
 		tflog.Warn(ctx, fmt.Sprintf("the %s has been deleted", request.resourceName))
+		if request.statusCode != nil {
+			*request.statusCode = statusCode
+		}
 		return statusDecision{shouldRetry: false, err: nil}
 	case 423:
 		return api.handleResourceLocked(ctx, request)
