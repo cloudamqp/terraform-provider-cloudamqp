@@ -126,6 +126,19 @@ func (api *API) handleCustomRetryCode(ctx context.Context, request retryRequest)
 }
 
 func (api *API) handleBadRequest(ctx context.Context, request retryRequest) statusDecision {
+	if request.failed == nil {
+		return statusDecision{shouldRetry: false, err: fmt.Errorf("getting %s: unknown error", request.resourceName)}
+	}
+
+	// Check for specific error codes first
+	if errorCode, ok := (*request.failed)["error_code"].(float64); ok {
+		if decision := api.handleErrorCode(ctx, int(errorCode), request); decision.err != nil || decision.shouldRetry {
+			return decision
+		}
+		// Unknown error_code value - continue to check error/message fields below
+	}
+
+	// If error_code doesn't exist or is unknown, check for backend timeout or extract error message
 	if isBackendTimeout(request.failed) {
 		if _, ok := ctx.Deadline(); !ok {
 			return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
@@ -134,6 +147,39 @@ func (api *API) handleBadRequest(ctx context.Context, request retryRequest) stat
 		return statusDecision{shouldRetry: true, useBackoff: false, err: nil}
 	}
 	return statusDecision{shouldRetry: false, err: extractErrorMessage(request.failed, request.resourceName)}
+}
+
+func (api *API) handleErrorCode(ctx context.Context, errorCode int, request retryRequest) statusDecision {
+	switch errorCode {
+	case 40001: // Firewall not finished configuring / Firewall blocking peering creation
+		if _, ok := ctx.Deadline(); !ok {
+			return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
+		}
+		tflog.Warn(ctx, fmt.Sprintf("firewall not finished configuring (error_code=%d), will retry, attempt=%d", errorCode, request.attempt))
+		return statusDecision{shouldRetry: true, useBackoff: false, err: nil}
+	case 40002: // Firewall rules validation failed
+		if errMsg, ok := (*request.failed)["error"].(string); ok {
+			return statusDecision{shouldRetry: false, err: fmt.Errorf("firewall rules validation failed: %s", errMsg)}
+		}
+		return statusDecision{shouldRetry: false, err: fmt.Errorf("firewall rules validation failed")}
+	case 40003: // Peering not found / Disk usage exceeded or validation error
+		return statusDecision{shouldRetry: false, err: extractErrorMessage(request.failed, request.resourceName)}
+	case 40005: // Account suspended
+		return statusDecision{shouldRetry: false, err: extractErrorMessage(request.failed, request.resourceName)}
+	case 40007: // Invalid disk size
+		return statusDecision{shouldRetry: false, err: extractErrorMessage(request.failed, request.resourceName)}
+	case 40008: // Platform not supported / downtime required
+		return statusDecision{shouldRetry: false, err: extractErrorMessage(request.failed, request.resourceName)}
+	case 40099: // Timeout talking to backend
+		if _, ok := ctx.Deadline(); !ok {
+			return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
+		}
+		tflog.Warn(ctx, fmt.Sprintf("timeout talking to backend (error_code=%d), will retry, attempt=%d", errorCode, request.attempt))
+		return statusDecision{shouldRetry: true, useBackoff: false, err: nil}
+	default:
+		// Unknown error_code - return empty decision to continue with other checks
+		return statusDecision{shouldRetry: false, err: nil}
+	}
 }
 
 func (api *API) handleResourceLocked(ctx context.Context, request retryRequest) statusDecision {
@@ -162,9 +208,6 @@ func (api *API) handleServiceUnavailable(ctx context.Context, request retryReque
 }
 
 func isBackendTimeout(failed *map[string]any) bool {
-	if failed == nil {
-		return false
-	}
 	errStr, ok := (*failed)["error"].(string)
 	return ok && errStr == "Timeout talking to backend"
 }
