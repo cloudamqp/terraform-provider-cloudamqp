@@ -400,8 +400,8 @@ The following arguments used by Data dog.
 
   ***Note:*** Create a Datadog API key at, [app.datadoghq.com]
 
-* `region`  - (Required) Region hosting the integration service. Valid regions, `us1`, `us3`, `us5`
-              and `eu`.
+* `region`  - (Required) Region hosting the integration service. Valid regions, `us1`, `us3`, `us5`,
+              `eu`, and `ap2`.
 
 Optional arguments:
 
