@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/dghubble/sling"
@@ -132,7 +131,7 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 	// Calculate sleep duration: use backoff for 429, fixed sleep for others
 	sleepDuration := request.sleep
 	if response.StatusCode == 429 {
-		sleepDuration = calculateBackoffDuration(ctx, response, request)
+		sleepDuration = calculateBackoffDuration(ctx, request)
 	}
 
 	select {
@@ -145,41 +144,10 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 	}
 }
 
-// calculateBackoffDuration calculates the backoff duration for rate limit retries.
-// It respects the Retry-After header if present, otherwise uses exponential backoff
-// with a maximum cap of 60 seconds.
-func calculateBackoffDuration(ctx context.Context, response *http.Response, request retryRequest) time.Duration {
+// calculateBackoffDuration calculates the backoff duration for rate limit retries
+// using exponential backoff with a maximum cap of 60 seconds.
+func calculateBackoffDuration(ctx context.Context, request retryRequest) time.Duration {
 	const maxBackoff = 60 * time.Second
-
-	// Check for Retry-After header
-	if retryAfter := response.Header.Get("Retry-After"); retryAfter != "" {
-		// Try parsing as seconds (integer)
-		if seconds, err := strconv.ParseInt(retryAfter, 10, 64); err == nil {
-			duration := time.Duration(seconds) * time.Second
-			if duration > maxBackoff {
-				tflog.Debug(ctx, fmt.Sprintf("Retry-After header specifies %ds, capping at %ds", seconds, int(maxBackoff.Seconds())))
-				return maxBackoff
-			}
-			tflog.Debug(ctx, fmt.Sprintf("Using Retry-After header value: %ds", seconds))
-			return duration
-		}
-
-		// Try parsing as HTTP-date format
-		if retryTime, err := http.ParseTime(retryAfter); err == nil {
-			duration := time.Until(retryTime)
-			if duration < 0 {
-				duration = 0
-			}
-			if duration > maxBackoff {
-				tflog.Debug(ctx, fmt.Sprintf("Retry-After header specifies %ds, capping at %ds", int(duration.Seconds()), int(maxBackoff.Seconds())))
-				return maxBackoff
-			}
-			tflog.Debug(ctx, fmt.Sprintf("Using Retry-After header date: %ds", int(duration.Seconds())))
-			return duration
-		}
-
-		tflog.Debug(ctx, fmt.Sprintf("Failed to parse Retry-After header: %s, falling back to exponential backoff", retryAfter))
-	}
 
 	// Exponential backoff: sleep * 2^(attempt-1)
 	// attempt=1: sleep * 1, attempt=2: sleep * 2, attempt=3: sleep * 4, etc.
