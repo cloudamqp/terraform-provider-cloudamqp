@@ -142,50 +142,53 @@ func (api *API) waitForPeeringStatus(ctx context.Context, instanceID int, peerin
 func (api *API) waitForPeeringStatusWithRetry(ctx context.Context, path, peeringID string,
 	attempt, sleep, timeout int) (int, error) {
 
-	var (
-		data   map[string]any
-		failed map[string]any
-	)
+	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
 
-	response, err := api.sling.New().Path(path).Receive(&data, &failed)
-	if err != nil {
-		return attempt, err
-	} else if attempt*sleep > timeout {
-		return attempt, fmt.Errorf("timeout reached after %d seconds, while accepting VPC peering",
-			timeout)
-	}
+	for {
+		if ctxTimeout.Err() != nil {
+			return attempt, fmt.Errorf("timeout reached after %d seconds, while waiting for VPC peering status", timeout)
+		}
 
-	switch response.StatusCode {
-	case 200:
-		switch data["status"] {
+		var (
+			data   map[string]any
+			failed map[string]any
+		)
+
+		tflog.Debug(ctx, fmt.Sprintf("Checking VPC peering status, attempt=%d", attempt))
+		err := api.callWithRetry(ctxTimeout, api.sling.New().Get(path), retryRequest{
+			functionName: "waitForPeeringStatusWithRetry",
+			resourceName: "VPC Peering",
+			attempt:      attempt,
+			sleep:        time.Duration(sleep) * time.Second,
+			data:         &data,
+			failed:       &failed,
+		})
+		if err != nil {
+			return attempt, err
+		}
+
+		// Check the status field
+		status, ok := data["status"].(string)
+		if !ok {
+			return attempt, fmt.Errorf("status field missing or invalid in response")
+		}
+
+		switch status {
 		case "active", "pending-acceptance":
 			return attempt, nil
 		case "deleted":
 			return attempt, fmt.Errorf("peering=%s has been deleted", peeringID)
-		}
-	case 400:
-		switch {
-		case failed["error_code"] == nil:
-			break
-		case failed["error_code"].(float64) == 40003:
-			tflog.Debug(ctx, fmt.Sprintf("peering connection not yet exists: %s, attempt=%d until_timeout=%d",
-				failed["message"].(string), attempt, (timeout-(attempt*sleep))))
+		default:
+			// Status is not ready yet, sleep and retry
+			tflog.Debug(ctx, fmt.Sprintf("VPC peering status=%s, not ready yet, attempt=%d", status, attempt))
 			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.waitForPeeringStatusWithRetry(ctx, path, peeringID, attempt, sleep, timeout)
+			select {
+			case <-ctxTimeout.Done():
+				return attempt, fmt.Errorf("timeout reached after %d seconds, while waiting for VPC peering status", timeout)
+			case <-time.After(time.Duration(sleep) * time.Second):
+				continue
+			}
 		}
-	case 423:
-		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d ", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.waitForPeeringStatusWithRetry(ctx, path, peeringID, attempt, sleep, timeout)
-	case 503:
-		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d ", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.waitForPeeringStatusWithRetry(ctx, path, peeringID, attempt, sleep, timeout)
 	}
-
-	return attempt, fmt.Errorf("failed to accept VPC peering, status=%d message=%s ",
-		response.StatusCode, failed)
 }

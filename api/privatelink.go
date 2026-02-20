@@ -119,46 +119,57 @@ func (api *API) DisablePrivatelink(ctx context.Context, instanceID int) error {
 func (api *API) waitForEnablePrivatelinkWithRetry(ctx context.Context, instanceID, attempt, sleep,
 	timeout int) error {
 
-	var (
-		data   map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
-	)
+	path := fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
+	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s attempt=%d sleep=%d timeout=%d", path, attempt,
-		sleep, timeout))
-	response, err := api.sling.New().Get(path).Receive(&data, &failed)
-	if err != nil {
-		return err
-	} else if attempt*sleep > timeout {
-		return fmt.Errorf("timeout reached after %d seconds, while enable PrivateLink", timeout)
-	}
+	tflog.Debug(ctx, fmt.Sprintf("waiting for PrivateLink to be enabled, sleep=%d timeout=%d", sleep, timeout))
 
-	switch response.StatusCode {
-	case 200:
-		tflog.Debug(ctx, "response data", data)
-		switch data["status"].(string) {
+	for {
+		if ctxTimeout.Err() != nil {
+			return fmt.Errorf("timeout reached after %d seconds, while enable PrivateLink", timeout)
+		}
+
+		var (
+			data   map[string]any
+			failed map[string]any
+		)
+
+		tflog.Debug(ctx, fmt.Sprintf("Checking PrivateLink status, attempt=%d", attempt))
+		err := api.callWithRetry(ctxTimeout, api.sling.New().Get(path), retryRequest{
+			functionName: "waitForEnablePrivatelinkWithRetry",
+			resourceName: "PrivateLink",
+			attempt:      attempt,
+			sleep:        time.Duration(sleep) * time.Second,
+			data:         &data,
+			failed:       &failed,
+		})
+		if err != nil {
+			return err
+		}
+
+		// Check the status field
+		status, ok := data["status"].(string)
+		if !ok {
+			return fmt.Errorf("status field missing or invalid in response")
+		}
+
+		tflog.Debug(ctx, fmt.Sprintf("PrivateLink status=%s", status))
+		switch status {
 		case "enabled":
 			return nil
 		case "pending":
-			tflog.Debug(ctx, fmt.Sprintf("enable PrivateLink not finished, will retry, "+
-				"attempt=%d until_timeout=%d", attempt, (timeout-(attempt*sleep))))
+			// Status is not ready yet, sleep and retry
+			tflog.Debug(ctx, fmt.Sprintf("enable PrivateLink not finished, will retry, attempt=%d", attempt))
 			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.waitForEnablePrivatelinkWithRetry(ctx, instanceID, attempt, sleep, timeout)
+			select {
+			case <-ctxTimeout.Done():
+				return fmt.Errorf("timeout reached after %d seconds, while enable PrivateLink", timeout)
+			case <-time.After(time.Duration(sleep) * time.Second):
+				continue
+			}
+		default:
+			return fmt.Errorf("unexpected PrivateLink status: %s", status)
 		}
-	case 423:
-		tflog.Debug(ctx, fmt.Sprintf("resource is locked, will try again, attempt=%d", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.waitForEnablePrivatelinkWithRetry(ctx, instanceID, attempt, sleep, timeout)
-	case 503:
-		tflog.Debug(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d", attempt))
-		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
-		return api.waitForEnablePrivatelinkWithRetry(ctx, instanceID, attempt, sleep, timeout)
 	}
-
-	return fmt.Errorf("failed to enable PrivateLink, status=%d message=%s",
-		response.StatusCode, failed)
 }

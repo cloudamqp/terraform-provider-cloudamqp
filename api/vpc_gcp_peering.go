@@ -12,32 +12,45 @@ import (
 func (api *API) waitForGcpPeeringStatus(ctx context.Context, path, peerID string,
 	attempt, sleep, timeout int) error {
 
-	var (
-		data   map[string]any
-		failed map[string]any
-	)
+	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
 
 	tflog.Debug(ctx, "waiting for VPC peering status")
 	for {
-		if attempt*sleep > timeout {
-			return fmt.Errorf("timeout reached after %d seconds, while waiting on VPC peering status",
-				timeout)
+		if ctxTimeout.Err() != nil {
+			return fmt.Errorf("timeout reached after %d seconds, while waiting on VPC peering status", timeout)
 		}
 
-		response, err := api.sling.New().Get(path).Receive(&data, &failed)
+		var (
+			data   map[string]any
+			failed map[string]any
+		)
+
+		tflog.Debug(ctx, fmt.Sprintf("Checking GCP VPC peering status, attempt=%d", attempt))
+		err := api.callWithRetry(ctxTimeout, api.sling.New().Get(path), retryRequest{
+			functionName: "waitForGcpPeeringStatus",
+			resourceName: "VPC GCP Peering",
+			attempt:      attempt,
+			sleep:        time.Duration(sleep) * time.Second,
+			data:         &data,
+			failed:       &failed,
+		})
 		if err != nil {
 			return err
 		}
 
-		if response.StatusCode != 200 {
-			return fmt.Errorf("failed to read VPC peering status, status=%d message=%s",
-				response.StatusCode, failed)
+		// Check the rows for the matching peerID and ACTIVE state
+		rows, ok := data["rows"].([]any)
+		if !ok {
+			return fmt.Errorf("rows field missing or invalid in response")
 		}
 
-		rows := data["rows"].([]any)
 		if len(rows) > 0 {
 			for _, row := range rows {
-				tempRow := row.(map[string]any)
+				tempRow, ok := row.(map[string]any)
+				if !ok {
+					continue
+				}
 				if tempRow["name"] != peerID {
 					continue
 				}
@@ -46,10 +59,16 @@ func (api *API) waitForGcpPeeringStatus(ctx context.Context, path, peerID string
 				}
 			}
 		}
-		tflog.Debug(ctx, fmt.Sprintf("waiting for state set to ACTIVE, attemp=%d until_timeout=%d",
-			attempt, (timeout-(attempt*sleep))))
+
+		// State is not ACTIVE yet, sleep and retry
+		tflog.Debug(ctx, fmt.Sprintf("waiting for state set to ACTIVE, attempt=%d", attempt))
 		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
+		select {
+		case <-ctxTimeout.Done():
+			return fmt.Errorf("timeout reached after %d seconds, while waiting on VPC peering status", timeout)
+		case <-time.After(time.Duration(sleep) * time.Second):
+			continue
+		}
 	}
 }
 

@@ -40,6 +40,12 @@ type retryRequest struct {
 	statusCode      *int // Optional: populated with HTTP status code on success
 }
 
+type statusDecision struct {
+	shouldRetry bool
+	useBackoff  bool
+	err         error
+}
+
 func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request retryRequest) error {
 	if ctx.Err() != nil {
 		return ctx.Err()
@@ -51,86 +57,20 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 			request.attempt, err.Error()))
 	}
 
-	tflog.Info(ctx, fmt.Sprintf("callWithRetry function=%s attempt=%d status=%d", request.functionName,
+	tflog.Debug(ctx, fmt.Sprintf("callWithRetry function=%s attempt=%d status=%d", request.functionName,
 		request.attempt, response.StatusCode))
 
-	switch response.StatusCode {
-	case request.customRetryCode:
-		if _, ok := ctx.Deadline(); !ok {
-			return fmt.Errorf("context has no deadline")
-		}
-		tflog.Warn(ctx, fmt.Sprintf("custom retry logic, will try again, attempt=%d", request.attempt))
-		// Intentionally fall through to retry logic below
-	case 200, 201, 202, 204:
-		// Populate status code if requested
-		if request.statusCode != nil {
-			*request.statusCode = response.StatusCode
-		}
+	decision := api.handleStatusCode(ctx, response.StatusCode, request)
+	if decision.err != nil {
+		return decision.err
+	}
+	if !decision.shouldRetry {
 		return nil
-	case 400, 409:
-		// Check for specific error codes first (e.g., firewall-specific errors)
-		if errorCode, ok := (*request.failed)["error_code"].(float64); ok {
-			switch errorCode {
-			case 40001: // Firewall not finished configuring
-				if _, ok := ctx.Deadline(); !ok {
-					return fmt.Errorf("context has no deadline")
-				}
-				tflog.Warn(ctx, fmt.Sprintf("firewall not finished configuring (error_code=%d), will retry, attempt=%d", int(errorCode), request.attempt))
-				// Intentionally fall through to retry logic below
-			case 40002: // Firewall rules validation failed
-				if errMsg, ok := (*request.failed)["error"].(string); ok {
-					return fmt.Errorf("firewall rules validation failed: %s", errMsg)
-				}
-				return fmt.Errorf("firewall rules validation failed")
-			default:
-				// Unknown error_code value - continue checking error/message fields
-			}
-		} else {
-			// If error_code doesn't exist or type assertion fails, check error/message fields
-			if errStr, ok := (*request.failed)["error"].(string); ok && errStr == "Timeout talking to backend" {
-				if _, ok := ctx.Deadline(); !ok {
-					return fmt.Errorf("context has no deadline")
-				}
-				tflog.Warn(ctx, fmt.Sprintf("timeout talking to backend, will retry, attempt=%d", request.attempt))
-				// Intentionally fall through to retry logic below
-			} else if msg, ok := (*request.failed)["message"].(string); ok {
-				return fmt.Errorf("getting %s: %s", request.resourceName, msg)
-			} else {
-				return fmt.Errorf("getting %s: %v", request.resourceName, *request.failed)
-			}
-		}
-	case 404:
-		tflog.Warn(ctx, fmt.Sprintf("the %s was not found", request.resourceName))
-		return nil
-	case 410:
-		tflog.Warn(ctx, fmt.Sprintf("the %s has been deleted", request.resourceName))
-		return nil
-	case 429:
-		if _, ok := ctx.Deadline(); !ok {
-			return fmt.Errorf("context has no deadline")
-		}
-		tflog.Warn(ctx, fmt.Sprintf("rate limit exceeded for %s, will retry with backoff, attempt=%d", request.resourceName, request.attempt))
-		// Intentionally fall through to retry logic below
-	case 423:
-		if msg, ok := (*request.failed)["message"].(string); ok {
-			tflog.Warn(ctx, fmt.Sprintf("resource %s is locked: %s. Will try again, attempt=%d", request.resourceName, msg, request.attempt))
-		} else {
-			tflog.Warn(ctx, fmt.Sprintf("resource %s is locked. Will try again, attempt=%d", request.resourceName, request.attempt))
-		}
-		// Intentionally fall through to retry logic below
-	case 503:
-		if _, ok := ctx.Deadline(); !ok {
-			return fmt.Errorf("context has no deadline")
-		}
-		tflog.Warn(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d", request.attempt))
-		// Intentionally fall through to retry logic below
-	default:
-		return fmt.Errorf("unexpected status code: %d", response.StatusCode)
 	}
 
 	// Calculate sleep duration: use backoff for 429, fixed sleep for others
 	sleepDuration := request.sleep
-	if response.StatusCode == 429 {
+	if decision.useBackoff {
 		sleepDuration = calculateBackoffDuration(ctx, request)
 	}
 
@@ -144,6 +84,161 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 	}
 }
 
+// handleStatusCode determines the action based on HTTP status code.
+// Returns a decision indicating whether to retry, use backoff, or return an error.
+func (api *API) handleStatusCode(ctx context.Context, statusCode int, request retryRequest) statusDecision {
+	if request.statusCode != nil {
+		*request.statusCode = statusCode
+	}
+
+	switch statusCode {
+	case request.customRetryCode:
+		return api.handleCustomRetryCode(ctx, request)
+	case 200, 201, 202, 204:
+		return statusDecision{shouldRetry: false, err: nil}
+	case 400, 409:
+		return api.handleBadRequest(ctx, request)
+	case 404:
+		tflog.Warn(ctx, fmt.Sprintf("the %s was not found", request.resourceName))
+		return statusDecision{shouldRetry: false, err: nil}
+	case 410:
+		tflog.Warn(ctx, fmt.Sprintf("the %s has been deleted", request.resourceName))
+		return statusDecision{shouldRetry: false, err: nil}
+	case 423:
+		return api.handleResourceLocked(ctx, request)
+	case 429:
+		return api.handleRateLimit(ctx, request)
+	case 503:
+		return api.handleServiceUnavailable(ctx, request)
+	default:
+		return statusDecision{shouldRetry: false, err: fmt.Errorf("unexpected status code: %d", statusCode)}
+	}
+}
+
+// handleCustomRetryCode handles retry logic for custom status codes specified in retryRequest.
+// Used for polling operations where non-success status codes indicate temporary states.
+//
+// Example use case: Polling for VPC readiness where 400 means "still provisioning"
+// and 200 means "ready". Set customRetryCode to 400 and the function will retry
+// until the API returns 200 or the context deadline is exceeded.
+//
+// Requirements:
+//   - Context must have a deadline (use context.WithTimeout or context.WithDeadline)
+//   - Returns error if context has no deadline to prevent infinite retries
+func (api *API) handleCustomRetryCode(ctx context.Context, request retryRequest) statusDecision {
+	if _, ok := ctx.Deadline(); !ok {
+		return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
+	}
+	tflog.Warn(ctx, fmt.Sprintf("custom retry logic, will try again, attempt=%d", request.attempt))
+	return statusDecision{shouldRetry: true, useBackoff: false, err: nil}
+}
+
+func (api *API) handleBadRequest(ctx context.Context, request retryRequest) statusDecision {
+	if request.failed == nil {
+		return statusDecision{shouldRetry: false, err: fmt.Errorf("getting %s: unknown error", request.resourceName)}
+	}
+
+	// Check for specific error codes first
+	if errorCode, ok := (*request.failed)["error_code"].(float64); ok {
+		if decision := api.handleErrorCode(ctx, int(errorCode), request); decision.err != nil || decision.shouldRetry {
+			return decision
+		}
+		// Unknown error_code value - continue to check error/message fields below
+	}
+
+	// If error_code doesn't exist or is unknown, check for backend timeout or extract error message
+	if isBackendTimeout(request.failed) {
+		if _, ok := ctx.Deadline(); !ok {
+			return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
+		}
+		tflog.Warn(ctx, fmt.Sprintf("timeout talking to backend, will try again, attempt=%d", request.attempt))
+		return statusDecision{shouldRetry: true, useBackoff: false, err: nil}
+	}
+	return statusDecision{shouldRetry: false, err: extractErrorMessage(request.failed, request.resourceName)}
+}
+
+func (api *API) handleErrorCode(ctx context.Context, errorCode int, request retryRequest) statusDecision {
+	switch errorCode {
+	case 40001: // Firewall not finished configuring / Firewall blocking peering creation
+		if _, ok := ctx.Deadline(); !ok {
+			return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
+		}
+		tflog.Warn(ctx, fmt.Sprintf("firewall not finished configuring (error_code=%d), will retry, attempt=%d", errorCode, request.attempt))
+		return statusDecision{shouldRetry: true, useBackoff: false, err: nil}
+	case 40002: // Firewall rules validation failed
+		if errMsg, ok := (*request.failed)["error"].(string); ok {
+			return statusDecision{shouldRetry: false, err: fmt.Errorf("firewall rules validation failed: %s", errMsg)}
+		}
+		return statusDecision{shouldRetry: false, err: fmt.Errorf("firewall rules validation failed")}
+	case 40003: // VPC peering and Disk operations
+		// For VPC peering not found, retry
+		if request.resourceName == "VPC Peering" {
+			if _, ok := ctx.Deadline(); !ok {
+				return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
+			}
+			tflog.Warn(ctx, fmt.Sprintf("peering not found (error_code=%d), will retry, attempt=%d", errorCode, request.attempt))
+			return statusDecision{shouldRetry: true, useBackoff: false, err: nil}
+		}
+		// Disk usage exceeded - do not retry
+		return statusDecision{shouldRetry: false, err: extractErrorMessage(request.failed, request.resourceName)}
+	case 40005: // Account suspended
+		return statusDecision{shouldRetry: false, err: extractErrorMessage(request.failed, request.resourceName)}
+	case 40007: // Invalid disk size
+		return statusDecision{shouldRetry: false, err: extractErrorMessage(request.failed, request.resourceName)}
+	case 40008: // Platform not supported / downtime required
+		return statusDecision{shouldRetry: false, err: extractErrorMessage(request.failed, request.resourceName)}
+	case 40099: // Timeout talking to backend
+		if _, ok := ctx.Deadline(); !ok {
+			return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
+		}
+		tflog.Warn(ctx, fmt.Sprintf("timeout talking to backend (error_code=%d), will retry, attempt=%d", errorCode, request.attempt))
+		return statusDecision{shouldRetry: true, useBackoff: false, err: nil}
+	default:
+		// Unknown error_code - return empty decision to continue with other checks
+		return statusDecision{shouldRetry: false, err: nil}
+	}
+}
+
+func (api *API) handleResourceLocked(ctx context.Context, request retryRequest) statusDecision {
+	if msg, ok := (*request.failed)["message"].(string); ok {
+		tflog.Warn(ctx, fmt.Sprintf("resource %s is locked: %s. Will try again, attempt=%d", request.resourceName, msg, request.attempt))
+	} else {
+		tflog.Warn(ctx, fmt.Sprintf("resource %s is locked. Will try again, attempt=%d", request.resourceName, request.attempt))
+	}
+	return statusDecision{shouldRetry: true, useBackoff: false, err: nil}
+}
+
+func (api *API) handleRateLimit(ctx context.Context, request retryRequest) statusDecision {
+	if _, ok := ctx.Deadline(); !ok {
+		return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
+	}
+	tflog.Warn(ctx, fmt.Sprintf("rate limit exceeded for %s, will retry with backoff, attempt=%d", request.resourceName, request.attempt))
+	return statusDecision{shouldRetry: true, useBackoff: true, err: nil}
+}
+
+func (api *API) handleServiceUnavailable(ctx context.Context, request retryRequest) statusDecision {
+	if _, ok := ctx.Deadline(); !ok {
+		return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
+	}
+	tflog.Warn(ctx, fmt.Sprintf("service unavailable, will try again, attempt=%d", request.attempt))
+	return statusDecision{shouldRetry: true, useBackoff: false, err: nil}
+}
+
+func isBackendTimeout(failed *map[string]any) bool {
+	errStr, ok := (*failed)["error"].(string)
+	return ok && errStr == "Timeout talking to backend"
+}
+
+func extractErrorMessage(failed *map[string]any, resourceName string) error {
+	if failed == nil {
+		return fmt.Errorf("getting %s: unknown error", resourceName)
+	}
+	if msg, ok := (*failed)["message"].(string); ok {
+		return fmt.Errorf("getting %s: %s", resourceName, msg)
+	}
+	return fmt.Errorf("getting %s: %v", resourceName, *failed)
+}
+
 // calculateBackoffDuration calculates the backoff duration for rate limit retries
 // using exponential backoff with a maximum cap of 60 seconds.
 func calculateBackoffDuration(ctx context.Context, request retryRequest) time.Duration {
@@ -153,7 +248,8 @@ func calculateBackoffDuration(ctx context.Context, request retryRequest) time.Du
 	// attempt=1: sleep * 1, attempt=2: sleep * 2, attempt=3: sleep * 4, etc.
 	// Guard against overflow by checking if shift amount is too large
 	if request.attempt > 63 {
-		tflog.Debug(ctx, fmt.Sprintf("Attempt %d exceeds safe exponential backoff range, using max backoff", request.attempt))
+		tflog.Debug(ctx, fmt.Sprintf("Attempt %d exceeds safe exponential backoff range, using max backoff for resource %s",
+			request.attempt, request.resourceName))
 		return maxBackoff
 	}
 
@@ -161,14 +257,12 @@ func calculateBackoffDuration(ctx context.Context, request retryRequest) time.Du
 
 	// Check for overflow (negative duration) or exceeding max
 	if backoff < 0 || backoff > maxBackoff {
-		if backoff < 0 {
-			tflog.Debug(ctx, fmt.Sprintf("Exponential backoff overflow detected at attempt=%d, using max backoff", request.attempt))
-		} else {
-			tflog.Debug(ctx, fmt.Sprintf("Exponential backoff would be %ds, capping at %ds", int(backoff.Seconds()), int(maxBackoff.Seconds())))
-		}
+		tflog.Debug(ctx, fmt.Sprintf("Using exponential max backoff: %ds (attempt=%d, base sleep=%ds) for resource %s",
+			int(maxBackoff.Seconds()), request.attempt, int(request.sleep.Seconds()), request.resourceName))
 		return maxBackoff
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("Using exponential backoff: %ds (attempt=%d, base sleep=%ds)", int(backoff.Seconds()), request.attempt, int(request.sleep.Seconds())))
+	tflog.Debug(ctx, fmt.Sprintf("Using exponential backoff: %ds (attempt=%d, base sleep=%ds) for resource %s",
+		int(backoff.Seconds()), request.attempt, int(request.sleep.Seconds()), request.resourceName))
 	return backoff
 }
