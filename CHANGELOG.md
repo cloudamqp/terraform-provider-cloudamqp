@@ -1,8 +1,38 @@
+## 1.43.0 (Unreleased)
+
+NOTES:
+
+* Major refactoring of the API client layer to use unified retry mechanism across all API methods, providing consistent
+  error handling and improved reliability.
+
+IMPROVEMENTS:
+
+* ClientLibrary: Refactored all API methods to use unified `callWithRetry()` approach for consistent error handling and retry logic ([#454])
+* CLientLibrary: Added rate limit retry with exponential backoff ([#455])
+* ClientLibrary: Refactored the genric retry with centralized HTTP status code handling and isolated logic ([#456])
+* Integration: Added support for `ap2` Datadog region for resources: ([#457])
+  * `cloudamqp_integration_metrics_prometheus`
+  * `cloudamqp_integration_log`
+
+DEPENDENCIES:
+
+* Bumped goreleaser/goreleaser-action from 6.4.0 to 7.0.0 ([#458])
+* Bumped github.com/hashicorp/terraform-plugin-go from 0.29.0 to 0.30.0 ([#459])
+* Bumped hashicorp/setup-terraform from 3 to 4 ([#460])
+
+[#454]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/454
+[#455]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/455
+[#456]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/456
+[#457]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/457
+[#458]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/458
+[#459]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/459
+[#460]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/460
+
 ## 1.42.1 (11 Feb, 2026)
 
 IMPROVEMENTS:
 
-* Integration: Updated how metrics filter is created/updated for `cloudamqp_integration_metric_prometheus` [#451]
+* Integration: Updated how metrics filter is created/updated for `cloudamqp_integration_metric_prometheus` ([#451])
 
 [#451]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/451
 
@@ -23,7 +53,7 @@ DEPENDENCIES:
 
 IMPROVEMENTS:
 
-* Resource: Added additional argument "key_id" to `cloudamqp_custom_certificate` [#448]
+* Resource: Added additional argument "key_id" to `cloudamqp_custom_certificate` ([#448])
 
 [#448]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/448
 
