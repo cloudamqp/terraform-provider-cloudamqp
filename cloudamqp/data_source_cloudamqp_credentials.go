@@ -12,7 +12,8 @@ import (
 func dataSourceCredentials() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: dataSourceCredentialsRead,
-
+		DeprecationMessage: "Use the credentials attribute from the `cloudamqp_instance` resource instead. This data" +
+			" source will be removed in a future version.",
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
 				Type:        schema.TypeInt,
