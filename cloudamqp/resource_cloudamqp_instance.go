@@ -124,6 +124,15 @@ func resourceInstance() *schema.Resource {
 				Computed:    true,
 				Description: "Software backend used, determined by subscription plan",
 			},
+			"credentials": {
+				Type:        schema.TypeMap,
+				Computed:    true,
+				Sensitive:   true,
+				Description: "The CloudAMQP broker instance credentials",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
 			"preferred_az": {
 				Type:        schema.TypeList,
 				Optional:    true,
@@ -268,11 +277,21 @@ func resourceRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Di
 	}
 
 	data = api.UrlInformation(data["url"].(string))
+	credentialsMap := make(map[string]any)
 	for k, v := range data {
-		if validateInstanceSchemaAttribute(k) {
-			if err = d.Set(k, v); err != nil {
-				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
+		switch k {
+		case "username", "password":
+			credentialsMap[k] = v
+		case "vhost":
+			if err = d.Set("vhost", v); err != nil {
+				return diag.Errorf("error setting vhost for resource %s: %s", d.Id(), err)
 			}
+		}
+	}
+
+	if len(credentialsMap) > 0 {
+		if err = d.Set("credentials", credentialsMap); err != nil {
+			return diag.Errorf("error setting credentials for resource %s: %s", d.Id(), err)
 		}
 	}
 	return diag.Diagnostics{}
