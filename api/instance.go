@@ -61,14 +61,14 @@ func (api *API) waitUntilReady(ctx context.Context, instanceID string) (map[stri
 
 func (api *API) waitUntilAllNodesReady(ctx context.Context, instanceID string) error {
 	path := fmt.Sprintf("api/instances/%s/nodes", instanceID)
-	ctxTimeout, cancel := context.WithTimeout(ctx, 1800*time.Second) // 30 minutes
+	timeoutCtx, cancel := context.WithTimeout(ctx, 10800*time.Second) // 3 hours
 	defer cancel()
 
 	tflog.Debug(ctx, fmt.Sprintf("waiting for all nodes to be ready, instanceID=%s", instanceID))
 	attempt := 1
 
 	for {
-		if ctxTimeout.Err() != nil {
+		if timeoutCtx.Err() != nil {
 			return fmt.Errorf("timeout reached while waiting for all nodes to be ready")
 		}
 
@@ -78,7 +78,7 @@ func (api *API) waitUntilAllNodesReady(ctx context.Context, instanceID string) e
 		)
 
 		tflog.Debug(ctx, fmt.Sprintf("Checking nodes ready status, attempt=%d", attempt))
-		err := api.callWithRetry(ctxTimeout, api.sling.New().Get(path), retryRequest{
+		err := api.callWithRetry(timeoutCtx, api.sling.New().Get(path), retryRequest{
 			functionName: "waitUntilAllNodesReady",
 			resourceName: "Instance Nodes",
 			attempt:      attempt,
@@ -110,7 +110,7 @@ func (api *API) waitUntilAllNodesReady(ctx context.Context, instanceID string) e
 		tflog.Debug(ctx, fmt.Sprintf("Not all nodes ready yet, attempt=%d", attempt))
 		attempt++
 		select {
-		case <-ctxTimeout.Done():
+		case <-timeoutCtx.Done():
 			return fmt.Errorf("timeout reached while waiting for all nodes to be ready")
 		case <-time.After(15 * time.Second):
 			continue
@@ -118,18 +118,16 @@ func (api *API) waitUntilAllNodesReady(ctx context.Context, instanceID string) e
 	}
 }
 
-func (api *API) waitUntilAllNodesConfigured(ctx context.Context, instanceID string,
-	attempt, sleep, timeout int) error {
-
+func (api *API) waitUntilAllNodesConfigured(ctx context.Context, instanceID string, attempt, sleep int) error {
 	path := fmt.Sprintf("api/instances/%s/nodes", instanceID)
-	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 10800*time.Second) // 3 hours
 	defer cancel()
 
-	tflog.Debug(ctx, fmt.Sprintf("waiting for all nodes to be configured, instanceID=%s sleep=%d timeout=%d", instanceID, sleep, timeout))
+	tflog.Debug(ctx, fmt.Sprintf("waiting for all nodes to be configured, instanceID=%s sleep=%d timeout=%d", instanceID, sleep, 10800))
 
 	for {
-		if ctxTimeout.Err() != nil {
-			return fmt.Errorf("timeout reached after %d seconds, while waiting on all nodes configured", timeout)
+		if timeoutCtx.Err() != nil {
+			return fmt.Errorf("timeout reached after %d seconds, while waiting on all nodes configured", 10800)
 		}
 
 		var (
@@ -138,7 +136,7 @@ func (api *API) waitUntilAllNodesConfigured(ctx context.Context, instanceID stri
 		)
 
 		tflog.Debug(ctx, fmt.Sprintf("Checking nodes configured status, attempt=%d", attempt))
-		err := api.callWithRetry(ctxTimeout, api.sling.New().Get(path), retryRequest{
+		err := api.callWithRetry(timeoutCtx, api.sling.New().Get(path), retryRequest{
 			functionName: "waitUntilAllNodesConfigured",
 			resourceName: "Instance Nodes",
 			attempt:      attempt,
@@ -170,8 +168,8 @@ func (api *API) waitUntilAllNodesConfigured(ctx context.Context, instanceID stri
 		tflog.Debug(ctx, fmt.Sprintf("Not all nodes configured yet, attempt=%d", attempt))
 		attempt++
 		select {
-		case <-ctxTimeout.Done():
-			return fmt.Errorf("timeout reached after %d seconds, while waiting on all nodes configured", timeout)
+		case <-timeoutCtx.Done():
+			return fmt.Errorf("timeout reached after %d seconds, while waiting on all nodes configured", 10800)
 		case <-time.After(time.Duration(sleep) * time.Second):
 			continue
 		}
