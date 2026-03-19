@@ -1,8 +1,22 @@
+## 1.44.0 (Unreleased)
+
+NOTES:
+
+* Added `credentials` attribute to `cloudamqp_instance` to fully support provider-to-provider configuration, e.g.
+  when combined with our [LavinMQ broker provider].
+
+FEATURES:
+
+* Resource: Added credentials attribute to `cloudamqp_instance` ([#467])
+
+[LavinMQ broker provider]: https://registry.terraform.io/providers/cloudamqp/lavinmq/latest
+[#467]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/467
+
 ## 1.43.1 (19 Mar, 2026)
 
 BUG FIXES:
 
-* Override timeout used for upgrade instance and resize disk ([#474])
+* Overriden timeout used for upgrade instance and resize disk ([#474])
 
 DEPENDENCIES:
 
@@ -20,7 +34,8 @@ NOTES:
 
 IMPROVEMENTS:
 
-* ClientLibrary: Refactored all API methods to use unified `callWithRetry()` approach for consistent error handling and retry logic ([#454])
+* ClientLibrary: Refactored all API methods to use unified `callWithRetry()` approach for consistent error handling and
+  retry logic ([#454])
 * CLientLibrary: Added rate limit retry with exponential backoff ([#455])
 * ClientLibrary: Refactored the genric retry with centralized HTTP status code handling and isolated logic ([#456])
 * Integration: Added support for `ap2` Datadog region for resources: ([#457])
