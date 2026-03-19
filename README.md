@@ -159,19 +159,37 @@ terraform import cloudamqp_alarm.alarm 65,80
    ```hcl
    provider_installation {
      dev_overrides {
-       "cloudamqp/cloudamqp" = "/path/to/terraform-provider-cloudamqp"
+       "hashicorp/cloudamqp" = "/path/to/terraform-provider-cloudamqp"
      }
      direct {}
    }
    ```
 
-   With `dev_overrides` set, skip `terraform init` and omit the `required_providers` block from your `.tf` files. Run `terraform plan` or `terraform apply` directly.
+   With `dev_overrides` set, skip `terraform init` and omit the `required_providers` block from your `.tf` files. Run
+   `terraform plan` or `terraform apply` directly.
+
+  <details>
+    <summary>
+      <b>
+        <i>Examples of dev_override with HCL configuration with omitted `required_providers`</i>
+      </b>
+    </summary>
+
+    ```hcl
+    provider "cloudamqp" {
+      apikey = var.cloudamqp_apikey   # or set CLOUDAMQP_APIKEY env var
+    }
+
+    resource "cloudamqp_instance" "this" {
+      name   = "my-rabbitmq"
+      plan   = "lemur"
+      region = "amazon-web-services::us-east-1"
+    }
+    ```
+
+   </details>
 
 3. After changing the provider code, rebuild and re-run your Terraform command:
-
-   ```sh
-   go build && terraform apply
-   ```
 
 ### Debug Logging
 
