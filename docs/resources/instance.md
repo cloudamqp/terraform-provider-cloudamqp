@@ -255,15 +255,23 @@ All attributes reference are computed
 
 * `id`            - The identifier (instance_id) for this resource, used as a reference by almost
                     all other resource and data sources
-* `url`           - The AMQP URL (uses the internal hostname if the instance was created with VPC).
+* `url`           - (Sensitive) The AMQP URL (uses the internal hostname if the instance was created with VPC).
                     Has the format: `amqps://{username}:{password}@{hostname}/{vhost}`
-* `apikey`        - API key needed to communicate to CloudAMQP's second API. The second API is used
+* `apikey`        - (Sensitive) API key needed to communicate to CloudAMQP's second API. The second API is used
                     to manage alarms, integration and more, full description [CloudAMQP API].
 * `host`          - The external hostname for the CloudAMQP instance.
 * `host_internal` - The internal hostname for the CloudAMQP instance.
 * `vhost`         - The virtual host used by Rabbit MQ.
 * `dedicated`     - Information if the CloudAMQP instance is shared or dedicated.
 * `backend`       - Information if the CloudAMQP instance runs either RabbitMQ or LavinMQ.
+* `credentials`   - (Sensitive) Broker credentials block with information extracted from URL.
+
+___
+
+The `credentials` block consists of:
+
+* `username` - The username to access the broker.
+* `password` - The password for the user to access the broker.
 
 ## Import
 
