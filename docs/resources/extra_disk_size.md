@@ -208,6 +208,8 @@ Any changes to the arguments will destroy and recreate this resource.
 
   ***Note:*** `allow_downtime`, `sleep`, `timeout` only available from [v1.25.0].
 
+  ***Note:*** `timeout` was overridden to 3 hours starting from [v1.43.1]
+
 ## Attributes Reference
 
 All attributes reference are computed
@@ -235,3 +237,4 @@ Not possible to import this resource.
 
 [CloudAMQP]: https://www.cloudamqp.com/
 [v1.25.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.25.0
+[v1.43.1]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.43.1
