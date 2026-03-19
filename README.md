@@ -48,7 +48,7 @@ instance before a new one is created. All data will be lost and a new hostname w
 
 ---
 
-### Debug Logging
+## Debug Logging
 
 Enable detailed debug output (includes CloudAMQP provider and underlying HTTP client logs):
 
