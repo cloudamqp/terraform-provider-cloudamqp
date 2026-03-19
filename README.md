@@ -5,9 +5,8 @@
 <!-- markdownlint-disable MD034 -->
 <!-- markdownlint-disable MD046 -->
 
-Manage your [CloudAMQP](https://www.cloudamqp.com/) LavinMQ and RabbitMQ instances with Terraform.
-
-- **Terraform Registry:** https://registry.terraform.io/providers/cloudamqp/cloudamqp
+Manage your [CloudAMQP](https://www.cloudamqp.com/) LavinMQ and RabbitMQ instances with Terraform. The provider is
+published to the [Terraform Registry](https://registry.terraform.io/providers/cloudamqp/cloudamqp).
 
 ---
 
@@ -48,6 +47,14 @@ resource "cloudamqp_instance" "this" {
 instance before a new one is created. All data will be lost and a new hostname with a new DNS record will be assigned.
 
 ---
+
+### Debug Logging
+
+Enable detailed debug output (includes CloudAMQP provider and underlying HTTP client logs):
+
+```sh
+export TF_LOG_PROVIDER=DEBUG
+```
 
 ## Resources
 
@@ -212,14 +219,6 @@ The provider communicates with two CloudAMQP APIs, both using the same* API key:
 *The Customer API proxies calls to the Instance API, so the provider only needs a single API key.
 Full API reference: https://docs.cloudamqp.com
 
-### Debug Logging
-
-Enable detailed debug output (includes CloudAMQP provider and underlying HTTP client logs):
-
-```sh
-export TF_LOG_PROVIDER=DEBUG
-```
-
 ### VCR Testing
 
 The provider uses Terraform Acceptance Tests together with [Go-VCR](https://github.com/dnaeon/go-vcr) to record and
@@ -243,5 +242,5 @@ TF_ACC=1 go test ./cloudamqp/ -v -run {TestName}
 TF_ACC=1 go test ./cloudamqp/ -v
 ```
 
-If a test result is cached, pass `-count=1` to force it to re-run. The default timeout is 10 minutes; adjust with
+If a test result is cached, pass `-count=1` to force it to re-run. The default timeout is 10 minutes, adjust with
 `-timeout`.
