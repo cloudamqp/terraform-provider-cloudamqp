@@ -8,7 +8,6 @@
 Manage your [CloudAMQP](https://www.cloudamqp.com/) LavinMQ and RabbitMQ instances with Terraform.
 
 - **Terraform Registry:** https://registry.terraform.io/providers/cloudamqp/cloudamqp
-- **CloudAMQP API documentations:** https://docs.cloudamqp.com
 
 ---
 
@@ -154,6 +153,8 @@ import {
 
 ### Build from Source
 
+**Prerequisites:** [Go](https://go.dev/doc/install) >= 1.24 and `make` must be installed.
+
 1. Clone the repository and build the provider binary:
 
    ```sh
@@ -199,6 +200,18 @@ import {
 
 3. After changing the provider code, rebuild and re-run your Terraform command:
 
+### CloudAMQP API
+
+The provider communicates with two CloudAMQP APIs, both using the same* API key:
+
+| API | Base URL | Purpose |
+| --- | --- | --- |
+| Customer API | https://customer.cloudamqp.com/api | Manage instances (create, delete, plan changes, VPCs) |
+| Instance API | https://api.cloudamqp.com | Configure resources on a running instance (alarms, plugins, firewall, integrations, etc.) |
+
+*The Customer API proxies calls to the Instance API, so the provider only needs a single API key.
+Full API reference: https://docs.cloudamqp.com
+
 ### Debug Logging
 
 Enable detailed debug output (includes CloudAMQP provider and underlying HTTP client logs):
@@ -207,7 +220,7 @@ Enable detailed debug output (includes CloudAMQP provider and underlying HTTP cl
 export TF_LOG_PROVIDER=DEBUG
 ```
 
-### Testing
+### VCR Testing
 
 The provider uses Terraform Acceptance Tests together with [Go-VCR](https://github.com/dnaeon/go-vcr) to record and
 replay HTTP interactions.
