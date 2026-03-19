@@ -151,7 +151,7 @@ terraform import cloudamqp_alarm.alarm 65,80
    ```sh
    git clone https://github.com/cloudamqp/terraform-provider-cloudamqp.git
    cd terraform-provider-cloudamqp
-   go build
+   make clean build
    ```
 
 2. Configure Terraform to use your local binary by adding the following to `~/.terraformrc`:
@@ -196,7 +196,7 @@ terraform import cloudamqp_alarm.alarm 65,80
 Enable detailed debug output (includes CloudAMQP provider and underlying HTTP client logs):
 
 ```sh
-export TF_LOG=DEBUG
+export TF_LOG_PROVIDER=DEBUG
 ```
 
 ### Testing
