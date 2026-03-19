@@ -8,6 +8,7 @@
 Manage your [CloudAMQP](https://www.cloudamqp.com/) LavinMQ and RabbitMQ instances with Terraform.
 
 - **Terraform Registry:** https://registry.terraform.io/providers/cloudamqp/cloudamqp
+- **CloudAMQP API documentations:** https://docs.cloudamqp.com
 
 ---
 
@@ -16,7 +17,8 @@ Manage your [CloudAMQP](https://www.cloudamqp.com/) LavinMQ and RabbitMQ instanc
 1. **Terraform** >= 0.13 — [Installation guide](https://developer.hashicorp.com/terraform/downloads)
 2. **CloudAMQP API key** — Sign up at https://www.cloudamqp.com/, then create a key at https://customer.cloudamqp.com/apikeys
 
-> The API key grants access to the Customer API, which manages instances and proxies calls to the per-instance API (alarms, notifications, plugins, etc.) using the same key.
+> The API key grants access to the Customer API, which manages instances and proxies calls to the per-instance API
+(alarms, notifications, plugins, etc.) using the same key.
 
 ---
 
@@ -86,7 +88,7 @@ instance before a new one is created. All data will be lost and a new hostname w
 ## Data Sources
 
 | Data Source | Description |
-|---|---|
+| --- | --- |
 | `cloudamqp_account` | Retrieve account information |
 | `cloudamqp_account_vpcs` | List VPCs associated with the account |
 | `cloudamqp_alarm` | Retrieve a single alarm |
@@ -207,7 +209,8 @@ export TF_LOG_PROVIDER=DEBUG
 
 ### Testing
 
-The provider uses Terraform Acceptance Tests together with [Go-VCR](https://github.com/dnaeon/go-vcr) to record and replay HTTP interactions.
+The provider uses Terraform Acceptance Tests together with [Go-VCR](https://github.com/dnaeon/go-vcr) to record and
+replay HTTP interactions.
 
 **Record a single test** (requires a live CloudAMQP API key in `.env`):
 
@@ -227,4 +230,5 @@ TF_ACC=1 go test ./cloudamqp/ -v -run {TestName}
 TF_ACC=1 go test ./cloudamqp/ -v
 ```
 
-If a test result is cached, pass `-count=1` to force it to re-run. The default timeout is 10 minutes; adjust with `-timeout`.
+If a test result is cached, pass `-count=1` to force it to re-run. The default timeout is 10 minutes; adjust with
+`-timeout`.
