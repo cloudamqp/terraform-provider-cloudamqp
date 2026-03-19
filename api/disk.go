@@ -37,7 +37,7 @@ func (api *API) ResizeDisk(ctx context.Context, instanceID int, params map[strin
 	}
 
 	// Wait for all nodes to be configured after successful resize
-	if err = api.waitUntilAllNodesConfigured(ctx, id, 1, sleep, timeout); err != nil {
+	if err = api.waitUntilAllNodesConfigured(ctx, id, 1, sleep); err != nil {
 		return nil, err
 	}
 
