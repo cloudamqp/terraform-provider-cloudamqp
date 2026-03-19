@@ -106,39 +106,45 @@ instance before a new one is created. All data will be lost and a new hostname w
 
 ## Import
 
-Bring existing infrastructure under Terraform management using `terraform import`. After importing, declare the matching resource block in your `.tf` file and run `terraform plan` to confirm it is tracked correctly.
+Bring existing infrastructure under Terraform management. Find resource IDs via the
+[CloudAMQP API](https://docs.cloudamqp.com/index.html#tag/instances) using a key from
+https://customer.cloudamqp.com/apikeys.
 
-Find resource IDs via the [CloudAMQP API](https://docs.cloudamqp.com/index.html#tag/instances) using a key from https://customer.cloudamqp.com/apikeys.
+After importing, run `terraform plan` to confirm the resource is tracked correctly.
 
 ### Instance
 
-```sh
-# Declare an empty resource block
-resource "cloudamqp_instance" "this" {}
-
-# Import (generic form)
-terraform import {resource_type}.{resource_name} {instance_id}
-
-# Example
-terraform import cloudamqp_instance.this 80
+```hcl
+import {
+  to = cloudamqp_instance.this
+  id = "<instance_id>"
+}
 ```
 
 ### Resources that depend on an instance
 
-Resources such as `cloudamqp_alarm` and `cloudamqp_notification` require both the resource ID and the instance ID, separated by a comma.
+Resources such as `cloudamqp_alarm` and `cloudamqp_notification` require both the resource ID and
+the instance ID, separated by a comma.
 
-```sh
-# Declare empty resource blocks
-resource "cloudamqp_notification" "recipient" {}
-resource "cloudamqp_alarm" "alarm" {}
+```hcl
+import {
+  to = cloudamqp_notification.recipient
+  id = "<resource_id>,<instance_id>"
+}
 
-# Import (generic form)
-terraform import {resource_type}.{resource_name} {resource_id},{instance_id}
-
-# Examples (instance_id=80)
-terraform import cloudamqp_notification.recipient 10,80
-terraform import cloudamqp_alarm.alarm 65,80
+import {
+  to = cloudamqp_alarm.alarm
+  id = "<resource_id>,<instance_id>"
+}
 ```
+
+> **Terraform CLI (< v1.5.0)**
+>
+> ```sh
+> terraform import cloudamqp_instance.this <instance_id>
+> terraform import cloudamqp_notification.recipient <resource_id>,<instance_id>
+> terraform import cloudamqp_alarm.alarm <resource_id>,<instance_id>
+> ```
 
 ---
 
