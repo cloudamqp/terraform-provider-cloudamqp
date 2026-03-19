@@ -1,3 +1,16 @@
+## 1.43.1 (Unreleased)
+
+BUG FIXES:
+
+* Override timeout used for upgrade instance and resize disk ([#474])
+
+DEPENDENCIES:
+
+* Bumped google.golang.org/grpc from 1.79.1 to 1.79.3 ([#473])
+
+[#473]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/473
+[#474]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/474
+
 ## 1.43.0 (25 Feb, 2026)
 
 NOTES:
