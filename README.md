@@ -1,5 +1,10 @@
 # Terraform Provider for CloudAMQP
 
+<!-- markdownlint-disable MD029 -->
+<!-- markdownlint-disable MD033 -->
+<!-- markdownlint-disable MD034 -->
+<!-- markdownlint-disable MD046 -->
+
 Manage your [CloudAMQP](https://www.cloudamqp.com/) LavinMQ and RabbitMQ instances with Terraform.
 
 - **Terraform Registry:** https://registry.terraform.io/providers/cloudamqp/cloudamqp
