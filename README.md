@@ -116,7 +116,7 @@ export TF_LOG_PROVIDER=DEBUG
 
 ### Build from Source
 
-**Prerequisites:** [Go](https://go.dev/doc/install) >= 1.24 and `make` must be installed.
+**Prerequisites:** [Go](https://go.dev/doc/install) >= 1.26 and `make` must be installed.
 
 1. Clone the repository and build the provider binary:
 
