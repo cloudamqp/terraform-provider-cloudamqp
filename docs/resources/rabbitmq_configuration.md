@@ -13,6 +13,8 @@ Only available for dedicated subscription plans running ***RabbitMQ***.
 
 ## Example Usage
 
+<!-- markdownlint-disable MD033 -->
+
 <details>
   <summary>
     <b>
@@ -153,6 +155,8 @@ resource "cloudamqp_node_actions" "node_action" {
 ```
 
 </details>
+
+<!-- markdownlint-enable MD033 -->
 
 ## Argument Reference
 
@@ -340,6 +344,8 @@ Or use Terraform CLI:
 
 ## Known issues
 
+<!-- markdownlint-disable MD033 -->
+
 <details>
   <summary>Cannot set heartbeat=0 when creating this resource</summary>
 
@@ -361,6 +367,8 @@ to the wanted value in the re-run.
 Will be solved once we migrate the current provider to `Terraform Plugin Framework`.
 
 </details>
+
+<!-- markdownlint-enable MD033 -->
 
 [CloudAMQP API list intances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
 [v1.35.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.35.0
