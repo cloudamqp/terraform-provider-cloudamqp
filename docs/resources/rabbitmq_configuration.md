@@ -354,10 +354,10 @@ Or use Terraform CLI:
 The provider is built by older `Terraform Plugin SDK` which doesn't support nullable configuration
 values. Instead the values will be set to it's default value based on it's schema primitive type.
 
-* schema.TypeString = ""
-* schema.TypeInt = 0
-* schema.TypeFloat = 0.0
-* schema.TypeBool = false
+- schema.TypeString = ""
+- schema.TypeInt = 0
+- schema.TypeFloat = 0.0
+- schema.TypeBool = false
 
 During initial create of this resource, we need to exclude all arguments that can take these default
 values. Argument such as `hearbeat`, `channel_max`, etc. cannot be set to its default value, 0 in
