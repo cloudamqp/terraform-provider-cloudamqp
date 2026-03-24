@@ -11,8 +11,6 @@ This resource allows you update RabbitMQ config.
 
 Only available for dedicated subscription plans running ***RabbitMQ***.
 
-
-
 ## Example Usage
 
 <details>
@@ -131,12 +129,13 @@ Set the following when enabling `mqtt_ssl_cert_login`:
 
 ```hcl
 resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
-  instance_id                       = cloudamqp_instance.instance.id
-  mqtt_vhost                        = cloudamqp_instance.instance.vhost
-  mqtt_exchange                     = "amq.topic"
-  mqtt_ssl_cert_login               = true
-  ssl_options_fail_if_no_peer_cert  = true
-  ssl_options_verify                = "verify_peer"
+  instance_id                              = cloudamqp_instance.instance.id
+  mqtt_vhost                               = cloudamqp_instance.instance.vhost
+  mqtt_exchange                            = "amq.topic"
+  mqtt_ssl_cert_login                      = true
+  mqtt_max_session_expiry_interval_seconds = 1800
+  ssl_options_fail_if_no_peer_cert         = true
+  ssl_options_verify                       = "verify_peer"
 }
 
 data "cloudamqp_nodes" "nodes" {
@@ -173,6 +172,7 @@ The following arguments are supported:
 - `mqtt_vhost`                    - (Optional/Computed) Virtual host for MQTT connections. Default set to newly created vhost, same as `cloudamqp_instance.instance.vhost`.
 - `mqtt_exchange`                 - (Optional/Computed) The exchange option determines which exchange messages from MQTT clients are published to.
 - `mqtt_ssl_cert_login`           - (Optional/Computed) Enable SSL certificate-based authentication for MQTT connections.
+- `mqtt_max_session_expiry_interval_seconds` - (Optional/Computed) The maximum Session Expiry Interval in seconds allowed by the server. Set to 0 to force sessions to expire on disconnect, or -1 for no limit.
 - `ssl_cert_login_from`           - (Optional/Computed) Determines which certificate field to use as the username for TLS-based authentication.
 - `ssl_options_fail_if_no_peer_cert` - (Optional/Computed) When set to true, TLS connections will fail if the client does not provide a certificate.
 - `ssl_options_verify`            - (Optional/Computed) Controls peer certificate verification for TLS connections.
@@ -276,6 +276,14 @@ Note: A vhost is automatically created when `cloudamqp_instance` is created. Thi
 | Type  | Affect |
 | --- | --- |
 | string | Only affects new connections |
+
+### mqtt_max_session_expiry_interval_seconds
+
+| Type  | Affect | Allowed values |
+|---|---|---|
+| int |  Only affects new connections | 0 or more, default 1800. -1 will set it to infinty/no limit |
+
+Note: Available from RabbitMQ broker version 3.13.x.
 
 ### mqtt_ssl_cert_login
 
