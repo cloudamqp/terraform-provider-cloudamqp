@@ -192,14 +192,14 @@ All attributes reference are computed
 
 ### heartbeat
 
-| Type | Default | Min  | Affect |
-|---|---|---|---|
+| Type | Default | Min | Affect |
+| --- | --- | --- | --- |
 | int | 120 | 0 | Only effects new connection |
 
 ### connection_max
 
-| Type | Default | Min  | Affect |
-|---|---|---|---|
+| Type | Default | Min | Affect |
+| --- | --- | --- | --- |
 | int | -1 | 1 | Applied immediately (RabbitMQ restart required before 3.11.13) |
 
 Note: -1 in the provider corresponds to INFINITY in the RabbitMQ config
@@ -207,15 +207,15 @@ Note: -1 in the provider corresponds to INFINITY in the RabbitMQ config
 ### channel_max
 
 | Type | Default | Min | Affect |
-|---|---|---|---|
-| int | 128 | 0 | Only effects new connections |
+| --- | --- | --- | --- |
+| int | 128 | 0 | Only affects new connections |
 
 Note: 0 means "no limit"
 
 ### consumer_timeout
 
 | Type | Default | Min | Max | Unit | Affect |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | int | 7200000 | 10000 | 86400000 | milliseconds | Only effects new channels |
 
 Note: -1 in the provider corresponds to false (disable) in the RabbitMQ config
@@ -223,13 +223,13 @@ Note: -1 in the provider corresponds to false (disable) in the RabbitMQ config
 ### vm_memory_high_watermark
 
 | Type | Default | Min | Max | Affect |
-|---|---|---|---|---|
- | float | 0.81 | 0.4 | 0.9 | Applied immediately |
+| --- | --- | --- | --- | --- |
+| float | 0.81 | 0.4 | 0.9 | Applied immediately |
 
 ### queue_index_embed_msgs_below
 
 | Type | Default | Min | Max | Unit | Affect |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | int | 4096 | 0 | 10485760 | bytes | Applied immediately for new queues |
 
 Note: Existing queues requires restart
@@ -237,19 +237,19 @@ Note: Existing queues requires restart
 ### max_message_size
 
 | Type | Default | Min | Max | Unit | Affect |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | int | 134217728 | 1 | 536870912 | bytes | Only effects new channels |
 
 ### log_exchange_level
 
 | Type | Default | Affect | Allowed values |
-|---|---|---| --- |
+| --- | --- | --- | --- |
 | string | error | RabbitMQ restart required | `debug, info, warning, error, critical, none` |
 
 ### cluster_partition_handling
 
-| Type  | Affect | Allowed values |
-|---|---|---|
+| Type | Affect | Allowed values |
+| --- | --- | --- |
 | string | Applied immediately | `autoheal, pause_minority, ignore` |
 
 Recommended setting for cluster_partition_handling: `autoheal` for cluster with 1-2
@@ -257,15 +257,15 @@ nodes, `pause_minority` for cluster with 3 or more nodes. While `ignore` setting
 
 ### message_interceptors_timestamp_overwrite
 
-| Type  | Affect | Allowed values |
-|---|---|---|
+| Type | Affect | Allowed values |
+| --- | --- | --- |
 | string | RabbitMQ restart required | `enabled_with_overwrite, enabled, disabled` |
 
 Note: Corresponds to setting `message_interceptors.incoming.set_header_timestamp.overwrite`
 
 ### mqtt_vhost
 
-| Type  | Affect |
+| Type | Affect |
 | --- | --- |
 | string | Only affects new connections |
 
@@ -273,21 +273,21 @@ Note: A vhost is automatically created when `cloudamqp_instance` is created. Thi
 
 ### mqtt_exchange
 
-| Type  | Affect |
+| Type | Affect |
 | --- | --- |
 | string | Only affects new connections |
 
 ### mqtt_max_session_expiry_interval_seconds
 
-| Type  | Affect | Allowed values |
-|---|---|---|
-| int |  Only affects new connections | 0 or more, default 1800. -1 will set it to infinty/no limit |
+| Type | Affect | Allowed values |
+| --- | --- | --- |
+| int | Only affects new connections | 0 or more, default 1800. -1 will set it to no limit |
 
 Note: Available from RabbitMQ broker version 3.13.x.
 
 ### mqtt_ssl_cert_login
 
-| Type  | Affect |
+| Type | Affect |
 | --- | --- |
 | bool | RabbitMQ restart required |
 
@@ -296,13 +296,13 @@ Note: When enabled, `rabbit.ssl_options.fail_if_no_peer_cert` should be set to *
 
 ### ssl_cert_login_from
 
-| Type  | Affect | Allowed values |
+| Type | Affect | Allowed values |
 | --- | --- | --- |
 | string | Only affects new connections | `common_name`, `distinguished_name` |
 
 ### ssl_options_fail_if_no_peer_cert
 
-| Type  | Affect |
+| Type | Affect |
 | --- | --- |
 | string | RabbitMQ restart required |
 
@@ -310,7 +310,7 @@ Note: When enabled, `rabbit.ssl_options.verify` must be set to ***verify_peer***
 
 ### ssl_options_verify
 
-| Type  | Affect | Allowed values |
+| Type | Affect | Allowed values |
 | --- | --- | --- |
 | string | RabbitMQ restart required | `verify_none`, `verify_peer` |
 
