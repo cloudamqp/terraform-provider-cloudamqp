@@ -54,9 +54,10 @@ type rabbitMqConfigurationResourceModel struct {
 	ClusterPartitionHandling              types.String  `tfsdk:"cluster_partition_handling"`
 	MessageInterceptorsTimestampOverwrite types.String  `tfsdk:"message_interceptors_timestamp_overwrite"`
 	// MQTT settings
-	MQTTVhost        types.String `tfsdk:"mqtt_vhost"`
-	MQTTExchange     types.String `tfsdk:"mqtt_exchange"`
-	MQTTSSLCertLogin types.Bool   `tfsdk:"mqtt_ssl_cert_login"`
+	MQTTVhost                           types.String `tfsdk:"mqtt_vhost"`
+	MQTTExchange                        types.String `tfsdk:"mqtt_exchange"`
+	MQTTSSLCertLogin                    types.Bool   `tfsdk:"mqtt_ssl_cert_login"`
+	MQTTMaxSessionExpiryIntervalSeconds types.Int64  `tfsdk:"mqtt_max_session_expiry_interval_seconds"`
 	// SSL settings
 	SSLCertLoginFrom           types.String `tfsdk:"ssl_cert_login_from"`
 	SSLOptionsFailIfNoPeerCert types.Bool   `tfsdk:"ssl_options_fail_if_no_peer_cert"`
@@ -229,6 +230,21 @@ func (r *rabbitMqConfigurationResource) Schema(ctx context.Context, req resource
 				Description: "Enable SSL certificate-based authentication for MQTT connections.",
 				PlanModifiers: []planmodifier.Bool{
 					boolplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"mqtt_max_session_expiry_interval_seconds": schema.Int64Attribute{
+				Optional: true,
+				Computed: true,
+				Description: "The maximum Session Expiry Interval in seconds allowed by the server. " +
+					"Set to 0 to force sessions to expire on disconnect, or -1 for no limit. ",
+				Validators: []validator.Int64{
+					int64validator.Any(
+						int64validator.OneOf(-1),
+						int64validator.AtLeast(0),
+					),
+				},
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.UseStateForUnknown(),
 				},
 			},
 			"ssl_cert_login_from": schema.StringAttribute{
@@ -460,6 +476,14 @@ func (r *rabbitMqConfigurationResource) populateResourceModel(resourceModel *rab
 	} else {
 		resourceModel.QueueIndexEmbedMsgsBelow = types.Int64Value(*data.QueueIndexEmbedMsgsBelow)
 	}
+
+	if data.MQTTMaxSessionExpiryIntervalSeconds == nil {
+		resourceModel.MQTTMaxSessionExpiryIntervalSeconds = types.Int64Null() // Not available (RabbitMQ < 3.13)
+	} else if data.MQTTMaxSessionExpiryIntervalSeconds.IsInfinity {
+		resourceModel.MQTTMaxSessionExpiryIntervalSeconds = types.Int64Value(-1)
+	} else {
+		resourceModel.MQTTMaxSessionExpiryIntervalSeconds = types.Int64PointerValue(data.MQTTMaxSessionExpiryIntervalSeconds.Value)
+	}
 }
 
 // Populate API create request from resource model
@@ -525,6 +549,14 @@ func (r *rabbitMqConfigurationResource) populateCreateRequest(plan rabbitMqConfi
 
 	if !plan.MQTTSSLCertLogin.IsUnknown() {
 		request.MQTTSSLCertLogin = plan.MQTTSSLCertLogin.ValueBoolPointer()
+	}
+
+	if !plan.MQTTMaxSessionExpiryIntervalSeconds.IsUnknown() && !plan.MQTTMaxSessionExpiryIntervalSeconds.IsNull() {
+		if plan.MQTTMaxSessionExpiryIntervalSeconds.ValueInt64() == -1 {
+			request.MQTTMaxSessionExpiryIntervalSeconds = utils.Pointer(model.MQTTMaxSessionExpiryInterval{IsInfinity: true})
+		} else {
+			request.MQTTMaxSessionExpiryIntervalSeconds = utils.Pointer(model.MQTTMaxSessionExpiryInterval{IsInfinity: false, Value: plan.MQTTMaxSessionExpiryIntervalSeconds.ValueInt64Pointer()})
+		}
 	}
 
 	// SSL settings
@@ -619,6 +651,15 @@ func (r *rabbitMqConfigurationResource) populateUpdateRequest(plan, state rabbit
 
 	if !plan.MQTTSSLCertLogin.IsNull() && !plan.MQTTSSLCertLogin.Equal(state.MQTTSSLCertLogin) {
 		request.MQTTSSLCertLogin = plan.MQTTSSLCertLogin.ValueBoolPointer()
+		changed = true
+	}
+
+	if !plan.MQTTMaxSessionExpiryIntervalSeconds.IsNull() && !plan.MQTTMaxSessionExpiryIntervalSeconds.Equal(state.MQTTMaxSessionExpiryIntervalSeconds) {
+		if plan.MQTTMaxSessionExpiryIntervalSeconds.ValueInt64() == -1 {
+			request.MQTTMaxSessionExpiryIntervalSeconds = utils.Pointer(model.MQTTMaxSessionExpiryInterval{IsInfinity: true})
+		} else {
+			request.MQTTMaxSessionExpiryIntervalSeconds = utils.Pointer(model.MQTTMaxSessionExpiryInterval{IsInfinity: false, Value: plan.MQTTMaxSessionExpiryIntervalSeconds.ValueInt64Pointer()})
+		}
 		changed = true
 	}
 
