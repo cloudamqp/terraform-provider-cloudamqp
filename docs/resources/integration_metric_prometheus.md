@@ -5,6 +5,7 @@ description: |-
   Creates and manages third party Prometheus metrics integrations for a CloudAMQP instance.
 ---
 
+<!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD033 -->
 
 # cloudamqp_integration_metric_prometheus
