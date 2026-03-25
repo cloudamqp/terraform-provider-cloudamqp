@@ -6,6 +6,7 @@ description: |-
 ---
 
 <!-- markdownlint-disable MD033 -->
+<!-- markdownlint-disable MD036 -->
 
 # cloudamqp_webhook
 
