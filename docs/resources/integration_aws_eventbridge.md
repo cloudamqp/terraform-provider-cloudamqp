@@ -5,6 +5,8 @@ description: |-
   Creates and manages an AWS EventBridge for a CloudAMQP instance.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_integration_aws_eventbridge
 
 This resource allows you to create and manage, an [AWS EventBridge] for a CloudAMQP instance. Once

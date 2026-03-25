@@ -5,6 +5,8 @@ description: |-
   Configure OAuth2 authentication for RabbitMQ
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_oauth2_configuration
 
 This resource allows you to configure OAuth2 authentication for your RabbitMQ instance.

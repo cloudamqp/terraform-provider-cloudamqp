@@ -5,6 +5,8 @@ description: |-
   Create VPC peering configuration to another VPC network hosted in GCP
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_vpc_gcp_peering
 
 This resouce creates a VPC peering configuration for the CloudAMQP instance. The configuration will

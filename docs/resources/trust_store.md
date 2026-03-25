@@ -5,6 +5,8 @@ description: |-
   Configure trust store for RabbitMQ
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_trust_store
 
 This resource allows you to configure a trust store for your RabbitMQ broker. The trust store

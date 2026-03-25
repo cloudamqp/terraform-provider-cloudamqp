@@ -5,6 +5,8 @@ description: |-
   Creates and manages third party metrics integration for a CloudAMQP instance.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_integration_metric
 
 This resource allows you to create and manage, forwarding metrics to third party integrations for a

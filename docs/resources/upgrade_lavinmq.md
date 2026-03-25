@@ -5,6 +5,8 @@ description: |-
   Invoke upgrade for LavinMQ.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_upgrade_lavinmq
 
 This resource allows you to upgrade LavinMQ version.

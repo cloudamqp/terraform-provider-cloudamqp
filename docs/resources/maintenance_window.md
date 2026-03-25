@@ -5,6 +5,8 @@ description: |-
   Update the preferred maintenance window.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_maintenance_window
 
 This resource allows you to set the preferred start of new scheduled maintenances. The maintenance

@@ -5,6 +5,8 @@ description: |-
   Invoke upgrade to latest possible upgradable versions for RabbitMQ and Erlang.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_upgrade_rabbitmq
 
 This resource allows you to upgrade RabbitMQ version. Depending on initial versions of RabbitMQ and

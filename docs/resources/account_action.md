@@ -5,6 +5,8 @@ description: |-
   Invoke account action
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_account_actions
 
 This resource allows you to invoke an account action. Current supported actions are

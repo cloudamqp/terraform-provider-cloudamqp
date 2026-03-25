@@ -5,6 +5,8 @@ description: |-
   Enable PrivateLink for a CloudAMQP instance hosted in AWS.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_privatelink_aws
 
 Enable PrivateLink for a CloudAMQP instance hosted in AWS. If no existing VPC available when enable

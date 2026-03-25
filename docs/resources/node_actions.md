@@ -5,6 +5,8 @@ description: |-
   Invoke actions on specific nodes or entire cluster (e.g. restart RabbitMQ).
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_node_actions
 
 This resource allows you to invoke actions on specific nodes or the entire cluster. Actions can target individual nodes, multiple nodes, or all nodes in the cluster at once.

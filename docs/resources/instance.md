@@ -5,6 +5,8 @@ description: |-
   Creates and manages a Rabbit MQ instance within CloudAMQP.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_instance
 
 This resource allows you to create and manage a CloudAMQP instance running either [**RabbitMQ**] or

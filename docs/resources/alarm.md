@@ -5,6 +5,8 @@ description: |-
   Creates and manages alarms to trigger notifications.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_alarm
 
 This resource allows you to create and manage alarms to trigger based on a set of conditions. Once

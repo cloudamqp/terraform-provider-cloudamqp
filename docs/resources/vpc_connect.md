@@ -6,6 +6,8 @@ description: |-
   AWS, Azure or GCP.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_vpc_connect
 
 This resource is a generic way to handle PrivateLink (AWS and Azure) and Private Service Connect

@@ -5,6 +5,8 @@ description: |-
   Creates and manages recipients to receive alarm notifications.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_notification
 
 This resource allows you to create and manage recipients to receive alarm notifications. There will

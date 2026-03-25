@@ -5,6 +5,8 @@ description: |-
   Creates and manages third party log integration for a CloudAMQP instance.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_integration_log
 
 This resource allows you to create and manage third party log integrations for a CloudAMQP instance.
