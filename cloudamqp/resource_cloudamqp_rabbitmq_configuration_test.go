@@ -187,6 +187,65 @@ func TestAccRabbitMqConfiguration_MqttConfiguration(t *testing.T) {
 	})
 }
 
+func TestAccRabbitMqConfiguration_MqttSessionExpiry(t *testing.T) {
+	t.Parallel()
+
+	instanceResourceName := "cloudamqp_instance.instance"
+	rabbitmqConfigResourceName := "cloudamqp_rabbitmq_configuration.rabbitmq_config"
+
+	instanceConfig := `
+				resource "cloudamqp_instance" "instance" {
+					name   = "TestAccRabbitMqConfiguration_MqttSessionExpiry"
+					plan   = "bunny-1"
+					region = "amazon-web-services::us-east-1"
+					tags   = []
+				}
+			`
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				// 1800 seconds (30 minutes) is the RabbitMQ default
+				Config: instanceConfig + `
+					resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
+						instance_id                              = cloudamqp_instance.instance.id
+						mqtt_max_session_expiry_interval_seconds = 1800
+					}
+				`,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccRabbitMqConfiguration_MqttSessionExpiry"),
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "mqtt_max_session_expiry_interval_seconds", "1800"),
+				),
+			},
+			{
+				// 0 forces sessions to expire immediately on disconnect
+				Config: instanceConfig + `
+					resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
+						instance_id                              = cloudamqp_instance.instance.id
+						mqtt_max_session_expiry_interval_seconds = 0
+					}
+				`,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "mqtt_max_session_expiry_interval_seconds", "0"),
+				),
+			},
+			{
+				// -1 maps to infinity (no session expiry limit)
+				Config: instanceConfig + `
+					resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
+						instance_id                              = cloudamqp_instance.instance.id
+						mqtt_max_session_expiry_interval_seconds = -1
+					}
+				`,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(rabbitmqConfigResourceName, "mqtt_max_session_expiry_interval_seconds", "-1"),
+				),
+			},
+		},
+	})
+}
+
 func TestAccRabbitMqConfiguration_MessageInterceptors(t *testing.T) {
 	t.Parallel()
 
@@ -310,6 +369,23 @@ func TestAccRabbitMqConfiguration_InvalidValues(t *testing.T) {
 					}
 				`,
 				ExpectError: regexp.MustCompile("Invalid Attribute Value Match"),
+			},
+			{
+				// -2 is below the allowed minimum (-1 for infinity, or >= 0)
+				Config: `
+					resource "cloudamqp_instance" "instance" {
+						name   = "TestAccRabbitMqConfiguration_InvalidValues"
+						plan   = "bunny-1"
+						region = "amazon-web-services::us-east-1"
+						tags   = []
+					}
+
+					resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
+						instance_id                              = cloudamqp_instance.instance.id
+						mqtt_max_session_expiry_interval_seconds = -2
+					}
+				`,
+				ExpectError: regexp.MustCompile("Invalid Attribute Value"),
 			},
 		},
 	})

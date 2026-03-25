@@ -11,9 +11,9 @@ This resource allows you update RabbitMQ config.
 
 Only available for dedicated subscription plans running ***RabbitMQ***.
 
-
-
 ## Example Usage
+
+<!-- markdownlint-disable MD033 -->
 
 <details>
   <summary>
@@ -131,12 +131,13 @@ Set the following when enabling `mqtt_ssl_cert_login`:
 
 ```hcl
 resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
-  instance_id                       = cloudamqp_instance.instance.id
-  mqtt_vhost                        = cloudamqp_instance.instance.vhost
-  mqtt_exchange                     = "amq.topic"
-  mqtt_ssl_cert_login               = true
-  ssl_options_fail_if_no_peer_cert  = true
-  ssl_options_verify                = "verify_peer"
+  instance_id                              = cloudamqp_instance.instance.id
+  mqtt_vhost                               = cloudamqp_instance.instance.vhost
+  mqtt_exchange                            = "amq.topic"
+  mqtt_ssl_cert_login                      = true
+  mqtt_max_session_expiry_interval_seconds = 1800
+  ssl_options_fail_if_no_peer_cert         = true
+  ssl_options_verify                       = "verify_peer"
 }
 
 data "cloudamqp_nodes" "nodes" {
@@ -154,6 +155,8 @@ resource "cloudamqp_node_actions" "node_action" {
 ```
 
 </details>
+
+<!-- markdownlint-enable MD033 -->
 
 ## Argument Reference
 
@@ -173,6 +176,7 @@ The following arguments are supported:
 - `mqtt_vhost`                    - (Optional/Computed) Virtual host for MQTT connections. Default set to newly created vhost, same as `cloudamqp_instance.instance.vhost`.
 - `mqtt_exchange`                 - (Optional/Computed) The exchange option determines which exchange messages from MQTT clients are published to.
 - `mqtt_ssl_cert_login`           - (Optional/Computed) Enable SSL certificate-based authentication for MQTT connections.
+- `mqtt_max_session_expiry_interval_seconds` - (Optional/Computed) The maximum Session Expiry Interval in seconds allowed by the server. Set to 0 to force sessions to expire on disconnect, or -1 for no limit.
 - `ssl_cert_login_from`           - (Optional/Computed) Determines which certificate field to use as the username for TLS-based authentication.
 - `ssl_options_fail_if_no_peer_cert` - (Optional/Computed) When set to true, TLS connections will fail if the client does not provide a certificate.
 - `ssl_options_verify`            - (Optional/Computed) Controls peer certificate verification for TLS connections.
@@ -192,14 +196,14 @@ All attributes reference are computed
 
 ### heartbeat
 
-| Type | Default | Min  | Affect |
-|---|---|---|---|
+| Type | Default | Min | Affect |
+| --- | --- | --- | --- |
 | int | 120 | 0 | Only effects new connection |
 
 ### connection_max
 
-| Type | Default | Min  | Affect |
-|---|---|---|---|
+| Type | Default | Min | Affect |
+| --- | --- | --- | --- |
 | int | -1 | 1 | Applied immediately (RabbitMQ restart required before 3.11.13) |
 
 Note: -1 in the provider corresponds to INFINITY in the RabbitMQ config
@@ -207,15 +211,15 @@ Note: -1 in the provider corresponds to INFINITY in the RabbitMQ config
 ### channel_max
 
 | Type | Default | Min | Affect |
-|---|---|---|---|
-| int | 128 | 0 | Only effects new connections |
+| --- | --- | --- | --- |
+| int | 128 | 0 | Only affects new connections |
 
 Note: 0 means "no limit"
 
 ### consumer_timeout
 
 | Type | Default | Min | Max | Unit | Affect |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | int | 7200000 | 10000 | 86400000 | milliseconds | Only effects new channels |
 
 Note: -1 in the provider corresponds to false (disable) in the RabbitMQ config
@@ -223,13 +227,13 @@ Note: -1 in the provider corresponds to false (disable) in the RabbitMQ config
 ### vm_memory_high_watermark
 
 | Type | Default | Min | Max | Affect |
-|---|---|---|---|---|
- | float | 0.81 | 0.4 | 0.9 | Applied immediately |
+| --- | --- | --- | --- | --- |
+| float | 0.81 | 0.4 | 0.9 | Applied immediately |
 
 ### queue_index_embed_msgs_below
 
 | Type | Default | Min | Max | Unit | Affect |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | int | 4096 | 0 | 10485760 | bytes | Applied immediately for new queues |
 
 Note: Existing queues requires restart
@@ -237,19 +241,19 @@ Note: Existing queues requires restart
 ### max_message_size
 
 | Type | Default | Min | Max | Unit | Affect |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | int | 134217728 | 1 | 536870912 | bytes | Only effects new channels |
 
 ### log_exchange_level
 
 | Type | Default | Affect | Allowed values |
-|---|---|---| --- |
+| --- | --- | --- | --- |
 | string | error | RabbitMQ restart required | `debug, info, warning, error, critical, none` |
 
 ### cluster_partition_handling
 
-| Type  | Affect | Allowed values |
-|---|---|---|
+| Type | Affect | Allowed values |
+| --- | --- | --- |
 | string | Applied immediately | `autoheal, pause_minority, ignore` |
 
 Recommended setting for cluster_partition_handling: `autoheal` for cluster with 1-2
@@ -257,15 +261,15 @@ nodes, `pause_minority` for cluster with 3 or more nodes. While `ignore` setting
 
 ### message_interceptors_timestamp_overwrite
 
-| Type  | Affect | Allowed values |
-|---|---|---|
+| Type | Affect | Allowed values |
+| --- | --- | --- |
 | string | RabbitMQ restart required | `enabled_with_overwrite, enabled, disabled` |
 
 Note: Corresponds to setting `message_interceptors.incoming.set_header_timestamp.overwrite`
 
 ### mqtt_vhost
 
-| Type  | Affect |
+| Type | Affect |
 | --- | --- |
 | string | Only affects new connections |
 
@@ -273,13 +277,21 @@ Note: A vhost is automatically created when `cloudamqp_instance` is created. Thi
 
 ### mqtt_exchange
 
-| Type  | Affect |
+| Type | Affect |
 | --- | --- |
 | string | Only affects new connections |
 
+### mqtt_max_session_expiry_interval_seconds
+
+| Type | Affect | Allowed values |
+| --- | --- | --- |
+| int | Only affects new connections | 0 or more, default 1800. -1 will set it to no limit |
+
+Note: Available from RabbitMQ broker version 3.13.x.
+
 ### mqtt_ssl_cert_login
 
-| Type  | Affect |
+| Type | Affect |
 | --- | --- |
 | bool | RabbitMQ restart required |
 
@@ -288,13 +300,13 @@ Note: When enabled, `rabbit.ssl_options.fail_if_no_peer_cert` should be set to *
 
 ### ssl_cert_login_from
 
-| Type  | Affect | Allowed values |
+| Type | Affect | Allowed values |
 | --- | --- | --- |
 | string | Only affects new connections | `common_name`, `distinguished_name` |
 
 ### ssl_options_fail_if_no_peer_cert
 
-| Type  | Affect |
+| Type | Affect |
 | --- | --- |
 | string | RabbitMQ restart required |
 
@@ -302,7 +314,7 @@ Note: When enabled, `rabbit.ssl_options.verify` must be set to ***verify_peer***
 
 ### ssl_options_verify
 
-| Type  | Affect | Allowed values |
+| Type | Affect | Allowed values |
 | --- | --- | --- |
 | string | RabbitMQ restart required | `verify_none`, `verify_peer` |
 
@@ -332,6 +344,8 @@ Or use Terraform CLI:
 
 ## Known issues
 
+<!-- markdownlint-disable MD033 -->
+
 <details>
   <summary>Cannot set heartbeat=0 when creating this resource</summary>
 
@@ -340,10 +354,10 @@ Or use Terraform CLI:
 The provider is built by older `Terraform Plugin SDK` which doesn't support nullable configuration
 values. Instead the values will be set to it's default value based on it's schema primitive type.
 
-* schema.TypeString = ""
-* schema.TypeInt = 0
-* schema.TypeFloat = 0.0
-* schema.TypeBool = false
+- schema.TypeString = ""
+- schema.TypeInt = 0
+- schema.TypeFloat = 0.0
+- schema.TypeBool = false
 
 During initial create of this resource, we need to exclude all arguments that can take these default
 values. Argument such as `hearbeat`, `channel_max`, etc. cannot be set to its default value, 0 in
@@ -353,6 +367,8 @@ to the wanted value in the re-run.
 Will be solved once we migrate the current provider to `Terraform Plugin Framework`.
 
 </details>
+
+<!-- markdownlint-enable MD033 -->
 
 [CloudAMQP API list intances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
 [v1.35.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.35.0
