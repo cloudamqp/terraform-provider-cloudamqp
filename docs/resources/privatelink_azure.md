@@ -5,6 +5,8 @@ description: |-
   Enable PrivateLink for a CloudAMQP instance hosted in Azure.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_privatelink_azure
 
 Enable PrivateLink for a CloudAMQP instance hosted in Azure. If no existing VPC available when

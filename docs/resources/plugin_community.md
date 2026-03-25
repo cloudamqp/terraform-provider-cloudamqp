@@ -5,6 +5,8 @@ description: |-
   Install or uninstall community plugin.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_plugin_community
 
 This resource allows you to install or uninstall community plugins. Once installed the plugin will

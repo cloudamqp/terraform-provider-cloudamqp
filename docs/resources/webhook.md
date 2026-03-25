@@ -5,6 +5,9 @@ description: |-
   Add, update or remove a webhook for a vhost and queue
 ---
 
+<!-- markdownlint-disable MD033 -->
+<!-- markdownlint-disable MD036 -->
+
 # cloudamqp_webhook
 
 This resource allows you to add, update or remove a swebhook for a specific vhost and queue.

@@ -5,6 +5,8 @@ description: |-
   Upload custom certificate to the cluster
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_custom_certificate
 
 This resource allows you to upload a custom certificate to all servers in your cluster. Update is

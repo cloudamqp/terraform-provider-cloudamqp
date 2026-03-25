@@ -5,6 +5,8 @@ description: |-
   Creates and manages third party metrics integration for a CloudAMQP instance.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_integration_metric
 
 This resource allows you to create and manage, forwarding metrics to third party integrations for a
@@ -262,18 +264,18 @@ integration used. See [integration type reference] below for more information.
 
 Valid names for third party log integration.
 
-| Name          | Description |
-|---------------|---------------------------------------------------------------|
-| cloudwatch    | Access key: Create an IAM user with permission to `PutMetricData` |
+| Name | Description |
+| ------------- | ------------------------------------------------------------- |
+| cloudwatch | Access key: Create an IAM user with permission to `PutMetricData` |
 | cloudwatch_v2 | Access key: Create an IAM user with permission to `PutMetricData` |
-| cloudwatch    | Assume role: Create a IAM role with the permission to `PutMetricData` |
+| cloudwatch | Assume role: Create a IAM role with the permission to `PutMetricData` |
 | cloudwatch_v2 | Assume role: Create a IAM role with the permission to `PutMetricData` |
-| datadog       | Create a Datadog API key at app.datadoghq.com |
-| datadog_v2    | Create a Datadog API key at app.datadoghq.com |
-| librato       | Create a new API token (with record only permissions) here: https://metrics.librato.com/tokens |
-| newrelic      | Deprecated! |
-| newrelic_v2   | Find or register an Insert API key for your account: Go to insights.newrelic.com > Manage data > API keys. |
-| stackdriver   | Create a service account and add 'monitor metrics writer' role from your Google Cloud Account |
+| datadog | Create a Datadog API key at app.datadoghq.com |
+| datadog_v2 | Create a Datadog API key at app.datadoghq.com |
+| librato | Create a new API token (with record only permissions) here: [Librato token] |
+| newrelic | Deprecated! |
+| newrelic_v2 | Find or register an Insert API key for your account: Go to insights.newrelic.com > Manage data > API keys. |
+| stackdriver | Create a service account and add 'monitor metrics writer' role from your Google Cloud Account |
 
 ## Integration type reference
 
@@ -328,7 +330,8 @@ Or use Terraform CLI:
 
 `terraform import cloudamqp_integration_metric.<resource_name> <resource_id>,<instance_id>`
 
-[CloudAMQP API add integrations]: https://docs.cloudamqp.com/instance-api.html#tag/integrations/post/integrations/metrics/{system}
-[CloudAMQP API list integrations]: https://docs.cloudamqp.com/instance-api.html#tag/integrations/get/integrations/metrics
 [Datadog documentation]: https://docs.datadoghq.com/getting_started/tagging/#define-tags
 [integration type reference]: #integration-type-reference
+[Librato token]: https://metrics.librato.com/tokens
+[CloudAMQP API add integrations]: https://docs.cloudamqp.com/instance-api.html#tag/integrations/post/integrations/metrics/{system}
+[CloudAMQP API list integrations]: https://docs.cloudamqp.com/instance-api.html#tag/integrations/get/integrations/metrics

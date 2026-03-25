@@ -5,6 +5,8 @@ description: |-
   Get information on pre-defined or created recipients.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_notifications
 
 Use this data source to retrieve information about all notification recipients. Each recipient will

@@ -5,6 +5,8 @@ description: |-
   Resize the disk with extra storage capacity.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_extra_disk_size
 
 This resource allows you to resize the disk with additional storage capacity.

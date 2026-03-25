@@ -5,6 +5,8 @@ description: |-
   Get a list of pre-defined or created alarms.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_alarms
 
 Use this data source to retrieve a list of default or created alarms.
