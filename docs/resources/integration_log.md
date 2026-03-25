@@ -372,13 +372,13 @@ The following arguments used by Coralogix.
 * `name`        - (Required) The name of the third party log integration (`coralogix`).
 * `application` - (Required) The application name for Coralogix.
 * `endpoint`    - (Required) The syslog destination to send the logs to for Coralogix.
-  - `syslog.eu1.coralogix.com:6514` (Europe - Ireland)
-  - `syslog.eu2.coralogix.com:6514` (Europe - Stockholm)
-  - `syslog.ap1.coralogix.com:6514` (Asia Pacific - Mumbai)
-  - `syslog.ap2.coralogix.com:6514` (Asia Pacific - Singapore)
-  - `syslog.ap3.coralogix.com:6514` (Asia Pacific - Sydney)
-  - `syslog.us1.coralogix.com:6514` (US - Ohio)
-  - `syslog.us2.coralogix.com:6514` (US - Oregon)
+  * `syslog.eu1.coralogix.com:6514` (Europe - Ireland)
+  * `syslog.eu2.coralogix.com:6514` (Europe - Stockholm)
+  * `syslog.ap1.coralogix.com:6514` (Asia Pacific - Mumbai)
+  * `syslog.ap2.coralogix.com:6514` (Asia Pacific - Singapore)
+  * `syslog.ap3.coralogix.com:6514` (Asia Pacific - Sydney)
+  * `syslog.us1.coralogix.com:6514` (US - Ohio)
+  * `syslog.us2.coralogix.com:6514` (US - Oregon)
 * `private_key` - (Required/Sensitive) The private access key.
 * `subsystem`   - (Required) The subsystem name for Coralogix.
 
