@@ -103,7 +103,7 @@ The following arguments are supported:
 * `oauth_scopes`               - (Optional) List of OAuth2 scopes to request. These scopes will be
                                  used when obtaining access tokens.
 * `audience`                   - (Optional) The audience to be passed along to the Oauth2 provider when
-                                 logging in to the management interface. Must be configured for Auth0, 
+                                 logging in to the management interface. Must be configured for Auth0,
                                  cannot be configured for Entra ID v2.
 * `sleep`                      - (Optional) Configurable sleep time in seconds between retries for
                                  OAuth2 configuration. Default set to 60 seconds.
