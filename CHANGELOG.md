@@ -9,8 +9,27 @@ FEATURES:
 
 * Resource: Added credentials attribute to `cloudamqp_instance` ([#467])
 
+IMPROVEMENTS:
+
+* Resource: Added `mqtt_max_session_expiry_interval_seconds` setting to `cloudamqp_rabbitmq_configration` ([#479])
+
+DEPRECATED:
+
+* Data-source: Credentials used by `data_source_cloudamqp_credentials` ([#467])
+
+DEPENDENCIES:
+
+* Bumped minimum required build Go version from 1.24 to 1.26 ([#477])
+* Bumped github.com/hashicorp/terraform-plugin-mux from 0.22.0 to 0.23.0 ([#478])
+* Bumped github.com/hashicorp/terraform-plugin-go from 0.30.0 to 0.31.0 ([#478])
+* Bumped github.com/hashicorp/terraform-plugin-framework from 1.18.0 to 1.19.0 ([#478])
+* Bumped github.com/hashicorp/terraform-plugin-sdk/v2 from 2.39.0 to 2.40.0 ([#478])
+
 [LavinMQ broker provider]: https://registry.terraform.io/providers/cloudamqp/lavinmq/latest
 [#467]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/467
+[#477]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/477
+[#478]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/478
+[#479]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/479
 
 ## 1.43.1 (19 Mar, 2026)
 
