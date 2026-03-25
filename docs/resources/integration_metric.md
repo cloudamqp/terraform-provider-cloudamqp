@@ -264,18 +264,18 @@ integration used. See [integration type reference] below for more information.
 
 Valid names for third party log integration.
 
-| Name          | Description |
-|---------------|---------------------------------------------------------------|
-| cloudwatch    | Access key: Create an IAM user with permission to `PutMetricData` |
+| Name | Description |
+| ------------- | ------------------------------------------------------------- |
+| cloudwatch | Access key: Create an IAM user with permission to `PutMetricData` |
 | cloudwatch_v2 | Access key: Create an IAM user with permission to `PutMetricData` |
-| cloudwatch    | Assume role: Create a IAM role with the permission to `PutMetricData` |
+| cloudwatch | Assume role: Create a IAM role with the permission to `PutMetricData` |
 | cloudwatch_v2 | Assume role: Create a IAM role with the permission to `PutMetricData` |
-| datadog       | Create a Datadog API key at app.datadoghq.com |
-| datadog_v2    | Create a Datadog API key at app.datadoghq.com |
-| librato       | Create a new API token (with record only permissions) here: https://metrics.librato.com/tokens |
-| newrelic      | Deprecated! |
-| newrelic_v2   | Find or register an Insert API key for your account: Go to insights.newrelic.com > Manage data > API keys. |
-| stackdriver   | Create a service account and add 'monitor metrics writer' role from your Google Cloud Account |
+| datadog | Create a Datadog API key at app.datadoghq.com |
+| datadog_v2 | Create a Datadog API key at app.datadoghq.com |
+| librato | Create a new API token (with record only permissions) here: [Librato token] |
+| newrelic | Deprecated! |
+| newrelic_v2 | Find or register an Insert API key for your account: Go to insights.newrelic.com > Manage data > API keys. |
+| stackdriver | Create a service account and add 'monitor metrics writer' role from your Google Cloud Account |
 
 ## Integration type reference
 
