@@ -6,19 +6,19 @@ import (
 	"strconv"
 	"time"
 
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/monitoring"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func (api *API) CreateAlarm(ctx context.Context, instanceID int, params map[string]any) (
-	map[string]any, error) {
+func (api *API) CreateAlarm(ctx context.Context, instanceID int64, params model.AlarmRequest) (string, error) {
 
 	var (
-		data   map[string]any
+		data   model.AlarmResponse
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s", path), params)
+	tflog.Info(ctx, fmt.Sprintf("method=POST path=%s params=%+v", path, params))
 	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
 		functionName: "CreateAlarm",
 		resourceName: "Alarm",
@@ -28,27 +28,22 @@ func (api *API) CreateAlarm(ctx context.Context, instanceID int, params map[stri
 		failed:       &failed,
 	})
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	if id, ok := data["id"]; ok {
-		data["id"] = strconv.FormatFloat(id.(float64), 'f', 0, 64)
-	} else {
-		return nil, fmt.Errorf("invalid identifier=%v", data["id"])
-	}
-	return data, nil
+	id := strconv.FormatInt(data.ID, 10)
+	return id, nil
 }
 
-func (api *API) ReadAlarm(ctx context.Context, instanceID int, alarmID string) (
-	map[string]any, error) {
+func (api *API) ReadAlarm(ctx context.Context, instanceID int64, alarmID string) (*model.AlarmResponse, error) {
 
 	var (
-		data   map[string]any
+		data   *model.AlarmResponse
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/%s", instanceID, alarmID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
+	tflog.Info(ctx, fmt.Sprintf("method=GET path=%s", path))
 	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
 		functionName: "ReadAlarm",
 		resourceName: "Alarm",
@@ -61,22 +56,22 @@ func (api *API) ReadAlarm(ctx context.Context, instanceID int, alarmID string) (
 		return nil, err
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("method=GET path=%s data=%+v", path, data))
 	// Handle resource drift
-	if len(data) == 0 {
+	if data == nil {
 		return nil, nil
 	}
-
 	return data, nil
 }
 
-func (api *API) ListAlarms(ctx context.Context, instanceID int) ([]map[string]any, error) {
+func (api *API) ListAlarms(ctx context.Context, instanceID int64) ([]model.AlarmResponse, error) {
 	var (
-		data   []map[string]any
+		data   []model.AlarmResponse
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
+	tflog.Info(ctx, fmt.Sprintf("method=GET path=%s", path))
 	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
 		functionName: "ListAlarms",
 		resourceName: "Alarm",
@@ -89,17 +84,18 @@ func (api *API) ListAlarms(ctx context.Context, instanceID int) ([]map[string]an
 		return nil, err
 	}
 
+	tflog.Debug(ctx, fmt.Sprintf("response data=%+v", data))
 	return data, nil
 }
 
-func (api *API) UpdateAlarm(ctx context.Context, instanceID int, params map[string]any) error {
+func (api *API) UpdateAlarm(ctx context.Context, instanceID int64, alarmID string, params model.AlarmRequest) error {
 	var (
 		failed map[string]any
-		path   = fmt.Sprintf("/api/instances/%d/alarms/%s", instanceID, params["id"].(string))
+		path   = fmt.Sprintf("/api/instances/%d/alarms/%s", instanceID, alarmID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s", path), params)
-	return api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
+	tflog.Info(ctx, fmt.Sprintf("method=PUT path=%s params=%+v", path, params))
+	err := api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
 		functionName: "UpdateAlarm",
 		resourceName: "Alarm",
 		attempt:      1,
@@ -107,16 +103,20 @@ func (api *API) UpdateAlarm(ctx context.Context, instanceID int, params map[stri
 		data:         nil,
 		failed:       &failed,
 	})
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func (api *API) DeleteAlarm(ctx context.Context, instanceID int, alarmID string) error {
+func (api *API) DeleteAlarm(ctx context.Context, instanceID int64, alarmID string) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/%s", instanceID, alarmID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s", path))
-	return api.callWithRetry(ctx, api.sling.New().Delete(path), retryRequest{
+	tflog.Info(ctx, fmt.Sprintf("method=DELETE path=%s", path))
+	err := api.callWithRetry(ctx, api.sling.New().Delete(path), retryRequest{
 		functionName: "DeleteAlarm",
 		resourceName: "Alarm",
 		attempt:      1,
@@ -124,4 +124,8 @@ func (api *API) DeleteAlarm(ctx context.Context, instanceID int, alarmID string)
 		data:         nil,
 		failed:       &failed,
 	})
+	if err != nil {
+		return err
+	}
+	return nil
 }
