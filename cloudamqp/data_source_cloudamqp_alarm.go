@@ -199,7 +199,7 @@ func (d *alarmDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 }
 
 func (d *alarmDataSource) populateResourceModel(ctx context.Context, data model.AlarmResponse, config *alarmDataSourceModel) {
-	config.AlarmID = types.Int64Value(int64(data.ID))
+	config.AlarmID = types.Int64Value(data.ID)
 	config.Type = types.StringValue(data.Type)
 	config.Enabled = types.BoolValue(data.Enabled)
 
