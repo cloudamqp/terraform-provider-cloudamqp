@@ -1,3 +1,13 @@
+# CHANGELOG
+
+## 1.44.1 (Unreleased)
+
+IMPROVEMENTS:
+
+* Add missing credentials attribute to instance data source ([#483])
+
+[#483]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/483
+
 ## 1.44.0 (25 Mar, 2026)
 
 NOTES:
