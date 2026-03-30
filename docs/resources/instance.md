@@ -190,6 +190,35 @@ resource "cloudamqp_instance" "instance" {
 
 </details>
 
+<details>
+  <summary>
+    <b>
+      <i>Provider-to-provider configuration, from </i>
+      <a href="https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.44.0">v1.44.0</a>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_instance" "instance" {
+  name   = "terraform-cloudamqp-instance"
+  plan   = "penguin-1"
+  region = "amazon-web-services::us-east-1"
+  tags   = ["terraform"]
+}
+
+provider "lavinmq" {
+  baseurl  = format("https://%s", cloudamqp_instance.instance.host)
+  username = cloudamqp_instance.instance.credentials.username
+  password = cloudamqp_instance.instance.credentials.password
+}
+
+resource "lavinmq_vhost" "new_vhost" {
+  name = "new_vhost"
+}
+```
+
+</details>
+
 ## Argument Reference
 
 The following arguments are supported:

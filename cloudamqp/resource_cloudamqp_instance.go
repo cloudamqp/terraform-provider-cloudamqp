@@ -276,7 +276,11 @@ func resourceRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Di
 		return diag.Errorf("error setting host for resource %s: %s", d.Id(), err)
 	}
 
-	data = api.UrlInformation(data["url"].(string))
+	urlStr, ok := data["url"].(string)
+	if !ok || urlStr == "" {
+		return diag.Errorf("missing URL in instance response for resource %s", d.Id())
+	}
+	data = api.UrlInformation(urlStr)
 	credentialsMap := make(map[string]any)
 	for k, v := range data {
 		switch k {
