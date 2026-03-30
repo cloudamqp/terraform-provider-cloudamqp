@@ -7,7 +7,7 @@ description: |-
 
 # cloudamqp_credentials
 
-~> **Deprecated** This data source is deprecated and will be removed in a future version. Use the `credentials` attribute from the `cloudamqp_instance` resource instead.
+~> **Deprecated** This data source will be removed in next major version (v2.0). Use the credentials attribute in `cloudamqp_instance` resource or data source instead.
 
 Use this data source to retrieve information about the credentials of the configured user in
 RabbitMQ. Information is extracted from `cloudamqp_instance.instance.url`.
