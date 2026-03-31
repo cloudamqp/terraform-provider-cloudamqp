@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.44.2 (Unreleased)
+## 1.44.2 (31 Mar, 2026)
 
 BUG FIXES:
 
