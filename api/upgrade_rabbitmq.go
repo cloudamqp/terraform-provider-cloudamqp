@@ -66,7 +66,7 @@ func (api *API) UpgradeToSpecificVersion(ctx context.Context, instanceID int, ve
 		functionName: "UpgradeToSpecificVersion",
 		resourceName: "RabbitMQ",
 		attempt:      1,
-		sleep:        5 * time.Second,
+		sleep:        10 * time.Second,
 		data:         &data,
 		failed:       &failed,
 		statusCode:   &statusCode,
@@ -76,11 +76,15 @@ func (api *API) UpgradeToSpecificVersion(ctx context.Context, instanceID int, ve
 	}
 
 	// Handle different success codes
-	if statusCode == 200 {
-		return "Already at highest possible version", nil
+	switch statusCode {
+	case 200:
+		// Temporary revert back to old behavior
+		return api.waitUntilLavinMQUpgraded(ctx, instanceID)
+	case 202:
+		return api.waitUntilLavinMQUpgraded(ctx, instanceID)
 	}
 
-	return api.waitUntilUpgraded(ctx, instanceID)
+	return "", nil
 }
 
 func (api *API) UpgradeToLatestVersion(ctx context.Context, instanceID int) (string, error) {
@@ -96,7 +100,7 @@ func (api *API) UpgradeToLatestVersion(ctx context.Context, instanceID int) (str
 		functionName: "UpgradeToLatestVersion",
 		resourceName: "RabbitMQ",
 		attempt:      1,
-		sleep:        5 * time.Second,
+		sleep:        10 * time.Second,
 		data:         &data,
 		failed:       &failed,
 		statusCode:   &statusCode,
