@@ -1,10 +1,18 @@
 # CHANGELOG
 
+## 1.44.2 (Unreleased)
+
+BUG FIXES:
+
+* Reverted polling behavior when upgrading specific broker version ([#484])
+
+[#484]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/484
+
 ## 1.44.1 (30 Mar, 2026)
 
 IMPROVEMENTS:
 
-* Add missing credentials attribute to instance data source ([#483])
+* Added missing credentials attribute to instance data source ([#483])
 
 [#483]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/483
 
