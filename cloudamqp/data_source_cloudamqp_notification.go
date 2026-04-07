@@ -136,12 +136,26 @@ func (d *notificationDataSource) Read(ctx context.Context, req datasource.ReadRe
 	}
 
 	instanceID := config.InstanceID.ValueInt64()
-	recipientID := config.RecipientID.ValueInt64()
 	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
 	defer cancel()
 
-	id := fmt.Sprintf("%d", recipientID)
-	data, err := d.client.ReadNotification(timeoutCtx, instanceID, id)
+	tflog.Info(ctx, fmt.Sprintf("Reading notification for instance ID %d with recipient ID '%s' or name '%s'", instanceID, config.RecipientID.String(), config.Name.String()))
+
+	data := &model.RecipientResponse{}
+	err := error(nil)
+	if !config.RecipientID.IsNull() {
+		id := fmt.Sprintf("%d", config.RecipientID.ValueInt64())
+		data, err = d.client.ReadNotification(timeoutCtx, instanceID, id)
+	} else if !config.Name.IsNull() {
+		data, err = d.client.ReadNotificationByName(timeoutCtx, instanceID, config.Name.ValueString())
+	} else {
+		resp.Diagnostics.AddError(
+			"Invalid Notification Identifier",
+			"Either recipient_id or name must be provided. Please provide one of them to identify the notification.",
+		)
+		return
+	}
+
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Failed to Read Notification",
@@ -151,8 +165,9 @@ func (d *notificationDataSource) Read(ctx context.Context, req datasource.ReadRe
 	}
 
 	if data == nil {
-		tflog.Warn(ctx, fmt.Sprintf("Resource drift detected for notification ID %s or instance ID %d", id, instanceID))
-		resp.State.RemoveResource(ctx)
+		resp.Diagnostics.AddWarning("Notification not found", "The notification could not be found. It may have been"+
+			" deleted outside of Terraform, or the identifier provided may be incorrect. Please verify the notification"+
+			" exists and the correct recipient_id or name is used.")
 		return
 	}
 

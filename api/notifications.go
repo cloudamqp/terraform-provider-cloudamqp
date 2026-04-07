@@ -61,6 +61,24 @@ func (api *API) ReadNotification(ctx context.Context, instanceID int64, recipien
 	return data, nil
 }
 
+func (api *API) ReadNotificationByName(ctx context.Context, instanceID int64, name string) (*model.RecipientResponse, error) {
+	notifications, err := api.ListNotifications(ctx, instanceID)
+	if err != nil {
+		return nil, err
+	}
+
+	tflog.Info(ctx, fmt.Sprintf("Looking for notification with name '%s' among %d notifications", name, len(notifications)))
+	for _, notification := range notifications {
+		tflog.Info(ctx, fmt.Sprintf("Checking notification with name '%s': %+v", notification.Name, notification.Sanitized()))
+		if notification.Name == name {
+			tflog.Info(ctx, fmt.Sprintf("Found notification with name '%s': %+v", name, notification.Sanitized()))
+			return &notification, nil
+		}
+	}
+
+	return nil, nil
+}
+
 func (api *API) ListNotifications(ctx context.Context, instanceID int64) ([]model.RecipientResponse, error) {
 	var (
 		data   []model.RecipientResponse
