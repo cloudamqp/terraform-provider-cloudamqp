@@ -11,7 +11,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 var (
@@ -139,8 +138,6 @@ func (d *notificationDataSource) Read(ctx context.Context, req datasource.ReadRe
 	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
 	defer cancel()
 
-	tflog.Info(ctx, fmt.Sprintf("Reading notification for instance ID %d with recipient ID '%s' or name '%s'", instanceID, config.RecipientID.String(), config.Name.String()))
-
 	data := &model.RecipientResponse{}
 	err := error(nil)
 	if !config.RecipientID.IsNull() {
@@ -213,7 +210,6 @@ func (d *notificationDataSource) populateDataSourceModel(data model.RecipientRes
 		}
 	case "pagerduty", "victorops":
 		if data.Options != nil && (data.Options.DedupKey != nil || data.Options.RK != nil) {
-			// opts := map[string]string{}
 			opts := map[string]attr.Value{}
 			if data.Options.DedupKey != nil {
 				opts["dedupkey"] = types.StringValue(*data.Options.DedupKey)

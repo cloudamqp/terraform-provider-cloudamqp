@@ -217,7 +217,6 @@ func (d *notificationsDataSource) populateDataSourceModel(data model.RecipientRe
 		}
 	case "pagerduty", "victorops":
 		if data.Options != nil && (data.Options.DedupKey != nil || data.Options.RK != nil) {
-			// opts := map[string]string{}
 			opts := map[string]attr.Value{}
 			if data.Options.DedupKey != nil {
 				opts["dedupkey"] = types.StringValue(*data.Options.DedupKey)
