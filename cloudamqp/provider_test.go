@@ -238,5 +238,11 @@ func sanitizeSensistiveData(body string) string {
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_TRUST_STORE_CA"), "TEST_TRUST_STORE_CA")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_TRUST_STORE_CERT"), "TEST_TRUST_STORE_CERT")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_TRUST_STORE_CERT_2"), "TEST_TRUST_STORE_CERT_2")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("RECIPIENT_OPSGENIE_VALUE"), "RECIPIENT_OPSGENIE_VALUE")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("RECIPIENT_SIGNL4_VALUE"), "RECIPIENT_SIGNL4_VALUE")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("RECIPIENT_PAGERDUTY_VALUE"), "RECIPIENT_PAGERDUTY_VALUE")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("RECIPIENT_TEAMS_VALUE"), "RECIPIENT_TEAMS_VALUE")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("RECIPIENT_VICTOROPS_VALUE"), "RECIPIENT_VICTOROPS_VALUE")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("RECIPIENT_SLACK_VALUE"), "RECIPIENT_SLACK_VALUE")
 	return body
 }

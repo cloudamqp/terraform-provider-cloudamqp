@@ -113,7 +113,7 @@ func (r *notificationResource) Schema(ctx context.Context, req resource.SchemaRe
 			},
 		},
 		Blocks: map[string]schema.Block{
-			"responders": schema.ListNestedBlock{
+			"responders": schema.SetNestedBlock{
 				NestedObject: schema.NestedBlockObject{
 					Attributes: map[string]schema.Attribute{
 						"type": schema.StringAttribute{
