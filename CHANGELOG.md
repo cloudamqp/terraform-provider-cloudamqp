@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.44.3 (Unreleased)
+
+NOTES:
+
+* Tried webhook sync to registry.terraform.io. Latest two v1.44.1 and v1.44.2 never got uploaded and rsyng provider
+  fails.
+
 ## 1.44.2 (31 Mar, 2026)
 
 BUG FIXES:
