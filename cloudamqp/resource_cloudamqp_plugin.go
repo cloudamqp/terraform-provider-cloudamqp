@@ -3,7 +3,6 @@ package cloudamqp
 import (
 	"context"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -127,8 +126,6 @@ func resourcePluginRead(ctx context.Context, d *schema.ResourceData, meta any) d
 		return diag.Errorf("missing instance identifier: {resource_id},{instance_id}")
 	}
 
-	log.Printf("[DEBUG] import plugin instanceID: %v, name: %v, sleep: %v, timeout: %v",
-		instanceID, name, sleep, timeout)
 	data, err := api.ReadPlugin(ctx, instanceID, name, sleep, timeout)
 	if err != nil {
 		// If instance not found (404), return nil to indicate resource not found
@@ -184,7 +181,7 @@ func resourcePluginDelete(ctx context.Context, d *schema.ResourceData, meta any)
 	)
 
 	if enableFasterInstanceDestroy {
-		log.Printf("[DEBUG] cloudamqp::resource::plugin::delete skip calling backend.")
+		tflog.Debug(ctx, "cloudamqp::resource::plugin::delete skip calling backend.")
 		return diag.Diagnostics{}
 	}
 
