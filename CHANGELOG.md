@@ -1,12 +1,14 @@
 # CHANGELOG
 
-## 1.x.x (Unreleased)
+## 1.44.4 (Unreleased)
 
 BUG FIXES:
 
 * resource/cloudamqp_plugin_community: Added schema `Timeouts` block to prevent context deadline cancellation when used via the Pulumi Terraform bridge ([#487])
+* resource/cloudamqp_plugin: Added schema `Timeouts` block to prevent context deadline cancellation when used via the Pulumi Terraform bridge ([#489])
 
 [#487]: https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/487
+[#489]: https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/489
 
 ## 1.44.3 (13 Apr, 2026)
 
