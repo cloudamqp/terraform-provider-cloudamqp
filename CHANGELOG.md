@@ -1,3 +1,38 @@
+# CHANGELOG
+
+## 1.44.4 (14 Apr, 2026)
+
+BUG FIXES:
+
+* resource/cloudamqp_plugin_community: Added schema `Timeouts` block to prevent context deadline cancellation when used via the Pulumi Terraform bridge ([#487])
+* resource/cloudamqp_plugin: Added schema `Timeouts` block to prevent context deadline cancellation when used via the Pulumi Terraform bridge ([#489])
+
+[#487]: https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/487
+[#489]: https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/489
+
+## 1.44.3 (13 Apr, 2026)
+
+NOTES:
+
+* Tried webhook sync to registry.terraform.io. Latest two v1.44.1 and v1.44.2 never got uploaded and rsyng provider
+  fails.
+
+## 1.44.2 (31 Mar, 2026)
+
+BUG FIXES:
+
+* Reverted polling behavior when upgrading specific broker version ([#484])
+
+[#484]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/484
+
+## 1.44.1 (30 Mar, 2026)
+
+IMPROVEMENTS:
+
+* Added missing credentials attribute to instance data source ([#483])
+
+[#483]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/483
+
 ## 1.44.0 (25 Mar, 2026)
 
 NOTES:

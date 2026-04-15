@@ -5,6 +5,8 @@ description: |-
   Get information about an already created CloudAMQP instance
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_instance
 
 Use this data source to retrieve information about an already created CloudAMQP instance. In order
@@ -17,6 +19,32 @@ data "cloudamqp_instance" "instance" {
   instance_id = <id>
 }
 ```
+
+<details>
+  <summary>
+    <b>
+      <i>Provider-to-provider configuration, from </i>
+      <a href="https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.44.1">v1.44.1</a>
+    </b>
+  </summary>
+
+```hcl
+data "cloudamqp_instance" "instance" {
+  instance_id = <id>
+}
+
+provider "lavinmq" {
+  baseurl  = format("https://%s", data.cloudamqp_instance.instance.host)
+  username = data.cloudamqp_instance.instance.credentials.username
+  password = data.cloudamqp_instance.instance.credentials.password
+}
+
+resource "lavinmq_vhost" "new_vhost" {
+  name = "new_vhost"
+}
+```
+
+</details>
 
 ## Argument Reference
 
@@ -44,3 +72,11 @@ All attributes reference are computed
 * `vhost`       - The virtual host configured in Rabbit MQ.
 * `dedicated`   - Information if the CloudAMQP instance is shared or dedicated.
 * `backend`     - Information if the CloudAMQP instance runs either RabbitMQ or LavinMQ.
+* `credentials`   - (Sensitive) Broker credentials block with information extracted from URL.
+
+___
+
+The `credentials` block consists of:
+
+* `username` - The username to access the broker.
+* `password` - The password for the user to access the broker.

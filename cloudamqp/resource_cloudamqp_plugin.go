@@ -3,9 +3,9 @@ package cloudamqp
 import (
 	"context"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -21,6 +21,12 @@ func resourcePlugin() *schema.Resource {
 		DeleteContext: resourcePluginDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
+		},
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(60 * time.Minute),
+			Read:   schema.DefaultTimeout(60 * time.Minute),
+			Update: schema.DefaultTimeout(60 * time.Minute),
+			Delete: schema.DefaultTimeout(60 * time.Minute),
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -120,8 +126,6 @@ func resourcePluginRead(ctx context.Context, d *schema.ResourceData, meta any) d
 		return diag.Errorf("missing instance identifier: {resource_id},{instance_id}")
 	}
 
-	log.Printf("[DEBUG] import plugin instanceID: %v, name: %v, sleep: %v, timeout: %v",
-		instanceID, name, sleep, timeout)
 	data, err := api.ReadPlugin(ctx, instanceID, name, sleep, timeout)
 	if err != nil {
 		// If instance not found (404), return nil to indicate resource not found
@@ -177,7 +181,7 @@ func resourcePluginDelete(ctx context.Context, d *schema.ResourceData, meta any)
 	)
 
 	if enableFasterInstanceDestroy {
-		log.Printf("[DEBUG] cloudamqp::resource::plugin::delete skip calling backend.")
+		tflog.Debug(ctx, "cloudamqp::resource::plugin::delete skip calling backend.")
 		return diag.Diagnostics{}
 	}
 
