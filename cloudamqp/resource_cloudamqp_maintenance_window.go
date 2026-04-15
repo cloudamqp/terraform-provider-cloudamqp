@@ -67,6 +67,7 @@ func (r *maintenanceWindowResource) Schema(ctx context.Context, req resource.Sch
 			},
 			"preferred_day": schema.StringAttribute{
 				Optional:    true,
+				Computed:    true,
 				Description: "Preferred day of the week when to run maintenance",
 				Validators: []validator.String{
 					stringvalidator.OneOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"),
@@ -74,6 +75,7 @@ func (r *maintenanceWindowResource) Schema(ctx context.Context, req resource.Sch
 			},
 			"preferred_time": schema.StringAttribute{
 				Optional:    true,
+				Computed:    true,
 				Description: "Preferred time (UTC) the day when to run maintenance",
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(
@@ -126,15 +128,15 @@ func (r *maintenanceWindowResource) Create(ctx context.Context, req resource.Cre
 	instanceID := int(plan.InstanceID.ValueInt64())
 	data := model.Maintenance{}
 
-	if !plan.PreferredDay.IsNull() && plan.PreferredDay.ValueString() != "" {
+	if !plan.PreferredDay.IsNull() {
 		data.PreferredDay = plan.PreferredDay.ValueString()
 	}
 
-	if !plan.PreferredTime.IsNull() && plan.PreferredTime.ValueString() != "" {
+	if !plan.PreferredTime.IsNull() {
 		data.PreferredTime = plan.PreferredTime.ValueString()
 	}
 
-	if !plan.AutomaticUpdates.IsNull() && plan.AutomaticUpdates.ValueString() != "" {
+	if !plan.AutomaticUpdates.IsNull() {
 		if plan.AutomaticUpdates.ValueString() == "on" {
 			data.AutomaticUpdates = utils.Pointer(true)
 		} else if plan.AutomaticUpdates.ValueString() == "off" {
@@ -251,15 +253,15 @@ func (r *maintenanceWindowResource) Update(ctx context.Context, req resource.Upd
 	instanceID := int(plan.InstanceID.ValueInt64())
 	data := model.Maintenance{}
 
-	if !plan.PreferredDay.IsNull() && plan.PreferredDay.ValueString() != "" {
+	if !plan.PreferredDay.IsNull() {
 		data.PreferredDay = plan.PreferredDay.ValueString()
 	}
 
-	if !plan.PreferredTime.IsNull() && plan.PreferredTime.ValueString() != "" {
+	if !plan.PreferredTime.IsNull() {
 		data.PreferredTime = plan.PreferredTime.ValueString()
 	}
 
-	if !plan.AutomaticUpdates.IsNull() && plan.AutomaticUpdates.ValueString() != "" {
+	if !plan.AutomaticUpdates.IsNull() {
 		if plan.AutomaticUpdates.ValueString() == "on" {
 			data.AutomaticUpdates = utils.Pointer(true)
 		} else if plan.AutomaticUpdates.ValueString() == "off" {
