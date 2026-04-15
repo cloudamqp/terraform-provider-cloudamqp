@@ -89,7 +89,7 @@ The following arguments are supported:
 * `preferred_day`     - (Optional) Preferred day of the week when to schedule maintenance.
 * `preferred_time`    - (Optional) Preferred time (UTC) of the day when to schedule maintenance.
 * `automatic_updates` - (Optional/Computed) Allow scheduling of a maintenance for version update
-                        once a new LavinMQ version been released.
+                        when a new LavinMQ version been released.
 
 ### Valid preferred days
 
@@ -106,7 +106,7 @@ Example: "00:00", "06:00", "12:00", "18:00", "23:00"
 ### Valid automatic updates
 
 This argument can right now only be used for LavinMQ subscriptions plan. For new instances it's
-automatically set to "off".
+automatically set to "on".
 
 Valid values are: ["on", "off"]
 
