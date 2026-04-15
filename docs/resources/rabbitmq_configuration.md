@@ -11,9 +11,9 @@ This resource allows you update RabbitMQ config.
 
 Only available for dedicated subscription plans running ***RabbitMQ***.
 
-
-
 ## Example Usage
+
+<!-- markdownlint-disable MD033 -->
 
 <details>
   <summary>
@@ -85,8 +85,7 @@ data "cloudamqp_nodes" "list_nodes" {
 
 resource "cloudamqp_node_actions" "node_action" {
   instance_id = cloudamqp_instance.instance.id
-  node_name   = data.cloudamqp_nodes.list_nodes.nodes[0].name
-  action      = "restart"
+  action      = "cluster.restart"
 
   depends_on = [
     cloudamqp_rabbitmq_configuration.rabbitmq_config,
@@ -115,54 +114,94 @@ resource "cloudamqp_rabbitmq_configuration" "rabbit_config" {
 
 </details>
 
+<details>
+  <summary>
+    <b>
+      <i>
+        MQTT and SSL configuration and combine `cloudamqp_node_actions` for RabbitMQ restart
+      </i>
+    </b>
+  </summary>
+
+SSL certificate-based authentication for MQTT connections requires peer certificate verification.
+Set the following when enabling `mqtt_ssl_cert_login`:
+
+- `ssl_options_fail_if_no_peer_cert` = ***true***
+- `ssl_options_verify` = ***verify_peer***
+
+```hcl
+resource "cloudamqp_rabbitmq_configuration" "rabbitmq_config" {
+  instance_id                              = cloudamqp_instance.instance.id
+  mqtt_vhost                               = cloudamqp_instance.instance.vhost
+  mqtt_exchange                            = "amq.topic"
+  mqtt_ssl_cert_login                      = true
+  mqtt_max_session_expiry_interval_seconds = 1800
+  ssl_options_fail_if_no_peer_cert         = true
+  ssl_options_verify                       = "verify_peer"
+}
+
+data "cloudamqp_nodes" "nodes" {
+  instance_id = cloudamqp_instance.instance.id
+}
+
+resource "cloudamqp_node_actions" "node_action" {
+  instance_id = cloudamqp_instance.instance.id
+  node_name   = data.cloudamqp_nodes.nodes.nodes[0].name
+  action      = "restart"
+  depends_on = [
+    cloudamqp_rabbitmq_configuration.rabbitmq_config,
+  ]
+}
+```
+
+</details>
+
 ## Argument Reference
 
 The following arguments are supported:
 
-* `instance_id`                   - (Required) The CloudAMQP instance ID.
-* `heartbeat`                     - (Optional/Computed) Set the server AMQP 0-9-1 heartbeat timeout
-                                    in seconds.
-* `connection_max`                - (Optional/Computed) Set the maximum permissible number of
-                                    connection.
-* `channel_max`                   - (Optional/Computed) Set the maximum permissible number of
-                                    channels per connection.
-* `consumer_timeout`              - (Optional/Computed) A consumer that has recevied a message and
-                                    does not acknowledge that message within the timeout in
-                                    milliseconds
-* `vm_memory_high_watermark`      - (Optional/Computed) When the server will enter memory based
-                                    flow-control as relative to the maximum available memory.
-* `queue_index_embed_msgs_below`  - (Optional/Computed) Size in bytes below which to embed messages
-                                    in the queue index. 0 will turn off payload embedding in the
-                                    queue index.
-* `max_message_size`              - (Optional/Computed) The largest allowed message payload size in
-                                    bytes.
-* `log_exchange_level`            - (Optional/Computed) Log level for the logger used for log
-                                    integrations and the CloudAMQP Console log view.
-* `cluster_partition_handling`    - (Optional/Computed) Set how the cluster should handle network
-                                    partition.
-* `sleep`                         - (Optional) Configurable sleep time in seconds between retries
-                                    for RabbitMQ configuration. Default set to 60 seconds.
-* `timeout`                       - (Optional) - Configurable timeout time in seconds for RabbitMQ
-                                    configuration. Default set to 3600 seconds.
+- `instance_id`                   - (Required) The CloudAMQP instance ID.
+- `heartbeat`                     - (Optional/Computed) Set the server AMQP 0-9-1 heartbeat timeout in seconds.
+- `connection_max`                - (Optional/Computed) Set the maximum permissible number of connection.
+- `channel_max`                   - (Optional/Computed) Set the maximum permissible number of channels per connection.
+- `consumer_timeout`              - (Optional/Computed) A consumer that has received a message and does not acknowledge that message within the timeout in milliseconds
+- `vm_memory_high_watermark`      - (Optional/Computed) When the server will enter memory based flow-control as relative to the maximum available memory.
+- `queue_index_embed_msgs_below`  - (Optional/Computed) Size in bytes below which to embed messages in the queue index. 0 will turn off payload embedding in the queue index.
+- `max_message_size`              - (Optional/Computed) The largest allowed message payload size in bytes.
+- `log_exchange_level`            - (Optional/Computed) Log level for the logger used for log integrations and the CloudAMQP Console log view.
+- `cluster_partition_handling`    - (Optional/Computed) Set how the cluster should handle network partition.
+- `message_interceptors_timestamp_overwrite` (Optional/Computed) Sets a timestamp header on incoming messages. ***enabled_with_overwrite*** will overwrite any existing timestamps in the header.
+- `mqtt_vhost`                    - (Optional/Computed) Virtual host for MQTT connections. Default set to newly created vhost, same as `cloudamqp_instance.instance.vhost`.
+- `mqtt_exchange`                 - (Optional/Computed) The exchange option determines which exchange messages from MQTT clients are published to.
+- `mqtt_ssl_cert_login`           - (Optional/Computed) Enable SSL certificate-based authentication for MQTT connections.
+- `mqtt_max_session_expiry_interval_seconds` - (Optional/Computed) The maximum Session Expiry Interval in seconds allowed by the server. Set to 0 to force sessions to expire on disconnect, or -1 for no limit.
+- `ssl_cert_login_from`           - (Optional/Computed) Determines which certificate field to use as the username for TLS-based authentication.
+- `ssl_options_fail_if_no_peer_cert` - (Optional/Computed) When set to true, TLS connections will fail if the client does not provide a certificate.
+- `ssl_options_verify`            - (Optional/Computed) Controls peer certificate verification for TLS connections.
+
+Configure sleep and timeout for API requests retries
+
+- `sleep`                         - (Optional) Configurable sleep time in seconds between retries for RabbitMQ configuration. Default set to 60 seconds.
+- `timeout`                       - (Optional) - Configurable timeout time in seconds for RabbitMQ configuration. Default set to 3600 seconds.
 
 ## Attributes Reference
 
 All attributes reference are computed
 
-* `id`  - The identifier for this resource.
+- `id`  - The identifier for this resource.
 
 ## Argument threshold values
 
 ### heartbeat
 
-| Type | Default | Min  | Affect |
-|---|---|---|---|
+| Type | Default | Min | Affect |
+| --- | --- | --- | --- |
 | int | 120 | 0 | Only effects new connection |
 
 ### connection_max
 
-| Type | Default | Min  | Affect |
-|---|---|---|---|
+| Type | Default | Min | Affect |
+| --- | --- | --- | --- |
 | int | -1 | 1 | Applied immediately (RabbitMQ restart required before 3.11.13) |
 
 Note: -1 in the provider corresponds to INFINITY in the RabbitMQ config
@@ -170,15 +209,15 @@ Note: -1 in the provider corresponds to INFINITY in the RabbitMQ config
 ### channel_max
 
 | Type | Default | Min | Affect |
-|---|---|---|---|
-| int | 128 | 0 | Only effects new connections |
+| --- | --- | --- | --- |
+| int | 128 | 0 | Only affects new connections |
 
 Note: 0 means "no limit"
 
 ### consumer_timeout
 
 | Type | Default | Min | Max | Unit | Affect |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | int | 7200000 | 10000 | 86400000 | milliseconds | Only effects new channels |
 
 Note: -1 in the provider corresponds to false (disable) in the RabbitMQ config
@@ -186,13 +225,13 @@ Note: -1 in the provider corresponds to false (disable) in the RabbitMQ config
 ### vm_memory_high_watermark
 
 | Type | Default | Min | Max | Affect |
-|---|---|---|---|---|
- | float | 0.81 | 0.4 | 0.9 | Applied immediately |
+| --- | --- | --- | --- | --- |
+| float | 0.81 | 0.4 | 0.9 | Applied immediately |
 
 ### queue_index_embed_msgs_below
 
 | Type | Default | Min | Max | Unit | Affect |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | int | 4096 | 0 | 10485760 | bytes | Applied immediately for new queues |
 
 Note: Existing queues requires restart
@@ -200,25 +239,84 @@ Note: Existing queues requires restart
 ### max_message_size
 
 | Type | Default | Min | Max | Unit | Affect |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | int | 134217728 | 1 | 536870912 | bytes | Only effects new channels |
 
 ### log_exchange_level
 
-| Type | Default | Affect |
-|---|---|---|
-| string | error | RabbitMQ restart required |
-
-Note: `debug, info, warning, error, critical, none`
+| Type | Default | Affect | Allowed values |
+| --- | --- | --- | --- |
+| string | error | RabbitMQ restart required | `debug, info, warning, error, critical, none` |
 
 ### cluster_partition_handling
 
-| Type  | Affect | Note |
-|---|---|---|
+| Type | Affect | Allowed values |
+| --- | --- | --- |
 | string | Applied immediately | `autoheal, pause_minority, ignore` |
 
 Recommended setting for cluster_partition_handling: `autoheal` for cluster with 1-2
 nodes, `pause_minority` for cluster with 3 or more nodes. While `ignore` setting is not recommended.
+
+### message_interceptors_timestamp_overwrite
+
+| Type | Affect | Allowed values |
+| --- | --- | --- |
+| string | RabbitMQ restart required | `enabled_with_overwrite, enabled, disabled` |
+
+Note: Corresponds to setting `message_interceptors.incoming.set_header_timestamp.overwrite`
+
+### mqtt_vhost
+
+| Type | Affect |
+| --- | --- |
+| string | Only affects new connections |
+
+Note: A vhost is automatically created when `cloudamqp_instance` is created. This attribute defaults to that vhost (I.e. `cloudamqp_instance.instance.vhost`).
+
+### mqtt_exchange
+
+| Type | Affect |
+| --- | --- |
+| string | Only affects new connections |
+
+### mqtt_max_session_expiry_interval_seconds
+
+| Type | Affect | Allowed values |
+| --- | --- | --- |
+| int | Only affects new connections | 0 or more, default 1800. -1 will set it to no limit |
+
+Note: Available from RabbitMQ broker version 3.13.x.
+
+### mqtt_ssl_cert_login
+
+| Type | Affect |
+| --- | --- |
+| bool | RabbitMQ restart required |
+
+Note: When enabled, `rabbit.ssl_options.fail_if_no_peer_cert` should be set to ***true*** and
+`rabbit.ssl_options.verify` should be set to ***verify_peer*** for it to work properly.
+
+### ssl_cert_login_from
+
+| Type | Affect | Allowed values |
+| --- | --- | --- |
+| string | Only affects new connections | `common_name`, `distinguished_name` |
+
+### ssl_options_fail_if_no_peer_cert
+
+| Type | Affect |
+| --- | --- |
+| string | RabbitMQ restart required |
+
+Note: When enabled, `rabbit.ssl_options.verify` must be set to ***verify_peer***.
+
+### ssl_options_verify
+
+| Type | Affect | Allowed values |
+| --- | --- | --- |
+| string | RabbitMQ restart required | `verify_none`, `verify_peer` |
+
+Note: `verify_peer` validates the client's certificate chain, `verify_none` disables verification.
 
 ## Dependency
 
@@ -252,10 +350,10 @@ Or use Terraform CLI:
 The provider is built by older `Terraform Plugin SDK` which doesn't support nullable configuration
 values. Instead the values will be set to it's default value based on it's schema primitive type.
 
-* schema.TypeString = ""
-* schema.TypeInt = 0
-* schema.TypeFloat = 0.0
-* schema.TypeBool = false
+- schema.TypeString = ""
+- schema.TypeInt = 0
+- schema.TypeFloat = 0.0
+- schema.TypeBool = false
 
 During initial create of this resource, we need to exclude all arguments that can take these default
 values. Argument such as `hearbeat`, `channel_max`, etc. cannot be set to its default value, 0 in

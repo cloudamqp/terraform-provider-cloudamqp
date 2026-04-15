@@ -5,6 +5,8 @@ description: |-
   Accepting VPC peering request from an AWS accepter.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_vpc_peering
 
 This resouce allows you to accepting VPC peering request from an AWS requester. This is only

@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -24,64 +23,60 @@ func (api *API) EnablePrivatelink(ctx context.Context, instanceID int, params ma
 		return err
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d timeout=%d params=%v ", path, sleep,
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d timeout=%d params=%v", path, sleep,
 		timeout, params))
-	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(nil, &failed)
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	err := api.callWithRetry(timeoutCtx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
+		functionName: "EnablePrivatelink",
+		resourceName: "PrivateLink",
+		attempt:      1,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 	if err != nil {
 		return err
 	}
 
-	switch response.StatusCode {
-	case 204:
-		return api.waitForEnablePrivatelinkWithRetry(ctx, instanceID, 1, sleep, timeout)
-	default:
-		return fmt.Errorf("faile to enable PrivateLink, status=%d message:=%s ",
-			response.StatusCode, failed)
-	}
+	return api.waitForEnablePrivatelinkWithRetry(ctx, instanceID, 1, sleep, timeout)
 }
 
 // ReadPrivatelink: Reads PrivateLink information
 func (api *API) ReadPrivatelink(ctx context.Context, instanceID, sleep, timeout int) (
 	map[string]any, error) {
 
-	path := fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d ", path, sleep, timeout))
-	return api.readPrivateLinkWithRetry(ctx, path, 1, sleep, timeout)
-}
-
-func (api *API) readPrivateLinkWithRetry(ctx context.Context, path string, attempt, sleep,
-	timeout int) (map[string]any, error) {
-
 	var (
 		data   map[string]any
 		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
 	)
 
-	response, err := api.sling.New().Get(path).Receive(&data, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d", path, sleep, timeout))
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	err := api.callWithRetry(timeoutCtx, api.sling.New().Get(path), retryRequest{
+		functionName: "ReadPrivatelink",
+		resourceName: "PrivateLink",
+		attempt:      1,
+		sleep:        time.Duration(sleep) * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
-	} else if attempt*sleep > timeout {
-		return nil, fmt.Errorf("timeout reached after %d seconds, while reading PrivateLink", timeout)
 	}
 
-	switch response.StatusCode {
-	case 200:
-		return data, nil
-	case 400:
-		if strings.Compare(failed["error"].(string), "Timeout talking to backend") == 0 {
-			tflog.Debug(ctx, fmt.Sprintf("timeout talking to backend, will try again, "+
-				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
-			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.readPrivateLinkWithRetry(ctx, path, attempt, sleep, timeout)
-		}
-	case 404:
-		tflog.Warn(ctx, "Privatelink not found")
+	// Handle resource drift
+	if len(data) == 0 {
 		return nil, nil
 	}
 
-	return nil, fmt.Errorf("failed to read PrivateLink, status=%d message=%s ",
-		response.StatusCode, failed)
+	return data, nil
 }
 
 // UpdatePrivatelink: Update allowed principals or subscriptions
@@ -91,19 +86,15 @@ func (api *API) UpdatePrivatelink(ctx context.Context, instanceID int, params ma
 		path   = fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v ", path, params))
-	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
-	if err != nil {
-		return err
-	}
-
-	switch response.StatusCode {
-	case 204:
-		return nil
-	default:
-		return fmt.Errorf("failed to update PrivateLink, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v", path, params))
+	return api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
+		functionName: "UpdatePrivatelink",
+		resourceName: "PrivateLink",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 }
 
 // DisablePrivatelink: Disable the PrivateLink feature
@@ -113,55 +104,72 @@ func (api *API) DisablePrivatelink(ctx context.Context, instanceID int) error {
 		path   = fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
-	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
-	if err != nil {
-		return err
-	}
-
-	switch response.StatusCode {
-	case 204:
-		return nil
-	default:
-		return fmt.Errorf("failed to disable PrivateLink, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s", path))
+	return api.callWithRetry(ctx, api.sling.New().Delete(path), retryRequest{
+		functionName: "DisablePrivatelink",
+		resourceName: "PrivateLink",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 }
 
 // waitForEnablePrivatelinkWithRetry: Wait until status change from pending to enable
 func (api *API) waitForEnablePrivatelinkWithRetry(ctx context.Context, instanceID, attempt, sleep,
 	timeout int) error {
 
-	var (
-		data   map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
-	)
+	path := fmt.Sprintf("/api/instances/%d/privatelink", instanceID)
+	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s attempt=%d sleep=%d timeout=%d ", path, attempt,
-		sleep, timeout))
-	response, err := api.sling.New().Get(path).Receive(&data, &failed)
-	if err != nil {
-		return err
-	} else if attempt*sleep > timeout {
-		return fmt.Errorf("timeout reached after %d seconds, while enable PrivateLink", timeout)
-	}
+	tflog.Debug(ctx, fmt.Sprintf("waiting for PrivateLink to be enabled, sleep=%d timeout=%d", sleep, timeout))
 
-	switch response.StatusCode {
-	case 200:
-		tflog.Debug(ctx, "response data", data)
-		switch data["status"].(string) {
+	for {
+		if ctxTimeout.Err() != nil {
+			return fmt.Errorf("timeout reached after %d seconds, while enable PrivateLink", timeout)
+		}
+
+		var (
+			data   map[string]any
+			failed map[string]any
+		)
+
+		tflog.Debug(ctx, fmt.Sprintf("Checking PrivateLink status, attempt=%d", attempt))
+		err := api.callWithRetry(ctxTimeout, api.sling.New().Get(path), retryRequest{
+			functionName: "waitForEnablePrivatelinkWithRetry",
+			resourceName: "PrivateLink",
+			attempt:      attempt,
+			sleep:        time.Duration(sleep) * time.Second,
+			data:         &data,
+			failed:       &failed,
+		})
+		if err != nil {
+			return err
+		}
+
+		// Check the status field
+		status, ok := data["status"].(string)
+		if !ok {
+			return fmt.Errorf("status field missing or invalid in response")
+		}
+
+		tflog.Debug(ctx, fmt.Sprintf("PrivateLink status=%s", status))
+		switch status {
 		case "enabled":
 			return nil
 		case "pending":
-			tflog.Debug(ctx, fmt.Sprintf("enable PrivateLink not finished, will retry, "+
-				"attempt=%d until_timeout=%d ", attempt, (timeout-(attempt*sleep))))
+			// Status is not ready yet, sleep and retry
+			tflog.Debug(ctx, fmt.Sprintf("enable PrivateLink not finished, will retry, attempt=%d", attempt))
 			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.waitForEnablePrivatelinkWithRetry(ctx, instanceID, attempt, sleep, timeout)
+			select {
+			case <-ctxTimeout.Done():
+				return fmt.Errorf("timeout reached after %d seconds, while enable PrivateLink", timeout)
+			case <-time.After(time.Duration(sleep) * time.Second):
+				continue
+			}
+		default:
+			return fmt.Errorf("unexpected PrivateLink status: %s", status)
 		}
 	}
-
-	return fmt.Errorf("failed to enable PrivateLink, status=%d message=%s ",
-		response.StatusCode, failed)
 }

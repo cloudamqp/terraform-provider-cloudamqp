@@ -5,6 +5,9 @@ description: |-
   Creates and manages third party Prometheus metrics integrations for a CloudAMQP instance.
 ---
 
+<!-- markdownlint-disable MD024 -->
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_integration_metric_prometheus
 
 This resource allows you to create and manage Prometheus-compatible metric integrations for CloudAMQP instances. Currently supported integrations include New Relic v3, Datadog v3, Azure Monitor, Splunk v2, Dynatrace, CloudWatch v3, and Stackdriver v2.
@@ -137,7 +140,7 @@ The following arguments are supported:
 The following arguments are supported:
 
 * `api_key` - (Required) Datadog API key for authentication.
-* `region` - (Required) Datadog region code. Valid values: `us1`, `us3`, `us5`, `eu1`.
+* `region` - (Required) Datadog region code. Valid values: `us1`, `us3`, `us5`, `eu1`, `ap2`.
 * `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
 * `rabbitmq_dashboard_metrics_format` - (Optional) Enable metric name transformation to match Datadog's RabbitMQ dashboard format. Default: `false`. **Note:** This option is only available for RabbitMQ clusters, not LavinMQ clusters.
 

@@ -5,6 +5,8 @@ description: |-
   Creates and manages alarms to trigger notifications.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_alarm
 
 This resource allows you to create and manage alarms to trigger based on a set of conditions. Once
@@ -133,14 +135,14 @@ Optional argument for all alarms: `tags, queue_regex, vhost_regex`
 | Name | Type | Shared | Dedicated | Required arguments |
 | ---- | ---- | ---- | ---- | ---- |
 | CPU | cpu | - | &#10004; | time_threshold, value_threshold |
-| Memory | memory | - | &#10004;  | time_threshold, value_threshold |
-| Disk space | disk | - | &#10004;  | time_threshold, value_threshold |
-| Queue | queue | &#10004;  | &#10004; | time_threshold, value_threshold, queue_regex, vhost_regex, message_type |
+| Memory | memory | - | &#10004; | time_threshold, value_threshold |
+| Disk space | disk | - | &#10004; | time_threshold, value_threshold |
+| Queue | queue | &#10004; | &#10004; | time_threshold, value_threshold, queue_regex, vhost_regex, message_type |
 | Connection | connection | &#10004; | &#10004; | time_threshold, value_threshold |
 | Connection flow | flow | &#10004; | &#10004; | time_threshold, value_threshold |
 | Consumer | consumer | &#10004; | &#10004; | time_threshold, value_threshold, queue, vhost |
 | Netsplit | netsplit | - | &#10004; | time_threshold |
-| Server unreachable | server_unreachable  | - | &#10004;  | time_threshold |
+| Server unreachable | server_unreachable | - | &#10004; | time_threshold |
 | Notice | notice | &#10004; | &#10004; | |
 
 <br>

@@ -634,7 +634,7 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"application":"playground","endpoint":"syslog.cx498.coralogix.com:6514","private_key":"CORALOGIX_SEND_DATA_KEY","subsystem":"dev-agile-olive-crane.rmq4.dev.cloudamqp.com"}
+            {"application":"playground","endpoint":"syslog.us2.coralogix.com:6514","private_key":"CORALOGIX_SEND_DATA_KEY","subsystem":"dev-agile-olive-crane.rmq4.dev.cloudamqp.com"}
         form: {}
         headers:
             Authorization:
@@ -971,7 +971,7 @@ interactions:
         trailer: {}
         content_length: 409
         uncompressed: false
-        body: '{"id":4,"type":"coralogix","config":{"endpoint":"syslog.cx498.coralogix.com:6514","hostname":"dev-agile-olive-crane.rmq4.dev.cloudamqp.com","component":"rabbitmq","subsystem":"dev-agile-olive-crane.rmq4.dev.cloudamqp.com","application":"playground","private_key":"CORALOGIX_SEND_DATA_KEY"},"error":null,"account_id":"1de78273-9200-4d5d-bb37-75a92a188713","created_at":"2024-05-13 12:45:47 +0200"}'
+        body: '{"id":4,"type":"coralogix","config":{"endpoint":"syslog.us2.coralogix.com:6514","hostname":"dev-agile-olive-crane.rmq4.dev.cloudamqp.com","component":"rabbitmq","subsystem":"dev-agile-olive-crane.rmq4.dev.cloudamqp.com","application":"playground","private_key":"CORALOGIX_SEND_DATA_KEY"},"error":null,"account_id":"1de78273-9200-4d5d-bb37-75a92a188713","created_at":"2024-05-13 12:45:47 +0200"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -1691,7 +1691,7 @@ interactions:
         trailer: {}
         content_length: 409
         uncompressed: false
-        body: '{"id":4,"type":"coralogix","config":{"endpoint":"syslog.cx498.coralogix.com:6514","hostname":"dev-agile-olive-crane.rmq4.dev.cloudamqp.com","component":"rabbitmq","subsystem":"dev-agile-olive-crane.rmq4.dev.cloudamqp.com","application":"playground","private_key":"CORALOGIX_SEND_DATA_KEY"},"error":null,"account_id":"1de78273-9200-4d5d-bb37-75a92a188713","created_at":"2024-05-13 12:45:47 +0200"}'
+        body: '{"id":4,"type":"coralogix","config":{"endpoint":"syslog.us2.coralogix.com:6514","hostname":"dev-agile-olive-crane.rmq4.dev.cloudamqp.com","component":"rabbitmq","subsystem":"dev-agile-olive-crane.rmq4.dev.cloudamqp.com","application":"playground","private_key":"CORALOGIX_SEND_DATA_KEY"},"error":null,"account_id":"1de78273-9200-4d5d-bb37-75a92a188713","created_at":"2024-05-13 12:45:47 +0200"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -2048,7 +2048,7 @@ interactions:
         trailer: {}
         content_length: 409
         uncompressed: false
-        body: '{"id":4,"type":"coralogix","config":{"endpoint":"syslog.cx498.coralogix.com:6514","hostname":"dev-agile-olive-crane.rmq4.dev.cloudamqp.com","component":"rabbitmq","subsystem":"dev-agile-olive-crane.rmq4.dev.cloudamqp.com","application":"playground","private_key":"CORALOGIX_SEND_DATA_KEY"},"error":null,"account_id":"1de78273-9200-4d5d-bb37-75a92a188713","created_at":"2024-05-13 12:45:47 +0200"}'
+        body: '{"id":4,"type":"coralogix","config":{"endpoint":"syslog.us2.coralogix.com:6514","hostname":"dev-agile-olive-crane.rmq4.dev.cloudamqp.com","component":"rabbitmq","subsystem":"dev-agile-olive-crane.rmq4.dev.cloudamqp.com","application":"playground","private_key":"CORALOGIX_SEND_DATA_KEY"},"error":null,"account_id":"1de78273-9200-4d5d-bb37-75a92a188713","created_at":"2024-05-13 12:45:47 +0200"}'
         headers:
             Cache-Control:
                 - no-cache

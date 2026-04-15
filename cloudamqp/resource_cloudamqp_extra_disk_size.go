@@ -99,14 +99,18 @@ func resourceExtraDiskSizeRead(ctx context.Context, d *schema.ResourceData, meta
 		instanceID = d.Get("instance_id").(int)
 	)
 
-	data, err := api.ListNodes(ctx, instanceID)
+	data, err := api.ListNodes(ctx, int64(instanceID))
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
 	nodes := make([]map[string]any, len(data))
 	for k, v := range data {
-		nodes[k] = readDiskNode(v)
+		node := map[string]any{}
+		node["name"] = v.Name
+		node["disk_size"] = v.DiskSize
+		node["additional_disk_size"] = v.AdditionalDiskSize
+		nodes[k] = node
 	}
 
 	if err = d.Set("nodes", nodes); err != nil {
@@ -121,24 +125,4 @@ func resourceExtraDiskSizeDelete(ctx context.Context, d *schema.ResourceData,
 	// Just remove this resource from the state file, as the delete route does not exist in the
 	// backend but we need to allow delete to happen, e.g. when you destroy your instance
 	return diag.Diagnostics{}
-}
-
-func readDiskNode(data map[string]any) map[string]any {
-	node := make(map[string]any)
-	for k, v := range data {
-		if validateDiskSchemaAttribute(k) {
-			node[k] = v
-		}
-	}
-	return node
-}
-
-func validateDiskSchemaAttribute(key string) bool {
-	switch key {
-	case "name",
-		"disk_size",
-		"additional_disk_size":
-		return true
-	}
-	return false
 }

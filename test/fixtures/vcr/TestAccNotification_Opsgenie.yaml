@@ -1,0 +1,206 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 219
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"type":"opsgenie","value":"RECIPIENT_OPSGENIE_VALUE","name":"OpsGenie","options":{"responders":[{"type":"team","id":"209402c4-a92f-4b91-a1e8-d48a8ea621b9"},{"type":"user","username":"alarm@example.com"}]}}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1091/alarms/recipients
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 246
+        uncompressed: false
+        body: '{"id":863,"type":"opsgenie","value":"RECIPIENT_OPSGENIE_VALUE","name":"OpsGenie","options":{"responders":[{"id":"209402c4-a92f-4b91-a1e8-d48a8ea621b9","type":"team"},{"type":"user","username":"alarm@example.com"}]},"last_status":null}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "246"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 7a52b9ca-f123-4522-a700-2793673e96d1
+        status: 201 Created
+        code: 201
+        duration: 23.974302ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1091/alarms/recipients/863
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 246
+        uncompressed: false
+        body: '{"id":863,"type":"opsgenie","value":"RECIPIENT_OPSGENIE_VALUE","name":"OpsGenie","options":{"responders":[{"id":"209402c4-a92f-4b91-a1e8-d48a8ea621b9","type":"team"},{"type":"user","username":"alarm@example.com"}]},"last_status":null}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "246"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 489f6d91-02a7-48dd-8ab1-8e85c3c2e986
+        status: 200 OK
+        code: 200
+        duration: 15.598541ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1091/alarms/recipients/863
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 246
+        uncompressed: false
+        body: '{"id":863,"type":"opsgenie","value":"RECIPIENT_OPSGENIE_VALUE","name":"OpsGenie","options":{"responders":[{"id":"209402c4-a92f-4b91-a1e8-d48a8ea621b9","type":"team"},{"type":"user","username":"alarm@example.com"}]},"last_status":null}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "246"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 307f60a2-bcbd-4a21-a397-c4fa48950775
+        status: 200 OK
+        code: 200
+        duration: 15.401821ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1091/alarms/recipients/863
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 4a25130a-0657-44bf-adea-d3abc6ed633d
+        status: 204 No Content
+        code: 204
+        duration: 25.475406ms

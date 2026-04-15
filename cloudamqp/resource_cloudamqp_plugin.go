@@ -3,9 +3,9 @@ package cloudamqp
 import (
 	"context"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -21,6 +21,12 @@ func resourcePlugin() *schema.Resource {
 		DeleteContext: resourcePluginDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
+		},
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(60 * time.Minute),
+			Read:   schema.DefaultTimeout(60 * time.Minute),
+			Update: schema.DefaultTimeout(60 * time.Minute),
+			Delete: schema.DefaultTimeout(60 * time.Minute),
 		},
 		Schema: map[string]*schema.Schema{
 			"instance_id": {
@@ -90,10 +96,10 @@ func resourcePluginCreate(ctx context.Context, d *schema.ResourceData, meta any)
 func resourcePluginRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
 		api        = meta.(*api.API)
-		instanceID = d.Get("instance_id").(int)
-		name       = d.Get("name").(string)
-		sleep      = d.Get("sleep").(int)
-		timeout    = d.Get("timeout").(int)
+		instanceID int
+		name       string
+		sleep      int
+		timeout    int
 	)
 
 	// Support for importing resource
@@ -109,12 +115,17 @@ func resourcePluginRead(ctx context.Context, d *schema.ResourceData, meta any) d
 		d.Set("sleep", 10)
 		d.Set("timeout", 1800)
 	}
+
+	// Read values after import setup to ensure defaults are applied
+	instanceID = d.Get("instance_id").(int)
+	name = d.Get("name").(string)
+	sleep = d.Get("sleep").(int)
+	timeout = d.Get("timeout").(int)
+
 	if instanceID == 0 {
 		return diag.Errorf("missing instance identifier: {resource_id},{instance_id}")
 	}
 
-	log.Printf("[DEBUG] import plugin instanceID: %v, name: %v, sleep: %v, timeout: %v",
-		instanceID, name, sleep, timeout)
 	data, err := api.ReadPlugin(ctx, instanceID, name, sleep, timeout)
 	if err != nil {
 		// If instance not found (404), return nil to indicate resource not found
@@ -170,7 +181,7 @@ func resourcePluginDelete(ctx context.Context, d *schema.ResourceData, meta any)
 	)
 
 	if enableFasterInstanceDestroy {
-		log.Printf("[DEBUG] cloudamqp::resource::plugin::delete skip calling backend.")
+		tflog.Debug(ctx, "cloudamqp::resource::plugin::delete skip calling backend.")
 		return diag.Diagnostics{}
 	}
 

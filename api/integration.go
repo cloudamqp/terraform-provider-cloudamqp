@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -20,25 +21,26 @@ func (api *API) CreateIntegration(ctx context.Context, instanceID int, intType s
 			"application_secret", "api_key", "token")
 	)
 
-	tflog.Debug(sesnitiveCtx, fmt.Sprintf("method=POST path=%s ", path), params)
-	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
+	tflog.Debug(sesnitiveCtx, fmt.Sprintf("method=POST path=%s", path), params)
+	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
+		functionName: "CreateIntegration",
+		resourceName: "Integration",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	switch response.StatusCode {
-	case 201:
-		tflog.Debug(sesnitiveCtx, "response data", data)
-		if v, ok := data["id"]; ok {
-			data["id"] = strconv.FormatFloat(v.(float64), 'f', 0, 64)
-		} else {
-			return nil, fmt.Errorf("invalid identifier=%v ", data["id"])
-		}
-		return data, err
-	default:
-		return nil, fmt.Errorf("failed to create integration, status=%d message=%s ",
-			response.StatusCode, failed)
+	tflog.Debug(sesnitiveCtx, "response data", data)
+	if v, ok := data["id"]; ok {
+		data["id"] = strconv.FormatFloat(v.(float64), 'f', 0, 64)
+	} else {
+		return nil, fmt.Errorf("invalid identifier=%v", data["id"])
 	}
+	return data, nil
 }
 
 // ReadIntegration retrieves a specific logs or metrics integration
@@ -54,38 +56,41 @@ func (api *API) ReadIntegration(ctx context.Context, instanceID int, intType, in
 			"token")
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
-	response, err := api.sling.New().Path(path).Receive(&data, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
+	err := api.callWithRetry(ctx, api.sling.New().Path(path), retryRequest{
+		functionName: "ReadIntegration",
+		resourceName: "Integration",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	switch response.StatusCode {
-	case 200:
-		tflog.Debug(sesnitiveCtx, "response data", data)
-		// Convert API response body, config part, into single map
-		convertedData := make(map[string]any)
-		for k, v := range data {
-			if k == "id" {
-				convertedData[k] = v
-			} else if k == "type" {
-				convertedData[k] = v
-			} else if k == "metrics_filter" {
-				convertedData[k] = v
-			} else if k == "config" {
-				for configK, configV := range data["config"].(map[string]any) {
-					convertedData[configK] = configV
-				}
+	// Handle resource drift
+	if len(data) == 0 {
+		return nil, nil
+	}
+
+	tflog.Debug(sesnitiveCtx, "response data", data)
+	// Convert API response body, config part, into single map
+	convertedData := make(map[string]any)
+	for k, v := range data {
+		if k == "id" {
+			convertedData[k] = v
+		} else if k == "type" {
+			convertedData[k] = v
+		} else if k == "metrics_filter" {
+			convertedData[k] = v
+		} else if k == "config" {
+			for configK, configV := range data["config"].(map[string]any) {
+				convertedData[configK] = configV
 			}
 		}
-		return convertedData, err
-	case 404:
-		tflog.Warn(ctx, "integration not found")
-		return nil, nil
-	default:
-		return nil, fmt.Errorf("failed to read integration, status=%d message=%s ",
-			response.StatusCode, failed)
 	}
+	return convertedData, nil
 }
 
 // UpdateIntegration updated the integration with new information
@@ -100,19 +105,15 @@ func (api *API) UpdateIntegration(ctx context.Context, instanceID int, intType, 
 			"token")
 	)
 
-	tflog.Debug(sesnitiveCtx, fmt.Sprintf("method=PUT path=%s ", path), params)
-	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
-	if err != nil {
-		return err
-	}
-
-	switch response.StatusCode {
-	case 204:
-		return nil
-	default:
-		return fmt.Errorf("failed to update integration, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	tflog.Debug(sesnitiveCtx, fmt.Sprintf("method=PUT path=%s", path), params)
+	return api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
+		functionName: "UpdateIntegration",
+		resourceName: "Integration",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 }
 
 // DeleteIntegration removes log or metric integration.
@@ -122,19 +123,15 @@ func (api *API) DeleteIntegration(ctx context.Context, instanceID int, intType, 
 		path   = fmt.Sprintf("/api/instances/%d/integrations/%s/%s", instanceID, intType, intID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
-	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
-	if err != nil {
-		return err
-	}
-
-	switch response.StatusCode {
-	case 204:
-		return nil
-	default:
-		return fmt.Errorf("failed to delete integration, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s", path))
+	return api.callWithRetry(ctx, api.sling.New().Delete(path), retryRequest{
+		functionName: "DeleteIntegration",
+		resourceName: "Integration",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 }
 
 // UpdateMetricsFilter updates the metrics filter for a prometheus integration
@@ -145,19 +142,13 @@ func (api *API) UpdateMetricsFilter(ctx context.Context, instanceID int, intID s
 		params = map[string]any{"metrics_filter": filter}
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s ", path), params)
-	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
-	if err != nil {
-		return err
-	}
-
-	switch response.StatusCode {
-	case 204:
-		return nil
-	case 200:
-		return nil
-	default:
-		return fmt.Errorf("failed to update metrics filter, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s", path), params)
+	return api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
+		functionName: "UpdateMetricsFilter",
+		resourceName: "MetricsFilter",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 }

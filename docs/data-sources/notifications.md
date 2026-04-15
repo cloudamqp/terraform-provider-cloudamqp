@@ -5,6 +5,8 @@ description: |-
   Get information on pre-defined or created recipients.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_notifications
 
 Use this data source to retrieve information about all notification recipients. Each recipient will
@@ -39,6 +41,29 @@ All attributes reference are computed
 * `type`          - The type of the recipient.
 * `value`         - The notification endpoint, where to send the notification.
 * `options`       - Options argument (e.g. `rk` used for VictorOps routing key).
+* `responders`  - An array of reponders (only for OpsGenie). Each `responders` block
+                  consists of the field documented below.
+
+___
+
+The options parameter:
+
+* rk        - (Optional) Routing key to route alarm notification (can be used with Victorops).
+* dedupkey  - (Optional) If multiple alarms are triggered using a recipient with this key, only the
+              the first alarm will trigger a notification (can be used with PagerDuty). Leave blank
+              to use the generated dedup key.
+
+___
+
+The `responders` block consists of:
+
+* `type`      - (Required) Type of responder. [`team`, `user`, `escalation`, `schedule`]
+* `id`        - (Optional) Identifier in UUID format
+* `name`      - (Optional) Name of the responder
+* `username`  - (Optional) Username of the responder
+
+Responders of type `team`, `escalation` and `schedule` can use either id or name.
+While `user` can use either id or username.
 
 ## Dependency
 

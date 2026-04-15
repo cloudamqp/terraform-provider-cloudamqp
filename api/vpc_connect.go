@@ -23,20 +23,21 @@ func (api *API) EnableVpcConnect(ctx context.Context, instanceID int,
 		return err
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d timeout=%d params=%v ", path, sleep,
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d timeout=%d params=%v", path, sleep,
 		timeout, params))
-	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(nil, &failed)
+	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
+		functionName: "EnableVpcConnect",
+		resourceName: "VPC Connect",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 	if err != nil {
 		return err
 	}
 
-	switch response.StatusCode {
-	case 204:
-		return api.waitForEnableVpcConnectWithRetry(ctx, instanceID, 1, sleep, timeout)
-	default:
-		return fmt.Errorf("failed to enable VPC connect, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	return api.waitForEnableVpcConnectWithRetry(ctx, instanceID, 1, sleep, timeout)
 }
 
 // ReadVpcConnect: Reads VPC Connect information
@@ -47,23 +48,24 @@ func (api *API) ReadVpcConnect(ctx context.Context, instanceID int) (map[string]
 		path   = fmt.Sprintf("/api/instances/%d/vpc-connect", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
-	response, err := api.sling.New().Get(path).Receive(&data, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
+	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+		functionName: "ReadVpcConnect",
+		resourceName: "VPC Connect",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	switch response.StatusCode {
-	case 200:
-		tflog.Debug(ctx, "response data", data)
-		return data, nil
-	case 404:
-		tflog.Warn(ctx, "VPC Connect not found")
+	if len(data) == 0 {
 		return nil, nil
-	default:
-		return nil, fmt.Errorf("failed to read VPC connect, status=%d message=%s ",
-			response.StatusCode, failed)
 	}
+
+	return data, nil
 }
 
 // UpdateVpcConnect: Update allowlist for the VPC Connect
@@ -75,19 +77,20 @@ func (api *API) UpdateVpcConnect(ctx context.Context, instanceID int,
 		path   = fmt.Sprintf("/api/instances/%d/vpc-connect", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v ", path, params))
-	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v", path, params))
+	err := api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
+		functionName: "UpdateVpcConnect",
+		resourceName: "VPC Connect",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 	if err != nil {
 		return err
 	}
 
-	switch response.StatusCode {
-	case 204:
-		return nil
-	default:
-		return fmt.Errorf("update VPC connect failed, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	return nil
 }
 
 // DisableVpcConnect: Disable the VPC Connect feature
@@ -97,53 +100,77 @@ func (api *API) DisableVpcConnect(ctx context.Context, instanceID int) error {
 		path   = fmt.Sprintf("/api/instances/%d/vpc-connect", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
-	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s", path))
+	err := api.callWithRetry(ctx, api.sling.New().Delete(path), retryRequest{
+		functionName: "DisableVpcConnect",
+		resourceName: "VPC Connect",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 	if err != nil {
 		return err
 	}
 
-	switch response.StatusCode {
-	case 204:
-		return nil
-	default:
-		return fmt.Errorf("failed to disable VPC connect, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	return nil
 }
 
 // waitForEnableVpcConnectWithRetry: Wait until status change from pending to enable
 func (api *API) waitForEnableVpcConnectWithRetry(ctx context.Context, instanceID, attempt, sleep, timeout int) error {
-	var (
-		data   map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("/api/instances/%d/vpc-connect", instanceID)
-	)
+	path := fmt.Sprintf("/api/instances/%d/vpc-connect", instanceID)
+	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
 
-	response, err := api.sling.New().Get(path).Receive(&data, &failed)
-	if err != nil {
-		return err
-	} else if attempt*sleep > timeout {
-		return fmt.Errorf("timeout reached after %d seconds, while enable VPC connect", timeout)
-	}
+	tflog.Debug(ctx, fmt.Sprintf("waiting for VPC Connect to be enabled, sleep=%d timeout=%d", sleep, timeout))
 
-	switch response.StatusCode {
-	case 200:
-		tflog.Debug(ctx, "response data", data)
-		switch data["status"].(string) {
+	for {
+		if ctxTimeout.Err() != nil {
+			return fmt.Errorf("timeout reached after %d seconds, while enable VPC connect", timeout)
+		}
+
+		var (
+			data   map[string]any
+			failed map[string]any
+		)
+
+		tflog.Debug(ctx, fmt.Sprintf("Checking VPC Connect status, attempt=%d", attempt))
+		err := api.callWithRetry(ctxTimeout, api.sling.New().Get(path), retryRequest{
+			functionName: "waitForEnableVpcConnectWithRetry",
+			resourceName: "VPC Connect",
+			attempt:      attempt,
+			sleep:        time.Duration(sleep) * time.Second,
+			data:         &data,
+			failed:       &failed,
+		})
+		if err != nil {
+			return err
+		}
+
+		// Check the status field
+		status, ok := data["status"].(string)
+		if !ok {
+			return fmt.Errorf("status field missing or invalid in response")
+		}
+
+		tflog.Debug(ctx, fmt.Sprintf("VPC Connect status=%s", status))
+		switch status {
 		case "enabled":
 			return nil
 		case "pending":
-			tflog.Debug(ctx, fmt.Sprintf("enable not finished and will retry, attempt=%d "+
-				"until_timeout=%d", attempt, (timeout-(attempt*sleep))))
+			// Status is not ready yet, sleep and retry
+			tflog.Debug(ctx, fmt.Sprintf("enable not finished and will retry, attempt=%d", attempt))
 			attempt++
-			time.Sleep(time.Duration(sleep) * time.Second)
-			return api.waitForEnableVpcConnectWithRetry(ctx, instanceID, attempt, sleep, timeout)
+			select {
+			case <-ctxTimeout.Done():
+				return fmt.Errorf("timeout reached after %d seconds, while enable VPC connect", timeout)
+			case <-time.After(time.Duration(sleep) * time.Second):
+				continue
+			}
+		default:
+			return fmt.Errorf("unexpected VPC Connect status: %s", status)
 		}
 	}
-
-	return fmt.Errorf("failed to enable VPC connect, status=%d message=%s ",
-		response.StatusCode, failed)
 }
 
 // enableVPC: Enable VPC for an instance
@@ -156,19 +183,20 @@ func (api *API) EnableVPC(ctx context.Context, instanceID int) error {
 
 	data, _ := api.ReadInstance(ctx, fmt.Sprintf("%d", instanceID))
 	if data["vpc"] == nil {
-		tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s ", path))
-		response, err := api.sling.New().Put(path).Receive(nil, &failed)
+		tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s", path))
+		err := api.callWithRetry(ctx, api.sling.New().Put(path), retryRequest{
+			functionName: "EnableVPC",
+			resourceName: "VPC",
+			attempt:      1,
+			sleep:        5 * time.Second,
+			data:         nil,
+			failed:       &failed,
+		})
 		if err != nil {
 			return err
 		}
 
-		switch response.StatusCode {
-		case 200:
-			return nil
-		default:
-			return fmt.Errorf("failed to enable VPC, status=%d message=%s ",
-				response.StatusCode, failed)
-		}
+		return nil
 	}
 
 	tflog.Debug(ctx, "VPC feature already enabled")

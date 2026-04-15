@@ -1,0 +1,29 @@
+package configuration
+
+type TrustStoreRequest struct {
+	Provider        string                          `json:"provider"`
+	RefreshInterval int64                           `json:"refresh_interval"`
+	Url             string                          `json:"url,omitempty"`
+	CACert          string                          `json:"cacertfile,omitempty"`
+	Certificates    *[]TrustStoreCertificateRequest `json:"certificates,omitempty"`
+}
+
+type TrustStoreCertificateRequest struct {
+	Name    string `json:"name"`
+	Content string `json:"content"`
+}
+
+type TrustStoreResponse struct {
+	ConfigurationId string  `json:"id"`
+	Url             *string `json:"url,omitempty"`
+	RefreshInterval int64   `json:"refresh_interval"`
+	Provider        string  `json:"provider"`
+}
+
+func (u TrustStoreRequest) Sanitized() TrustStoreRequest {
+	sanitized := u
+	if sanitized.CACert != "" {
+		sanitized.CACert = "***"
+	}
+	return sanitized
+}

@@ -3,132 +3,136 @@ package api
 import (
 	"context"
 	"fmt"
-	"strconv"
+	"time"
 
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/monitoring"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func (api *API) CreateNotification(ctx context.Context, instanceID int, params map[string]any) (
-	map[string]any, error) {
-
+func (api *API) CreateNotification(ctx context.Context, instanceID int64, params *model.RecipientRequest) (*model.RecipientResponse, error) {
 	var (
-		data   map[string]any
+		data   *model.RecipientResponse
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s ", path), params)
-	response, err := api.sling.New().Post(path).BodyJSON(params).Receive(&data, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s, params=%+v", path, params.Sanitized()))
+	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
+		functionName: "CreateNotification",
+		resourceName: "Notification",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	switch response.StatusCode {
-	case 201:
-		tflog.Debug(ctx, "response data", data)
-		if v, ok := data["id"]; ok {
-			data["id"] = strconv.FormatFloat(v.(float64), 'f', 0, 64)
-		} else {
-			return nil, fmt.Errorf("invalid identifier=%v ", data["id"])
-		}
-		return data, err
-	default:
-		return nil, fmt.Errorf("failed to create notification, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	return data, nil
 }
 
-func (api *API) ReadNotification(ctx context.Context, instanceID int, recipientID string) (
-	map[string]any, error) {
-
+func (api *API) ReadNotification(ctx context.Context, instanceID int64, recipientID string) (*model.RecipientResponse, error) {
 	var (
-		data   map[string]any
+		data   *model.RecipientResponse
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients/%s", instanceID, recipientID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
-	response, err := api.sling.New().Path(path).Receive(&data, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
+	err := api.callWithRetry(ctx, api.sling.New().Path(path), retryRequest{
+		functionName: "ReadNotification",
+		resourceName: "Notification",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	switch response.StatusCode {
-	case 200:
-		tflog.Debug(ctx, "response data", data)
-		return data, nil
-	case 404:
-		tflog.Warn(ctx, "notification not found")
+	tflog.Debug(ctx, fmt.Sprintf("ReadNotification response: %+v", data.Sanitized()))
+	// Handle resource drift
+	if data == nil {
 		return nil, nil
-	default:
-		return nil, fmt.Errorf("failed to read notification, status=%d message=%s ",
-			response.StatusCode, failed)
 	}
+
+	return data, nil
 }
 
-func (api *API) ListNotifications(ctx context.Context, instanceID int) ([]map[string]any, error) {
-	var (
-		data   []map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients", instanceID)
-	)
-
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
-	response, err := api.sling.New().Path(path).Receive(&data, &failed)
+func (api *API) ReadNotificationByName(ctx context.Context, instanceID int64, name string) (*model.RecipientResponse, error) {
+	notifications, err := api.ListNotifications(ctx, instanceID)
 	if err != nil {
 		return nil, err
 	}
 
-	switch response.StatusCode {
-	case 200:
-		tflog.Debug(ctx, fmt.Sprintf("response data=%v", data))
-		return data, nil
-	default:
-		return nil, fmt.Errorf("failed to read notifications, status=%d message=%s ",
-			response.StatusCode, failed)
+	tflog.Info(ctx, fmt.Sprintf("Looking for notification with name '%s' among %d notifications", name, len(notifications)))
+	for _, notification := range notifications {
+		tflog.Info(ctx, fmt.Sprintf("Checking notification with name '%s': %+v", notification.Name, notification.Sanitized()))
+		if notification.Name == name {
+			tflog.Info(ctx, fmt.Sprintf("Found notification with name '%s': %+v", name, notification.Sanitized()))
+			return &notification, nil
+		}
 	}
+
+	return nil, nil
 }
 
-func (api *API) UpdateNotification(ctx context.Context, instanceID int, recipientID string,
-	params map[string]any) error {
+func (api *API) ListNotifications(ctx context.Context, instanceID int64) ([]model.RecipientResponse, error) {
+	var (
+		data   []model.RecipientResponse
+		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients", instanceID)
+	)
+
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
+	err := api.callWithRetry(ctx, api.sling.New().Path(path), retryRequest{
+		functionName: "ListNotifications",
+		resourceName: "Notification",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
+func (api *API) UpdateNotification(ctx context.Context, instanceID int64, recipientID string, params *model.RecipientRequest) error {
 
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients/%s", instanceID, recipientID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s ", path))
-	response, err := api.sling.New().Put(path).BodyJSON(params).Receive(nil, &failed)
-	if err != nil {
-		return err
-	}
-
-	switch response.StatusCode {
-	case 200:
-		return nil
-	default:
-		return fmt.Errorf("failed to update notification, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s, params=%+v", path, params.Sanitized()))
+	return api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
+		functionName: "UpdateNotification",
+		resourceName: "Notification",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 }
 
-func (api *API) DeleteNotification(ctx context.Context, instanceID int, recipientID string) error {
+func (api *API) DeleteNotification(ctx context.Context, instanceID int64, recipientID string) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/alarms/recipients/%s", instanceID, recipientID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s ", path))
-	response, err := api.sling.New().Delete(path).Receive(nil, &failed)
-	if err != nil {
-		return err
-	}
-
-	switch response.StatusCode {
-	case 204:
-		return nil
-	default:
-		return fmt.Errorf("failed to delete notification, status=%d message=%s ",
-			response.StatusCode, failed)
-	}
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s", path))
+	return api.callWithRetry(ctx, api.sling.New().Delete(path), retryRequest{
+		functionName: "DeleteNotification",
+		resourceName: "Notification",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         nil,
+		failed:       &failed,
+	})
 }

@@ -7,6 +7,8 @@ description: |-
 
 # cloudamqp_alarm
 
+~> **Deprecated** This data source will be removed in next major version (v2.0). Use the `cloudamqp_alarms` data source instead.
+
 Use this data source to retrieve information about default or created alarms. Either use `alarm_id`
 or `type` to retrieve the alarm.
 

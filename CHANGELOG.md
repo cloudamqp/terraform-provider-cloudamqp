@@ -1,3 +1,194 @@
+# CHANGELOG
+
+## 1.44.4 (14 Apr, 2026)
+
+BUG FIXES:
+
+* resource/cloudamqp_plugin_community: Added schema `Timeouts` block to prevent context deadline cancellation when used via the Pulumi Terraform bridge ([#487])
+* resource/cloudamqp_plugin: Added schema `Timeouts` block to prevent context deadline cancellation when used via the Pulumi Terraform bridge ([#489])
+
+[#487]: https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/487
+[#489]: https://github.com/cloudamqp/terraform-provider-cloudamqp/issues/489
+
+## 1.44.3 (13 Apr, 2026)
+
+NOTES:
+
+* Tried webhook sync to registry.terraform.io. Latest two v1.44.1 and v1.44.2 never got uploaded and rsyng provider
+  fails.
+
+## 1.44.2 (31 Mar, 2026)
+
+BUG FIXES:
+
+* Reverted polling behavior when upgrading specific broker version ([#484])
+
+[#484]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/484
+
+## 1.44.1 (30 Mar, 2026)
+
+IMPROVEMENTS:
+
+* Added missing credentials attribute to instance data source ([#483])
+
+[#483]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/483
+
+## 1.44.0 (25 Mar, 2026)
+
+NOTES:
+
+* Added `credentials` attribute to `cloudamqp_instance` to fully support provider-to-provider configuration, e.g.
+  when combined with our [LavinMQ broker provider].
+
+FEATURES:
+
+* Resource: Added credentials attribute to `cloudamqp_instance` ([#467])
+
+IMPROVEMENTS:
+
+* Resource: Added `mqtt_max_session_expiry_interval_seconds` setting to `cloudamqp_rabbitmq_configration` ([#479])
+
+DEPRECATED:
+
+* Data-source: Credentials used by `data_source_cloudamqp_credentials` ([#467])
+
+DEPENDENCIES:
+
+* Bumped minimum required build Go version from 1.24 to 1.26 ([#477])
+* Bumped github.com/hashicorp/terraform-plugin-mux from 0.22.0 to 0.23.0 ([#478])
+* Bumped github.com/hashicorp/terraform-plugin-go from 0.30.0 to 0.31.0 ([#478])
+* Bumped github.com/hashicorp/terraform-plugin-framework from 1.18.0 to 1.19.0 ([#478])
+* Bumped github.com/hashicorp/terraform-plugin-sdk/v2 from 2.39.0 to 2.40.0 ([#478])
+
+[LavinMQ broker provider]: https://registry.terraform.io/providers/cloudamqp/lavinmq/latest
+[#467]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/467
+[#477]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/477
+[#478]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/478
+[#479]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/479
+
+## 1.43.1 (19 Mar, 2026)
+
+BUG FIXES:
+
+* Overriden timeout used for upgrade instance and resize disk ([#474])
+
+DEPENDENCIES:
+
+* Bumped google.golang.org/grpc from 1.79.1 to 1.79.3 ([#473])
+
+[#473]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/473
+[#474]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/474
+
+## 1.43.0 (25 Feb, 2026)
+
+NOTES:
+
+* Major refactoring of the API client layer to use unified retry mechanism across all API methods, providing consistent
+  error handling and improved reliability.
+
+IMPROVEMENTS:
+
+* ClientLibrary: Refactored all API methods to use unified `callWithRetry()` approach for consistent error handling and
+  retry logic ([#454])
+* CLientLibrary: Added rate limit retry with exponential backoff ([#455])
+* ClientLibrary: Refactored the genric retry with centralized HTTP status code handling and isolated logic ([#456])
+* Integration: Added support for `ap2` Datadog region for resources: ([#457])
+  * `cloudamqp_integration_metrics_prometheus`
+  * `cloudamqp_integration_log`
+
+DEPENDENCIES:
+
+* Bumped goreleaser/goreleaser-action from 6.4.0 to 7.0.0 ([#458])
+* Bumped github.com/hashicorp/terraform-plugin-go from 0.29.0 to 0.30.0 ([#459])
+* Bumped hashicorp/setup-terraform from 3 to 4 ([#460])
+
+[#454]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/454
+[#455]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/455
+[#456]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/456
+[#457]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/457
+[#458]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/458
+[#459]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/459
+[#460]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/460
+
+## 1.42.1 (11 Feb, 2026)
+
+IMPROVEMENTS:
+
+* Integration: Updated how metrics filter is created/updated for `cloudamqp_integration_metric_prometheus` ([#451])
+
+[#451]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/451
+
+## 1.42.0 (06 Feb, 2026)
+
+FEATURES:
+
+* Resource: Added support for file provider in `cloudamqp_trust_store` ([#446])
+
+DEPENDENCIES:
+
+* Bumped github.com/hashicorp/terraform-plugin-sdk/v2 from 2.38.1 to 2.38.2 ([#449])
+
+[#446]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/446
+[#449]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/449
+
+## 1.41.1 (12 Jan, 2026)
+
+IMPROVEMENTS:
+
+* Resource: Added additional argument "key_id" to `cloudamqp_custom_certificate` ([#448])
+
+[#448]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/448
+
+## 1.41.0 (22 Dec, 2025)
+
+NOTES:
+
+* Added `Claude.md` and `AGENTS.md` files with AI agent instructions.
+
+FEATURES:
+
+* Resource: Added new `cloudamqp_trust_store` resource ([#443])
+* Migrated `cloudamqp_node_actions` towards Terraform plugin framework ([#445])
+
+IMPROVEMENTS:
+
+* Resource: Added additional MQTT/SSL settings to `cloudamqp_rabbitmq_configuration` ([#440])
+* Resource: Added message interceptos setting to `cloudamqp_rabbitmq_configuration` ([#442])
+* Resource: Added cluster actions to `cloudamqp_node_actions` ([#445])
+
+[#440]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/440
+[#442]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/442
+[#443]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/443
+[#445]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/445
+
+## 1.40.0 (11 Dec, 2025)
+
+IMPROVEMENTS:
+
+* ClientLibrary: Added retries for status code 423 and 503 ([#437])
+* ClientLibrary: Added retry for custom domain requests ([#438])
+* Resource: Added sleep/timeout for `cloudamqp_custom_domain` ([#438])
+
+DEPENDENCIES:
+
+* Bumped github.com/hashicorp/terraform-plugin-framework from 1.16.1 to 1.17.0 ([#435])
+
+[#435]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/435
+[#437]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/437
+[#438]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/438
+
+## 1.39.0 (02 Dec, 2025)
+
+NOTES:
+
+* Support added for custom certificate, "Bring your own certificate"
+
+FEATURES:
+
+* Resource: Added `cloudamqp_custom_certificate` resource ([#430])
+
+[#430]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/430
+
 ## 1.38.3 (21 Nov, 2025)
 
 NOTES:
@@ -11,9 +202,9 @@ IMPROVEMENTS:
 
 DEPENDENCIES:
 
-* Bump github.com/hashicorp/terraform-plugin-log from 0.9.0 to 0.10.0 ([#424])
-* Bump golang.org/x/crypto from 0.42.0 to 0.45.0 ([#426])
-* Bump actions/checkout from 5 to 6 ([#427])
+* Bumped github.com/hashicorp/terraform-plugin-log from 0.9.0 to 0.10.0 ([#424])
+* Bumped golang.org/x/crypto from 0.42.0 to 0.45.0 ([#426])
+* Bumped actions/checkout from 5 to 6 ([#427])
 
 [#421]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/421
 [#422]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/422
@@ -40,7 +231,7 @@ IMPROVEMENTS:
 
 DEPENDENCIES:
 
-* Bump actions/setup-go from 5 to 6 ([#369])
+* Bumped actions/setup-go from 5 to 6 ([#369])
 
 [#369]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/369
 [#417]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/417
@@ -82,7 +273,7 @@ BUG FIXES:
 
 DEPENDENCIES:
 
-* Bump github.com/hashicorp/terraform-plugin-framework-validators from 0.18.0 to 0.19.0 ([#396])
+* Bumped github.com/hashicorp/terraform-plugin-framework-validators from 0.18.0 to 0.19.0 ([#396])
 
 [#379]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/379
 [#381]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/381
@@ -122,9 +313,9 @@ IMPROVEMENTS:
 
 DEPENDENCIES:
 
-* Bump github.com/hashicorp/terraform-plugin-mux from 0.20.0 to 0.21.0 ([#373])
-* Bump github.com/hashicorp/terraform-plugin-sdk/v2 from 2.37.0 to 2.38.1 ([#375], [#378])
-* Bump github.com/hashicorp/terraform-plugin-framework from 1.15.1 to 1.16.1 ([#376], [#382])
+* Bumped github.com/hashicorp/terraform-plugin-mux from 0.20.0 to 0.21.0 ([#373])
+* Bumped github.com/hashicorp/terraform-plugin-sdk/v2 from 2.37.0 to 2.38.1 ([#375], [#378])
+* Bumped github.com/hashicorp/terraform-plugin-framework from 1.15.1 to 1.16.1 ([#376], [#382])
 
 [#362]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/362
 [#363]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/363
@@ -156,9 +347,9 @@ IMPROVEMENTS:
 
 DEPENDENCIES:
 
-* Bump github.com/hashicorp/terraform-plugin-framework from 1.15.0 to 1.15.1 ([#355])
-* Bump actions/checkout from 4 to 5 ([#357])
-* Bump goreleaser/goreleaser-action from 6.3.0 to 6.4.0 ([#358])
+* Bumped github.com/hashicorp/terraform-plugin-framework from 1.15.0 to 1.15.1 ([#355])
+* Bumped actions/checkout from 4 to 5 ([#357])
+* Bumped goreleaser/goreleaser-action from 6.3.0 to 6.4.0 ([#358])
 
 [#351]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/351
 [#355]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/355
@@ -191,7 +382,7 @@ FEATURES:
 
 DEPENDENCIES:
 
-* Bump github.com/cloudflare/circl from 1.6.0 to 1.6.1 ([#342])
+* Bumped github.com/cloudflare/circl from 1.6.0 to 1.6.1 ([#342])
 
 [#342]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/342
 [#344]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/344
@@ -207,7 +398,7 @@ FEATURES:
 
 DEPENDENCIES:
 
-* Bump golang.org/x/net from 0.36.0 to 0.38.0 ([#338])
+* Bumped golang.org/x/net from 0.36.0 to 0.38.0 ([#338])
 
 [#335]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/335
 [#338]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/338
@@ -234,10 +425,10 @@ IMPROVEMENTS:
 
 DEPENDENCIES:
 
-* Bump Go version to 1.24
-* Bump golang.org/x/net from 0.34.0 to 0.36.0 ([#325])
-* Bump crazy-max/ghaction-import-gpg from 6.2.0 to 6.3.0 ([#332])
-* Bump goreleaser/goreleaser-action from 6.2.1 to 6.3.0 ([#333])
+* Bumped Go version to 1.24
+* Bumped golang.org/x/net from 0.34.0 to 0.36.0 ([#325])
+* Bumped crazy-max/ghaction-import-gpg from 6.2.0 to 6.3.0 ([#332])
+* Bumped goreleaser/goreleaser-action from 6.2.1 to 6.3.0 ([#333])
 
 [#325]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/325
 [#326]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/326
@@ -560,9 +751,9 @@ FEATURES:
 
 DEPENDENCIES:
 
-* Bump github.com/hashicorp/go-getter from 1.6.1 to 1.7.0 ([#187])
-* Bump golang.org/x/net from 0.0.0-20210326060303-6b1517762897 to 0.7.0 ([#190])
-* Bump golang.org/x/crypto from 0.0.0-20210921155107-089bfa567519 to 0.1.0 ([#191])
+* Bumped github.com/hashicorp/go-getter from 1.6.1 to 1.7.0 ([#187])
+* Bumped golang.org/x/net from 0.0.0-20210326060303-6b1517762897 to 0.7.0 ([#190])
+* Bumped golang.org/x/crypto from 0.0.0-20210921155107-089bfa567519 to 0.1.0 ([#191])
 
 [#187]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/187
 [#190]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/190

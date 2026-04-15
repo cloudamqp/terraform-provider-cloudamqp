@@ -5,6 +5,8 @@ description: |-
   Creates and manages a Rabbit MQ instance within CloudAMQP.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_instance
 
 This resource allows you to create and manage a CloudAMQP instance running either [**RabbitMQ**] or
@@ -188,6 +190,35 @@ resource "cloudamqp_instance" "instance" {
 
 </details>
 
+<details>
+  <summary>
+    <b>
+      <i>Provider-to-provider configuration, from </i>
+      <a href="https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.44.0">v1.44.0</a>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_instance" "instance" {
+  name   = "terraform-cloudamqp-instance"
+  plan   = "penguin-1"
+  region = "amazon-web-services::us-east-1"
+  tags   = ["terraform"]
+}
+
+provider "lavinmq" {
+  baseurl  = format("https://%s", cloudamqp_instance.instance.host)
+  username = cloudamqp_instance.instance.credentials.username
+  password = cloudamqp_instance.instance.credentials.password
+}
+
+resource "lavinmq_vhost" "new_vhost" {
+  name = "new_vhost"
+}
+```
+
+</details>
+
 ## Argument Reference
 
 The following arguments are supported:
@@ -255,15 +286,23 @@ All attributes reference are computed
 
 * `id`            - The identifier (instance_id) for this resource, used as a reference by almost
                     all other resource and data sources
-* `url`           - The AMQP URL (uses the internal hostname if the instance was created with VPC).
+* `url`           - (Sensitive) The AMQP URL (uses the internal hostname if the instance was created with VPC).
                     Has the format: `amqps://{username}:{password}@{hostname}/{vhost}`
-* `apikey`        - API key needed to communicate to CloudAMQP's second API. The second API is used
+* `apikey`        - (Sensitive) API key needed to communicate to CloudAMQP's second API. The second API is used
                     to manage alarms, integration and more, full description [CloudAMQP API].
 * `host`          - The external hostname for the CloudAMQP instance.
 * `host_internal` - The internal hostname for the CloudAMQP instance.
 * `vhost`         - The virtual host used by Rabbit MQ.
 * `dedicated`     - Information if the CloudAMQP instance is shared or dedicated.
 * `backend`       - Information if the CloudAMQP instance runs either RabbitMQ or LavinMQ.
+* `credentials`   - (Sensitive) Broker credentials block with information extracted from URL.
+
+___
+
+The `credentials` block consists of:
+
+* `username` - The username to access the broker.
+* `password` - The password for the user to access the broker.
 
 ## Import
 

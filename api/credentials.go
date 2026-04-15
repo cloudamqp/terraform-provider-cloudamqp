@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -15,19 +16,30 @@ func (api *API) ReadCredentials(ctx context.Context, instanceID int) (map[string
 		path   = fmt.Sprintf("/api/instances/%d", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s ", path))
-	response, err := api.sling.New().Get(path).Receive(&data, &failed)
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
+	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+		functionName: "ReadCredentials",
+		resourceName: "Credentials",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	switch response.StatusCode {
-	case 200:
-		return extractInfo(data["url"].(string)), nil
-	default:
-		return nil, fmt.Errorf("failed to read credentials, status=%d message=%s ",
-			response.StatusCode, failed)
+	// Handle resource drift
+	if len(data) == 0 {
+		return nil, nil
 	}
+
+	url, ok := data["url"].(string)
+	if !ok {
+		return nil, fmt.Errorf("url field not found in credentials response")
+	}
+
+	return extractInfo(url), nil
 }
 
 func extractInfo(url string) map[string]any {

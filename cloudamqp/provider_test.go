@@ -14,6 +14,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-go/tfprotov5"
 	"github.com/hashicorp/terraform-plugin-mux/tf5muxserver"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/tidwall/gjson"
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"
 	"gopkg.in/dnaeon/go-vcr.v3/recorder"
@@ -167,6 +168,14 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 			regexp.MustCompile(`api/vpcs/\d+/vpc-peering/pcx-[0-9].*$`).MatchString(i.Request.URL):
 			fmt.Println("SKIP: GET /api/vpcs/{id}/security/vpc-peering/request", i.Request.URL)
 			i.DiscardOnSave = true
+		case i.Response.Code == 200 && i.Request.Method == "GET" &&
+			regexp.MustCompile(`/api/instances/\d+/custom-domains$`).MatchString(i.Request.URL):
+			// Filter polling for custom domain configure state, only store configured response
+			configured := gjson.Get(i.Response.Body, "configured").Bool()
+			if configured != true {
+				fmt.Println("SKIP: GET /api/instances/{id}/custom-domains", i.Request.URL, "configured:", configured)
+				i.DiscardOnSave = true
+			}
 		}
 		return nil
 	}
@@ -224,5 +233,32 @@ func sanitizeSensistiveData(body string) string {
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("SCALYR_TOKEN"), "SCALYR_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("SPLUNK_TOKEN"), "SPLUNK_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("SPLUNK_TOKEN_2"), "SPLUNK_TOKEN_2")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_CERTIFICATE_CA"), "TEST_CERTIFICATE_CA")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_CERTIFICATE_CERT"), "TEST_CERTIFICATE_CERT")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_CERTIFICATE_PRIVATE_KEY"), "TEST_CERTIFICATE_PRIVATE_KEY")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_TRUST_STORE_CA"), "TEST_TRUST_STORE_CA")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_TRUST_STORE_CERT"), "TEST_TRUST_STORE_CERT")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("TEST_TRUST_STORE_CERT_2"), "TEST_TRUST_STORE_CERT_2")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("RECIPIENT_OPSGENIE_VALUE"), "RECIPIENT_OPSGENIE_VALUE")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("RECIPIENT_SIGNL4_VALUE"), "RECIPIENT_SIGNL4_VALUE")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("RECIPIENT_PAGERDUTY_VALUE"), "RECIPIENT_PAGERDUTY_VALUE")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("RECIPIENT_TEAMS_VALUE"), "RECIPIENT_TEAMS_VALUE")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("RECIPIENT_VICTOROPS_VALUE"), "RECIPIENT_VICTOROPS_VALUE")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("RECIPIENT_SLACK_VALUE"), "RECIPIENT_SLACK_VALUE")
 	return body
+}
+
+// testAccImportCombinedIdFunc returns an ImportStateIdFunc that combines the resource ID and instance ID for import testing of resources with composite IDs.
+func testAccImportCombinedIdFunc(instanceID, resourceName string) resource.ImportStateIdFunc {
+	return func(state *terraform.State) (string, error) {
+		rs, ok := state.RootModule().Resources[resourceName]
+		if !ok {
+			return "", fmt.Errorf("Resource %s not found", resourceName)
+		}
+		if rs.Primary.ID == "" {
+			return "", fmt.Errorf("No resource id set")
+		}
+		resourceID := rs.Primary.ID
+		return fmt.Sprintf("%s,%v", resourceID, instanceID), nil
+	}
 }

@@ -5,6 +5,8 @@ description: |-
   Configure and manage firewall rules
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_security_firewall
 
 This resource allows you to configure and manage firewall rules for the CloudAMQP instance.

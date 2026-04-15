@@ -15,10 +15,11 @@ func (api *API) SetMaintenance(ctx context.Context, instanceID int, data model.M
 		path   = fmt.Sprintf("/api/instances/%d/maintenance/settings", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%v", path, data))
+	tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
+
 	return api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(data), retryRequest{
 		functionName: "SetMaintenance",
-		resourceName: "maintenance window",
+		resourceName: "Maintenance",
 		attempt:      1,
 		sleep:        5 * time.Second,
 		data:         nil,
@@ -46,7 +47,9 @@ func (api *API) ReadMaintenance(ctx context.Context, instanceID int) (*model.Mai
 		return nil, fmt.Errorf("failed to read maintenance window: %w", err)
 	}
 
-	// Handle resource drift (404/410 returns nil from callWithRetry)
+	tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
+
+	// Handle resource drift - check if response is empty
 	if data.PreferredDay == "" && data.PreferredTime == "" {
 		return nil, nil
 	}

@@ -5,6 +5,8 @@ description: |-
   Enable and disable Rabbit MQ plugin.
 ---
 
+<!-- markdownlint-disable MD033 -->
+
 # cloudamqp_plugin
 
 This resource allows you to enable or disable Rabbit MQ plugins.
