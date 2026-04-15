@@ -15,7 +15,7 @@ func (api *API) SetMaintenance(ctx context.Context, instanceID int, data model.M
 		path   = fmt.Sprintf("/api/instances/%d/maintenance/settings", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s data=%+v", path, data))
 
 	return api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(data), retryRequest{
 		functionName: "SetMaintenance",
@@ -47,7 +47,7 @@ func (api *API) ReadMaintenance(ctx context.Context, instanceID int) (*model.Mai
 		return nil, fmt.Errorf("failed to read maintenance window: %w", err)
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("data: %v", data))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s data=%+v", path, data))
 
 	// Handle resource drift - check if response is empty
 	if data.PreferredDay == "" && data.PreferredTime == "" {
