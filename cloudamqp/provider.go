@@ -99,6 +99,8 @@ func (p *cloudamqpProvider) DataSources(_ context.Context) []func() datasource.D
 	return []func() datasource.DataSource{
 		NewAlarmDataSource,
 		NewAlarmsDataSource,
+		NewNotificationDataSource,
+		NewNotificationsDataSource,
 	}
 }
 
@@ -111,6 +113,7 @@ func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resou
 		NewIntegrationLogResource,
 		NewIntegrationMetricResource,
 		NewNodeActionsResource,
+		NewNotificationResource,
 		NewOAuth2ConfigurationResource,
 		NewRabbitMqConfigurationResource,
 		NewTrustStoreResource,
@@ -154,8 +157,6 @@ func Provider(v string, client *http.Client) *schemaSdk.Provider {
 			"cloudamqp_credentials":         dataSourceCredentials(),
 			"cloudamqp_instance":            dataSourceInstance(),
 			"cloudamqp_nodes":               dataSourceNodes(),
-			"cloudamqp_notification":        dataSourceNotification(),
-			"cloudamqp_notifications":       dataSourceNotifications(),
 			"cloudamqp_plugins_community":   dataSourcePluginsCommunity(),
 			"cloudamqp_plugins":             dataSourcePlugins(),
 			"cloudamqp_upgradable_versions": dataSourceUpgradableVersions(),
@@ -168,7 +169,6 @@ func Provider(v string, client *http.Client) *schemaSdk.Provider {
 			"cloudamqp_instance":                      resourceInstance(),
 			"cloudamqp_integration_metric_prometheus": resourceIntegrationMetricPrometheus(),
 			"cloudamqp_maintenance_window":            resourceMaintenanceWindow(),
-			"cloudamqp_notification":                  resourceNotification(),
 			"cloudamqp_plugin_community":              resourcePluginCommunity(),
 			"cloudamqp_plugin":                        resourcePlugin(),
 			"cloudamqp_privatelink_aws":               resourcePrivateLinkAws(),
