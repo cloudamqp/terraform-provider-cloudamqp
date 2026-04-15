@@ -61,7 +61,7 @@ func (api *API) UpgradeToSpecificLavinMQVersion(ctx context.Context, instanceID 
 		functionName: "UpgradeToSpecificLavinMQVersion",
 		resourceName: "LavinMQ",
 		attempt:      1,
-		sleep:        5 * time.Second,
+		sleep:        10 * time.Second,
 		data:         &data,
 		failed:       &failed,
 		statusCode:   &statusCode,
@@ -73,11 +73,15 @@ func (api *API) UpgradeToSpecificLavinMQVersion(ctx context.Context, instanceID 
 	tflog.Debug(ctx, "response data", data)
 
 	// Handle different success codes
-	if statusCode == 200 {
-		return "Already at highest possible version", nil
+	switch statusCode {
+	case 200:
+		// Temporary revert back to old behavior
+		return api.waitUntilLavinMQUpgraded(ctx, instanceID)
+	case 202:
+		return api.waitUntilLavinMQUpgraded(ctx, instanceID)
 	}
 
-	return api.waitUntilLavinMQUpgraded(ctx, instanceID)
+	return "", nil
 }
 
 func (api *API) UpgradeToLatestLavinMQVersion(ctx context.Context, instanceID int) (string, error) {
@@ -93,7 +97,7 @@ func (api *API) UpgradeToLatestLavinMQVersion(ctx context.Context, instanceID in
 		functionName: "UpgradeToLatestLavinMQVersion",
 		resourceName: "LavinMQ",
 		attempt:      1,
-		sleep:        5 * time.Second,
+		sleep:        10 * time.Second,
 		data:         &data,
 		failed:       &failed,
 		statusCode:   &statusCode,
