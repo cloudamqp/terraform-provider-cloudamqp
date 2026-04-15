@@ -152,6 +152,30 @@ func (r *maintenanceWindowResource) Create(ctx context.Context, req resource.Cre
 	}
 
 	plan.ID = types.StringValue(strconv.Itoa(instanceID))
+
+	readData, err := r.client.ReadMaintenance(timeoutCtx, instanceID)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Failed to Read Maintenance Window After Create",
+			fmt.Sprintf("Could not read maintenance window with ID %d: %s", instanceID, err),
+		)
+		return
+	}
+
+	if readData != nil {
+		plan.PreferredDay = types.StringValue(readData.PreferredDay)
+		plan.PreferredTime = types.StringValue(readData.PreferredTime)
+		if readData.AutomaticUpdates != nil {
+			if *readData.AutomaticUpdates {
+				plan.AutomaticUpdates = types.StringValue("on")
+			} else {
+				plan.AutomaticUpdates = types.StringValue("off")
+			}
+		} else {
+			plan.AutomaticUpdates = types.StringNull()
+		}
+	}
+
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -250,6 +274,29 @@ func (r *maintenanceWindowResource) Update(ctx context.Context, req resource.Upd
 			fmt.Sprintf("Could not update maintenance window: %s", err),
 		)
 		return
+	}
+
+	readData, err := r.client.ReadMaintenance(timeoutCtx, instanceID)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Failed to Read Maintenance Window After Update",
+			fmt.Sprintf("Could not read maintenance window with ID %d: %s", instanceID, err),
+		)
+		return
+	}
+
+	if readData != nil {
+		plan.PreferredDay = types.StringValue(readData.PreferredDay)
+		plan.PreferredTime = types.StringValue(readData.PreferredTime)
+		if readData.AutomaticUpdates != nil {
+			if *readData.AutomaticUpdates {
+				plan.AutomaticUpdates = types.StringValue("on")
+			} else {
+				plan.AutomaticUpdates = types.StringValue("off")
+			}
+		} else {
+			plan.AutomaticUpdates = types.StringNull()
+		}
 	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
