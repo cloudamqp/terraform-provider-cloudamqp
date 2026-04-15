@@ -76,7 +76,7 @@ func TestAccNotification_Email(t *testing.T) {
 			{
 				Config: `
           resource "cloudamqp_notification" "email_recipient" {
-            instance_id = 1085
+            instance_id = 1091
             type        = "email"
             value       = "alarm@example.com"
             name        = "alarm"
@@ -86,6 +86,12 @@ func TestAccNotification_Email(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudamqp_notification.email_recipient", "value", "alarm@example.com"),
 					resource.TestCheckResourceAttr("cloudamqp_notification.email_recipient", "name", "alarm"),
 				),
+			},
+			{
+				ResourceName:      "cloudamqp_notification.email_recipient",
+				ImportStateIdFunc: testAccImportCombinedIdFunc("1091", "cloudamqp_notification.email_recipient"),
+				ImportState:       true,
+				ImportStateVerify: true,
 			},
 		},
 	})
@@ -106,7 +112,7 @@ func TestAccNotification_Opsgenie(t *testing.T) {
 			{
 				Config: fmt.Sprintf(`
           resource "cloudamqp_notification" "opsgenie_recipient" {
-            instance_id = 1085
+            instance_id = 1091
             type        = "opsgenie"
             value       = "%s"
             name        = "OpsGenie"
@@ -130,6 +136,12 @@ func TestAccNotification_Opsgenie(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudamqp_notification.opsgenie_recipient", "responders.1.username", "alarm@example.com"),
 				),
 			},
+			{
+				ResourceName:      "cloudamqp_notification.opsgenie_recipient",
+				ImportStateIdFunc: testAccImportCombinedIdFunc("1091", "cloudamqp_notification.opsgenie_recipient"),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 }
@@ -149,7 +161,7 @@ func TestAccNotification_PagerDuty(t *testing.T) {
 			{
 				Config: fmt.Sprintf(`
           resource "cloudamqp_notification" "pagerduty_recipient" {
-            instance_id = 1085
+            instance_id = 1091
             type        = "pagerduty"
             value       = "%s"
             name        = "PagerDuty"
@@ -164,6 +176,12 @@ func TestAccNotification_PagerDuty(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudamqp_notification.pagerduty_recipient", "options.%", "1"),
 					resource.TestCheckResourceAttr("cloudamqp_notification.pagerduty_recipient", "options.dedupkey", "DEDUPKEY"),
 				),
+			},
+			{
+				ResourceName:      "cloudamqp_notification.pagerduty_recipient",
+				ImportStateIdFunc: testAccImportCombinedIdFunc("1091", "cloudamqp_notification.pagerduty_recipient"),
+				ImportState:       true,
+				ImportStateVerify: true,
 			},
 		},
 	})
@@ -184,7 +202,7 @@ func TestAccNotification_Signl4(t *testing.T) {
 			{
 				Config: fmt.Sprintf(`
           resource "cloudamqp_notification" "signl4_recipient" {
-            instance_id = 1085
+            instance_id = 1091
             type        = "signl4"
             value       = "%s"
             name        = "Signl4"
@@ -194,6 +212,12 @@ func TestAccNotification_Signl4(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudamqp_notification.signl4_recipient", "value", testRecipientSignl4Value),
 					resource.TestCheckResourceAttr("cloudamqp_notification.signl4_recipient", "name", "Signl4"),
 				),
+			},
+			{
+				ResourceName:      "cloudamqp_notification.signl4_recipient",
+				ImportStateIdFunc: testAccImportCombinedIdFunc("1091", "cloudamqp_notification.signl4_recipient"),
+				ImportState:       true,
+				ImportStateVerify: true,
 			},
 		},
 	})
@@ -214,7 +238,7 @@ func TestAccNotification_Slack(t *testing.T) {
 			{
 				Config: fmt.Sprintf(`
           resource "cloudamqp_notification" "slack_recipient" {
-            instance_id = 1085
+            instance_id = 1091
             type        = "slack"
             value       = "%s"
             name        = "Slack"
@@ -224,6 +248,12 @@ func TestAccNotification_Slack(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudamqp_notification.slack_recipient", "value", testRecipientSlackValue),
 					resource.TestCheckResourceAttr("cloudamqp_notification.slack_recipient", "name", "Slack"),
 				),
+			},
+			{
+				ResourceName:      "cloudamqp_notification.slack_recipient",
+				ImportStateIdFunc: testAccImportCombinedIdFunc("1091", "cloudamqp_notification.slack_recipient"),
+				ImportState:       true,
+				ImportStateVerify: true,
 			},
 		},
 	})
@@ -244,7 +274,7 @@ func TestAccNotification_Teams(t *testing.T) {
 			{
 				Config: fmt.Sprintf(`
           resource "cloudamqp_notification" "teams_recipient" {
-            instance_id = 1085
+            instance_id = 1091
             type        = "teams"
             value       = "%s"
             name        = "Teams"
@@ -254,6 +284,12 @@ func TestAccNotification_Teams(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudamqp_notification.teams_recipient", "value", testRecipientTeamsValue),
 					resource.TestCheckResourceAttr("cloudamqp_notification.teams_recipient", "name", "Teams"),
 				),
+			},
+			{
+				ResourceName:      "cloudamqp_notification.teams_recipient",
+				ImportStateIdFunc: testAccImportCombinedIdFunc("1091", "cloudamqp_notification.teams_recipient"),
+				ImportState:       true,
+				ImportStateVerify: true,
 			},
 		},
 	})

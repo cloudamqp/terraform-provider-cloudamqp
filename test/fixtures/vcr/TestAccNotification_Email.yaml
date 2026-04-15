@@ -6,14 +6,14 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 73
+        content_length: 60
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"alarm","options":{},"type":"email","value":"alarm@example.com"}
+            {"type":"email","value":"alarm@example.com","name":"alarm"}
         form: {}
         headers:
             Authorization:
@@ -22,7 +22,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1085/alarms/recipients
+        url: http://localhost:9393/api/instances/1091/alarms/recipients
         method: POST
       response:
         proto: HTTP/1.1
@@ -32,7 +32,7 @@ interactions:
         trailer: {}
         content_length: 100
         uncompressed: false
-        body: '{"id":831,"type":"email","value":"alarm@example.com","name":"alarm","options":{},"last_status":null}'
+        body: '{"id":862,"type":"email","value":"alarm@example.com","name":"alarm","options":{},"last_status":null}'
         headers:
             Cache-Control:
                 - no-cache
@@ -51,10 +51,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - e697122c-5f2b-4c09-893d-805bc241c3b7
+                - ae102de1-1de1-42e7-87ff-d07b47a65f77
         status: 201 Created
         code: 201
-        duration: 30.81598ms
+        duration: 26.310591ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -73,7 +73,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1085/alarms/recipients/831
+        url: http://localhost:9393/api/instances/1091/alarms/recipients/862
         method: GET
       response:
         proto: HTTP/1.1
@@ -83,7 +83,7 @@ interactions:
         trailer: {}
         content_length: 100
         uncompressed: false
-        body: '{"id":831,"type":"email","value":"alarm@example.com","name":"alarm","options":{},"last_status":null}'
+        body: '{"id":862,"type":"email","value":"alarm@example.com","name":"alarm","options":{},"last_status":null}'
         headers:
             Cache-Control:
                 - no-cache
@@ -102,10 +102,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 6d5a9df4-61f0-44f8-9b16-494b9ea3b27a
+                - c6e08b2a-f2f9-4d8d-9715-ed670df13b41
         status: 200 OK
         code: 200
-        duration: 11.450012ms
+        duration: 15.250217ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -124,7 +124,58 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1085/alarms/recipients/831
+        url: http://localhost:9393/api/instances/1091/alarms/recipients/862
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 100
+        uncompressed: false
+        body: '{"id":862,"type":"email","value":"alarm@example.com","name":"alarm","options":{},"last_status":null}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "100"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - fd4ea302-69e8-4bed-8dc2-6c1052c58644
+        status: 200 OK
+        code: 200
+        duration: 16.326569ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/1091/alarms/recipients/862
         method: DELETE
       response:
         proto: HTTP/1.1
@@ -149,7 +200,7 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - f5c6f8f0-c8bf-407f-9745-71677e2b6ef0
+                - 7640dc70-5f73-4dd7-84ac-5fd7caf223de
         status: 204 No Content
         code: 204
-        duration: 28.8523ms
+        duration: 16.662354ms

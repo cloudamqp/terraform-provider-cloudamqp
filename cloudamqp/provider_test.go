@@ -14,6 +14,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-go/tfprotov5"
 	"github.com/hashicorp/terraform-plugin-mux/tf5muxserver"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/tidwall/gjson"
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"
 	"gopkg.in/dnaeon/go-vcr.v3/recorder"
@@ -245,4 +246,19 @@ func sanitizeSensistiveData(body string) string {
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("RECIPIENT_VICTOROPS_VALUE"), "RECIPIENT_VICTOROPS_VALUE")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("RECIPIENT_SLACK_VALUE"), "RECIPIENT_SLACK_VALUE")
 	return body
+}
+
+// testAccImportCombinedIdFunc returns an ImportStateIdFunc that combines the resource ID and instance ID for import testing of resources with composite IDs.
+func testAccImportCombinedIdFunc(instanceID, resourceName string) resource.ImportStateIdFunc {
+	return func(state *terraform.State) (string, error) {
+		rs, ok := state.RootModule().Resources[resourceName]
+		if !ok {
+			return "", fmt.Errorf("Resource %s not found", resourceName)
+		}
+		if rs.Primary.ID == "" {
+			return "", fmt.Errorf("No resource id set")
+		}
+		resourceID := rs.Primary.ID
+		return fmt.Sprintf("%s,%v", resourceID, instanceID), nil
+	}
 }
