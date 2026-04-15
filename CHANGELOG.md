@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 1.45.0 (Unreleased)
+
+FEATURES:
+
+* Migrated `cloudamqp_alarm` resource/data sources towards Terraform plugin framework ([#482])
+* Migrated `cloudamqp_notification` resource/data sources towards Terraform plugin framework ([#485])
+
+DEPENDENCIES:
+
+* Bumped github.com/hashicorp/terraform-plugin-mux from 0.23.0 to 0.23.1 ([#486])
+
+[#482]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/482
+[#485]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/485
+[#486]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/486
+
 ## 1.44.4 (14 Apr, 2026)
 
 BUG FIXES:
