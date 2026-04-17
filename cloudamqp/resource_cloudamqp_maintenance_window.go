@@ -16,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -68,19 +69,24 @@ func (r *maintenanceWindowResource) Schema(ctx context.Context, req resource.Sch
 			"preferred_day": schema.StringAttribute{
 				Optional:    true,
 				Computed:    true,
+				Default:     stringdefault.StaticString(""),
 				Description: "Preferred day of the week when to run maintenance",
 				Validators: []validator.String{
-					stringvalidator.OneOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"),
+					stringvalidator.OneOf("", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"),
 				},
 			},
 			"preferred_time": schema.StringAttribute{
 				Optional:    true,
 				Computed:    true,
+				Default:     stringdefault.StaticString(""),
 				Description: "Preferred time (UTC) the day when to run maintenance",
 				Validators: []validator.String{
-					stringvalidator.RegexMatches(
-						regexp.MustCompile(`^([0-1][0-9]|2[0-3]):([0-5][0-9])$`),
-						"must be in format hh:mm (e.g., 14:30)",
+					stringvalidator.Any(
+						stringvalidator.OneOf(""),
+						stringvalidator.RegexMatches(
+							regexp.MustCompile(`^([0-1][0-9]|2[0-3]):([0-5][0-9])$`),
+							"must be in format hh:mm (e.g., 14:30)",
+						),
 					),
 				},
 			},
