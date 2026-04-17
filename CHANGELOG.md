@@ -4,6 +4,7 @@
 
 FEATURES:
 
+* Migrated `cloudamqp_maintenance_window` resource towards Terraform plugin framework ([#432])
 * Migrated `cloudamqp_alarm` resource/data sources towards Terraform plugin framework ([#482])
 * Migrated `cloudamqp_notification` resource/data sources towards Terraform plugin framework ([#485])
 
@@ -11,6 +12,7 @@ DEPENDENCIES:
 
 * Bumped github.com/hashicorp/terraform-plugin-mux from 0.23.0 to 0.23.1 ([#486])
 
+[#432]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/432
 [#482]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/482
 [#485]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/485
 [#486]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/486
