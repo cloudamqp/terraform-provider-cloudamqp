@@ -219,16 +219,58 @@ resource "lavinmq_vhost" "new_vhost" {
 
 </details>
 
+<details>
+  <summary>
+    <b>
+      <i>LavinMQ shared to dedicated in-place upgrade, from v1.45.0</i>
+    </b>
+  </summary>
+
+```hcl
+# Initial shared LavinMQ instance
+resource "cloudamqp_instance" "instance" {
+  name   = "terraform-cloudamqp-instance"
+  plan   = "lemming"
+  region = "amazon-web-services::eu-north-1"
+  tags   = ["terraform"]
+}
+```
+
+```hcl
+# Upgraded to dedicated LavinMQ — region can change within the same cloud provider
+# No resource replacement occurs; the instance ID is preserved
+resource "cloudamqp_instance" "instance" {
+  name   = "terraform-cloudamqp-instance"
+  plan   = "wolverine-1"
+  region = "amazon-web-services::eu-west-1"
+  tags   = ["terraform"]
+}
+```
+
+</details>
+
 ## Argument Reference
 
 The following arguments are supported:
 
 * `name`    - (Required) Name of the CloudAMQP instance.
 * `plan`    - (Required) The subscription plan. See available [plans].
+
+  ***Note:*** Changing between a LavinMQ shared plan (`lemming`, `ermine`) and a dedicated LavinMQ
+              plan will **not** force resource replacement. The instance ID is preserved and existing
+              definitions are kept. See [LavinMQ shared to dedicated] for details.
+              All other plan type changes (e.g. shared to dedicated for RabbitMQ) will force a new
+              resource.
+
 * `region`  - (Required) The region to host the instance in. See available [regions].
 
   ***Note:*** Changing region will force the instance to be destroyed and a new created in the new
               region. All data will be lost and a new name assigned.
+
+  ***Note:*** Exception: when upgrading a LavinMQ shared instance to a dedicated plan, the region
+              can change without destroying the resource, as long as the cloud provider stays the
+              same (e.g. `amazon-web-services` → `amazon-web-services` is allowed, but
+              `amazon-web-services` → `google-compute-engine` is not).
 
 * `nodes`   - (Optional/Computed) Number of nodes, 1, 3 or 5 depending on plan used. Only needed for
               legacy plans, will otherwise be computed.
@@ -382,6 +424,49 @@ resource "cloudamqp_instance" "instance" {
 
 </details>
 
+## LavinMQ shared to dedicated upgrade
+
+From v1.45.0 it is possible to upgrade a LavinMQ shared instance (`lemming` or `ermine`) in-place
+to any dedicated LavinMQ plan without destroying and recreating the resource. The instance ID is
+preserved and existing definitions are kept. To upgrade, change the `plan` argument and apply.
+
+~> This upgrade path is only available for **LavinMQ** instances. RabbitMQ shared instances cannot
+be upgraded in-place to dedicated plans.
+
+Optionally, the following attributes can be changed in the same `terraform apply` during the
+upgrade: `region` (within the same cloud provider), `vpc_id`, `vpc_subnet`, and `preferred_az`.
+
+See the [LavinMQ shared to dedicated] guide for full details and more examples.
+
+<details>
+  <summary>
+    <b>
+      <i>Upgrade LavinMQ shared instance to dedicated, from v1.45.0</i>
+    </b>
+  </summary>
+
+```hcl
+# Initial shared LavinMQ instance
+resource "cloudamqp_instance" "instance" {
+  name   = "instance"
+  plan   = "lemming"
+  region = "amazon-web-services::eu-north-1"
+  tags   = ["terraform"]
+}
+```
+
+```hcl
+# Upgraded to dedicated — instance ID is preserved, no resource replacement
+resource "cloudamqp_instance" "instance" {
+  name   = "instance"
+  plan   = "wolverine-1"
+  region = "amazon-web-services::eu-west-1"
+  tags   = ["terraform"]
+}
+```
+
+</details>
+
 ## Copy settings to a new dedicated instance
 
 With copy settings it's possible to create a new dedicated instance with settings such as alarms,
@@ -456,6 +541,7 @@ resource "cloudamqp_instance" "bunny_instance" {
 [CloudAMQP plans]: https://www.cloudamqp.com/plans.html
 [copy settings]: #copy-settings-to-a-new-dedicated-instance
 [example]: ../guides/info_vpc_existing.md
+[LavinMQ shared to dedicated]: ../guides/info_lavinmq_shared_to_dedicated.md
 [regions]: ../guides/info_region.md
 [**LavinMQ**]: https://lavinmq.com
 [Managed VPC]: ../guides/info_managed_vpc#dedicated-instance-and-vpc_subnet
