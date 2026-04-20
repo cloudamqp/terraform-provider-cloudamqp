@@ -8,11 +8,16 @@ FEATURES:
 * Migrated `cloudamqp_alarm` resource/data sources towards Terraform plugin framework ([#482])
 * Migrated `cloudamqp_notification` resource/data sources towards Terraform plugin framework ([#485])
 
+IMPROVEMENTS:
+
+* resource/cloudamqp_instance: Allow in-place upgrade from LavinMQ shared to dedicated plan, with optional `region`, `vpc_id`, `vpc_subnet`, and `preferred_az` changes during the transition ([#453])
+
 DEPENDENCIES:
 
 * Bumped github.com/hashicorp/terraform-plugin-mux from 0.23.0 to 0.23.1 ([#486])
 
 [#432]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/432
+[#453]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/453
 [#482]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/482
 [#485]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/485
 [#486]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/486

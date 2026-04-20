@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/converter"
@@ -219,6 +220,72 @@ func TestAccInstance_Downgrade(t *testing.T) {
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.#", "1"),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.running", "true"),
 					resource.TestCheckResourceAttr(dataSourceNodesName, "nodes.0.configured", "true"),
+				),
+			},
+		},
+	})
+}
+
+// TestAccInstance_LavinmqSharedToDedicated: Create a LavinMQ shared instance and upgrade
+// in-place to a dedicated plan while changing region. The instance ID must stay the same
+// to prove no resource replacement happened.
+func TestAccInstance_LavinmqSharedToDedicated(t *testing.T) {
+	t.Parallel()
+
+	var (
+		fileNames            = []string{"instance"}
+		instanceResourceName = "cloudamqp_instance.instance"
+		sharedInstanceID     string
+
+		params = map[string]string{
+			"InstanceName":   "TestAccInstance_LavinmqSharedToDedicated",
+			"InstancePlan":   "lemming",
+			"InstanceRegion": "amazon-web-services::eu-north-1",
+		}
+
+		paramsUpdated = map[string]string{
+			"InstanceName":   "TestAccInstance_LavinmqSharedToDedicated",
+			"InstancePlan":   "wolverine-1",
+			"InstanceRegion": "amazon-web-services::eu-west-1",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "plan", params["InstancePlan"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "region", params["InstanceRegion"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "dedicated", "false"),
+					func(s *terraform.State) error {
+						rs, ok := s.RootModule().Resources[instanceResourceName]
+						if !ok {
+							return fmt.Errorf("resource %s not found", instanceResourceName)
+						}
+						sharedInstanceID = rs.Primary.ID
+						return nil
+					},
+				),
+			},
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "plan", paramsUpdated["InstancePlan"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "region", paramsUpdated["InstanceRegion"]),
+					resource.TestCheckResourceAttr(instanceResourceName, "dedicated", "true"),
+					func(s *terraform.State) error {
+						rs, ok := s.RootModule().Resources[instanceResourceName]
+						if !ok {
+							return fmt.Errorf("resource %s not found", instanceResourceName)
+						}
+						if rs.Primary.ID != sharedInstanceID {
+							return fmt.Errorf("expected instance ID to remain %s after shared->dedicated upgrade, got %s",
+								sharedInstanceID, rs.Primary.ID)
+						}
+						return nil
+					},
 				),
 			},
 		},

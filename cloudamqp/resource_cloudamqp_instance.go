@@ -33,21 +33,18 @@ func resourceInstance() *schema.Resource {
 			"region": {
 				Type:        schema.TypeString,
 				Required:    true,
-				ForceNew:    true,
 				Description: "Name of the region you want to create your instance in",
 			},
 			"vpc_id": {
 				Type:        schema.TypeInt,
 				Computed:    true,
 				Optional:    true,
-				ForceNew:    true,
 				Description: "The ID of the VPC to create your instance in",
 			},
 			"vpc_subnet": {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Optional:    true,
-				ForceNew:    true,
 				Description: "Dedicated VPC subnet, shouldn't overlap with your current VPC's subnet",
 			},
 			"nodes": {
@@ -166,11 +163,19 @@ func resourceInstance() *schema.Resource {
 		},
 		CustomizeDiff: customdiff.All(
 			customdiff.ForceNewIfChange("plan", func(ctx context.Context, old, new, meta any) bool {
-				// Recreate instance if changing plan type (from dedicated to shared or vice versa)
+				// Going between RabbitMQ shared and dedicated plans requires resource replacement
 				oldPlanType := isSharedPlan(old.(string))
 				newPlanType := isSharedPlan(new.(string))
+
+				// We allow moving LavinMQ shared to dedicated in-place, but not reverse
+				if isLavinmqSharedToDedicatedUpgrade(old.(string), new.(string)) {
+					return false
+				}
 				return !(oldPlanType == newPlanType)
 			}),
+			customdiff.ForceNewIf("region", forceNewUnlessLavinmqSharedToDedicated),
+			customdiff.ForceNewIf("vpc_id", forceNewUnlessLavinmqSharedToDedicated),
+			customdiff.ForceNewIf("vpc_subnet", forceNewUnlessLavinmqSharedToDedicated),
 			customdiff.ValidateChange("plan", func(ctx context.Context, old, new, meta any) error {
 				if old == new {
 					return nil
@@ -322,6 +327,30 @@ func resourceUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.
 		}
 	}
 
+	if d.HasChange("plan") {
+		oldPlan, newPlan := d.GetChange("plan")
+		if isLavinmqSharedToDedicatedUpgrade(oldPlan.(string), newPlan.(string)) {
+			if d.HasChange("region") {
+				params["region"] = d.Get("region")
+			}
+			if d.HasChange("vpc_id") {
+				if v := d.Get("vpc_id").(int); v != 0 {
+					params["vpc_id"] = v
+				}
+			}
+			if d.HasChange("vpc_subnet") {
+				if v := d.Get("vpc_subnet").(string); v != "" {
+					params["vpc_subnet"] = v
+				}
+			}
+			if d.HasChange("preferred_az") {
+				if v := d.Get("preferred_az").([]any); len(v) > 0 {
+					params["preferred_az"] = v
+				}
+			}
+		}
+	}
+
 	if err := api.UpdateInstance(ctx, d.Id(), params); err != nil {
 		return diag.FromErr(err)
 	}
@@ -368,6 +397,25 @@ func isSharedPlan(plan string) bool {
 		return true
 	}
 	return false
+}
+
+func isLavinmqSharedPlan(plan string) bool {
+	switch plan {
+	case
+		"lemming",
+		"ermine":
+		return true
+	}
+	return false
+}
+
+func isLavinmqSharedToDedicatedUpgrade(oldPlan, newPlan string) bool {
+	return isLavinmqSharedPlan(oldPlan) && !isSharedPlan(newPlan)
+}
+
+func forceNewUnlessLavinmqSharedToDedicated(ctx context.Context, d *schema.ResourceDiff, meta any) bool {
+	oldPlan, newPlan := d.GetChange("plan")
+	return !isLavinmqSharedToDedicatedUpgrade(oldPlan.(string), newPlan.(string))
 }
 
 func isLegacyPlan(plan string) bool {
