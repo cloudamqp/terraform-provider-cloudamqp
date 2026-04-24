@@ -44,6 +44,7 @@ func TestAccOAuth2Configuration_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_scopes.0", "read"),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_scopes.1", "write"),
 					resource.TestCheckResourceAttrSet(oauth2ConfigResourceName, "id"),
+					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "disable_basic_auth", "false"),
 				),
 			},
 			{
@@ -133,6 +134,7 @@ func TestAccOAuth2Configuration_Update(t *testing.T) {
 			"VerifyAud":        "true",
 			"OauthClientId":    "test-client-id",
 			"OauthScopes":      `["read", "write"]`,
+			"DisableBasicAuth": "false",
 		}
 
 		updatedParams = map[string]string{
@@ -144,6 +146,7 @@ func TestAccOAuth2Configuration_Update(t *testing.T) {
 			"VerifyAud":        "false",
 			"OauthClientId":    "updated-client-id",
 			"OauthScopes":      `["read", "write", "admin"]`,
+			"DisableBasicAuth": "true",
 		}
 	)
 
@@ -161,6 +164,7 @@ func TestAccOAuth2Configuration_Update(t *testing.T) {
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_scopes.#", "2"),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_scopes.0", "read"),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_scopes.1", "write"),
+					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "disable_basic_auth", "false"),
 				),
 			},
 			{
@@ -175,6 +179,7 @@ func TestAccOAuth2Configuration_Update(t *testing.T) {
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_scopes.0", "read"),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_scopes.1", "write"),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "oauth_scopes.2", "admin"),
+					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "disable_basic_auth", "true"),
 				),
 			},
 		},
@@ -209,6 +214,8 @@ func TestAccOAuth2Configuration_MinimalConfig(t *testing.T) {
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "resource_server_id", params["ResourceServerId"]),
 					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "issuer", params["Issuer"]),
 					resource.TestCheckResourceAttrSet(oauth2ConfigResourceName, "id"),
+					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "verify_aud", "false"),
+					resource.TestCheckResourceAttr(oauth2ConfigResourceName, "disable_basic_auth", "false"),
 				),
 			},
 		},

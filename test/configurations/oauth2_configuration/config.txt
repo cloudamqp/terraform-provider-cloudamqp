@@ -10,4 +10,5 @@ resource "cloudamqp_oauth2_configuration" "oauth2_config" {
   {{if .AdditionalScopesKey }} additional_scopes_key    = {{.AdditionalScopesKey}}{{end}}
   {{if .ScopePrefix }} scope_prefix = "{{.ScopePrefix}}"{{end}}
   {{if .Audience }} audience = "{{.Audience}}" {{end}}
+  {{if .DisableBasicAuth }} disable_basic_auth = "{{.DisableBasicAuth}}" {{end}}
 }
