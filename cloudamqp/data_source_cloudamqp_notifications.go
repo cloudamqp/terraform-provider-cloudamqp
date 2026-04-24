@@ -3,115 +3,82 @@ package cloudamqp
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/monitoring"
-	"github.com/hashicorp/terraform-plugin-framework/attr"
-	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-var (
-	_ datasource.DataSource              = &notificationsDataSource{}
-	_ datasource.DataSourceWithConfigure = &notificationsDataSource{}
-)
-
-type notificationsDataSource struct {
-	client *api.API
-}
-
-func NewNotificationsDataSource() datasource.DataSource {
-	return &notificationsDataSource{}
-}
-
-type notificationsDataSourceModel struct {
-	ID         types.String                            `tfsdk:"id"`
-	InstanceID types.Int64                             `tfsdk:"instance_id"`
-	Recipients []recipientNotificationsDataSourceModel `tfsdk:"recipients"`
-}
-
-type recipientNotificationsDataSourceModel struct {
-	RecipientID types.Int64                              `tfsdk:"recipient_id"`
-	Type        types.String                             `tfsdk:"type"`
-	Value       types.String                             `tfsdk:"value"`
-	Name        types.String                             `tfsdk:"name"`
-	Options     types.Map                                `tfsdk:"options"`
-	Responders  *[]notificationsDataSourceResponderModel `tfsdk:"responders"`
-}
-
-type notificationsDataSourceResponderModel struct {
-	Type     types.String `tfsdk:"type"`
-	ID       types.String `tfsdk:"id"`
-	Name     types.String `tfsdk:"name"`
-	Username types.String `tfsdk:"username"`
-}
-
-func (d *notificationsDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = "cloudamqp_notifications"
-}
-
-func (d *notificationsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{
-		Description: "Use this data source to retrieve information about default or created notifications. Either use" +
-			" recipient_id or name to retrieve the notification.",
-		Attributes: map[string]schema.Attribute{
-			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "The identifier for this data source",
-			},
-			"instance_id": schema.Int64Attribute{
+func dataSourceNotifications() *schema.Resource {
+	return &schema.Resource{
+		ReadContext: dataSourceNotificationsRead,
+		Importer: &schema.ResourceImporter{
+			StateContext: schema.ImportStatePassthroughContext,
+		},
+		Schema: map[string]*schema.Schema{
+			"instance_id": {
+				Type:        schema.TypeInt,
 				Required:    true,
 				Description: "Instance identifier",
 			},
-		},
-		Blocks: map[string]schema.Block{
-			"recipients": schema.ListNestedBlock{
-				NestedObject: schema.NestedBlockObject{
-					Attributes: map[string]schema.Attribute{
-						"recipient_id": schema.Int64Attribute{
-							Optional:    true,
+			"recipients": {
+				Type:        schema.TypeList,
+				Computed:    true,
+				Description: "List of notification recipients",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"recipient_id": {
+							Type:        schema.TypeInt,
 							Computed:    true,
 							Description: "Recipient identifier",
 						},
-						"type": schema.StringAttribute{
+						"type": {
+							Type:        schema.TypeString,
 							Computed:    true,
-							Description: "Type of the notification.",
+							Description: "Type of the notification",
 						},
-						"value": schema.StringAttribute{
+						"value": {
+							Type:        schema.TypeString,
 							Computed:    true,
 							Description: "Notification endpoint, where to send the notifcation",
 						},
-						"name": schema.StringAttribute{
-							Optional:    true,
+						"name": {
+							Type:        schema.TypeString,
 							Computed:    true,
-							Description: "Optional display name of the recipient",
+							Description: "Display name of the recipient",
 						},
-						"options": schema.MapAttribute{
-							ElementType: types.StringType,
+						"options": {
+							Type:        schema.TypeMap,
 							Computed:    true,
-							Description: "Optional key-value pair options parameters (e.g. dedupkey, rk)",
+							Description: "Key-value pair options parameters",
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
 						},
-					},
-					Blocks: map[string]schema.Block{
-						"responders": schema.ListNestedBlock{
-							NestedObject: schema.NestedBlockObject{
-								Attributes: map[string]schema.Attribute{
-									"type": schema.StringAttribute{
+						"responders": {
+							Type:        schema.TypeList,
+							Computed:    true,
+							Description: "List of responders (opsgenie/opsgenie-eu only)",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"type": {
+										Type:        schema.TypeString,
 										Computed:    true,
 										Description: "Responder type, valid options are: team, user, escalation, schedule",
 									},
-									"id": schema.StringAttribute{
+									"id": {
+										Type:        schema.TypeString,
 										Computed:    true,
 										Description: "Responder ID",
 									},
-									"name": schema.StringAttribute{
+									"name": {
+										Type:        schema.TypeString,
 										Computed:    true,
 										Description: "Responder name",
 									},
-									"username": schema.StringAttribute{
+									"username": {
+										Type:        schema.TypeString,
 										Computed:    true,
 										Description: "Responder username",
 									},
@@ -125,108 +92,74 @@ func (d *notificationsDataSource) Schema(ctx context.Context, req datasource.Sch
 	}
 }
 
-func (d *notificationsDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
-	if req.ProviderData == nil {
-		return
-	}
-	client, ok := req.ProviderData.(*api.API)
-	if !ok {
-		resp.Diagnostics.AddError(
-			"Unexpected Data Source Configure Type",
-			fmt.Sprintf("Expected *api.API, got: %T. Please report this issue to the provider developers.", req.ProviderData),
-		)
-		return
-	}
-	d.client = client
-}
+func dataSourceNotificationsRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	instanceID := int64(d.Get("instance_id").(int))
 
-func (d *notificationsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config notificationsDataSourceModel
-	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	instanceID := config.InstanceID.ValueInt64()
-	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
-	defer cancel()
-
-	data, err := d.client.ListNotifications(timeoutCtx, instanceID)
+	client := meta.(*api.API)
+	data, err := client.ListNotifications(ctx, instanceID)
 	if err != nil {
-		resp.Diagnostics.AddError(
-			"Failed to Read Notification",
-			fmt.Sprintf("Could not read notification: %s", err),
-		)
-		return
+		return diag.FromErr(err)
 	}
 
-	if data == nil {
-		tflog.Warn(ctx, fmt.Sprintf("Resource drift detected for instance ID %d", instanceID))
-		resp.State.RemoveResource(ctx)
-		return
+	d.SetId(fmt.Sprintf("%d.notifications", instanceID))
+
+	recipients := make([]map[string]any, len(data))
+	for k, v := range data {
+		recipients[k] = readNotification(v)
 	}
 
-	config.ID = types.StringValue(fmt.Sprintf("%d.notifications", instanceID))
-	config.InstanceID = types.Int64Value(instanceID)
-
-	for _, notification := range data {
-		dataSourceModel := d.populateDataSourceModel(notification)
-		config.Recipients = append(config.Recipients, dataSourceModel)
+	if err = d.Set("recipients", recipients); err != nil {
+		return diag.Errorf("error setting recipients for resource %s: %s", d.Id(), err)
 	}
-
-	resp.Diagnostics.Append(resp.State.Set(ctx, &config)...)
+	return diag.Diagnostics{}
 }
 
-func (d *notificationsDataSource) populateDataSourceModel(data model.RecipientResponse) recipientNotificationsDataSourceModel {
-	config := recipientNotificationsDataSourceModel{
-		RecipientID: types.Int64Value(data.ID),
-		Type:        types.StringValue(data.Type),
-		Value:       types.StringValue(data.Value),
-		Name:        types.StringValue(data.Name),
-		Options:     types.MapNull(types.StringType),
-		Responders:  nil,
+func readNotification(data model.RecipientResponse) map[string]any {
+	notification := map[string]any{
+		"recipient_id": data.ID,
+		"type":         data.Type,
+		"value":        data.Value,
+		"name":         data.Name,
+		"options":      map[string]string{},
+		"responders":   []map[string]any{},
 	}
 
 	switch data.Type {
 	case "opsgenie", "opsgenie-eu":
 		if data.Options != nil && data.Options.Responders != nil && len(*data.Options.Responders) > 0 {
-			responderModels := make([]notificationsDataSourceResponderModel, len(*data.Options.Responders))
-			for i, responder := range *data.Options.Responders {
-				responderModel := notificationsDataSourceResponderModel{
-					Type: types.StringValue(responder.Type),
+			responders := make([]map[string]any, len(*data.Options.Responders))
+			for i, r := range *data.Options.Responders {
+				responder := map[string]any{
+					"type":     r.Type,
+					"id":       "",
+					"name":     "",
+					"username": "",
 				}
-				if responder.ID != nil {
-					responderModel.ID = types.StringValue(*responder.ID)
-				} else {
-					responderModel.ID = types.StringNull()
+				if r.ID != nil {
+					responder["id"] = *r.ID
 				}
-				if responder.Name != nil {
-					responderModel.Name = types.StringValue(*responder.Name)
-				} else {
-					responderModel.Name = types.StringNull()
+				if r.Name != nil {
+					responder["name"] = *r.Name
 				}
-				if responder.Username != nil {
-					responderModel.Username = types.StringValue(*responder.Username)
-				} else {
-					responderModel.Username = types.StringNull()
+				if r.Username != nil {
+					responder["username"] = *r.Username
 				}
-				responderModels[i] = responderModel
+				responders[i] = responder
 			}
-			config.Responders = &responderModels
-			config.Options = types.MapNull(types.StringType)
+			notification["responders"] = responders
 		}
 	case "pagerduty", "victorops":
-		if data.Options != nil && (data.Options.DedupKey != nil || data.Options.RK != nil) {
-			opts := map[string]attr.Value{}
+		if data.Options != nil {
+			opts := map[string]string{}
 			if data.Options.DedupKey != nil {
-				opts["dedupkey"] = types.StringValue(*data.Options.DedupKey)
+				opts["dedupkey"] = *data.Options.DedupKey
 			}
 			if data.Options.RK != nil {
-				opts["rk"] = types.StringValue(*data.Options.RK)
+				opts["rk"] = *data.Options.RK
 			}
-			config.Options = types.MapValueMust(types.StringType, opts)
+			notification["options"] = opts
 		}
-		config.Responders = nil
 	}
-	return config
+
+	return notification
 }
