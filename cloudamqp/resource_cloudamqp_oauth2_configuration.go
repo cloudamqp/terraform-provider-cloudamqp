@@ -51,6 +51,7 @@ type oauth2ConfigurationResourceModel struct {
 	OauthClientId           types.String `tfsdk:"oauth_client_id"`
 	OauthScopes             types.List   `tfsdk:"oauth_scopes"`
 	Audience                types.String `tfsdk:"audience"`
+	DisableBasicAuth        types.Bool   `tfsdk:"disable_basic_auth"`
 	Sleep                   types.Int64  `tfsdk:"sleep"`
 	Timeout                 types.Int64  `tfsdk:"timeout"`
 }
@@ -152,6 +153,14 @@ func (r *oauth2ConfigurationResource) Schema(ctx context.Context, req resource.S
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"disable_basic_auth": schema.BoolAttribute{
+				Optional:    true,
+				Computed:    true,
+				Description: "Disable basic auth for OAuth2 configuration",
+				PlanModifiers: []planmodifier.Bool{
+					boolplanmodifier.UseStateForUnknown(),
+				},
+			},
 			"sleep": schema.Int64Attribute{
 				Optional:    true,
 				Default:     int64default.StaticInt64(60),
@@ -214,6 +223,7 @@ func (r *oauth2ConfigurationResource) Create(ctx context.Context, req resource.C
 
 	request := model.OAuth2ConfigRequest{}
 	populateOAuth2ConfigRequestModel(ctx, &plan, &request)
+	tflog.Info(ctx, fmt.Sprintf("CreateOAuth2Configuration with request: %+v", request))
 
 	job, err := r.client.CreateOAuth2Configuration(timeoutCtx, instanceID, sleep, request)
 	if err != nil {
@@ -269,7 +279,7 @@ func (r *oauth2ConfigurationResource) Read(ctx context.Context, req resource.Rea
 		return
 	}
 
-	tflog.Info(ctx, fmt.Sprintf("Read OAuth2 configuration data: %v", data))
+	tflog.Info(ctx, fmt.Sprintf("Read OAuth2 configuration data: %+v", data))
 
 	populateOAuth2ConfigurationStateModel(ctx, &state, data)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
@@ -307,12 +317,14 @@ func (r *oauth2ConfigurationResource) Update(ctx context.Context, req resource.U
 		AdditionalScopesKey:     additionalScopesKey,
 		ScopePrefix:             plan.ScopePrefix.ValueString(),
 		Audience:                plan.Audience.ValueString(),
+		DisableBasicAuth:        utils.Pointer(plan.DisableBasicAuth.ValueBool()),
 	}
 
 	sleep, timeout := extractSleepAndTimeout(&plan)
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
+	tflog.Info(ctx, fmt.Sprintf("Updating OAuth2 configuration with params: %+v", params))
 	job, err := r.client.UpdateOAuth2Configuration(timeoutCtx, instanceID, sleep, params)
 	if err != nil {
 		resp.Diagnostics.AddError("Error updating OAuth2 configuration", err.Error())
@@ -386,6 +398,7 @@ func populateOAuth2ConfigurationStateModel(ctx context.Context, state *oauth2Con
 	}
 
 	state.VerifyAud = types.BoolValue(*data.VerifyAud)
+	state.DisableBasicAuth = types.BoolValue(data.DisableBasicAuth)
 }
 
 func populateOAuth2ConfigRequestModel(ctx context.Context, plan *oauth2ConfigurationResourceModel, data *model.OAuth2ConfigRequest) {
@@ -400,6 +413,7 @@ func populateOAuth2ConfigRequestModel(ctx context.Context, plan *oauth2Configura
 	plan.AdditionalScopesKey.ElementsAs(ctx, &data.AdditionalScopesKey, false)
 	data.ScopePrefix = plan.ScopePrefix.ValueString()
 	data.Audience = plan.Audience.ValueString()
+	data.DisableBasicAuth = utils.Pointer(plan.DisableBasicAuth.ValueBool())
 }
 
 func extractSleepAndTimeout(plan *oauth2ConfigurationResourceModel) (time.Duration, time.Duration) {
