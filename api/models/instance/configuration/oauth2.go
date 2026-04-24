@@ -16,6 +16,7 @@ type OAuth2ConfigResponse struct {
 	Audience                *string            `json:"audience,omitempty"`
 	CreatedAt               *time.Time         `json:"created_at,omitempty"`
 	UpdatedAt               *time.Time         `json:"updated_at,omitempty"`
+	DisableBasicAuth        bool               `json:"oauth_disable_basic_auth"`
 }
 
 type OAuth2ConfigRequest struct {
@@ -29,4 +30,5 @@ type OAuth2ConfigRequest struct {
 	OauthClientId           string            `json:"oauth_client_id,omitempty"`
 	OauthScopes             []string          `json:"oauth_scopes,omitempty"`
 	Audience                string            `json:"audience,omitempty"`
+	DisableBasicAuth        *bool             `json:"oauth_disable_basic_auth,omitempty"`
 }
