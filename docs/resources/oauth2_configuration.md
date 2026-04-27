@@ -54,10 +54,11 @@ resource "cloudamqp_oauth2_configuration" "oauth2_config" {
     read  = "read:all"
     write = "write:all"
   }
-  verify_aud      = true
-  oauth_client_id = "test-client-id"
-  oauth_scopes    = ["read", "write", "admin"]
-  audience        = "https://test-audience.example.com"
+  verify_aud         = true
+  oauth_client_id    = "test-client-id"
+  oauth_scopes       = ["read", "write", "admin"]
+  audience           = "https://test-audience.example.com"
+  disable_basic_auth = true
 }
 ```
 
@@ -105,6 +106,7 @@ The following arguments are supported:
 * `audience`                   - (Optional) The audience to be passed along to the Oauth2 provider when
                                  logging in to the management interface. Must be configured for Auth0,
                                  cannot be configured for Entra ID v2.
+* `disable_basic_auth`         - (Optiona/Computed) Disable static username/password management interface access.
 * `sleep`                      - (Optional) Configurable sleep time in seconds between retries for
                                  OAuth2 configuration. Default set to 60 seconds.
 * `timeout`                    - (Optional) Configurable timeout time in seconds for OAuth2
