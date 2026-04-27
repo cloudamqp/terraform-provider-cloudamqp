@@ -5,22 +5,26 @@
 FEATURES:
 
 * Migrated `cloudamqp_maintenance_window` resource towards Terraform plugin framework ([#432])
-* Migrated `cloudamqp_alarm` resource/data sources towards Terraform plugin framework ([#482])
-* Migrated `cloudamqp_notification` resource/data sources towards Terraform plugin framework ([#485])
+* Migrated `cloudamqp_alarm` resource/data source towards Terraform plugin framework ([#482])
+* Migrated `cloudamqp_notification` resource/data source towards Terraform plugin framework ([#485])
 
 IMPROVEMENTS:
 
 * resource/cloudamqp_instance: Allow in-place upgrade from LavinMQ shared to dedicated plan, with optional `region`, `vpc_id`, `vpc_subnet`, and `preferred_az` changes during the transition ([#453])
+* resource/cloudamqp_oauth2_configuration: Added `disable_basic_auth` setting to configuration ([#495])
 
 DEPENDENCIES:
 
 * Bumped github.com/hashicorp/terraform-plugin-mux from 0.23.0 to 0.23.1 ([#486])
+* Bumped goreleaser/goreleaser-action from 7.0.0 to 7.1.0 ([#491])
 
 [#432]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/432
 [#453]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/453
 [#482]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/482
 [#485]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/485
 [#486]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/486
+[#491]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/491
+[#495]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/495
 
 ## 1.44.4 (14 Apr, 2026)
 
