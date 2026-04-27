@@ -106,7 +106,7 @@ The following arguments are supported:
 * `audience`                   - (Optional) The audience to be passed along to the Oauth2 provider when
                                  logging in to the management interface. Must be configured for Auth0,
                                  cannot be configured for Entra ID v2.
-* `disable_basic_auth`         - (Optiona/Computed) Disable static username/password management interface access.
+* `disable_basic_auth`         - (Optional/Computed) Disable static username/password management interface access.
 * `sleep`                      - (Optional) Configurable sleep time in seconds between retries for
                                  OAuth2 configuration. Default set to 60 seconds.
 * `timeout`                    - (Optional) Configurable timeout time in seconds for OAuth2
