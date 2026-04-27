@@ -3,134 +3,97 @@ package cloudamqp
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/monitoring"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
-	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
-var (
-	_ datasource.DataSource              = &alarmsDataSource{}
-	_ datasource.DataSourceWithConfigure = &alarmsDataSource{}
-)
-
-type alarmsDataSource struct {
-	client *api.API
-}
-
-func NewAlarmsDataSource() datasource.DataSource {
-	return &alarmsDataSource{}
-}
-
-type alarmsDataSourceModel struct {
-	ID         types.String          `tfsdk:"id"`
-	InstanceID types.Int64           `tfsdk:"instance_id"`
-	Type       types.String          `tfsdk:"type"`
-	Alarms     []alarmDataSourceItem `tfsdk:"alarms"`
-}
-
-type alarmDataSourceItem struct {
-	AlarmID          types.Int64  `tfsdk:"alarm_id"`
-	Type             types.String `tfsdk:"type"`
-	Enabled          types.Bool   `tfsdk:"enabled"`
-	ReminderInterval types.Int64  `tfsdk:"reminder_interval"`
-	ValueThreshold   types.Int64  `tfsdk:"value_threshold"`
-	ValueCalculation types.String `tfsdk:"value_calculation"`
-	TimeThreshold    types.Int64  `tfsdk:"time_threshold"`
-	VhostRegex       types.String `tfsdk:"vhost_regex"`
-	QueueRegex       types.String `tfsdk:"queue_regex"`
-	MessageType      types.String `tfsdk:"message_type"`
-	Recipients       types.List   `tfsdk:"recipients"`
-}
-
-func (d *alarmsDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = "cloudamqp_alarms"
-}
-
-func (d *alarmsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{
-		Description: "Use this data source to retrieve a list of pre-defined or created alarms.",
-		Attributes: map[string]schema.Attribute{
-			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "The identifier for this data source",
-			},
-			"instance_id": schema.Int64Attribute{
+func dataSourceAlarms() *schema.Resource {
+	return &schema.Resource{
+		ReadContext: dataSourceAlarmsRead,
+		Importer: &schema.ResourceImporter{
+			StateContext: schema.ImportStatePassthroughContext,
+		},
+		Schema: map[string]*schema.Schema{
+			"instance_id": {
+				Type:        schema.TypeInt,
 				Required:    true,
 				Description: "Instance identifier",
 			},
-			"type": schema.StringAttribute{
+			"type": {
+				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Type of the alarm to filter by",
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"cpu",
-						"memory",
-						"disk",
-						"queue",
-						"connection",
-						"flow",
-						"consumer",
-						"netsplit",
-						"ssh",
-						"notice",
-						"server_unreachable",
-					),
-				},
+				Description: "Type of the alarm",
+				ValidateDiagFunc: validation.ToDiagFunc(validation.StringInSlice([]string{
+					"cpu", "memory", "disk", "queue", "connection",
+					"flow", "consumer", "netsplit", "ssh", "notice", "server_unreachable",
+				}, false)),
 			},
-		},
-		Blocks: map[string]schema.Block{
-			"alarms": schema.ListNestedBlock{
-				NestedObject: schema.NestedBlockObject{
-					Attributes: map[string]schema.Attribute{
-						"alarm_id": schema.Int64Attribute{
+			"alarms": {
+				Type:        schema.TypeList,
+				Computed:    true,
+				Description: "List of alarms",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"alarm_id": {
+							Type:        schema.TypeInt,
 							Computed:    true,
 							Description: "Alarm identifier",
 						},
-						"type": schema.StringAttribute{
+						"type": {
+							Type:        schema.TypeString,
 							Computed:    true,
 							Description: "Type of the alarm",
 						},
-						"enabled": schema.BoolAttribute{
+						"enabled": {
+							Type:        schema.TypeBool,
 							Computed:    true,
 							Description: "Enable or disable an alarm",
 						},
-						"reminder_interval": schema.Int64Attribute{
+						"reminder_interval": {
+							Type:        schema.TypeInt,
 							Computed:    true,
 							Description: "The reminder interval (in seconds) to resend the alarm if not resolved. Set to 0 for no reminders",
 						},
-						"value_threshold": schema.Int64Attribute{
+						"value_threshold": {
+							Type:        schema.TypeInt,
 							Computed:    true,
 							Description: "What value to trigger the alarm for",
 						},
-						"value_calculation": schema.StringAttribute{
+						"value_calculation": {
+							Type:        schema.TypeString,
 							Computed:    true,
 							Description: "Disk value threshold calculation. Fixed or percentage of disk space remaining",
 						},
-						"time_threshold": schema.Int64Attribute{
+						"time_threshold": {
+							Type:        schema.TypeInt,
 							Computed:    true,
 							Description: "For how long (in seconds) the value_threshold should be active before trigger alarm",
 						},
-						"vhost_regex": schema.StringAttribute{
+						"vhost_regex": {
+							Type:        schema.TypeString,
 							Computed:    true,
 							Description: "Regex for which vhost the queues are in",
 						},
-						"queue_regex": schema.StringAttribute{
+						"queue_regex": {
+							Type:        schema.TypeString,
 							Computed:    true,
 							Description: "Regex for which queues to check",
 						},
-						"message_type": schema.StringAttribute{
+						"message_type": {
+							Type:        schema.TypeString,
 							Computed:    true,
 							Description: "Message types (total, unacked, ready) of the queue to trigger the alarm",
 						},
-						"recipients": schema.ListAttribute{
-							ElementType: types.Int64Type,
-							Computed:    true,
+						"recipients": {
+							Type:     schema.TypeList,
+							Computed: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeInt,
+							},
 							Description: "Identifiers for recipients to be notified.",
 						},
 					},
@@ -140,111 +103,95 @@ func (d *alarmsDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 	}
 }
 
-func (d *alarmsDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
-	if req.ProviderData == nil {
-		return
-	}
-	client, ok := req.ProviderData.(*api.API)
-	if !ok {
-		resp.Diagnostics.AddError(
-			"Unexpected Data Source Configure Type",
-			fmt.Sprintf("Expected *api.API, got: %T. Please report this issue to the provider developers.", req.ProviderData),
-		)
-		return
-	}
-	d.client = client
-}
+func dataSourceAlarmsRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	var (
+		instanceID = int64(d.Get("instance_id").(int))
+	)
 
-func (d *alarmsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config alarmsDataSourceModel
-	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	instanceID := config.InstanceID.ValueInt64()
-	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
-	defer cancel()
-
-	alarms, err := d.client.ListAlarms(timeoutCtx, instanceID)
+	client := meta.(*api.API)
+	data, err := client.ListAlarms(ctx, instanceID)
 	if err != nil {
-		resp.Diagnostics.AddError(
-			"Failed to List Alarms",
-			fmt.Sprintf("Could not list alarms: %s", err),
-		)
-		return
+		return diag.FromErr(err)
 	}
 
-	if !config.Type.IsNull() {
-		for _, alarm := range alarms {
-			if alarm.Type == config.Type.ValueString() {
-				config.Alarms = append(config.Alarms, d.populateResourceModel(ctx, alarm))
+	filtered := data
+	if alarmType := d.Get("type").(string); alarmType != "" {
+		d.SetId(fmt.Sprintf("%d.%s.alarms", instanceID, alarmType))
+		filtered = make([]model.AlarmResponse, 0)
+		for _, alarm := range data {
+			if alarm.Type == alarmType {
+				filtered = append(filtered, alarm)
 			}
 		}
-		config.ID = types.StringValue(fmt.Sprintf("%d.%s.alarms", instanceID, config.Type.ValueString()))
 	} else {
-		for _, alarm := range alarms {
-			config.Alarms = append(config.Alarms, d.populateResourceModel(ctx, alarm))
-		}
-		config.ID = types.StringValue(fmt.Sprintf("%d.alarms", instanceID))
+		d.SetId(fmt.Sprintf("%d.alarms", instanceID))
 	}
 
-	resp.Diagnostics.Append(resp.State.Set(ctx, &config)...)
+	alarms := make([]map[string]any, len(filtered))
+	for k, v := range filtered {
+		alarms[k] = readAlarm(v)
+	}
+
+	if err = d.Set("alarms", alarms); err != nil {
+		return diag.Errorf("error setting alarms for resource %s: %s", d.Id(), err)
+	}
+
+	return diag.Diagnostics{}
 }
 
-func (d *alarmsDataSource) populateResourceModel(ctx context.Context, data model.AlarmResponse) alarmDataSourceItem {
-	alarm := alarmDataSourceItem{}
-	alarm.AlarmID = types.Int64Value(int64(data.ID))
-	alarm.Type = types.StringValue(data.Type)
-	alarm.Enabled = types.BoolValue(data.Enabled)
+func readAlarm(data model.AlarmResponse) map[string]any {
+	alarm := map[string]any{
+		"alarm_id": data.ID,
+		"type":     data.Type,
+		"enabled":  data.Enabled,
+	}
 
 	if data.ReminderInterval != nil {
-		alarm.ReminderInterval = types.Int64Value(*data.ReminderInterval)
+		alarm["reminder_interval"] = *data.ReminderInterval
 	} else {
-		alarm.ReminderInterval = types.Int64Null()
+		alarm["reminder_interval"] = int64(0)
 	}
 
 	if data.ValueThreshold != nil {
-		alarm.ValueThreshold = types.Int64Value(*data.ValueThreshold)
+		alarm["value_threshold"] = *data.ValueThreshold
 	} else {
-		alarm.ValueThreshold = types.Int64Null()
+		alarm["value_threshold"] = int64(0)
 	}
 
 	if data.ValueCalculation != nil {
-		alarm.ValueCalculation = types.StringValue(*data.ValueCalculation)
+		alarm["value_calculation"] = *data.ValueCalculation
 	} else {
-		alarm.ValueCalculation = types.StringNull()
+		alarm["value_calculation"] = ""
 	}
 
 	if data.TimeThreshold != nil {
-		alarm.TimeThreshold = types.Int64Value(*data.TimeThreshold)
+		alarm["time_threshold"] = *data.TimeThreshold
 	} else {
-		alarm.TimeThreshold = types.Int64Null()
+		alarm["time_threshold"] = int64(0)
 	}
 
 	if data.VhostRegex != nil {
-		alarm.VhostRegex = types.StringValue(*data.VhostRegex)
+		alarm["vhost_regex"] = *data.VhostRegex
 	} else {
-		alarm.VhostRegex = types.StringNull()
+		alarm["vhost_regex"] = ""
 	}
 
 	if data.QueueRegex != nil {
-		alarm.QueueRegex = types.StringValue(*data.QueueRegex)
+		alarm["queue_regex"] = *data.QueueRegex
 	} else {
-		alarm.QueueRegex = types.StringNull()
+		alarm["queue_regex"] = ""
 	}
 
 	if data.MessageType != nil {
-		alarm.MessageType = types.StringValue(*data.MessageType)
+		alarm["message_type"] = *data.MessageType
 	} else {
-		alarm.MessageType = types.StringNull()
+		alarm["message_type"] = ""
 	}
 
 	if data.Recipients != nil {
-		recipientsList, _ := types.ListValueFrom(ctx, types.Int64Type, *data.Recipients)
-		alarm.Recipients = recipientsList
+		alarm["recipients"] = *data.Recipients
 	} else {
-		alarm.Recipients = types.ListNull(types.Int64Type)
+		alarm["recipients"] = []int64{}
 	}
 
 	return alarm
