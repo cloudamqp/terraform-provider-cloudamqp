@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.45.0 (Unreleased)
+## 1.45.0 (27 Apr, 2026)
 
 FEATURES:
 
