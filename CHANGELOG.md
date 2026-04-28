@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.45.1 (Unreleased)
+
+BUG FIXES:
+
+* resource/cloudamqp_instance: Add timeout block to always set timeout to context ([#497])
+
+DEPENDENCIES:
+
+* Bumped goreleaser/goreleaser-action from 7.1.0 to 7.2.1 ([#496])
+
+[#496]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/496
+[#497]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/497
+
 ## 1.45.0 (27 Apr, 2026)
 
 FEATURES:
