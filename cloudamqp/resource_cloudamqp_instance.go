@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"context"
+	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -18,6 +19,12 @@ func resourceInstance() *schema.Resource {
 		DeleteContext: resourceDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
+		},
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(30 * time.Minute),
+			Read:   schema.DefaultTimeout(10 * time.Minute),
+			Update: schema.DefaultTimeout(180 * time.Minute),
+			Delete: schema.DefaultTimeout(30 * time.Minute),
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -196,6 +203,8 @@ func resourceInstance() *schema.Resource {
 
 func resourceCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
+	ctxTimeout, cancel := context.WithTimeout(ctx, d.Timeout(schema.TimeoutCreate))
+	defer cancel()
 	keys := instanceCreateAttributeKeys()
 	params := make(map[string]any)
 	for _, k := range keys {
@@ -231,7 +240,7 @@ func resourceCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.
 		}
 	}
 
-	data, err := api.CreateInstance(ctx, params)
+	data, err := api.CreateInstance(ctxTimeout, params)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -242,7 +251,9 @@ func resourceCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.
 
 func resourceRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
-	data, err := api.ReadInstance(ctx, d.Id())
+	ctxTimeout, cancel := context.WithTimeout(ctx, d.Timeout(schema.TimeoutRead))
+	defer cancel()
+	data, err := api.ReadInstance(ctxTimeout, d.Id())
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -308,6 +319,8 @@ func resourceRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Di
 
 func resourceUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
+	ctxTimeout, cancel := context.WithTimeout(ctx, d.Timeout(schema.TimeoutUpdate))
+	defer cancel()
 	keys := []string{"name", "plan", "nodes", "tags"}
 	params := make(map[string]any)
 
@@ -351,7 +364,7 @@ func resourceUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.
 		}
 	}
 
-	if err := api.UpdateInstance(ctx, d.Id(), params); err != nil {
+	if err := api.UpdateInstance(ctxTimeout, d.Id(), params); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -360,7 +373,9 @@ func resourceUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.
 
 func resourceDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*api.API)
-	if err := api.DeleteInstance(ctx, d.Id(), d.Get("keep_associated_vpc").(bool)); err != nil {
+	ctxTimeout, cancel := context.WithTimeout(ctx, d.Timeout(schema.TimeoutDelete))
+	defer cancel()
+	if err := api.DeleteInstance(ctxTimeout, d.Id(), d.Get("keep_associated_vpc").(bool)); err != nil {
 		return diag.FromErr(err)
 	}
 	return diag.Diagnostics{}
