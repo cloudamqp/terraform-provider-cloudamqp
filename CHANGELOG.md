@@ -1,10 +1,18 @@
 # CHANGELOG
 
+## 1.45.2 (Unreleased)
+
+BUG FIXES:
+
+* resource/cloudamqp_maintenance_window: Fixed preserve automatic_updates state when API returns nil ([#500])
+
+[#500]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/500
+
 ## 1.45.1 (28 Apr, 2026)
 
 BUG FIXES:
 
-* resource/cloudamqp_instance: Add timeout block to always set timeout to context ([#497])
+* resource/cloudamqp_instance: Added timeout block to always set timeout to context ([#497])
 
 DEPENDENCIES:
 
