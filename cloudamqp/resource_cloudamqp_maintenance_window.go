@@ -94,6 +94,9 @@ func (r *maintenanceWindowResource) Schema(ctx context.Context, req resource.Sch
 				Optional:    true,
 				Computed:    true,
 				Description: "Enable automatic updates (only available for LavinMQ)",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 				Validators: []validator.String{
 					stringvalidator.OneOf("on", "off"),
 				},
@@ -179,7 +182,7 @@ func (r *maintenanceWindowResource) Create(ctx context.Context, req resource.Cre
 			} else {
 				plan.AutomaticUpdates = types.StringValue("off")
 			}
-		} else {
+		} else if plan.AutomaticUpdates.IsUnknown() {
 			plan.AutomaticUpdates = types.StringNull()
 		}
 	}
@@ -236,7 +239,7 @@ func (r *maintenanceWindowResource) Read(ctx context.Context, req resource.ReadR
 		} else {
 			state.AutomaticUpdates = types.StringValue("off")
 		}
-	} else {
+	} else if state.AutomaticUpdates.IsUnknown() {
 		state.AutomaticUpdates = types.StringNull()
 	}
 
@@ -302,7 +305,7 @@ func (r *maintenanceWindowResource) Update(ctx context.Context, req resource.Upd
 			} else {
 				plan.AutomaticUpdates = types.StringValue("off")
 			}
-		} else {
+		} else if plan.AutomaticUpdates.IsUnknown() {
 			plan.AutomaticUpdates = types.StringNull()
 		}
 	}
