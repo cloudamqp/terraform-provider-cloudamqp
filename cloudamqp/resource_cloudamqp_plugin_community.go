@@ -64,7 +64,7 @@ func resourcePluginCommunity() *schema.Resource {
 			"timeout": {
 				Type:        schema.TypeInt,
 				Optional:    true,
-				Default:     3600,
+				Default:     1800,
 				Description: "Configurable timeout time in seconds for plugins",
 			},
 		},
@@ -121,7 +121,7 @@ func resourcePluginCommunityRead(ctx context.Context, d *schema.ResourceData, me
 		d.Set("instance_id", instanceID)
 		// Set default values for optional arguments
 		d.Set("sleep", 10)
-		d.Set("timeout", 3600)
+		d.Set("timeout", 1800)
 	}
 	if instanceID == 0 {
 		return diag.Errorf("missing instance identifier: {resource_id},{instance_id}")
