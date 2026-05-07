@@ -206,7 +206,8 @@ func validateCommunityPluginSchemaAttribute(key string) bool {
 	switch key {
 	case "name",
 		"require",
-		"description":
+		"description",
+		"enabled":
 		return true
 	}
 	return false
