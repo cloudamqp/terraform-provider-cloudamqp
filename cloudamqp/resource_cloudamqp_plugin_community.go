@@ -121,13 +121,17 @@ func resourcePluginCommunityRead(ctx context.Context, d *schema.ResourceData, me
 		d.Set("instance_id", instanceID)
 		// Set default values for optional arguments
 		d.Set("sleep", 10)
-		sleep = 10
 		d.Set("timeout", 1800)
-		timeout = 1800
 	}
 	if instanceID == 0 {
 		return diag.Errorf("missing instance identifier: {resource_id},{instance_id}")
 	}
+
+	// Read values after import setup to ensure defaults are applied
+	instanceID = d.Get("instance_id").(int)
+	name = d.Get("name").(string)
+	sleep = d.Get("sleep").(int)
+	timeout = d.Get("timeout").(int)
 
 	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
 	defer cancel()
