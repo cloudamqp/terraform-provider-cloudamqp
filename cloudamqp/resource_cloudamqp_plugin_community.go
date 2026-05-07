@@ -121,13 +121,18 @@ func resourcePluginCommunityRead(ctx context.Context, d *schema.ResourceData, me
 		d.Set("instance_id", instanceID)
 		// Set default values for optional arguments
 		d.Set("sleep", 10)
+		sleep = 10
 		d.Set("timeout", 1800)
+		timeout = 1800
 	}
 	if instanceID == 0 {
 		return diag.Errorf("missing instance identifier: {resource_id},{instance_id}")
 	}
 
 	data, err := api.ReadPluginCommunity(ctx, instanceID, name, sleep, timeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
 	if err != nil {
 		// If instance not found (404), return nil to indicate resource not found
 		// This allows Terraform to recreate the resource when the instance is recreated
