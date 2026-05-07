@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.45.3 (Unreleased)
+
+BUG FIXES:
+
+* resource/cloudamqp_plugin_community: Fixed failing import of resource ([#502])
+
+[#502]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/502
+
 ## 1.45.2 (30 Apr, 2026)
 
 BUG FIXES:
