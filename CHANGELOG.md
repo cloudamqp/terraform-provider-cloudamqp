@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.45.3 (Unreleased)
+## 1.45.3 (07 May, 2026)
 
 BUG FIXES:
 
