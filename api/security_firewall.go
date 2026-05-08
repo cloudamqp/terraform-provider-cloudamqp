@@ -105,35 +105,31 @@ func (api *API) PollForFirewallConfigured(ctx context.Context, instanceID int64,
 	defer ticker.Stop()
 
 	for {
+		tflog.Info(ctx, fmt.Sprintf("method=GET path=%s ", path))
+		err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+			functionName: "pollForFirewallConfigured",
+			resourceName: "FirewallSettings",
+			attempt:      attempt,
+			sleep:        sleep,
+			data:         &data,
+			failed:       &failed,
+		})
+		if err != nil {
+			tflog.Error(ctx, fmt.Sprintf("error reading firewall configured status: %v", err))
+		} else if configured, exists := data["configured"]; exists && configured.(bool) {
+			tflog.Info(ctx, "firewall is configured")
+			return nil
+		} else {
+			tflog.Info(ctx, fmt.Sprintf("firewall not yet configured, will retry, attempt=%d ", attempt))
+			attempt++
+		}
+
 		select {
 		case <-ctx.Done():
 			msg := "timeout reached while polling for firewall configured"
 			tflog.Error(ctx, msg)
 			return fmt.Errorf("%s", msg)
 		case <-ticker.C:
-			tflog.Info(ctx, fmt.Sprintf("method=GET path=%s ", path))
-			err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
-				functionName: "pollForFirewallConfigured",
-				resourceName: "FirewallSettings",
-				attempt:      attempt,
-				sleep:        sleep,
-				data:         &data,
-				failed:       &failed,
-			})
-			if err != nil {
-				tflog.Error(ctx, fmt.Sprintf("error reading firewall configured status: %v", err))
-				continue
-			}
-			if configured, exists := data["configured"]; exists && configured.(bool) {
-				tflog.Info(ctx, "firewall is configured")
-				return nil
-			}
-			tflog.Info(ctx, fmt.Sprintf("firewall not yet configured, will retry, attempt=%d ", attempt))
-			attempt++
-		case <-ctx.Done():
-			msg := "context cancelled while polling for firewall configured"
-			tflog.Error(ctx, msg)
-			return fmt.Errorf("%s", msg)
 		}
 	}
 }
