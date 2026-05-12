@@ -122,6 +122,25 @@ resource "cloudamqp_integration_log" "datadog" {
 <details>
   <summary>
     <b>
+      <i>Grafana Cloud (Loki) log integration</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_integration_log" "loki" {
+  instance_id = cloudamqp_instance.instance.id
+  name        = "loki_otlp"
+  endpoint    = "https://otlp-gateway-prod-<region>.grafana.net/otlp"
+  username    = var.grafana_username
+  token       = var.grafana_cloud_token
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
       <i>Log entries log integration</i>
     </b>
   </summary>
@@ -411,6 +430,22 @@ Optional arguments:
 
   ***Note:*** If tags are used with Datadog. The value part (prod, europe, ...) must start with a
               letter, read more about tags format in the [Datadog documentation].
+
+</details>
+
+<details>
+  <summary>
+    <b>Grafana Cloud (Loki)</b>
+  </summary>
+
+The following arguments used by Grafana Cloud (Loki).
+
+* `name`     - (Required) The name of the third party log integration (`loki_otlp`).
+* `endpoint` - (Required) The OTLP gateway URL. Format: `https://otlp-gateway-prod-<region>.grafana.net/otlp`.
+* `username` - (Required) The Grafana Cloud username.
+* `token`    - (Required/Sensitive) The Grafana Cloud token.
+
+***Note:*** To find your credentials, sign in to the Grafana Cloud Portal, open your stack, find the OpenTelemetry tile and click Configure.
 
 </details>
 
