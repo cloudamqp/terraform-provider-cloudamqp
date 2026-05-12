@@ -12,6 +12,7 @@ type LogRequest struct {
 	Endpoint          string `json:"endpoint,omitempty"`
 	Host              string `json:"host,omitempty"`
 	HostPort          string `json:"host_port,omitempty"`
+	Password          string `json:"password,omitempty"`
 	PrivateKey        string `json:"private_key,omitempty"`
 	PrivateKeyID      string `json:"private_key_id,omitempty"`
 	ProjectID         string `json:"project_id,omitempty"`
@@ -25,6 +26,7 @@ type LogRequest struct {
 	TenantID          string `json:"tenant_id,omitempty"`
 	Token             string `json:"token,omitempty"`
 	URL               string `json:"url,omitempty"`
+	Username          string `json:"username,omitempty"`
 }
 
 type LogResponse struct {
@@ -45,6 +47,7 @@ type LogConfigResponse struct {
 	Endpoint          *string `json:"endpoint,omitempty"`
 	Host              *string `json:"host,omitempty"`
 	HostPort          *string `json:"host_port,omitempty"`
+	Password          *string `json:"password,omitempty"`
 	PrivateKey        *string `json:"private_key,omitempty"`
 	PrivateKeyID      *string `json:"private_key_id,omitempty"`
 	ProjectID         *string `json:"project_id,omitempty"`
@@ -58,4 +61,5 @@ type LogConfigResponse struct {
 	TenantID          *string `json:"tenant_id,omitempty"`
 	Token             *string `json:"token,omitempty"`
 	URL               *string `json:"url,omitempty"`
+	Username          *string `json:"username,omitempty"`
 }
