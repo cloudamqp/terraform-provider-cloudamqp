@@ -378,7 +378,7 @@ func extractStackdriverCredentials(credentials string) (map[string]string, error
 		return nil, fmt.Errorf("failed to parse stackdriver credentials JSON: %s", err)
 	}
 
-	requiredFields := []string{"client_email", "private_key_id", "private_key", "project_id"}
+	requiredFields := []string{"type", "client_email", "private_key_id", "private_key", "project_id"}
 	for _, field := range requiredFields {
 		if jsonMap[field] == nil || jsonMap[field] == "" {
 			return nil, fmt.Errorf("required field '%s' is missing from credentials JSON", field)
@@ -386,6 +386,7 @@ func extractStackdriverCredentials(credentials string) (map[string]string, error
 	}
 
 	return map[string]string{
+		"type":           jsonMap["type"].(string),
 		"client_email":   jsonMap["client_email"].(string),
 		"private_key_id": jsonMap["private_key_id"].(string),
 		"private_key":    jsonMap["private_key"].(string),
