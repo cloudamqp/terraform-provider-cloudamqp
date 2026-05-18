@@ -120,6 +120,8 @@ func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resou
 		NewPluginBatchResource,
 		NewRabbitMqConfigurationResource,
 		NewTrustStoreResource,
+		NewUpgradeLavinMQResource,
+		NewUpgradeRabbitMQResource,
 		NewVpcResource,
 		NewWebhookResource,
 	}
@@ -176,8 +178,6 @@ func Provider(v string, client *http.Client) *schemaSdk.Provider {
 			"cloudamqp_privatelink_aws":               resourcePrivateLinkAws(),
 			"cloudamqp_privatelink_azure":             resourcePrivateLinkAzure(),
 			"cloudamqp_security_firewall":             resourceSecurityFirewall(),
-			"cloudamqp_upgrade_rabbitmq":              resourceUpgradeRabbitMQ(),
-			"cloudamqp_upgrade_lavinmq":               resourceUpgradeLavinMQ(),
 			"cloudamqp_vpc_connect":                   resourceVpcConnect(),
 			"cloudamqp_vpc_gcp_peering":               resourceVpcGcpPeering(),
 			"cloudamqp_vpc_peering":                   resourceVpcPeering(),
