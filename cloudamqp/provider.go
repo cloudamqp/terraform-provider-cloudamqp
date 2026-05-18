@@ -99,6 +99,7 @@ func (p *cloudamqpProvider) DataSources(_ context.Context) []func() datasource.D
 	return []func() datasource.DataSource{
 		NewAlarmDataSource,
 		NewNotificationDataSource,
+		NewUpgradableVersionsDataSource,
 	}
 }
 
@@ -152,18 +153,17 @@ func Provider(v string, client *http.Client) *schemaSdk.Provider {
 			},
 		},
 		DataSourcesMap: map[string]*schemaSdk.Resource{
-			"cloudamqp_account_vpcs":        dataSourceAccountVpcs(),
-			"cloudamqp_account":             dataSourceAccount(),
-			"cloudamqp_alarms":              dataSourceAlarms(),
-			"cloudamqp_credentials":         dataSourceCredentials(),
-			"cloudamqp_instance":            dataSourceInstance(),
-			"cloudamqp_nodes":               dataSourceNodes(),
-			"cloudamqp_notifications":       dataSourceNotifications(),
-			"cloudamqp_plugins_community":   dataSourcePluginsCommunity(),
-			"cloudamqp_plugins":             dataSourcePlugins(),
-			"cloudamqp_upgradable_versions": dataSourceUpgradableVersions(),
-			"cloudamqp_vpc_gcp_info":        dataSourceVpcGcpInfo(),
-			"cloudamqp_vpc_info":            dataSourceVpcInfo(),
+			"cloudamqp_account_vpcs":      dataSourceAccountVpcs(),
+			"cloudamqp_account":           dataSourceAccount(),
+			"cloudamqp_alarms":            dataSourceAlarms(),
+			"cloudamqp_credentials":       dataSourceCredentials(),
+			"cloudamqp_instance":          dataSourceInstance(),
+			"cloudamqp_nodes":             dataSourceNodes(),
+			"cloudamqp_notifications":     dataSourceNotifications(),
+			"cloudamqp_plugins_community": dataSourcePluginsCommunity(),
+			"cloudamqp_plugins":           dataSourcePlugins(),
+			"cloudamqp_vpc_gcp_info":      dataSourceVpcGcpInfo(),
+			"cloudamqp_vpc_info":          dataSourceVpcInfo(),
 		},
 		ResourcesMap: map[string]*schemaSdk.Resource{
 			"cloudamqp_extra_disk_size":               resourceExtraDiskSize(),

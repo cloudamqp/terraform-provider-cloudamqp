@@ -9,7 +9,7 @@ import (
 )
 
 // ReadVersions - Read versions RabbitMQ and Erlang can upgrade to
-func (api *API) ReadVersions(ctx context.Context, instanceID int) (map[string]any, error) {
+func (api *API) ReadVersions(ctx context.Context, instanceID int64) (map[string]any, error) {
 	var (
 		data   map[string]any
 		failed map[string]any
