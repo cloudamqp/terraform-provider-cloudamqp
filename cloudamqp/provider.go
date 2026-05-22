@@ -97,6 +97,7 @@ func (p *cloudamqpProvider) Configure(ctx context.Context, request provider.Conf
 
 func (p *cloudamqpProvider) DataSources(_ context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
+		NewAccountVpcsDataSource,
 		NewAlarmDataSource,
 		NewNotificationDataSource,
 		NewUpgradableVersionsDataSource,
@@ -155,7 +156,6 @@ func Provider(v string, client *http.Client) *schemaSdk.Provider {
 			},
 		},
 		DataSourcesMap: map[string]*schemaSdk.Resource{
-			"cloudamqp_account_vpcs":      dataSourceAccountVpcs(),
 			"cloudamqp_account":           dataSourceAccount(),
 			"cloudamqp_alarms":            dataSourceAlarms(),
 			"cloudamqp_credentials":       dataSourceCredentials(),
