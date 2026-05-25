@@ -114,7 +114,7 @@ func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resou
 		NewAwsEventBridgeResource,
 		NewCustomCertificateResource,
 		NewCustomDomainResource,
-    ewFirewallResource,
+		NewFirewallResource,
 		NewIntegrationLogResource,
 		NewIntegrationMetricResource,
 		NewMaintenanceWindowResource,
