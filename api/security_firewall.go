@@ -5,82 +5,40 @@ import (
 	"fmt"
 	"time"
 
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/network"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func (api *API) waitUntilFirewallConfigured(ctx context.Context, instanceID, attempt, sleep,
-	timeout int) error {
-
-	var (
-		data   map[string]any
-		failed map[string]any
-		path   = fmt.Sprintf("/api/instances/%d/security/firewall/configured", instanceID)
-	)
-
-	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-	defer cancel()
-
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d", path, sleep, timeout))
-	return api.callWithRetry(ctxTimeout, api.sling.New().Path(path), retryRequest{
-		functionName: "waitUntilFirewallConfigured",
-		resourceName: "Firewall",
-		attempt:      attempt,
-		sleep:        time.Duration(sleep) * time.Second,
-		data:         &data,
-		failed:       &failed,
-	})
-}
-
-func (api *API) CreateFirewallSettings(ctx context.Context, instanceID int, params []map[string]any,
-	sleep, timeout int) ([]map[string]any, error) {
-
+func (api *API) CreateFirewallSettings(ctx context.Context, instanceID int64, params []model.FirewallRuleRequest, sleep time.Duration) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	)
 
-	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-	defer cancel()
-
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d timeout=%d params=%v", path, sleep,
-		timeout, params))
-	err := api.callWithRetry(ctxTimeout, api.sling.New().Post(path).BodyJSON(params), retryRequest{
+	tflog.Info(ctx, fmt.Sprintf("method=POST path=%s params=%+v ", path, params))
+	return api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
 		functionName: "CreateFirewallSettings",
-		resourceName: "Firewall",
+		resourceName: "FirewallSettings",
 		attempt:      1,
-		sleep:        time.Duration(sleep) * time.Second,
+		sleep:        sleep,
 		data:         nil,
 		failed:       &failed,
 	})
-	if err != nil {
-		return nil, err
-	}
-
-	err = api.waitUntilFirewallConfigured(ctx, instanceID, 1, sleep, timeout)
-	if err != nil {
-		return nil, err
-	}
-
-	return api.ReadFirewallSettings(ctx, instanceID)
 }
 
-func (api *API) ReadFirewallSettings(ctx context.Context, instanceID int) ([]map[string]any, error) {
+func (api *API) ReadFirewallSettings(ctx context.Context, instanceID int64, sleep time.Duration) (*[]model.FirewallRuleResponse, error) {
 	var (
-		data   []map[string]any
+		data   *[]model.FirewallRuleResponse
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	)
 
-	// Add timeout context for retries in case firewall is still configuring
-	ctxTimeout, cancel := context.WithTimeout(ctx, 300*time.Second)
-	defer cancel()
-
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
-	err := api.callWithRetry(ctxTimeout, api.sling.New().Path(path), retryRequest{
+	tflog.Info(ctx, fmt.Sprintf("method=GET path=%s ", path))
+	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
 		functionName: "ReadFirewallSettings",
-		resourceName: "Firewall",
+		resourceName: "FirewallSettings",
 		attempt:      1,
-		sleep:        5 * time.Second,
+		sleep:        sleep,
 		data:         &data,
 		failed:       &failed,
 	})
@@ -88,75 +46,90 @@ func (api *API) ReadFirewallSettings(ctx context.Context, instanceID int) ([]map
 		return nil, err
 	}
 
-	if len(data) == 0 {
+	tflog.Info(ctx, fmt.Sprintf("method=GET path=%s data=%+v ", path, data))
+	if data == nil {
 		return nil, nil
 	}
 
 	return data, nil
 }
 
-func (api *API) UpdateFirewallSettings(ctx context.Context, instanceID int, params []map[string]any,
-	sleep, timeout int) ([]map[string]any, error) {
-
+func (api *API) UpdateFirewallSettings(ctx context.Context, instanceID int64, params []model.FirewallRuleRequest, sleep time.Duration) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	)
 
-	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-	defer cancel()
-
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d timeout=%d params=%v", path, sleep,
-		timeout, params))
-	err := api.callWithRetry(ctxTimeout, api.sling.New().Put(path).BodyJSON(params), retryRequest{
+	tflog.Info(ctx, fmt.Sprintf("method=POST path=%s params=%+v ", path, params))
+	return api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
 		functionName: "UpdateFirewallSettings",
-		resourceName: "Firewall",
+		resourceName: "FirewallSettings",
 		attempt:      1,
-		sleep:        time.Duration(sleep) * time.Second,
+		sleep:        sleep,
 		data:         nil,
 		failed:       &failed,
 	})
-	if err != nil {
-		return nil, err
-	}
-
-	err = api.waitUntilFirewallConfigured(ctx, instanceID, 1, sleep, timeout)
-	if err != nil {
-		return nil, err
-	}
-
-	return api.ReadFirewallSettings(ctx, instanceID)
 }
 
-func (api *API) DeleteFirewallSettings(ctx context.Context, instanceID, sleep, timeout int) (
-	[]map[string]any, error) {
-
+func (api *API) DeleteFirewallSettings(ctx context.Context, instanceID int64, params []model.FirewallRuleRequest, sleep time.Duration) error {
 	var (
-		params = []map[string]any{}
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	)
 
-	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-	defer cancel()
-
-	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d", path, sleep, timeout))
-	err := api.callWithRetry(ctxTimeout, api.sling.New().Put(path).BodyJSON(params), retryRequest{
+	tflog.Info(ctx, fmt.Sprintf("method=DELETE path=%s params=%+v ", path, params))
+	return api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
 		functionName: "DeleteFirewallSettings",
-		resourceName: "Firewall",
+		resourceName: "FirewallSettings",
 		attempt:      1,
-		sleep:        time.Duration(sleep) * time.Second,
+		sleep:        sleep,
 		data:         nil,
 		failed:       &failed,
 	})
-	if err != nil {
-		return nil, err
+}
+
+func (api *API) PollForFirewallConfigured(ctx context.Context, instanceID int64, sleep time.Duration) error {
+	var (
+		data    map[string]any
+		failed  map[string]any
+		path    = fmt.Sprintf("/api/instances/%d/security/firewall/configured", instanceID)
+		attempt = 1
+	)
+
+	_, ok := ctx.Deadline()
+	if !ok {
+		return fmt.Errorf("context has no deadline")
 	}
 
-	err = api.waitUntilFirewallConfigured(ctx, instanceID, 1, sleep, timeout)
-	if err != nil {
-		return nil, err
-	}
+	ticker := time.NewTicker(sleep)
+	defer ticker.Stop()
 
-	return api.ReadFirewallSettings(ctx, instanceID)
+	for {
+		tflog.Info(ctx, fmt.Sprintf("method=GET path=%s ", path))
+		err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+			functionName: "pollForFirewallConfigured",
+			resourceName: "FirewallSettings",
+			attempt:      attempt,
+			sleep:        sleep,
+			data:         &data,
+			failed:       &failed,
+		})
+		if err != nil {
+			tflog.Error(ctx, fmt.Sprintf("error reading firewall configured status: %v", err))
+		} else if configured, exists := data["configured"]; exists && configured.(bool) {
+			tflog.Info(ctx, "firewall is configured")
+			return nil
+		} else {
+			tflog.Info(ctx, fmt.Sprintf("firewall not yet configured, will retry, attempt=%d ", attempt))
+			attempt++
+		}
+
+		select {
+		case <-ctx.Done():
+			msg := "timeout reached while polling for firewall configured"
+			tflog.Error(ctx, msg)
+			return fmt.Errorf("%s", msg)
+		case <-ticker.C:
+		}
+	}
 }
