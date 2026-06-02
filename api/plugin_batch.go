@@ -20,7 +20,7 @@ func (api *API) CreatePluginBatch(ctx context.Context, instanceID int64,
 		path   = fmt.Sprintf("/api/instances/%d/plugins/batch", instanceID)
 	)
 
-	tflog.Info(ctx, fmt.Sprintf("method=POST path=%s params=%+v", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%+v", path, params))
 	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
 		functionName: "CreatePluginBatch",
 		resourceName: "PluginBatch",
@@ -49,7 +49,7 @@ func (api *API) UpdatePluginBatch(ctx context.Context, instanceID int64,
 		path   = fmt.Sprintf("/api/instances/%d/plugins/batch", instanceID)
 	)
 
-	tflog.Info(ctx, fmt.Sprintf("method=PUT path=%s params=%+v", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%+v", path, params))
 	err := api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
 		functionName: "UpdatePluginBatch",
 		resourceName: "PluginBatch",
@@ -78,7 +78,7 @@ func (api *API) DeletePluginBatch(ctx context.Context, instanceID int64,
 		path   = fmt.Sprintf("/api/instances/%d/plugins/batch", instanceID)
 	)
 
-	tflog.Info(ctx, fmt.Sprintf("method=DELETE path=%s params=%+v", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s params=%+v", path, params))
 	err := api.callWithRetry(ctx, api.sling.New().Delete(path).BodyJSON(params), retryRequest{
 		functionName: "DeletePluginBatch",
 		resourceName: "PluginBatch",

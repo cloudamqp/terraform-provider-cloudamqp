@@ -34,7 +34,7 @@ func TestAccPluginBatch_Basic(t *testing.T) {
 						plugins = {
 							rabbitmq_stomp           = true,
 							rabbitmq_top             = true,
-							rabbitmq_web_mqtt        = true,
+							rabbitmq_web_mqtt        = true
 						}
 					}
 				`,
@@ -62,7 +62,7 @@ func TestAccPluginBatch_Basic(t *testing.T) {
 							rabbitmq_stomp           = true,
 							rabbitmq_top             = false,
 							rabbitmq_web_mqtt        = true,
-							rabbitmq_random_exchange = true,
+							rabbitmq_random_exchange = true
 						}
 					}
 				`,
@@ -90,7 +90,7 @@ func TestAccPluginBatch_Basic(t *testing.T) {
 							rabbitmq_stomp           = false,
 							rabbitmq_top             = false,
 							rabbitmq_web_mqtt        = false,
-							rabbitmq_random_exchange = false,
+							rabbitmq_random_exchange = false
 						}
 					}
 				`,
@@ -105,5 +105,3 @@ func TestAccPluginBatch_Basic(t *testing.T) {
 		},
 	})
 }
-
-

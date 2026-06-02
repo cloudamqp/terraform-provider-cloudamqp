@@ -46,7 +46,7 @@ func (r *pluginBatchResource) Metadata(_ context.Context, req resource.MetadataR
 
 func (r *pluginBatchResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Manage multiple RabbitMQ plugins in a single batch operation.",
+		Description: "Manage multiple RabbitMQ plugins as a single resource.",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Computed:    true,
@@ -163,6 +163,12 @@ func (r *pluginBatchResource) Read(ctx context.Context, req resource.ReadRequest
 	apiPlugins, err := r.client.ListPlugins(ctx, instanceID, sleep, timeout)
 	if err != nil {
 		resp.Diagnostics.AddError("Error reading plugins", err.Error())
+		return
+	}
+
+	// Resource drift: instance not found, trigger re-creation.
+	if len(apiPlugins) == 0 {
+		resp.State.RemoveResource(ctx)
 		return
 	}
 
