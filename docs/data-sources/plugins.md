@@ -14,17 +14,19 @@ instance.
 
 ```hcl
 data "cloudamqp_plugins" "plugins" {
-  instance_id = cloudamqp_instance.instance.id
+  instance_id  = cloudamqp_instance.instance.id
+  only_enabled = true
 }
 ```
 
 ## Argument Reference
 
-* `instance_id` - (Required) The CloudAMQP instance identifier.
-* `sleep`       - (Optional) Configurable sleep time (seconds) for retries when requesting
-                  information about plugins. Default set to 10 seconds.
-* `timeout`     - (Optional) Configurable timeout time (seconds) for retries when requesting
-                  information about plugins. Default set to 1800 seconds.
+* `instance_id`   - (Required) The CloudAMQP instance identifier.
+* `only_enabled`  - (Optional) Only read out enabled plugins. Default set to false.
+* `sleep`         - (Optional) Configurable sleep time (seconds) for retries when requesting
+                    information about plugins. Default set to 10 seconds.
+* `timeout`       - (Optional) Configurable timeout time (seconds) for retries when requesting
+                    information about plugins. Default set to 1800 seconds.
 
 ## Attributes Reference
 
