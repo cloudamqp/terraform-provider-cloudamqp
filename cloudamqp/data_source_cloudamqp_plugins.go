@@ -19,6 +19,12 @@ func dataSourcePlugins() *schema.Resource {
 				Required:    true,
 				Description: "Instance identifier",
 			},
+			"only_enabled": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Only read out enabled plugins",
+			},
 			"plugins": {
 				Type:     schema.TypeList,
 				Computed: true,
@@ -61,10 +67,11 @@ func dataSourcePlugins() *schema.Resource {
 
 func dataSourcePluginsRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
-		api        = meta.(*api.API)
-		instanceID = d.Get("instance_id").(int)
-		sleep      = d.Get("sleep").(int)
-		timeout    = d.Get("timeout").(int)
+		api         = meta.(*api.API)
+		instanceID  = d.Get("instance_id").(int)
+		onlyEnabled = d.Get("only_enabled").(bool)
+		sleep       = d.Get("sleep").(int)
+		timeout     = d.Get("timeout").(int)
 	)
 
 	data, err := api.ListPlugins(ctx, instanceID, sleep, timeout)
@@ -73,9 +80,12 @@ func dataSourcePluginsRead(ctx context.Context, d *schema.ResourceData, meta any
 		return diag.FromErr(err)
 	}
 
-	plugins := make([]map[string]any, len(data))
-	for k, v := range data {
-		plugins[k] = readPlugin(v)
+	plugins := make([]map[string]any, 0, len(data))
+	for _, v := range data {
+		if onlyEnabled && v["enabled"] != true {
+			continue
+		}
+		plugins = append(plugins, readPlugin(v))
 	}
 
 	if err = d.Set("plugins", plugins); err != nil {
