@@ -9,9 +9,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-// Recording the test benefits from having sleep set to default (10 s).
-// While replaying the test, using lower sleep (1 s), will speed up the test.
-
 // TestAccPlugin_Basic: Enabled plugin, import and disable it.
 func TestAccPlugin_Basic(t *testing.T) {
 	t.Parallel()
@@ -28,7 +25,6 @@ func TestAccPlugin_Basic(t *testing.T) {
 			"InstancePlan":  "bunny-1",
 			"PluginName":    "rabbitmq_mqtt",
 			"PluginEnabled": "true",
-			"PluginSleep":   "1",
 		}
 
 		paramsUpdated = map[string]string{
@@ -37,7 +33,6 @@ func TestAccPlugin_Basic(t *testing.T) {
 			"InstancePlan":  "bunny-1",
 			"PluginName":    "rabbitmq_mqtt",
 			"PluginEnabled": "false",
-			"PluginSleep":   "1",
 		}
 	)
 
@@ -69,6 +64,34 @@ func TestAccPlugin_Basic(t *testing.T) {
 					resource.TestMatchResourceAttr(dataSourcePluginsName, "plugins.#", regexp.MustCompile(`[0-9]`)),
 					resource.TestCheckResourceAttr(dataSourcePluginsName, "timeout", "1800"),
 				),
+			},
+		},
+	})
+}
+
+// TestAccPlugin_Error: Try to enable an invalid plugin, expect job failure error.
+func TestAccPlugin_Error(t *testing.T) {
+	t.Parallel()
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: `
+					resource "cloudamqp_instance" "instance" {
+						name   = "TestAccPlugin_Error"
+						plan   = "bunny-1"
+						region = "amazon-web-services::eu-central-1"
+						tags   = ["vcr-test"]
+					}
+
+					resource "cloudamqp_plugin" "rabbitmq_invalid" {
+						instance_id = cloudamqp_instance.instance.id
+						name        = "rabbitmq_invalid"
+						enabled     = true
+					}
+				`,
+				ExpectError: regexp.MustCompile(`plugins_not_found`),
 			},
 		},
 	})
