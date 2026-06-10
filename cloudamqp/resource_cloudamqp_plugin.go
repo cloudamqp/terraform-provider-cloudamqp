@@ -85,12 +85,22 @@ func resourcePluginCreate(ctx context.Context, d *schema.ResourceData, meta any)
 		timeout    = d.Get("timeout").(int)
 	)
 
-	_, err := api.EnablePlugin(ctx, instanceID, name, sleep, timeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	jobResp, err := api.EnablePlugin(timeoutCtx, instanceID, name)
 	if err != nil {
 		return diag.FromErr(err)
 	}
+
+	_, err = api.PollForJobCompleted(timeoutCtx, int64(instanceID), *jobResp.ID, time.Duration(sleep)*time.Second)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
 	d.SetId(name)
-	return resourcePluginRead(ctx, d, meta)
+	d.Set("enabled", true)
+	return diag.Diagnostics{}
 }
 
 func resourcePluginRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
@@ -164,11 +174,21 @@ func resourcePluginUpdate(ctx context.Context, d *schema.ResourceData, meta any)
 		timeout    = d.Get("timeout").(int)
 	)
 
-	_, err := api.UpdatePlugin(ctx, instanceID, name, enabled, sleep, timeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	jobResp, err := api.UpdatePlugin(timeoutCtx, instanceID, name, enabled)
 	if err != nil {
-		return diag.Errorf("[Failed to update pluign: %v", err)
+		return diag.Errorf("Failed to update plugin: %v", err)
 	}
-	return resourcePluginRead(ctx, d, meta)
+
+	_, err = api.PollForJobCompleted(timeoutCtx, int64(instanceID), *jobResp.ID, time.Duration(sleep)*time.Second)
+	if err != nil {
+		return diag.Errorf("Failed to poll for plugin update job: %v", err)
+	}
+
+	d.Set("enabled", enabled)
+	return diag.Diagnostics{}
 }
 
 func resourcePluginDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
@@ -185,14 +205,23 @@ func resourcePluginDelete(ctx context.Context, d *schema.ResourceData, meta any)
 		return diag.Diagnostics{}
 	}
 
-	if err := api.DeletePlugin(ctx, instanceID, name, sleep, timeout); err != nil {
-		// If instance not found (404), consider deletion successful
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	jobResp, err := api.DeletePlugin(timeoutCtx, instanceID, name)
+	if err != nil {
 		if strings.Contains(err.Error(), "instance not found") || strings.Contains(err.Error(), "status=404") {
 			tflog.Info(ctx, fmt.Sprintf("instance not found during plugin deletion, considering successful: %s", name))
 			return nil
 		}
 		return diag.FromErr(err)
 	}
+
+	_, err = api.PollForJobCompleted(timeoutCtx, int64(instanceID), *jobResp.ID, time.Duration(sleep)*time.Second)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
 	return diag.Diagnostics{}
 }
 

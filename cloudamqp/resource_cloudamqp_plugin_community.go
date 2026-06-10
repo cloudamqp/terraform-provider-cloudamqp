@@ -80,25 +80,22 @@ func resourcePluginCommunityCreate(ctx context.Context, d *schema.ResourceData, 
 		timeout    = d.Get("timeout").(int)
 	)
 
-	data, err := api.ReadPluginCommunity(ctx, instanceID, name, sleep, timeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	jobResp, err := api.InstallPluginCommunity(timeoutCtx, instanceID, name)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	_, err = api.InstallPluginCommunity(ctx, instanceID, name, sleep, timeout)
+	_, err = api.PollForJobCompleted(timeoutCtx, int64(instanceID), *jobResp.ID, time.Duration(sleep)*time.Second)
 	if err != nil {
 		return diag.FromErr(err)
 	}
+
 	d.SetId(name)
-
-	for k, v := range data {
-		if validateCommunityPluginSchemaAttribute(k) {
-			if err = d.Set(k, v); err != nil {
-				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
-			}
-		}
-	}
-	return nil
+	d.Set("enabled", true)
+	return diag.Diagnostics{}
 }
 
 func resourcePluginCommunityRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
@@ -174,11 +171,21 @@ func resourcePluginCommunityUpdate(ctx context.Context, d *schema.ResourceData, 
 		timeout    = d.Get("timeout").(int)
 	)
 
-	_, err := api.UpdatePluginCommunity(ctx, instanceID, name, enabled, sleep, timeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	jobResp, err := api.UpdatePluginCommunity(timeoutCtx, instanceID, name, enabled)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	return resourcePluginCommunityRead(ctx, d, meta)
+
+	_, err = api.PollForJobCompleted(timeoutCtx, int64(instanceID), *jobResp.ID, time.Duration(sleep)*time.Second)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	d.Set("enabled", enabled)
+	return diag.Diagnostics{}
 }
 
 func resourcePluginCommunityDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
@@ -195,14 +202,23 @@ func resourcePluginCommunityDelete(ctx context.Context, d *schema.ResourceData, 
 		return nil
 	}
 
-	if _, err := api.UninstallPluginCommunity(ctx, instanceID, name, sleep, timeout); err != nil {
-		// If instance not found (404), consider deletion successful
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	jobResp, err := api.UninstallPluginCommunity(timeoutCtx, instanceID, name)
+	if err != nil {
 		if strings.Contains(err.Error(), "instance not found") || strings.Contains(err.Error(), "status=404") {
 			tflog.Info(ctx, fmt.Sprintf("instance not found during community plugin deletion, considering successful: %s", name))
 			return nil
 		}
 		return diag.FromErr(err)
 	}
+
+	_, err = api.PollForJobCompleted(timeoutCtx, int64(instanceID), *jobResp.ID, time.Duration(sleep)*time.Second)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
 	return diag.Diagnostics{}
 }
 

@@ -29,7 +29,7 @@ interactions:
         trailer: {}
         content_length: 8216
         uncompressed: false
-        body: '[{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"turtle","price":0,"backend":"postgresql","shared":true},{"name":"ducky","price":0,"backend":"kafka","shared":true},{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"hedgehog","price":5,"backend":"mosquitto","shared":true},{"name":"spider","price":5,"backend":"postgresql","shared":true},{"name":"cat","price":10,"backend":"postgresql","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"koala","price":19,"backend":"mosquitto","shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"butterfly","price":49,"backend":"postgresql","shared":false},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"addons_2-1","price":79,"backend":"addons","shared":false},{"name":"dedicated_2-1","price":95,"backend":"kafka","shared":false},{"name":"butterfly-follower","price":98,"backend":"postgresql","shared":false},{"name":"mouse","price":99,"backend":"kafka","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"mouse-1","price":99,"backend":"kafka","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"leopard","price":99,"backend":"mosquitto","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"addons_4-1","price":158,"backend":"addons","shared":false},{"name":"dedicated_4-1","price":165,"backend":"kafka","shared":false},{"name":"bat-1","price":175,"backend":"kafka","shared":false},{"name":"hippo-follower","price":198,"backend":"postgresql","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"elephant","price":199,"backend":"postgresql","shared":false},{"name":"puffin-5","price":245,"backend":"lavinmq","shared":false},{"name":"dedicated_2-3","price":285,"backend":"kafka","shared":false},{"name":"mouse-3","price":297,"backend":"kafka","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"pug","price":299,"backend":"mosquitto","shared":false},{"name":"elephant-follower","price":398,"backend":"postgresql","shared":false},{"name":"pigeon","price":399,"backend":"postgresql","shared":false},{"name":"dedicated_4-3","price":495,"backend":"kafka","shared":false},{"name":"mouse-5","price":495,"backend":"kafka","shared":false},{"name":"penguin-5","price":495,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"bat","price":499,"backend":"kafka","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"bat-3","price":525,"backend":"kafka","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"mouse-7","price":693,"backend":"kafka","shared":false},{"name":"dolphin","price":749,"backend":"postgresql","shared":false},{"name":"pigeon-follower","price":798,"backend":"postgresql","shared":false},{"name":"bat-5","price":875,"backend":"kafka","shared":false},{"name":"dedicated_8-3","price":885,"backend":"kafka","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"lynx-5","price":995,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"fox","price":999,"backend":"kafka","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"fox-3","price":1005,"backend":"kafka","shared":false},{"name":"dedicated_8-4","price":1180,"backend":"kafka","shared":false},{"name":"bat-7","price":1225,"backend":"kafka","shared":false},{"name":"dedicated_16-3","price":1335,"backend":"kafka","shared":false},{"name":"rat","price":1399,"backend":"postgresql","shared":false},{"name":"dedicated_8-5","price":1475,"backend":"kafka","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"dolphin-follower","price":1498,"backend":"postgresql","shared":false},{"name":"fox-5","price":1675,"backend":"kafka","shared":false},{"name":"dedicated_8-6","price":1770,"backend":"kafka","shared":false},{"name":"dedicated_16-4","price":1780,"backend":"kafka","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-7","price":2065,"backend":"kafka","shared":false},{"name":"dedicated_16-5","price":2225,"backend":"kafka","shared":false},{"name":"fox-7","price":2345,"backend":"kafka","shared":false},{"name":"dedicated_8-8","price":2360,"backend":"kafka","shared":false},{"name":"dedicated_32-3","price":2385,"backend":"kafka","shared":false},{"name":"wolverine-5","price":2495,"backend":"lavinmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-9","price":2655,"backend":"kafka","shared":false},{"name":"dedicated_16-6","price":2670,"backend":"kafka","shared":false},{"name":"rat-follower","price":2798,"backend":"postgresql","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"dedicated_16-7","price":3115,"backend":"kafka","shared":false},{"name":"dedicated_32-4","price":3180,"backend":"kafka","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"dedicated_16-8","price":3560,"backend":"kafka","shared":false},{"name":"dedicated_32-5","price":3975,"backend":"kafka","shared":false},{"name":"dedicated_16-9","price":4005,"backend":"kafka","shared":false},{"name":"dedicated_64-3","price":4185,"backend":"kafka","shared":false},{"name":"dedicated_32-6","price":4770,"backend":"kafka","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"reindeer-5","price":4995,"backend":"lavinmq","shared":false},{"name":"lion-7","price":5250,"backend":"kafka","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-7","price":5565,"backend":"kafka","shared":false},{"name":"dedicated_64-4","price":5580,"backend":"kafka","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-8","price":6360,"backend":"kafka","shared":false},{"name":"dedicated_64-5","price":6975,"backend":"kafka","shared":false},{"name":"dedicated_32-9","price":7155,"backend":"kafka","shared":false},{"name":"dedicated_64-6","price":8370,"backend":"kafka","shared":false},{"name":"penguin-7","price":8400,"backend":"kafka","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"dedicated_64-7","price":9765,"backend":"kafka","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"bear-5","price":9995,"backend":"lavinmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"dedicated_64-8","price":11160,"backend":"kafka","shared":false},{"name":"dedicated_64-9","price":12555,"backend":"kafka","shared":false},{"name":"orca-5","price":14995,"backend":"lavinmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        body: '[{"name":"ducky","price":0,"backend":"kafka","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"turtle","price":0,"backend":"postgresql","shared":true},{"name":"hedgehog","price":5,"backend":"mosquitto","shared":true},{"name":"spider","price":5,"backend":"postgresql","shared":true},{"name":"cat","price":10,"backend":"postgresql","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"koala","price":19,"backend":"mosquitto","shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"butterfly","price":49,"backend":"postgresql","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"addons_2-1","price":79,"backend":"addons","shared":false},{"name":"dedicated_2-1","price":95,"backend":"kafka","shared":false},{"name":"butterfly-follower","price":98,"backend":"postgresql","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"leopard","price":99,"backend":"mosquitto","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"mouse-1","price":99,"backend":"kafka","shared":false},{"name":"mouse","price":99,"backend":"kafka","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"addons_4-1","price":158,"backend":"addons","shared":false},{"name":"dedicated_4-1","price":165,"backend":"kafka","shared":false},{"name":"bat-1","price":175,"backend":"kafka","shared":false},{"name":"hippo-follower","price":198,"backend":"postgresql","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"elephant","price":199,"backend":"postgresql","shared":false},{"name":"puffin-5","price":245,"backend":"lavinmq","shared":false},{"name":"dedicated_2-3","price":285,"backend":"kafka","shared":false},{"name":"mouse-3","price":297,"backend":"kafka","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"pug","price":299,"backend":"mosquitto","shared":false},{"name":"elephant-follower","price":398,"backend":"postgresql","shared":false},{"name":"pigeon","price":399,"backend":"postgresql","shared":false},{"name":"penguin-5","price":495,"backend":"lavinmq","shared":false},{"name":"mouse-5","price":495,"backend":"kafka","shared":false},{"name":"dedicated_4-3","price":495,"backend":"kafka","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"bat","price":499,"backend":"kafka","shared":false},{"name":"bat-3","price":525,"backend":"kafka","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"mouse-7","price":693,"backend":"kafka","shared":false},{"name":"dolphin","price":749,"backend":"postgresql","shared":false},{"name":"pigeon-follower","price":798,"backend":"postgresql","shared":false},{"name":"bat-5","price":875,"backend":"kafka","shared":false},{"name":"dedicated_8-3","price":885,"backend":"kafka","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"lynx-5","price":995,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"fox","price":999,"backend":"kafka","shared":false},{"name":"fox-3","price":1005,"backend":"kafka","shared":false},{"name":"dedicated_8-4","price":1180,"backend":"kafka","shared":false},{"name":"bat-7","price":1225,"backend":"kafka","shared":false},{"name":"dedicated_16-3","price":1335,"backend":"kafka","shared":false},{"name":"rat","price":1399,"backend":"postgresql","shared":false},{"name":"dedicated_8-5","price":1475,"backend":"kafka","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"dolphin-follower","price":1498,"backend":"postgresql","shared":false},{"name":"fox-5","price":1675,"backend":"kafka","shared":false},{"name":"dedicated_8-6","price":1770,"backend":"kafka","shared":false},{"name":"dedicated_16-4","price":1780,"backend":"kafka","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-7","price":2065,"backend":"kafka","shared":false},{"name":"dedicated_16-5","price":2225,"backend":"kafka","shared":false},{"name":"fox-7","price":2345,"backend":"kafka","shared":false},{"name":"dedicated_8-8","price":2360,"backend":"kafka","shared":false},{"name":"dedicated_32-3","price":2385,"backend":"kafka","shared":false},{"name":"wolverine-5","price":2495,"backend":"lavinmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-9","price":2655,"backend":"kafka","shared":false},{"name":"dedicated_16-6","price":2670,"backend":"kafka","shared":false},{"name":"rat-follower","price":2798,"backend":"postgresql","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"dedicated_16-7","price":3115,"backend":"kafka","shared":false},{"name":"dedicated_32-4","price":3180,"backend":"kafka","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"dedicated_16-8","price":3560,"backend":"kafka","shared":false},{"name":"dedicated_32-5","price":3975,"backend":"kafka","shared":false},{"name":"dedicated_16-9","price":4005,"backend":"kafka","shared":false},{"name":"dedicated_64-3","price":4185,"backend":"kafka","shared":false},{"name":"dedicated_32-6","price":4770,"backend":"kafka","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"reindeer-5","price":4995,"backend":"lavinmq","shared":false},{"name":"lion-7","price":5250,"backend":"kafka","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-7","price":5565,"backend":"kafka","shared":false},{"name":"dedicated_64-4","price":5580,"backend":"kafka","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"dedicated_32-8","price":6360,"backend":"kafka","shared":false},{"name":"dedicated_64-5","price":6975,"backend":"kafka","shared":false},{"name":"dedicated_32-9","price":7155,"backend":"kafka","shared":false},{"name":"dedicated_64-6","price":8370,"backend":"kafka","shared":false},{"name":"penguin-7","price":8400,"backend":"kafka","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"dedicated_64-7","price":9765,"backend":"kafka","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"bear-5","price":9995,"backend":"lavinmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"dedicated_64-8","price":11160,"backend":"kafka","shared":false},{"name":"dedicated_64-9","price":12555,"backend":"kafka","shared":false},{"name":"orca-5","price":14995,"backend":"lavinmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
         headers:
             Cache-Control:
                 - no-cache
@@ -48,10 +48,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - f1d850b9-95ec-4cd7-a62c-d17bfcf1f775
+                - 0d34b1fb-6abb-433a-8c77-b6604273386b
         status: 200 OK
         code: 200
-        duration: 10.295674ms
+        duration: 9.909862ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -99,10 +99,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - ef680b76-3ec7-4cf7-b38a-860b1204404a
+                - 9c98e9b0-4bd5-4a3b-82f7-b3d7b21947c7
         status: 200 OK
         code: 200
-        duration: 4.847817ms
+        duration: 7.948872ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -131,7 +131,7 @@ interactions:
         trailer: {}
         content_length: 8216
         uncompressed: false
-        body: '[{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"turtle","price":0,"backend":"postgresql","shared":true},{"name":"ducky","price":0,"backend":"kafka","shared":true},{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"hedgehog","price":5,"backend":"mosquitto","shared":true},{"name":"spider","price":5,"backend":"postgresql","shared":true},{"name":"cat","price":10,"backend":"postgresql","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"koala","price":19,"backend":"mosquitto","shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"butterfly","price":49,"backend":"postgresql","shared":false},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"addons_2-1","price":79,"backend":"addons","shared":false},{"name":"dedicated_2-1","price":95,"backend":"kafka","shared":false},{"name":"butterfly-follower","price":98,"backend":"postgresql","shared":false},{"name":"mouse","price":99,"backend":"kafka","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"mouse-1","price":99,"backend":"kafka","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"leopard","price":99,"backend":"mosquitto","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"addons_4-1","price":158,"backend":"addons","shared":false},{"name":"dedicated_4-1","price":165,"backend":"kafka","shared":false},{"name":"bat-1","price":175,"backend":"kafka","shared":false},{"name":"hippo-follower","price":198,"backend":"postgresql","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"elephant","price":199,"backend":"postgresql","shared":false},{"name":"puffin-5","price":245,"backend":"lavinmq","shared":false},{"name":"dedicated_2-3","price":285,"backend":"kafka","shared":false},{"name":"mouse-3","price":297,"backend":"kafka","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"pug","price":299,"backend":"mosquitto","shared":false},{"name":"elephant-follower","price":398,"backend":"postgresql","shared":false},{"name":"pigeon","price":399,"backend":"postgresql","shared":false},{"name":"dedicated_4-3","price":495,"backend":"kafka","shared":false},{"name":"mouse-5","price":495,"backend":"kafka","shared":false},{"name":"penguin-5","price":495,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"bat","price":499,"backend":"kafka","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"bat-3","price":525,"backend":"kafka","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"mouse-7","price":693,"backend":"kafka","shared":false},{"name":"dolphin","price":749,"backend":"postgresql","shared":false},{"name":"pigeon-follower","price":798,"backend":"postgresql","shared":false},{"name":"bat-5","price":875,"backend":"kafka","shared":false},{"name":"dedicated_8-3","price":885,"backend":"kafka","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"lynx-5","price":995,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"fox","price":999,"backend":"kafka","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"fox-3","price":1005,"backend":"kafka","shared":false},{"name":"dedicated_8-4","price":1180,"backend":"kafka","shared":false},{"name":"bat-7","price":1225,"backend":"kafka","shared":false},{"name":"dedicated_16-3","price":1335,"backend":"kafka","shared":false},{"name":"rat","price":1399,"backend":"postgresql","shared":false},{"name":"dedicated_8-5","price":1475,"backend":"kafka","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"dolphin-follower","price":1498,"backend":"postgresql","shared":false},{"name":"fox-5","price":1675,"backend":"kafka","shared":false},{"name":"dedicated_8-6","price":1770,"backend":"kafka","shared":false},{"name":"dedicated_16-4","price":1780,"backend":"kafka","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-7","price":2065,"backend":"kafka","shared":false},{"name":"dedicated_16-5","price":2225,"backend":"kafka","shared":false},{"name":"fox-7","price":2345,"backend":"kafka","shared":false},{"name":"dedicated_8-8","price":2360,"backend":"kafka","shared":false},{"name":"dedicated_32-3","price":2385,"backend":"kafka","shared":false},{"name":"wolverine-5","price":2495,"backend":"lavinmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-9","price":2655,"backend":"kafka","shared":false},{"name":"dedicated_16-6","price":2670,"backend":"kafka","shared":false},{"name":"rat-follower","price":2798,"backend":"postgresql","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"dedicated_16-7","price":3115,"backend":"kafka","shared":false},{"name":"dedicated_32-4","price":3180,"backend":"kafka","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"dedicated_16-8","price":3560,"backend":"kafka","shared":false},{"name":"dedicated_32-5","price":3975,"backend":"kafka","shared":false},{"name":"dedicated_16-9","price":4005,"backend":"kafka","shared":false},{"name":"dedicated_64-3","price":4185,"backend":"kafka","shared":false},{"name":"dedicated_32-6","price":4770,"backend":"kafka","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"reindeer-5","price":4995,"backend":"lavinmq","shared":false},{"name":"lion-7","price":5250,"backend":"kafka","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-7","price":5565,"backend":"kafka","shared":false},{"name":"dedicated_64-4","price":5580,"backend":"kafka","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-8","price":6360,"backend":"kafka","shared":false},{"name":"dedicated_64-5","price":6975,"backend":"kafka","shared":false},{"name":"dedicated_32-9","price":7155,"backend":"kafka","shared":false},{"name":"dedicated_64-6","price":8370,"backend":"kafka","shared":false},{"name":"penguin-7","price":8400,"backend":"kafka","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"dedicated_64-7","price":9765,"backend":"kafka","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"bear-5","price":9995,"backend":"lavinmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"dedicated_64-8","price":11160,"backend":"kafka","shared":false},{"name":"dedicated_64-9","price":12555,"backend":"kafka","shared":false},{"name":"orca-5","price":14995,"backend":"lavinmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        body: '[{"name":"ducky","price":0,"backend":"kafka","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"turtle","price":0,"backend":"postgresql","shared":true},{"name":"hedgehog","price":5,"backend":"mosquitto","shared":true},{"name":"spider","price":5,"backend":"postgresql","shared":true},{"name":"cat","price":10,"backend":"postgresql","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"koala","price":19,"backend":"mosquitto","shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"butterfly","price":49,"backend":"postgresql","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"addons_2-1","price":79,"backend":"addons","shared":false},{"name":"dedicated_2-1","price":95,"backend":"kafka","shared":false},{"name":"butterfly-follower","price":98,"backend":"postgresql","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"leopard","price":99,"backend":"mosquitto","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"mouse-1","price":99,"backend":"kafka","shared":false},{"name":"mouse","price":99,"backend":"kafka","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"addons_4-1","price":158,"backend":"addons","shared":false},{"name":"dedicated_4-1","price":165,"backend":"kafka","shared":false},{"name":"bat-1","price":175,"backend":"kafka","shared":false},{"name":"hippo-follower","price":198,"backend":"postgresql","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"elephant","price":199,"backend":"postgresql","shared":false},{"name":"puffin-5","price":245,"backend":"lavinmq","shared":false},{"name":"dedicated_2-3","price":285,"backend":"kafka","shared":false},{"name":"mouse-3","price":297,"backend":"kafka","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"pug","price":299,"backend":"mosquitto","shared":false},{"name":"elephant-follower","price":398,"backend":"postgresql","shared":false},{"name":"pigeon","price":399,"backend":"postgresql","shared":false},{"name":"penguin-5","price":495,"backend":"lavinmq","shared":false},{"name":"mouse-5","price":495,"backend":"kafka","shared":false},{"name":"dedicated_4-3","price":495,"backend":"kafka","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"bat","price":499,"backend":"kafka","shared":false},{"name":"bat-3","price":525,"backend":"kafka","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"mouse-7","price":693,"backend":"kafka","shared":false},{"name":"dolphin","price":749,"backend":"postgresql","shared":false},{"name":"pigeon-follower","price":798,"backend":"postgresql","shared":false},{"name":"bat-5","price":875,"backend":"kafka","shared":false},{"name":"dedicated_8-3","price":885,"backend":"kafka","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"lynx-5","price":995,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"fox","price":999,"backend":"kafka","shared":false},{"name":"fox-3","price":1005,"backend":"kafka","shared":false},{"name":"dedicated_8-4","price":1180,"backend":"kafka","shared":false},{"name":"bat-7","price":1225,"backend":"kafka","shared":false},{"name":"dedicated_16-3","price":1335,"backend":"kafka","shared":false},{"name":"rat","price":1399,"backend":"postgresql","shared":false},{"name":"dedicated_8-5","price":1475,"backend":"kafka","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"dolphin-follower","price":1498,"backend":"postgresql","shared":false},{"name":"fox-5","price":1675,"backend":"kafka","shared":false},{"name":"dedicated_8-6","price":1770,"backend":"kafka","shared":false},{"name":"dedicated_16-4","price":1780,"backend":"kafka","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-7","price":2065,"backend":"kafka","shared":false},{"name":"dedicated_16-5","price":2225,"backend":"kafka","shared":false},{"name":"fox-7","price":2345,"backend":"kafka","shared":false},{"name":"dedicated_8-8","price":2360,"backend":"kafka","shared":false},{"name":"dedicated_32-3","price":2385,"backend":"kafka","shared":false},{"name":"wolverine-5","price":2495,"backend":"lavinmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-9","price":2655,"backend":"kafka","shared":false},{"name":"dedicated_16-6","price":2670,"backend":"kafka","shared":false},{"name":"rat-follower","price":2798,"backend":"postgresql","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"dedicated_16-7","price":3115,"backend":"kafka","shared":false},{"name":"dedicated_32-4","price":3180,"backend":"kafka","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"dedicated_16-8","price":3560,"backend":"kafka","shared":false},{"name":"dedicated_32-5","price":3975,"backend":"kafka","shared":false},{"name":"dedicated_16-9","price":4005,"backend":"kafka","shared":false},{"name":"dedicated_64-3","price":4185,"backend":"kafka","shared":false},{"name":"dedicated_32-6","price":4770,"backend":"kafka","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"reindeer-5","price":4995,"backend":"lavinmq","shared":false},{"name":"lion-7","price":5250,"backend":"kafka","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-7","price":5565,"backend":"kafka","shared":false},{"name":"dedicated_64-4","price":5580,"backend":"kafka","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"dedicated_32-8","price":6360,"backend":"kafka","shared":false},{"name":"dedicated_64-5","price":6975,"backend":"kafka","shared":false},{"name":"dedicated_32-9","price":7155,"backend":"kafka","shared":false},{"name":"dedicated_64-6","price":8370,"backend":"kafka","shared":false},{"name":"penguin-7","price":8400,"backend":"kafka","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"dedicated_64-7","price":9765,"backend":"kafka","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"bear-5","price":9995,"backend":"lavinmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"dedicated_64-8","price":11160,"backend":"kafka","shared":false},{"name":"dedicated_64-9","price":12555,"backend":"kafka","shared":false},{"name":"orca-5","price":14995,"backend":"lavinmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
         headers:
             Cache-Control:
                 - no-cache
@@ -150,10 +150,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - c6cf44ea-7896-46c2-9505-37c907a0eca0
+                - 0edc5d4b-70e4-4cd0-9f41-0c6fd697043e
         status: 200 OK
         code: 200
-        duration: 8.507901ms
+        duration: 5.394442ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -201,10 +201,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - e2c53406-4de9-472d-a15e-5d144eee63a0
+                - 66e73aca-8f35-48ab-9d81-7537fe73a598
         status: 200 OK
         code: 200
-        duration: 7.286883ms
+        duration: 3.944995ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -233,7 +233,7 @@ interactions:
         trailer: {}
         content_length: 8216
         uncompressed: false
-        body: '[{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"turtle","price":0,"backend":"postgresql","shared":true},{"name":"ducky","price":0,"backend":"kafka","shared":true},{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"hedgehog","price":5,"backend":"mosquitto","shared":true},{"name":"spider","price":5,"backend":"postgresql","shared":true},{"name":"cat","price":10,"backend":"postgresql","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"koala","price":19,"backend":"mosquitto","shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"butterfly","price":49,"backend":"postgresql","shared":false},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"addons_2-1","price":79,"backend":"addons","shared":false},{"name":"dedicated_2-1","price":95,"backend":"kafka","shared":false},{"name":"butterfly-follower","price":98,"backend":"postgresql","shared":false},{"name":"mouse","price":99,"backend":"kafka","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"mouse-1","price":99,"backend":"kafka","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"leopard","price":99,"backend":"mosquitto","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"addons_4-1","price":158,"backend":"addons","shared":false},{"name":"dedicated_4-1","price":165,"backend":"kafka","shared":false},{"name":"bat-1","price":175,"backend":"kafka","shared":false},{"name":"hippo-follower","price":198,"backend":"postgresql","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"elephant","price":199,"backend":"postgresql","shared":false},{"name":"puffin-5","price":245,"backend":"lavinmq","shared":false},{"name":"dedicated_2-3","price":285,"backend":"kafka","shared":false},{"name":"mouse-3","price":297,"backend":"kafka","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"pug","price":299,"backend":"mosquitto","shared":false},{"name":"elephant-follower","price":398,"backend":"postgresql","shared":false},{"name":"pigeon","price":399,"backend":"postgresql","shared":false},{"name":"dedicated_4-3","price":495,"backend":"kafka","shared":false},{"name":"mouse-5","price":495,"backend":"kafka","shared":false},{"name":"penguin-5","price":495,"backend":"lavinmq","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"bat","price":499,"backend":"kafka","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"bat-3","price":525,"backend":"kafka","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"mouse-7","price":693,"backend":"kafka","shared":false},{"name":"dolphin","price":749,"backend":"postgresql","shared":false},{"name":"pigeon-follower","price":798,"backend":"postgresql","shared":false},{"name":"bat-5","price":875,"backend":"kafka","shared":false},{"name":"dedicated_8-3","price":885,"backend":"kafka","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"lynx-5","price":995,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"fox","price":999,"backend":"kafka","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"fox-3","price":1005,"backend":"kafka","shared":false},{"name":"dedicated_8-4","price":1180,"backend":"kafka","shared":false},{"name":"bat-7","price":1225,"backend":"kafka","shared":false},{"name":"dedicated_16-3","price":1335,"backend":"kafka","shared":false},{"name":"rat","price":1399,"backend":"postgresql","shared":false},{"name":"dedicated_8-5","price":1475,"backend":"kafka","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"dolphin-follower","price":1498,"backend":"postgresql","shared":false},{"name":"fox-5","price":1675,"backend":"kafka","shared":false},{"name":"dedicated_8-6","price":1770,"backend":"kafka","shared":false},{"name":"dedicated_16-4","price":1780,"backend":"kafka","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-7","price":2065,"backend":"kafka","shared":false},{"name":"dedicated_16-5","price":2225,"backend":"kafka","shared":false},{"name":"fox-7","price":2345,"backend":"kafka","shared":false},{"name":"dedicated_8-8","price":2360,"backend":"kafka","shared":false},{"name":"dedicated_32-3","price":2385,"backend":"kafka","shared":false},{"name":"wolverine-5","price":2495,"backend":"lavinmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-9","price":2655,"backend":"kafka","shared":false},{"name":"dedicated_16-6","price":2670,"backend":"kafka","shared":false},{"name":"rat-follower","price":2798,"backend":"postgresql","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"dedicated_16-7","price":3115,"backend":"kafka","shared":false},{"name":"dedicated_32-4","price":3180,"backend":"kafka","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"dedicated_16-8","price":3560,"backend":"kafka","shared":false},{"name":"dedicated_32-5","price":3975,"backend":"kafka","shared":false},{"name":"dedicated_16-9","price":4005,"backend":"kafka","shared":false},{"name":"dedicated_64-3","price":4185,"backend":"kafka","shared":false},{"name":"dedicated_32-6","price":4770,"backend":"kafka","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"reindeer-5","price":4995,"backend":"lavinmq","shared":false},{"name":"lion-7","price":5250,"backend":"kafka","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-7","price":5565,"backend":"kafka","shared":false},{"name":"dedicated_64-4","price":5580,"backend":"kafka","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-8","price":6360,"backend":"kafka","shared":false},{"name":"dedicated_64-5","price":6975,"backend":"kafka","shared":false},{"name":"dedicated_32-9","price":7155,"backend":"kafka","shared":false},{"name":"dedicated_64-6","price":8370,"backend":"kafka","shared":false},{"name":"penguin-7","price":8400,"backend":"kafka","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"dedicated_64-7","price":9765,"backend":"kafka","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"bear-5","price":9995,"backend":"lavinmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"dedicated_64-8","price":11160,"backend":"kafka","shared":false},{"name":"dedicated_64-9","price":12555,"backend":"kafka","shared":false},{"name":"orca-5","price":14995,"backend":"lavinmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
+        body: '[{"name":"ducky","price":0,"backend":"kafka","shared":true},{"name":"vpn","price":0,"backend":"vpn","shared":false},{"name":"lemur","price":0,"backend":"rabbitmq","shared":true},{"name":"lemming","price":0,"backend":"lavinmq","shared":true},{"name":"turtle","price":0,"backend":"postgresql","shared":true},{"name":"hedgehog","price":5,"backend":"mosquitto","shared":true},{"name":"spider","price":5,"backend":"postgresql","shared":true},{"name":"cat","price":10,"backend":"postgresql","shared":true},{"name":"tiger","price":19,"backend":"rabbitmq","shared":true},{"name":"koala","price":19,"backend":"mosquitto","shared":false},{"name":"ermine","price":19,"backend":"lavinmq","shared":true},{"name":"puffin-1","price":49,"backend":"lavinmq","shared":false},{"name":"butterfly","price":49,"backend":"postgresql","shared":false},{"name":"squirrel-1","price":50,"backend":"rabbitmq","shared":false},{"name":"addons_2-1","price":79,"backend":"addons","shared":false},{"name":"dedicated_2-1","price":95,"backend":"kafka","shared":false},{"name":"butterfly-follower","price":98,"backend":"postgresql","shared":false},{"name":"penguin-1","price":99,"backend":"lavinmq","shared":false},{"name":"bunny-1","price":99,"backend":"rabbitmq","shared":false},{"name":"leopard","price":99,"backend":"mosquitto","shared":false},{"name":"vpc","price":99,"backend":"vpc","shared":false},{"name":"mouse-1","price":99,"backend":"kafka","shared":false},{"name":"mouse","price":99,"backend":"kafka","shared":false},{"name":"puffin-3","price":147,"backend":"lavinmq","shared":false},{"name":"fox-1","price":149,"backend":"lavinmq","shared":false},{"name":"addons_4-1","price":158,"backend":"addons","shared":false},{"name":"dedicated_4-1","price":165,"backend":"kafka","shared":false},{"name":"bat-1","price":175,"backend":"kafka","shared":false},{"name":"hippo-follower","price":198,"backend":"postgresql","shared":false},{"name":"hare-1","price":199,"backend":"rabbitmq","shared":false},{"name":"lynx-1","price":199,"backend":"lavinmq","shared":false},{"name":"elephant","price":199,"backend":"postgresql","shared":false},{"name":"puffin-5","price":245,"backend":"lavinmq","shared":false},{"name":"dedicated_2-3","price":285,"backend":"kafka","shared":false},{"name":"mouse-3","price":297,"backend":"kafka","shared":false},{"name":"penguin-3","price":297,"backend":"lavinmq","shared":false},{"name":"bunny-3","price":297,"backend":"rabbitmq","shared":false},{"name":"rabbit-1","price":299,"backend":"rabbitmq","shared":false},{"name":"pug","price":299,"backend":"mosquitto","shared":false},{"name":"elephant-follower","price":398,"backend":"postgresql","shared":false},{"name":"pigeon","price":399,"backend":"postgresql","shared":false},{"name":"penguin-5","price":495,"backend":"lavinmq","shared":false},{"name":"mouse-5","price":495,"backend":"kafka","shared":false},{"name":"dedicated_4-3","price":495,"backend":"kafka","shared":false},{"name":"panda-1","price":499,"backend":"rabbitmq","shared":false},{"name":"wolverine-1","price":499,"backend":"lavinmq","shared":false},{"name":"leopard-1","price":499,"backend":"lavinmq","shared":false},{"name":"bat","price":499,"backend":"kafka","shared":false},{"name":"bat-3","price":525,"backend":"kafka","shared":false},{"name":"lynx-3","price":597,"backend":"lavinmq","shared":false},{"name":"hare-3","price":597,"backend":"rabbitmq","shared":false},{"name":"mouse-7","price":693,"backend":"kafka","shared":false},{"name":"dolphin","price":749,"backend":"postgresql","shared":false},{"name":"pigeon-follower","price":798,"backend":"postgresql","shared":false},{"name":"bat-5","price":875,"backend":"kafka","shared":false},{"name":"dedicated_8-3","price":885,"backend":"kafka","shared":false},{"name":"rabbit-3","price":897,"backend":"rabbitmq","shared":false},{"name":"lynx-5","price":995,"backend":"lavinmq","shared":false},{"name":"ape-1","price":999,"backend":"rabbitmq","shared":false},{"name":"reindeer-1","price":999,"backend":"lavinmq","shared":false},{"name":"fox","price":999,"backend":"kafka","shared":false},{"name":"fox-3","price":1005,"backend":"kafka","shared":false},{"name":"dedicated_8-4","price":1180,"backend":"kafka","shared":false},{"name":"bat-7","price":1225,"backend":"kafka","shared":false},{"name":"dedicated_16-3","price":1335,"backend":"kafka","shared":false},{"name":"rat","price":1399,"backend":"postgresql","shared":false},{"name":"dedicated_8-5","price":1475,"backend":"kafka","shared":false},{"name":"rabbit-5","price":1495,"backend":"rabbitmq","shared":false},{"name":"wolverine-3","price":1497,"backend":"lavinmq","shared":false},{"name":"panda-3","price":1497,"backend":"rabbitmq","shared":false},{"name":"dolphin-follower","price":1498,"backend":"postgresql","shared":false},{"name":"fox-5","price":1675,"backend":"kafka","shared":false},{"name":"dedicated_8-6","price":1770,"backend":"kafka","shared":false},{"name":"dedicated_16-4","price":1780,"backend":"kafka","shared":false},{"name":"bear-1","price":1999,"backend":"lavinmq","shared":false},{"name":"hippo-1","price":1999,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-7","price":2065,"backend":"kafka","shared":false},{"name":"dedicated_16-5","price":2225,"backend":"kafka","shared":false},{"name":"fox-7","price":2345,"backend":"kafka","shared":false},{"name":"dedicated_8-8","price":2360,"backend":"kafka","shared":false},{"name":"dedicated_32-3","price":2385,"backend":"kafka","shared":false},{"name":"wolverine-5","price":2495,"backend":"lavinmq","shared":false},{"name":"panda-5","price":2495,"backend":"rabbitmq","shared":false},{"name":"dedicated_8-9","price":2655,"backend":"kafka","shared":false},{"name":"dedicated_16-6","price":2670,"backend":"kafka","shared":false},{"name":"rat-follower","price":2798,"backend":"postgresql","shared":false},{"name":"ape-3","price":2997,"backend":"rabbitmq","shared":false},{"name":"reindeer-3","price":2997,"backend":"lavinmq","shared":false},{"name":"orca-1","price":2999,"backend":"lavinmq","shared":false},{"name":"dedicated_16-7","price":3115,"backend":"kafka","shared":false},{"name":"dedicated_32-4","price":3180,"backend":"kafka","shared":false},{"name":"lion-1","price":3499,"backend":"rabbitmq","shared":false},{"name":"dedicated_16-8","price":3560,"backend":"kafka","shared":false},{"name":"dedicated_32-5","price":3975,"backend":"kafka","shared":false},{"name":"dedicated_16-9","price":4005,"backend":"kafka","shared":false},{"name":"dedicated_64-3","price":4185,"backend":"kafka","shared":false},{"name":"dedicated_32-6","price":4770,"backend":"kafka","shared":false},{"name":"ape-5","price":4995,"backend":"rabbitmq","shared":false},{"name":"reindeer-5","price":4995,"backend":"lavinmq","shared":false},{"name":"lion-7","price":5250,"backend":"kafka","shared":false},{"name":"rhino-1","price":5499,"backend":"rabbitmq","shared":false},{"name":"dedicated_32-7","price":5565,"backend":"kafka","shared":false},{"name":"dedicated_64-4","price":5580,"backend":"kafka","shared":false},{"name":"hippo-3","price":5997,"backend":"rabbitmq","shared":false},{"name":"bear-3","price":5997,"backend":"lavinmq","shared":false},{"name":"dedicated_32-8","price":6360,"backend":"kafka","shared":false},{"name":"dedicated_64-5","price":6975,"backend":"kafka","shared":false},{"name":"dedicated_32-9","price":7155,"backend":"kafka","shared":false},{"name":"dedicated_64-6","price":8370,"backend":"kafka","shared":false},{"name":"penguin-7","price":8400,"backend":"kafka","shared":false},{"name":"orca-3","price":8997,"backend":"lavinmq","shared":false},{"name":"dedicated_64-7","price":9765,"backend":"kafka","shared":false},{"name":"hippo-5","price":9995,"backend":"rabbitmq","shared":false},{"name":"bear-5","price":9995,"backend":"lavinmq","shared":false},{"name":"lion-3","price":10497,"backend":"rabbitmq","shared":false},{"name":"dedicated_64-8","price":11160,"backend":"kafka","shared":false},{"name":"dedicated_64-9","price":12555,"backend":"kafka","shared":false},{"name":"orca-5","price":14995,"backend":"lavinmq","shared":false},{"name":"rhino-3","price":16497,"backend":"rabbitmq","shared":false},{"name":"lion-5","price":17495,"backend":"rabbitmq","shared":false},{"name":"rhino-5","price":27495,"backend":"rabbitmq","shared":false}]'
         headers:
             Cache-Control:
                 - no-cache
@@ -252,10 +252,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 95f5e1ba-2ef6-45da-bd2e-df7455fa1d6a
+                - 87195a28-66ac-40aa-a63d-dd6632f5372a
         status: 200 OK
         code: 200
-        duration: 9.361432ms
+        duration: 8.793185ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -303,23 +303,23 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 34c023e7-f003-44fb-a68a-489ad68c533b
+                - c255c7be-48c7-4e8d-9786-a244817c79e5
         status: 200 OK
         code: 200
-        duration: 3.18996ms
+        duration: 3.921492ms
     - id: 6
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 164
+        content_length: 162
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"TestAccPluginCommunity_Basic","no_default_alarms":false,"plan":"bunny-1","preferred_az":[],"region":"amazon-web-services::us-east-1","tags":["terraform"]}
+            {"name":"TestAccPluginBatch_Basic","no_default_alarms":false,"plan":"bunny-1","preferred_az":[],"region":"amazon-web-services::eu-central-1","tags":["vcr-test"]}
         form: {}
         headers:
             Authorization:
@@ -338,7 +338,7 @@ interactions:
         trailer: {}
         content_length: 251
         uncompressed: false
-        body: '{"id":1263,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"27059c1e-0147-40d1-8153-622a6f9b16fc","url":"amqps://eikrclhe:***@dev-funny-gray-rhino.rmq3.dev.cloudamqp.com/eikrclhe"}'
+        body: '{"id":1244,"message":"Your dedicated instance will be available within a couple of minutes","apikey":"818fd849-9d70-4a7b-bc12-049c693273f4","url":"amqps://jhytleho:***@dev-happy-gold-hyena.rmq7.dev.cloudamqp.com/jhytleho"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -357,10 +357,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 9c2d727e-6721-4dba-a1d2-3ec654998633
+                - 032e86a8-1b19-4e28-8ccf-dcb11302f38c
         status: 200 OK
         code: 200
-        duration: 75.221393ms
+        duration: 79.678158ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -379,7 +379,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263
+        url: http://localhost:9393/api/instances/1244
         method: GET
       response:
         proto: HTTP/1.1
@@ -387,14 +387,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 784
+        content_length: 782
         uncompressed: false
-        body: '{"id":1263,"name":"TestAccPluginCommunity_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"bc439403-139f-4110-99ac-a971e761841a","url":"amqps://eikrclhe:***@dev-funny-gray-rhino.rmq3.dev.cloudamqp.com/eikrclhe","ready":true,"apikey":"27059c1e-0147-40d1-8153-622a6f9b16fc","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://eikrclhe:***@dev-funny-gray-rhino.rmq3.dev.cloudamqp.com/eikrclhe","internal":"amqp://eikrclhe:***@dev-funny-gray-rhino.in.rmq3.dev.cloudamqp.com/eikrclhe"},"rmq_version":"4.2.6","hostname_external":"dev-funny-gray-rhino.rmq3.dev.cloudamqp.com","hostname_internal":"dev-funny-gray-rhino.in.rmq3.dev.cloudamqp.com"}'
+        body: '{"id":1244,"name":"TestAccPluginBatch_Basic","plan":"bunny-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"fbf6c48f-b274-4320-a098-cf3c809bb3f7","url":"amqps://jhytleho:***@dev-happy-gold-hyena.rmq7.dev.cloudamqp.com/jhytleho","ready":true,"apikey":"818fd849-9d70-4a7b-bc12-049c693273f4","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://jhytleho:***@dev-happy-gold-hyena.rmq7.dev.cloudamqp.com/jhytleho","internal":"amqp://jhytleho:***@dev-happy-gold-hyena.in.rmq7.dev.cloudamqp.com/jhytleho"},"rmq_version":"4.2.6","hostname_external":"dev-happy-gold-hyena.rmq7.dev.cloudamqp.com","hostname_internal":"dev-happy-gold-hyena.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "784"
+                - "782"
             Content-Type:
                 - application/json
             Nel:
@@ -408,10 +408,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 02666982-cc90-4419-8fee-3b9ffe5a1e01
+                - 5e4140ed-67d7-4bb7-b6b6-a34952610139
         status: 200 OK
         code: 200
-        duration: 23.27852ms
+        duration: 24.47652ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -430,7 +430,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263
+        url: http://localhost:9393/api/instances/1244
         method: GET
       response:
         proto: HTTP/1.1
@@ -438,14 +438,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 784
+        content_length: 782
         uncompressed: false
-        body: '{"id":1263,"name":"TestAccPluginCommunity_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"bc439403-139f-4110-99ac-a971e761841a","url":"amqps://eikrclhe:***@dev-funny-gray-rhino.rmq3.dev.cloudamqp.com/eikrclhe","ready":true,"apikey":"27059c1e-0147-40d1-8153-622a6f9b16fc","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://eikrclhe:***@dev-funny-gray-rhino.rmq3.dev.cloudamqp.com/eikrclhe","internal":"amqp://eikrclhe:***@dev-funny-gray-rhino.in.rmq3.dev.cloudamqp.com/eikrclhe"},"rmq_version":"4.2.6","hostname_external":"dev-funny-gray-rhino.rmq3.dev.cloudamqp.com","hostname_internal":"dev-funny-gray-rhino.in.rmq3.dev.cloudamqp.com"}'
+        body: '{"id":1244,"name":"TestAccPluginBatch_Basic","plan":"bunny-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"fbf6c48f-b274-4320-a098-cf3c809bb3f7","url":"amqps://jhytleho:***@dev-happy-gold-hyena.rmq7.dev.cloudamqp.com/jhytleho","ready":true,"apikey":"818fd849-9d70-4a7b-bc12-049c693273f4","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://jhytleho:***@dev-happy-gold-hyena.rmq7.dev.cloudamqp.com/jhytleho","internal":"amqp://jhytleho:***@dev-happy-gold-hyena.in.rmq7.dev.cloudamqp.com/jhytleho"},"rmq_version":"4.2.6","hostname_external":"dev-happy-gold-hyena.rmq7.dev.cloudamqp.com","hostname_internal":"dev-happy-gold-hyena.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "784"
+                - "782"
             Content-Type:
                 - application/json
             Nel:
@@ -459,23 +459,23 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - c980781d-1896-4427-950c-2d2d87bc8fec
+                - df3b2798-a131-4ac0-aec2-7fe3c9e91200
         status: 200 OK
         code: 200
-        duration: 17.111807ms
+        duration: 16.407681ms
     - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 52
+        content_length: 65
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"plugin_name":"rabbitmq_delayed_message_exchange"}
+            {"enable":["rabbitmq_web_mqtt","rabbitmq_stomp","rabbitmq_top"]}
         form: {}
         headers:
             Authorization:
@@ -484,7 +484,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/plugins/community?async=true
+        url: http://localhost:9393/api/instances/1244/plugins/batch
         method: POST
       response:
         proto: HTTP/1.1
@@ -494,7 +494,7 @@ interactions:
         trailer: {}
         content_length: 49
         uncompressed: false
-        body: '{"job_id":"aa05db77-6c1b-47da-bc4a-3517f65387f4"}'
+        body: '{"job_id":"15601289-824c-4cfe-9a5f-df60b90813fb"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -513,10 +513,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 105ecda6-ea6d-4927-9a9e-c5edeb7144dc
+                - 7439b69a-1844-4046-9ab7-179bb154c9eb
         status: 202 Accepted
         code: 202
-        duration: 41.143155ms
+        duration: 28.340861ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -535,7 +535,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/plugins/community
+        url: http://localhost:9393/api/instances/1244/jobs/15601289-824c-4cfe-9a5f-df60b90813fb
         method: GET
       response:
         proto: HTTP/1.1
@@ -543,14 +543,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 549
+        content_length: 288
         uncompressed: false
-        body: '[{"name":"rabbitmq_lvc_exchange","description":"The last value exchange acts like a direct exchange (binding keys are compared for equality with routing keys); but it also keeps track of the last value that was published with each routing key, and when a queue is bound, it automatically enqueues the last value for the binding key.","require":"3.6.0","deprecated":"4.3.0"},{"name":"rabbitmq_delayed_message_exchange","description":"A plugin that adds delayed-messaging (or scheduled-messaging) to RabbitMQ.","require":"3.4.0","deprecated":"4.3.0"}]'
+        body: '{"id":"15601289-824c-4cfe-9a5f-df60b90813fb","account_id":"fbf6c48f-b274-4320-a098-cf3c809bb3f7","resource_type":"plugin_batch","resource_id":null,"resource_action":"create","status":"completed","created_at":"2026-06-02T09:54:04Z","updated_at":"2026-06-02T09:54:06Z","error_message":null}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "549"
+                - "288"
             Content-Type:
                 - application/json
             Nel:
@@ -564,10 +564,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - d20d8f92-7c05-4d68-83e1-9611516d6cb8
+                - 62f46379-289d-4f71-abb2-4c4c4066101b
         status: 200 OK
         code: 200
-        duration: 4.07102209s
+        duration: 23.425952ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -586,7 +586,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/jobs/aa05db77-6c1b-47da-bc4a-3517f65387f4
+        url: http://localhost:9393/api/instances/1244
         method: GET
       response:
         proto: HTTP/1.1
@@ -594,14 +594,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 293
+        content_length: 782
         uncompressed: false
-        body: '{"id":"aa05db77-6c1b-47da-bc4a-3517f65387f4","account_id":"bc439403-139f-4110-99ac-a971e761841a","resource_type":"community_plugin","resource_id":null,"resource_action":"install","status":"completed","created_at":"2026-06-10T17:58:09Z","updated_at":"2026-06-10T17:58:26Z","error_message":null}'
+        body: '{"id":1244,"name":"TestAccPluginBatch_Basic","plan":"bunny-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"fbf6c48f-b274-4320-a098-cf3c809bb3f7","url":"amqps://jhytleho:***@dev-happy-gold-hyena.rmq7.dev.cloudamqp.com/jhytleho","ready":true,"apikey":"818fd849-9d70-4a7b-bc12-049c693273f4","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://jhytleho:***@dev-happy-gold-hyena.rmq7.dev.cloudamqp.com/jhytleho","internal":"amqp://jhytleho:***@dev-happy-gold-hyena.in.rmq7.dev.cloudamqp.com/jhytleho"},"rmq_version":"4.2.6","hostname_external":"dev-happy-gold-hyena.rmq7.dev.cloudamqp.com","hostname_internal":"dev-happy-gold-hyena.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "293"
+                - "782"
             Content-Type:
                 - application/json
             Nel:
@@ -615,10 +615,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - e8259592-74f5-4888-bfc7-ece36fd72e53
+                - 550e90e0-3d8f-4f9c-8b7a-8b2673ee02d6
         status: 200 OK
         code: 200
-        duration: 25.225611ms
+        duration: 12.824432ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -637,7 +637,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/plugins/community
+        url: http://localhost:9393/api/instances/1244/plugins
         method: GET
       response:
         proto: HTTP/1.1
@@ -645,14 +645,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 374
+        content_length: 6107
         uncompressed: false
-        body: '[{"name":"rabbitmq_lvc_exchange","description":"The last value exchange acts like a direct exchange (binding keys are compared for equality with routing keys); but it also keeps track of the last value that was published with each routing key, and when a queue is bound, it automatically enqueues the last value for the binding key.","require":"3.6.0","deprecated":"4.3.0"}]'
+        body: '[{"name":"rabbitmq_amqp1_0","version":"4.2.6","description":"Deprecated no-op AMQP 1.0 plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"4.2.6","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"4.2.6","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_internal_loopback","version":"4.2.6","description":"RabbitMQ Internal Loopback Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"4.2.6","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"4.2.6","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"4.2.6","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"4.2.6","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_exchange_federation","version":"4.2.6","description":"RabbitMQ Exchange Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"4.2.6","description":"Deprecated no-op RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_common","version":"4.2.6","description":"RabbitMQ Federation Common","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"4.2.6","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_prometheus","version":"4.2.6","description":"Exposes rabbitmq_federation metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"4.2.6","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"4.2.6","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"4.2.6","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"4.2.6","description":"RabbitMQ MQTT Adapter","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"4.2.6","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_queue_federation","version":"4.2.6","description":"RabbitMQ Queue Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"4.2.6","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"4.2.6","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"4.2.6","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"4.2.6","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"4.2.6","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_prometheus","version":"4.2.6","description":"Exposes rabbitmq_shovel metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"4.2.6","description":"RabbitMQ STOMP plugin","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"4.2.6","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"4.2.6","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"4.2.6","description":"RabbitMQ Top","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"4.2.6","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"4.2.6","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"4.2.6","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"4.2.6","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "374"
+                - "6107"
             Content-Type:
                 - application/json
             Nel:
@@ -666,10 +666,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 94bb2770-ade4-4d7c-95b0-3beabc7706ab
+                - a3719a3a-f5bf-4e25-ac77-72ab245b7436
         status: 200 OK
         code: 200
-        duration: 1.799179783s
+        duration: 1.351615265s
     - id: 13
       request:
         proto: HTTP/1.1
@@ -688,7 +688,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263
+        url: http://localhost:9393/api/instances/1244
         method: GET
       response:
         proto: HTTP/1.1
@@ -696,14 +696,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 784
+        content_length: 782
         uncompressed: false
-        body: '{"id":1263,"name":"TestAccPluginCommunity_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"bc439403-139f-4110-99ac-a971e761841a","url":"amqps://eikrclhe:***@dev-funny-gray-rhino.rmq3.dev.cloudamqp.com/eikrclhe","ready":true,"apikey":"27059c1e-0147-40d1-8153-622a6f9b16fc","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://eikrclhe:***@dev-funny-gray-rhino.rmq3.dev.cloudamqp.com/eikrclhe","internal":"amqp://eikrclhe:***@dev-funny-gray-rhino.in.rmq3.dev.cloudamqp.com/eikrclhe"},"rmq_version":"4.2.6","hostname_external":"dev-funny-gray-rhino.rmq3.dev.cloudamqp.com","hostname_internal":"dev-funny-gray-rhino.in.rmq3.dev.cloudamqp.com"}'
+        body: '{"id":1244,"name":"TestAccPluginBatch_Basic","plan":"bunny-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"fbf6c48f-b274-4320-a098-cf3c809bb3f7","url":"amqps://jhytleho:***@dev-happy-gold-hyena.rmq7.dev.cloudamqp.com/jhytleho","ready":true,"apikey":"818fd849-9d70-4a7b-bc12-049c693273f4","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://jhytleho:***@dev-happy-gold-hyena.rmq7.dev.cloudamqp.com/jhytleho","internal":"amqp://jhytleho:***@dev-happy-gold-hyena.in.rmq7.dev.cloudamqp.com/jhytleho"},"rmq_version":"4.2.6","hostname_external":"dev-happy-gold-hyena.rmq7.dev.cloudamqp.com","hostname_internal":"dev-happy-gold-hyena.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "784"
+                - "782"
             Content-Type:
                 - application/json
             Nel:
@@ -717,10 +717,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - daf91b63-eff2-4646-8ded-d7c982f7963e
+                - dd36a419-c26c-4f43-86c3-6b272b779c42
         status: 200 OK
         code: 200
-        duration: 15.360329ms
+        duration: 20.002128ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -739,7 +739,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/plugins/community
+        url: http://localhost:9393/api/instances/1244/plugins
         method: GET
       response:
         proto: HTTP/1.1
@@ -747,14 +747,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 374
+        content_length: 6107
         uncompressed: false
-        body: '[{"name":"rabbitmq_lvc_exchange","description":"The last value exchange acts like a direct exchange (binding keys are compared for equality with routing keys); but it also keeps track of the last value that was published with each routing key, and when a queue is bound, it automatically enqueues the last value for the binding key.","require":"3.6.0","deprecated":"4.3.0"}]'
+        body: '[{"name":"rabbitmq_amqp1_0","version":"4.2.6","description":"Deprecated no-op AMQP 1.0 plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"4.2.6","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"4.2.6","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_internal_loopback","version":"4.2.6","description":"RabbitMQ Internal Loopback Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"4.2.6","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"4.2.6","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"4.2.6","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"4.2.6","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_exchange_federation","version":"4.2.6","description":"RabbitMQ Exchange Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"4.2.6","description":"Deprecated no-op RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_common","version":"4.2.6","description":"RabbitMQ Federation Common","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"4.2.6","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_prometheus","version":"4.2.6","description":"Exposes rabbitmq_federation metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"4.2.6","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"4.2.6","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"4.2.6","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"4.2.6","description":"RabbitMQ MQTT Adapter","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"4.2.6","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_queue_federation","version":"4.2.6","description":"RabbitMQ Queue Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"4.2.6","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"4.2.6","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"4.2.6","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"4.2.6","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"4.2.6","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_prometheus","version":"4.2.6","description":"Exposes rabbitmq_shovel metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"4.2.6","description":"RabbitMQ STOMP plugin","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"4.2.6","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"4.2.6","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"4.2.6","description":"RabbitMQ Top","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"4.2.6","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"4.2.6","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"4.2.6","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"4.2.6","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "374"
+                - "6107"
             Content-Type:
                 - application/json
             Nel:
@@ -768,44 +768,47 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 81921a98-98aa-4624-97c5-e00aba9d0b6f
+                - 3b3ac533-01ac-4100-819f-6886e483d77b
         status: 200 OK
         code: 200
-        duration: 16.722ms
+        duration: 16.262674ms
     - id: 15
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 67
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"enable":["rabbitmq_random_exchange"],"disable":["rabbitmq_top"]}
         form: {}
         headers:
             Authorization:
                 - REDACTED
+            Content-Type:
+                - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/plugins
-        method: GET
+        url: http://localhost:9393/api/instances/1244/plugins/batch
+        method: PUT
       response:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 6334
+        content_length: 49
         uncompressed: false
-        body: '[{"name":"rabbitmq_amqp1_0","version":"4.2.6","description":"Deprecated no-op AMQP 1.0 plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"4.2.6","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"4.2.6","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_internal_loopback","version":"4.2.6","description":"RabbitMQ Internal Loopback Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"4.2.6","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"4.2.6","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"4.2.6","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_delayed_message_exchange","version":"v4.2.6","description":"RabbitMQ Delayed Message Exchange","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"4.2.6","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_exchange_federation","version":"4.2.6","description":"RabbitMQ Exchange Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"4.2.6","description":"Deprecated no-op RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_common","version":"4.2.6","description":"RabbitMQ Federation Common","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"4.2.6","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_prometheus","version":"4.2.6","description":"Exposes rabbitmq_federation metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"4.2.6","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"4.2.6","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"4.2.6","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"4.2.6","description":"RabbitMQ MQTT Adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"4.2.6","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_queue_federation","version":"4.2.6","description":"RabbitMQ Queue Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"4.2.6","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"4.2.6","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"4.2.6","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"4.2.6","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"4.2.6","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_prometheus","version":"4.2.6","description":"Exposes rabbitmq_shovel metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"4.2.6","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"4.2.6","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"4.2.6","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"4.2.6","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"4.2.6","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"4.2.6","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":null,"required":"Required by management, management agent and prometheus","hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"4.2.6","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"4.2.6","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        body: '{"job_id":"89352d90-80ea-40e1-81b3-da54c8cf4a52"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "6334"
+                - "49"
             Content-Type:
                 - application/json
             Nel:
@@ -819,10 +822,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 921edd68-7fe0-4908-9ae6-d41f7516c0de
-        status: 200 OK
-        code: 200
-        duration: 21.497086ms
+                - 4f7bad4b-424b-434f-91be-f36025e64a24
+        status: 202 Accepted
+        code: 202
+        duration: 27.212938ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -841,7 +844,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/plugins/community
+        url: http://localhost:9393/api/instances/1244/jobs/89352d90-80ea-40e1-81b3-da54c8cf4a52
         method: GET
       response:
         proto: HTTP/1.1
@@ -849,14 +852,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 374
+        content_length: 288
         uncompressed: false
-        body: '[{"name":"rabbitmq_lvc_exchange","description":"The last value exchange acts like a direct exchange (binding keys are compared for equality with routing keys); but it also keeps track of the last value that was published with each routing key, and when a queue is bound, it automatically enqueues the last value for the binding key.","require":"3.6.0","deprecated":"4.3.0"}]'
+        body: '{"id":"89352d90-80ea-40e1-81b3-da54c8cf4a52","account_id":"fbf6c48f-b274-4320-a098-cf3c809bb3f7","resource_type":"plugin_batch","resource_id":null,"resource_action":"update","status":"completed","created_at":"2026-06-02T09:54:10Z","updated_at":"2026-06-02T09:54:20Z","error_message":null}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "374"
+                - "288"
             Content-Type:
                 - application/json
             Nel:
@@ -870,10 +873,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - eafefc09-729e-4cf1-a0be-2ecdb3c89546
+                - 948b2aff-d546-472c-817e-419eefa752c5
         status: 200 OK
         code: 200
-        duration: 16.680457ms
+        duration: 27.018151ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -892,7 +895,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263
+        url: http://localhost:9393/api/instances/1244
         method: GET
       response:
         proto: HTTP/1.1
@@ -900,14 +903,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 784
+        content_length: 782
         uncompressed: false
-        body: '{"id":1263,"name":"TestAccPluginCommunity_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"bc439403-139f-4110-99ac-a971e761841a","url":"amqps://eikrclhe:***@dev-funny-gray-rhino.rmq3.dev.cloudamqp.com/eikrclhe","ready":true,"apikey":"27059c1e-0147-40d1-8153-622a6f9b16fc","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://eikrclhe:***@dev-funny-gray-rhino.rmq3.dev.cloudamqp.com/eikrclhe","internal":"amqp://eikrclhe:***@dev-funny-gray-rhino.in.rmq3.dev.cloudamqp.com/eikrclhe"},"rmq_version":"4.2.6","hostname_external":"dev-funny-gray-rhino.rmq3.dev.cloudamqp.com","hostname_internal":"dev-funny-gray-rhino.in.rmq3.dev.cloudamqp.com"}'
+        body: '{"id":1244,"name":"TestAccPluginBatch_Basic","plan":"bunny-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"fbf6c48f-b274-4320-a098-cf3c809bb3f7","url":"amqps://jhytleho:***@dev-happy-gold-hyena.rmq7.dev.cloudamqp.com/jhytleho","ready":true,"apikey":"818fd849-9d70-4a7b-bc12-049c693273f4","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://jhytleho:***@dev-happy-gold-hyena.rmq7.dev.cloudamqp.com/jhytleho","internal":"amqp://jhytleho:***@dev-happy-gold-hyena.in.rmq7.dev.cloudamqp.com/jhytleho"},"rmq_version":"4.2.6","hostname_external":"dev-happy-gold-hyena.rmq7.dev.cloudamqp.com","hostname_internal":"dev-happy-gold-hyena.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "784"
+                - "782"
             Content-Type:
                 - application/json
             Nel:
@@ -921,10 +924,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 3a8d4488-d57a-4b9c-bf5b-999e934b1dfb
+                - acb199f7-a663-4790-85d3-4e29098f7eff
         status: 200 OK
         code: 200
-        duration: 12.559901ms
+        duration: 14.788873ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -943,7 +946,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/plugins/community
+        url: http://localhost:9393/api/instances/1244/plugins
         method: GET
       response:
         proto: HTTP/1.1
@@ -951,14 +954,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 374
+        content_length: 6107
         uncompressed: false
-        body: '[{"name":"rabbitmq_lvc_exchange","description":"The last value exchange acts like a direct exchange (binding keys are compared for equality with routing keys); but it also keeps track of the last value that was published with each routing key, and when a queue is bound, it automatically enqueues the last value for the binding key.","require":"3.6.0","deprecated":"4.3.0"}]'
+        body: '[{"name":"rabbitmq_amqp1_0","version":"4.2.6","description":"Deprecated no-op AMQP 1.0 plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"4.2.6","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"4.2.6","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_internal_loopback","version":"4.2.6","description":"RabbitMQ Internal Loopback Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"4.2.6","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"4.2.6","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"4.2.6","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"4.2.6","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_exchange_federation","version":"4.2.6","description":"RabbitMQ Exchange Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"4.2.6","description":"Deprecated no-op RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_common","version":"4.2.6","description":"RabbitMQ Federation Common","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"4.2.6","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_prometheus","version":"4.2.6","description":"Exposes rabbitmq_federation metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"4.2.6","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"4.2.6","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"4.2.6","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"4.2.6","description":"RabbitMQ MQTT Adapter","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"4.2.6","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_queue_federation","version":"4.2.6","description":"RabbitMQ Queue Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"4.2.6","description":"RabbitMQ Random Exchange","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"4.2.6","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"4.2.6","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"4.2.6","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"4.2.6","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_prometheus","version":"4.2.6","description":"Exposes rabbitmq_shovel metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"4.2.6","description":"RabbitMQ STOMP plugin","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"4.2.6","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"4.2.6","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"4.2.6","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"4.2.6","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"4.2.6","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"4.2.6","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"4.2.6","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "374"
+                - "6107"
             Content-Type:
                 - application/json
             Nel:
@@ -972,10 +975,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - dadc853a-c477-435c-8c13-a0c25d8675d7
+                - 7ea0a6aa-5a0e-4096-9c0a-7b454b82e8b3
         status: 200 OK
         code: 200
-        duration: 18.15924ms
+        duration: 1.332595675s
     - id: 19
       request:
         proto: HTTP/1.1
@@ -994,7 +997,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/plugins
+        url: http://localhost:9393/api/instances/1244
         method: GET
       response:
         proto: HTTP/1.1
@@ -1002,14 +1005,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 6334
+        content_length: 782
         uncompressed: false
-        body: '[{"name":"rabbitmq_amqp1_0","version":"4.2.6","description":"Deprecated no-op AMQP 1.0 plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"4.2.6","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"4.2.6","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_internal_loopback","version":"4.2.6","description":"RabbitMQ Internal Loopback Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"4.2.6","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"4.2.6","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"4.2.6","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_delayed_message_exchange","version":"v4.2.6","description":"RabbitMQ Delayed Message Exchange","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"4.2.6","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_exchange_federation","version":"4.2.6","description":"RabbitMQ Exchange Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"4.2.6","description":"Deprecated no-op RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_common","version":"4.2.6","description":"RabbitMQ Federation Common","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"4.2.6","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_prometheus","version":"4.2.6","description":"Exposes rabbitmq_federation metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"4.2.6","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"4.2.6","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"4.2.6","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"4.2.6","description":"RabbitMQ MQTT Adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"4.2.6","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_queue_federation","version":"4.2.6","description":"RabbitMQ Queue Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"4.2.6","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"4.2.6","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"4.2.6","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"4.2.6","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"4.2.6","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_prometheus","version":"4.2.6","description":"Exposes rabbitmq_shovel metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"4.2.6","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"4.2.6","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"4.2.6","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"4.2.6","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"4.2.6","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"4.2.6","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":null,"required":"Required by management, management agent and prometheus","hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"4.2.6","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"4.2.6","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
+        body: '{"id":1244,"name":"TestAccPluginBatch_Basic","plan":"bunny-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"fbf6c48f-b274-4320-a098-cf3c809bb3f7","url":"amqps://jhytleho:***@dev-happy-gold-hyena.rmq7.dev.cloudamqp.com/jhytleho","ready":true,"apikey":"818fd849-9d70-4a7b-bc12-049c693273f4","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://jhytleho:***@dev-happy-gold-hyena.rmq7.dev.cloudamqp.com/jhytleho","internal":"amqp://jhytleho:***@dev-happy-gold-hyena.in.rmq7.dev.cloudamqp.com/jhytleho"},"rmq_version":"4.2.6","hostname_external":"dev-happy-gold-hyena.rmq7.dev.cloudamqp.com","hostname_internal":"dev-happy-gold-hyena.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "6334"
+                - "782"
             Content-Type:
                 - application/json
             Nel:
@@ -1023,10 +1026,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 058ff439-5003-4b23-94eb-b61d11be2c6b
+                - 3c16c84e-34cb-481b-888d-1221a338139f
         status: 200 OK
         code: 200
-        duration: 22.146459ms
+        duration: 11.677498ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -1045,7 +1048,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/plugins/community
+        url: http://localhost:9393/api/instances/1244/plugins
         method: GET
       response:
         proto: HTTP/1.1
@@ -1053,14 +1056,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 374
+        content_length: 6107
         uncompressed: false
-        body: '[{"name":"rabbitmq_lvc_exchange","description":"The last value exchange acts like a direct exchange (binding keys are compared for equality with routing keys); but it also keeps track of the last value that was published with each routing key, and when a queue is bound, it automatically enqueues the last value for the binding key.","require":"3.6.0","deprecated":"4.3.0"}]'
+        body: '[{"name":"rabbitmq_amqp1_0","version":"4.2.6","description":"Deprecated no-op AMQP 1.0 plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"4.2.6","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"4.2.6","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_internal_loopback","version":"4.2.6","description":"RabbitMQ Internal Loopback Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"4.2.6","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"4.2.6","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"4.2.6","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"4.2.6","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_exchange_federation","version":"4.2.6","description":"RabbitMQ Exchange Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"4.2.6","description":"Deprecated no-op RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_common","version":"4.2.6","description":"RabbitMQ Federation Common","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"4.2.6","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_prometheus","version":"4.2.6","description":"Exposes rabbitmq_federation metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"4.2.6","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"4.2.6","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"4.2.6","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"4.2.6","description":"RabbitMQ MQTT Adapter","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"4.2.6","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_queue_federation","version":"4.2.6","description":"RabbitMQ Queue Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"4.2.6","description":"RabbitMQ Random Exchange","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"4.2.6","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"4.2.6","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"4.2.6","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"4.2.6","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_prometheus","version":"4.2.6","description":"Exposes rabbitmq_shovel metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"4.2.6","description":"RabbitMQ STOMP plugin","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"4.2.6","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"4.2.6","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"4.2.6","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"4.2.6","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"4.2.6","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"4.2.6","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"4.2.6","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "374"
+                - "6107"
             Content-Type:
                 - application/json
             Nel:
@@ -1074,23 +1077,23 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - c4bed44e-0680-4d01-bb1d-c9c9c754567a
+                - 7b0949d9-0bb3-453f-a277-1910878427d4
         status: 200 OK
         code: 200
-        duration: 13.983471ms
+        duration: 15.674499ms
     - id: 21
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 68
+        content_length: 78
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"enabled":false,"plugin_name":"rabbitmq_delayed_message_exchange"}
+            {"disable":["rabbitmq_stomp","rabbitmq_web_mqtt","rabbitmq_random_exchange"]}
         form: {}
         headers:
             Authorization:
@@ -1099,7 +1102,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/plugins/community?async=true
+        url: http://localhost:9393/api/instances/1244/plugins/batch
         method: PUT
       response:
         proto: HTTP/1.1
@@ -1109,7 +1112,7 @@ interactions:
         trailer: {}
         content_length: 49
         uncompressed: false
-        body: '{"job_id":"457284e7-0a21-4c4a-8b79-9f819f17d6a7"}'
+        body: '{"job_id":"675cca83-2ec6-4a12-a6dd-eda13fd95195"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -1128,10 +1131,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 3ca7e528-7218-41e3-868f-e8416991d37c
+                - 9153eef1-999f-480e-b621-4e5da3870a54
         status: 202 Accepted
         code: 202
-        duration: 25.012788ms
+        duration: 24.626653ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -1150,7 +1153,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/jobs/457284e7-0a21-4c4a-8b79-9f819f17d6a7
+        url: http://localhost:9393/api/instances/1244/jobs/675cca83-2ec6-4a12-a6dd-eda13fd95195
         method: GET
       response:
         proto: HTTP/1.1
@@ -1158,14 +1161,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 283
+        content_length: 288
         uncompressed: false
-        body: '{"id":"457284e7-0a21-4c4a-8b79-9f819f17d6a7","account_id":"bc439403-139f-4110-99ac-a971e761841a","resource_type":"plugin","resource_id":null,"resource_action":"disable","status":"completed","created_at":"2026-06-10T17:58:32Z","updated_at":"2026-06-10T17:58:39Z","error_message":null}'
+        body: '{"id":"675cca83-2ec6-4a12-a6dd-eda13fd95195","account_id":"fbf6c48f-b274-4320-a098-cf3c809bb3f7","resource_type":"plugin_batch","resource_id":null,"resource_action":"update","status":"completed","created_at":"2026-06-02T09:54:22Z","updated_at":"2026-06-02T09:54:29Z","error_message":null}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "283"
+                - "288"
             Content-Type:
                 - application/json
             Nel:
@@ -1179,10 +1182,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - d93ce6d4-cb02-4c25-961b-bcd631e11eac
+                - 5b2df131-4b18-46c2-8bf5-4c59cd3fd206
         status: 200 OK
         code: 200
-        duration: 25.826782ms
+        duration: 29.346043ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -1201,7 +1204,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/plugins/community
+        url: http://localhost:9393/api/instances/1244
         method: GET
       response:
         proto: HTTP/1.1
@@ -1209,14 +1212,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 374
+        content_length: 782
         uncompressed: false
-        body: '[{"name":"rabbitmq_lvc_exchange","description":"The last value exchange acts like a direct exchange (binding keys are compared for equality with routing keys); but it also keeps track of the last value that was published with each routing key, and when a queue is bound, it automatically enqueues the last value for the binding key.","require":"3.6.0","deprecated":"4.3.0"}]'
+        body: '{"id":1244,"name":"TestAccPluginBatch_Basic","plan":"bunny-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"fbf6c48f-b274-4320-a098-cf3c809bb3f7","url":"amqps://jhytleho:***@dev-happy-gold-hyena.rmq7.dev.cloudamqp.com/jhytleho","ready":true,"apikey":"818fd849-9d70-4a7b-bc12-049c693273f4","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://jhytleho:***@dev-happy-gold-hyena.rmq7.dev.cloudamqp.com/jhytleho","internal":"amqp://jhytleho:***@dev-happy-gold-hyena.in.rmq7.dev.cloudamqp.com/jhytleho"},"rmq_version":"4.2.6","hostname_external":"dev-happy-gold-hyena.rmq7.dev.cloudamqp.com","hostname_internal":"dev-happy-gold-hyena.in.rmq7.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "374"
+                - "782"
             Content-Type:
                 - application/json
             Nel:
@@ -1230,10 +1233,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - e3e9c13f-5683-4b1f-85db-ecfcd78a3d2a
+                - 01b5302e-9859-4b92-9877-b71266edba52
         status: 200 OK
         code: 200
-        duration: 1.831844846s
+        duration: 18.466375ms
     - id: 24
       request:
         proto: HTTP/1.1
@@ -1252,7 +1255,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263
+        url: http://localhost:9393/api/instances/1244/plugins
         method: GET
       response:
         proto: HTTP/1.1
@@ -1260,14 +1263,14 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 784
+        content_length: 6110
         uncompressed: false
-        body: '{"id":1263,"name":"TestAccPluginCommunity_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"bc439403-139f-4110-99ac-a971e761841a","url":"amqps://eikrclhe:***@dev-funny-gray-rhino.rmq3.dev.cloudamqp.com/eikrclhe","ready":true,"apikey":"27059c1e-0147-40d1-8153-622a6f9b16fc","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://eikrclhe:***@dev-funny-gray-rhino.rmq3.dev.cloudamqp.com/eikrclhe","internal":"amqp://eikrclhe:***@dev-funny-gray-rhino.in.rmq3.dev.cloudamqp.com/eikrclhe"},"rmq_version":"4.2.6","hostname_external":"dev-funny-gray-rhino.rmq3.dev.cloudamqp.com","hostname_internal":"dev-funny-gray-rhino.in.rmq3.dev.cloudamqp.com"}'
+        body: '[{"name":"rabbitmq_amqp1_0","version":"4.2.6","description":"Deprecated no-op AMQP 1.0 plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"4.2.6","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"4.2.6","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_internal_loopback","version":"4.2.6","description":"RabbitMQ Internal Loopback Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"4.2.6","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"4.2.6","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"4.2.6","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"4.2.6","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_exchange_federation","version":"4.2.6","description":"RabbitMQ Exchange Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"4.2.6","description":"Deprecated no-op RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_common","version":"4.2.6","description":"RabbitMQ Federation Common","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"4.2.6","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_prometheus","version":"4.2.6","description":"Exposes rabbitmq_federation metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"4.2.6","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"4.2.6","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"4.2.6","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"4.2.6","description":"RabbitMQ MQTT Adapter","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"4.2.6","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_queue_federation","version":"4.2.6","description":"RabbitMQ Queue Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"4.2.6","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"4.2.6","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"4.2.6","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"4.2.6","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"4.2.6","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_prometheus","version":"4.2.6","description":"Exposes rabbitmq_shovel metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"4.2.6","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"4.2.6","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"4.2.6","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"4.2.6","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"4.2.6","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"4.2.6","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":"Used by management plugin","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"4.2.6","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"4.2.6","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "784"
+                - "6110"
             Content-Type:
                 - application/json
             Nel:
@@ -1281,10 +1284,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - c4815264-90b5-4196-bfce-c8a99f1ee635
+                - 008f7521-9c90-4bbd-b540-c6edbcab44e2
         status: 200 OK
         code: 200
-        duration: 16.991142ms
+        duration: 1.26630161s
     - id: 25
       request:
         proto: HTTP/1.1
@@ -1303,24 +1306,20 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/plugins/community
-        method: GET
+        url: http://localhost:9393/api/instances/1244?keep_vpc=false
+        method: DELETE
       response:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 374
+        content_length: 0
         uncompressed: false
-        body: '[{"name":"rabbitmq_lvc_exchange","description":"The last value exchange acts like a direct exchange (binding keys are compared for equality with routing keys); but it also keeps track of the last value that was published with each routing key, and when a queue is bound, it automatically enqueues the last value for the binding key.","require":"3.6.0","deprecated":"4.3.0"}]'
+        body: ""
         headers:
             Cache-Control:
                 - no-cache
-            Content-Length:
-                - "374"
-            Content-Type:
-                - application/json
             Nel:
                 - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
@@ -1332,10 +1331,10 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 7032ce09-ae81-4991-a4ca-be0aaa3b0a38
-        status: 200 OK
-        code: 200
-        duration: 15.197883ms
+                - 878df190-6627-45c4-98c8-20139f517488
+        status: 204 No Content
+        code: 204
+        duration: 49.891737ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -1354,258 +1353,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/plugins
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 6335
-        uncompressed: false
-        body: '[{"name":"rabbitmq_amqp1_0","version":"4.2.6","description":"Deprecated no-op AMQP 1.0 plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_cache","version":"4.2.6","description":"RabbitMQ Authentication Backend cache","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_http","version":"4.2.6","description":"RabbitMQ HTTP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_internal_loopback","version":"4.2.6","description":"RabbitMQ Internal Loopback Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_backend_ldap","version":"4.2.6","description":"RabbitMQ LDAP Authentication Backend","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_auth_mechanism_ssl","version":"4.2.6","description":"RabbitMQ SSL authentication (SASL EXTERNAL)","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_consistent_hash_exchange","version":"4.2.6","description":"Consistent Hash Exchange Type","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_delayed_message_exchange","version":"v4.2.6","description":"RabbitMQ Delayed Message Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_event_exchange","version":"4.2.6","description":"Event Exchange Type","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_exchange_federation","version":"4.2.6","description":"RabbitMQ Exchange Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation","version":"4.2.6","description":"Deprecated no-op RabbitMQ Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_common","version":"4.2.6","description":"RabbitMQ Federation Common","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_management","version":"4.2.6","description":"RabbitMQ Federation Management","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_federation_prometheus","version":"4.2.6","description":"Exposes rabbitmq_federation metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_jms_topic_exchange","version":"4.2.6","description":"RabbitMQ JMS topic selector exchange plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_management","version":"4.2.6","description":"RabbitMQ Management Console","enabled":true,"recommended":null,"required":"Used for health and metrics","hidden":null,"blocked":null},{"name":"rabbitmq_management_agent","version":"4.2.6","description":"RabbitMQ Management Agent","enabled":true,"recommended":null,"required":"Used for node metrics","hidden":null,"blocked":null},{"name":"rabbitmq_mqtt","version":"4.2.6","description":"RabbitMQ MQTT Adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_prometheus","version":"4.2.6","description":"Prometheus metrics for RabbitMQ","enabled":true,"recommended":null,"required":"Used for metrics, monitoring and support-debugging","hidden":null,"blocked":null},{"name":"rabbitmq_queue_federation","version":"4.2.6","description":"RabbitMQ Queue Federation","enabled":true,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_random_exchange","version":"4.2.6","description":"RabbitMQ Random Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_recent_history_exchange","version":"4.2.6","description":"RabbitMQ Recent History Exchange","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_sharding","version":"4.2.6","description":"RabbitMQ Sharding Plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel","version":"4.2.6","description":"Data Shovel for RabbitMQ","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_management","version":"4.2.6","description":"Management extension for the Shovel plugin","enabled":true,"recommended":"Used for instance logs","required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_shovel_prometheus","version":"4.2.6","description":"Exposes rabbitmq_shovel metrics to Prometheus","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stomp","version":"4.2.6","description":"RabbitMQ STOMP plugin","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream","version":"4.2.6","description":"RabbitMQ Stream","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_stream_management","version":"4.2.6","description":"RabbitMQ Stream Management","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_top","version":"4.2.6","description":"RabbitMQ Top","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_tracing","version":"4.2.6","description":"RabbitMQ message logging / tracing","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_dispatch","version":"4.2.6","description":"RabbitMQ Web Dispatcher","enabled":true,"recommended":null,"required":"Required by management, management agent and prometheus","hidden":null,"blocked":null},{"name":"rabbitmq_web_mqtt","version":"4.2.6","description":"RabbitMQ MQTT-over-WebSockets adapter","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null},{"name":"rabbitmq_web_stomp","version":"4.2.6","description":"RabbitMQ STOMP-over-WebSockets support","enabled":false,"recommended":null,"required":null,"hidden":null,"blocked":null}]'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "6335"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 4ce9e9bb-76d2-4345-8ecf-b998ad735512
-        status: 200 OK
-        code: 200
-        duration: 18.588955ms
-    - id: 27
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/plugins/community
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 374
-        uncompressed: false
-        body: '[{"name":"rabbitmq_lvc_exchange","description":"The last value exchange acts like a direct exchange (binding keys are compared for equality with routing keys); but it also keeps track of the last value that was published with each routing key, and when a queue is bound, it automatically enqueues the last value for the binding key.","require":"3.6.0","deprecated":"4.3.0"}]'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "374"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 4038095e-28fc-41b7-8905-f8619322d310
-        status: 200 OK
-        code: 200
-        duration: 12.948542ms
-    - id: 28
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/plugins/community/rabbitmq_delayed_message_exchange?async=true
-        method: DELETE
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 49
-        uncompressed: false
-        body: '{"job_id":"c039d7d6-3427-4fde-bbe1-1f8f3d7078f4"}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "49"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - e8a9ec77-4fb2-4be4-92d3-0783bba5155c
-        status: 202 Accepted
-        code: 202
-        duration: 37.147514ms
-    - id: 29
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263/jobs/c039d7d6-3427-4fde-bbe1-1f8f3d7078f4
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 295
-        uncompressed: false
-        body: '{"id":"c039d7d6-3427-4fde-bbe1-1f8f3d7078f4","account_id":"bc439403-139f-4110-99ac-a971e761841a","resource_type":"community_plugin","resource_id":null,"resource_action":"uninstall","status":"completed","created_at":"2026-06-10T17:58:44Z","updated_at":"2026-06-10T17:58:51Z","error_message":null}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "295"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 23ae84ec-b581-4775-97a8-9771ca6d8bf6
-        status: 200 OK
-        code: 200
-        duration: 26.858041ms
-    - id: 30
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263?keep_vpc=false
-        method: DELETE
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
-        headers:
-            Cache-Control:
-                - no-cache
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 7c21b3b4-f0b6-44de-9de5-c5ea2af88042
-        status: 204 No Content
-        code: 204
-        duration: 65.591129ms
-    - id: 31
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/instances/1263
+        url: http://localhost:9393/api/instances/1244
         method: GET
       response:
         proto: HTTP/1.1
@@ -1634,7 +1382,7 @@ interactions:
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - ca4922de-165c-489d-8cf3-1f5cb5b0ea59
+                - bfdf4737-e2e8-4582-b5e4-3ad1c46dfbf7
         status: 404 Not Found
         code: 404
-        duration: 6.728951ms
+        duration: 6.924516ms
