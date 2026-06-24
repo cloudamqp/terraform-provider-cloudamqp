@@ -4,9 +4,23 @@
 
 FEATURES:
 
-* **New Resource:** `cloudamqp_plugin_batch` - Manage multiple RabbitMQ plugins in batch using the CloudAMQP API ([#521])
+* **New Resource:** `cloudamqp_plugin_batch` - Manage multiple RabbitMQ plugins in single resource ([#521])
 
+IMPROVEMENTS:
+
+* data_source/cloudamqp_plugins: Added new filter attributes to filter plugins ([#522])
+
+DEPENDENCIES:
+
+* Bumped actions/checkout from 6 to 7 ([#524])
+* Bumped goreleaser/goreleaser-action from 7.2.1 to 7.2.2 ([#518])
+* Bumped github.com/tidwall/gjson from 1.18.0 to 1.19.0 ([#515])
+
+[#515]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/515
+[#518]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/518
 [#521]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/521
+[#522]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/522
+[#524]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/524
 
 ## 1.45.3 (07 May, 2026)
 
