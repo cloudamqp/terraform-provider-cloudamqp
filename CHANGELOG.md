@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.46.0 (Unreleased)
+
+FEATURES:
+
+* **New Resource:** `cloudamqp_plugin_batch` - Manage multiple RabbitMQ plugins in batch using the CloudAMQP API ([#521])
+
+[#521]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/521
+
 ## 1.45.3 (07 May, 2026)
 
 BUG FIXES:
