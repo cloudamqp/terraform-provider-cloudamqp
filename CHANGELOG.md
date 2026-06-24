@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.46.0 (Unreleased)
+## 1.46.0 (24 Jun, 2026)
 
 FEATURES:
 
