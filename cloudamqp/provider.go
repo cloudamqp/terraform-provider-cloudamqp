@@ -114,6 +114,7 @@ func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resou
 		NewNodeActionsResource,
 		NewNotificationResource,
 		NewOAuth2ConfigurationResource,
+		NewPluginBatchResource,
 		NewRabbitMqConfigurationResource,
 		NewTrustStoreResource,
 		NewVpcResource,
