@@ -18,11 +18,11 @@ func (r *integrationLogAgentResource) ConfigValidators(ctx context.Context) []re
 type exactlyOneIntegrationBlockValidator struct{}
 
 func (v exactlyOneIntegrationBlockValidator) Description(_ context.Context) string {
-	return "Exactly one integration block must be set (cloudwatch, uptrace, splunk)"
+	return "Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) MarkdownDescription(_ context.Context) string {
-	return "Exactly one integration block must be set (`cloudwatch`, `uptrace`, `splunk`)"
+	return "Exactly one integration block must be set (`cloudwatch`, `uptrace`, `splunk`, `coralogix`)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
@@ -38,6 +38,7 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	cloudwatchConfigured := config.Cloudwatch != nil && !config.Cloudwatch.IAMRole.IsNull()
 	uptraceConfigured := config.Uptrace != nil && !config.Uptrace.DSN.IsNull()
 	splunkConfigured := config.Splunk != nil && !config.Splunk.Endpoint.IsNull()
+	coralogixConfigured := config.Coralogix != nil && !config.Coralogix.PrivateKey.IsNull()
 
 	count := 0
 	if cloudwatchConfigured {
@@ -49,11 +50,14 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	if splunkConfigured {
 		count++
 	}
+	if coralogixConfigured {
+		count++
+	}
 
 	if count != 1 {
 		resp.Diagnostics.AddError(
 			"Invalid Configuration",
-			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, uptrace, splunk), got %d", count),
+			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix), got %d", count),
 		)
 		return
 	}
@@ -88,6 +92,25 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 		if config.Splunk.Token.IsNull() {
 			resp.Diagnostics.AddAttributeError(path.Root("splunk").AtName("token"),
 				"Missing required attribute", "token is required for splunk integration")
+		}
+	}
+
+	if coralogixConfigured {
+		if config.Coralogix.PrivateKey.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("coralogix").AtName("private_key"),
+				"Missing required attribute", "private_key is required for coralogix integration")
+		}
+		if config.Coralogix.Application.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("coralogix").AtName("application"),
+				"Missing required attribute", "application is required for coralogix integration")
+		}
+		if config.Coralogix.Subsystem.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("coralogix").AtName("subsystem"),
+				"Missing required attribute", "subsystem is required for coralogix integration")
+		}
+		if config.Coralogix.Region.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("coralogix").AtName("region"),
+				"Missing required attribute", "region is required for coralogix integration")
 		}
 	}
 }

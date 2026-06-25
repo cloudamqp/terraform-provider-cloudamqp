@@ -13,6 +13,10 @@ type LogAgentRequest struct {
 	Endpoint   string `json:"endpoint,omitempty"`
 	Token      string `json:"token,omitempty"`
 	SourceType string `json:"sourcetype,omitempty"`
+	// Coralogix
+	PrivateKey  string `json:"private_key,omitempty"`
+	Application string `json:"application,omitempty"`
+	Subsystem   string `json:"subsystem,omitempty"`
 }
 
 type LogAgentResponse struct {
@@ -34,4 +38,8 @@ type LogAgentConfigResponse struct {
 	Endpoint   *string `json:"endpoint,omitempty"`
 	Token      *string `json:"token,omitempty"`
 	SourceType *string `json:"sourcetype,omitempty"`
+	// Coralogix
+	PrivateKey  *string `json:"private_key,omitempty"`
+	Application *string `json:"application,omitempty"`
+	Subsystem   *string `json:"subsystem,omitempty"`
 }

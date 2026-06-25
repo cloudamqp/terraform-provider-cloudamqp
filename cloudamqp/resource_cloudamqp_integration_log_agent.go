@@ -8,12 +8,14 @@ import (
 	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -34,11 +36,12 @@ func NewIntegrationLogAgentResource() resource.Resource {
 }
 
 type integrationLogAgentResourceModel struct {
-	ID         types.String     `tfsdk:"id"`
-	InstanceID types.Int64      `tfsdk:"instance_id"`
-	Cloudwatch *cloudwatchModel `tfsdk:"cloudwatch"`
-	Uptrace    *uptraceModel    `tfsdk:"uptrace"`
-	Splunk     *splunkModel     `tfsdk:"splunk"`
+	ID         types.String      `tfsdk:"id"`
+	InstanceID types.Int64       `tfsdk:"instance_id"`
+	Cloudwatch *cloudwatchModel  `tfsdk:"cloudwatch"`
+	Uptrace    *uptraceModel     `tfsdk:"uptrace"`
+	Splunk     *splunkModel      `tfsdk:"splunk"`
+	Coralogix  *coralogixModel   `tfsdk:"coralogix"`
 }
 
 type cloudwatchModel struct {
@@ -57,6 +60,13 @@ type splunkModel struct {
 	Endpoint   types.String `tfsdk:"hec_endpoint"`
 	Token      types.String `tfsdk:"token"`
 	SourceType types.String `tfsdk:"source_type"`
+}
+
+type coralogixModel struct {
+	PrivateKey  types.String `tfsdk:"private_key"`
+	Application types.String `tfsdk:"application"`
+	Subsystem   types.String `tfsdk:"subsystem"`
+	Region      types.String `tfsdk:"region"`
 }
 
 func (r *integrationLogAgentResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -157,6 +167,31 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 					"source_type": schema.StringAttribute{
 						Optional:    true,
 						Description: "Splunk source type (leave empty to use the token's default)",
+					},
+				},
+			},
+			"coralogix": schema.SingleNestedBlock{
+				Description: "Coralogix log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"private_key": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						Description: "Coralogix private key (always starts with cxtp_...)",
+					},
+					"application": schema.StringAttribute{
+						Optional:    true,
+						Description: "Application name, used to group logs by environment",
+					},
+					"subsystem": schema.StringAttribute{
+						Optional:    true,
+						Description: "Subsystem name, used to group logs by service within an application",
+					},
+					"region": schema.StringAttribute{
+						Optional:    true,
+						Description: "Coralogix region (US1, US2, US3, EU1, EU2, AP1, AP2, AP3)",
+						Validators: []validator.String{
+							stringvalidator.OneOf("US1", "US2", "US3", "EU1", "EU2", "AP1", "AP2", "AP3"),
+						},
 					},
 				},
 			},

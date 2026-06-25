@@ -20,7 +20,10 @@ func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentR
 	if m.Splunk != nil && !m.Splunk.Endpoint.IsNull() {
 		return "splunk_v2", nil
 	}
-	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, uptrace, splunk)")
+	if m.Coralogix != nil && !m.Coralogix.PrivateKey.IsNull() {
+		return "coralogix_v2", nil
+	}
+	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, uptrace, splunk, coralogix)")
 }
 
 // populateRequest converts the resource model to an API request
@@ -52,6 +55,13 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 			req.SourceType = plan.Splunk.SourceType.ValueString()
 		}
 		return req
+	case "coralogix_v2":
+		return model.LogAgentRequest{
+			PrivateKey:  plan.Coralogix.PrivateKey.ValueString(),
+			Application: plan.Coralogix.Application.ValueString(),
+			Subsystem:   plan.Coralogix.Subsystem.ValueString(),
+			Region:      plan.Coralogix.Region.ValueString(),
+		}
 	}
 	return model.LogAgentRequest{}
 }
@@ -82,5 +92,13 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		if !m.Splunk.SourceType.IsNull() || data.Config.SourceType != nil {
 			m.Splunk.SourceType = types.StringPointerValue(data.Config.SourceType)
 		}
+	case "coralogix_v2":
+		if m.Coralogix == nil {
+			m.Coralogix = &coralogixModel{}
+		}
+		m.Coralogix.PrivateKey = types.StringPointerValue(data.Config.PrivateKey)
+		m.Coralogix.Application = types.StringPointerValue(data.Config.Application)
+		m.Coralogix.Subsystem = types.StringPointerValue(data.Config.Subsystem)
+		m.Coralogix.Region = types.StringPointerValue(data.Config.Region)
 	}
 }
