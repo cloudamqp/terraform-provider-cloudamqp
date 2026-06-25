@@ -25,6 +25,11 @@ type LogAgentRequest struct {
 	Headers  map[string]string `json:"headers,omitempty"`
 	Username string            `json:"username,omitempty"`
 	Password string            `json:"password,omitempty"`
+	// Google Cloud
+	CredentialType string `json:"type,omitempty"`
+	ProjectID      string `json:"project_id,omitempty"`
+	ClientEmail    string `json:"client_email,omitempty"`
+	PrivateKeyID   string `json:"private_key_id,omitempty"`
 }
 
 type LogAgentResponse struct {
@@ -57,4 +62,8 @@ type LogAgentConfigResponse struct {
 	AuthType *string           `json:"auth_type,omitempty"`
 	Headers  map[string]string `json:"headers,omitempty"`
 	Username *string           `json:"username,omitempty"`
+	// Google Cloud
+	ProjectID    *string `json:"project_id,omitempty"`
+	ClientEmail  *string `json:"client_email,omitempty"`
+	PrivateKeyID *string `json:"private_key_id,omitempty"`
 }

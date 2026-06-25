@@ -1,6 +1,8 @@
 package cloudamqp
 
 import (
+	"encoding/base64"
+	"encoding/json"
 	"fmt"
 
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/integrations"
@@ -30,11 +32,40 @@ func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentR
 	if m.CustomOTLP != nil && !m.CustomOTLP.Endpoint.IsNull() {
 		return "custom_otlp", nil
 	}
-	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp)")
+	if m.GoogleCloud != nil && !m.GoogleCloud.ServiceAccountFile.IsNull() {
+		return "googlecloud", nil
+	}
+	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp, google_cloud)")
+}
+
+// extractGoogleCloudCredentials decodes a base64-encoded Google service account key JSON
+// and returns the required credential fields.
+func extractGoogleCloudCredentials(encoded string) (map[string]string, error) {
+	decoded, err := base64.StdEncoding.DecodeString(encoded)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode service_account_file: %w", err)
+	}
+	var jsonMap map[string]any
+	if err := json.Unmarshal(decoded, &jsonMap); err != nil {
+		return nil, fmt.Errorf("failed to parse service_account_file JSON: %w", err)
+	}
+	requiredFields := []string{"type", "client_email", "private_key_id", "private_key", "project_id"}
+	for _, field := range requiredFields {
+		if jsonMap[field] == nil || jsonMap[field] == "" {
+			return nil, fmt.Errorf("required field '%s' is missing from service_account_file", field)
+		}
+	}
+	return map[string]string{
+		"type":           jsonMap["type"].(string),
+		"client_email":   jsonMap["client_email"].(string),
+		"private_key_id": jsonMap["private_key_id"].(string),
+		"private_key":    jsonMap["private_key"].(string),
+		"project_id":     jsonMap["project_id"].(string),
+	}, nil
 }
 
 // populateRequest converts the resource model to an API request
-func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentResourceModel, intType string) model.LogAgentRequest {
+func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentResourceModel, intType string) (model.LogAgentRequest, error) {
 	switch intType {
 	case "cloudwatch_v2":
 		req := model.LogAgentRequest{
@@ -48,11 +79,11 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 		if !plan.Cloudwatch.LogStreamName.IsNull() && !plan.Cloudwatch.LogStreamName.IsUnknown() {
 			req.LogStreamName = plan.Cloudwatch.LogStreamName.ValueString()
 		}
-		return req
+		return req, nil
 	case "uptrace":
 		return model.LogAgentRequest{
 			DSN: plan.Uptrace.DSN.ValueString(),
-		}
+		}, nil
 	case "splunk_v2":
 		req := model.LogAgentRequest{
 			Endpoint: plan.Splunk.Endpoint.ValueString(),
@@ -61,14 +92,14 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 		if !plan.Splunk.SourceType.IsNull() && !plan.Splunk.SourceType.IsUnknown() {
 			req.SourceType = plan.Splunk.SourceType.ValueString()
 		}
-		return req
+		return req, nil
 	case "coralogix_v2":
 		return model.LogAgentRequest{
 			PrivateKey:  plan.Coralogix.PrivateKey.ValueString(),
 			Application: plan.Coralogix.Application.ValueString(),
 			Subsystem:   plan.Coralogix.Subsystem.ValueString(),
 			Region:      plan.Coralogix.Region.ValueString(),
-		}
+		}, nil
 	case "datadog_v2":
 		req := model.LogAgentRequest{
 			APIKey: plan.Datadog.APIKey.ValueString(),
@@ -77,7 +108,7 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 		if !plan.Datadog.Tags.IsNull() && !plan.Datadog.Tags.IsUnknown() {
 			req.Tags = plan.Datadog.Tags.ValueString()
 		}
-		return req
+		return req, nil
 	case "custom_otlp":
 		req := model.LogAgentRequest{
 			Endpoint: plan.CustomOTLP.Endpoint.ValueString(),
@@ -98,9 +129,25 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 			req.Password = plan.CustomOTLP.Password.ValueString()
 			req.AuthType = "basic_auth"
 		}
-		return req
+		return req, nil
+	case "googlecloud":
+		creds, err := extractGoogleCloudCredentials(plan.GoogleCloud.ServiceAccountFile.ValueString())
+		if err != nil {
+			return model.LogAgentRequest{}, err
+		}
+		req := model.LogAgentRequest{
+			CredentialType: creds["type"],
+			ProjectID:      creds["project_id"],
+			ClientEmail:    creds["client_email"],
+			PrivateKeyID:   creds["private_key_id"],
+			PrivateKey:     creds["private_key"],
+		}
+		if !plan.GoogleCloud.Tags.IsNull() && !plan.GoogleCloud.Tags.IsUnknown() {
+			req.Tags = plan.GoogleCloud.Tags.ValueString()
+		}
+		return req, nil
 	}
-	return model.LogAgentRequest{}
+	return model.LogAgentRequest{}, nil
 }
 
 // populateResourceModel fills the resource model from the API response
@@ -164,5 +211,16 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		}
 		m.CustomOTLP.Username = types.StringPointerValue(data.Config.Username)
 		// password is WriteOnly — not returned by the API, not stored in state
+	case "googlecloud":
+		if m.GoogleCloud == nil {
+			m.GoogleCloud = &googleCloudModel{}
+		}
+		// service_account_file is WriteOnly — not returned by the API, not stored in state
+		m.GoogleCloud.ProjectID = types.StringPointerValue(data.Config.ProjectID)
+		m.GoogleCloud.ClientEmail = types.StringPointerValue(data.Config.ClientEmail)
+		m.GoogleCloud.PrivateKeyID = types.StringPointerValue(data.Config.PrivateKeyID)
+		if !m.GoogleCloud.Tags.IsNull() || data.Config.Tags != nil {
+			m.GoogleCloud.Tags = types.StringPointerValue(data.Config.Tags)
+		}
 	}
 }

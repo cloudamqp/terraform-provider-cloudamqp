@@ -18,11 +18,11 @@ func (r *integrationLogAgentResource) ConfigValidators(ctx context.Context) []re
 type exactlyOneIntegrationBlockValidator struct{}
 
 func (v exactlyOneIntegrationBlockValidator) Description(_ context.Context) string {
-	return "Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp)"
+	return "Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp, google_cloud)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) MarkdownDescription(_ context.Context) string {
-	return "Exactly one integration block must be set (`cloudwatch`, `uptrace`, `splunk`, `coralogix`, `datadog`, `custom_otlp`)"
+	return "Exactly one integration block must be set (`cloudwatch`, `uptrace`, `splunk`, `coralogix`, `datadog`, `custom_otlp`, `google_cloud`)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
@@ -41,6 +41,7 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	coralogixConfigured := config.Coralogix != nil && !config.Coralogix.PrivateKey.IsNull()
 	datadogConfigured := config.Datadog != nil && !config.Datadog.APIKey.IsNull()
 	customOtlpConfigured := config.CustomOTLP != nil && !config.CustomOTLP.Endpoint.IsNull()
+	googleCloudConfigured := config.GoogleCloud != nil && !config.GoogleCloud.ServiceAccountFile.IsNull()
 
 	count := 0
 	if cloudwatchConfigured {
@@ -61,11 +62,14 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	if customOtlpConfigured {
 		count++
 	}
+	if googleCloudConfigured {
+		count++
+	}
 
 	if count != 1 {
 		resp.Diagnostics.AddError(
 			"Invalid Configuration",
-			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp), got %d", count),
+			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp, google_cloud), got %d", count),
 		)
 		return
 	}
@@ -153,6 +157,13 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 		if passwordSet && !usernameSet {
 			resp.Diagnostics.AddAttributeError(path.Root("custom_otlp").AtName("username"),
 				"Missing required attribute", "custom_otlp: username is required when password is set")
+		}
+	}
+
+	if googleCloudConfigured {
+		if config.GoogleCloud.ServiceAccountFile.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("google_cloud").AtName("service_account_file"),
+				"Missing required attribute", "service_account_file is required for google_cloud integration")
 		}
 	}
 }

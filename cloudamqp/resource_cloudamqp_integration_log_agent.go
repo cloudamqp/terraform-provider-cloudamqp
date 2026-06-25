@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -44,6 +45,7 @@ type integrationLogAgentResourceModel struct {
 	Coralogix   *coralogixModel   `tfsdk:"coralogix"`
 	Datadog     *datadogModel     `tfsdk:"datadog"`
 	CustomOTLP  *customOtlpModel  `tfsdk:"custom_otlp"`
+	GoogleCloud *googleCloudModel `tfsdk:"google_cloud"`
 }
 
 type cloudwatchModel struct {
@@ -82,6 +84,15 @@ type customOtlpModel struct {
 	Headers  types.Map    `tfsdk:"headers"`
 	Username types.String `tfsdk:"username"`
 	Password types.String `tfsdk:"password"`
+}
+
+type googleCloudModel struct {
+	ServiceAccountFile        types.String `tfsdk:"service_account_file"`
+	ServiceAccountFileVersion types.Int64  `tfsdk:"service_account_file_version"`
+	ProjectID                 types.String `tfsdk:"project_id"`
+	ClientEmail               types.String `tfsdk:"client_email"`
+	PrivateKeyID              types.String `tfsdk:"private_key_id"`
+	Tags                      types.String `tfsdk:"tags"`
 }
 
 func (r *integrationLogAgentResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -257,6 +268,52 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 					},
 				},
 			},
+			"google_cloud": schema.SingleNestedBlock{
+				Description: "Google Cloud log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"service_account_file": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Base64-encoded Google service account key JSON file",
+					},
+					"service_account_file_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only service_account_file. Increment to trigger an update when the file contents change (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
+					},
+					"project_id": schema.StringAttribute{
+						Computed:    true,
+						Description: "Google Cloud project ID (computed from service_account_file)",
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
+					},
+					"client_email": schema.StringAttribute{
+						Computed:    true,
+						Description: "Google service account client email (computed from service_account_file)",
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
+					},
+					"private_key_id": schema.StringAttribute{
+						Computed:    true,
+						Sensitive:   true,
+						Description: "Google service account private key ID (computed from service_account_file)",
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
+					},
+					"tags": schema.StringAttribute{
+						Optional:    true,
+						Description: "Comma-separated tags to attach to logs (e.g. env=prod,region=eu)",
+					},
+				},
+			},
 		},
 	}
 }
@@ -298,10 +355,27 @@ func (r *integrationLogAgentResource) Create(ctx context.Context, req resource.C
 		return
 	}
 
+	// Read WriteOnly fields from config (not available in plan)
+	var config integrationLogAgentResourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	if config.GoogleCloud != nil && !config.GoogleCloud.ServiceAccountFile.IsNull() {
+		if plan.GoogleCloud == nil {
+			plan.GoogleCloud = &googleCloudModel{}
+		}
+		plan.GoogleCloud.ServiceAccountFile = config.GoogleCloud.ServiceAccountFile
+	}
+
 	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
 	defer cancel()
 	instanceID := plan.InstanceID.ValueInt64()
-	request := r.populateRequest(&plan, intType)
+	request, err := r.populateRequest(&plan, intType)
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid service_account_file", err.Error())
+		return
+	}
 
 	id, err := r.client.CreateIntegrationLogAgent(timeoutCtx, instanceID, intType, request)
 	if err != nil {
@@ -363,11 +437,28 @@ func (r *integrationLogAgentResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
+	// Read WriteOnly fields from config (not available in plan)
+	var config integrationLogAgentResourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	if config.GoogleCloud != nil && !config.GoogleCloud.ServiceAccountFile.IsNull() {
+		if plan.GoogleCloud == nil {
+			plan.GoogleCloud = &googleCloudModel{}
+		}
+		plan.GoogleCloud.ServiceAccountFile = config.GoogleCloud.ServiceAccountFile
+	}
+
 	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
 	defer cancel()
 	id := plan.ID.ValueString()
 	instanceID := plan.InstanceID.ValueInt64()
-	request := r.populateRequest(&plan, intType)
+	request, err := r.populateRequest(&plan, intType)
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid service_account_file", err.Error())
+		return
+	}
 
 	err = r.client.UpdateIntegrationLogAgent(timeoutCtx, instanceID, id, request)
 	if err != nil {
