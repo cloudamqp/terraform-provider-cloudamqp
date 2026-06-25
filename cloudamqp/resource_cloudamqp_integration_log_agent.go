@@ -46,6 +46,7 @@ type integrationLogAgentResourceModel struct {
 	Datadog     *datadogModel     `tfsdk:"datadog"`
 	CustomOTLP  *customOtlpModel  `tfsdk:"custom_otlp"`
 	GoogleCloud *googleCloudModel `tfsdk:"google_cloud"`
+	Grafana     *grafanaModel     `tfsdk:"grafana"`
 }
 
 type cloudwatchModel struct {
@@ -93,6 +94,12 @@ type googleCloudModel struct {
 	ClientEmail               types.String `tfsdk:"client_email"`
 	PrivateKeyID              types.String `tfsdk:"private_key_id"`
 	Tags                      types.String `tfsdk:"tags"`
+}
+
+type grafanaModel struct {
+	Endpoint          types.String `tfsdk:"endpoint"`
+	GrafanaInstanceID types.String `tfsdk:"grafana_instance_id"`
+	APIToken          types.String `tfsdk:"api_token"`
 }
 
 func (r *integrationLogAgentResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -311,6 +318,25 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 					"tags": schema.StringAttribute{
 						Optional:    true,
 						Description: "Comma-separated tags to attach to logs (e.g. env=prod,region=eu)",
+					},
+				},
+			},
+			"grafana": schema.SingleNestedBlock{
+				Description: "Grafana Cloud (Loki) log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"endpoint": schema.StringAttribute{
+						Optional:    true,
+						Description: "Grafana Loki endpoint URL",
+					},
+					"grafana_instance_id": schema.StringAttribute{
+						Optional:    true,
+						Description: "Grafana Cloud instance ID",
+					},
+					"api_token": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Grafana Cloud API token",
 					},
 				},
 			},

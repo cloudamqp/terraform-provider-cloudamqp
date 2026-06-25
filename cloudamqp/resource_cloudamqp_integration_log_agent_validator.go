@@ -18,11 +18,11 @@ func (r *integrationLogAgentResource) ConfigValidators(ctx context.Context) []re
 type exactlyOneIntegrationBlockValidator struct{}
 
 func (v exactlyOneIntegrationBlockValidator) Description(_ context.Context) string {
-	return "Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp, google_cloud)"
+	return "Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp, google_cloud, grafana)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) MarkdownDescription(_ context.Context) string {
-	return "Exactly one integration block must be set (`cloudwatch`, `uptrace`, `splunk`, `coralogix`, `datadog`, `custom_otlp`, `google_cloud`)"
+	return "Exactly one integration block must be set (`cloudwatch`, `uptrace`, `splunk`, `coralogix`, `datadog`, `custom_otlp`, `google_cloud`, `grafana`)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
@@ -42,6 +42,7 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	datadogConfigured := config.Datadog != nil && !config.Datadog.APIKey.IsNull()
 	customOtlpConfigured := config.CustomOTLP != nil && !config.CustomOTLP.Endpoint.IsNull()
 	googleCloudConfigured := config.GoogleCloud != nil && !config.GoogleCloud.ServiceAccountFile.IsNull()
+	grafanaConfigured := config.Grafana != nil && !config.Grafana.Endpoint.IsNull()
 
 	count := 0
 	if cloudwatchConfigured {
@@ -65,11 +66,14 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	if googleCloudConfigured {
 		count++
 	}
+	if grafanaConfigured {
+		count++
+	}
 
 	if count != 1 {
 		resp.Diagnostics.AddError(
 			"Invalid Configuration",
-			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp, google_cloud), got %d", count),
+			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp, google_cloud, grafana), got %d", count),
 		)
 		return
 	}
@@ -164,6 +168,21 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 		if config.GoogleCloud.ServiceAccountFile.IsNull() {
 			resp.Diagnostics.AddAttributeError(path.Root("google_cloud").AtName("service_account_file"),
 				"Missing required attribute", "service_account_file is required for google_cloud integration")
+		}
+	}
+
+	if grafanaConfigured {
+		if config.Grafana.Endpoint.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("grafana").AtName("endpoint"),
+				"Missing required attribute", "endpoint is required for grafana integration")
+		}
+		if config.Grafana.GrafanaInstanceID.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("grafana").AtName("grafana_instance_id"),
+				"Missing required attribute", "grafana_instance_id is required for grafana integration")
+		}
+		if config.Grafana.APIToken.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("grafana").AtName("api_token"),
+				"Missing required attribute", "api_token is required for grafana integration")
 		}
 	}
 }

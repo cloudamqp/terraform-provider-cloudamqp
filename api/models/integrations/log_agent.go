@@ -30,6 +30,9 @@ type LogAgentRequest struct {
 	ProjectID      string `json:"project_id,omitempty"`
 	ClientEmail    string `json:"client_email,omitempty"`
 	PrivateKeyID   string `json:"private_key_id,omitempty"`
+	// Grafana
+	GrafanaInstanceID string `json:"instance_id,omitempty"`
+	APIToken          string `json:"api_token,omitempty"`
 }
 
 type LogAgentResponse struct {
@@ -66,4 +69,6 @@ type LogAgentConfigResponse struct {
 	ProjectID    *string `json:"project_id,omitempty"`
 	ClientEmail  *string `json:"client_email,omitempty"`
 	PrivateKeyID *string `json:"private_key_id,omitempty"`
+	// Grafana
+	GrafanaInstanceID *string `json:"instance_id,omitempty"`
 }

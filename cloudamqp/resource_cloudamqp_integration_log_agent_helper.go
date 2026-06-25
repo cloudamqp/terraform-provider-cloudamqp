@@ -35,7 +35,10 @@ func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentR
 	if m.GoogleCloud != nil && !m.GoogleCloud.ServiceAccountFile.IsNull() {
 		return "googlecloud", nil
 	}
-	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp, google_cloud)")
+	if m.Grafana != nil && !m.Grafana.Endpoint.IsNull() {
+		return "grafana", nil
+	}
+	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp, google_cloud, grafana)")
 }
 
 // extractGoogleCloudCredentials decodes a base64-encoded Google service account key JSON
@@ -146,6 +149,12 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 			req.Tags = plan.GoogleCloud.Tags.ValueString()
 		}
 		return req, nil
+	case "grafana":
+		return model.LogAgentRequest{
+			Endpoint:          plan.Grafana.Endpoint.ValueString(),
+			GrafanaInstanceID: plan.Grafana.GrafanaInstanceID.ValueString(),
+			APIToken:          plan.Grafana.APIToken.ValueString(),
+		}, nil
 	}
 	return model.LogAgentRequest{}, nil
 }
@@ -222,5 +231,12 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		if !m.GoogleCloud.Tags.IsNull() || data.Config.Tags != nil {
 			m.GoogleCloud.Tags = types.StringPointerValue(data.Config.Tags)
 		}
+	case "grafana":
+		if m.Grafana == nil {
+			m.Grafana = &grafanaModel{}
+		}
+		m.Grafana.Endpoint = types.StringPointerValue(data.Config.Endpoint)
+		m.Grafana.GrafanaInstanceID = types.StringPointerValue(data.Config.GrafanaInstanceID)
+		// api_token is WriteOnly — not returned by the API, not stored in state
 	}
 }
