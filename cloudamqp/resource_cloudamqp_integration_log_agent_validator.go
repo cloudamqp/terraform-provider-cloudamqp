@@ -18,11 +18,11 @@ func (r *integrationLogAgentResource) ConfigValidators(ctx context.Context) []re
 type exactlyOneIntegrationBlockValidator struct{}
 
 func (v exactlyOneIntegrationBlockValidator) Description(_ context.Context) string {
-	return "Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog)"
+	return "Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) MarkdownDescription(_ context.Context) string {
-	return "Exactly one integration block must be set (`cloudwatch`, `uptrace`, `splunk`, `coralogix`, `datadog`)"
+	return "Exactly one integration block must be set (`cloudwatch`, `uptrace`, `splunk`, `coralogix`, `datadog`, `custom_otlp`)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
@@ -40,6 +40,7 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	splunkConfigured := config.Splunk != nil && !config.Splunk.Endpoint.IsNull()
 	coralogixConfigured := config.Coralogix != nil && !config.Coralogix.PrivateKey.IsNull()
 	datadogConfigured := config.Datadog != nil && !config.Datadog.APIKey.IsNull()
+	customOtlpConfigured := config.CustomOTLP != nil && !config.CustomOTLP.Endpoint.IsNull()
 
 	count := 0
 	if cloudwatchConfigured {
@@ -57,11 +58,14 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	if datadogConfigured {
 		count++
 	}
+	if customOtlpConfigured {
+		count++
+	}
 
 	if count != 1 {
 		resp.Diagnostics.AddError(
 			"Invalid Configuration",
-			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog), got %d", count),
+			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp), got %d", count),
 		)
 		return
 	}
@@ -126,6 +130,29 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 		if config.Datadog.Region.IsNull() {
 			resp.Diagnostics.AddAttributeError(path.Root("datadog").AtName("region"),
 				"Missing required attribute", "region is required for datadog integration")
+		}
+	}
+
+	if customOtlpConfigured {
+		if config.CustomOTLP.Endpoint.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("custom_otlp").AtName("endpoint"),
+				"Missing required attribute", "endpoint is required for custom_otlp integration")
+		}
+		headersSet := !config.CustomOTLP.Headers.IsNull() && !config.CustomOTLP.Headers.IsUnknown() && len(config.CustomOTLP.Headers.Elements()) > 0
+		usernameSet := !config.CustomOTLP.Username.IsNull() && !config.CustomOTLP.Username.IsUnknown()
+		passwordSet := !config.CustomOTLP.Password.IsNull() && !config.CustomOTLP.Password.IsUnknown()
+		if headersSet && (usernameSet || passwordSet) {
+			resp.Diagnostics.AddError(
+				"Conflicting attributes",
+				"custom_otlp: headers and username/password are mutually exclusive; use one or the other for authentication")
+		}
+		if usernameSet && !passwordSet {
+			resp.Diagnostics.AddAttributeError(path.Root("custom_otlp").AtName("password"),
+				"Missing required attribute", "custom_otlp: password is required when username is set")
+		}
+		if passwordSet && !usernameSet {
+			resp.Diagnostics.AddAttributeError(path.Root("custom_otlp").AtName("username"),
+				"Missing required attribute", "custom_otlp: username is required when password is set")
 		}
 	}
 }

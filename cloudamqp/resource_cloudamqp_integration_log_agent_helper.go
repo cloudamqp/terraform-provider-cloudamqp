@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/integrations"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -26,7 +27,10 @@ func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentR
 	if m.Datadog != nil && !m.Datadog.APIKey.IsNull() {
 		return "datadog_v2", nil
 	}
-	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, uptrace, splunk, coralogix, datadog)")
+	if m.CustomOTLP != nil && !m.CustomOTLP.Endpoint.IsNull() {
+		return "custom_otlp", nil
+	}
+	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp)")
 }
 
 // populateRequest converts the resource model to an API request
@@ -72,6 +76,27 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 		}
 		if !plan.Datadog.Tags.IsNull() && !plan.Datadog.Tags.IsUnknown() {
 			req.Tags = plan.Datadog.Tags.ValueString()
+		}
+		return req
+	case "custom_otlp":
+		req := model.LogAgentRequest{
+			Endpoint: plan.CustomOTLP.Endpoint.ValueString(),
+		}
+		headersSet := !plan.CustomOTLP.Headers.IsNull() && !plan.CustomOTLP.Headers.IsUnknown() && len(plan.CustomOTLP.Headers.Elements()) > 0
+		usernameSet := !plan.CustomOTLP.Username.IsNull() && !plan.CustomOTLP.Username.IsUnknown()
+		if headersSet {
+			headers := make(map[string]string, len(plan.CustomOTLP.Headers.Elements()))
+			for k, v := range plan.CustomOTLP.Headers.Elements() {
+				if sv, ok := v.(types.String); ok {
+					headers[k] = sv.ValueString()
+				}
+			}
+			req.Headers = headers
+			req.AuthType = "headers"
+		} else if usernameSet {
+			req.Username = plan.CustomOTLP.Username.ValueString()
+			req.Password = plan.CustomOTLP.Password.ValueString()
+			req.AuthType = "basic_auth"
 		}
 		return req
 	}
@@ -121,5 +146,23 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		if !m.Datadog.Tags.IsNull() || data.Config.Tags != nil {
 			m.Datadog.Tags = types.StringPointerValue(data.Config.Tags)
 		}
+	case "custom_otlp":
+		if m.CustomOTLP == nil {
+			m.CustomOTLP = &customOtlpModel{}
+		}
+		m.CustomOTLP.Endpoint = types.StringPointerValue(data.Config.Endpoint)
+		// Convert headers map from API response to types.Map
+		if len(data.Config.Headers) > 0 {
+			elements := make(map[string]attr.Value, len(data.Config.Headers))
+			for k, v := range data.Config.Headers {
+				v := v // capture loop variable
+				elements[k] = types.StringValue(v)
+			}
+			m.CustomOTLP.Headers = types.MapValueMust(types.StringType, elements)
+		} else {
+			m.CustomOTLP.Headers = types.MapNull(types.StringType)
+		}
+		m.CustomOTLP.Username = types.StringPointerValue(data.Config.Username)
+		// password is WriteOnly — not returned by the API, not stored in state
 	}
 }

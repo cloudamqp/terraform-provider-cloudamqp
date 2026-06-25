@@ -38,11 +38,12 @@ func NewIntegrationLogAgentResource() resource.Resource {
 type integrationLogAgentResourceModel struct {
 	ID         types.String     `tfsdk:"id"`
 	InstanceID types.Int64      `tfsdk:"instance_id"`
-	Cloudwatch *cloudwatchModel `tfsdk:"cloudwatch"`
-	Uptrace    *uptraceModel    `tfsdk:"uptrace"`
-	Splunk     *splunkModel     `tfsdk:"splunk"`
-	Coralogix  *coralogixModel  `tfsdk:"coralogix"`
-	Datadog    *datadogModel    `tfsdk:"datadog"`
+	Cloudwatch  *cloudwatchModel  `tfsdk:"cloudwatch"`
+	Uptrace     *uptraceModel     `tfsdk:"uptrace"`
+	Splunk      *splunkModel      `tfsdk:"splunk"`
+	Coralogix   *coralogixModel   `tfsdk:"coralogix"`
+	Datadog     *datadogModel     `tfsdk:"datadog"`
+	CustomOTLP  *customOtlpModel  `tfsdk:"custom_otlp"`
 }
 
 type cloudwatchModel struct {
@@ -74,6 +75,13 @@ type datadogModel struct {
 	APIKey types.String `tfsdk:"api_key"`
 	Region types.String `tfsdk:"region"`
 	Tags   types.String `tfsdk:"tags"`
+}
+
+type customOtlpModel struct {
+	Endpoint types.String `tfsdk:"endpoint"`
+	Headers  types.Map    `tfsdk:"headers"`
+	Username types.String `tfsdk:"username"`
+	Password types.String `tfsdk:"password"`
 }
 
 func (r *integrationLogAgentResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -221,6 +229,31 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 					"tags": schema.StringAttribute{
 						Optional:    true,
 						Description: "Comma-separated tags to attach to logs (e.g. env=prod,region=eu)",
+					},
+				},
+			},
+			"custom_otlp": schema.SingleNestedBlock{
+				Description: "Custom OTLP log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"endpoint": schema.StringAttribute{
+						Optional:    true,
+						Description: "OTLP HTTP endpoint URL (e.g. http://otlp.uptrace.dev:4318)",
+					},
+					"headers": schema.MapAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						ElementType: types.StringType,
+						Description: "Key-value HTTP headers for authentication (e.g. uptrace-dsn: https://token@api.uptrace.dev/project_id). Mutually exclusive with username/password.",
+					},
+					"username": schema.StringAttribute{
+						Optional:    true,
+						Description: "Username for HTTP basic auth. Must be set together with password. Mutually exclusive with headers.",
+					},
+					"password": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Password for HTTP basic auth. Must be set together with username. Mutually exclusive with headers.",
 					},
 				},
 			},

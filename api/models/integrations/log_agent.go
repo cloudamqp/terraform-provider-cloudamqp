@@ -20,6 +20,11 @@ type LogAgentRequest struct {
 	// Datadog
 	APIKey string `json:"api_key,omitempty"`
 	Tags   string `json:"tags,omitempty"`
+	// Custom OTLP
+	AuthType string            `json:"auth_type,omitempty"`
+	Headers  map[string]string `json:"headers,omitempty"`
+	Username string            `json:"username,omitempty"`
+	Password string            `json:"password,omitempty"`
 }
 
 type LogAgentResponse struct {
@@ -48,4 +53,8 @@ type LogAgentConfigResponse struct {
 	// Datadog
 	APIKey *string `json:"api_key,omitempty"`
 	Tags   *string `json:"tags,omitempty"`
+	// Custom OTLP
+	AuthType *string           `json:"auth_type,omitempty"`
+	Headers  map[string]string `json:"headers,omitempty"`
+	Username *string           `json:"username,omitempty"`
 }
