@@ -23,7 +23,10 @@ func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentR
 	if m.Coralogix != nil && !m.Coralogix.PrivateKey.IsNull() {
 		return "coralogix_v2", nil
 	}
-	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, uptrace, splunk, coralogix)")
+	if m.Datadog != nil && !m.Datadog.APIKey.IsNull() {
+		return "datadog_v2", nil
+	}
+	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, uptrace, splunk, coralogix, datadog)")
 }
 
 // populateRequest converts the resource model to an API request
@@ -62,6 +65,15 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 			Subsystem:   plan.Coralogix.Subsystem.ValueString(),
 			Region:      plan.Coralogix.Region.ValueString(),
 		}
+	case "datadog_v2":
+		req := model.LogAgentRequest{
+			APIKey: plan.Datadog.APIKey.ValueString(),
+			Region: plan.Datadog.Region.ValueString(),
+		}
+		if !plan.Datadog.Tags.IsNull() && !plan.Datadog.Tags.IsUnknown() {
+			req.Tags = plan.Datadog.Tags.ValueString()
+		}
+		return req
 	}
 	return model.LogAgentRequest{}
 }
@@ -100,5 +112,14 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		m.Coralogix.Application = types.StringPointerValue(data.Config.Application)
 		m.Coralogix.Subsystem = types.StringPointerValue(data.Config.Subsystem)
 		m.Coralogix.Region = types.StringPointerValue(data.Config.Region)
+	case "datadog_v2":
+		if m.Datadog == nil {
+			m.Datadog = &datadogModel{}
+		}
+		// api_key is WriteOnly — not returned by the API, not stored in state
+		m.Datadog.Region = types.StringPointerValue(data.Config.Region)
+		if !m.Datadog.Tags.IsNull() || data.Config.Tags != nil {
+			m.Datadog.Tags = types.StringPointerValue(data.Config.Tags)
+		}
 	}
 }

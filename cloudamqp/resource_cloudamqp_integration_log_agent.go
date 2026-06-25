@@ -36,12 +36,13 @@ func NewIntegrationLogAgentResource() resource.Resource {
 }
 
 type integrationLogAgentResourceModel struct {
-	ID         types.String      `tfsdk:"id"`
-	InstanceID types.Int64       `tfsdk:"instance_id"`
-	Cloudwatch *cloudwatchModel  `tfsdk:"cloudwatch"`
-	Uptrace    *uptraceModel     `tfsdk:"uptrace"`
-	Splunk     *splunkModel      `tfsdk:"splunk"`
-	Coralogix  *coralogixModel   `tfsdk:"coralogix"`
+	ID         types.String     `tfsdk:"id"`
+	InstanceID types.Int64      `tfsdk:"instance_id"`
+	Cloudwatch *cloudwatchModel `tfsdk:"cloudwatch"`
+	Uptrace    *uptraceModel    `tfsdk:"uptrace"`
+	Splunk     *splunkModel     `tfsdk:"splunk"`
+	Coralogix  *coralogixModel  `tfsdk:"coralogix"`
+	Datadog    *datadogModel    `tfsdk:"datadog"`
 }
 
 type cloudwatchModel struct {
@@ -67,6 +68,12 @@ type coralogixModel struct {
 	Application types.String `tfsdk:"application"`
 	Subsystem   types.String `tfsdk:"subsystem"`
 	Region      types.String `tfsdk:"region"`
+}
+
+type datadogModel struct {
+	APIKey types.String `tfsdk:"api_key"`
+	Region types.String `tfsdk:"region"`
+	Tags   types.String `tfsdk:"tags"`
 }
 
 func (r *integrationLogAgentResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -192,6 +199,28 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 						Validators: []validator.String{
 							stringvalidator.OneOf("US1", "US2", "US3", "EU1", "EU2", "AP1", "AP2", "AP3"),
 						},
+					},
+				},
+			},
+			"datadog": schema.SingleNestedBlock{
+				Description: "Datadog log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"api_key": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Datadog API key",
+					},
+					"region": schema.StringAttribute{
+						Optional:    true,
+						Description: "Datadog region (US1, US3, US5, EU, AP2)",
+						Validators: []validator.String{
+							stringvalidator.OneOf("US1", "US3", "US5", "EU", "AP2"),
+						},
+					},
+					"tags": schema.StringAttribute{
+						Optional:    true,
+						Description: "Comma-separated tags to attach to logs (e.g. env=prod,region=eu)",
 					},
 				},
 			},

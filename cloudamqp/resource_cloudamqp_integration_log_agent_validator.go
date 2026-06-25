@@ -18,11 +18,11 @@ func (r *integrationLogAgentResource) ConfigValidators(ctx context.Context) []re
 type exactlyOneIntegrationBlockValidator struct{}
 
 func (v exactlyOneIntegrationBlockValidator) Description(_ context.Context) string {
-	return "Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix)"
+	return "Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) MarkdownDescription(_ context.Context) string {
-	return "Exactly one integration block must be set (`cloudwatch`, `uptrace`, `splunk`, `coralogix`)"
+	return "Exactly one integration block must be set (`cloudwatch`, `uptrace`, `splunk`, `coralogix`, `datadog`)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
@@ -39,6 +39,7 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	uptraceConfigured := config.Uptrace != nil && !config.Uptrace.DSN.IsNull()
 	splunkConfigured := config.Splunk != nil && !config.Splunk.Endpoint.IsNull()
 	coralogixConfigured := config.Coralogix != nil && !config.Coralogix.PrivateKey.IsNull()
+	datadogConfigured := config.Datadog != nil && !config.Datadog.APIKey.IsNull()
 
 	count := 0
 	if cloudwatchConfigured {
@@ -53,11 +54,14 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	if coralogixConfigured {
 		count++
 	}
+	if datadogConfigured {
+		count++
+	}
 
 	if count != 1 {
 		resp.Diagnostics.AddError(
 			"Invalid Configuration",
-			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix), got %d", count),
+			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog), got %d", count),
 		)
 		return
 	}
@@ -111,6 +115,17 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 		if config.Coralogix.Region.IsNull() {
 			resp.Diagnostics.AddAttributeError(path.Root("coralogix").AtName("region"),
 				"Missing required attribute", "region is required for coralogix integration")
+		}
+	}
+
+	if datadogConfigured {
+		if config.Datadog.APIKey.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("datadog").AtName("api_key"),
+				"Missing required attribute", "api_key is required for datadog integration")
+		}
+		if config.Datadog.Region.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("datadog").AtName("region"),
+				"Missing required attribute", "region is required for datadog integration")
 		}
 	}
 }

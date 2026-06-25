@@ -17,6 +17,9 @@ type LogAgentRequest struct {
 	PrivateKey  string `json:"private_key,omitempty"`
 	Application string `json:"application,omitempty"`
 	Subsystem   string `json:"subsystem,omitempty"`
+	// Datadog
+	APIKey string `json:"api_key,omitempty"`
+	Tags   string `json:"tags,omitempty"`
 }
 
 type LogAgentResponse struct {
@@ -42,4 +45,7 @@ type LogAgentConfigResponse struct {
 	PrivateKey  *string `json:"private_key,omitempty"`
 	Application *string `json:"application,omitempty"`
 	Subsystem   *string `json:"subsystem,omitempty"`
+	// Datadog
+	APIKey *string `json:"api_key,omitempty"`
+	Tags   *string `json:"tags,omitempty"`
 }
