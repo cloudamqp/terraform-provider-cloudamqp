@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
-	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/integrations"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -20,9 +19,10 @@ import (
 )
 
 var (
-	_ resource.Resource                = &integrationLogAgentResource{}
-	_ resource.ResourceWithConfigure   = &integrationLogAgentResource{}
-	_ resource.ResourceWithImportState = &integrationLogAgentResource{}
+	_ resource.Resource                     = &integrationLogAgentResource{}
+	_ resource.ResourceWithConfigure        = &integrationLogAgentResource{}
+	_ resource.ResourceWithImportState      = &integrationLogAgentResource{}
+	_ resource.ResourceWithConfigValidators = &integrationLogAgentResource{}
 )
 
 type integrationLogAgentResource struct {
@@ -37,6 +37,8 @@ type integrationLogAgentResourceModel struct {
 	ID         types.String     `tfsdk:"id"`
 	InstanceID types.Int64      `tfsdk:"instance_id"`
 	Cloudwatch *cloudwatchModel `tfsdk:"cloudwatch"`
+	Uptrace    *uptraceModel    `tfsdk:"uptrace"`
+	Splunk     *splunkModel     `tfsdk:"splunk"`
 }
 
 type cloudwatchModel struct {
@@ -45,6 +47,16 @@ type cloudwatchModel struct {
 	Region        types.String `tfsdk:"region"`
 	LogGroupName  types.String `tfsdk:"log_group_name"`
 	LogStreamName types.String `tfsdk:"log_stream_name"`
+}
+
+type uptraceModel struct {
+	DSN types.String `tfsdk:"dsn"`
+}
+
+type splunkModel struct {
+	Endpoint   types.String `tfsdk:"hec_endpoint"`
+	Token      types.String `tfsdk:"token"`
+	SourceType types.String `tfsdk:"source_type"`
 }
 
 func (r *integrationLogAgentResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -90,15 +102,15 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 				Description: "CloudWatch OTLP log integration configuration",
 				Attributes: map[string]schema.Attribute{
 					"iam_role": schema.StringAttribute{
-						Required:    true,
+						Optional:    true,
 						Description: "AWS IAM role ARN",
 					},
 					"iam_external_id": schema.StringAttribute{
-						Required:    true,
+						Optional:    true,
 						Description: "External identifier that matches the role you created",
 					},
 					"region": schema.StringAttribute{
-						Required:    true,
+						Optional:    true,
 						Description: "AWS region",
 					},
 					"log_group_name": schema.StringAttribute{
@@ -116,6 +128,35 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.UseStateForUnknown(),
 						},
+					},
+				},
+			},
+			"uptrace": schema.SingleNestedBlock{
+				Description: "Uptrace OTLP log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"dsn": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						Description: "Uptrace DSN (Data Source Name) URL",
+					},
+				},
+			},
+			"splunk": schema.SingleNestedBlock{
+				Description: "Splunk HEC log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"endpoint": schema.StringAttribute{
+						Optional:    true,
+						Description: "Splunk HEC endpoint URL (e.g. https://your-instance.splunkcloud.com:8088/services/collector)",
+					},
+					"token": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Splunk HEC token",
+					},
+					"source_type": schema.StringAttribute{
+						Optional:    true,
+						Description: "Splunk source type (leave empty to use the token's default)",
 					},
 				},
 			},
@@ -265,48 +306,4 @@ func (r *integrationLogAgentResource) Delete(ctx context.Context, req resource.D
 		return
 	}
 	resp.State.RemoveResource(ctx)
-}
-
-// getIntegrationType returns the API type string based on which block is populated
-func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentResourceModel) (string, error) {
-	if m.Cloudwatch != nil {
-		return "cloudwatch_v2", nil
-	}
-	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch)")
-}
-
-// populateRequest converts the resource model to an API request
-func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentResourceModel, intType string) model.LogAgentRequest {
-	switch intType {
-	case "cloudwatch_v2":
-		cw := plan.Cloudwatch
-		req := model.LogAgentRequest{
-			Region:        cw.Region.ValueString(),
-			IAMRole:       cw.IAMRole.ValueString(),
-			IAMExternalID: cw.IAMExternalID.ValueString(),
-		}
-		if !cw.LogGroupName.IsNull() && !cw.LogGroupName.IsUnknown() {
-			req.LogGroupName = cw.LogGroupName.ValueString()
-		}
-		if !cw.LogStreamName.IsNull() && !cw.LogStreamName.IsUnknown() {
-			req.LogStreamName = cw.LogStreamName.ValueString()
-		}
-		return req
-	}
-	return model.LogAgentRequest{}
-}
-
-// populateResourceModel fills the resource model from the API response
-func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAgentResourceModel, data *model.LogAgentResponse) {
-	switch data.Type {
-	case "cloudwatch_v2":
-		if m.Cloudwatch == nil {
-			m.Cloudwatch = &cloudwatchModel{}
-		}
-		m.Cloudwatch.IAMRole = types.StringPointerValue(data.Config.IAMRole)
-		m.Cloudwatch.IAMExternalID = types.StringPointerValue(data.Config.IAMExternalID)
-		m.Cloudwatch.Region = types.StringPointerValue(data.Config.Region)
-		m.Cloudwatch.LogGroupName = types.StringPointerValue(data.Config.LogGroupName)
-		m.Cloudwatch.LogStreamName = types.StringPointerValue(data.Config.LogStreamName)
-	}
 }
