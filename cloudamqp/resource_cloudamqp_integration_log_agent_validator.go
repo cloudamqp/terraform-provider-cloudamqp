@@ -18,11 +18,11 @@ func (r *integrationLogAgentResource) ConfigValidators(ctx context.Context) []re
 type exactlyOneIntegrationBlockValidator struct{}
 
 func (v exactlyOneIntegrationBlockValidator) Description(_ context.Context) string {
-	return "Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp, google_cloud, grafana)"
+	return "Exactly one integration block must be set (cloudwatch, coralogix, custom_otlp, datadog, google_cloud, grafana, splunk, uptrace)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) MarkdownDescription(_ context.Context) string {
-	return "Exactly one integration block must be set (`cloudwatch`, `uptrace`, `splunk`, `coralogix`, `datadog`, `custom_otlp`, `google_cloud`, `grafana`)"
+	return "Exactly one integration block must be set (`cloudwatch`, `coralogix`, `custom_otlp`, `datadog`, `google_cloud`, `grafana`, `splunk`, `uptrace`)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
@@ -36,31 +36,25 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	// With protocol v5 (mux), absent blocks arrive as non-nil empty objects,
 	// so a nil-check alone is insufficient.
 	cloudwatchConfigured := config.Cloudwatch != nil && !config.Cloudwatch.IAMRole.IsNull()
-	uptraceConfigured := config.Uptrace != nil && !config.Uptrace.DSN.IsNull()
-	splunkConfigured := config.Splunk != nil && !config.Splunk.Endpoint.IsNull()
 	coralogixConfigured := config.Coralogix != nil && !config.Coralogix.PrivateKey.IsNull()
-	datadogConfigured := config.Datadog != nil && !config.Datadog.APIKey.IsNull()
 	customOtlpConfigured := config.CustomOTLP != nil && !config.CustomOTLP.Endpoint.IsNull()
+	datadogConfigured := config.Datadog != nil && !config.Datadog.APIKey.IsNull()
 	googleCloudConfigured := config.GoogleCloud != nil && !config.GoogleCloud.ServiceAccountFile.IsNull()
 	grafanaConfigured := config.Grafana != nil && !config.Grafana.Endpoint.IsNull()
+	splunkConfigured := config.Splunk != nil && !config.Splunk.Endpoint.IsNull()
+	uptraceConfigured := config.Uptrace != nil && !config.Uptrace.DSN.IsNull()
 
 	count := 0
 	if cloudwatchConfigured {
 		count++
 	}
-	if uptraceConfigured {
-		count++
-	}
-	if splunkConfigured {
-		count++
-	}
 	if coralogixConfigured {
 		count++
 	}
-	if datadogConfigured {
+	if customOtlpConfigured {
 		count++
 	}
-	if customOtlpConfigured {
+	if datadogConfigured {
 		count++
 	}
 	if googleCloudConfigured {
@@ -69,11 +63,17 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	if grafanaConfigured {
 		count++
 	}
+	if splunkConfigured {
+		count++
+	}
+	if uptraceConfigured {
+		count++
+	}
 
 	if count != 1 {
 		resp.Diagnostics.AddError(
 			"Invalid Configuration",
-			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp, google_cloud, grafana), got %d", count),
+			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, coralogix, custom_otlp, datadog, google_cloud, grafana, splunk, uptrace), got %d", count),
 		)
 		return
 	}
@@ -93,24 +93,6 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 		}
 	}
 
-	if uptraceConfigured {
-		if config.Uptrace.DSN.IsNull() {
-			resp.Diagnostics.AddAttributeError(path.Root("uptrace").AtName("dsn"),
-				"Missing required attribute", "dsn is required for uptrace integration")
-		}
-	}
-
-	if splunkConfigured {
-		if config.Splunk.Endpoint.IsNull() {
-			resp.Diagnostics.AddAttributeError(path.Root("splunk").AtName("hec_endpoint"),
-				"Missing required attribute", "hec_endpoint is required for splunk integration")
-		}
-		if config.Splunk.Token.IsNull() {
-			resp.Diagnostics.AddAttributeError(path.Root("splunk").AtName("token"),
-				"Missing required attribute", "token is required for splunk integration")
-		}
-	}
-
 	if coralogixConfigured {
 		if config.Coralogix.PrivateKey.IsNull() {
 			resp.Diagnostics.AddAttributeError(path.Root("coralogix").AtName("private_key"),
@@ -127,17 +109,6 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 		if config.Coralogix.Region.IsNull() {
 			resp.Diagnostics.AddAttributeError(path.Root("coralogix").AtName("region"),
 				"Missing required attribute", "region is required for coralogix integration")
-		}
-	}
-
-	if datadogConfigured {
-		if config.Datadog.APIKey.IsNull() {
-			resp.Diagnostics.AddAttributeError(path.Root("datadog").AtName("api_key"),
-				"Missing required attribute", "api_key is required for datadog integration")
-		}
-		if config.Datadog.Region.IsNull() {
-			resp.Diagnostics.AddAttributeError(path.Root("datadog").AtName("region"),
-				"Missing required attribute", "region is required for datadog integration")
 		}
 	}
 
@@ -164,6 +135,17 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 		}
 	}
 
+	if datadogConfigured {
+		if config.Datadog.APIKey.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("datadog").AtName("api_key"),
+				"Missing required attribute", "api_key is required for datadog integration")
+		}
+		if config.Datadog.Region.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("datadog").AtName("region"),
+				"Missing required attribute", "region is required for datadog integration")
+		}
+	}
+
 	if googleCloudConfigured {
 		if config.GoogleCloud.ServiceAccountFile.IsNull() {
 			resp.Diagnostics.AddAttributeError(path.Root("google_cloud").AtName("service_account_file"),
@@ -183,6 +165,24 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 		if config.Grafana.APIToken.IsNull() {
 			resp.Diagnostics.AddAttributeError(path.Root("grafana").AtName("api_token"),
 				"Missing required attribute", "api_token is required for grafana integration")
+		}
+	}
+
+	if splunkConfigured {
+		if config.Splunk.Endpoint.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("splunk").AtName("hec_endpoint"),
+				"Missing required attribute", "hec_endpoint is required for splunk integration")
+		}
+		if config.Splunk.Token.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("splunk").AtName("token"),
+				"Missing required attribute", "token is required for splunk integration")
+		}
+	}
+
+	if uptraceConfigured {
+		if config.Uptrace.DSN.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("uptrace").AtName("dsn"),
+				"Missing required attribute", "dsn is required for uptrace integration")
 		}
 	}
 }

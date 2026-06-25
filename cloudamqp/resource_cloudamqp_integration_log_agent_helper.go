@@ -17,20 +17,14 @@ func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentR
 	if m.Cloudwatch != nil && !m.Cloudwatch.IAMRole.IsNull() {
 		return "cloudwatch_v2", nil
 	}
-	if m.Uptrace != nil && !m.Uptrace.DSN.IsNull() {
-		return "uptrace", nil
-	}
-	if m.Splunk != nil && !m.Splunk.Endpoint.IsNull() {
-		return "splunk_v2", nil
-	}
 	if m.Coralogix != nil && !m.Coralogix.PrivateKey.IsNull() {
 		return "coralogix_v2", nil
 	}
-	if m.Datadog != nil && !m.Datadog.APIKey.IsNull() {
-		return "datadog_v2", nil
-	}
 	if m.CustomOTLP != nil && !m.CustomOTLP.Endpoint.IsNull() {
 		return "custom_otlp", nil
+	}
+	if m.Datadog != nil && !m.Datadog.APIKey.IsNull() {
+		return "datadog_v2", nil
 	}
 	if m.GoogleCloud != nil && !m.GoogleCloud.ServiceAccountFile.IsNull() {
 		return "googlecloud", nil
@@ -38,7 +32,13 @@ func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentR
 	if m.Grafana != nil && !m.Grafana.Endpoint.IsNull() {
 		return "grafana", nil
 	}
-	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, uptrace, splunk, coralogix, datadog, custom_otlp, google_cloud, grafana)")
+	if m.Splunk != nil && !m.Splunk.Endpoint.IsNull() {
+		return "splunk_v2", nil
+	}
+	if m.Uptrace != nil && !m.Uptrace.DSN.IsNull() {
+		return "uptrace", nil
+	}
+	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, coralogix, custom_otlp, datadog, google_cloud, grafana, splunk, uptrace)")
 }
 
 // extractGoogleCloudCredentials decodes a base64-encoded Google service account key JSON
@@ -83,19 +83,6 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 			req.LogStreamName = plan.Cloudwatch.LogStreamName.ValueString()
 		}
 		return req, nil
-	case "uptrace":
-		return model.LogAgentRequest{
-			DSN: plan.Uptrace.DSN.ValueString(),
-		}, nil
-	case "splunk_v2":
-		req := model.LogAgentRequest{
-			Endpoint: plan.Splunk.Endpoint.ValueString(),
-			Token:    plan.Splunk.Token.ValueString(),
-		}
-		if !plan.Splunk.SourceType.IsNull() && !plan.Splunk.SourceType.IsUnknown() {
-			req.SourceType = plan.Splunk.SourceType.ValueString()
-		}
-		return req, nil
 	case "coralogix_v2":
 		return model.LogAgentRequest{
 			PrivateKey:  plan.Coralogix.PrivateKey.ValueString(),
@@ -103,15 +90,6 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 			Subsystem:   plan.Coralogix.Subsystem.ValueString(),
 			Region:      plan.Coralogix.Region.ValueString(),
 		}, nil
-	case "datadog_v2":
-		req := model.LogAgentRequest{
-			APIKey: plan.Datadog.APIKey.ValueString(),
-			Region: plan.Datadog.Region.ValueString(),
-		}
-		if !plan.Datadog.Tags.IsNull() && !plan.Datadog.Tags.IsUnknown() {
-			req.Tags = plan.Datadog.Tags.ValueString()
-		}
-		return req, nil
 	case "custom_otlp":
 		req := model.LogAgentRequest{
 			Endpoint: plan.CustomOTLP.Endpoint.ValueString(),
@@ -131,6 +109,15 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 			req.Username = plan.CustomOTLP.Username.ValueString()
 			req.Password = plan.CustomOTLP.Password.ValueString()
 			req.AuthType = "basic_auth"
+		}
+		return req, nil
+	case "datadog_v2":
+		req := model.LogAgentRequest{
+			APIKey: plan.Datadog.APIKey.ValueString(),
+			Region: plan.Datadog.Region.ValueString(),
+		}
+		if !plan.Datadog.Tags.IsNull() && !plan.Datadog.Tags.IsUnknown() {
+			req.Tags = plan.Datadog.Tags.ValueString()
 		}
 		return req, nil
 	case "googlecloud":
@@ -155,6 +142,19 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 			GrafanaInstanceID: plan.Grafana.GrafanaInstanceID.ValueString(),
 			APIToken:          plan.Grafana.APIToken.ValueString(),
 		}, nil
+	case "splunk_v2":
+		req := model.LogAgentRequest{
+			Endpoint: plan.Splunk.Endpoint.ValueString(),
+			Token:    plan.Splunk.Token.ValueString(),
+		}
+		if !plan.Splunk.SourceType.IsNull() && !plan.Splunk.SourceType.IsUnknown() {
+			req.SourceType = plan.Splunk.SourceType.ValueString()
+		}
+		return req, nil
+	case "uptrace":
+		return model.LogAgentRequest{
+			DSN: plan.Uptrace.DSN.ValueString(),
+		}, nil
 	}
 	return model.LogAgentRequest{}, nil
 }
@@ -171,20 +171,6 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		m.Cloudwatch.Region = types.StringPointerValue(data.Config.Region)
 		m.Cloudwatch.LogGroupName = types.StringPointerValue(data.Config.LogGroupName)
 		m.Cloudwatch.LogStreamName = types.StringPointerValue(data.Config.LogStreamName)
-	case "uptrace":
-		if m.Uptrace == nil {
-			m.Uptrace = &uptraceModel{}
-		}
-		m.Uptrace.DSN = types.StringPointerValue(data.Config.DSN)
-	case "splunk_v2":
-		if m.Splunk == nil {
-			m.Splunk = &splunkModel{}
-		}
-		m.Splunk.Endpoint = types.StringPointerValue(data.Config.Endpoint)
-		// token is WriteOnly — not returned by the API, not stored in state
-		if !m.Splunk.SourceType.IsNull() || data.Config.SourceType != nil {
-			m.Splunk.SourceType = types.StringPointerValue(data.Config.SourceType)
-		}
 	case "coralogix_v2":
 		if m.Coralogix == nil {
 			m.Coralogix = &coralogixModel{}
@@ -193,15 +179,6 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		m.Coralogix.Application = types.StringPointerValue(data.Config.Application)
 		m.Coralogix.Subsystem = types.StringPointerValue(data.Config.Subsystem)
 		m.Coralogix.Region = types.StringPointerValue(data.Config.Region)
-	case "datadog_v2":
-		if m.Datadog == nil {
-			m.Datadog = &datadogModel{}
-		}
-		// api_key is WriteOnly — not returned by the API, not stored in state
-		m.Datadog.Region = types.StringPointerValue(data.Config.Region)
-		if !m.Datadog.Tags.IsNull() || data.Config.Tags != nil {
-			m.Datadog.Tags = types.StringPointerValue(data.Config.Tags)
-		}
 	case "custom_otlp":
 		if m.CustomOTLP == nil {
 			m.CustomOTLP = &customOtlpModel{}
@@ -220,6 +197,15 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		}
 		m.CustomOTLP.Username = types.StringPointerValue(data.Config.Username)
 		// password is WriteOnly — not returned by the API, not stored in state
+	case "datadog_v2":
+		if m.Datadog == nil {
+			m.Datadog = &datadogModel{}
+		}
+		// api_key is WriteOnly — not returned by the API, not stored in state
+		m.Datadog.Region = types.StringPointerValue(data.Config.Region)
+		if !m.Datadog.Tags.IsNull() || data.Config.Tags != nil {
+			m.Datadog.Tags = types.StringPointerValue(data.Config.Tags)
+		}
 	case "googlecloud":
 		if m.GoogleCloud == nil {
 			m.GoogleCloud = &googleCloudModel{}
@@ -238,5 +224,19 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		m.Grafana.Endpoint = types.StringPointerValue(data.Config.Endpoint)
 		m.Grafana.GrafanaInstanceID = types.StringPointerValue(data.Config.GrafanaInstanceID)
 		// api_token is WriteOnly — not returned by the API, not stored in state
+	case "splunk_v2":
+		if m.Splunk == nil {
+			m.Splunk = &splunkModel{}
+		}
+		m.Splunk.Endpoint = types.StringPointerValue(data.Config.Endpoint)
+		// token is WriteOnly — not returned by the API, not stored in state
+		if !m.Splunk.SourceType.IsNull() || data.Config.SourceType != nil {
+			m.Splunk.SourceType = types.StringPointerValue(data.Config.SourceType)
+		}
+	case "uptrace":
+		if m.Uptrace == nil {
+			m.Uptrace = &uptraceModel{}
+		}
+		m.Uptrace.DSN = types.StringPointerValue(data.Config.DSN)
 	}
 }

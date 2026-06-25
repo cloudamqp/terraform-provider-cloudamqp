@@ -37,16 +37,16 @@ func NewIntegrationLogAgentResource() resource.Resource {
 }
 
 type integrationLogAgentResourceModel struct {
-	ID         types.String     `tfsdk:"id"`
-	InstanceID types.Int64      `tfsdk:"instance_id"`
+	ID          types.String      `tfsdk:"id"`
+	InstanceID  types.Int64       `tfsdk:"instance_id"`
 	Cloudwatch  *cloudwatchModel  `tfsdk:"cloudwatch"`
-	Uptrace     *uptraceModel     `tfsdk:"uptrace"`
-	Splunk      *splunkModel      `tfsdk:"splunk"`
 	Coralogix   *coralogixModel   `tfsdk:"coralogix"`
-	Datadog     *datadogModel     `tfsdk:"datadog"`
 	CustomOTLP  *customOtlpModel  `tfsdk:"custom_otlp"`
+	Datadog     *datadogModel     `tfsdk:"datadog"`
 	GoogleCloud *googleCloudModel `tfsdk:"google_cloud"`
 	Grafana     *grafanaModel     `tfsdk:"grafana"`
+	Splunk      *splunkModel      `tfsdk:"splunk"`
+	Uptrace     *uptraceModel     `tfsdk:"uptrace"`
 }
 
 type cloudwatchModel struct {
@@ -57,16 +57,6 @@ type cloudwatchModel struct {
 	LogStreamName types.String `tfsdk:"log_stream_name"`
 }
 
-type uptraceModel struct {
-	DSN types.String `tfsdk:"dsn"`
-}
-
-type splunkModel struct {
-	Endpoint   types.String `tfsdk:"hec_endpoint"`
-	Token      types.String `tfsdk:"token"`
-	SourceType types.String `tfsdk:"source_type"`
-}
-
 type coralogixModel struct {
 	PrivateKey  types.String `tfsdk:"private_key"`
 	Application types.String `tfsdk:"application"`
@@ -74,17 +64,17 @@ type coralogixModel struct {
 	Region      types.String `tfsdk:"region"`
 }
 
-type datadogModel struct {
-	APIKey types.String `tfsdk:"api_key"`
-	Region types.String `tfsdk:"region"`
-	Tags   types.String `tfsdk:"tags"`
-}
-
 type customOtlpModel struct {
 	Endpoint types.String `tfsdk:"endpoint"`
 	Headers  types.Map    `tfsdk:"headers"`
 	Username types.String `tfsdk:"username"`
 	Password types.String `tfsdk:"password"`
+}
+
+type datadogModel struct {
+	APIKey types.String `tfsdk:"api_key"`
+	Region types.String `tfsdk:"region"`
+	Tags   types.String `tfsdk:"tags"`
 }
 
 type googleCloudModel struct {
@@ -100,6 +90,16 @@ type grafanaModel struct {
 	Endpoint          types.String `tfsdk:"endpoint"`
 	GrafanaInstanceID types.String `tfsdk:"grafana_instance_id"`
 	APIToken          types.String `tfsdk:"api_token"`
+}
+
+type splunkModel struct {
+	Endpoint   types.String `tfsdk:"hec_endpoint"`
+	Token      types.String `tfsdk:"token"`
+	SourceType types.String `tfsdk:"source_type"`
+}
+
+type uptraceModel struct {
+	DSN types.String `tfsdk:"dsn"`
 }
 
 func (r *integrationLogAgentResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -174,35 +174,6 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 					},
 				},
 			},
-			"uptrace": schema.SingleNestedBlock{
-				Description: "Uptrace OTLP log integration configuration",
-				Attributes: map[string]schema.Attribute{
-					"dsn": schema.StringAttribute{
-						Optional:    true,
-						Sensitive:   true,
-						Description: "Uptrace DSN (Data Source Name) URL",
-					},
-				},
-			},
-			"splunk": schema.SingleNestedBlock{
-				Description: "Splunk HEC log integration configuration",
-				Attributes: map[string]schema.Attribute{
-					"endpoint": schema.StringAttribute{
-						Optional:    true,
-						Description: "Splunk HEC endpoint URL (e.g. https://your-instance.splunkcloud.com:8088/services/collector)",
-					},
-					"token": schema.StringAttribute{
-						Optional:    true,
-						Sensitive:   true,
-						WriteOnly:   true,
-						Description: "Splunk HEC token",
-					},
-					"source_type": schema.StringAttribute{
-						Optional:    true,
-						Description: "Splunk source type (leave empty to use the token's default)",
-					},
-				},
-			},
 			"coralogix": schema.SingleNestedBlock{
 				Description: "Coralogix log integration configuration",
 				Attributes: map[string]schema.Attribute{
@@ -228,28 +199,6 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 					},
 				},
 			},
-			"datadog": schema.SingleNestedBlock{
-				Description: "Datadog log integration configuration",
-				Attributes: map[string]schema.Attribute{
-					"api_key": schema.StringAttribute{
-						Optional:    true,
-						Sensitive:   true,
-						WriteOnly:   true,
-						Description: "Datadog API key",
-					},
-					"region": schema.StringAttribute{
-						Optional:    true,
-						Description: "Datadog region (US1, US3, US5, EU, AP2)",
-						Validators: []validator.String{
-							stringvalidator.OneOf("US1", "US3", "US5", "EU", "AP2"),
-						},
-					},
-					"tags": schema.StringAttribute{
-						Optional:    true,
-						Description: "Comma-separated tags to attach to logs (e.g. env=prod,region=eu)",
-					},
-				},
-			},
 			"custom_otlp": schema.SingleNestedBlock{
 				Description: "Custom OTLP log integration configuration",
 				Attributes: map[string]schema.Attribute{
@@ -272,6 +221,28 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 						Sensitive:   true,
 						WriteOnly:   true,
 						Description: "Password for HTTP basic auth. Must be set together with username. Mutually exclusive with headers.",
+					},
+				},
+			},
+			"datadog": schema.SingleNestedBlock{
+				Description: "Datadog log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"api_key": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Datadog API key",
+					},
+					"region": schema.StringAttribute{
+						Optional:    true,
+						Description: "Datadog region (US1, US3, US5, EU, AP2)",
+						Validators: []validator.String{
+							stringvalidator.OneOf("US1", "US3", "US5", "EU", "AP2"),
+						},
+					},
+					"tags": schema.StringAttribute{
+						Optional:    true,
+						Description: "Comma-separated tags to attach to logs (e.g. env=prod,region=eu)",
 					},
 				},
 			},
@@ -337,6 +308,35 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 						Sensitive:   true,
 						WriteOnly:   true,
 						Description: "Grafana Cloud API token",
+					},
+				},
+			},
+			"splunk": schema.SingleNestedBlock{
+				Description: "Splunk HEC log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"endpoint": schema.StringAttribute{
+						Optional:    true,
+						Description: "Splunk HEC endpoint URL (e.g. https://your-instance.splunkcloud.com:8088/services/collector)",
+					},
+					"token": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Splunk HEC token",
+					},
+					"source_type": schema.StringAttribute{
+						Optional:    true,
+						Description: "Splunk source type (leave empty to use the token's default)",
+					},
+				},
+			},
+			"uptrace": schema.SingleNestedBlock{
+				Description: "Uptrace OTLP log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"dsn": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						Description: "Uptrace DSN (Data Source Name) URL",
 					},
 				},
 			},
