@@ -110,6 +110,25 @@ resource "cloudamqp_integration_log_agent" "coralogix" {
 <details>
   <summary>
     <b>
+      <i>Datadog log agent integration</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_integration_log_agent" "datadog" {
+  instance_id = cloudamqp_instance.instance.id
+  datadog {
+    api_key = var.datadog_api_key
+    region  = "us1"
+  }
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
       <i>Grafana Cloud log agent integration</i>
     </b>
   </summary>
@@ -209,6 +228,20 @@ The following arguments are used by the `coralogix` block.
 * `region`              - (Required) Coralogix ingress region. Valid values: `eu1`, `eu2`, `ap1`, `ap2`, `ap3`, `us1`, `us2`, `us3`, `uk1`. See the [Coralogix region documentation] for the region-to-domain mapping.
 * `application`         - (Required) Application name used to group logs by environment in Coralogix (e.g. `cloudamqp`).
 * `subsystem`           - (Required) Subsystem name used to group logs by service within an application. Recommended to use `cloudamqp_instance.instance.host`.
+
+</details>
+
+<details>
+  <summary>
+    <b>Datadog</b>
+  </summary>
+
+The following arguments are used by the `datadog` block.
+
+* `api_key`         - (Required, Write-only) Datadog API key. Found in Datadog under **Organization Settings → API Keys**. This value is write-only and will not be stored in state.
+* `api_key_version` - (Optional/Computed) Version of the write-only `api_key`. Increment to trigger an update when the key changes (default: `1`).
+* `region`          - (Required) Datadog ingestion region. Valid values: `us1`, `us3`, `us5`, `eu`, `ap2`.
+* `tags`            - (Optional) Comma-separated tags to attach to logs (e.g. `env=prod,region=eu`).
 
 </details>
 

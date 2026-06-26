@@ -173,6 +173,80 @@ func TestAccIntegrationLogAgent_Coralogix_Basic(t *testing.T) {
 	})
 }
 
+// TestAccIntegrationLogAgent_Datadog_Basic: Create Datadog log agent integration, import (ignoring write-only api_key), and update by incrementing api_key_version.
+func TestAccIntegrationLogAgent_Datadog_Basic(t *testing.T) {
+	t.Parallel()
+
+	testAPIKey := "DATADOG_APIKEY"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testAPIKey = os.Getenv("DATADOG_APIKEY")
+	}
+
+	var (
+		instanceResourceName = "cloudamqp_instance.instance"
+		datadogResourceName  = "cloudamqp_integration_log_agent.datadog"
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_instance" "instance" {
+					  name   = "TestAccIntegrationLogAgent_Datadog_Basic"
+					  plan   = "penguin-1"
+					  region = "amazon-web-services::eu-central-1"
+					  tags   = ["vcr-test"]
+					}
+
+					resource "cloudamqp_integration_log_agent" "datadog" {
+					  instance_id = cloudamqp_instance.instance.id
+					  datadog {
+					    api_key = "%s"
+					    region  = "us1"
+					  }
+					}
+				`, testAPIKey),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccIntegrationLogAgent_Datadog_Basic"),
+					resource.TestCheckResourceAttr(datadogResourceName, "datadog.region", "us1"),
+					resource.TestCheckResourceAttr(datadogResourceName, "datadog.api_key_version", "1"),
+				),
+			},
+			{
+				ResourceName:            datadogResourceName,
+				ImportStateIdFunc:       testAccImportCombinedStateIdFunc(instanceResourceName, datadogResourceName),
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"datadog.api_key"},
+			},
+			{
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_instance" "instance" {
+					  name   = "TestAccIntegrationLogAgent_Datadog_Basic"
+					  plan   = "penguin-1"
+					  region = "amazon-web-services::eu-central-1"
+					  tags   = ["vcr-test"]
+					}
+
+					resource "cloudamqp_integration_log_agent" "datadog" {
+					  instance_id = cloudamqp_instance.instance.id
+					  datadog {
+					    api_key         = "%s"
+					    api_key_version = 2
+					    region          = "us1"
+					  }
+					}
+				`, testAPIKey),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(datadogResourceName, "datadog.region", "us1"),
+					resource.TestCheckResourceAttr(datadogResourceName, "datadog.api_key_version", "2"),
+				),
+			},
+		},
+	})
+}
+
 // TestAccIntegrationLogAgent_Grafana_Basic: Create Grafana Cloud log agent integration, import (ignoring write-only api_token), and update by incrementing api_token_version.
 func TestAccIntegrationLogAgent_Grafana_Basic(t *testing.T) {
 	t.Parallel()
