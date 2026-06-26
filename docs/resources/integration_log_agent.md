@@ -109,6 +109,26 @@ resource "cloudamqp_integration_log_agent" "grafana" {
 <details>
   <summary>
     <b>
+      <i>Splunk log agent integration</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_integration_log_agent" "splunk" {
+  instance_id = cloudamqp_instance.instance.id
+  splunk {
+    endpoint = var.splunk_hec_endpoint
+    token        = var.splunk_token
+    source_type  = "cloudamqp"
+  }
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
       <i>Uptrace log agent integration</i>
     </b>
   </summary>
@@ -180,6 +200,28 @@ See the [Grafana Cloud OTLP setup guide] for step-by-step instructions.
 
 <details>
   <summary>
+    <b>Splunk</b>
+  </summary>
+
+The following arguments are used by the `splunk` block.
+
+* `endpoint`       - (Required) Splunk HTTP Event Collector (HEC) endpoint URL. Format: `https://<instance-id>.splunkcloud.com:443/services/collector`.
+* `token`          - (Required, Write-only) Splunk HEC token. This value is write-only and will not be stored in state.
+* `token_version`  - (Optional/Computed) Version of the write-only `token`. Increment to trigger an update when the token changes (default: `1`).
+* `source_type`    - (Optional) Splunk source type. Leave blank to use the token's default.
+
+To set up:
+
+1. In Splunk, go to **Settings → Data inputs → HTTP Event Collector** and create a new token. Set a **default index** and disable **indexer acknowledgement**.
+2. Your HEC URL looks like `https://<your-instance-id>.splunkcloud.com:443/services/collector`.
+3. Enter the HEC endpoint, token, and optionally a source type in the resource block.
+
+See the [Splunk HEC documentation] for full setup instructions.
+
+</details>
+
+<details>
+  <summary>
     <b>Uptrace</b>
   </summary>
 
@@ -221,4 +263,5 @@ import {
 [AWS IAM role documentation]: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html
 [Grafana Cloud Portal]: https://grafana.com/auth/sign-in
 [Grafana Cloud OTLP setup guide]: https://grafana.com/docs/grafana-cloud/send-data/otlp/send-data-otlp/#manual-opentelemetry-setup-for-advanced-users
+[Splunk HEC documentation]: https://docs.splunk.com/Documentation/Splunk/latest/Data/UsetheHTTPEventCollector
 [Uptrace DSN documentation]: https://uptrace.dev/get/dsn.html

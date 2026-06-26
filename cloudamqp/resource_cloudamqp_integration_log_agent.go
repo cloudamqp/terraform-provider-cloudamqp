@@ -100,7 +100,7 @@ type grafanaModel struct {
 }
 
 type splunkModel struct {
-	Endpoint     types.String `tfsdk:"hec_endpoint"`
+	Endpoint     types.String `tfsdk:"endpoint"`
 	Token        types.String `tfsdk:"token"`
 	TokenVersion types.Int64  `tfsdk:"token_version"`
 	SourceType   types.String `tfsdk:"source_type"`

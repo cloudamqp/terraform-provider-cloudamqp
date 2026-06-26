@@ -240,3 +240,82 @@ func TestAccIntegrationLogAgent_Grafana_Basic(t *testing.T) {
 		},
 	})
 }
+
+// TestAccIntegrationLogAgent_Splunk_Basic: Create Splunk HEC log agent integration, import (ignoring write-only token), and update by incrementing token_version.
+func TestAccIntegrationLogAgent_Splunk_Basic(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized value for playback and use real value for recording
+	testToken := "SPLUNK_TOKEN"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testToken = os.Getenv("SPLUNK_TOKEN")
+	}
+
+	var (
+		instanceResourceName = "cloudamqp_instance.instance"
+		splunkResourceName   = "cloudamqp_integration_log_agent.splunk"
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_instance" "instance" {
+					  name   = "TestAccIntegrationLogAgent_Splunk_Basic"
+					  plan   = "penguin-1"
+					  region = "amazon-web-services::eu-central-1"
+					  tags   = ["vcr-test"]
+					}
+
+					resource "cloudamqp_integration_log_agent" "splunk" {
+					  instance_id = cloudamqp_instance.instance.id
+					  splunk {
+					    endpoint = "https://my-instance.splunkcloud.com:443/services/collector"
+					    token        = "%s"
+					    source_type  = "cloudamqp"
+					  }
+					}
+				`, testToken),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccIntegrationLogAgent_Splunk_Basic"),
+					resource.TestCheckResourceAttr(splunkResourceName, "splunk.endpoint", "https://my-instance.splunkcloud.com:443/services/collector"),
+					resource.TestCheckResourceAttr(splunkResourceName, "splunk.source_type", "cloudamqp"),
+					resource.TestCheckResourceAttr(splunkResourceName, "splunk.token_version", "1"),
+				),
+			},
+			{
+				ResourceName:            splunkResourceName,
+				ImportStateIdFunc:       testAccImportCombinedStateIdFunc(instanceResourceName, splunkResourceName),
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"splunk.token"},
+			},
+			{
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_instance" "instance" {
+					  name   = "TestAccIntegrationLogAgent_Splunk_Basic"
+					  plan   = "penguin-1"
+					  region = "amazon-web-services::eu-central-1"
+					  tags   = ["vcr-test"]
+					}
+
+					resource "cloudamqp_integration_log_agent" "splunk" {
+					  instance_id = cloudamqp_instance.instance.id
+					  splunk {
+					    endpoint   = "https://my-instance.splunkcloud.com:443/services/collector"
+					    token          = "%s"
+					    source_type    = "cloudamqp"
+					    token_version  = 2
+					  }
+					}
+				`, testToken),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(splunkResourceName, "splunk.endpoint", "https://my-instance.splunkcloud.com:443/services/collector"),
+					resource.TestCheckResourceAttr(splunkResourceName, "splunk.source_type", "cloudamqp"),
+					resource.TestCheckResourceAttr(splunkResourceName, "splunk.token_version", "2"),
+				),
+			},
+		},
+	})
+}
