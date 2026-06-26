@@ -86,6 +86,27 @@ resource "aws_cloudwatch_log_stream" "this" {
 
 </details>
 
+<details>
+  <summary>
+    <b>
+      <i>Uptrace log agent integration</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_integration_log_agent" "uptrace" {
+  instance_id = cloudamqp_instance.instance.id
+  uptrace {
+    dsn = var.uptrace_dsn
+  }
+}
+```
+
+Find your DSN in the Uptrace project under **Settings → DSN**.
+The DSN format is: `https://<token>@otlp.uptrace.dev/<project_id>`
+
+</details>
+
 ## Argument Reference
 
 The following arguments are supported:
@@ -112,6 +133,20 @@ The following arguments are used by the `cloudwatch` block.
 See the [CloudAMQP CloudWatch documentation] for a step-by-step setup guide on configuring the IAM
 role and trust relationship, or the [AWS IAM role documentation] for how to create a role with a
 cross-account trust policy and an external ID.
+
+</details>
+
+</details>
+
+<details>
+  <summary>
+    <b>Uptrace</b>
+  </summary>
+
+The following arguments are used by the `uptrace` block.
+
+* `dsn`         - (Required, Write-only) Uptrace DSN (Data Source Name) URL. Find this in your Uptrace project under **Settings → DSN**. Format: `https://<token>@otlp.uptrace.dev/<project_id>`. This value is write-only and will not be stored in state.
+* `dsn_version` - (Optional/Computed) Version of the write-only `dsn`. Increment this to trigger an update when the DSN changes (default: `1`).
 
 </details>
 
@@ -144,3 +179,4 @@ import {
 [v1.47.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.47.0
 [CloudAMQP CloudWatch documentation]: https://www.cloudamqp.com/docs/monitoring_logs_cloudwatch_v2.html
 [AWS IAM role documentation]: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html
+[Uptrace DSN documentation]: https://uptrace.dev/get/dsn.html

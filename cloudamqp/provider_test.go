@@ -247,6 +247,7 @@ func sanitizeSensistiveData(body string) string {
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("RECIPIENT_SLACK_VALUE"), "RECIPIENT_SLACK_VALUE")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("CLOUDWATCH_IAM_ROLE"), "CLOUDWATCH_IAM_ROLE")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("CLOUDWATCH_IAM_EXTERNAL_ID"), "CLOUDWATCH_IAM_EXTERNAL_ID")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("UPTRACE_DSN"), "UPTRACE_DSN")
 	return body
 }
 
