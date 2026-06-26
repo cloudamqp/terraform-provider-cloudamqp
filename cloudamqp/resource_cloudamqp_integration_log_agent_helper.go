@@ -18,13 +18,13 @@ func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentR
 	if m.Cloudwatch != nil && !m.Cloudwatch.IAMRole.IsNull() {
 		return "cloudwatch_v2", nil
 	}
-	if m.Coralogix != nil && !m.Coralogix.PrivateKey.IsNull() {
+	if m.Coralogix != nil && !m.Coralogix.Region.IsNull() {
 		return "coralogix_v2", nil
 	}
 	if m.CustomOTLP != nil && !m.CustomOTLP.Endpoint.IsNull() {
 		return "custom_otlp", nil
 	}
-	if m.Datadog != nil && !m.Datadog.APIKey.IsNull() {
+	if m.Datadog != nil && !m.Datadog.Region.IsNull() {
 		return "datadog_v2", nil
 	}
 	if m.GoogleCloud != nil && !m.GoogleCloud.ServiceAccountFile.IsNull() {
@@ -36,7 +36,7 @@ func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentR
 	if m.Splunk != nil && !m.Splunk.Endpoint.IsNull() {
 		return "splunk_v2", nil
 	}
-	if m.Uptrace != nil && !m.Uptrace.DSN.IsNull() {
+	if m.Uptrace != nil && !m.Uptrace.DSNVersion.IsNull() {
 		return "uptrace", nil
 	}
 	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, coralogix, custom_otlp, datadog, google_cloud, grafana, splunk, uptrace)")
@@ -176,7 +176,7 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		if m.Coralogix == nil {
 			m.Coralogix = &coralogixModel{}
 		}
-		m.Coralogix.PrivateKey = types.StringPointerValue(data.Config.PrivateKey)
+		// private_key is WriteOnly — not returned by the API, not stored in state
 		m.Coralogix.Application = types.StringPointerValue(data.Config.Application)
 		m.Coralogix.Subsystem = types.StringPointerValue(data.Config.Subsystem)
 		if data.Config.Domain != nil {
@@ -240,6 +240,6 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		if m.Uptrace == nil {
 			m.Uptrace = &uptraceModel{}
 		}
-		m.Uptrace.DSN = types.StringPointerValue(data.Config.DSN)
+		// dsn is WriteOnly — not returned by the API, not stored in state
 	}
 }

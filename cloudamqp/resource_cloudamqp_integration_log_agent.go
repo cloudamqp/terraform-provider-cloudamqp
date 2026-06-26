@@ -61,23 +61,26 @@ type cloudwatchModel struct {
 }
 
 type coralogixModel struct {
-	PrivateKey  types.String `tfsdk:"private_key"`
-	Application types.String `tfsdk:"application"`
-	Subsystem   types.String `tfsdk:"subsystem"`
-	Region      types.String `tfsdk:"region"`
+	PrivateKey        types.String `tfsdk:"private_key"`
+	PrivateKeyVersion types.Int64  `tfsdk:"private_key_version"`
+	Application       types.String `tfsdk:"application"`
+	Subsystem         types.String `tfsdk:"subsystem"`
+	Region            types.String `tfsdk:"region"`
 }
 
 type customOtlpModel struct {
-	Endpoint types.String `tfsdk:"endpoint"`
-	Headers  types.Map    `tfsdk:"headers"`
-	Username types.String `tfsdk:"username"`
-	Password types.String `tfsdk:"password"`
+	Endpoint        types.String `tfsdk:"endpoint"`
+	Headers         types.Map    `tfsdk:"headers"`
+	Username        types.String `tfsdk:"username"`
+	Password        types.String `tfsdk:"password"`
+	PasswordVersion types.Int64  `tfsdk:"password_version"`
 }
 
 type datadogModel struct {
-	APIKey types.String `tfsdk:"api_key"`
-	Region types.String `tfsdk:"region"`
-	Tags   types.String `tfsdk:"tags"`
+	APIKey        types.String `tfsdk:"api_key"`
+	APIKeyVersion types.Int64  `tfsdk:"api_key_version"`
+	Region        types.String `tfsdk:"region"`
+	Tags          types.String `tfsdk:"tags"`
 }
 
 type googleCloudModel struct {
@@ -93,16 +96,19 @@ type grafanaModel struct {
 	Endpoint          types.String `tfsdk:"endpoint"`
 	GrafanaInstanceID types.String `tfsdk:"grafana_instance_id"`
 	APIToken          types.String `tfsdk:"api_token"`
+	APITokenVersion   types.Int64  `tfsdk:"api_token_version"`
 }
 
 type splunkModel struct {
-	Endpoint   types.String `tfsdk:"hec_endpoint"`
-	Token      types.String `tfsdk:"token"`
-	SourceType types.String `tfsdk:"source_type"`
+	Endpoint     types.String `tfsdk:"hec_endpoint"`
+	Token        types.String `tfsdk:"token"`
+	TokenVersion types.Int64  `tfsdk:"token_version"`
+	SourceType   types.String `tfsdk:"source_type"`
 }
 
 type uptraceModel struct {
-	DSN types.String `tfsdk:"dsn"`
+	DSN        types.String `tfsdk:"dsn"`
+	DSNVersion types.Int64  `tfsdk:"dsn_version"`
 }
 
 func (r *integrationLogAgentResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -183,7 +189,17 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 					"private_key": schema.StringAttribute{
 						Optional:    true,
 						Sensitive:   true,
+						WriteOnly:   true,
 						Description: "Coralogix private key (always starts with cxtp_...)",
+					},
+					"private_key_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only private_key. Increment to trigger an update when the key changes (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
 					},
 					"application": schema.StringAttribute{
 						Optional:    true,
@@ -225,6 +241,15 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 						WriteOnly:   true,
 						Description: "Password for HTTP basic auth. Must be set together with username. Mutually exclusive with headers.",
 					},
+					"password_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only password. Increment to trigger an update when the password changes (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
+					},
 				},
 			},
 			"datadog": schema.SingleNestedBlock{
@@ -235,6 +260,15 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 						Sensitive:   true,
 						WriteOnly:   true,
 						Description: "Datadog API key",
+					},
+					"api_key_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only api_key. Increment to trigger an update when the key changes (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
 					},
 					"region": schema.StringAttribute{
 						Optional:    true,
@@ -318,6 +352,15 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 						WriteOnly:   true,
 						Description: "Grafana Cloud API token",
 					},
+					"api_token_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only api_token. Increment to trigger an update when the token changes (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
+					},
 				},
 			},
 			"splunk": schema.SingleNestedBlock{
@@ -333,6 +376,15 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 						WriteOnly:   true,
 						Description: "Splunk HEC token",
 					},
+					"token_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only token. Increment to trigger an update when the token changes (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
+					},
 					"source_type": schema.StringAttribute{
 						Optional:    true,
 						Description: "Splunk source type (leave empty to use the token's default)",
@@ -345,7 +397,17 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 					"dsn": schema.StringAttribute{
 						Optional:    true,
 						Sensitive:   true,
+						WriteOnly:   true,
 						Description: "Uptrace DSN (Data Source Name) URL",
+					},
+					"dsn_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only dsn. Increment to trigger an update when the DSN changes (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
 					},
 				},
 			},
@@ -401,6 +463,18 @@ func (r *integrationLogAgentResource) Create(ctx context.Context, req resource.C
 			plan.GoogleCloud = &googleCloudModel{}
 		}
 		plan.GoogleCloud.ServiceAccountFile = config.GoogleCloud.ServiceAccountFile
+	}
+	if config.Coralogix != nil && !config.Coralogix.PrivateKey.IsNull() {
+		if plan.Coralogix == nil {
+			plan.Coralogix = &coralogixModel{}
+		}
+		plan.Coralogix.PrivateKey = config.Coralogix.PrivateKey
+	}
+	if config.Uptrace != nil && !config.Uptrace.DSN.IsNull() {
+		if plan.Uptrace == nil {
+			plan.Uptrace = &uptraceModel{}
+		}
+		plan.Uptrace.DSN = config.Uptrace.DSN
 	}
 
 	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
@@ -483,6 +557,18 @@ func (r *integrationLogAgentResource) Update(ctx context.Context, req resource.U
 			plan.GoogleCloud = &googleCloudModel{}
 		}
 		plan.GoogleCloud.ServiceAccountFile = config.GoogleCloud.ServiceAccountFile
+	}
+	if config.Coralogix != nil && !config.Coralogix.PrivateKey.IsNull() {
+		if plan.Coralogix == nil {
+			plan.Coralogix = &coralogixModel{}
+		}
+		plan.Coralogix.PrivateKey = config.Coralogix.PrivateKey
+	}
+	if config.Uptrace != nil && !config.Uptrace.DSN.IsNull() {
+		if plan.Uptrace == nil {
+			plan.Uptrace = &uptraceModel{}
+		}
+		plan.Uptrace.DSN = config.Uptrace.DSN
 	}
 
 	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
