@@ -89,6 +89,26 @@ resource "aws_cloudwatch_log_stream" "this" {
 <details>
   <summary>
     <b>
+      <i>Grafana Cloud log agent integration</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_integration_log_agent" "grafana" {
+  instance_id = cloudamqp_instance.instance.id
+  grafana {
+    endpoint            = var.grafana_endpoint
+    grafana_instance_id = var.grafana_instance_id
+    api_token           = var.grafana_api_token
+  }
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
       <i>Uptrace log agent integration</i>
     </b>
   </summary>
@@ -136,6 +156,26 @@ cross-account trust policy and an external ID.
 
 </details>
 
+<details>
+  <summary>
+    <b>Grafana Cloud</b>
+  </summary>
+
+The following arguments are used by the `grafana` block.
+
+* `endpoint`            - (Required) Grafana Cloud OTLP endpoint URL. Format: `https://otlp-gateway-prod-<region>.grafana.net/otlp`. Found in the Grafana Cloud Portal under **Stack → OpenTelemetry → Configure**.
+* `grafana_instance_id` - (Required) Grafana Cloud numeric stack instance ID. Found alongside the endpoint in the OpenTelemetry configuration page.
+* `api_token`           - (Required, Write-only) Grafana Cloud API token (starts with `glc_eyJ...`). Generate one in the OpenTelemetry configuration page. This value is write-only and will not be stored in state.
+* `api_token_version`   - (Optional/Computed) Version of the write-only `api_token`. Increment to trigger an update when the token changes (default: `1`).
+
+To find your credentials:
+
+1. Sign in to the [Grafana Cloud Portal] and open your stack
+2. Find the **OpenTelemetry** tile and click **Configure**
+3. Copy the **Endpoint URL** and **Instance ID**, and generate an API token
+
+See the [Grafana Cloud OTLP setup guide] for step-by-step instructions.
+
 </details>
 
 <details>
@@ -145,7 +185,7 @@ cross-account trust policy and an external ID.
 
 The following arguments are used by the `uptrace` block.
 
-* `dsn`         - (Required, Write-only) Uptrace DSN (Data Source Name) URL. Find this in your Uptrace project under **Settings → DSN**. Format: `https://<token>@otlp.uptrace.dev/<project_id>`. This value is write-only and will not be stored in state.
+* `dsn`         - (Required, Write-only) Uptrace DSN (Data Source Name) URL. Find this in your Uptrace project under **Settings → DSN** (see [Uptrace DSN documentation]). Format: `https://<token>@otlp.uptrace.dev/<project_id>`. This value is write-only and will not be stored in state.
 * `dsn_version` - (Optional/Computed) Version of the write-only `dsn`. Increment this to trigger an update when the DSN changes (default: `1`).
 
 </details>
@@ -179,4 +219,6 @@ import {
 [v1.47.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.47.0
 [CloudAMQP CloudWatch documentation]: https://www.cloudamqp.com/docs/monitoring_logs_cloudwatch_v2.html
 [AWS IAM role documentation]: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html
+[Grafana Cloud Portal]: https://grafana.com/auth/sign-in
+[Grafana Cloud OTLP setup guide]: https://grafana.com/docs/grafana-cloud/send-data/otlp/send-data-otlp/#manual-opentelemetry-setup-for-advanced-users
 [Uptrace DSN documentation]: https://uptrace.dev/get/dsn.html

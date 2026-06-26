@@ -161,3 +161,82 @@ func TestAccIntegrationLogAgent_Uptrace_Basic(t *testing.T) {
 		},
 	})
 }
+
+// TestAccIntegrationLogAgent_Grafana_Basic: Create Grafana Cloud log agent integration, import (ignoring write-only api_token), and update by incrementing api_token_version.
+func TestAccIntegrationLogAgent_Grafana_Basic(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized values for playback and use real values for recording
+	testAPIToken := "GRAFANA_API_TOKEN"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testAPIToken = os.Getenv("GRAFANA_API_TOKEN")
+	}
+
+	var (
+		instanceResourceName = "cloudamqp_instance.instance"
+		grafanaResourceName  = "cloudamqp_integration_log_agent.grafana"
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_instance" "instance" {
+					  name   = "TestAccIntegrationLogAgent_Grafana_Basic"
+					  plan   = "penguin-1"
+					  region = "amazon-web-services::eu-central-1"
+					  tags   = ["vcr-test"]
+					}
+
+					resource "cloudamqp_integration_log_agent" "grafana" {
+					  instance_id = cloudamqp_instance.instance.id
+					  grafana {
+					    endpoint            = "https://otlp-gateway-prod-us-central-0.grafana.net/otlp"
+					    grafana_instance_id = "123456"
+					    api_token           = "%s"
+					  }
+					}
+				`, testAPIToken),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccIntegrationLogAgent_Grafana_Basic"),
+					resource.TestCheckResourceAttr(grafanaResourceName, "grafana.endpoint", "https://otlp-gateway-prod-us-central-0.grafana.net/otlp"),
+					resource.TestCheckResourceAttr(grafanaResourceName, "grafana.grafana_instance_id", "123456"),
+					resource.TestCheckResourceAttr(grafanaResourceName, "grafana.api_token_version", "1"),
+				),
+			},
+			{
+				ResourceName:            grafanaResourceName,
+				ImportStateIdFunc:       testAccImportCombinedStateIdFunc(instanceResourceName, grafanaResourceName),
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"grafana.api_token"},
+			},
+			{
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_instance" "instance" {
+					  name   = "TestAccIntegrationLogAgent_Grafana_Basic"
+					  plan   = "penguin-1"
+					  region = "amazon-web-services::eu-central-1"
+					  tags   = ["vcr-test"]
+					}
+
+					resource "cloudamqp_integration_log_agent" "grafana" {
+					  instance_id = cloudamqp_instance.instance.id
+					  grafana {
+					    endpoint            = "https://otlp-gateway-prod-us-central-0.grafana.net/otlp"
+					    grafana_instance_id = "123456"
+					    api_token           = "%s"
+					    api_token_version   = 2
+					  }
+					}
+				`, testAPIToken),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(grafanaResourceName, "grafana.endpoint", "https://otlp-gateway-prod-us-central-0.grafana.net/otlp"),
+					resource.TestCheckResourceAttr(grafanaResourceName, "grafana.grafana_instance_id", "123456"),
+					resource.TestCheckResourceAttr(grafanaResourceName, "grafana.api_token_version", "2"),
+				),
+			},
+		},
+	})
+}
