@@ -32,14 +32,57 @@ resource "cloudamqp_integration_log_agent" "cloudwatch" {
     iam_role        = var.aws_iam_role
     iam_external_id = var.aws_iam_external_id
     region          = var.aws_region
-    log_group_name  = var.aws_log_group_name
-    log_stream_name = var.aws_log_stream_name
+    log_group       = "CloudAMQP"
+    log_stream      = cloudamqp_instance.instance.cluster_name
   }
 }
 ```
 
 * AWS IAM role: `arn:aws:iam::ACCOUNT-ID:role/ROLE-NAME`
 * External id: Create your own external identifier that matches the role created. E.g. `cloudamqp-abc123`.
+
+See the [CloudAMQP CloudWatch documentation] for a step-by-step guide on setting up the IAM role and
+trust relationship.
+
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>CloudWatch log agent integration with AWS Terraform provider</i>
+    </b>
+  </summary>
+
+```hcl
+provider "aws" {
+  region = var.aws_region
+}
+
+resource "cloudamqp_integration_log_agent" "cloudwatch" {
+  instance_id = cloudamqp_instance.instance.id
+  cloudwatch {
+    iam_role        = var.aws_iam_role
+    iam_external_id = var.aws_iam_external_id
+    region          = var.aws_region
+    log_group       = "CloudAMQP"
+    log_stream      = cloudamqp_instance.instance.cluster_name
+  }
+}
+
+resource "aws_cloudwatch_log_group" "this" {
+  name              = "CloudAMQP"
+  retention_in_days = 30
+
+  tags = {
+    Environment = "Production"
+  }
+}
+
+resource "aws_cloudwatch_log_stream" "this" {
+  name           = cloudamqp_instance.instance.cluster_name
+  log_group_name = aws_cloudwatch_log_group.this.name
+}
+```
 
 </details>
 
@@ -61,16 +104,14 @@ The following arguments are used by the `cloudwatch` block.
 * `iam_role`        - (Required) AWS IAM role ARN used to assume permissions for the integration.
 * `iam_external_id` - (Required) External identifier that matches the trust policy of the IAM role.
 * `region`          - (Required) AWS region hosting the CloudWatch log group.
-* `log_group_name`  - (Optional/Computed) The name of the CloudWatch log group. Defaults to `CloudAMQP` if not set.
-* `log_stream_name` - (Optional/Computed) The name of the CloudWatch log stream. Defaults to the cluster name if not set.
+* `log_group`       - (Optional/Computed) The name of the CloudWatch log group. Defaults to `CloudAMQP` if not set.
+* `log_stream`      - (Required) The name of the CloudWatch log stream. Recommended to use the cluster name, found in `cloudamqp_instance.instance.cluster_name`.
 
 ### IAM permissions
 
-The IAM role must have a trust relationship that allows CloudAMQP to assume it. The role needs the
-following permissions: `logs:PutLogEvents`.
-
-See the [AWS IAM role documentation] for how to create a role with a cross-account trust policy and
-an external ID.
+See the [CloudAMQP CloudWatch documentation] for a step-by-step setup guide on configuring the IAM
+role and trust relationship, or the [AWS IAM role documentation] for how to create a role with a
+cross-account trust policy and an external ID.
 
 </details>
 
@@ -101,4 +142,5 @@ import {
 `terraform import cloudamqp_integration_log_agent.cloudwatch <id>,<instance_id>`
 
 [v1.47.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.47.0
+[CloudAMQP CloudWatch documentation]: https://www.cloudamqp.com/docs/monitoring_logs_cloudwatch_v2.html
 [AWS IAM role documentation]: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html
