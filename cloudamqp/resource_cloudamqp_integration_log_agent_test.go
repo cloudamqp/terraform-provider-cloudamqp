@@ -91,19 +91,19 @@ func TestAccIntegrationLogAgent_Cloudwatch_Basic(t *testing.T) {
 	})
 }
 
-// TestAccIntegrationLogAgent_Uptrace_Basic: Create Uptrace log agent integration, import (ignoring write-only dsn), and update by incrementing dsn_version.
-func TestAccIntegrationLogAgent_Uptrace_Basic(t *testing.T) {
+// TestAccIntegrationLogAgent_Coralogix_Basic: Create Coralogix log agent integration, import (ignoring write-only private_key), and update by incrementing private_key_version.
+func TestAccIntegrationLogAgent_Coralogix_Basic(t *testing.T) {
 	t.Parallel()
 
 	// Set sanitized value for playback and use real value for recording
-	testDSN := "UPTRACE_DSN"
+	testPrivateKey := "CORALOGIX_SEND_DATA_KEY"
 	if os.Getenv("CLOUDAMQP_RECORD") != "" {
-		testDSN = os.Getenv("UPTRACE_DSN")
+		testPrivateKey = os.Getenv("CORALOGIX_SEND_DATA_KEY")
 	}
 
 	var (
-		instanceResourceName = "cloudamqp_instance.instance"
-		uptraceResourceName  = "cloudamqp_integration_log_agent.uptrace"
+		instanceResourceName  = "cloudamqp_instance.instance"
+		coralogixResourceName = "cloudamqp_integration_log_agent.coralogix"
 	)
 
 	cloudamqpResourceTest(t, resource.TestCase{
@@ -112,50 +112,61 @@ func TestAccIntegrationLogAgent_Uptrace_Basic(t *testing.T) {
 			{
 				Config: fmt.Sprintf(`
 					resource "cloudamqp_instance" "instance" {
-					  name   = "TestAccIntegrationLogAgent_Uptrace_Basic"
+					  name   = "TestAccIntegrationLogAgent_Coralogix_Basic"
 					  plan   = "penguin-1"
 					  region = "amazon-web-services::eu-central-1"
 					  tags   = ["vcr-test"]
 					}
 
-					resource "cloudamqp_integration_log_agent" "uptrace" {
+					resource "cloudamqp_integration_log_agent" "coralogix" {
 					  instance_id = cloudamqp_instance.instance.id
-					  uptrace {
-					    dsn = "%s"
+					  coralogix {
+					    private_key = "%s"
+					    region      = "eu2"
+					    application = "cloudamqp"
+					    subsystem   = cloudamqp_instance.instance.host
 					  }
 					}
-				`, testDSN),
+				`, testPrivateKey),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccIntegrationLogAgent_Uptrace_Basic"),
-					resource.TestCheckResourceAttr(uptraceResourceName, "uptrace.dsn_version", "1"),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccIntegrationLogAgent_Coralogix_Basic"),
+					resource.TestCheckResourceAttr(coralogixResourceName, "coralogix.region", "eu2"),
+					resource.TestCheckResourceAttr(coralogixResourceName, "coralogix.application", "cloudamqp"),
+					resource.TestCheckResourceAttr(coralogixResourceName, "coralogix.private_key_version", "1"),
+					resource.TestCheckResourceAttrPair(coralogixResourceName, "coralogix.subsystem", instanceResourceName, "host"),
 				),
 			},
 			{
-				ResourceName:            uptraceResourceName,
-				ImportStateIdFunc:       testAccImportCombinedStateIdFunc(instanceResourceName, uptraceResourceName),
+				ResourceName:            coralogixResourceName,
+				ImportStateIdFunc:       testAccImportCombinedStateIdFunc(instanceResourceName, coralogixResourceName),
 				ImportState:             true,
 				ImportStateVerify:       true,
-				ImportStateVerifyIgnore: []string{"uptrace.dsn"},
+				ImportStateVerifyIgnore: []string{"coralogix.private_key"},
 			},
 			{
 				Config: fmt.Sprintf(`
 					resource "cloudamqp_instance" "instance" {
-					  name   = "TestAccIntegrationLogAgent_Uptrace_Basic"
+					  name   = "TestAccIntegrationLogAgent_Coralogix_Basic"
 					  plan   = "penguin-1"
 					  region = "amazon-web-services::eu-central-1"
 					  tags   = ["vcr-test"]
 					}
 
-					resource "cloudamqp_integration_log_agent" "uptrace" {
+					resource "cloudamqp_integration_log_agent" "coralogix" {
 					  instance_id = cloudamqp_instance.instance.id
-					  uptrace {
-					    dsn         = "%s"
-					    dsn_version = 2
+					  coralogix {
+					    private_key         = "%s"
+					    private_key_version = 2
+					    region              = "eu2"
+					    application         = "cloudamqp"
+					    subsystem           = cloudamqp_instance.instance.host
 					  }
 					}
-				`, testDSN),
+				`, testPrivateKey),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(uptraceResourceName, "uptrace.dsn_version", "2"),
+					resource.TestCheckResourceAttr(coralogixResourceName, "coralogix.region", "eu2"),
+					resource.TestCheckResourceAttr(coralogixResourceName, "coralogix.application", "cloudamqp"),
+					resource.TestCheckResourceAttr(coralogixResourceName, "coralogix.private_key_version", "2"),
 				),
 			},
 		},
@@ -314,6 +325,77 @@ func TestAccIntegrationLogAgent_Splunk_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(splunkResourceName, "splunk.endpoint", "https://my-instance.splunkcloud.com:443/services/collector"),
 					resource.TestCheckResourceAttr(splunkResourceName, "splunk.source_type", "cloudamqp"),
 					resource.TestCheckResourceAttr(splunkResourceName, "splunk.token_version", "2"),
+				),
+			},
+		},
+	})
+}
+
+// TestAccIntegrationLogAgent_Uptrace_Basic: Create Uptrace log agent integration, import (ignoring write-only dsn), and update by incrementing dsn_version.
+func TestAccIntegrationLogAgent_Uptrace_Basic(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized value for playback and use real value for recording
+	testDSN := "UPTRACE_DSN"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testDSN = os.Getenv("UPTRACE_DSN")
+	}
+
+	var (
+		instanceResourceName = "cloudamqp_instance.instance"
+		uptraceResourceName  = "cloudamqp_integration_log_agent.uptrace"
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_instance" "instance" {
+					  name   = "TestAccIntegrationLogAgent_Uptrace_Basic"
+					  plan   = "penguin-1"
+					  region = "amazon-web-services::eu-central-1"
+					  tags   = ["vcr-test"]
+					}
+
+					resource "cloudamqp_integration_log_agent" "uptrace" {
+					  instance_id = cloudamqp_instance.instance.id
+					  uptrace {
+					    dsn = "%s"
+					  }
+					}
+				`, testDSN),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccIntegrationLogAgent_Uptrace_Basic"),
+					resource.TestCheckResourceAttr(uptraceResourceName, "uptrace.dsn_version", "1"),
+				),
+			},
+			{
+				ResourceName:            uptraceResourceName,
+				ImportStateIdFunc:       testAccImportCombinedStateIdFunc(instanceResourceName, uptraceResourceName),
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"uptrace.dsn"},
+			},
+			{
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_instance" "instance" {
+					  name   = "TestAccIntegrationLogAgent_Uptrace_Basic"
+					  plan   = "penguin-1"
+					  region = "amazon-web-services::eu-central-1"
+					  tags   = ["vcr-test"]
+					}
+
+					resource "cloudamqp_integration_log_agent" "uptrace" {
+					  instance_id = cloudamqp_instance.instance.id
+					  uptrace {
+					    dsn         = "%s"
+					    dsn_version = 2
+					  }
+					}
+				`, testDSN),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(uptraceResourceName, "uptrace.dsn_version", "2"),
 				),
 			},
 		},

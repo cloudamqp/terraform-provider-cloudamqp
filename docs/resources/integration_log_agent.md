@@ -89,6 +89,27 @@ resource "aws_cloudwatch_log_stream" "this" {
 <details>
   <summary>
     <b>
+      <i>Coralogix log agent integration</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_integration_log_agent" "coralogix" {
+  instance_id = cloudamqp_instance.instance.id
+  coralogix {
+    private_key = var.coralogix_private_key
+    region      = "eu2"
+    application = "cloudamqp"
+    subsystem   = cloudamqp_instance.instance.host
+  }
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
       <i>Grafana Cloud log agent integration</i>
     </b>
   </summary>
@@ -117,7 +138,7 @@ resource "cloudamqp_integration_log_agent" "grafana" {
 resource "cloudamqp_integration_log_agent" "splunk" {
   instance_id = cloudamqp_instance.instance.id
   splunk {
-    endpoint = var.splunk_hec_endpoint
+    endpoint     = var.splunk_endpoint
     token        = var.splunk_token
     source_type  = "cloudamqp"
   }
@@ -173,6 +194,21 @@ The following arguments are used by the `cloudwatch` block.
 See the [CloudAMQP CloudWatch documentation] for a step-by-step setup guide on configuring the IAM
 role and trust relationship, or the [AWS IAM role documentation] for how to create a role with a
 cross-account trust policy and an external ID.
+
+</details>
+
+<details>
+  <summary>
+    <b>Coralogix</b>
+  </summary>
+
+The following arguments are used by the `coralogix` block.
+
+* `private_key`         - (Required, Write-only) Coralogix Send-Your-Data API key (starts with `cxtp_...`). Found in Coralogix under **Settings → API Keys**. This value is write-only and will not be stored in state.
+* `private_key_version` - (Optional/Computed) Version of the write-only `private_key`. Increment to trigger an update when the key changes (default: `1`).
+* `region`              - (Required) Coralogix ingress region. Valid values: `eu1`, `eu2`, `ap1`, `ap2`, `ap3`, `us1`, `us2`, `us3`, `uk1`. See the [Coralogix region documentation] for the region-to-domain mapping.
+* `application`         - (Required) Application name used to group logs by environment in Coralogix (e.g. `cloudamqp`).
+* `subsystem`           - (Required) Subsystem name used to group logs by service within an application. Recommended to use `cloudamqp_instance.instance.host`.
 
 </details>
 
@@ -261,6 +297,7 @@ import {
 [v1.47.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.47.0
 [CloudAMQP CloudWatch documentation]: https://www.cloudamqp.com/docs/monitoring_logs_cloudwatch_v2.html
 [AWS IAM role documentation]: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html
+[Coralogix region documentation]: https://coralogix.com/docs/coralogix-domain/
 [Grafana Cloud Portal]: https://grafana.com/auth/sign-in
 [Grafana Cloud OTLP setup guide]: https://grafana.com/docs/grafana-cloud/send-data/otlp/send-data-otlp/#manual-opentelemetry-setup-for-advanced-users
 [Splunk HEC documentation]: https://docs.splunk.com/Documentation/Splunk/latest/Data/UsetheHTTPEventCollector
