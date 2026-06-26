@@ -72,3 +72,57 @@ type LogAgentConfigResponse struct {
 	// Grafana
 	GrafanaInstanceID *string `json:"instance_id,omitempty"`
 }
+
+func redactedString(s string) string {
+	if s != "" {
+		return "***"
+	}
+	return ""
+}
+
+func redactedStringPtr(s *string) *string {
+	if s != nil && *s != "" {
+		v := "***"
+		return &v
+	}
+	return s
+}
+
+func (r LogAgentRequest) Sanitized() LogAgentRequest {
+	sanitized := r
+	sanitized.DSN = redactedString(r.DSN)
+	sanitized.Token = redactedString(r.Token)
+	sanitized.PrivateKey = redactedString(r.PrivateKey)
+	sanitized.PrivateKeyID = redactedString(r.PrivateKeyID)
+	sanitized.APIKey = redactedString(r.APIKey)
+	sanitized.Password = redactedString(r.Password)
+	sanitized.APIToken = redactedString(r.APIToken)
+	if len(r.Headers) > 0 {
+		sanitized.Headers = make(map[string]string, len(r.Headers))
+		for k := range r.Headers {
+			sanitized.Headers[k] = "***"
+		}
+	}
+	return sanitized
+}
+
+func (r LogAgentResponse) Sanitized() LogAgentResponse {
+	sanitized := r
+	sanitized.Config = r.Config.Sanitized()
+	return sanitized
+}
+
+func (c LogAgentConfigResponse) Sanitized() LogAgentConfigResponse {
+	sanitized := c
+	sanitized.DSN = redactedStringPtr(c.DSN)
+	sanitized.Token = redactedStringPtr(c.Token)
+	sanitized.PrivateKey = redactedStringPtr(c.PrivateKey)
+	sanitized.APIKey = redactedStringPtr(c.APIKey)
+	if len(c.Headers) > 0 {
+		sanitized.Headers = make(map[string]string, len(c.Headers))
+		for k := range c.Headers {
+			sanitized.Headers[k] = "***"
+		}
+	}
+	return sanitized
+}

@@ -18,7 +18,7 @@ func (api *API) CreateIntegrationLogAgent(ctx context.Context, instanceID int64,
 		path   = fmt.Sprintf("/api/instances/%d/integrations/logs/%s", instanceID, intType)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%+v ", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%+v ", path, params.Sanitized()))
 	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
 		functionName: "CreateIntegrationLogAgent",
 		resourceName: "IntegrationLogAgent",
@@ -57,7 +57,7 @@ func (api *API) ReadIntegrationLogAgent(ctx context.Context, instanceID int64, l
 		return nil, err
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s data=%+v ", path, data))
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s data=%+v ", path, data.Sanitized()))
 
 	// Handle resource drift
 	if data.ID == 0 {
@@ -74,7 +74,7 @@ func (api *API) UpdateIntegrationLogAgent(ctx context.Context, instanceID int64,
 		path   = fmt.Sprintf("/api/instances/%d/integrations/logs/%s", instanceID, logID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v ", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%+v ", path, params.Sanitized()))
 	return api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
 		functionName: "UpdateIntegrationLogAgent",
 		resourceName: "IntegrationLogAgent",
