@@ -11,6 +11,53 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+// copyWriteOnlyFields copies write-only field values from config into the plan.
+// Write-only fields are not available in the plan, only in the config.
+func copyWriteOnlyFields(plan *integrationLogAgentResourceModel, config *integrationLogAgentResourceModel) {
+	if config.Coralogix != nil && !config.Coralogix.PrivateKey.IsNull() {
+		if plan.Coralogix == nil {
+			plan.Coralogix = &coralogixModel{}
+		}
+		plan.Coralogix.PrivateKey = config.Coralogix.PrivateKey
+	}
+	if config.CustomOTLP != nil && !config.CustomOTLP.Password.IsNull() {
+		if plan.CustomOTLP == nil {
+			plan.CustomOTLP = &customOtlpModel{}
+		}
+		plan.CustomOTLP.Password = config.CustomOTLP.Password
+	}
+	if config.Datadog != nil && !config.Datadog.APIKey.IsNull() {
+		if plan.Datadog == nil {
+			plan.Datadog = &datadogModel{}
+		}
+		plan.Datadog.APIKey = config.Datadog.APIKey
+	}
+	if config.GoogleCloud != nil && !config.GoogleCloud.ServiceAccountFile.IsNull() {
+		if plan.GoogleCloud == nil {
+			plan.GoogleCloud = &googleCloudModel{}
+		}
+		plan.GoogleCloud.ServiceAccountFile = config.GoogleCloud.ServiceAccountFile
+	}
+	if config.Grafana != nil && !config.Grafana.APIToken.IsNull() {
+		if plan.Grafana == nil {
+			plan.Grafana = &grafanaModel{}
+		}
+		plan.Grafana.APIToken = config.Grafana.APIToken
+	}
+	if config.Splunk != nil && !config.Splunk.Token.IsNull() {
+		if plan.Splunk == nil {
+			plan.Splunk = &splunkModel{}
+		}
+		plan.Splunk.Token = config.Splunk.Token
+	}
+	if config.Uptrace != nil && !config.Uptrace.DSN.IsNull() {
+		if plan.Uptrace == nil {
+			plan.Uptrace = &uptraceModel{}
+		}
+		plan.Uptrace.DSN = config.Uptrace.DSN
+	}
+}
+
 // getIntegrationType returns the API type string based on which block is populated.
 // Uses key-field null checks rather than nil checks to handle protocol v5 (mux),
 // where absent blocks arrive as non-nil empty objects.

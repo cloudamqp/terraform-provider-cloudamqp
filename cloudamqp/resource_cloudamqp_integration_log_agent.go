@@ -453,29 +453,12 @@ func (r *integrationLogAgentResource) Create(ctx context.Context, req resource.C
 	}
 
 	// Read WriteOnly fields from config (not available in plan)
-	var config integrationLogAgentResourceModel
-	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
+	var createConfig integrationLogAgentResourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &createConfig)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if config.GoogleCloud != nil && !config.GoogleCloud.ServiceAccountFile.IsNull() {
-		if plan.GoogleCloud == nil {
-			plan.GoogleCloud = &googleCloudModel{}
-		}
-		plan.GoogleCloud.ServiceAccountFile = config.GoogleCloud.ServiceAccountFile
-	}
-	if config.Coralogix != nil && !config.Coralogix.PrivateKey.IsNull() {
-		if plan.Coralogix == nil {
-			plan.Coralogix = &coralogixModel{}
-		}
-		plan.Coralogix.PrivateKey = config.Coralogix.PrivateKey
-	}
-	if config.Uptrace != nil && !config.Uptrace.DSN.IsNull() {
-		if plan.Uptrace == nil {
-			plan.Uptrace = &uptraceModel{}
-		}
-		plan.Uptrace.DSN = config.Uptrace.DSN
-	}
+	copyWriteOnlyFields(&plan, &createConfig)
 
 	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
 	defer cancel()
@@ -547,29 +530,12 @@ func (r *integrationLogAgentResource) Update(ctx context.Context, req resource.U
 	}
 
 	// Read WriteOnly fields from config (not available in plan)
-	var config integrationLogAgentResourceModel
-	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
+	var updateConfig integrationLogAgentResourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &updateConfig)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if config.GoogleCloud != nil && !config.GoogleCloud.ServiceAccountFile.IsNull() {
-		if plan.GoogleCloud == nil {
-			plan.GoogleCloud = &googleCloudModel{}
-		}
-		plan.GoogleCloud.ServiceAccountFile = config.GoogleCloud.ServiceAccountFile
-	}
-	if config.Coralogix != nil && !config.Coralogix.PrivateKey.IsNull() {
-		if plan.Coralogix == nil {
-			plan.Coralogix = &coralogixModel{}
-		}
-		plan.Coralogix.PrivateKey = config.Coralogix.PrivateKey
-	}
-	if config.Uptrace != nil && !config.Uptrace.DSN.IsNull() {
-		if plan.Uptrace == nil {
-			plan.Uptrace = &uptraceModel{}
-		}
-		plan.Uptrace.DSN = config.Uptrace.DSN
-	}
+	copyWriteOnlyFields(&plan, &updateConfig)
 
 	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
 	defer cancel()
