@@ -7,6 +7,8 @@ import (
 	"strings"
 	"time"
 
+	"regexp"
+
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -15,6 +17,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -53,8 +56,8 @@ type cloudwatchModel struct {
 	IAMRole       types.String `tfsdk:"iam_role"`
 	IAMExternalID types.String `tfsdk:"iam_external_id"`
 	Region        types.String `tfsdk:"region"`
-	LogGroupName  types.String `tfsdk:"log_group_name"`
-	LogStreamName types.String `tfsdk:"log_stream_name"`
+	LogGroup      types.String `tfsdk:"log_group"`
+	LogStream     types.String `tfsdk:"log_stream"`
 }
 
 type coralogixModel struct {
@@ -156,17 +159,17 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 						Optional:    true,
 						Description: "AWS region",
 					},
-					"log_group_name": schema.StringAttribute{
+					"log_group": schema.StringAttribute{
 						Optional:    true,
 						Computed:    true,
+						Default:     stringdefault.StaticString("CloudAMQP"),
 						Description: "The name of the CloudWatch log group",
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
-					"log_stream_name": schema.StringAttribute{
+					"log_stream": schema.StringAttribute{
 						Optional:    true,
-						Computed:    true,
 						Description: "The name of the CloudWatch log stream",
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.UseStateForUnknown(),
@@ -192,9 +195,9 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 					},
 					"region": schema.StringAttribute{
 						Optional:    true,
-						Description: "Coralogix region (US1, US2, US3, EU1, EU2, AP1, AP2, AP3)",
+						Description: "Coralogix region (eu1, eu2, ap1, ap2, ap3, us1, us2, us3, uk1)",
 						Validators: []validator.String{
-							stringvalidator.OneOf("US1", "US2", "US3", "EU1", "EU2", "AP1", "AP2", "AP3"),
+							stringvalidator.OneOf("eu1", "eu2", "ap1", "ap2", "ap3", "us1", "us2", "us3", "uk1"),
 						},
 					},
 				},
@@ -235,9 +238,9 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 					},
 					"region": schema.StringAttribute{
 						Optional:    true,
-						Description: "Datadog region (US1, US3, US5, EU, AP2)",
+						Description: "Datadog region (us1, us3, us5, eu, ap2)",
 						Validators: []validator.String{
-							stringvalidator.OneOf("US1", "US3", "US5", "EU", "AP2"),
+							stringvalidator.OneOf("us1", "us3", "us5", "eu", "ap2"),
 						},
 					},
 					"tags": schema.StringAttribute{
@@ -297,7 +300,13 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 				Attributes: map[string]schema.Attribute{
 					"endpoint": schema.StringAttribute{
 						Optional:    true,
-						Description: "Grafana Loki endpoint URL",
+						Description: "Grafana Cloud OTLP endpoint (e.g. https://otlp-gateway-prod-eu-west-0.grafana.net/otlp)",
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(
+								regexp.MustCompile(`^https://otlp-gateway-prod-[a-z0-9-]+\.grafana\.net/otlp$`),
+								"must be a valid Grafana Cloud OTLP endpoint (https://otlp-gateway-prod-<region>.grafana.net/otlp)",
+							),
+						},
 					},
 					"grafana_instance_id": schema.StringAttribute{
 						Optional:    true,

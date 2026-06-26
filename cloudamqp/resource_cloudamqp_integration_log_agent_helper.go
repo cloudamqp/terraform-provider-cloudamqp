@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/integrations"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -76,19 +77,19 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 			IAMRole:       plan.Cloudwatch.IAMRole.ValueString(),
 			IAMExternalID: plan.Cloudwatch.IAMExternalID.ValueString(),
 		}
-		if !plan.Cloudwatch.LogGroupName.IsNull() && !plan.Cloudwatch.LogGroupName.IsUnknown() {
-			req.LogGroupName = plan.Cloudwatch.LogGroupName.ValueString()
+		if !plan.Cloudwatch.LogGroup.IsNull() && !plan.Cloudwatch.LogGroup.IsUnknown() {
+			req.LogGroup = plan.Cloudwatch.LogGroup.ValueString()
 		}
-		if !plan.Cloudwatch.LogStreamName.IsNull() && !plan.Cloudwatch.LogStreamName.IsUnknown() {
-			req.LogStreamName = plan.Cloudwatch.LogStreamName.ValueString()
+		if !plan.Cloudwatch.LogStream.IsNull() && !plan.Cloudwatch.LogStream.IsUnknown() {
+			req.LogStream = plan.Cloudwatch.LogStream.ValueString()
 		}
 		return req, nil
 	case "coralogix_v2":
 		return model.LogAgentRequest{
+			Domain:      plan.Coralogix.Region.ValueString() + ".coralogix.com",
 			PrivateKey:  plan.Coralogix.PrivateKey.ValueString(),
 			Application: plan.Coralogix.Application.ValueString(),
 			Subsystem:   plan.Coralogix.Subsystem.ValueString(),
-			Region:      plan.Coralogix.Region.ValueString(),
 		}, nil
 	case "custom_otlp":
 		req := model.LogAgentRequest{
@@ -169,8 +170,8 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		m.Cloudwatch.IAMRole = types.StringPointerValue(data.Config.IAMRole)
 		m.Cloudwatch.IAMExternalID = types.StringPointerValue(data.Config.IAMExternalID)
 		m.Cloudwatch.Region = types.StringPointerValue(data.Config.Region)
-		m.Cloudwatch.LogGroupName = types.StringPointerValue(data.Config.LogGroupName)
-		m.Cloudwatch.LogStreamName = types.StringPointerValue(data.Config.LogStreamName)
+		m.Cloudwatch.LogGroup = types.StringPointerValue(data.Config.LogGroup)
+		m.Cloudwatch.LogStream = types.StringPointerValue(data.Config.LogStream)
 	case "coralogix_v2":
 		if m.Coralogix == nil {
 			m.Coralogix = &coralogixModel{}
@@ -178,7 +179,9 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		m.Coralogix.PrivateKey = types.StringPointerValue(data.Config.PrivateKey)
 		m.Coralogix.Application = types.StringPointerValue(data.Config.Application)
 		m.Coralogix.Subsystem = types.StringPointerValue(data.Config.Subsystem)
-		m.Coralogix.Region = types.StringPointerValue(data.Config.Region)
+		if data.Config.Domain != nil {
+			m.Coralogix.Region = types.StringValue(strings.TrimSuffix(*data.Config.Domain, ".coralogix.com"))
+		}
 	case "custom_otlp":
 		if m.CustomOTLP == nil {
 			m.CustomOTLP = &customOtlpModel{}
