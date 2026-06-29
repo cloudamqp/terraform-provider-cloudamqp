@@ -203,9 +203,9 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 					},
 					"region": schema.StringAttribute{
 						Optional:    true,
-						Description: "Coralogix region (eu1, eu2, ap1, ap2, ap3, us1, us2, us3, uk1)",
+						Description: "Coralogix region (ap1, ap2, ap3, eu1, eu2, us1, us2, us3)",
 						Validators: []validator.String{
-							stringvalidator.OneOf("eu1", "eu2", "ap1", "ap2", "ap3", "us1", "us2", "us3", "uk1"),
+							stringvalidator.OneOf("ap1", "ap2", "ap3", "eu1", "eu2", "us1", "us2", "us3"),
 						},
 					},
 				},
