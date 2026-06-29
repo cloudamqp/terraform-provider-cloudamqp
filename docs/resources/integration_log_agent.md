@@ -244,7 +244,7 @@ The following arguments are used by the `coralogix` block.
 
 * `private_key`         - (Required, Write-only) Coralogix Send-Your-Data API key (starts with `cxtp_...`). Found in Coralogix under **Settings → API Keys**. This value is write-only and will not be stored in state.
 * `private_key_version` - (Optional/Computed) Version of the write-only `private_key`. Increment to trigger an update when the key changes (default: `1`).
-* `region`              - (Required) Coralogix ingress region. Valid values: `eu1`, `eu2`, `ap1`, `ap2`, `ap3`, `us1`, `us2`, `us3`, `uk1`. See the [Coralogix region documentation] for the region-to-domain mapping.
+* `region`              - (Required) Coralogix ingress region. Valid values: `ap1`, `ap2`, `ap3`, `eu1`, `eu2`, `us1`, `us2`, `us3`. See the [Coralogix region documentation] for the region-to-domain mapping.
 * `application`         - (Required) Application name used to group logs by environment in Coralogix (e.g. `cloudamqp`).
 * `subsystem`           - (Required) Subsystem name used to group logs by service within an application. Recommended to use `cloudamqp_instance.instance.host`.
 
