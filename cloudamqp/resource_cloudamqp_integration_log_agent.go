@@ -45,7 +45,6 @@ type integrationLogAgentResourceModel struct {
 	InstanceID  types.Int64       `tfsdk:"instance_id"`
 	Cloudwatch  *cloudwatchModel  `tfsdk:"cloudwatch"`
 	Coralogix   *coralogixModel   `tfsdk:"coralogix"`
-	CustomOTLP  *customOtlpModel  `tfsdk:"custom_otlp"`
 	Datadog     *datadogModel     `tfsdk:"datadog"`
 	GoogleCloud *googleCloudModel `tfsdk:"google_cloud"`
 	Grafana     *grafanaModel     `tfsdk:"grafana"`
@@ -67,14 +66,6 @@ type coralogixModel struct {
 	Application       types.String `tfsdk:"application"`
 	Subsystem         types.String `tfsdk:"subsystem"`
 	Region            types.String `tfsdk:"region"`
-}
-
-type customOtlpModel struct {
-	Endpoint        types.String `tfsdk:"endpoint"`
-	Headers         types.Map    `tfsdk:"headers"`
-	Username        types.String `tfsdk:"username"`
-	Password        types.String `tfsdk:"password"`
-	PasswordVersion types.Int64  `tfsdk:"password_version"`
 }
 
 type datadogModel struct {
@@ -215,40 +206,6 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 						Description: "Coralogix region (eu1, eu2, ap1, ap2, ap3, us1, us2, us3, uk1)",
 						Validators: []validator.String{
 							stringvalidator.OneOf("eu1", "eu2", "ap1", "ap2", "ap3", "us1", "us2", "us3", "uk1"),
-						},
-					},
-				},
-			},
-			"custom_otlp": schema.SingleNestedBlock{
-				Description: "Custom OTLP log integration configuration",
-				Attributes: map[string]schema.Attribute{
-					"endpoint": schema.StringAttribute{
-						Optional:    true,
-						Description: "OTLP HTTP endpoint URL (e.g. http://otlp.uptrace.dev:4318)",
-					},
-					"headers": schema.MapAttribute{
-						Optional:    true,
-						Sensitive:   true,
-						ElementType: types.StringType,
-						Description: "Key-value HTTP headers for authentication (e.g. uptrace-dsn: https://token@api.uptrace.dev/project_id). Mutually exclusive with username/password.",
-					},
-					"username": schema.StringAttribute{
-						Optional:    true,
-						Description: "Username for HTTP basic auth. Must be set together with password. Mutually exclusive with headers.",
-					},
-					"password": schema.StringAttribute{
-						Optional:    true,
-						Sensitive:   true,
-						WriteOnly:   true,
-						Description: "Password for HTTP basic auth. Must be set together with username. Mutually exclusive with headers.",
-					},
-					"password_version": schema.Int64Attribute{
-						Optional:    true,
-						Computed:    true,
-						Default:     int64default.StaticInt64(1),
-						Description: "Version of the write-only password. Increment to trigger an update when the password changes (default: 1).",
-						PlanModifiers: []planmodifier.Int64{
-							int64planmodifier.UseStateForUnknown(),
 						},
 					},
 				},

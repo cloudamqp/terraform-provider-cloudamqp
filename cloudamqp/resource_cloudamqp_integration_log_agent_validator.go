@@ -19,11 +19,11 @@ func (r *integrationLogAgentResource) ConfigValidators(ctx context.Context) []re
 type exactlyOneIntegrationBlockValidator struct{}
 
 func (v exactlyOneIntegrationBlockValidator) Description(_ context.Context) string {
-	return "Exactly one integration block must be set (cloudwatch, coralogix, custom_otlp, datadog, google_cloud, grafana, splunk, uptrace)"
+	return "Exactly one integration block must be set (cloudwatch, coralogix, datadog, google_cloud, grafana, splunk, uptrace)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) MarkdownDescription(_ context.Context) string {
-	return "Exactly one integration block must be set (`cloudwatch`, `coralogix`, `custom_otlp`, `datadog`, `google_cloud`, `grafana`, `splunk`, `uptrace`)"
+	return "Exactly one integration block must be set (`cloudwatch`, `coralogix`, `datadog`, `google_cloud`, `grafana`, `splunk`, `uptrace`)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
@@ -38,7 +38,6 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	// so a nil-check alone is insufficient.
 	cloudwatchConfigured := config.Cloudwatch != nil && !config.Cloudwatch.IAMRole.IsNull()
 	coralogixConfigured := config.Coralogix != nil && !config.Coralogix.PrivateKey.IsNull()
-	customOtlpConfigured := config.CustomOTLP != nil && !config.CustomOTLP.Endpoint.IsNull()
 	datadogConfigured := config.Datadog != nil && !config.Datadog.APIKey.IsNull()
 	googleCloudConfigured := config.GoogleCloud != nil && !config.GoogleCloud.ServiceAccountFile.IsNull()
 	grafanaConfigured := config.Grafana != nil && !config.Grafana.Endpoint.IsNull()
@@ -50,9 +49,6 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 		count++
 	}
 	if coralogixConfigured {
-		count++
-	}
-	if customOtlpConfigured {
 		count++
 	}
 	if datadogConfigured {
@@ -74,7 +70,7 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	if count != 1 {
 		resp.Diagnostics.AddError(
 			"Invalid Configuration",
-			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, coralogix, custom_otlp, datadog, google_cloud, grafana, splunk, uptrace), got %d", count),
+			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, coralogix, datadog, google_cloud, grafana, splunk, uptrace), got %d", count),
 		)
 		return
 	}
@@ -110,29 +106,6 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 		if config.Coralogix.Region.IsNull() {
 			resp.Diagnostics.AddAttributeError(path.Root("coralogix").AtName("region"),
 				"Missing required attribute", "region is required for coralogix integration")
-		}
-	}
-
-	if customOtlpConfigured {
-		if config.CustomOTLP.Endpoint.IsNull() {
-			resp.Diagnostics.AddAttributeError(path.Root("custom_otlp").AtName("endpoint"),
-				"Missing required attribute", "endpoint is required for custom_otlp integration")
-		}
-		headersSet := !config.CustomOTLP.Headers.IsNull() && !config.CustomOTLP.Headers.IsUnknown() && len(config.CustomOTLP.Headers.Elements()) > 0
-		usernameSet := !config.CustomOTLP.Username.IsNull() && !config.CustomOTLP.Username.IsUnknown()
-		passwordSet := !config.CustomOTLP.Password.IsNull() && !config.CustomOTLP.Password.IsUnknown()
-		if headersSet && (usernameSet || passwordSet) {
-			resp.Diagnostics.AddError(
-				"Conflicting attributes",
-				"custom_otlp: headers and username/password are mutually exclusive; use one or the other for authentication")
-		}
-		if usernameSet && !passwordSet {
-			resp.Diagnostics.AddAttributeError(path.Root("custom_otlp").AtName("password"),
-				"Missing required attribute", "custom_otlp: password is required when username is set")
-		}
-		if passwordSet && !usernameSet {
-			resp.Diagnostics.AddAttributeError(path.Root("custom_otlp").AtName("username"),
-				"Missing required attribute", "custom_otlp: username is required when password is set")
 		}
 	}
 

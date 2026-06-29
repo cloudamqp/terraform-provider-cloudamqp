@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/integrations"
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -18,12 +17,6 @@ func copyWriteOnlyFields(plan *integrationLogAgentResourceModel, config *integra
 			plan.Coralogix = &coralogixModel{}
 		}
 		plan.Coralogix.PrivateKey = config.Coralogix.PrivateKey
-	}
-	if config.CustomOTLP != nil && !config.CustomOTLP.Password.IsNull() {
-		if plan.CustomOTLP == nil {
-			plan.CustomOTLP = &customOtlpModel{}
-		}
-		plan.CustomOTLP.Password = config.CustomOTLP.Password
 	}
 	if config.Datadog != nil && !config.Datadog.APIKey.IsNull() {
 		if plan.Datadog == nil {
@@ -67,9 +60,6 @@ func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentR
 	if m.Coralogix != nil && !m.Coralogix.Region.IsNull() {
 		return "coralogix_v2", nil
 	}
-	if m.CustomOTLP != nil && !m.CustomOTLP.Endpoint.IsNull() {
-		return "custom_otlp", nil
-	}
 	if m.Datadog != nil && !m.Datadog.Region.IsNull() {
 		return "datadog_v2", nil
 	}
@@ -85,7 +75,7 @@ func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentR
 	if m.Uptrace != nil && !m.Uptrace.DSNVersion.IsNull() {
 		return "uptrace", nil
 	}
-	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, coralogix, custom_otlp, datadog, google_cloud, grafana, splunk, uptrace)")
+	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, coralogix, datadog, google_cloud, grafana, splunk, uptrace)")
 }
 
 // extractGoogleCloudCredentials returns the required credential fields from a Google service account key JSON.
@@ -132,27 +122,6 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 			Application: plan.Coralogix.Application.ValueString(),
 			Subsystem:   plan.Coralogix.Subsystem.ValueString(),
 		}, nil
-	case "custom_otlp":
-		req := model.LogAgentRequest{
-			Endpoint: plan.CustomOTLP.Endpoint.ValueString(),
-		}
-		headersSet := !plan.CustomOTLP.Headers.IsNull() && !plan.CustomOTLP.Headers.IsUnknown() && len(plan.CustomOTLP.Headers.Elements()) > 0
-		usernameSet := !plan.CustomOTLP.Username.IsNull() && !plan.CustomOTLP.Username.IsUnknown()
-		if headersSet {
-			headers := make(map[string]string, len(plan.CustomOTLP.Headers.Elements()))
-			for k, v := range plan.CustomOTLP.Headers.Elements() {
-				if sv, ok := v.(types.String); ok {
-					headers[k] = sv.ValueString()
-				}
-			}
-			req.Headers = headers
-			req.AuthType = "headers"
-		} else if usernameSet {
-			req.Username = plan.CustomOTLP.Username.ValueString()
-			req.Password = plan.CustomOTLP.Password.ValueString()
-			req.AuthType = "basic_auth"
-		}
-		return req, nil
 	case "datadog_v2":
 		req := model.LogAgentRequest{
 			APIKey: plan.Datadog.APIKey.ValueString(),
@@ -226,24 +195,6 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		if data.Config.Domain != nil {
 			m.Coralogix.Region = types.StringValue(strings.TrimSuffix(*data.Config.Domain, ".coralogix.com"))
 		}
-	case "custom_otlp":
-		if m.CustomOTLP == nil {
-			m.CustomOTLP = &customOtlpModel{}
-		}
-		m.CustomOTLP.Endpoint = types.StringPointerValue(data.Config.Endpoint)
-		// Convert headers map from API response to types.Map
-		if len(data.Config.Headers) > 0 {
-			elements := make(map[string]attr.Value, len(data.Config.Headers))
-			for k, v := range data.Config.Headers {
-				v := v // capture loop variable
-				elements[k] = types.StringValue(v)
-			}
-			m.CustomOTLP.Headers = types.MapValueMust(types.StringType, elements)
-		} else {
-			m.CustomOTLP.Headers = types.MapNull(types.StringType)
-		}
-		m.CustomOTLP.Username = types.StringPointerValue(data.Config.Username)
-		// password is WriteOnly, not returned by the API, not stored in state
 	case "datadog_v2":
 		if m.Datadog == nil {
 			m.Datadog = &datadogModel{}
