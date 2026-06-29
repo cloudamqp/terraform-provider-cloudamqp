@@ -97,8 +97,13 @@ func (p *cloudamqpProvider) Configure(ctx context.Context, request provider.Conf
 
 func (p *cloudamqpProvider) DataSources(_ context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
+		NewAccountDataSource,
+		NewAccountVpcsDataSource,
 		NewAlarmDataSource,
 		NewNotificationDataSource,
+		NewUpgradableVersionsDataSource,
+		NewVpcGcpInfoDataSource,
+		NewVpcInfoDataSource,
 	}
 }
 
@@ -108,6 +113,7 @@ func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resou
 		NewAlarmResource,
 		NewAwsEventBridgeResource,
 		NewCustomCertificateResource,
+		NewCustomDomainResource,
 		NewIntegrationLogResource,
 		NewIntegrationMetricResource,
 		NewMaintenanceWindowResource,
@@ -117,6 +123,8 @@ func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resou
 		NewPluginBatchResource,
 		NewRabbitMqConfigurationResource,
 		NewTrustStoreResource,
+		NewUpgradeLavinMQResource,
+		NewUpgradeRabbitMQResource,
 		NewVpcResource,
 		NewWebhookResource,
 	}
@@ -152,21 +160,15 @@ func Provider(v string, client *http.Client) *schemaSdk.Provider {
 			},
 		},
 		DataSourcesMap: map[string]*schemaSdk.Resource{
-			"cloudamqp_account_vpcs":        dataSourceAccountVpcs(),
-			"cloudamqp_account":             dataSourceAccount(),
-			"cloudamqp_alarms":              dataSourceAlarms(),
-			"cloudamqp_credentials":         dataSourceCredentials(),
-			"cloudamqp_instance":            dataSourceInstance(),
-			"cloudamqp_nodes":               dataSourceNodes(),
-			"cloudamqp_notifications":       dataSourceNotifications(),
-			"cloudamqp_plugins_community":   dataSourcePluginsCommunity(),
-			"cloudamqp_plugins":             dataSourcePlugins(),
-			"cloudamqp_upgradable_versions": dataSourceUpgradableVersions(),
-			"cloudamqp_vpc_gcp_info":        dataSourceVpcGcpInfo(),
-			"cloudamqp_vpc_info":            dataSourceVpcInfo(),
+			"cloudamqp_alarms":            dataSourceAlarms(),
+			"cloudamqp_credentials":       dataSourceCredentials(),
+			"cloudamqp_instance":          dataSourceInstance(),
+			"cloudamqp_nodes":             dataSourceNodes(),
+			"cloudamqp_notifications":     dataSourceNotifications(),
+			"cloudamqp_plugins_community": dataSourcePluginsCommunity(),
+			"cloudamqp_plugins":           dataSourcePlugins(),
 		},
 		ResourcesMap: map[string]*schemaSdk.Resource{
-			"cloudamqp_custom_domain":                 resourceCustomDomain(),
 			"cloudamqp_extra_disk_size":               resourceExtraDiskSize(),
 			"cloudamqp_instance":                      resourceInstance(),
 			"cloudamqp_integration_metric_prometheus": resourceIntegrationMetricPrometheus(),
@@ -175,8 +177,6 @@ func Provider(v string, client *http.Client) *schemaSdk.Provider {
 			"cloudamqp_privatelink_aws":               resourcePrivateLinkAws(),
 			"cloudamqp_privatelink_azure":             resourcePrivateLinkAzure(),
 			"cloudamqp_security_firewall":             resourceSecurityFirewall(),
-			"cloudamqp_upgrade_rabbitmq":              resourceUpgradeRabbitMQ(),
-			"cloudamqp_upgrade_lavinmq":               resourceUpgradeLavinMQ(),
 			"cloudamqp_vpc_connect":                   resourceVpcConnect(),
 			"cloudamqp_vpc_gcp_peering":               resourceVpcGcpPeering(),
 			"cloudamqp_vpc_peering":                   resourceVpcPeering(),
