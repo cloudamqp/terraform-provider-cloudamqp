@@ -10,8 +10,9 @@ description: |-
 # cloudamqp_custom_certificate
 
 This resource allows you to upload a custom certificate to all servers in your cluster. Update is
-not supported, all changes require replacement. `ca`, `cert` and `private_key` all use **WriteOnly**,
-meaning no information is present in plan phase, logs or stored in the state for security purposes.
+not supported, all changes require replacement. The certificate can be used for one or more SNI
+hostnames. `ca`, `cert` and `private_key` all use **WriteOnly**, meaning no information is present
+in plan phase, logs or stored in the state for security purposes.
 
 ~> **WARNING:** Please note that when uploading a custom certificate or restoring to default certificate,
 all current connections will be closed.
@@ -25,20 +26,44 @@ Only available for dedicated subscription plans running ***RabbitMQ***.
 <details>
   <summary>
     <b>
-      <i>Upload a custom certificate</i>
+      <i>Upload a custom certificate for one hostname</i>
     </b>
   </summary>
 
 ```hcl
 resource "cloudamqp_custom_certificate" "cert" {
   instance_id = cloudamqp_instance.instance.id
-  
+
   # Load certificate files from disk
   ca          = file("${path.module}/certs/ca.pem")
   cert        = file("${path.module}/certs/server.crt")
   private_key = file("${path.module}/certs/server.key")
-  
+
   sni_hosts = "cloudamqp.example.com"
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>Upload a custom certificate for multiple hostnames</i>
+    </b>
+  </summary>
+
+Use a comma or space separated string when the same certificate covers more than one SNI hostname.
+Each hostname must be covered by the certificate common name or subject alternative names.
+
+```hcl
+resource "cloudamqp_custom_certificate" "cert" {
+  instance_id = cloudamqp_instance.instance.id
+
+  ca          = file("${path.module}/certs/ca.pem")
+  cert        = file("${path.module}/certs/server.crt")
+  private_key = file("${path.module}/certs/server.key")
+
+  sni_hosts = "foo.starkast.net,999.zomg.se,bar.saftkalas.nu"
 }
 ```
 
@@ -61,11 +86,11 @@ locals {
 
 resource "cloudamqp_custom_certificate" "cert" {
   instance_id = cloudamqp_instance.instance.id
-  
+
   ca          = file("${path.module}/certs/ca-${local.cert_version}.pem")
   cert        = file("${path.module}/certs/cert-${local.cert_version}.crt")
   private_key = file("${path.module}/certs/key-${local.cert_version}.key")
-  
+
   sni_hosts = "cloudamqp.example.com"
   version   = local.cert_version
 }
@@ -129,7 +154,8 @@ The following arguments are supported:
 * `ca` - (Required/WriteOnly) The PEM-encoded Certificate Authority (CA).
 * `cert` - (Required/WriteOnly) The PEM-encoded server certificate.
 * `private_key` - (Required/WriteOnly) The PEM-encoded private key corresponding to the certificate.
-* `sni_hosts` - (Required/ForceNew) A hostname (Server Name Indication) that this certificate applies to.
+* `sni_hosts` - (Required/ForceNew) Hostname(s) (Server Name Indication) that this certificate
+  applies to. Use a comma or space separated string for multiple hostnames.
 * `version` - (Optional/Computed/ForceNew) An integer based argument to trigger force new (default: 1).
 * `key_id` - (Optional/Computed/ForceNew) A string based argument to trigger force new (default: "").
 
