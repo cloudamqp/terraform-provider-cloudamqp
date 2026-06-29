@@ -6,6 +6,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 // ConfigValidators enforces that exactly one integration block is set
@@ -183,6 +184,32 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 		if config.Uptrace.DSN.IsNull() {
 			resp.Diagnostics.AddAttributeError(path.Root("uptrace").AtName("dsn"),
 				"Missing required attribute", "dsn is required for uptrace integration")
+		}
+	}
+}
+
+// ModifyPlan marks computed google_cloud fields as Unknown when service_account_file_version changes,
+// so Terraform's consistency check does not fail when credentials are rotated.
+func (r *integrationLogAgentResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	// Skip on destroy or create (no prior state to compare against)
+	if req.Plan.Raw.IsNull() || req.State.Raw.IsNull() {
+		return
+	}
+
+	var plan integrationLogAgentResourceModel
+	var state integrationLogAgentResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	if plan.GoogleCloud != nil && state.GoogleCloud != nil {
+		if !plan.GoogleCloud.ServiceAccountFileVersion.Equal(state.GoogleCloud.ServiceAccountFileVersion) {
+			plan.GoogleCloud.ProjectID = types.StringUnknown()
+			plan.GoogleCloud.ClientEmail = types.StringUnknown()
+			plan.GoogleCloud.PrivateKeyID = types.StringUnknown()
+			resp.Diagnostics.Append(resp.Plan.Set(ctx, &plan)...)
 		}
 	}
 }

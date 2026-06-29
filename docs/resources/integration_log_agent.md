@@ -129,6 +129,25 @@ resource "cloudamqp_integration_log_agent" "datadog" {
 <details>
   <summary>
     <b>
+      <i>Google Cloud log agent integration</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_integration_log_agent" "google_cloud" {
+  instance_id = cloudamqp_instance.instance.id
+  google_cloud {
+    service_account_file         = file("path/to/service_account_key.json")
+    service_account_file_version = 1
+  }
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
       <i>Grafana Cloud log agent integration</i>
     </b>
   </summary>
@@ -242,6 +261,32 @@ The following arguments are used by the `datadog` block.
 * `api_key_version` - (Optional/Computed) Version of the write-only `api_key`. Increment to trigger an update when the key changes (default: `1`).
 * `region`          - (Required) Datadog ingestion region. Valid values: `us1`, `us3`, `us5`, `eu`, `ap2`.
 * `tags`            - (Optional) Comma-separated tags to attach to logs (e.g. `env=prod,region=eu`).
+
+</details>
+
+<details>
+  <summary>
+    <b>Google Cloud</b>
+  </summary>
+
+The following arguments are used by the `google_cloud` block.
+
+* `service_account_file`         - (Required, Write-only) Google service account key JSON file contents. Use `file("path/to/key.json")` to load the downloaded JSON credentials file. This value is write-only and will not be stored in state.
+* `service_account_file_version` - (Optional/Computed) Version of the write-only `service_account_file`. Increment to trigger an update when the file contents change (default: `1`).
+* `project_id`                   - (Computed) Google Cloud project ID. Extracted from the service account file.
+* `client_email`                 - (Computed) Google service account client email. Extracted from the service account file.
+* `private_key_id`               - (Computed, Sensitive) Google service account private key ID. Extracted from the service account file.
+* `tags`                         - (Optional) Comma-separated tags to attach to logs (e.g. `env=prod,region=eu`).
+
+To generate a credentials file:
+
+1. Sign in to your Google Cloud account
+2. Go to **IAM & admin → Service accounts**
+3. Click **+ Create Service Account**, give it a name, and click **Create**
+4. Add the role **Logs Writer** — no other roles are needed
+5. Click **Done**, then open the created service account
+6. Click **Keys → Add Key → Create a new key**, select **JSON**, and click **Create**
+7. The file is downloaded to your computer — pass it to `service_account_file` using `file("path/to/key.json")`
 
 </details>
 

@@ -1,7 +1,6 @@
 package cloudamqp
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -89,15 +88,10 @@ func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentR
 	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, coralogix, custom_otlp, datadog, google_cloud, grafana, splunk, uptrace)")
 }
 
-// extractGoogleCloudCredentials decodes a base64-encoded Google service account key JSON
-// and returns the required credential fields.
-func extractGoogleCloudCredentials(encoded string) (map[string]string, error) {
-	decoded, err := base64.StdEncoding.DecodeString(encoded)
-	if err != nil {
-		return nil, fmt.Errorf("failed to decode service_account_file: %w", err)
-	}
+// extractGoogleCloudCredentials returns the required credential fields from a Google service account key JSON.
+func extractGoogleCloudCredentials(file string) (map[string]string, error) {
 	var jsonMap map[string]any
-	if err := json.Unmarshal(decoded, &jsonMap); err != nil {
+	if err := json.Unmarshal([]byte(file), &jsonMap); err != nil {
 		return nil, fmt.Errorf("failed to parse service_account_file JSON: %w", err)
 	}
 	requiredFields := []string{"type", "client_email", "private_key_id", "private_key", "project_id"}
@@ -180,6 +174,9 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 			PrivateKeyID:   creds["private_key_id"],
 			PrivateKey:     creds["private_key"],
 		}
+		plan.GoogleCloud.ClientEmail = types.StringValue(creds["client_email"])
+		plan.GoogleCloud.PrivateKeyID = types.StringValue(creds["private_key_id"])
+		plan.GoogleCloud.ProjectID = types.StringValue(creds["project_id"])
 		if !plan.GoogleCloud.Tags.IsNull() && !plan.GoogleCloud.Tags.IsUnknown() {
 			req.Tags = plan.GoogleCloud.Tags.ValueString()
 		}
@@ -223,7 +220,7 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		if m.Coralogix == nil {
 			m.Coralogix = &coralogixModel{}
 		}
-		// private_key is WriteOnly — not returned by the API, not stored in state
+		// private_key is WriteOnly, not returned by the API, not stored in state
 		m.Coralogix.Application = types.StringPointerValue(data.Config.Application)
 		m.Coralogix.Subsystem = types.StringPointerValue(data.Config.Subsystem)
 		if data.Config.Domain != nil {
@@ -246,12 +243,12 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 			m.CustomOTLP.Headers = types.MapNull(types.StringType)
 		}
 		m.CustomOTLP.Username = types.StringPointerValue(data.Config.Username)
-		// password is WriteOnly — not returned by the API, not stored in state
+		// password is WriteOnly, not returned by the API, not stored in state
 	case "datadog_v2":
 		if m.Datadog == nil {
 			m.Datadog = &datadogModel{}
 		}
-		// api_key is WriteOnly — not returned by the API, not stored in state
+		// api_key is WriteOnly,not returned by the API, not stored in state
 		m.Datadog.Region = types.StringPointerValue(data.Config.Region)
 		if !m.Datadog.Tags.IsNull() || data.Config.Tags != nil {
 			m.Datadog.Tags = types.StringPointerValue(data.Config.Tags)
@@ -260,7 +257,8 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		if m.GoogleCloud == nil {
 			m.GoogleCloud = &googleCloudModel{}
 		}
-		// service_account_file is WriteOnly — not returned by the API, not stored in state
+		// service_account_file is WriteOnly, not returned by the API, not stored in state
+		// private_key is not stored in state, only extracted from service_account_file and stored in the API
 		m.GoogleCloud.ProjectID = types.StringPointerValue(data.Config.ProjectID)
 		m.GoogleCloud.ClientEmail = types.StringPointerValue(data.Config.ClientEmail)
 		m.GoogleCloud.PrivateKeyID = types.StringPointerValue(data.Config.PrivateKeyID)
@@ -273,13 +271,13 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		}
 		m.Grafana.Endpoint = types.StringPointerValue(data.Config.Endpoint)
 		m.Grafana.GrafanaInstanceID = types.StringPointerValue(data.Config.GrafanaInstanceID)
-		// api_token is WriteOnly — not returned by the API, not stored in state
+		// api_token is WriteOnly, not returned by the API, not stored in state
 	case "splunk_v2":
 		if m.Splunk == nil {
 			m.Splunk = &splunkModel{}
 		}
 		m.Splunk.Endpoint = types.StringPointerValue(data.Config.Endpoint)
-		// token is WriteOnly — not returned by the API, not stored in state
+		// token is WriteOnly, not returned by the API, not stored in state
 		if !m.Splunk.SourceType.IsNull() || data.Config.SourceType != nil {
 			m.Splunk.SourceType = types.StringPointerValue(data.Config.SourceType)
 		}
@@ -287,6 +285,6 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		if m.Uptrace == nil {
 			m.Uptrace = &uptraceModel{}
 		}
-		// dsn is WriteOnly — not returned by the API, not stored in state
+		// dsn is WriteOnly, not returned by the API, not stored in state
 	}
 }

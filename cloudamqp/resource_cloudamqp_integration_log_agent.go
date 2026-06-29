@@ -29,6 +29,7 @@ var (
 	_ resource.ResourceWithConfigure        = &integrationLogAgentResource{}
 	_ resource.ResourceWithImportState      = &integrationLogAgentResource{}
 	_ resource.ResourceWithConfigValidators = &integrationLogAgentResource{}
+	_ resource.ResourceWithModifyPlan       = &integrationLogAgentResource{}
 )
 
 type integrationLogAgentResource struct {
@@ -290,7 +291,7 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 						Optional:    true,
 						Sensitive:   true,
 						WriteOnly:   true,
-						Description: "Base64-encoded Google service account key JSON file",
+						Description: "Google service account key JSON file contents. Use file(\"path/to/key.json\") to load the downloaded credentials file.",
 					},
 					"service_account_file_version": schema.Int64Attribute{
 						Optional:    true,
@@ -441,24 +442,20 @@ func (r *integrationLogAgentResource) ImportState(ctx context.Context, req resou
 // Create creates the resource and sets the initial Terraform state
 func (r *integrationLogAgentResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan integrationLogAgentResourceModel
+	var config integrationLogAgentResourceModel
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
+	// Read WriteOnly fields from config (not available in plan)
+	copyWriteOnlyFields(&plan, &config)
 	intType, err := r.getIntegrationType(&plan)
 	if err != nil {
 		resp.Diagnostics.AddError("Invalid configuration", err.Error())
 		return
 	}
-
-	// Read WriteOnly fields from config (not available in plan)
-	var createConfig integrationLogAgentResourceModel
-	resp.Diagnostics.Append(req.Config.Get(ctx, &createConfig)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	copyWriteOnlyFields(&plan, &createConfig)
 
 	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
 	defer cancel()
@@ -518,24 +515,20 @@ func (r *integrationLogAgentResource) Read(ctx context.Context, req resource.Rea
 // Update modifies the resource and updates the integration in the API
 func (r *integrationLogAgentResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan integrationLogAgentResourceModel
+	var config integrationLogAgentResourceModel
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
+	// Read WriteOnly fields from config (not available in plan)
+	copyWriteOnlyFields(&plan, &config)
 	intType, err := r.getIntegrationType(&plan)
 	if err != nil {
 		resp.Diagnostics.AddError("Invalid configuration", err.Error())
 		return
 	}
-
-	// Read WriteOnly fields from config (not available in plan)
-	var updateConfig integrationLogAgentResourceModel
-	resp.Diagnostics.Append(req.Config.Get(ctx, &updateConfig)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	copyWriteOnlyFields(&plan, &updateConfig)
 
 	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
 	defer cancel()

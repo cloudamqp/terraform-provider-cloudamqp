@@ -247,6 +247,87 @@ func TestAccIntegrationLogAgent_Datadog_Basic(t *testing.T) {
 	})
 }
 
+// TestAccIntegrationLogAgent_GoogleCloud_Basic: Create Google Cloud log agent integration, import (ignoring write-only service_account_file), and update credentials by incrementing service_account_file_version.
+func TestAccIntegrationLogAgent_GoogleCloud_Basic(t *testing.T) {
+	t.Parallel()
+
+	credentialsJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials.json")
+	if err != nil {
+		t.Fatalf("Failed to read credentials file: %v", err)
+	}
+
+	credentialsUpdateJSON, err := os.ReadFile("../test/fixtures/stackdriver_test_credentials_update.json")
+	if err != nil {
+		t.Fatalf("Failed to read update credentials file: %v", err)
+	}
+
+	var (
+		instanceResourceName    = "cloudamqp_instance.instance"
+		googleCloudResourceName = "cloudamqp_integration_log_agent.google_cloud"
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_instance" "instance" {
+					  name   = "TestAccIntegrationLogAgent_GoogleCloud_Basic"
+					  plan   = "penguin-1"
+					  region = "amazon-web-services::eu-central-1"
+					  tags   = ["vcr-test"]
+					}
+
+					resource "cloudamqp_integration_log_agent" "google_cloud" {
+					  instance_id = cloudamqp_instance.instance.id
+					  google_cloud {
+					    service_account_file = %s
+					  }
+					}
+				`, fmt.Sprintf("%q", string(credentialsJSON))),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccIntegrationLogAgent_GoogleCloud_Basic"),
+					resource.TestCheckResourceAttr(googleCloudResourceName, "google_cloud.project_id", "test-project"),
+					resource.TestCheckResourceAttr(googleCloudResourceName, "google_cloud.client_email", "test@serviceaccount.com"),
+					resource.TestCheckResourceAttr(googleCloudResourceName, "google_cloud.private_key_id", "test-key-id"),
+					resource.TestCheckResourceAttr(googleCloudResourceName, "google_cloud.service_account_file_version", "1"),
+				),
+			},
+			{
+				ResourceName:            googleCloudResourceName,
+				ImportStateIdFunc:       testAccImportCombinedStateIdFunc(instanceResourceName, googleCloudResourceName),
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"google_cloud.service_account_file"},
+			},
+			{
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_instance" "instance" {
+					  name   = "TestAccIntegrationLogAgent_GoogleCloud_Basic"
+					  plan   = "penguin-1"
+					  region = "amazon-web-services::eu-central-1"
+					  tags   = ["vcr-test"]
+					}
+
+					resource "cloudamqp_integration_log_agent" "google_cloud" {
+					  instance_id = cloudamqp_instance.instance.id
+					  google_cloud {
+					    service_account_file         = %s
+					    service_account_file_version = 2
+					  }
+					}
+				`, fmt.Sprintf("%q", string(credentialsUpdateJSON))),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(googleCloudResourceName, "google_cloud.project_id", "updated-project"),
+					resource.TestCheckResourceAttr(googleCloudResourceName, "google_cloud.client_email", "updated@serviceaccount.com"),
+					resource.TestCheckResourceAttr(googleCloudResourceName, "google_cloud.private_key_id", "updated-key-id"),
+					resource.TestCheckResourceAttr(googleCloudResourceName, "google_cloud.service_account_file_version", "2"),
+				),
+			},
+		},
+	})
+}
+
 // TestAccIntegrationLogAgent_Grafana_Basic: Create Grafana Cloud log agent integration, import (ignoring write-only api_token), and update by incrementing api_token_version.
 func TestAccIntegrationLogAgent_Grafana_Basic(t *testing.T) {
 	t.Parallel()
