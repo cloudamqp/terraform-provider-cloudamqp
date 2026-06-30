@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.47.0 (Unreleased)
+
+IMRPOVEMENT:
+
+* Docs: Updated documenation for support of multiple custom certificate hostnames [#526]
+
+[#526]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/526
+
 ## 1.46.0 (24 Jun, 2026)
 
 FEATURES:
