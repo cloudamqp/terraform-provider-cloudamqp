@@ -205,6 +205,79 @@ func TestAccAlarm_Notice(t *testing.T) {
 	})
 }
 
+// TestAccAlarm_DiskAutoResize: Create a disk_auto_resize alarm and import it.
+func TestAccAlarm_DiskAutoResize(t *testing.T) {
+	t.Parallel()
+
+	var (
+		instanceResourceName      = "cloudamqp_instance.instance"
+		resizeAlarmResourceName   = "cloudamqp_alarm.disk_auto_resize"
+		resizeAlarmDataSourceName = "data.cloudamqp_alarm.disk_auto_resize"
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: `
+				  resource "cloudamqp_instance" "instance" {
+				    name              = "TestAccAlarm_DiskAutoResize"
+						region            = "amazon-web-services::us-east-1"
+				    plan              = "penguin-1"
+						tags              = ["vcr-test"]
+				  }
+
+				  resource "cloudamqp_notification" "recipient" {
+				    instance_id = cloudamqp_instance.instance.id
+				    type        = "email"
+				    value       = "test@example.com"
+						name        = "test"
+					}
+
+					resource "cloudamqp_alarm" "disk_auto_resize" {
+					  instance_id       = cloudamqp_instance.instance.id
+					  type              = "disk_auto_resize"
+					  enabled           = true
+					  time_threshold    = 600
+					  value_threshold   = 5
+					  value_calculation = "percentage"
+					  allow_downtime    = true
+					  recipients        = [cloudamqp_notification.recipient.id]
+					}
+
+					data "cloudamqp_alarm" "disk_auto_resize" {
+					  instance_id = cloudamqp_instance.instance.id
+					  type        = "disk_auto_resize"
+
+						depends_on = [
+							cloudamqp_alarm.disk_auto_resize,
+						]
+					}
+				`,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(resizeAlarmResourceName, "type", "disk_auto_resize"),
+					resource.TestCheckResourceAttr(resizeAlarmResourceName, "enabled", "true"),
+					resource.TestCheckResourceAttr(resizeAlarmResourceName, "time_threshold", "600"),
+					resource.TestCheckResourceAttr(resizeAlarmResourceName, "value_threshold", "5"),
+					resource.TestCheckResourceAttr(resizeAlarmResourceName, "value_calculation", "percentage"),
+					resource.TestCheckResourceAttr(resizeAlarmResourceName, "allow_downtime", "true"),
+					resource.TestCheckResourceAttr(resizeAlarmResourceName, "recipients.#", "1"),
+					// validate data source
+					resource.TestCheckResourceAttr(resizeAlarmDataSourceName, "type", "disk_auto_resize"),
+					resource.TestCheckResourceAttr(resizeAlarmDataSourceName, "value_calculation", "percentage"),
+					resource.TestCheckResourceAttr(resizeAlarmDataSourceName, "allow_downtime", "true"),
+				),
+			},
+			{
+				ResourceName:      resizeAlarmResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, resizeAlarmResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
 func testAccImportCombinedStateIdFunc(instanceName, resourceName string) resource.ImportStateIdFunc {
 	return func(state *terraform.State) (string, error) {
 		rs, ok := state.RootModule().Resources[instanceName]

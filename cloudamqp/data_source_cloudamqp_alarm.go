@@ -78,6 +78,7 @@ func (d *alarmDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"cpu",
 						"memory",
 						"disk",
+						"disk_auto_resize",
 						"queue",
 						"connection",
 						"flow",

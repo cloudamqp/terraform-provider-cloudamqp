@@ -390,7 +390,9 @@ func (a *alarmResource) populateResourceModel(ctx context.Context, data model.Al
 	if data.ReminderInterval != nil {
 		state.ReminderInterval = types.Int64Value(*data.ReminderInterval)
 	} else {
-		state.ReminderInterval = types.Int64Null()
+		// Non-remindable alarms (e.g. disk_auto_resize) return no reminder_interval;
+		// fall back to the schema default of 0 to avoid a perpetual plan diff.
+		state.ReminderInterval = types.Int64Value(0)
 	}
 
 	if data.ValueThreshold != nil {
