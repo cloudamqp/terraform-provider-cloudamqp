@@ -111,10 +111,12 @@ The following arguments are supported:
                         all recipients.
 * `message_type`      - (Optional) Message type `(total, unacked, ready)` used by queue alarm type.
 
-Specific argument for `disk` alarm
+Specific arguments for `disk` and `disk_auto_resize` alarms
 
 * `value_calculation` - (Optional) Disk value threshold calculation, `fixed, percentage` of disk
                         space remaining.
+* `allow_downtime`    - (Optional) For `disk_auto_resize`, allow the resize to proceed even if it
+                        requires brief downtime. The Default is `false`.
 
 Based on alarm type, different arguments are flagged as required or optional.
 
@@ -126,8 +128,8 @@ All attributes reference are computed
 
 ## Alarm type reference
 
-Supported alarm types: `cpu, memory, disk, queue, connection, flow, consumer, netsplit,
-  server_unreachable, notice`
+Supported alarm types: `cpu, memory, disk, disk_auto_resize, queue, connection, flow, consumer,
+  netsplit, server_unreachable, notice`
 
 Required arguments for all alarms: `instance_id, type, enabled`<br>
 Optional argument for all alarms: `tags, queue_regex, vhost_regex`
@@ -137,6 +139,7 @@ Optional argument for all alarms: `tags, queue_regex, vhost_regex`
 | CPU | cpu | - | &#10004; | time_threshold, value_threshold |
 | Memory | memory | - | &#10004; | time_threshold, value_threshold |
 | Disk space | disk | - | &#10004; | time_threshold, value_threshold |
+| Disk auto-resize | disk_auto_resize | - | &#10004; | time_threshold, value_threshold, value_calculation, allow_downtime |
 | Queue | queue | &#10004; | &#10004; | time_threshold, value_threshold, queue_regex, vhost_regex, message_type |
 | Connection | connection | &#10004; | &#10004; | time_threshold, value_threshold |
 | Connection flow | flow | &#10004; | &#10004; | time_threshold, value_threshold |

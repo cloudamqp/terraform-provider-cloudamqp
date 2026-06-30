@@ -2,6 +2,10 @@
 
 ## 1.47.0 (Unreleased)
 
+IMPROVEMENTS:
+
+* resource/cloudamqp_alarm: Support `disk_auto_resize` alarm type and the `allow_downtime` argument ([#PR])
+
 IMRPOVEMENT:
 
 * Docs: Updated documenation for support of multiple custom certificate hostnames [#526]
