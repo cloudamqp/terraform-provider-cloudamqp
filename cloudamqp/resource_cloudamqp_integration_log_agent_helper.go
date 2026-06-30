@@ -84,19 +84,15 @@ func extractGoogleCloudCredentials(file string) (map[string]string, error) {
 	if err := json.Unmarshal([]byte(file), &jsonMap); err != nil {
 		return nil, fmt.Errorf("failed to parse service_account_file JSON: %w", err)
 	}
-	requiredFields := []string{"type", "client_email", "private_key_id", "private_key", "project_id"}
-	for _, field := range requiredFields {
-		if jsonMap[field] == nil || jsonMap[field] == "" {
-			return nil, fmt.Errorf("required field '%s' is missing from service_account_file", field)
+	result := make(map[string]string, 5)
+	for _, field := range []string{"type", "client_email", "private_key_id", "private_key", "project_id"} {
+		v, ok := jsonMap[field].(string)
+		if !ok || v == "" {
+			return nil, fmt.Errorf("required field '%s' is missing or not a string in service_account_file", field)
 		}
+		result[field] = v
 	}
-	return map[string]string{
-		"type":           jsonMap["type"].(string),
-		"client_email":   jsonMap["client_email"].(string),
-		"private_key_id": jsonMap["private_key_id"].(string),
-		"private_key":    jsonMap["private_key"].(string),
-		"project_id":     jsonMap["project_id"].(string),
-	}, nil
+	return result, nil
 }
 
 // populateRequest converts the resource model to an API request

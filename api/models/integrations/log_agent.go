@@ -1,39 +1,42 @@
 package integrations
 
 type LogAgentRequest struct {
-	// CloudWatch
-	Region        string `json:"region,omitempty"`
+	// CloudWatch (cloudwatch_v2)
 	IAMRole       string `json:"iam_role,omitempty"`
 	IAMExternalID string `json:"iam_external_id,omitempty"`
 	LogGroup      string `json:"log_group,omitempty"`
 	LogStream     string `json:"log_stream,omitempty"`
-	// Uptrace
-	DSN string `json:"dsn,omitempty"`
-	// Splunk
-	Endpoint   string `json:"endpoint,omitempty"`
-	Token      string `json:"token,omitempty"`
-	SourceType string `json:"sourcetype,omitempty"`
-	// Coralogix
+	// Coralogix (coralogix_v2)
 	Domain      string `json:"domain,omitempty"`
 	PrivateKey  string `json:"private_key,omitempty"`
 	Application string `json:"application,omitempty"`
 	Subsystem   string `json:"subsystem,omitempty"`
-	// Datadog
+	// Datadog (datadog_v2)
 	APIKey string `json:"api_key,omitempty"`
-	Tags   string `json:"tags,omitempty"`
-	// Custom OTLP
-	AuthType string            `json:"auth_type,omitempty"`
-	Headers  map[string]string `json:"headers,omitempty"`
-	Username string            `json:"username,omitempty"`
-	Password string            `json:"password,omitempty"`
-	// Google Cloud
+	// Google Cloud (googlecloud)
 	CredentialType string `json:"type,omitempty"`
 	ProjectID      string `json:"project_id,omitempty"`
 	ClientEmail    string `json:"client_email,omitempty"`
 	PrivateKeyID   string `json:"private_key_id,omitempty"`
-	// Grafana
+	// Grafana (grafana)
 	GrafanaInstanceID string `json:"instance_id,omitempty"`
 	APIToken          string `json:"api_token,omitempty"`
+	// Splunk (splunk_v2) and Grafana (grafana)
+	Endpoint string `json:"endpoint,omitempty"`
+	// Splunk (splunk_v2)
+	Token      string `json:"token,omitempty"`
+	SourceType string `json:"sourcetype,omitempty"`
+	// Uptrace (uptrace)
+	DSN string `json:"dsn,omitempty"`
+	// Datadog (datadog_v2) and Google Cloud (googlecloud)
+	Tags string `json:"tags,omitempty"`
+	// Shared: CloudWatch (cloudwatch_v2) and Datadog (datadog_v2)
+	Region string `json:"region,omitempty"`
+	// Custom OTLP (future)
+	AuthType string            `json:"auth_type,omitempty"`
+	Headers  map[string]string `json:"headers,omitempty"`
+	Username string            `json:"username,omitempty"`
+	Password string            `json:"password,omitempty"`
 }
 
 type LogAgentResponse struct {
@@ -43,36 +46,39 @@ type LogAgentResponse struct {
 }
 
 type LogAgentConfigResponse struct {
-	// CloudWatch
-	Region        *string `json:"region,omitempty"`
+	// CloudWatch (cloudwatch_v2)
 	IAMRole       *string `json:"iam_role,omitempty"`
 	IAMExternalID *string `json:"iam_external_id,omitempty"`
 	LogGroup      *string `json:"log_group,omitempty"`
 	LogStream     *string `json:"log_stream,omitempty"`
-	// Uptrace
-	DSN *string `json:"dsn,omitempty"`
-	// Splunk
-	Endpoint   *string `json:"endpoint,omitempty"`
-	Token      *string `json:"token,omitempty"`
-	SourceType *string `json:"sourcetype,omitempty"`
-	// Coralogix
+	// Coralogix (coralogix_v2)
 	Domain      *string `json:"domain,omitempty"`
 	PrivateKey  *string `json:"private_key,omitempty"`
 	Application *string `json:"application,omitempty"`
 	Subsystem   *string `json:"subsystem,omitempty"`
-	// Datadog
-	APIKey *string `json:"api_key,omitempty"`
-	Tags   *string `json:"tags,omitempty"`
-	// Custom OTLP
-	AuthType *string           `json:"auth_type,omitempty"`
-	Headers  map[string]string `json:"headers,omitempty"`
-	Username *string           `json:"username,omitempty"`
-	// Google Cloud
+	// Google Cloud (googlecloud)
 	ProjectID    *string `json:"project_id,omitempty"`
 	ClientEmail  *string `json:"client_email,omitempty"`
 	PrivateKeyID *string `json:"private_key_id,omitempty"`
-	// Grafana
+	// Grafana (grafana)
 	GrafanaInstanceID *string `json:"instance_id,omitempty"`
+	// Splunk (splunk_v2) and Grafana (grafana)
+	Endpoint *string `json:"endpoint,omitempty"`
+	// Splunk (splunk_v2)
+	Token      *string `json:"token,omitempty"`
+	SourceType *string `json:"sourcetype,omitempty"`
+	// Uptrace (uptrace)
+	DSN *string `json:"dsn,omitempty"`
+	// Datadog (datadog_v2)
+	APIKey *string `json:"api_key,omitempty"`
+	// Datadog (datadog_v2) and Google Cloud (googlecloud)
+	Tags *string `json:"tags,omitempty"`
+	// Shared: CloudWatch (cloudwatch_v2) and Datadog (datadog_v2)
+	Region *string `json:"region,omitempty"`
+	// Custom OTLP (future)
+	AuthType *string           `json:"auth_type,omitempty"`
+	Headers  map[string]string `json:"headers,omitempty"`
+	Username *string           `json:"username,omitempty"`
 }
 
 func redactedString(s string) string {

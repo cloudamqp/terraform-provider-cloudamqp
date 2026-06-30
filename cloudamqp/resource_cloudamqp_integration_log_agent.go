@@ -274,8 +274,8 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 						},
 					},
 					"private_key_id": schema.StringAttribute{
-						Computed:    true,
-						Sensitive:   true,
+						Computed: true,
+
 						Description: "Google service account private key ID (computed from service_account_file)",
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.UseStateForUnknown(),

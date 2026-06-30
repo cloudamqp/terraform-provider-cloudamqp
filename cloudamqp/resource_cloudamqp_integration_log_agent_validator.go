@@ -144,8 +144,8 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 
 	if splunkConfigured {
 		if config.Splunk.Endpoint.IsNull() {
-			resp.Diagnostics.AddAttributeError(path.Root("splunk").AtName("hec_endpoint"),
-				"Missing required attribute", "hec_endpoint is required for splunk integration")
+			resp.Diagnostics.AddAttributeError(path.Root("splunk").AtName("endpoint"),
+				"Missing required attribute", "endpoint is required for splunk integration")
 		}
 		if config.Splunk.Token.IsNull() {
 			resp.Diagnostics.AddAttributeError(path.Root("splunk").AtName("token"),
