@@ -4,7 +4,7 @@
 
 IMPROVEMENTS:
 
-* resource/cloudamqp_alarm: Support `disk_auto_resize` alarm type and the `allow_downtime` argument ([#529])
+* resource/cloudamqp_alarm: Support `disk_auto_resize` alarm type and the `allow_downtime` argument. `allow_downtime` (disk_auto_resize only) and `value_calculation` (disk and disk_auto_resize only) are validated against the alarm type at plan time ([#529])
 
 IMRPOVEMENT:
 

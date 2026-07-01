@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -273,6 +274,46 @@ func TestAccAlarm_DiskAutoResize(t *testing.T) {
 				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, resizeAlarmResourceName),
 				ImportState:       true,
 				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// TestAccAlarm_DiskFieldsRejectedOnWrongType: disk specific arguments are
+// rejected at plan time on alarm types that do not support them.
+func TestAccAlarm_DiskFieldsRejectedOnWrongType(t *testing.T) {
+	t.Parallel()
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: `
+					resource "cloudamqp_alarm" "invalid" {
+					  instance_id     = 123
+					  type            = "cpu"
+					  enabled         = true
+					  time_threshold  = 600
+					  value_threshold = 90
+					  allow_downtime  = true
+					  recipients      = [1]
+					}
+				`,
+				ExpectError: regexp.MustCompile(`allow_downtime can only be set when type is "disk_auto_resize"`),
+			},
+			{
+				Config: `
+					resource "cloudamqp_alarm" "invalid" {
+					  instance_id       = 123
+					  type              = "cpu"
+					  enabled           = true
+					  time_threshold    = 600
+					  value_threshold   = 90
+					  value_calculation = "percentage"
+					  recipients        = [1]
+					}
+				`,
+				ExpectError: regexp.MustCompile(`value_calculation can only be set when type is "disk" or "disk_auto_resize"`),
 			},
 		},
 	})

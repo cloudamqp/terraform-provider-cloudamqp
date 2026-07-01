@@ -25,9 +25,10 @@ import (
 )
 
 var (
-	_ resource.Resource                = &alarmResource{}
-	_ resource.ResourceWithConfigure   = &alarmResource{}
-	_ resource.ResourceWithImportState = &alarmResource{}
+	_ resource.Resource                     = &alarmResource{}
+	_ resource.ResourceWithConfigure        = &alarmResource{}
+	_ resource.ResourceWithImportState      = &alarmResource{}
+	_ resource.ResourceWithConfigValidators = &alarmResource{}
 )
 
 type alarmResource struct {
@@ -56,6 +57,58 @@ type alarmResourceModel struct {
 
 func (r *alarmResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = "cloudamqp_alarm"
+}
+
+func (r *alarmResource) ConfigValidators(ctx context.Context) []resource.ConfigValidator {
+	return []resource.ConfigValidator{
+		alarmTypeFieldsValidator{},
+	}
+}
+
+// alarmTypeFieldsValidator rejects disk specific arguments on alarm types that
+// do not support them, giving a clear plan-time error instead of silently
+// dropping the value server-side (which would leave a perpetual plan diff).
+type alarmTypeFieldsValidator struct{}
+
+func (v alarmTypeFieldsValidator) Description(ctx context.Context) string {
+	return "value_calculation is only valid for disk and disk_auto_resize alarms; " +
+		"allow_downtime is only valid for disk_auto_resize alarms"
+}
+
+func (v alarmTypeFieldsValidator) MarkdownDescription(ctx context.Context) string {
+	return v.Description(ctx)
+}
+
+func (v alarmTypeFieldsValidator) ValidateResource(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	var data alarmResourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	// Skip validation while the type is not yet known (e.g. computed value).
+	if data.Type.IsUnknown() || data.Type.IsNull() {
+		return
+	}
+	alarmType := data.Type.ValueString()
+
+	if !data.ValueCalculation.IsNull() && !data.ValueCalculation.IsUnknown() &&
+		alarmType != "disk" && alarmType != "disk_auto_resize" {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("value_calculation"),
+			"Invalid attribute combination",
+			fmt.Sprintf("value_calculation can only be set when type is \"disk\" or \"disk_auto_resize\", got: %q.", alarmType),
+		)
+	}
+
+	if !data.AllowDowntime.IsNull() && !data.AllowDowntime.IsUnknown() &&
+		alarmType != "disk_auto_resize" {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("allow_downtime"),
+			"Invalid attribute combination",
+			fmt.Sprintf("allow_downtime can only be set when type is \"disk_auto_resize\", got: %q.", alarmType),
+		)
+	}
 }
 
 func (r *alarmResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {

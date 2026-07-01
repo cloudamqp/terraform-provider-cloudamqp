@@ -118,6 +118,9 @@ Specific arguments for `disk` and `disk_auto_resize` alarms
 * `allow_downtime`    - (Optional) For `disk_auto_resize`, allow the resize to proceed even if it
                         requires brief downtime. The Default is `false`.
 
+Setting `value_calculation` on any other alarm type, or `allow_downtime` on a non
+`disk_auto_resize` alarm, is rejected at plan time.
+
 Based on alarm type, different arguments are flagged as required or optional.
 
 ## Attributes Reference
