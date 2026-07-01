@@ -25,10 +25,10 @@ import (
 )
 
 var (
-	_ resource.Resource                     = &alarmResource{}
-	_ resource.ResourceWithConfigure        = &alarmResource{}
-	_ resource.ResourceWithImportState      = &alarmResource{}
-	_ resource.ResourceWithConfigValidators = &alarmResource{}
+	_ resource.Resource                   = &alarmResource{}
+	_ resource.ResourceWithConfigure      = &alarmResource{}
+	_ resource.ResourceWithImportState    = &alarmResource{}
+	_ resource.ResourceWithValidateConfig = &alarmResource{}
 )
 
 type alarmResource struct {
@@ -59,27 +59,10 @@ func (r *alarmResource) Metadata(ctx context.Context, req resource.MetadataReque
 	resp.TypeName = "cloudamqp_alarm"
 }
 
-func (r *alarmResource) ConfigValidators(ctx context.Context) []resource.ConfigValidator {
-	return []resource.ConfigValidator{
-		alarmTypeFieldsValidator{},
-	}
-}
-
-// alarmTypeFieldsValidator rejects disk specific arguments on alarm types that
-// do not support them, giving a clear plan-time error instead of silently
-// dropping the value server-side (which would leave a perpetual plan diff).
-type alarmTypeFieldsValidator struct{}
-
-func (v alarmTypeFieldsValidator) Description(ctx context.Context) string {
-	return "value_calculation is only valid for disk and disk_auto_resize alarms; " +
-		"allow_downtime is only valid for disk_auto_resize alarms"
-}
-
-func (v alarmTypeFieldsValidator) MarkdownDescription(ctx context.Context) string {
-	return v.Description(ctx)
-}
-
-func (v alarmTypeFieldsValidator) ValidateResource(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+// ValidateConfig rejects disk specific arguments on alarm types that do not
+// support them, giving a clear plan-time error instead of silently dropping the
+// value server-side (which would leave a perpetual plan diff).
+func (r *alarmResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
 	var data alarmResourceModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
