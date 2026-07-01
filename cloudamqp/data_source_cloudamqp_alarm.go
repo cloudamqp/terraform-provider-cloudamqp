@@ -39,6 +39,7 @@ type alarmDataSourceModel struct {
 	ValueThreshold   types.Int64  `tfsdk:"value_threshold"`
 	ValueCalculation types.String `tfsdk:"value_calculation"`
 	TimeThreshold    types.Int64  `tfsdk:"time_threshold"`
+	AllowDowntime    types.Bool   `tfsdk:"allow_downtime"`
 	VhostRegex       types.String `tfsdk:"vhost_regex"`
 	QueueRegex       types.String `tfsdk:"queue_regex"`
 	MessageType      types.String `tfsdk:"message_type"`
@@ -77,6 +78,7 @@ func (d *alarmDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"cpu",
 						"memory",
 						"disk",
+						"disk_auto_resize",
 						"queue",
 						"connection",
 						"flow",
@@ -108,6 +110,10 @@ func (d *alarmDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"time_threshold": schema.Int64Attribute{
 				Computed:    true,
 				Description: "For how long (in seconds) the value_threshold should be active before trigger alarm",
+			},
+			"allow_downtime": schema.BoolAttribute{
+				Computed:    true,
+				Description: "For disk_auto_resize, allow the resize to proceed even if it requires brief downtime",
 			},
 			"vhost_regex": schema.StringAttribute{
 				Computed:    true,
@@ -225,6 +231,12 @@ func (d *alarmDataSource) populateResourceModel(ctx context.Context, data model.
 		config.TimeThreshold = types.Int64Value(*data.TimeThreshold)
 	} else {
 		config.TimeThreshold = types.Int64Null()
+	}
+
+	if data.AllowDowntime != nil {
+		config.AllowDowntime = types.BoolValue(*data.AllowDowntime)
+	} else {
+		config.AllowDowntime = types.BoolNull()
 	}
 
 	if data.VhostRegex != nil {

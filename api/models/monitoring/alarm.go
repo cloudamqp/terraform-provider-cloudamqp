@@ -7,6 +7,7 @@ type AlarmRequest struct {
 	ValueThreshold   *int64   `json:"value_threshold,omitempty"`
 	ValueCalculation string   `json:"value_calculation,omitempty"`
 	TimeThreshold    *int64   `json:"time_threshold,omitempty"`
+	AllowDowntime    *bool    `json:"allow_downtime,omitempty"`
 	VhostRegex       string   `json:"vhost_regex,omitempty"`
 	QueueRegex       string   `json:"queue_regex,omitempty"`
 	MessageType      string   `json:"message_type,omitempty"`
@@ -21,6 +22,7 @@ type AlarmResponse struct {
 	ValueThreshold   *int64   `json:"value_threshold,omitempty"`
 	ValueCalculation *string  `json:"value_calculation,omitempty"`
 	TimeThreshold    *int64   `json:"time_threshold,omitempty"`
+	AllowDowntime    *bool    `json:"allow_downtime,omitempty"`
 	VhostRegex       *string  `json:"vhost_regex,omitempty"`
 	QueueRegex       *string  `json:"queue_regex,omitempty"`
 	MessageType      *string  `json:"message_type,omitempty"`

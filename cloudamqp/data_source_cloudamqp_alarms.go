@@ -28,7 +28,7 @@ func dataSourceAlarms() *schema.Resource {
 				Optional:    true,
 				Description: "Type of the alarm",
 				ValidateDiagFunc: validation.ToDiagFunc(validation.StringInSlice([]string{
-					"cpu", "memory", "disk", "queue", "connection",
+					"cpu", "memory", "disk", "disk_auto_resize", "queue", "connection",
 					"flow", "consumer", "netsplit", "ssh", "notice", "server_unreachable",
 				}, false)),
 			},

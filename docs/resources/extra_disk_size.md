@@ -34,6 +34,14 @@ the rate time limit. See `Possible to resize` column above for the different clo
 -> **Note:** Shrinking the disk will always need to swap the old disk to a new one and require
 `allow_downtime` set to *true*.
 
+~> **Warning:** Do not use this resource together with a `disk_auto_resize` alarm (see
+`cloudamqp_alarm`) on the same instance. Both control the instance's additional disk size, so the
+alarm can grow the disk out of band from Terraform. This resource does not refresh `extra_disk_size`
+from the actual size, so the drift is invisible in the plan, but any change that re-applies this
+resource will resize back to the declared value — which shrinks the disk (with downtime) if the
+alarm has already grown it beyond that value. Manage the disk with either this resource or the
+`disk_auto_resize` alarm, not both.
+
 Pricing is available at [CloudAMQP] and only available for dedicated subscription plans.
 
 ## Example Usage
