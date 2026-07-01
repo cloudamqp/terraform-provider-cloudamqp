@@ -121,6 +121,12 @@ Specific arguments for `disk` and `disk_auto_resize` alarms
 Setting `value_calculation` on any other alarm type, or `allow_downtime` on a non
 `disk_auto_resize` alarm, is rejected at plan time.
 
+~> **Warning:** A `disk_auto_resize` alarm grows the instance's additional disk out of band from
+Terraform. Do not use it together with the `cloudamqp_extra_disk_size` resource on the same instance;
+both control the same disk and will conflict, which can lead to Terraform shrinking the disk (with
+downtime) back to the value declared on `cloudamqp_extra_disk_size`. Manage the disk with either the
+`disk_auto_resize` alarm or `cloudamqp_extra_disk_size`, not both.
+
 Based on alarm type, different arguments are flagged as required or optional.
 
 ## Attributes Reference
