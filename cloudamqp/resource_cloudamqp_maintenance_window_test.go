@@ -93,6 +93,12 @@ func TestAccMaintenanceWindow_LavinMQ(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudamqp_maintenance_window.this", "automatic_updates", "off"),
 				),
 			},
+			{
+				ResourceName:      "cloudamqp_maintenance_window.this",
+				ImportStateIdFunc: testAccImportStateIdFunc("cloudamqp_instance.instance"),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 }
@@ -163,6 +169,12 @@ func TestAccMaintenanceWindow_RabbitMQ(t *testing.T) {
 					resource.TestCheckResourceAttr(maintenanceWindowResourceName, "preferred_time",
 						paramsTime["PreferredTime"]),
 				),
+			},
+			{
+				ResourceName:      maintenanceWindowResourceName,
+				ImportStateIdFunc: testAccImportStateIdFunc(instanceResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
 			},
 		},
 	})

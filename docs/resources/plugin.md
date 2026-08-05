@@ -173,22 +173,23 @@ Or use Terraform CLI:
 
 ## Required plugins
 
-Plugins that is not needed to be managed by the provider since they will always be enabled. We have
-made `rabbitmq_prometheus` required for all clusters since RabbitMQ version 3.10.0.
+The following plugins are always enabled by CloudAMQP and do not need to be managed:
 
 | Name                      | Version |
 |---------------------------|---------|
 | rabbitmq_management       | all     |
 | rabbitmq_management_agent | all     |
 | rabbitmq_prometheus       | 3.10.0  |
+| rabbitmq_web_dispatch     | all     |
 
 ## Enable faster instance destroy
 
-When running `terraform destroy` this resource will try to disable the managed plugin before
+When running `terraform destroy` this resource will try to disable the managed plugins before
 deleting `cloudamqp_instance`. This is not necessary since the servers will be deleted.
 
 Set `enable_faster_instance_destroy` to ***true*** in the provider configuration to skip this.
 
+[cloudamqp_plugin]: plugin.md
 [CloudAMQP API list plugins]: https://docs.cloudamqp.com/instance-api.html#tag/plugins/get/plugins
 [v1.19.2]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.19.2
 [v1.27.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0
