@@ -4,11 +4,8 @@
 
 IMPROVEMENTS:
 
-* resource/cloudamqp_alarm: Support `disk_auto_resize` alarm type and the `allow_downtime` argument. `allow_downtime` (disk_auto_resize only) and `value_calculation` (disk and disk_auto_resize only) are validated against the alarm type at plan time ([#529])
-
-IMRPOVEMENT:
-
-* Docs: Updated documenation for support of multiple custom certificate hostnames [#526]
+* docs/resource/custom_certificate: Updated documenation for support of multiple custom certificate hostnames [#526]
+* resource/cloudamqp_alarm: Added support for `disk_auto_resize` alarm type and the `allow_downtime` argument ([#529])
 
 [#526]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/526
 [#529]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/529
