@@ -93,6 +93,31 @@ resource "cloudamqp_alarm" "notice" {
 
 </details>
 
+<details>
+  <summary>
+    <b>
+      <i>Auto resize disk alarm</i>
+      <a href="https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.47.0">v1.47.0</a>
+    </b>
+  </summary>
+
+`disk_auto_resize` alarm type to support disk [autoscaling](https://www.cloudamqp.com/docs/cloudamqp-autoscaling.html) feature.
+
+```hcl
+resource "cloudamqp_alarm" "disk_autoscale" {
+  instance_id       = cloudamqp_instance.example.id
+  type              = "disk_auto_resize"
+  enabled           = true
+  value_threshold   = 5
+  value_calculation = "percentage"
+  time_threshold    = 600
+  allow_downtime    = false
+  recipients        = [cloudamqp_notification.recipient.id]
+}
+```
+
+</details>
+
 ## Argument Reference
 
 The following arguments are supported:
