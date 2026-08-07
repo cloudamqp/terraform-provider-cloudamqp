@@ -46,10 +46,12 @@ All attributes reference are computed
 * `recipients`          - Identifier for recipient to be notified.
 * `message_type`        - Message type `(total, unacked, ready)` used by queue alarm type.
 
-Specific attribute for `disk` alarm
+Specific attributes for `disk` and `disk_auto_resize` alarms
 
 * `value_calculation`   - Disk value threshold calculation, `(fixed, percentage)` of disk space
                           remaining.
+* `allow_downtime`      - For `disk_auto_resize`, whether the resize may proceed even if it requires
+                          brief downtime.
 
 ## Dependency
 
@@ -57,4 +59,4 @@ This data source depends on CloudAMQP instance identifier, `cloudamqp_instance.i
 
 ## Alarm Types
 
-`cpu, memory, disk, queue, connection, flow, consumer, netsplit, server_unreachable, notice`
+`cpu, memory, disk, disk_auto_resize, queue, connection, flow, consumer, netsplit, server_unreachable, notice`
