@@ -114,6 +114,7 @@ func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resou
 		NewAwsEventBridgeResource,
 		NewCustomCertificateResource,
 		NewCustomDomainResource,
+		NewExtraDiskSizeResource,
 		NewFirewallResource,
 		NewIntegrationLogResource,
 		NewIntegrationMetricResource,
@@ -170,7 +171,6 @@ func Provider(v string, client *http.Client) *schemaSdk.Provider {
 			"cloudamqp_plugins":           dataSourcePlugins(),
 		},
 		ResourcesMap: map[string]*schemaSdk.Resource{
-			"cloudamqp_extra_disk_size":               resourceExtraDiskSize(),
 			"cloudamqp_instance":                      resourceInstance(),
 			"cloudamqp_integration_metric_prometheus": resourceIntegrationMetricPrometheus(),
 			"cloudamqp_plugin_community":              resourcePluginCommunity(),

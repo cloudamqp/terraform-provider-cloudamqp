@@ -45,3 +45,8 @@ type InstanceUrls struct {
 	External string `json:"external"`
 	Internal string `json:"internal"`
 }
+
+type ExtraDiskRequest struct {
+	ExtraDisk     int64 `json:"extra_disk_size"`
+	AllowDowntime bool  `json:"allow_downtime"`
+}
