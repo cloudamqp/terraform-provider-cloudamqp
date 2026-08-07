@@ -25,9 +25,10 @@ import (
 )
 
 var (
-	_ resource.Resource                = &alarmResource{}
-	_ resource.ResourceWithConfigure   = &alarmResource{}
-	_ resource.ResourceWithImportState = &alarmResource{}
+	_ resource.Resource                   = &alarmResource{}
+	_ resource.ResourceWithConfigure      = &alarmResource{}
+	_ resource.ResourceWithImportState    = &alarmResource{}
+	_ resource.ResourceWithValidateConfig = &alarmResource{}
 )
 
 type alarmResource struct {
@@ -47,6 +48,7 @@ type alarmResourceModel struct {
 	ValueThreshold   types.Int64  `tfsdk:"value_threshold"`
 	ValueCalculation types.String `tfsdk:"value_calculation"`
 	TimeThreshold    types.Int64  `tfsdk:"time_threshold"`
+	AllowDowntime    types.Bool   `tfsdk:"allow_downtime"`
 	VhostRegex       types.String `tfsdk:"vhost_regex"`
 	QueueRegex       types.String `tfsdk:"queue_regex"`
 	MessageType      types.String `tfsdk:"message_type"`
@@ -55,6 +57,41 @@ type alarmResourceModel struct {
 
 func (r *alarmResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = "cloudamqp_alarm"
+}
+
+// ValidateConfig rejects disk specific arguments on alarm types that do not
+// support them, giving a clear plan-time error instead of silently dropping the
+// value server-side (which would leave a perpetual plan diff).
+func (r *alarmResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	var data alarmResourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	// Skip validation while the type is not yet known (e.g. computed value).
+	if data.Type.IsUnknown() || data.Type.IsNull() {
+		return
+	}
+	alarmType := data.Type.ValueString()
+
+	if !data.ValueCalculation.IsNull() && !data.ValueCalculation.IsUnknown() &&
+		alarmType != "disk" && alarmType != "disk_auto_resize" {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("value_calculation"),
+			"Invalid attribute combination",
+			fmt.Sprintf("value_calculation can only be set when type is \"disk\" or \"disk_auto_resize\", got: %q.", alarmType),
+		)
+	}
+
+	if !data.AllowDowntime.IsNull() && !data.AllowDowntime.IsUnknown() &&
+		alarmType != "disk_auto_resize" {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("allow_downtime"),
+			"Invalid attribute combination",
+			fmt.Sprintf("allow_downtime can only be set when type is \"disk_auto_resize\", got: %q.", alarmType),
+		)
+	}
 }
 
 func (r *alarmResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
@@ -84,6 +121,7 @@ func (r *alarmResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						"cpu",
 						"memory",
 						"disk",
+						"disk_auto_resize",
 						"queue",
 						"connection",
 						"flow",
@@ -125,6 +163,10 @@ func (r *alarmResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Validators: []validator.Int64{
 					int64validator.AtLeast(0),
 				},
+			},
+			"allow_downtime": schema.BoolAttribute{
+				Optional:    true,
+				Description: "For disk_auto_resize, allow the resize to proceed even if it requires brief downtime",
 			},
 			"vhost_regex": schema.StringAttribute{
 				Optional:    true,
@@ -356,6 +398,9 @@ func (r *alarmResource) populateRequest(ctx context.Context, plan alarmResourceM
 	if !plan.TimeThreshold.IsUnknown() && !plan.TimeThreshold.IsNull() {
 		params.TimeThreshold = plan.TimeThreshold.ValueInt64Pointer()
 	}
+	if !plan.AllowDowntime.IsUnknown() && !plan.AllowDowntime.IsNull() {
+		params.AllowDowntime = plan.AllowDowntime.ValueBoolPointer()
+	}
 	if !plan.VhostRegex.IsUnknown() && !plan.VhostRegex.IsNull() {
 		params.VhostRegex = plan.VhostRegex.ValueString()
 	}
@@ -381,7 +426,9 @@ func (a *alarmResource) populateResourceModel(ctx context.Context, data model.Al
 	if data.ReminderInterval != nil {
 		state.ReminderInterval = types.Int64Value(*data.ReminderInterval)
 	} else {
-		state.ReminderInterval = types.Int64Null()
+		// Non-remindable alarms (e.g. disk_auto_resize) return no reminder_interval;
+		// fall back to the schema default of 0 to avoid a perpetual plan diff.
+		state.ReminderInterval = types.Int64Value(0)
 	}
 
 	if data.ValueThreshold != nil {
@@ -400,6 +447,12 @@ func (a *alarmResource) populateResourceModel(ctx context.Context, data model.Al
 		state.TimeThreshold = types.Int64Value(*data.TimeThreshold)
 	} else {
 		state.TimeThreshold = types.Int64Null()
+	}
+
+	if data.AllowDowntime != nil {
+		state.AllowDowntime = types.BoolValue(*data.AllowDowntime)
+	} else {
+		state.AllowDowntime = types.BoolNull()
 	}
 
 	if data.VhostRegex != nil {

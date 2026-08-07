@@ -19,6 +19,21 @@ func dataSourcePlugins() *schema.Resource {
 				Required:    true,
 				Description: "Instance identifier",
 			},
+			"enabled": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Only store enabled plugins to state",
+			},
+			"recommended": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Only store plugins marked as recommended to state",
+			},
+			"required": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Only store plugins marked as required to state",
+			},
 			"plugins": {
 				Type:     schema.TypeList,
 				Computed: true,
@@ -37,6 +52,14 @@ func dataSourcePlugins() *schema.Resource {
 							Computed: true,
 						},
 						"enabled": {
+							Type:     schema.TypeBool,
+							Computed: true,
+						},
+						"recommended": {
+							Type:     schema.TypeBool,
+							Computed: true,
+						},
+						"required": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
@@ -61,10 +84,13 @@ func dataSourcePlugins() *schema.Resource {
 
 func dataSourcePluginsRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	var (
-		api        = meta.(*api.API)
-		instanceID = d.Get("instance_id").(int)
-		sleep      = d.Get("sleep").(int)
-		timeout    = d.Get("timeout").(int)
+		api         = meta.(*api.API)
+		instanceID  = d.Get("instance_id").(int)
+		enabled     = d.Get("enabled").(bool)
+		recommended = d.Get("recommended").(bool)
+		required    = d.Get("required").(bool)
+		sleep       = d.Get("sleep").(int)
+		timeout     = d.Get("timeout").(int)
 	)
 
 	data, err := api.ListPlugins(ctx, instanceID, sleep, timeout)
@@ -73,9 +99,24 @@ func dataSourcePluginsRead(ctx context.Context, d *schema.ResourceData, meta any
 		return diag.FromErr(err)
 	}
 
-	plugins := make([]map[string]any, len(data))
-	for k, v := range data {
-		plugins[k] = readPlugin(v)
+	plugins := make([]map[string]any, 0, len(data))
+	for _, v := range data {
+		if enabled && v["enabled"] != true {
+			continue
+		}
+		if recommended {
+			str, _ := v["recommended"].(string)
+			if str == "" {
+				continue
+			}
+		}
+		if required {
+			str, _ := v["required"].(string)
+			if str == "" {
+				continue
+			}
+		}
+		plugins = append(plugins, readPlugin(v))
 	}
 
 	if err = d.Set("plugins", plugins); err != nil {
@@ -87,9 +128,15 @@ func dataSourcePluginsRead(ctx context.Context, d *schema.ResourceData, meta any
 func readPlugin(data map[string]any) map[string]any {
 	plugin := make(map[string]any)
 	for k, v := range data {
-		if validatePluginsSchemaAttribute(k) {
-			plugin[k] = v
+		if !validatePluginsSchemaAttribute(k) {
+			continue
 		}
+		if k == "recommended" || k == "required" {
+			str, _ := v.(string)
+			plugin[k] = str != ""
+			continue
+		}
+		plugin[k] = v
 	}
 	return plugin
 }
@@ -99,7 +146,9 @@ func validatePluginsSchemaAttribute(key string) bool {
 	case "name",
 		"version",
 		"description",
-		"enabled":
+		"enabled",
+		"recommended",
+		"required":
 		return true
 	}
 	return false
