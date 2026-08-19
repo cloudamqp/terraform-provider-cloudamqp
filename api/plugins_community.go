@@ -5,26 +5,20 @@ import (
 	"fmt"
 	"time"
 
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 // InstallPluginCommunity: install a community plugin on an instance.
-func (api *API) InstallPluginCommunity(ctx context.Context, instanceID int, pluginName string,
-	sleep, timeout int) (map[string]any, error) {
+func (api *API) InstallPluginCommunity(ctx context.Context, instanceID int64, params model.PluginRequest, sleep int64) error {
 
 	var (
 		failed map[string]any
-		params = make(map[string]any)
 		path   = fmt.Sprintf("/api/instances/%d/plugins/community?async=true", instanceID)
 	)
 
-	params["plugin_name"] = pluginName
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d timeout=%d", path, sleep, timeout), params)
-
-	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-	defer cancel()
-
-	err := api.callWithRetry(timeoutCtx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d params=%+v", path, sleep, params))
+	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
 		functionName: "InstallPluginCommunity",
 		resourceName: "CommunityPlugin",
 		attempt:      1,
@@ -33,25 +27,24 @@ func (api *API) InstallPluginCommunity(ctx context.Context, instanceID int, plug
 		failed:       &failed,
 	})
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return api.waitUntilPluginChanged(ctx, instanceID, pluginName, true, 1, sleep, timeout)
+	return api.pollPluginChanged(ctx, instanceID, params, 1, sleep)
 }
 
 // ReadPluginCommunity: reads a specific community plugin from an instance.
-func (api *API) ReadPluginCommunity(ctx context.Context, instanceID int, pluginName string, sleep,
-	timeout int) (map[string]any, error) {
+func (api *API) ReadPluginCommunity(ctx context.Context, instanceID int64, name string, sleep int64) (*model.PluginResponse, error) {
 
-	data, err := api.ListPluginsCommunity(ctx, instanceID, sleep, timeout)
+	data, err := api.ListPluginsCommunity(ctx, instanceID, sleep)
 	if err != nil {
 		return nil, err
 	}
 
 	for _, plugin := range data {
-		if plugin["name"] == pluginName {
-			tflog.Debug(ctx, fmt.Sprintf("plugin found, %s ", pluginName))
-			return plugin, nil
+		if plugin.Name == name {
+			tflog.Debug(ctx, fmt.Sprintf("community plugin found, %s ", name))
+			return &plugin, nil
 		}
 	}
 
@@ -59,21 +52,15 @@ func (api *API) ReadPluginCommunity(ctx context.Context, instanceID int, pluginN
 }
 
 // ListPluginsCommunity: list all community plugins for an instance.
-func (api *API) ListPluginsCommunity(ctx context.Context, instanceID, sleep, timeout int) (
-	[]map[string]any, error) {
-
+func (api *API) ListPluginsCommunity(ctx context.Context, instanceID, sleep int64) ([]model.PluginResponse, error) {
 	var (
-		data   []map[string]any
+		data   []model.PluginResponse
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/plugins/community", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d", path, sleep, timeout))
-
-	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-	defer cancel()
-
-	err := api.callWithRetry(timeoutCtx, api.sling.New().Get(path), retryRequest{
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d", path, sleep))
+	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
 		functionName: "ListPluginsCommunity",
 		resourceName: "CommunityPlugin",
 		attempt:      1,
@@ -89,24 +76,14 @@ func (api *API) ListPluginsCommunity(ctx context.Context, instanceID, sleep, tim
 }
 
 // UpdatePluginCommunity: updates a community plugin from an instance.
-func (api *API) UpdatePluginCommunity(ctx context.Context, instanceID int, pluginName string,
-	enabled bool, sleep, timeout int) (map[string]any, error) {
-
+func (api *API) UpdatePluginCommunity(ctx context.Context, instanceID int64, params model.PluginRequest, sleep int64) error {
 	var (
 		failed map[string]any
-		params = make(map[string]any)
 		path   = fmt.Sprintf("/api/instances/%d/plugins/community?async=true", instanceID)
 	)
 
-	params["plugin_name"] = pluginName
-	params["enabled"] = enabled
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s enabled=%t sleep=%d timeout=%d", path, enabled,
-		sleep, timeout), params)
-
-	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-	defer cancel()
-
-	err := api.callWithRetry(timeoutCtx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d params=%+v", path, sleep, params))
+	err := api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
 		functionName: "UpdatePluginCommunity",
 		resourceName: "CommunityPlugin",
 		attempt:      1,
@@ -115,27 +92,21 @@ func (api *API) UpdatePluginCommunity(ctx context.Context, instanceID int, plugi
 		failed:       &failed,
 	})
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return api.waitUntilPluginChanged(ctx, instanceID, pluginName, enabled, 1, sleep, timeout)
+	return api.pollPluginChanged(ctx, instanceID, params, 1, sleep)
 }
 
 // UninstallPluginCommunity: uninstall a community plugin from an instance.
-func (api *API) UninstallPluginCommunity(ctx context.Context, instanceID int, pluginName string,
-	sleep, timeout int) (map[string]any, error) {
-
+func (api *API) UninstallPluginCommunity(ctx context.Context, instanceID int64, pluginName string, sleep int64) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/plugins/community/%s?async=true", instanceID, pluginName)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d timeout=%d", path, sleep, timeout))
-
-	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-	defer cancel()
-
-	err := api.callWithRetry(timeoutCtx, api.sling.New().Delete(path), retryRequest{
+	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s sleep=%d", path, sleep))
+	err := api.callWithRetry(ctx, api.sling.New().Delete(path), retryRequest{
 		functionName: "UninstallPluginCommunity",
 		resourceName: "CommunityPlugin",
 		attempt:      1,
@@ -144,31 +115,37 @@ func (api *API) UninstallPluginCommunity(ctx context.Context, instanceID int, pl
 		failed:       &failed,
 	})
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return api.waitUntilPluginUninstalled(ctx, instanceID, pluginName, 1, sleep, timeout)
+	return api.waitUntilPluginUninstalled(ctx, instanceID, pluginName, 1, sleep)
 }
 
 // waitUntilPluginUninstalled: wait until a community plugin been uninstalled.
-func (api *API) waitUntilPluginUninstalled(ctx context.Context, instanceID int, pluginName string,
-	attempt, sleep, timeout int) (map[string]any, error) {
+func (api *API) waitUntilPluginUninstalled(ctx context.Context, instanceID int64, pluginName string, attempt, sleep int64) error {
 
-	tflog.Debug(ctx, fmt.Sprintf("waiting for community plugin, %s, to be uninstalled", pluginName))
+	tflog.Debug(ctx, fmt.Sprintf("waiting for community plugin to be uninstalled, instanceID=%d plugin=%s sleep=%d", instanceID, pluginName, sleep))
 	for {
-		if attempt*sleep > timeout {
-			return nil, fmt.Errorf("timeout reached of %d seconds, while waiting on communit plugin "+
-				"being uninstalled", timeout)
+		if ctx.Err() != nil {
+			return fmt.Errorf("timeout reached while waiting on community plugin being uninstalled: %w", ctx.Err())
 		}
 
-		response, err := api.ReadPlugin(ctx, instanceID, pluginName, sleep, timeout)
+		tflog.Debug(ctx, fmt.Sprintf("Checking community plugin uninstall status, attempt=%d", attempt))
+		response, err := api.ReadPluginCommunity(ctx, instanceID, pluginName, sleep)
 		if err != nil {
-			return nil, err
+			return err
 		}
-		if len(response) == 0 {
-			return response, nil
+		if response == nil {
+			return nil
 		}
+
+		tflog.Debug(ctx, fmt.Sprintf("Community plugin still installed, attempt=%d", attempt))
 		attempt++
-		time.Sleep(time.Duration(sleep) * time.Second)
+		select {
+		case <-ctx.Done():
+			return fmt.Errorf("timeout reached while waiting on community plugin being uninstalled: %w", ctx.Err())
+		case <-time.After(time.Duration(sleep) * time.Second):
+			continue
+		}
 	}
 }
