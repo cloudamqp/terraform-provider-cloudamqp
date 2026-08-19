@@ -99,11 +99,10 @@ func (r *extraDiskSizeResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"timeout": schema.Int64Attribute{
-				Optional:           true,
-				Computed:           true,
-				Default:            int64default.StaticInt64(1800),
-				Description:        "Timeout in seconds for disk resize and node convergence",
-				DeprecationMessage: "The timeout attribute is deprecated and will be removed in next 2.0.0 version. Use the timeouts block instead.",
+				Optional:    true,
+				Computed:    true,
+				Default:     int64default.StaticInt64(1800),
+				Description: "Timeout in seconds for disk resize and node convergence",
 				Validators: []validator.Int64{
 					int64validator.AtLeast(1),
 				},
