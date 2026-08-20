@@ -176,13 +176,20 @@ func (r *pluginCommunityResource) Create(ctx context.Context, req resource.Creat
 	timeoutCtx, cancel := context.WithTimeout(ctx, createTimeout)
 	defer cancel()
 
-	err := r.client.InstallPluginCommunity(timeoutCtx, instanceID, params, sleep)
+	data, err := r.client.InstallPluginCommunity(timeoutCtx, instanceID, params, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to Create Community Plugin", err.Error())
 		return
 	}
 
 	plan.ID = types.StringValue(plan.Name.ValueString())
+	plan.Description = types.StringValue(data.Description)
+	plan.Enabled = types.BoolValue(data.Enabled)
+	if data.Require != "" {
+		plan.Require = types.StringValue(data.Require)
+	} else {
+		plan.Require = types.StringNull()
+	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
@@ -253,12 +260,19 @@ func (r *pluginCommunityResource) Update(ctx context.Context, req resource.Updat
 	defer cancel()
 
 	// TODO: Do this work? Shouldn't UpdatePlugin be used instead?
-	err := r.client.UpdatePluginCommunity(timeoutCtx, instanceID, params, sleep)
+	data, err := r.client.UpdatePluginCommunity(timeoutCtx, instanceID, params, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to Update Community Plugin", err.Error())
 		return
 	}
 
+	plan.Description = types.StringValue(data.Description)
+	plan.Enabled = types.BoolValue(data.Enabled)
+	if data.Require != "" {
+		plan.Require = types.StringValue(data.Require)
+	} else {
+		plan.Require = types.StringNull()
+	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 

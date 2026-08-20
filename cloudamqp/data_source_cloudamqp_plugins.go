@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 var (
@@ -46,7 +47,7 @@ func (d *pluginsDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 		"version":     types.StringType,
 		"description": types.StringType,
 		"enabled":     types.BoolType,
-		"recommended": types.BoolType,
+		"recommended": types.StringType,
 		"required":    types.StringType,
 	}}
 
@@ -127,6 +128,8 @@ func (d *pluginsDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		timeout = state.Timeout.ValueInt64()
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Reading plugins for instanceID=%d with filters enabled=%t, recommended=%t, required=%t, sleep=%d, timeout=%d", instanceID, enabledFilter, recommendedFilter, requiredFilter, sleep, timeout))
+
 	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
 	defer cancel()
 
@@ -141,23 +144,32 @@ func (d *pluginsDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		"version":     types.StringType,
 		"description": types.StringType,
 		"enabled":     types.BoolType,
-		"recommended": types.BoolType,
+		"recommended": types.StringType,
 		"required":    types.StringType,
 	}}
 
 	values := make([]attr.Value, 0, len(data))
 	for _, p := range data {
-		recommended := p.Recommended != nil && *p.Recommended
-		required := p.Required != "" && p.Required != "false"
+		recommendedBool := p.Recommended != nil && *p.Recommended != "" && *p.Recommended != "false"
+		requiredBool := p.Required != nil && *p.Required != "" && *p.Required != "false"
 
 		if enabledFilter && !p.Enabled {
 			continue
 		}
-		if recommendedFilter && !recommended {
+		if recommendedFilter && !recommendedBool {
 			continue
 		}
-		if requiredFilter && !required {
+		if requiredFilter && !requiredBool {
 			continue
+		}
+
+		recommendedVal := ""
+		if p.Recommended != nil {
+			recommendedVal = *p.Recommended
+		}
+		requiredVal := ""
+		if p.Required != nil {
+			requiredVal = *p.Required
 		}
 
 		obj, diags := types.ObjectValue(pluginObjectType.AttrTypes, map[string]attr.Value{
@@ -165,8 +177,8 @@ func (d *pluginsDataSource) Read(ctx context.Context, req datasource.ReadRequest
 			"version":     types.StringValue(p.Version),
 			"description": types.StringValue(p.Description),
 			"enabled":     types.BoolValue(p.Enabled),
-			"recommended": types.BoolValue(recommended),
-			"required":    types.StringValue(p.Required),
+			"recommended": types.StringValue(recommendedVal),
+			"required":    types.StringValue(requiredVal),
 		})
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
@@ -181,6 +193,8 @@ func (d *pluginsDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		return
 	}
 
+	state.Sleep = types.Int64Value(sleep)
+	state.Timeout = types.Int64Value(timeout)
 	state.ID = types.StringValue(fmt.Sprintf("%d.plugins", instanceID))
 	state.Plugins = pluginsList
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
