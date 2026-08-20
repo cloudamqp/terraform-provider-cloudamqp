@@ -20,6 +20,10 @@ IMPROVEMENTS:
 
 * data_source/cloudamqp_plugins: Added new filter attributes to filter plugins ([#522])
 
+BUG FIXES:
+
+* resource/cloudamqp_integration_metric_prometheus: Preserve the `type` field from the Stackdriver credentials file, without it the metrics exporter fails to start ([#517])
+
 DEPENDENCIES:
 
 * Bumped actions/checkout from 6 to 7 ([#524])
@@ -27,6 +31,7 @@ DEPENDENCIES:
 * Bumped github.com/tidwall/gjson from 1.18.0 to 1.19.0 ([#515])
 
 [#515]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/515
+[#517]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/517
 [#518]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/518
 [#521]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/521
 [#522]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/522
