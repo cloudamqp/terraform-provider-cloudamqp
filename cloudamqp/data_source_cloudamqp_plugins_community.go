@@ -141,6 +141,8 @@ func (d *pluginsCommunityDataSource) Read(ctx context.Context, req datasource.Re
 		return
 	}
 
+	state.Sleep = types.Int64Value(sleep)
+	state.Timeout = types.Int64Value(timeout)
 	state.ID = types.StringValue(fmt.Sprintf("%d.plugins_community", instanceID))
 	state.Plugins = pluginsList
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)

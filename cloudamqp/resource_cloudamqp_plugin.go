@@ -176,13 +176,15 @@ func (r *pluginResource) Create(ctx context.Context, req resource.CreateRequest,
 	timeoutCtx, cancel := context.WithTimeout(ctx, createTimeout)
 	defer cancel()
 
-	err := r.client.EnablePlugin(timeoutCtx, instanceID, params, sleep)
+	data, err := r.client.EnablePlugin(timeoutCtx, instanceID, params, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to Create Plugin", err.Error())
 		return
 	}
 
 	plan.ID = types.StringValue(plan.Name.ValueString())
+	plan.Description = types.StringValue(data.Description)
+	plan.Version = types.StringValue(data.Version)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
@@ -248,12 +250,14 @@ func (r *pluginResource) Update(ctx context.Context, req resource.UpdateRequest,
 	timeoutCtx, cancel := context.WithTimeout(ctx, updateTimeout)
 	defer cancel()
 
-	err := r.client.UpdatePlugin(timeoutCtx, instanceID, params, sleep)
+	data, err := r.client.UpdatePlugin(timeoutCtx, instanceID, params, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to Update Plugin", err.Error())
 		return
 	}
 
+	plan.Description = types.StringValue(data.Description)
+	plan.Version = types.StringValue(data.Version)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
@@ -285,7 +289,7 @@ func (r *pluginResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	timeoutCtx, cancel := context.WithTimeout(ctx, updateTimeout)
 	defer cancel()
 
-	err := r.client.DeletePlugin(timeoutCtx, instanceID, params, sleep)
+	_, err := r.client.DeletePlugin(timeoutCtx, instanceID, params, sleep)
 	if err != nil {
 		if strings.Contains(err.Error(), "instance not found") || strings.Contains(err.Error(), "status=404") {
 			tflog.Info(ctx, fmt.Sprintf("instance not found during plugin deletion, considering successful: %s", state.Name.ValueString()))

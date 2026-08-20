@@ -10,7 +10,7 @@ import (
 )
 
 // InstallPluginCommunity: install a community plugin on an instance.
-func (api *API) InstallPluginCommunity(ctx context.Context, instanceID int64, params model.PluginRequest, sleep int64) error {
+func (api *API) InstallPluginCommunity(ctx context.Context, instanceID int64, params model.PluginRequest, sleep int64) (*model.PluginResponse, error) {
 
 	var (
 		failed map[string]any
@@ -27,7 +27,7 @@ func (api *API) InstallPluginCommunity(ctx context.Context, instanceID int64, pa
 		failed:       &failed,
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	return api.pollPluginChanged(ctx, instanceID, params, 1, sleep)
@@ -76,7 +76,7 @@ func (api *API) ListPluginsCommunity(ctx context.Context, instanceID, sleep int6
 }
 
 // UpdatePluginCommunity: updates a community plugin from an instance.
-func (api *API) UpdatePluginCommunity(ctx context.Context, instanceID int64, params model.PluginRequest, sleep int64) error {
+func (api *API) UpdatePluginCommunity(ctx context.Context, instanceID int64, params model.PluginRequest, sleep int64) (*model.PluginResponse, error) {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/plugins/community?async=true", instanceID)
@@ -92,7 +92,7 @@ func (api *API) UpdatePluginCommunity(ctx context.Context, instanceID int64, par
 		failed:       &failed,
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	return api.pollPluginChanged(ctx, instanceID, params, 1, sleep)
@@ -118,32 +118,30 @@ func (api *API) UninstallPluginCommunity(ctx context.Context, instanceID int64, 
 		return err
 	}
 
-	return api.waitUntilPluginUninstalled(ctx, instanceID, pluginName, 1, sleep)
+	return api.pollPluginRemoved(ctx, instanceID, pluginName, 1, sleep)
 }
 
-// waitUntilPluginUninstalled: wait until a community plugin been uninstalled.
-func (api *API) waitUntilPluginUninstalled(ctx context.Context, instanceID int64, pluginName string, attempt, sleep int64) error {
-
-	tflog.Debug(ctx, fmt.Sprintf("waiting for community plugin to be uninstalled, instanceID=%d plugin=%s sleep=%d", instanceID, pluginName, sleep))
+func (api *API) pollPluginRemoved(ctx context.Context, instanceID int64, pluginName string, attempt, sleep int64) error {
+	tflog.Debug(ctx, fmt.Sprintf("waiting for plugin to be removed, instanceID=%d plugin=%s sleep=%d", instanceID, pluginName, sleep))
 	for {
 		if ctx.Err() != nil {
-			return fmt.Errorf("timeout reached while waiting on community plugin being uninstalled: %w", ctx.Err())
+			return fmt.Errorf("timeout reached while waiting on plugin being removed: %w", ctx.Err())
 		}
 
-		tflog.Debug(ctx, fmt.Sprintf("Checking community plugin uninstall status, attempt=%d", attempt))
-		response, err := api.ReadPluginCommunity(ctx, instanceID, pluginName, sleep)
+		tflog.Debug(ctx, fmt.Sprintf("Checking plugin removal status, attempt=%d", attempt))
+		response, err := api.ReadPlugin(ctx, instanceID, pluginName, sleep) // Wait until the plugin is removed from Plugins list
 		if err != nil {
 			return err
 		}
 		if response == nil {
-			return nil
+			return nil // Plugin is gone
 		}
 
-		tflog.Debug(ctx, fmt.Sprintf("Community plugin still installed, attempt=%d", attempt))
+		tflog.Debug(ctx, fmt.Sprintf("Plugin still installed, attempt=%d", attempt))
 		attempt++
 		select {
 		case <-ctx.Done():
-			return fmt.Errorf("timeout reached while waiting on community plugin being uninstalled: %w", ctx.Err())
+			return fmt.Errorf("timeout reached while waiting on plugin being removed: %w", ctx.Err())
 		case <-time.After(time.Duration(sleep) * time.Second):
 			continue
 		}
