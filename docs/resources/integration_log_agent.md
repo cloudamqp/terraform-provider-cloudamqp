@@ -12,7 +12,8 @@ description: |-
 ~> **Note:** This resource is available from [v1.47.0].
 
 This resource allows you to create and manage agent based log integrations for a CloudAMQP instance.
-Once configured, the logs produced will be forwarded to the corresponding integration.
+Once configured, the logs produced will be forwarded to the corresponding integration. More information
+can be found for all supported [CloudAMQP Logs Integration].
 
 Only available for dedicated subscription plans.
 
@@ -373,6 +374,7 @@ import {
 `terraform import cloudamqp_integration_log_agent.cloudwatch <id>,<instance_id>`
 
 [v1.47.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.47.0
+[CloudAMQP Logs Integration]: https://www.cloudamqp.com/docs/cloudamqp-integrations.html
 [CloudAMQP CloudWatch documentation]: https://www.cloudamqp.com/docs/monitoring_logs_cloudwatch_v2.html
 [AWS IAM role documentation]: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html
 [Coralogix region documentation]: https://coralogix.com/docs/coralogix-domain/
