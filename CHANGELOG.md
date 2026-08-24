@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.47.0 (Unreleased)
+## 1.47.0 (24 Aug, 2026)
 
 FEATURES:
 
