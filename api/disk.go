@@ -3,28 +3,23 @@ package api
 import (
 	"context"
 	"fmt"
-	"strconv"
 	"time"
 
+	models "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func (api *API) ResizeDisk(ctx context.Context, instanceID int, params map[string]any,
-	sleep, timeout int) (map[string]any, error) {
+func (api *API) ResizeDisk(ctx context.Context, instanceID int64, params models.ExtraDiskRequest, sleep int64) (map[string]any, error) {
 
 	var (
 		data   map[string]any
 		failed map[string]any
-		id     = strconv.Itoa(instanceID)
-		path   = fmt.Sprintf("api/instances/%s/disk", id)
+		path   = fmt.Sprintf("api/instances/%d/disk", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d timeout=%d", path, sleep, timeout), params)
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s sleep=%d params=%+v", path, sleep, params))
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-	defer cancel()
-
-	err := api.callWithRetry(timeoutCtx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
+	err := api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
 		functionName: "ResizeDisk",
 		resourceName: "Disk",
 		attempt:      1,
@@ -37,7 +32,7 @@ func (api *API) ResizeDisk(ctx context.Context, instanceID int, params map[strin
 	}
 
 	// Wait for all nodes to be configured after successful resize
-	if err = api.waitUntilAllNodesConfigured(ctx, id, 1, sleep); err != nil {
+	if err = api.PollAllNodesConfigured(ctx, instanceID, 1, sleep); err != nil {
 		return nil, err
 	}
 
