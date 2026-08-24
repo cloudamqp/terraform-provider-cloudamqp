@@ -4,11 +4,11 @@
 
 FEATURES:
 
-* resource/cloudamqp_integration_log_agent: New agent based log integration [#527]
+* **New Resource:**  `cloudamqp_integration_log_agent` - New agent based log integration ([#527])
 
 IMPROVEMENTS:
 
-* docs/resource/custom_certificate: Updated documenation for support of multiple custom certificate hostnames [#526]
+* docs/resource/custom_certificate: Updated documenation for support of multiple custom certificate hostnames ([#526])
 * resource/cloudamqp_alarm: Added support for `disk_auto_resize` alarm type and the `allow_downtime` argument ([#529])
 
 [#526]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/526
