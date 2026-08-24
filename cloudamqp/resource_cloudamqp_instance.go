@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
@@ -95,6 +96,11 @@ func resourceInstance() *schema.Resource {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "Internal hostname for the CloudAMQP instance",
+			},
+			"cluster_name": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Cluster name, extracted from the external hostname",
 			},
 			"vhost": {
 				Type:        schema.TypeString,
@@ -284,12 +290,17 @@ func resourceRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Di
 		d.Set("dedicated", false)
 	}
 
-	if err = d.Set("host", data["hostname_external"].(string)); err != nil {
+	hostStr := data["hostname_external"].(string)
+	if err = d.Set("host", hostStr); err != nil {
 		return diag.Errorf("error setting host for resource %s: %s", d.Id(), err)
 	}
 
 	if err = d.Set("host_internal", data["hostname_internal"].(string)); err != nil {
 		return diag.Errorf("error setting host for resource %s: %s", d.Id(), err)
+	}
+
+	if err = d.Set("cluster_name", strings.SplitN(hostStr, ".", 2)[0]); err != nil {
+		return diag.Errorf("error setting cluster_name for resource %s: %s", d.Id(), err)
 	}
 
 	urlStr, ok := data["url"].(string)

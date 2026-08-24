@@ -1,0 +1,534 @@
+package cloudamqp
+
+import (
+	"context"
+	"fmt"
+	"strconv"
+	"strings"
+	"time"
+
+	"regexp"
+
+	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
+	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+)
+
+var (
+	_ resource.Resource                     = &integrationLogAgentResource{}
+	_ resource.ResourceWithConfigure        = &integrationLogAgentResource{}
+	_ resource.ResourceWithImportState      = &integrationLogAgentResource{}
+	_ resource.ResourceWithConfigValidators = &integrationLogAgentResource{}
+	_ resource.ResourceWithModifyPlan       = &integrationLogAgentResource{}
+)
+
+type integrationLogAgentResource struct {
+	client *api.API
+}
+
+func NewIntegrationLogAgentResource() resource.Resource {
+	return &integrationLogAgentResource{}
+}
+
+type integrationLogAgentResourceModel struct {
+	ID          types.String      `tfsdk:"id"`
+	InstanceID  types.Int64       `tfsdk:"instance_id"`
+	Cloudwatch  *cloudwatchModel  `tfsdk:"cloudwatch"`
+	Coralogix   *coralogixModel   `tfsdk:"coralogix"`
+	Datadog     *datadogModel     `tfsdk:"datadog"`
+	GoogleCloud *googleCloudModel `tfsdk:"google_cloud"`
+	Grafana     *grafanaModel     `tfsdk:"grafana"`
+	Splunk      *splunkModel      `tfsdk:"splunk"`
+	Uptrace     *uptraceModel     `tfsdk:"uptrace"`
+}
+
+type cloudwatchModel struct {
+	IAMRole       types.String `tfsdk:"iam_role"`
+	IAMExternalID types.String `tfsdk:"iam_external_id"`
+	Region        types.String `tfsdk:"region"`
+	LogGroup      types.String `tfsdk:"log_group"`
+	LogStream     types.String `tfsdk:"log_stream"`
+}
+
+type coralogixModel struct {
+	PrivateKey        types.String `tfsdk:"private_key"`
+	PrivateKeyVersion types.Int64  `tfsdk:"private_key_version"`
+	Application       types.String `tfsdk:"application"`
+	Subsystem         types.String `tfsdk:"subsystem"`
+	Region            types.String `tfsdk:"region"`
+}
+
+type datadogModel struct {
+	APIKey        types.String `tfsdk:"api_key"`
+	APIKeyVersion types.Int64  `tfsdk:"api_key_version"`
+	Region        types.String `tfsdk:"region"`
+	Tags          types.String `tfsdk:"tags"`
+}
+
+type googleCloudModel struct {
+	ServiceAccountFile        types.String `tfsdk:"service_account_file"`
+	ServiceAccountFileVersion types.Int64  `tfsdk:"service_account_file_version"`
+	ProjectID                 types.String `tfsdk:"project_id"`
+	ClientEmail               types.String `tfsdk:"client_email"`
+	PrivateKeyID              types.String `tfsdk:"private_key_id"`
+	Tags                      types.String `tfsdk:"tags"`
+}
+
+type grafanaModel struct {
+	Endpoint          types.String `tfsdk:"endpoint"`
+	GrafanaInstanceID types.String `tfsdk:"grafana_instance_id"`
+	APIToken          types.String `tfsdk:"api_token"`
+	APITokenVersion   types.Int64  `tfsdk:"api_token_version"`
+}
+
+type splunkModel struct {
+	Endpoint     types.String `tfsdk:"endpoint"`
+	Token        types.String `tfsdk:"token"`
+	TokenVersion types.Int64  `tfsdk:"token_version"`
+	SourceType   types.String `tfsdk:"source_type"`
+}
+
+type uptraceModel struct {
+	DSN        types.String `tfsdk:"dsn"`
+	DSNVersion types.Int64  `tfsdk:"dsn_version"`
+}
+
+func (r *integrationLogAgentResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = "cloudamqp_integration_log_agent"
+}
+
+func (r *integrationLogAgentResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+	client, ok := req.ProviderData.(*api.API)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Provider Data Type",
+			fmt.Sprintf("Expected *api.API, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+		return
+	}
+	r.client = client
+}
+
+// Schema defines the schema for the resource
+func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: "Resource ID of the log integration",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"instance_id": schema.Int64Attribute{
+				Required:    true,
+				Description: "Instance identifier",
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.RequiresReplace(),
+				},
+			},
+		},
+		Blocks: map[string]schema.Block{
+			"cloudwatch": schema.SingleNestedBlock{
+				Description: "CloudWatch OTLP log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"iam_role": schema.StringAttribute{
+						Optional:    true,
+						Description: "AWS IAM role ARN",
+					},
+					"iam_external_id": schema.StringAttribute{
+						Optional:    true,
+						Description: "External identifier that matches the role you created",
+					},
+					"region": schema.StringAttribute{
+						Optional:    true,
+						Description: "AWS region",
+					},
+					"log_group": schema.StringAttribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("CloudAMQP"),
+						Description: "The name of the CloudWatch log group",
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
+					},
+					"log_stream": schema.StringAttribute{
+						Optional:    true,
+						Description: "The name of the CloudWatch log stream",
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
+					},
+				},
+			},
+			"coralogix": schema.SingleNestedBlock{
+				Description: "Coralogix log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"private_key": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Coralogix private key (always starts with cxtp_...)",
+					},
+					"private_key_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only private_key. Increment to trigger an update when the key changes (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
+					},
+					"application": schema.StringAttribute{
+						Optional:    true,
+						Description: "Application name, used to group logs by environment",
+					},
+					"subsystem": schema.StringAttribute{
+						Optional:    true,
+						Description: "Subsystem name, used to group logs by service within an application",
+					},
+					"region": schema.StringAttribute{
+						Optional:    true,
+						Description: "Coralogix region (ap1, ap2, ap3, eu1, eu2, us1, us2, us3)",
+						Validators: []validator.String{
+							stringvalidator.OneOf("ap1", "ap2", "ap3", "eu1", "eu2", "us1", "us2", "us3"),
+						},
+					},
+				},
+			},
+			"datadog": schema.SingleNestedBlock{
+				Description: "Datadog log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"api_key": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Datadog API key",
+					},
+					"api_key_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only api_key. Increment to trigger an update when the key changes (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
+					},
+					"region": schema.StringAttribute{
+						Optional:    true,
+						Description: "Datadog region (us1, us3, us5, eu, ap2)",
+						Validators: []validator.String{
+							stringvalidator.OneOf("us1", "us3", "us5", "eu", "ap2"),
+						},
+					},
+					"tags": schema.StringAttribute{
+						Optional:    true,
+						Description: "Comma-separated tags to attach to logs (e.g. env=prod,region=eu)",
+					},
+				},
+			},
+			"google_cloud": schema.SingleNestedBlock{
+				Description: "Google Cloud log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"service_account_file": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Google service account key JSON file contents. Use file(\"path/to/key.json\") to load the downloaded credentials file.",
+					},
+					"service_account_file_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only service_account_file. Increment to trigger an update when the file contents change (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
+					},
+					"project_id": schema.StringAttribute{
+						Computed:    true,
+						Description: "Google Cloud project ID (computed from service_account_file)",
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
+					},
+					"client_email": schema.StringAttribute{
+						Computed:    true,
+						Description: "Google service account client email (computed from service_account_file)",
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
+					},
+					"private_key_id": schema.StringAttribute{
+						Computed: true,
+
+						Description: "Google service account private key ID (computed from service_account_file)",
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
+					},
+					"tags": schema.StringAttribute{
+						Optional:    true,
+						Description: "Comma-separated tags to attach to logs (e.g. env=prod,region=eu)",
+					},
+				},
+			},
+			"grafana": schema.SingleNestedBlock{
+				Description: "Grafana Cloud (Loki) log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"endpoint": schema.StringAttribute{
+						Optional:    true,
+						Description: "Grafana Cloud OTLP endpoint (e.g. https://otlp-gateway-prod-eu-west-0.grafana.net/otlp)",
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(
+								regexp.MustCompile(`^https://otlp-gateway-prod-[a-z0-9-]+\.grafana\.net/otlp$`),
+								"must be a valid Grafana Cloud OTLP endpoint (https://otlp-gateway-prod-<region>.grafana.net/otlp)",
+							),
+						},
+					},
+					"grafana_instance_id": schema.StringAttribute{
+						Optional:    true,
+						Description: "Grafana Cloud instance ID",
+					},
+					"api_token": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Grafana Cloud API token",
+					},
+					"api_token_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only api_token. Increment to trigger an update when the token changes (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
+					},
+				},
+			},
+			"splunk": schema.SingleNestedBlock{
+				Description: "Splunk HEC log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"endpoint": schema.StringAttribute{
+						Optional:    true,
+						Description: "Splunk HEC endpoint URL (e.g. https://your-instance.splunkcloud.com:8088/services/collector)",
+					},
+					"token": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Splunk HEC token",
+					},
+					"token_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only token. Increment to trigger an update when the token changes (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
+					},
+					"source_type": schema.StringAttribute{
+						Optional:    true,
+						Description: "Splunk source type (leave empty to use the token's default)",
+					},
+				},
+			},
+			"uptrace": schema.SingleNestedBlock{
+				Description: "Uptrace OTLP log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"dsn": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Uptrace DSN (Data Source Name) URL",
+					},
+					"dsn_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only dsn. Increment to trigger an update when the DSN changes (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+// ImportState imports the resource state from the API into the Terraform state
+func (r *integrationLogAgentResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	tflog.Info(ctx, fmt.Sprintf("ImportState: ID=%s", req.ID))
+	if !strings.Contains(req.ID, ",") {
+		resp.Diagnostics.AddError("Invalid import ID format", "Expected format: {resource_id},{instance_id}")
+		return
+	}
+
+	idSplit := strings.Split(req.ID, ",")
+	if len(idSplit) != 2 {
+		resp.Diagnostics.AddError("Invalid import ID format", "Expected format: {resource_id},{instance_id}")
+		return
+	}
+	instanceID, err := strconv.Atoi(idSplit[1])
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid instance_id in import ID", fmt.Sprintf("Could not convert instance_id to int: %s", err))
+		return
+	}
+
+	resp.State.SetAttribute(ctx, path.Root("id"), idSplit[0])
+	resp.State.SetAttribute(ctx, path.Root("instance_id"), int64(instanceID))
+}
+
+// Create creates the resource and sets the initial Terraform state
+func (r *integrationLogAgentResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan integrationLogAgentResourceModel
+	var config integrationLogAgentResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	// Read WriteOnly fields from config (not available in plan)
+	copyWriteOnlyFields(&plan, &config)
+	intType, err := r.getIntegrationType(&plan)
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid configuration", err.Error())
+		return
+	}
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
+	defer cancel()
+	instanceID := plan.InstanceID.ValueInt64()
+	request, err := r.populateRequest(&plan, intType)
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid service_account_file", err.Error())
+		return
+	}
+
+	id, err := r.client.CreateIntegrationLogAgent(timeoutCtx, instanceID, intType, request)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Failed to Create Log Integration",
+			fmt.Sprintf("Could not create log integration: %s", err),
+		)
+		return
+	}
+
+	plan.ID = types.StringValue(id)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+}
+
+// Read fetches the resource state from the API and updates the Terraform state accordingly
+func (r *integrationLogAgentResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state integrationLogAgentResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
+	defer cancel()
+	id := state.ID.ValueString()
+	instanceID := state.InstanceID.ValueInt64()
+
+	data, err := r.client.ReadIntegrationLogAgent(timeoutCtx, instanceID, id)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Failed to Read Log Integration",
+			fmt.Sprintf("Could not read log integration with ID %s: %s", id, err),
+		)
+		return
+	}
+
+	// Resource drift: instance or resource not found, trigger re-creation
+	if data == nil {
+		tflog.Info(ctx, fmt.Sprintf("Log integration not found, resource will be recreated: %s", state.ID.ValueString()))
+		resp.State.RemoveResource(ctx)
+		return
+	}
+
+	r.populateResourceModel(&state, data)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
+}
+
+// Update modifies the resource and updates the integration in the API
+func (r *integrationLogAgentResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan integrationLogAgentResourceModel
+	var config integrationLogAgentResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	// Read WriteOnly fields from config (not available in plan)
+	copyWriteOnlyFields(&plan, &config)
+	intType, err := r.getIntegrationType(&plan)
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid configuration", err.Error())
+		return
+	}
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
+	defer cancel()
+	id := plan.ID.ValueString()
+	instanceID := plan.InstanceID.ValueInt64()
+	request, err := r.populateRequest(&plan, intType)
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid service_account_file", err.Error())
+		return
+	}
+
+	err = r.client.UpdateIntegrationLogAgent(timeoutCtx, instanceID, id, request)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Failed to Update Log Integration",
+			fmt.Sprintf("Could not update log integration with ID %s: %s", id, err),
+		)
+		return
+	}
+
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+}
+
+// Delete removes the resource from the state and deletes the integration from the API
+func (r *integrationLogAgentResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state integrationLogAgentResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
+	defer cancel()
+	id := state.ID.ValueString()
+	instanceID := state.InstanceID.ValueInt64()
+
+	err := r.client.DeleteIntegrationLogAgent(timeoutCtx, instanceID, id)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Failed to Delete Log Integration",
+			fmt.Sprintf("Could not delete log integration with ID %s: %s", id, err),
+		)
+		return
+	}
+	resp.State.RemoveResource(ctx)
+}
