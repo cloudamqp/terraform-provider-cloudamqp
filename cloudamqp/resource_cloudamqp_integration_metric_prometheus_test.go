@@ -1118,3 +1118,52 @@ func TestAccIntegrationMetricPrometheusMetricsFilter_Custom(t *testing.T) {
 		},
 	})
 }
+
+// TestAccIntegrationMetricPrometheusGrafana_Basic: Add Grafana Cloud prometheus metric integration and import.
+func TestAccIntegrationMetricPrometheusGrafana_Basic(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized value for playback and use real value for recording
+	testApiToken := "GRAFANA_API_TOKEN"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testApiToken = os.Getenv("GRAFANA_API_TOKEN")
+	}
+
+	var (
+		fileNames                     = []string{"instance", "integrations/metrics/integration_metric_prometheus_grafana"}
+		instanceResourceName          = "cloudamqp_instance.instance"
+		prometheusGrafanaResourceName = "cloudamqp_integration_metric_prometheus.grafana"
+
+		params = map[string]string{
+			"InstanceName":      "TestAccIntegrationMetricPrometheusGrafana_Basic",
+			"InstanceID":        fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":      "bunny-1",
+			"GrafanaEndpoint":   "https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push",
+			"GrafanaInstanceID": "123456",
+			"GrafanaApiToken":   testApiToken,
+			"GrafanaTags":       "env=prod,service=rabbitmq",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusGrafanaResourceName, "grafana.#", "1"),
+					resource.TestCheckResourceAttr(prometheusGrafanaResourceName, "grafana.0.endpoint", params["GrafanaEndpoint"]),
+					resource.TestCheckResourceAttr(prometheusGrafanaResourceName, "grafana.0.instance_id", params["GrafanaInstanceID"]),
+					resource.TestCheckResourceAttr(prometheusGrafanaResourceName, "grafana.0.tags", params["GrafanaTags"]),
+				),
+			},
+			{
+				ResourceName:      prometheusGrafanaResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusGrafanaResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}

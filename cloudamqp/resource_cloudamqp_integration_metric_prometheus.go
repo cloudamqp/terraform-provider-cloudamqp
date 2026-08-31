@@ -44,7 +44,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2"},
+				ConflictsWith: []string{"datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2", "grafana"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
@@ -70,7 +70,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2"},
+				ConflictsWith: []string{"newrelic_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2", "grafana"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
@@ -101,7 +101,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2", "grafana"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"connection_string": {
@@ -117,7 +117,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "dynatrace", "cloudwatch_v3", "stackdriver_v2"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "dynatrace", "cloudwatch_v3", "stackdriver_v2", "grafana"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"token": {
@@ -143,7 +143,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "cloudwatch_v3", "stackdriver_v2"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "cloudwatch_v3", "stackdriver_v2", "grafana"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"environment_id": {
@@ -169,7 +169,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "stackdriver_v2"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "stackdriver_v2", "grafana"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"iam_role": {
@@ -199,7 +199,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeList,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "grafana"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"credentials_file": {
@@ -249,6 +249,37 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 							Computed:    true,
 							Sensitive:   true,
 							Description: "Google service account private key ID (computed from credentials file)",
+						},
+						"tags": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "tags. E.g. env=prod,service=web",
+						},
+					},
+				},
+			},
+			"grafana": {
+				Type:          schema.TypeSet,
+				Optional:      true,
+				MaxItems:      1,
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2"},
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"endpoint": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "Grafana Cloud Prometheus remote write endpoint. E.g. https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push",
+						},
+						"instance_id": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "Grafana Cloud Prometheus instance identifier, used as the basic auth username",
+						},
+						"api_token": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Sensitive:   true,
+							Description: "Grafana Cloud API token with the metrics:write scope",
 						},
 						"tags": {
 							Type:        schema.TypeString,
@@ -342,6 +373,15 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		if tags := stackdriverConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}
+	} else if grafanaList := d.Get("grafana").(*schema.Set).List(); len(grafanaList) > 0 {
+		intName = "grafana"
+		grafanaConfig := grafanaList[0].(map[string]any)
+		params["endpoint"] = grafanaConfig["endpoint"]
+		params["instance_id"] = grafanaConfig["instance_id"]
+		params["api_token"] = grafanaConfig["api_token"]
+		if tags := grafanaConfig["tags"]; tags != nil && tags != "" {
+			params["tags"] = tags
+		}
 	}
 
 	if intName == "" {
@@ -427,6 +467,7 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 	d.Set("dynatrace", nil)
 	d.Set("cloudwatch_v3", nil)
 	d.Set("stackdriver_v2", nil)
+	d.Set("grafana", nil)
 
 	if metricsFilter, ok := data["metrics_filter"]; ok && metricsFilter != nil {
 		if filterSlice, ok := metricsFilter.([]any); ok {
@@ -541,6 +582,23 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		if err := d.Set("stackdriver_v2", stackdriverV2); err != nil {
 			return diag.Errorf("error setting stackdriver_v2 for resource %s: %s", d.Id(), err)
 		}
+	} else if name == "grafana" {
+		grafana := []map[string]any{{}}
+		if endpoint, ok := data["endpoint"]; ok {
+			grafana[0]["endpoint"] = endpoint
+		}
+		if instanceID, ok := data["instance_id"]; ok {
+			grafana[0]["instance_id"] = instanceID
+		}
+		if apiToken, ok := data["api_token"]; ok {
+			grafana[0]["api_token"] = apiToken
+		}
+		if tags, ok := data["tags"]; ok {
+			grafana[0]["tags"] = tags
+		}
+		if err := d.Set("grafana", grafana); err != nil {
+			return diag.Errorf("error setting grafana for resource %s: %s", d.Id(), err)
+		}
 	}
 
 	return nil
@@ -616,6 +674,14 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 		}
 
 		if tags := stackdriverConfig["tags"]; tags != nil && tags != "" {
+			params["tags"] = tags
+		}
+	} else if grafanaList := d.Get("grafana").(*schema.Set).List(); len(grafanaList) > 0 {
+		grafanaConfig := grafanaList[0].(map[string]any)
+		params["endpoint"] = grafanaConfig["endpoint"]
+		params["instance_id"] = grafanaConfig["instance_id"]
+		params["api_token"] = grafanaConfig["api_token"]
+		if tags := grafanaConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}
 	}
