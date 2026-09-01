@@ -136,3 +136,13 @@ resource "cloudamqp_integration_metric_prometheus" "grafana" {
     api_token   = var.grafana_api_token
   }
 }
+
+resource "cloudamqp_integration_metric_prometheus" "prometheus_remote_write" {
+  instance_id = cloudamqp_instance.instance.id
+  prometheus_remote_write {
+    endpoint  = var.remote_write_endpoint
+    auth_type = "basic_auth"
+    username  = var.remote_write_username
+    password  = var.remote_write_password
+  }
+}

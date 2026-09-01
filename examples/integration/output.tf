@@ -66,3 +66,7 @@ output "stackdriver_v2_integration_id" {
 output "grafana_integration_id" {
   value = cloudamqp_integration_metric_prometheus.grafana.id
 }
+
+output "prometheus_remote_write_integration_id" {
+  value = cloudamqp_integration_metric_prometheus.prometheus_remote_write.id
+}

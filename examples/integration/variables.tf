@@ -126,3 +126,20 @@ variable "grafana_api_token" {
   description = "Grafana Cloud API token with the metrics:write scope"
   sensitive   = true
 }
+
+// Prometheus Remote Write
+variable "remote_write_endpoint" {
+  type        = string
+  description = "Remote write endpoint including the path"
+}
+
+variable "remote_write_username" {
+  type        = string
+  description = "Username for basic auth against the remote write endpoint"
+}
+
+variable "remote_write_password" {
+  type        = string
+  description = "Password or token for basic auth against the remote write endpoint"
+  sensitive   = true
+}
