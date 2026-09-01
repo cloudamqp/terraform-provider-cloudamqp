@@ -1,0 +1,9 @@
+resource "cloudamqp_integration_metric_prometheus" "grafana" {
+  instance_id = {{.InstanceID}}
+  grafana {
+    endpoint    = "{{.GrafanaEndpoint}}"
+    instance_id = "{{.GrafanaInstanceID}}"
+    api_token   = "{{.GrafanaApiToken}}"
+    tags        = "{{.GrafanaTags}}"
+  }
+}

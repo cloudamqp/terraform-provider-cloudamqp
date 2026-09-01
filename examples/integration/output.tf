@@ -62,3 +62,7 @@ output "cloudwatch_v3_integration_id" {
 output "stackdriver_v2_integration_id" {
   value = cloudamqp_integration_metric_prometheus.stackdriver_v2.id
 }
+
+output "grafana_integration_id" {
+  value = cloudamqp_integration_metric_prometheus.grafana.id
+}

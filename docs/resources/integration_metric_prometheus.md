@@ -10,7 +10,7 @@ description: |-
 
 # cloudamqp_integration_metric_prometheus
 
-This resource allows you to create and manage Prometheus-compatible metric integrations for CloudAMQP instances. Currently supported integrations include New Relic v3, Datadog v3, Azure Monitor, Splunk v2, Dynatrace, CloudWatch v3, and Stackdriver v2.
+This resource allows you to create and manage Prometheus-compatible metric integrations for CloudAMQP instances. Currently supported integrations include New Relic v3, Datadog v3, Azure Monitor, Splunk v2, Dynatrace, CloudWatch v3, Stackdriver v2, and Grafana Cloud (Mimir).
 
 ## Example Usage
 
@@ -117,6 +117,23 @@ resource "cloudamqp_integration_metric_prometheus" "stackdriver_v2" {
 base64 -i /path/to/service-account-key.json
 ```
 
+### Grafana Cloud (Mimir)
+
+```hcl
+resource "cloudamqp_integration_metric_prometheus" "grafana" {
+  instance_id = cloudamqp_instance.instance.id
+
+  grafana {
+    endpoint    = var.grafana_endpoint
+    instance_id = var.grafana_instance_id
+    api_token   = var.grafana_api_token
+    tags        = "key=value,key2=value2"
+  }
+}
+```
+
+**Note:** Find all three values in the Grafana Cloud Portal, under **Send Metrics** on the **Prometheus** tile of your stack. The `instance_id` is the numeric Prometheus instance identifier, which is not the same as the Loki instance identifier used by the Grafana Cloud log integration.
+
 ## Argument Reference
 
 The following arguments are supported:
@@ -188,6 +205,15 @@ The following computed attributes are available:
 * `client_email` - Google service account client email (extracted from credentials file).
 * `private_key` - Google service account private key (extracted from credentials file).
 * `private_key_id` - Google service account private key ID (extracted from credentials file).
+
+### grafana
+
+The following arguments are supported:
+
+* `endpoint` - (Required) Grafana Cloud Prometheus remote write endpoint. Example: `https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push`.
+* `instance_id` - (Required) Grafana Cloud numeric Prometheus instance identifier, used as the basic auth username.
+* `api_token` - (Required) Grafana Cloud API token with the `metrics:write` scope, or a service account token with the `MetricsPublisher` role.
+* `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
 
 ## Attributes Reference
 
@@ -271,6 +297,15 @@ import {
 }
 ```
 
+### Grafana Cloud (Mimir)
+
+```hcl
+import {
+  to = cloudamqp_integration_metric_prometheus.grafana
+  id = format("<integration_id>,%s", cloudamqp_instance.instance.id)
+}
+```
+
 Or use Terraform CLI:
 
 ```sh
@@ -281,6 +316,7 @@ terraform import cloudamqp_integration_metric_prometheus.splunk_v2 <integration_
 terraform import cloudamqp_integration_metric_prometheus.dynatrace <integration_id>,<instance_id>
 terraform import cloudamqp_integration_metric_prometheus.cloudwatch_v3 <integration_id>,<instance_id>
 terraform import cloudamqp_integration_metric_prometheus.stackdriver_v2 <integration_id>,<instance_id>
+terraform import cloudamqp_integration_metric_prometheus.grafana <integration_id>,<instance_id>
 ```
 
 ## Dependency

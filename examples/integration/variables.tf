@@ -109,3 +109,20 @@ variable "stackdriver_credentials" {
   description = "Base64-encoded Google service account key JSON file"
   sensitive   = true
 }
+
+// Grafana Cloud (Mimir)
+variable "grafana_endpoint" {
+  type        = string
+  description = "Grafana Cloud Prometheus remote write endpoint"
+}
+
+variable "grafana_instance_id" {
+  type        = string
+  description = "Grafana Cloud numeric Prometheus instance ID, used as basic auth username"
+}
+
+variable "grafana_api_token" {
+  type        = string
+  description = "Grafana Cloud API token with the metrics:write scope"
+  sensitive   = true
+}

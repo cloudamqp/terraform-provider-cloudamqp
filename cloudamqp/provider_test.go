@@ -226,6 +226,7 @@ func sanitizeSensistiveData(body string) string {
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("DATADOG_APIKEY"), "DATADOG_APIKEY")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("DYNATRACE_TOKEN"), "DYNATRACE_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("DYNATRACE_TOKEN_2"), "DYNATRACE_TOKEN_2")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("GRAFANA_API_TOKEN"), "GRAFANA_API_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("LIBRATO_APIKEY"), "LIBRATO_APIKEY")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("LOGENTIRES_TOKEN"), "LOGENTIRES_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("LOGGLY_TOKEN"), "LOGGLY_TOKEN")

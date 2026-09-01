@@ -127,3 +127,12 @@ resource "cloudamqp_integration_metric_prometheus" "stackdriver_v2" {
     credentials = filebase64("${path.module}/stackdriver-credentials.json")
   }
 }
+
+resource "cloudamqp_integration_metric_prometheus" "grafana" {
+  instance_id = cloudamqp_instance.instance.id
+  grafana {
+    endpoint    = var.grafana_endpoint
+    instance_id = var.grafana_instance_id
+    api_token   = var.grafana_api_token
+  }
+}

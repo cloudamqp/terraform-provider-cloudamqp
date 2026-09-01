@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.48.0 (Unreleased)
+
+IMPROVEMENTS:
+
+* resource/cloudamqp_integration_metric_prometheus: Added support for Grafana Cloud (Mimir) metric integration ([#538])
+
+[#538]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/538
+
 ## 1.47.0 (24 Aug, 2026)
 
 FEATURES:
