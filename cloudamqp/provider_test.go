@@ -231,6 +231,7 @@ func sanitizeSensistiveData(body string) string {
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("LOGENTIRES_TOKEN"), "LOGENTIRES_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("LOGGLY_TOKEN"), "LOGGLY_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("NEWRELIC_APIKEY"), "NEWRELIC_APIKEY")
+	body = sanitizer.FilterSensitiveData(body, os.Getenv("REMOTE_WRITE_PASSWORD"), "REMOTE_WRITE_PASSWORD")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("SCALYR_TOKEN"), "SCALYR_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("SPLUNK_TOKEN"), "SPLUNK_TOKEN")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("SPLUNK_TOKEN_2"), "SPLUNK_TOKEN_2")

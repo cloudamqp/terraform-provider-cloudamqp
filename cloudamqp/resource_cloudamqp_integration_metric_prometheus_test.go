@@ -1167,3 +1167,60 @@ func TestAccIntegrationMetricPrometheusGrafana_Basic(t *testing.T) {
 		},
 	})
 }
+
+// TestAccIntegrationMetricPrometheusRemoteWrite_Basic: Add Prometheus remote write metric integration and import.
+func TestAccIntegrationMetricPrometheusRemoteWrite_Basic(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized value for playback and use real value for recording
+	testPassword := "REMOTE_WRITE_PASSWORD"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testPassword = os.Getenv("REMOTE_WRITE_PASSWORD")
+	}
+
+	var (
+		fileNames                         = []string{"instance", "integrations/metrics/integration_metric_prometheus_remote_write"}
+		instanceResourceName              = "cloudamqp_instance.instance"
+		prometheusRemoteWriteResourceName = "cloudamqp_integration_metric_prometheus.prometheus_remote_write"
+
+		params = map[string]string{
+			"InstanceName":        "TestAccIntegrationMetricPrometheusRemoteWrite_Basic",
+			"InstanceID":          fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":        "bunny-1",
+			"RemoteWriteEndpoint": "https://mimir.example.com/api/v1/push",
+			"RemoteWriteUsername": "mimir-writer",
+			"RemoteWritePassword": testPassword,
+			"RemoteWriteHeaders":  "X-Scope-OrgID: tenant-1",
+			"RemoteWriteTags":     "env=prod,service=rabbitmq",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(prometheusRemoteWriteResourceName, "prometheus_remote_write.#", "1"),
+					resource.TestCheckResourceAttr(prometheusRemoteWriteResourceName, "prometheus_remote_write.0.endpoint",
+						params["RemoteWriteEndpoint"]),
+					resource.TestCheckResourceAttr(prometheusRemoteWriteResourceName, "prometheus_remote_write.0.auth_type",
+						"basic_auth"),
+					resource.TestCheckResourceAttr(prometheusRemoteWriteResourceName, "prometheus_remote_write.0.username",
+						params["RemoteWriteUsername"]),
+					resource.TestCheckResourceAttr(prometheusRemoteWriteResourceName, "prometheus_remote_write.0.headers",
+						params["RemoteWriteHeaders"]),
+					resource.TestCheckResourceAttr(prometheusRemoteWriteResourceName, "prometheus_remote_write.0.tags",
+						params["RemoteWriteTags"]),
+				),
+			},
+			{
+				ResourceName:      prometheusRemoteWriteResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusRemoteWriteResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}

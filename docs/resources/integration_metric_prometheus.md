@@ -10,7 +10,7 @@ description: |-
 
 # cloudamqp_integration_metric_prometheus
 
-This resource allows you to create and manage Prometheus-compatible metric integrations for CloudAMQP instances. Currently supported integrations include New Relic v3, Datadog v3, Azure Monitor, Splunk v2, Dynatrace, CloudWatch v3, Stackdriver v2, and Grafana Cloud (Mimir).
+This resource allows you to create and manage Prometheus-compatible metric integrations for CloudAMQP instances. Currently supported integrations include New Relic v3, Datadog v3, Azure Monitor, Splunk v2, Dynatrace, CloudWatch v3, Stackdriver v2, Grafana Cloud (Mimir), and Prometheus Remote Write.
 
 ## Example Usage
 
@@ -134,6 +134,25 @@ resource "cloudamqp_integration_metric_prometheus" "grafana" {
 
 **Note:** Find all three values in the Grafana Cloud Portal, under **Send Metrics** on the **Prometheus** tile of your stack. The `instance_id` is the numeric Prometheus instance identifier, which is not the same as the Loki instance identifier used by the Grafana Cloud log integration.
 
+### Prometheus Remote Write
+
+```hcl
+resource "cloudamqp_integration_metric_prometheus" "prometheus_remote_write" {
+  instance_id = cloudamqp_instance.instance.id
+
+  prometheus_remote_write {
+    endpoint  = var.remote_write_endpoint
+    auth_type = "basic_auth"
+    username  = var.remote_write_username
+    password  = var.remote_write_password
+    headers   = "X-Scope-OrgID: my-tenant"
+    tags      = "key=value,key2=value2"
+  }
+}
+```
+
+**Note:** Headers are sent with every request whichever `auth_type` you pick, so a tenant header can accompany basic auth. Multi-tenant Mimir and Cortex read `X-Scope-OrgID`, Thanos reads `THANOS-TENANT`. Set `auth_type` to `headers` when the credentials themselves live in a header, for example `Authorization: Bearer your-token`.
+
 ## Argument Reference
 
 The following arguments are supported:
@@ -213,6 +232,17 @@ The following arguments are supported:
 * `endpoint` - (Required) Grafana Cloud Prometheus remote write endpoint. Example: `https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push`.
 * `instance_id` - (Required) Grafana Cloud numeric Prometheus instance identifier, used as the basic auth username.
 * `api_token` - (Required) Grafana Cloud API token with the `metrics:write` scope, or a service account token with the `MetricsPublisher` role.
+* `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
+
+### prometheus_remote_write
+
+The following arguments are supported:
+
+* `endpoint` - (Required) Remote write endpoint including the path, over HTTPS. Example: `https://mimir.example.com/api/v1/push`.
+* `auth_type` - (Optional) Authentication for the endpoint. Valid values: `none`, `basic_auth`, `headers`. Default: `none`.
+* `username` - (Optional) Username, used when `auth_type` is `basic_auth`.
+* `password` - (Optional) Password or token, used when `auth_type` is `basic_auth`.
+* `headers` - (Optional) Headers sent with every request, one `key: value` pair per line. Required when `auth_type` is `headers`.
 * `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
 
 ## Attributes Reference
@@ -306,6 +336,15 @@ import {
 }
 ```
 
+### Prometheus Remote Write
+
+```hcl
+import {
+  to = cloudamqp_integration_metric_prometheus.prometheus_remote_write
+  id = format("<integration_id>,%s", cloudamqp_instance.instance.id)
+}
+```
+
 Or use Terraform CLI:
 
 ```sh
@@ -317,6 +356,7 @@ terraform import cloudamqp_integration_metric_prometheus.dynatrace <integration_
 terraform import cloudamqp_integration_metric_prometheus.cloudwatch_v3 <integration_id>,<instance_id>
 terraform import cloudamqp_integration_metric_prometheus.stackdriver_v2 <integration_id>,<instance_id>
 terraform import cloudamqp_integration_metric_prometheus.grafana <integration_id>,<instance_id>
+terraform import cloudamqp_integration_metric_prometheus.prometheus_remote_write <integration_id>,<instance_id>
 ```
 
 ## Dependency
