@@ -5,8 +5,10 @@
 IMPROVEMENTS:
 
 * resource/cloudamqp_integration_metric_prometheus: Added support for Grafana Cloud (Mimir) metric integration ([#538])
+* resource/cloudamqp_integration_metric_prometheus: Added support for Prometheus Remote Write metric integration ([#539])
 
 [#538]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/538
+[#539]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/539
 
 ## 1.47.0 (24 Aug, 2026)
 

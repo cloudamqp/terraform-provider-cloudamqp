@@ -44,7 +44,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2", "grafana"},
+				ConflictsWith: []string{"datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2", "grafana", "prometheus_remote_write"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
@@ -70,7 +70,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2", "grafana"},
+				ConflictsWith: []string{"newrelic_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2", "grafana", "prometheus_remote_write"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"api_key": {
@@ -101,7 +101,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2", "grafana"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2", "grafana", "prometheus_remote_write"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"connection_string": {
@@ -117,7 +117,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "dynatrace", "cloudwatch_v3", "stackdriver_v2", "grafana"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "dynatrace", "cloudwatch_v3", "stackdriver_v2", "grafana", "prometheus_remote_write"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"token": {
@@ -143,7 +143,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "cloudwatch_v3", "stackdriver_v2", "grafana"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "cloudwatch_v3", "stackdriver_v2", "grafana", "prometheus_remote_write"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"environment_id": {
@@ -169,7 +169,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "stackdriver_v2", "grafana"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "stackdriver_v2", "grafana", "prometheus_remote_write"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"iam_role": {
@@ -199,7 +199,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeList,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "grafana"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "grafana", "prometheus_remote_write"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"credentials_file": {
@@ -262,7 +262,7 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 				Type:          schema.TypeSet,
 				Optional:      true,
 				MaxItems:      1,
-				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2"},
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2", "prometheus_remote_write"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"endpoint": {
@@ -280,6 +280,51 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 							Required:    true,
 							Sensitive:   true,
 							Description: "Grafana Cloud API token with the metrics:write scope",
+						},
+						"tags": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "tags. E.g. env=prod,service=web",
+						},
+					},
+				},
+			},
+			"prometheus_remote_write": {
+				Type:          schema.TypeSet,
+				Optional:      true,
+				MaxItems:      1,
+				ConflictsWith: []string{"newrelic_v3", "datadog_v3", "azure_monitor", "splunk_v2", "dynatrace", "cloudwatch_v3", "stackdriver_v2", "grafana"},
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"endpoint": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "Remote write endpoint, including the path. E.g. https://mimir.example.com/api/v1/push",
+						},
+						"auth_type": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Default:      "none",
+							Description:  "Authentication for the endpoint; none, basic_auth or headers",
+							ValidateFunc: validation.StringInSlice([]string{"none", "basic_auth", "headers"}, false),
+						},
+						"username": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Username, used when auth_type is basic_auth",
+						},
+						"password": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Sensitive:   true,
+							Description: "Password or token, used when auth_type is basic_auth",
+						},
+						"headers": {
+							Type:      schema.TypeString,
+							Optional:  true,
+							Sensitive: true,
+							Description: "Headers sent with every request, one 'key: value' pair per line. Required when " +
+								"auth_type is headers",
 						},
 						"tags": {
 							Type:        schema.TypeString,
@@ -382,6 +427,12 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 		if tags := grafanaConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
 		}
+	} else if remoteWriteList := d.Get("prometheus_remote_write").(*schema.Set).List(); len(remoteWriteList) > 0 {
+		intName = "prometheus_remote_write"
+		remoteWriteConfig := remoteWriteList[0].(map[string]any)
+		for key, value := range remoteWriteParams(remoteWriteConfig) {
+			params[key] = value
+		}
 	}
 
 	if intName == "" {
@@ -405,6 +456,20 @@ func resourceIntegrationMetricPrometheusCreate(ctx context.Context, d *schema.Re
 	}
 
 	return resourceIntegrationMetricPrometheusRead(ctx, d, meta)
+}
+
+func remoteWriteParams(config map[string]any) map[string]any {
+	params := map[string]any{"endpoint": config["endpoint"]}
+	if authType := config["auth_type"]; authType != nil && authType != "" {
+		params["auth_type"] = authType
+	}
+	for _, key := range []string{"username", "password", "headers", "tags"} {
+		if value := config[key]; value != nil && value != "" {
+			params[key] = value
+		}
+	}
+
+	return params
 }
 
 func extractStackdriverCredentials(credentials string) (map[string]string, error) {
@@ -460,6 +525,7 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		return nil
 	}
 
+	stateRemoteWrite := d.Get("prometheus_remote_write").(*schema.Set)
 	d.Set("newrelic_v3", nil)
 	d.Set("datadog_v3", nil)
 	d.Set("azure_monitor", nil)
@@ -468,6 +534,7 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 	d.Set("cloudwatch_v3", nil)
 	d.Set("stackdriver_v2", nil)
 	d.Set("grafana", nil)
+	d.Set("prometheus_remote_write", nil)
 
 	if metricsFilter, ok := data["metrics_filter"]; ok && metricsFilter != nil {
 		if filterSlice, ok := metricsFilter.([]any); ok {
@@ -599,6 +666,21 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		if err := d.Set("grafana", grafana); err != nil {
 			return diag.Errorf("error setting grafana for resource %s: %s", d.Id(), err)
 		}
+	} else if name == "prometheus_remote_write" {
+		remoteWrite := []map[string]any{{}}
+		for _, key := range []string{"endpoint", "auth_type", "username", "password", "headers", "tags"} {
+			if value, ok := data[key]; ok {
+				remoteWrite[0][key] = value
+			}
+		}
+		if _, ok := remoteWrite[0]["password"]; !ok {
+			if stateList := stateRemoteWrite.List(); len(stateList) > 0 {
+				remoteWrite[0]["password"] = stateList[0].(map[string]any)["password"]
+			}
+		}
+		if err := d.Set("prometheus_remote_write", remoteWrite); err != nil {
+			return diag.Errorf("error setting prometheus_remote_write for resource %s: %s", d.Id(), err)
+		}
 	}
 
 	return nil
@@ -683,6 +765,11 @@ func resourceIntegrationMetricPrometheusUpdate(ctx context.Context, d *schema.Re
 		params["api_token"] = grafanaConfig["api_token"]
 		if tags := grafanaConfig["tags"]; tags != nil && tags != "" {
 			params["tags"] = tags
+		}
+	} else if remoteWriteList := d.Get("prometheus_remote_write").(*schema.Set).List(); len(remoteWriteList) > 0 {
+		remoteWriteConfig := remoteWriteList[0].(map[string]any)
+		for key, value := range remoteWriteParams(remoteWriteConfig) {
+			params[key] = value
 		}
 	}
 

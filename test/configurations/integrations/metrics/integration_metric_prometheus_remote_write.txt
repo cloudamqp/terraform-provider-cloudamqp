@@ -1,0 +1,11 @@
+resource "cloudamqp_integration_metric_prometheus" "prometheus_remote_write" {
+  instance_id = {{.InstanceID}}
+  prometheus_remote_write {
+    endpoint  = "{{.RemoteWriteEndpoint}}"
+    auth_type = "basic_auth"
+    username  = "{{.RemoteWriteUsername}}"
+    password  = "{{.RemoteWritePassword}}"
+    headers   = "{{.RemoteWriteHeaders}}"
+    tags      = "{{.RemoteWriteTags}}"
+  }
+}
