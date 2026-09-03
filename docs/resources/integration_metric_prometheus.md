@@ -153,6 +153,23 @@ resource "cloudamqp_integration_metric_prometheus" "prometheus_remote_write" {
 
 **Note:** Headers are sent with every request whichever `auth_type` you pick, so a tenant header can accompany basic auth. Multi-tenant Mimir and Cortex read `X-Scope-OrgID`, Thanos reads `THANOS-TENANT`. Set `auth_type` to `headers` when the credentials themselves live in a header, for example `Authorization: Bearer your-token`.
 
+For receivers behind an OIDC gateway, and for Azure managed Prometheus, use `auth_type = "oauth2"`:
+
+```hcl
+resource "cloudamqp_integration_metric_prometheus" "prometheus_remote_write" {
+  instance_id = cloudamqp_instance.instance.id
+
+  prometheus_remote_write {
+    endpoint      = var.remote_write_endpoint
+    auth_type     = "oauth2"
+    client_id     = var.oauth2_client_id
+    client_secret = var.oauth2_client_secret
+    token_url     = "https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/token"
+    scopes        = "https://monitor.azure.com/.default"
+  }
+}
+```
+
 ## Argument Reference
 
 The following arguments are supported:
@@ -239,10 +256,14 @@ The following arguments are supported:
 The following arguments are supported:
 
 * `endpoint` - (Required) Remote write endpoint including the path, over HTTPS. Example: `https://mimir.example.com/api/v1/push`.
-* `auth_type` - (Optional) Authentication for the endpoint. Valid values: `none`, `basic_auth`, `headers`. Default: `none`.
+* `auth_type` - (Optional) Authentication for the endpoint. Valid values: `none`, `basic_auth`, `headers`, `oauth2`. Default: `none`.
 * `username` - (Optional) Username, used when `auth_type` is `basic_auth`.
 * `password` - (Optional) Password or token, used when `auth_type` is `basic_auth`.
 * `headers` - (Optional) Headers sent with every request, one `key: value` pair per line. Required when `auth_type` is `headers`.
+* `client_id` - (Optional) Client identifier. Required when `auth_type` is `oauth2`.
+* `client_secret` - (Optional) Client secret. Required when `auth_type` is `oauth2`.
+* `token_url` - (Optional) OAuth2 token endpoint over HTTPS. Required when `auth_type` is `oauth2`.
+* `scopes` - (Optional) Scopes requested with the OAuth2 token, space or comma separated.
 * `tags` - (Optional) Additional tags to attach to metrics. Format: `key=value,key2=value2`.
 
 ## Attributes Reference
