@@ -525,6 +525,7 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		return nil
 	}
 
+	stateRemoteWrite := d.Get("prometheus_remote_write").(*schema.Set)
 	d.Set("newrelic_v3", nil)
 	d.Set("datadog_v3", nil)
 	d.Set("azure_monitor", nil)
@@ -670,6 +671,11 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		for _, key := range []string{"endpoint", "auth_type", "username", "password", "headers", "tags"} {
 			if value, ok := data[key]; ok {
 				remoteWrite[0][key] = value
+			}
+		}
+		if _, ok := remoteWrite[0]["password"]; !ok {
+			if stateList := stateRemoteWrite.List(); len(stateList) > 0 {
+				remoteWrite[0]["password"] = stateList[0].(map[string]any)["password"]
 			}
 		}
 		if err := d.Set("prometheus_remote_write", remoteWrite); err != nil {

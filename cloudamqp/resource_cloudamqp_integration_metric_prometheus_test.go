@@ -1216,10 +1216,11 @@ func TestAccIntegrationMetricPrometheusRemoteWrite_Basic(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:      prometheusRemoteWriteResourceName,
-				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, prometheusRemoteWriteResourceName),
-				ImportState:       true,
-				ImportStateVerify: true,
+				ResourceName:            prometheusRemoteWriteResourceName,
+				ImportStateIdFunc:       testAccImportCombinedStateIdFunc(instanceResourceName, prometheusRemoteWriteResourceName),
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"prometheus_remote_write"},
 			},
 		},
 	})
