@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.48.0 (Unreleased)
+## 1.48.0 (3 Sep, 2026)
 
 IMPROVEMENTS:
 
