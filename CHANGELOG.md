@@ -2,7 +2,7 @@
 
 ## 1.48.0 (3 Sep, 2026)
 
-IMPROVEMENTS:
+FEATURES:
 
 * resource/cloudamqp_integration_metric_prometheus: Added support for Grafana Cloud (Mimir) metric integration ([#538])
 * resource/cloudamqp_integration_metric_prometheus: Added support for Prometheus Remote Write metric integration ([#539])
