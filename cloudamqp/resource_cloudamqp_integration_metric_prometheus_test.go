@@ -1230,12 +1230,6 @@ func TestAccIntegrationMetricPrometheusRemoteWrite_Basic(t *testing.T) {
 func TestAccIntegrationMetricPrometheusRemoteWriteOAuth2_Basic(t *testing.T) {
 	t.Parallel()
 
-	// Set sanitized value for playback and use real value for recording
-	testClientSecret := "OAUTH2_CLIENT_SECRET"
-	if os.Getenv("CLOUDAMQP_RECORD") != "" {
-		testClientSecret = os.Getenv("OAUTH2_CLIENT_SECRET")
-	}
-
 	var (
 		fileNames            = []string{"instance", "integrations/metrics/integration_metric_prometheus_remote_write_oauth2"}
 		instanceResourceName = "cloudamqp_instance.instance"
@@ -1247,9 +1241,11 @@ func TestAccIntegrationMetricPrometheusRemoteWriteOAuth2_Basic(t *testing.T) {
 			"InstancePlan":        "bunny-1",
 			"RemoteWriteEndpoint": "https://mimir.example.com/api/v1/push",
 			"OAuth2ClientID":      "cloudamqp-metrics",
-			"OAuth2ClientSecret":  testClientSecret,
-			"OAuth2TokenURL":      "https://login.example.com/oauth2/v2.0/token",
-			"OAuth2Scopes":        "https://monitor.azure.com/.default",
+			// The API only checks the secret is present, so the same literal is used for
+			// recording and playback, which keeps the cassette and the config in step.
+			"OAuth2ClientSecret": "oauth2-client-secret",
+			"OAuth2TokenURL":     "https://login.example.com/oauth2/v2.0/token",
+			"OAuth2Scopes":       "https://monitor.azure.com/.default",
 		}
 	)
 
