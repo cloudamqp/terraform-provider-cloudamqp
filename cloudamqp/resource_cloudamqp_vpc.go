@@ -151,7 +151,7 @@ func (r *vpcResource) Create(ctx context.Context, req resource.CreateRequest, re
 		return
 	}
 
-	plan.ID = types.StringValue(strconv.Itoa(data.ID))
+	plan.ID = types.StringValue(fmt.Sprintf("%d", data.ID))
 	plan.VpcName = types.StringValue(data.VpcName)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {

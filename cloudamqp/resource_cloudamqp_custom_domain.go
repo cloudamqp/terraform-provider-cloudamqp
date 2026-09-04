@@ -2,172 +2,212 @@ package cloudamqp
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func resourceCustomDomain() *schema.Resource {
-	return &schema.Resource{
-		CreateContext: resourceCustomDomainCreate,
-		ReadContext:   resourceCustomDomainRead,
-		UpdateContext: resourceCustomDomainUpdate,
-		DeleteContext: resourceCustomDomainDelete,
-		Importer: &schema.ResourceImporter{
-			StateContext: schema.ImportStatePassthroughContext,
-		},
-		Schema: map[string]*schema.Schema{
-			"instance_id": {
-				Type:        schema.TypeInt,
-				Required:    true,
-				ForceNew:    true,
-				Description: "Instance identifier",
+var (
+	_ resource.Resource                = &customDomainResource{}
+	_ resource.ResourceWithConfigure   = &customDomainResource{}
+	_ resource.ResourceWithImportState = &customDomainResource{}
+)
+
+type customDomainResource struct {
+	client *api.API
+}
+
+func NewCustomDomainResource() resource.Resource {
+	return &customDomainResource{}
+}
+
+type customDomainResourceModel struct {
+	ID         types.String `tfsdk:"id"`
+	InstanceID types.Int64  `tfsdk:"instance_id"`
+	Hostname   types.String `tfsdk:"hostname"`
+	Sleep      types.Int64  `tfsdk:"sleep"`
+	Timeout    types.Int64  `tfsdk:"timeout"`
+}
+
+func (r *customDomainResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = "cloudamqp_custom_domain"
+}
+
+func (r *customDomainResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: "The identifier for this resource",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
-			"hostname": {
-				Type:        schema.TypeString,
+			"instance_id": schema.Int64Attribute{
+				Required:    true,
+				Description: "Instance identifier",
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.RequiresReplace(),
+				},
+			},
+			"hostname": schema.StringAttribute{
 				Required:    true,
 				Description: "The custom hostname.",
 			},
-			"sleep": {
-				Type:        schema.TypeInt,
+			"sleep": schema.Int64Attribute{
 				Optional:    true,
-				Default:     10,
+				Computed:    true,
+				Default:     int64default.StaticInt64(10),
 				Description: "Configurable sleep time in seconds between retries for custom domain configuration",
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.UseStateForUnknown(),
+				},
 			},
-			"timeout": {
-				Type:        schema.TypeInt,
+			"timeout": schema.Int64Attribute{
 				Optional:    true,
-				Default:     1800,
+				Computed:    true,
+				Default:     int64default.StaticInt64(1800),
 				Description: "Configurable timeout time in seconds for custom domain configuration",
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.UseStateForUnknown(),
+				},
 			},
 		},
 	}
 }
 
-func resourceCustomDomainCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	api := meta.(*api.API)
-	instanceID := d.Get("instance_id").(int)
-	hostname := d.Get("hostname").(string)
-	sleep := d.Get("sleep").(int)
-	timeout := d.Get("timeout").(int)
-
-	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-	defer cancel()
-
-	data, err := api.CreateCustomDomain(timeoutCtx, instanceID, hostname, time.Duration(sleep)*time.Second)
-	if err != nil {
-		return diag.FromErr(err)
+func (r *customDomainResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
 	}
-
-	d.SetId(strconv.Itoa(instanceID))
-	d.Set("instance_id", instanceID)
-
-	for k, v := range data {
-		if validateCustomDomainSchemaAttribute(k) {
-			if err = d.Set(k, v); err != nil {
-				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
-			}
-		}
+	client, ok := req.ProviderData.(*api.API)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Provider Data Type",
+			fmt.Sprintf("Expected *api.API, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+		return
 	}
-	return diag.Diagnostics{}
+	r.client = client
 }
 
-func resourceCustomDomainRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	api := meta.(*api.API)
-	instanceID, _ := strconv.Atoi(d.Id())
-	sleep := d.Get("sleep").(int)
-	timeout := d.Get("timeout").(int)
+func (r *customDomainResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+}
 
-	// Set defaults during import
-	if d.Get("instance_id").(int) == 0 {
-		d.Set("instance_id", instanceID)
-	}
-	if sleep == 0 && timeout == 0 {
-		sleep = 10
-		d.Set("sleep", 10)
-		timeout = 1800
-		d.Set("timeout", 1800)
+func (r *customDomainResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan customDomainResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	instanceID := plan.InstanceID.ValueInt64()
+	sleep := time.Duration(plan.Sleep.ValueInt64()) * time.Second
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(plan.Timeout.ValueInt64())*time.Second)
 	defer cancel()
 
-	data, err := api.ReadCustomDomain(timeoutCtx, instanceID, time.Duration(sleep)*time.Second)
+	data, err := r.client.CreateCustomDomain(timeoutCtx, instanceID, plan.Hostname.ValueString(), sleep)
 	if err != nil {
-		return diag.FromErr(err)
+		resp.Diagnostics.AddError("Error creating custom domain", err.Error())
+		return
 	}
 
-	// Resource drift: instance or resource not found, trigger re-creation
+	plan.ID = types.StringValue(strconv.FormatInt(instanceID, 10))
+	plan.Hostname = types.StringValue(data.Hostname)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+}
+
+func (r *customDomainResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state customDomainResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	instanceID, err := strconv.ParseInt(state.ID.ValueString(), 10, 64)
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid ID", fmt.Sprintf("Could not convert ID to integer: %s", err))
+		return
+	}
+
+	// Apply defaults when values are absent (e.g. during import)
+	if state.Sleep.IsNull() || state.Sleep.IsUnknown() || state.Sleep.ValueInt64() == 0 {
+		state.Sleep = types.Int64Value(10)
+	}
+	if state.Timeout.IsNull() || state.Timeout.IsUnknown() || state.Timeout.ValueInt64() == 0 {
+		state.Timeout = types.Int64Value(1800)
+	}
+	if state.InstanceID.IsNull() || state.InstanceID.IsUnknown() {
+		state.InstanceID = types.Int64Value(instanceID)
+	}
+
+	sleep := time.Duration(state.Sleep.ValueInt64()) * time.Second
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(state.Timeout.ValueInt64())*time.Second)
+	defer cancel()
+
+	data, err := r.client.ReadCustomDomain(timeoutCtx, instanceID, sleep)
+	if err != nil {
+		resp.Diagnostics.AddError("Error reading custom domain", err.Error())
+		return
+	}
+
+	// Resource drift: resource not found, trigger re-creation
 	if data == nil {
-		d.SetId("")
-		return nil
+		resp.State.RemoveResource(ctx)
+		return
 	}
 
-	d.SetId(strconv.Itoa(instanceID))
-	d.Set("instance_id", instanceID)
-
-	for k, v := range data {
-		if validateCustomDomainSchemaAttribute(k) {
-			if err = d.Set(k, v); err != nil {
-				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
-			}
-		}
-	}
-	return diag.Diagnostics{}
+	state.Hostname = types.StringValue(data.Hostname)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
-func resourceCustomDomainUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	api := meta.(*api.API)
-	instanceID, _ := strconv.Atoi(d.Id())
-	hostname := d.Get("hostname").(string)
-	sleep := d.Get("sleep").(int)
-	timeout := d.Get("timeout").(int)
+func (r *customDomainResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan customDomainResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	instanceID := plan.InstanceID.ValueInt64()
+	sleep := time.Duration(plan.Sleep.ValueInt64()) * time.Second
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(plan.Timeout.ValueInt64())*time.Second)
 	defer cancel()
 
-	data, err := api.UpdateCustomDomain(timeoutCtx, instanceID, hostname, time.Duration(sleep)*time.Second)
+	data, err := r.client.UpdateCustomDomain(timeoutCtx, instanceID, plan.Hostname.ValueString(), sleep)
 	if err != nil {
-		return diag.FromErr(err)
+		resp.Diagnostics.AddError("Error updating custom domain", err.Error())
+		return
 	}
 
-	d.SetId(strconv.Itoa(instanceID))
-	d.Set("instance_id", instanceID)
-
-	for k, v := range data {
-		if validateCustomDomainSchemaAttribute(k) {
-			if err = d.Set(k, v); err != nil {
-				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
-			}
-		}
-	}
-	return diag.Diagnostics{}
+	plan.Hostname = types.StringValue(data.Hostname)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
-func resourceCustomDomainDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	api := meta.(*api.API)
-	instanceID, _ := strconv.Atoi(d.Id())
-	sleep := d.Get("sleep").(int)
-	timeout := d.Get("timeout").(int)
+func (r *customDomainResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state customDomainResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	instanceID := state.InstanceID.ValueInt64()
+	sleep := time.Duration(state.Sleep.ValueInt64()) * time.Second
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(state.Timeout.ValueInt64())*time.Second)
 	defer cancel()
 
-	_, err := api.DeleteCustomDomain(timeoutCtx, instanceID, time.Duration(sleep)*time.Second)
+	err := r.client.DeleteCustomDomain(timeoutCtx, instanceID, sleep)
 	if err != nil {
-		return diag.FromErr(err)
+		resp.Diagnostics.AddError("Error deleting custom domain", err.Error())
 	}
-
-	return diag.Diagnostics{}
-}
-
-func validateCustomDomainSchemaAttribute(key string) bool {
-	switch key {
-	case "hostname":
-		return true
-	}
-	return false
 }

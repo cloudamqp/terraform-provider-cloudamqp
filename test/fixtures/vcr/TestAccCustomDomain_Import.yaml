@@ -1,0 +1,510 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 33
+        transfer_encoding: []
+        trailer: {}
+        host: customer.cloudamqp.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"hostname":"vcr-test.ddns.net"}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: https://customer.cloudamqp.com/api/instances/386127/custom-domain
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 61
+        uncompressed: false
+        body: '{"status":"Custom domain added, certificate being generated"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "61"
+            Content-Type:
+                - application/json
+            Date:
+                - Wed, 13 May 2026 11:38:37 GMT
+            Nel:
+                - '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}'
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=OM3bWAQeevREbjOZ6g2f%2FVPXh3wv4q4gpy5ecD3VyoY%3D\u0026sid=af571f24-03ee-46d1-9f90-ab9030c2c74c\u0026ts=1778672317"}],"max_age":3600}'
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Reporting-Endpoints:
+                - heroku-nel="https://nel.heroku.com/reports?s=OM3bWAQeevREbjOZ6g2f%2FVPXh3wv4q4gpy5ecD3VyoY%3D&sid=af571f24-03ee-46d1-9f90-ab9030c2c74c&ts=1778672317"
+            Server:
+                - Heroku
+            Set-Cookie:
+                - REDACTED
+            Strict-Transport-Security:
+                - max-age=31536000; includeSubDomains
+            Via:
+                - 2.0 heroku-router
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 9e6793c5-c096-15f6-f387-cced4cb705da
+        status: 202 Accepted
+        code: 202
+        duration: 993.579979ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: customer.cloudamqp.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: https://customer.cloudamqp.com/api/instances/386127/custom-domain
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 36
+        uncompressed: false
+        body: '{"hostname":null,"configured":false}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "36"
+            Content-Type:
+                - application/json
+            Date:
+                - Wed, 13 May 2026 11:38:41 GMT
+            Nel:
+                - '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}'
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=OM3bWAQeevREbjOZ6g2f%2FVPXh3wv4q4gpy5ecD3VyoY%3D\u0026sid=af571f24-03ee-46d1-9f90-ab9030c2c74c\u0026ts=1778672317"}],"max_age":3600}'
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Reporting-Endpoints:
+                - heroku-nel="https://nel.heroku.com/reports?s=OM3bWAQeevREbjOZ6g2f%2FVPXh3wv4q4gpy5ecD3VyoY%3D&sid=af571f24-03ee-46d1-9f90-ab9030c2c74c&ts=1778672317"
+            Server:
+                - Heroku
+            Set-Cookie:
+                - REDACTED
+            Strict-Transport-Security:
+                - max-age=31536000; includeSubDomains
+            Via:
+                - 2.0 heroku-router
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 780980b2-ad13-d623-3cbe-d5231dc79d10
+        status: 200 OK
+        code: 200
+        duration: 3.815961509s
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: customer.cloudamqp.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: https://customer.cloudamqp.com/api/instances/386127/custom-domain
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 36
+        uncompressed: false
+        body: '{"hostname":null,"configured":false}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "36"
+            Content-Type:
+                - application/json
+            Date:
+                - Wed, 13 May 2026 11:38:44 GMT
+            Nel:
+                - '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}'
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=Rc15nJLFavccPiNB9bY84q3fHLamIURtHBCNdjNlOvY%3D\u0026sid=af571f24-03ee-46d1-9f90-ab9030c2c74c\u0026ts=1778672322"}],"max_age":3600}'
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Reporting-Endpoints:
+                - heroku-nel="https://nel.heroku.com/reports?s=Rc15nJLFavccPiNB9bY84q3fHLamIURtHBCNdjNlOvY%3D&sid=af571f24-03ee-46d1-9f90-ab9030c2c74c&ts=1778672322"
+            Server:
+                - Heroku
+            Set-Cookie:
+                - REDACTED
+            Strict-Transport-Security:
+                - max-age=31536000; includeSubDomains
+            Via:
+                - 2.0 heroku-router
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 654f630d-3c95-652c-a2fd-39d5ee46fa5f
+        status: 200 OK
+        code: 200
+        duration: 2.341341857s
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: customer.cloudamqp.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: https://customer.cloudamqp.com/api/instances/386127/custom-domain
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 36
+        uncompressed: false
+        body: '{"hostname":null,"configured":false}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "36"
+            Content-Type:
+                - application/json
+            Date:
+                - Wed, 13 May 2026 11:38:48 GMT
+            Nel:
+                - '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}'
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=gwoKQgSUdzh6%2F63ebeOWVsS2%2B9YDu0tizgRwth699kI%3D\u0026sid=af571f24-03ee-46d1-9f90-ab9030c2c74c\u0026ts=1778672325"}],"max_age":3600}'
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Reporting-Endpoints:
+                - heroku-nel="https://nel.heroku.com/reports?s=gwoKQgSUdzh6%2F63ebeOWVsS2%2B9YDu0tizgRwth699kI%3D&sid=af571f24-03ee-46d1-9f90-ab9030c2c74c&ts=1778672325"
+            Server:
+                - Heroku
+            Set-Cookie:
+                - REDACTED
+            Strict-Transport-Security:
+                - max-age=31536000; includeSubDomains
+            Via:
+                - 2.0 heroku-router
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - e54c60b5-246e-ec54-be25-c24e931ca524
+        status: 200 OK
+        code: 200
+        duration: 2.261053803s
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: customer.cloudamqp.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: https://customer.cloudamqp.com/api/instances/386127/custom-domain
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 50
+        uncompressed: false
+        body: '{"hostname":"vcr-test.ddns.net","configured":true}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "50"
+            Content-Type:
+                - application/json
+            Date:
+                - Wed, 13 May 2026 11:38:51 GMT
+            Nel:
+                - '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}'
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=QnY3t8Jty0ltQwNZRCGp6E4LBqPqhyISTuD8Idg7OFw%3D\u0026sid=af571f24-03ee-46d1-9f90-ab9030c2c74c\u0026ts=1778672329"}],"max_age":3600}'
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Reporting-Endpoints:
+                - heroku-nel="https://nel.heroku.com/reports?s=QnY3t8Jty0ltQwNZRCGp6E4LBqPqhyISTuD8Idg7OFw%3D&sid=af571f24-03ee-46d1-9f90-ab9030c2c74c&ts=1778672329"
+            Server:
+                - Heroku
+            Set-Cookie:
+                - REDACTED
+            Strict-Transport-Security:
+                - max-age=31536000; includeSubDomains
+            Via:
+                - 2.0 heroku-router
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - aac7f6e0-f4f9-5f9d-adb0-313a3bff08b3
+        status: 200 OK
+        code: 200
+        duration: 2.292331514s
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: customer.cloudamqp.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: https://customer.cloudamqp.com/api/instances/386127/custom-domain
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 50
+        uncompressed: false
+        body: '{"hostname":"vcr-test.ddns.net","configured":true}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "50"
+            Content-Type:
+                - application/json
+            Date:
+                - Wed, 13 May 2026 11:38:53 GMT
+            Nel:
+                - '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}'
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=F%2F%2B2TaaOZ%2FK7LpqJtdfOOH%2BCWhKERdr7yGZgeEt%2Fdqc%3D\u0026sid=af571f24-03ee-46d1-9f90-ab9030c2c74c\u0026ts=1778672331"}],"max_age":3600}'
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Reporting-Endpoints:
+                - heroku-nel="https://nel.heroku.com/reports?s=F%2F%2B2TaaOZ%2FK7LpqJtdfOOH%2BCWhKERdr7yGZgeEt%2Fdqc%3D&sid=af571f24-03ee-46d1-9f90-ab9030c2c74c&ts=1778672331"
+            Server:
+                - Heroku
+            Set-Cookie:
+                - REDACTED
+            Strict-Transport-Security:
+                - max-age=31536000; includeSubDomains
+            Via:
+                - 2.0 heroku-router
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 830b76ba-7dda-dabd-7930-cfb711f7bcbc
+        status: 200 OK
+        code: 200
+        duration: 2.335600268s
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: customer.cloudamqp.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: https://customer.cloudamqp.com/api/instances/386127/custom-domain
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 50
+        uncompressed: false
+        body: '{"hostname":"vcr-test.ddns.net","configured":true}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "50"
+            Content-Type:
+                - application/json
+            Date:
+                - Wed, 13 May 2026 11:38:56 GMT
+            Nel:
+                - '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}'
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=8EUM3Z3AXDW5MX5AJfFK28T%2BukHQMkcxRtCm46%2BKmds%3D\u0026sid=af571f24-03ee-46d1-9f90-ab9030c2c74c\u0026ts=1778672334"}],"max_age":3600}'
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Reporting-Endpoints:
+                - heroku-nel="https://nel.heroku.com/reports?s=8EUM3Z3AXDW5MX5AJfFK28T%2BukHQMkcxRtCm46%2BKmds%3D&sid=af571f24-03ee-46d1-9f90-ab9030c2c74c&ts=1778672334"
+            Server:
+                - Heroku
+            Set-Cookie:
+                - REDACTED
+            Strict-Transport-Security:
+                - max-age=31536000; includeSubDomains
+            Via:
+                - 2.0 heroku-router
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 0f4270c2-395b-1a80-93aa-0d47a27184ea
+        status: 200 OK
+        code: 200
+        duration: 2.307162698s
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: customer.cloudamqp.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: https://customer.cloudamqp.com/api/instances/386127/custom-domain
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 69
+        uncompressed: false
+        body: '{"status":"Removing custom domain and restoring default certificate"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "69"
+            Content-Type:
+                - application/json
+            Date:
+                - Wed, 13 May 2026 11:38:58 GMT
+            Nel:
+                - '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}'
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=qBxO4eeJTrtQVPBSDSnWqVor%2BcxgL7u%2FIK25HFe1cCs%3D\u0026sid=af571f24-03ee-46d1-9f90-ab9030c2c74c\u0026ts=1778672336"}],"max_age":3600}'
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Reporting-Endpoints:
+                - heroku-nel="https://nel.heroku.com/reports?s=qBxO4eeJTrtQVPBSDSnWqVor%2BcxgL7u%2FIK25HFe1cCs%3D&sid=af571f24-03ee-46d1-9f90-ab9030c2c74c&ts=1778672336"
+            Server:
+                - Heroku
+            Set-Cookie:
+                - REDACTED
+            Strict-Transport-Security:
+                - max-age=31536000; includeSubDomains
+            Via:
+                - 2.0 heroku-router
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 5fb840bf-fbf7-83b5-7a99-68ddbdfe5629
+        status: 202 Accepted
+        code: 202
+        duration: 2.43399398s

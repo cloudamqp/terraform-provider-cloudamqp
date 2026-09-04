@@ -9,7 +9,7 @@ import (
 )
 
 // ReadVersions - Read versions RabbitMQ and Erlang can upgrade to
-func (api *API) ReadVersions(ctx context.Context, instanceID int) (map[string]any, error) {
+func (api *API) ReadVersions(ctx context.Context, instanceID int64) (map[string]any, error) {
 	var (
 		data   map[string]any
 		failed map[string]any
@@ -33,7 +33,7 @@ func (api *API) ReadVersions(ctx context.Context, instanceID int) (map[string]an
 }
 
 // UpgradeRabbitMQ - Upgrade to latest possible version or a specific available version
-func (api *API) UpgradeRabbitMQ(ctx context.Context, instanceID int, current_version,
+func (api *API) UpgradeRabbitMQ(ctx context.Context, instanceID int64, current_version,
 	new_version string) (string, error) {
 
 	tflog.Debug(ctx, fmt.Sprintf("instanceID=%d current_version=%s new_version=%s "+
@@ -48,7 +48,7 @@ func (api *API) UpgradeRabbitMQ(ctx context.Context, instanceID int, current_ver
 	}
 }
 
-func (api *API) UpgradeToSpecificVersion(ctx context.Context, instanceID int, version string) (
+func (api *API) UpgradeToSpecificVersion(ctx context.Context, instanceID int64, version string) (
 	string, error) {
 
 	var (
@@ -87,7 +87,7 @@ func (api *API) UpgradeToSpecificVersion(ctx context.Context, instanceID int, ve
 	return "", nil
 }
 
-func (api *API) UpgradeToLatestVersion(ctx context.Context, instanceID int) (string, error) {
+func (api *API) UpgradeToLatestVersion(ctx context.Context, instanceID int64) (string, error) {
 	var (
 		data       map[string]any
 		failed     map[string]any
@@ -117,7 +117,7 @@ func (api *API) UpgradeToLatestVersion(ctx context.Context, instanceID int) (str
 	return api.waitUntilUpgraded(ctx, instanceID)
 }
 
-func (api *API) waitUntilUpgraded(ctx context.Context, instanceID int) (string, error) {
+func (api *API) waitUntilUpgraded(ctx context.Context, instanceID int64) (string, error) {
 	var path = fmt.Sprintf("api/instances/%d/nodes", instanceID)
 
 	tflog.Debug(ctx, fmt.Sprintf("waiting until RabbitMQ been upgraded, method=GET path=%s", path))

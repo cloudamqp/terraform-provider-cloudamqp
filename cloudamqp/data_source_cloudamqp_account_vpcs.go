@@ -2,58 +2,78 @@ package cloudamqp
 
 import (
 	"context"
-	"time"
+	"fmt"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-// Note: Cannot yet be migrated to framework while using "vpcs: schema.ListNestedAttribute" to build
-// up the data source schema.
-// Error: Failed to load plugin schema: AttributeName("vpcs"): protocol version 5 cannot have Attributes set..
-// Makes the provider crash when loading the provider.
-func dataSourceAccountVpcs() *schema.Resource {
-	return &schema.Resource{
-		ReadContext: dataSourceAccountVpcsRead,
+var _ datasource.DataSource = &accountVpcsDataSource{}
+var _ datasource.DataSourceWithConfigure = &accountVpcsDataSource{}
 
-		Schema: map[string]*schema.Schema{
-			"vpcs": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"id": {
-							Type:        schema.TypeInt,
+type accountVpcsDataSource struct {
+	client *api.API
+}
+
+func NewAccountVpcsDataSource() datasource.DataSource {
+	return &accountVpcsDataSource{}
+}
+
+type accountVpcsDataSourceModel struct {
+	ID   types.String                `tfsdk:"id"`
+	VPCs []accountVpcDataSourceModel `tfsdk:"vpcs"`
+}
+
+type accountVpcDataSourceModel struct {
+	ID      types.Int64  `tfsdk:"id"`
+	Name    types.String `tfsdk:"name"`
+	Region  types.String `tfsdk:"region"`
+	Subnet  types.String `tfsdk:"subnet"`
+	Tags    types.List   `tfsdk:"tags"`
+	VpcName types.String `tfsdk:"vpc_name"`
+}
+
+func (d *accountVpcsDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = "cloudamqp_account_vpcs"
+}
+
+func (d *accountVpcsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: "The account identifier",
+			},
+		},
+		Blocks: map[string]schema.Block{
+			"vpcs": schema.SetNestedBlock{
+				Description: "List of VPCs for the account.",
+				NestedObject: schema.NestedBlockObject{
+					Attributes: map[string]schema.Attribute{
+						"id": schema.Int64Attribute{
 							Computed:    true,
 							Description: "The instance identifier",
 						},
-						"name": {
-							Type:        schema.TypeString,
+						"name": schema.StringAttribute{
 							Computed:    true,
 							Description: "The name of the instance",
 						},
-						"region": {
-							Type:        schema.TypeString,
+						"region": schema.StringAttribute{
 							Computed:    true,
-							Description: "The region were the instanece is located in",
+							Description: "The region where the instance is located",
 						},
-						"subnet": {
-							Type:        schema.TypeString,
-							Required:    true,
-							ForceNew:    true,
+						"subnet": schema.StringAttribute{
+							Computed:    true,
 							Description: "The VPC subnet",
 						},
-						"tags": {
-							Type:     schema.TypeList,
-							Optional: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-							Description: "Tag the VPC instance with optional tags",
+						"tags": schema.ListAttribute{
+							Computed:    true,
+							ElementType: types.StringType,
+							Description: "Optional tags to associate with the VPC instance",
 						},
-						"vpc_name": {
-							Type:        schema.TypeString,
+						"vpc_name": schema.StringAttribute{
 							Computed:    true,
 							Description: "VPC name given when hosted at the cloud provider",
 						},
@@ -64,35 +84,45 @@ func dataSourceAccountVpcs() *schema.Resource {
 	}
 }
 
-func dataSourceAccountVpcsRead(ctx context.Context, d *schema.ResourceData,
-	meta any) diag.Diagnostics {
+func (d *accountVpcsDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+	client, ok := req.ProviderData.(*api.API)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Provider Data Type",
+			fmt.Sprintf("Expected *api.API, got: %T", req.ProviderData),
+		)
+		return
+	}
+	d.client = client
+}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
-	defer cancel()
+func (d *accountVpcsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var state accountVpcsDataSourceModel
 
-	api := meta.(*api.API)
-	data, err := api.ListVpcs(timeoutCtx)
+	vpcs, err := d.client.ListVpcs(ctx)
 	if err != nil {
-		return diag.FromErr(err)
+		resp.Diagnostics.AddError("API Error", fmt.Sprintf("Failed to list VPCs: %s", err.Error()))
+		return
 	}
 
-	d.SetId("noId")
-	vpcs := make([]map[string]any, len(data))
-	for k, vpcData := range data {
-		vpc := map[string]any{
-			"id":       vpcData.ID,
-			"name":     vpcData.Name,
-			"region":   vpcData.Region,
-			"subnet":   vpcData.Subnet,
-			"tags":     vpcData.Tags,
-			"vpc_name": vpcData.VpcName,
-		}
-		vpcs[k] = vpc
+	state.VPCs = make([]accountVpcDataSourceModel, 0, len(vpcs))
+	for _, vpc := range vpcs {
+		vpcState := accountVpcDataSourceModel{}
+		vpcState.ID = types.Int64Value(vpc.ID)
+		vpcState.Name = types.StringValue(vpc.Name)
+		vpcState.Region = types.StringValue(vpc.Region)
+		vpcState.Subnet = types.StringValue(vpc.Subnet)
+		vpcState.Tags, _ = types.ListValueFrom(ctx, types.StringType, vpc.Tags)
+		vpcState.VpcName = types.StringValue(vpc.VpcName)
+		state.VPCs = append(state.VPCs, vpcState)
 	}
 
-	if err = d.Set("vpcs", vpcs); err != nil {
-		return diag.Errorf("error setting vpcs for resource %s, %s", d.Id(), err)
+	state.ID = types.StringValue("account_vpcs")
+	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
-
-	return diag.Diagnostics{}
 }

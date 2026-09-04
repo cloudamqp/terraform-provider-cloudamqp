@@ -8,211 +8,305 @@ import (
 	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
+	"github.com/hashicorp/terraform-plugin-framework-timeouts/resource/timeouts"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func resourcePluginCommunity() *schema.Resource {
-	return &schema.Resource{
-		CreateContext: resourcePluginCommunityCreate,
-		ReadContext:   resourcePluginCommunityRead,
-		UpdateContext: resourcePluginCommunityUpdate,
-		DeleteContext: resourcePluginCommunityDelete,
-		Importer: &schema.ResourceImporter{
-			StateContext: schema.ImportStatePassthroughContext,
-		},
-		Timeouts: &schema.ResourceTimeout{
-			Create: schema.DefaultTimeout(60 * time.Minute),
-			Read:   schema.DefaultTimeout(60 * time.Minute),
-			Update: schema.DefaultTimeout(60 * time.Minute),
-			Delete: schema.DefaultTimeout(60 * time.Minute),
-		},
-		Schema: map[string]*schema.Schema{
-			"instance_id": {
-				Type:        schema.TypeInt,
-				Required:    true,
-				ForceNew:    true,
-				Description: "Instance identifier",
+var (
+	_ resource.Resource                = &pluginCommunityResource{}
+	_ resource.ResourceWithConfigure   = &pluginCommunityResource{}
+	_ resource.ResourceWithImportState = &pluginCommunityResource{}
+)
+
+type pluginCommunityResource struct {
+	client *api.API
+}
+
+func NewPluginCommunityResource() resource.Resource {
+	return &pluginCommunityResource{}
+}
+
+type pluginCommunityResourceModel struct {
+	ID          types.String   `tfsdk:"id"`
+	InstanceID  types.Int64    `tfsdk:"instance_id"`
+	Name        types.String   `tfsdk:"name"`
+	Enabled     types.Bool     `tfsdk:"enabled"`
+	Description types.String   `tfsdk:"description"`
+	Require     types.String   `tfsdk:"require"`
+	Sleep       types.Int64    `tfsdk:"sleep"`
+	Timeout     types.Int64    `tfsdk:"timeout"`
+	Timeouts    timeouts.Value `tfsdk:"timeouts"`
+}
+
+func (r *pluginCommunityResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = "cloudamqp_plugin_community"
+}
+
+func (r *pluginCommunityResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		Description: "Manage community RabbitMQ plugins for an instance.",
+		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: "The resource identifier (plugin name)",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
-			"name": {
-				Type:        schema.TypeString,
+			"instance_id": schema.Int64Attribute{
+				Required:    true,
+				Description: "Instance identifier",
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.RequiresReplace(),
+				},
+			},
+			"name": schema.StringAttribute{
 				Required:    true,
 				Description: "The name of the plugin",
 			},
-			"enabled": {
-				Type:        schema.TypeBool,
+			"enabled": schema.BoolAttribute{
 				Required:    true,
 				Description: "If the plugin is enabled",
 			},
-			"description": {
-				Type:        schema.TypeString,
+			"description": schema.StringAttribute{
 				Computed:    true,
 				Description: "The description of the plugin",
 			},
-			"require": {
-				Type:        schema.TypeString,
+			"require": schema.StringAttribute{
 				Computed:    true,
 				Description: "Required version of RabbitMQ",
 			},
-			"sleep": {
-				Type:        schema.TypeInt,
+			"sleep": schema.Int64Attribute{
 				Optional:    true,
-				Default:     10,
+				Computed:    true,
+				Default:     int64default.StaticInt64(10),
 				Description: "Configurable sleep time in seconds between retries for plugins",
 			},
-			"timeout": {
-				Type:        schema.TypeInt,
-				Optional:    true,
-				Default:     1800,
-				Description: "Configurable timeout time in seconds for plugins",
+			"timeout": schema.Int64Attribute{
+				Optional:           true,
+				Computed:           true,
+				Default:            int64default.StaticInt64(1800),
+				Description:        "Configurable timeout time in seconds for plugins",
+				DeprecationMessage: "The timeout attribute is deprecated and will be removed in next 2.0.0 version. Use the timeouts block instead.",
 			},
+		},
+		Blocks: map[string]schema.Block{
+			"timeouts": timeouts.Block(ctx, timeouts.Opts{
+				Create:            true,
+				Read:              true,
+				Update:            true,
+				Delete:            true,
+				CreateDescription: "Timeout for creating a community plugin. Default is 60 minutes.",
+				ReadDescription:   "Timeout for reading a community plugin. Default is 60 minutes.",
+				UpdateDescription: "Timeout for updating a community plugin. Default is 60 minutes.",
+				DeleteDescription: "Timeout for deleting a community plugin. Default is 60 minutes.",
+			}),
 		},
 	}
 }
 
-func resourcePluginCommunityCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	var (
-		api        = meta.(*api.API)
-		instanceID = d.Get("instance_id").(int)
-		name       = d.Get("name").(string)
-		sleep      = d.Get("sleep").(int)
-		timeout    = d.Get("timeout").(int)
-	)
-
-	data, err := api.ReadPluginCommunity(ctx, instanceID, name, sleep, timeout)
-	if err != nil {
-		return diag.FromErr(err)
+func (r *pluginCommunityResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
 	}
 
-	_, err = api.InstallPluginCommunity(ctx, instanceID, name, sleep, timeout)
-	if err != nil {
-		return diag.FromErr(err)
+	client, ok := req.ProviderData.(*api.API)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Provider Data Type",
+			fmt.Sprintf("Expected *api.API, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+		return
 	}
-	d.SetId(name)
 
-	for k, v := range data {
-		if validateCommunityPluginSchemaAttribute(k) {
-			if err = d.Set(k, v); err != nil {
-				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
-			}
-		}
-	}
-	return nil
+	r.client = client
 }
 
-func resourcePluginCommunityRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	var (
-		api        = meta.(*api.API)
-		instanceID = d.Get("instance_id").(int)
-		name       = d.Get("name").(string)
-		sleep      = d.Get("sleep").(int)
-		timeout    = d.Get("timeout").(int)
-	)
+func (r *pluginCommunityResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	tflog.Info(ctx, fmt.Sprintf("import of resource with identifiers: %s", req.ID))
 
-	// Support for importing resource
-	if strings.Contains(d.Id(), ",") {
-		tflog.Info(ctx, fmt.Sprintf("import of resource with identifiers: %s", d.Id()))
-		s := strings.Split(d.Id(), ",")
-		name = s[0]
-		d.SetId(name)
-		d.Set("name", name)
-		instanceID, _ = strconv.Atoi(s[1])
-		d.Set("instance_id", instanceID)
-		// Set default values for optional arguments
-		d.Set("sleep", 10)
-		d.Set("timeout", 1800)
-	}
-	if instanceID == 0 {
-		return diag.Errorf("missing instance identifier: {resource_id},{instance_id}")
+	s := strings.Split(req.ID, ",")
+	if len(s) != 2 {
+		resp.Diagnostics.AddError("Invalid import ID format", "Expected format: {resource_id},{instance_id}")
+		return
 	}
 
-	// Read values after import setup to ensure defaults are applied
-	instanceID = d.Get("instance_id").(int)
-	name = d.Get("name").(string)
-	sleep = d.Get("sleep").(int)
-	timeout = d.Get("timeout").(int)
+	instanceID, err := strconv.ParseInt(s[1], 10, 64)
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid instance_id in import ID", fmt.Sprintf("Could not convert instance_id to int64: %s", err))
+		return
+	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), s[0])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), s[0])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("instance_id"), instanceID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("sleep"), int64(10))...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("timeout"), int64(1800))...)
+}
+
+func (r *pluginCommunityResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan pluginCommunityResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	instanceID := plan.InstanceID.ValueInt64()
+	params := model.PluginRequest{
+		Name:    plan.Name.ValueString(),
+		Enabled: plan.Enabled.ValueBool(),
+	}
+	sleep := plan.Sleep.ValueInt64()
+
+	createTimeout, diags := plan.Timeouts.Create(ctx, 60*time.Minute)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, createTimeout)
 	defer cancel()
 
-	data, err := api.ReadPlugin(timeoutCtx, instanceID, name, sleep, timeout)
+	data, err := r.client.InstallPluginCommunity(timeoutCtx, instanceID, params, sleep)
 	if err != nil {
-		// If instance not found (404), return nil to indicate resource not found
-		// This allows Terraform to recreate the resource when the instance is recreated
-		if strings.Contains(err.Error(), "instance not found") || strings.Contains(err.Error(), "status=404") {
-			tflog.Info(ctx, fmt.Sprintf("instance not found, community plugin resource will be recreated: %s", name))
-			return nil
-		}
-		return diag.FromErr(err)
+		resp.Diagnostics.AddError("Failed to Create Community Plugin", err.Error())
+		return
 	}
 
-	// If no data returned (instance not found), return nil to indicate resource not found
+	plan.ID = types.StringValue(plan.Name.ValueString())
+	plan.Description = types.StringValue(data.Description)
+	plan.Enabled = types.BoolValue(data.Enabled)
+	if data.Require != "" {
+		plan.Require = types.StringValue(data.Require)
+	} else {
+		plan.Require = types.StringNull()
+	}
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+}
+
+func (r *pluginCommunityResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state pluginCommunityResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	instanceID := state.InstanceID.ValueInt64()
+	name := state.Name.ValueString()
+	sleep := state.Sleep.ValueInt64()
+
+	readTimeout, diags := state.Timeouts.Read(ctx, 60*time.Minute)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, readTimeout)
+	defer cancel()
+
+	data, err := r.client.ReadPlugin(timeoutCtx, instanceID, name, sleep)
+	if err != nil {
+		resp.Diagnostics.AddError("Failed to Read Community Plugin", err.Error())
+		return
+	}
+
 	if data == nil {
-		tflog.Info(ctx, fmt.Sprintf("community plugin not found, resource will be recreated: %s", name))
-		return nil
+		tflog.Info(ctx, fmt.Sprintf("community plugin not found, %s", state.Name.ValueString()))
+		resp.State.RemoveResource(ctx)
+		return
 	}
 
-	for k, v := range data {
-		if validateCommunityPluginSchemaAttribute(k) {
-			if err = d.Set(k, v); err != nil {
-				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
-			}
-		}
+	state.Description = types.StringValue(data.Description)
+	state.Enabled = types.BoolValue(data.Enabled)
+	if data.Require != "" {
+		state.Require = types.StringValue(data.Require)
+	} else {
+		state.Require = types.StringNull()
 	}
 
-	return diag.Diagnostics{}
+	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
-func resourcePluginCommunityUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	var (
-		api        = meta.(*api.API)
-		instanceID = d.Get("instance_id").(int)
-		name       = d.Get("name").(string)
-		enabled    = d.Get("enabled").(bool)
-		sleep      = d.Get("sleep").(int)
-		timeout    = d.Get("timeout").(int)
-	)
+func (r *pluginCommunityResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan pluginCommunityResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
-	_, err := api.UpdatePluginCommunity(ctx, instanceID, name, enabled, sleep, timeout)
+	instanceID := plan.InstanceID.ValueInt64()
+	params := model.PluginRequest{
+		Name:    plan.Name.ValueString(),
+		Enabled: plan.Enabled.ValueBool(),
+	}
+	sleep := plan.Sleep.ValueInt64()
+
+	updateTimeout, diags := plan.Timeouts.Update(ctx, 60*time.Minute)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, updateTimeout)
+	defer cancel()
+
+	// TODO: Do this work? Shouldn't UpdatePlugin be used instead?
+	data, err := r.client.UpdatePluginCommunity(timeoutCtx, instanceID, params, sleep)
 	if err != nil {
-		return diag.FromErr(err)
+		resp.Diagnostics.AddError("Failed to Update Community Plugin", err.Error())
+		return
 	}
-	return resourcePluginCommunityRead(ctx, d, meta)
+
+	plan.Description = types.StringValue(data.Description)
+	plan.Enabled = types.BoolValue(data.Enabled)
+	if data.Require != "" {
+		plan.Require = types.StringValue(data.Require)
+	} else {
+		plan.Require = types.StringNull()
+	}
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
-func resourcePluginCommunityDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	var (
-		api        = meta.(*api.API)
-		instanceID = d.Get("instance_id").(int)
-		name       = d.Get("name").(string)
-		sleep      = d.Get("sleep").(int)
-		timeout    = d.Get("timeout").(int)
-	)
+func (r *pluginCommunityResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state pluginCommunityResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	if enableFasterInstanceDestroy {
 		tflog.Debug(ctx, "delete will skip calling backend.")
-		return nil
+		return
 	}
 
-	if _, err := api.UninstallPluginCommunity(ctx, instanceID, name, sleep, timeout); err != nil {
-		// If instance not found (404), consider deletion successful
+	instanceID := state.InstanceID.ValueInt64()
+	name := state.Name.ValueString()
+	sleep := state.Sleep.ValueInt64()
+
+	deleteTimeout, diags := state.Timeouts.Delete(ctx, 60*time.Minute)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, deleteTimeout)
+	defer cancel()
+
+	err := r.client.UninstallPluginCommunity(timeoutCtx, instanceID, name, sleep)
+	if err != nil {
 		if strings.Contains(err.Error(), "instance not found") || strings.Contains(err.Error(), "status=404") {
 			tflog.Info(ctx, fmt.Sprintf("instance not found during community plugin deletion, considering successful: %s", name))
-			return nil
+			return
 		}
-		return diag.FromErr(err)
+		resp.Diagnostics.AddError("Failed to Delete Community Plugin", err.Error())
 	}
-	return diag.Diagnostics{}
-}
-
-func validateCommunityPluginSchemaAttribute(key string) bool {
-	switch key {
-	case "name",
-		"require",
-		"description",
-		"enabled":
-		return true
-	}
-	return false
 }
