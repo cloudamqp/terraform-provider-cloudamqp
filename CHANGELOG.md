@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.49.0 (Unreleased)
+
+IMPROVEMENTS:
+
+* resource/cloudamqp_integration_metric_prometheus: Added oauth2 authentication to the Prometheus Remote Write metric integration ([#542])
+
+[#542]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/542
+
 ## 1.48.0 (3 Sep, 2026)
 
 FEATURES:

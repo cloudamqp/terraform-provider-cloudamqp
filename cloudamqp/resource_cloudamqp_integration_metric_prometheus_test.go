@@ -1225,3 +1225,57 @@ func TestAccIntegrationMetricPrometheusRemoteWrite_Basic(t *testing.T) {
 		},
 	})
 }
+
+// TestAccIntegrationMetricPrometheusRemoteWriteOAuth2_Basic: Add oauth2 authenticated remote write integration and import.
+func TestAccIntegrationMetricPrometheusRemoteWriteOAuth2_Basic(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized value for playback and use real value for recording
+	testClientSecret := "OAUTH2_CLIENT_SECRET"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testClientSecret = os.Getenv("OAUTH2_CLIENT_SECRET")
+	}
+
+	var (
+		fileNames            = []string{"instance", "integrations/metrics/integration_metric_prometheus_remote_write_oauth2"}
+		instanceResourceName = "cloudamqp_instance.instance"
+		oauth2ResourceName   = "cloudamqp_integration_metric_prometheus.prometheus_remote_write_oauth2"
+
+		params = map[string]string{
+			"InstanceName":        "TestAccIntegrationMetricPrometheusRemoteWriteOAuth2_Basic",
+			"InstanceID":          fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":        "bunny-1",
+			"RemoteWriteEndpoint": "https://mimir.example.com/api/v1/push",
+			"OAuth2ClientID":      "cloudamqp-metrics",
+			"OAuth2ClientSecret":  testClientSecret,
+			"OAuth2TokenURL":      "https://login.example.com/oauth2/v2.0/token",
+			"OAuth2Scopes":        "https://monitor.azure.com/.default",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(oauth2ResourceName, "prometheus_remote_write.#", "1"),
+					resource.TestCheckResourceAttr(oauth2ResourceName, "prometheus_remote_write.0.auth_type", "oauth2"),
+					resource.TestCheckResourceAttr(oauth2ResourceName, "prometheus_remote_write.0.client_id",
+						params["OAuth2ClientID"]),
+					resource.TestCheckResourceAttr(oauth2ResourceName, "prometheus_remote_write.0.token_url",
+						params["OAuth2TokenURL"]),
+					resource.TestCheckResourceAttr(oauth2ResourceName, "prometheus_remote_write.0.scopes",
+						params["OAuth2Scopes"]),
+				),
+			},
+			{
+				ResourceName:      oauth2ResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, oauth2ResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
