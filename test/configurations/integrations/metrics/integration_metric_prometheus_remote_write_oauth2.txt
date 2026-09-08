@@ -1,0 +1,11 @@
+resource "cloudamqp_integration_metric_prometheus" "prometheus_remote_write_oauth2" {
+  instance_id = {{.InstanceID}}
+  prometheus_remote_write {
+    endpoint      = "{{.RemoteWriteEndpoint}}"
+    auth_type     = "oauth2"
+    client_id     = "{{.OAuth2ClientID}}"
+    client_secret = "{{.OAuth2ClientSecret}}"
+    token_url     = "{{.OAuth2TokenURL}}"
+    scopes        = "{{.OAuth2Scopes}}"
+  }
+}

@@ -305,8 +305,8 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 							Type:         schema.TypeString,
 							Optional:     true,
 							Default:      "none",
-							Description:  "Authentication for the endpoint; none, basic_auth or headers",
-							ValidateFunc: validation.StringInSlice([]string{"none", "basic_auth", "headers"}, false),
+							Description:  "Authentication for the endpoint; none, basic_auth, headers or oauth2",
+							ValidateFunc: validation.StringInSlice([]string{"none", "basic_auth", "headers", "oauth2"}, false),
 						},
 						"username": {
 							Type:        schema.TypeString,
@@ -325,6 +325,27 @@ func resourceIntegrationMetricPrometheus() *schema.Resource {
 							Sensitive: true,
 							Description: "Headers sent with every request, one 'key: value' pair per line. Required when " +
 								"auth_type is headers",
+						},
+						"client_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Client identifier, used when auth_type is oauth2",
+						},
+						"client_secret": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Sensitive:   true,
+							Description: "Client secret, used when auth_type is oauth2",
+						},
+						"token_url": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "OAuth2 token endpoint over HTTPS, used when auth_type is oauth2",
+						},
+						"scopes": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Scopes requested with the OAuth2 token, space or comma separated",
 						},
 						"tags": {
 							Type:        schema.TypeString,
@@ -463,7 +484,8 @@ func remoteWriteParams(config map[string]any) map[string]any {
 	if authType := config["auth_type"]; authType != nil && authType != "" {
 		params["auth_type"] = authType
 	}
-	for _, key := range []string{"username", "password", "headers", "tags"} {
+	for _, key := range []string{"username", "password", "headers", "client_id", "client_secret", "token_url",
+		"scopes", "tags"} {
 		if value := config[key]; value != nil && value != "" {
 			params[key] = value
 		}
@@ -668,7 +690,8 @@ func resourceIntegrationMetricPrometheusRead(ctx context.Context, d *schema.Reso
 		}
 	} else if name == "prometheus_remote_write" {
 		remoteWrite := []map[string]any{{}}
-		for _, key := range []string{"endpoint", "auth_type", "username", "password", "headers", "tags"} {
+		for _, key := range []string{"endpoint", "auth_type", "username", "password", "headers", "client_id",
+			"client_secret", "token_url", "scopes", "tags"} {
 			if value, ok := data[key]; ok {
 				remoteWrite[0][key] = value
 			}
