@@ -1,0 +1,1990 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 126
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"TestAccAccountVPCs_Basic-01","region":"amazon-web-services::us-east-1","subnet":"10.56.72.0/24","tags":["vcr-test"]}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 83
+        uncompressed: false
+        body: '{"id":1225,"message":"VPC created","apikey":"fec1722d-c859-40a9-b0a1-76bb96902bea"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "83"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 92285fd5-a33b-4f02-8d45-9f5f76a66ed5
+        status: 200 OK
+        code: 200
+        duration: 61.307195ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0e211c2dc0e2c6eb0","name":"vpc-8sqafzsr","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0842ff11aec220048","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 98818139-ebe1-4585-a5ac-891c76ec97f9
+        status: 200 OK
+        code: 200
+        duration: 1.154527663s
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0e211c2dc0e2c6eb0","name":"vpc-8sqafzsr","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0842ff11aec220048","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 73162b3a-9e12-4ffe-95b2-3513547c1607
+        status: 200 OK
+        code: 200
+        duration: 1.210242314s
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 215
+        uncompressed: false
+        body: '{"id":1225,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"6cb90b02-3315-40d6-8a60-0de0a294a5fb","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "215"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 6658bd58-1ce6-4edd-824c-bcc97abbbb52
+        status: 200 OK
+        code: 200
+        duration: 18.062516ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0e211c2dc0e2c6eb0","name":"vpc-8sqafzsr","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0842ff11aec220048","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 86b55ef2-3961-439d-b889-933d7ec9c569
+        status: 200 OK
+        code: 200
+        duration: 1.248009184s
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 215
+        uncompressed: false
+        body: '{"id":1225,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"6cb90b02-3315-40d6-8a60-0de0a294a5fb","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "215"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 23a0efe8-8767-4371-8426-128b02f2aa46
+        status: 200 OK
+        code: 200
+        duration: 16.707631ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0e211c2dc0e2c6eb0","name":"vpc-8sqafzsr","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0842ff11aec220048","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 77e653cc-62db-4f96-9618-70a49439ef1c
+        status: 200 OK
+        code: 200
+        duration: 1.479717571s
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 126
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"TestAccAccountVPCs_Basic-02","region":"amazon-web-services::us-east-1","subnet":"10.56.72.0/24","tags":["vcr-test"]}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 83
+        uncompressed: false
+        body: '{"id":1226,"message":"VPC created","apikey":"6b54d067-0c63-414b-bde2-4b1fae501c76"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "83"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - a9c840b7-96e8-4c94-bf4f-bc0a7c74cacf
+        status: 200 OK
+        code: 200
+        duration: 44.91164ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1226/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-085fb634fc0a84f67","name":"vpc-jdf3mc76","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0c9dfad8e1d6e1faa","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 16310f1c-44f7-478b-b585-23790cc84b6a
+        status: 200 OK
+        code: 200
+        duration: 993.654496ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1226/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-085fb634fc0a84f67","name":"vpc-jdf3mc76","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0c9dfad8e1d6e1faa","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 1d1a2702-4c14-472c-ae9f-9bca7446b453
+        status: 200 OK
+        code: 200
+        duration: 1.180150191s
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1226
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 215
+        uncompressed: false
+        body: '{"id":1226,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"de6e9da9-c04e-45c7-9cc9-9f810206310d","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "215"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - ca4d1f6b-bff4-4ae8-9460-6d8fc5062c76
+        status: 200 OK
+        code: 200
+        duration: 24.240909ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 215
+        uncompressed: false
+        body: '{"id":1225,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"6cb90b02-3315-40d6-8a60-0de0a294a5fb","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "215"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - ab8a6b7e-1d41-492a-b8e1-cb7d542926f0
+        status: 200 OK
+        code: 200
+        duration: 24.943717ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0e211c2dc0e2c6eb0","name":"vpc-8sqafzsr","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0842ff11aec220048","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 6b827012-d577-47fb-bccb-a438985e8bc5
+        status: 200 OK
+        code: 200
+        duration: 1.34588662s
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1226/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-085fb634fc0a84f67","name":"vpc-jdf3mc76","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0c9dfad8e1d6e1faa","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f047df8f-cd14-4c32-9845-d94ef5ff7bdd
+        status: 200 OK
+        code: 200
+        duration: 1.352422188s
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 433
+        uncompressed: false
+        body: '[{"id":1226,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"de6e9da9-c04e-45c7-9cc9-9f810206310d","instances":[]},{"id":1225,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"6cb90b02-3315-40d6-8a60-0de0a294a5fb","instances":[]}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "433"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 981758e4-8a2e-41a8-82a7-30b0b79195c8
+        status: 200 OK
+        code: 200
+        duration: 18.928744ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1226
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 215
+        uncompressed: false
+        body: '{"id":1226,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"de6e9da9-c04e-45c7-9cc9-9f810206310d","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "215"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 949779b7-fa83-4c7f-9790-8bc5dcae8b35
+        status: 200 OK
+        code: 200
+        duration: 19.348998ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 215
+        uncompressed: false
+        body: '{"id":1225,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"6cb90b02-3315-40d6-8a60-0de0a294a5fb","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "215"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 4ed7a2cb-6fb5-4043-8612-5edcd1a2b63f
+        status: 200 OK
+        code: 200
+        duration: 53.532248ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1226/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-085fb634fc0a84f67","name":"vpc-jdf3mc76","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0c9dfad8e1d6e1faa","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 23b636a9-1aea-4bc5-9176-2bf8780499f0
+        status: 200 OK
+        code: 200
+        duration: 1.485952157s
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1226/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-085fb634fc0a84f67","name":"vpc-jdf3mc76","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0c9dfad8e1d6e1faa","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 48bc0921-e346-4f63-a784-f8cb1c6f427e
+        status: 200 OK
+        code: 200
+        duration: 1.488736815s
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0e211c2dc0e2c6eb0","name":"vpc-8sqafzsr","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0842ff11aec220048","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f2a9f079-5f3b-4903-bd37-2881ab7731be
+        status: 200 OK
+        code: 200
+        duration: 1.173621694s
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0e211c2dc0e2c6eb0","name":"vpc-8sqafzsr","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0842ff11aec220048","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - adb1c60d-1f80-4acc-9c51-60d3960b050c
+        status: 200 OK
+        code: 200
+        duration: 2.631188805s
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 433
+        uncompressed: false
+        body: '[{"id":1226,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"de6e9da9-c04e-45c7-9cc9-9f810206310d","instances":[]},{"id":1225,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"6cb90b02-3315-40d6-8a60-0de0a294a5fb","instances":[]}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "433"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f6a3f9c7-1742-42bd-a282-28641dc97483
+        status: 200 OK
+        code: 200
+        duration: 11.782651ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1226/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-085fb634fc0a84f67","name":"vpc-jdf3mc76","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0c9dfad8e1d6e1faa","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f6d132d9-1dd8-425c-a0ad-23b3a378708d
+        status: 200 OK
+        code: 200
+        duration: 1.15120122s
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0e211c2dc0e2c6eb0","name":"vpc-8sqafzsr","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0842ff11aec220048","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - d11cdaca-54ab-4f27-9e4c-63ef51354318
+        status: 200 OK
+        code: 200
+        duration: 1.380339527s
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 433
+        uncompressed: false
+        body: '[{"id":1226,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"de6e9da9-c04e-45c7-9cc9-9f810206310d","instances":[]},{"id":1225,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"6cb90b02-3315-40d6-8a60-0de0a294a5fb","instances":[]}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "433"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 32caeca4-651b-4781-af5f-5a54c055769b
+        status: 200 OK
+        code: 200
+        duration: 4.982799ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1226/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-085fb634fc0a84f67","name":"vpc-jdf3mc76","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0c9dfad8e1d6e1faa","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f57978ae-9624-4801-b608-74b8058589c8
+        status: 200 OK
+        code: 200
+        duration: 1.117124411s
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0e211c2dc0e2c6eb0","name":"vpc-8sqafzsr","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0842ff11aec220048","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - a32cfb70-d6ad-499f-9462-6ecae21ee061
+        status: 200 OK
+        code: 200
+        duration: 896.503459ms
+    - id: 27
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1226
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 215
+        uncompressed: false
+        body: '{"id":1226,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"de6e9da9-c04e-45c7-9cc9-9f810206310d","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "215"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 4b41179c-e5fe-479e-8673-a8416bbf85cd
+        status: 200 OK
+        code: 200
+        duration: 22.403492ms
+    - id: 28
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 433
+        uncompressed: false
+        body: '[{"id":1226,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"de6e9da9-c04e-45c7-9cc9-9f810206310d","instances":[]},{"id":1225,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"6cb90b02-3315-40d6-8a60-0de0a294a5fb","instances":[]}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "433"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - e26f5fb2-b6f2-4476-9b10-a75eea385784
+        status: 200 OK
+        code: 200
+        duration: 23.821195ms
+    - id: 29
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 215
+        uncompressed: false
+        body: '{"id":1225,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"6cb90b02-3315-40d6-8a60-0de0a294a5fb","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "215"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 899a038e-b4c1-454b-a2fc-a095009decd6
+        status: 200 OK
+        code: 200
+        duration: 24.61215ms
+    - id: 30
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1226/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-085fb634fc0a84f67","name":"vpc-jdf3mc76","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0c9dfad8e1d6e1faa","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - e8d7447a-77fb-4eaf-a1c4-9f1575a3cffc
+        status: 200 OK
+        code: 200
+        duration: 896.468399ms
+    - id: 31
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1226/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-085fb634fc0a84f67","name":"vpc-jdf3mc76","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0c9dfad8e1d6e1faa","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - fdc4047c-dc9c-49e2-bb0e-54e45d730ae4
+        status: 200 OK
+        code: 200
+        duration: 900.323334ms
+    - id: 32
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0e211c2dc0e2c6eb0","name":"vpc-8sqafzsr","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0842ff11aec220048","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 70873c04-a8e6-4a30-9571-fdf5b257b4b2
+        status: 200 OK
+        code: 200
+        duration: 855.85456ms
+    - id: 33
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0e211c2dc0e2c6eb0","name":"vpc-8sqafzsr","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0842ff11aec220048","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 9d13b4a7-e165-4b0b-a9da-782bb2125724
+        status: 200 OK
+        code: 200
+        duration: 1.754398489s
+    - id: 34
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 433
+        uncompressed: false
+        body: '[{"id":1226,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"de6e9da9-c04e-45c7-9cc9-9f810206310d","instances":[]},{"id":1225,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::us-east-1","tags":["vcr-test"],"providerid":"6cb90b02-3315-40d6-8a60-0de0a294a5fb","instances":[]}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "433"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - dbf410b4-3720-4e25-ba5a-8e80b7a5e038
+        status: 200 OK
+        code: 200
+        duration: 9.523616ms
+    - id: 35
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1226/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-085fb634fc0a84f67","name":"vpc-jdf3mc76","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0c9dfad8e1d6e1faa","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 326095e2-587c-4446-b5ce-0c784f7ba41c
+        status: 200 OK
+        code: 200
+        duration: 1.015705236s
+    - id: 36
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0e211c2dc0e2c6eb0","name":"vpc-8sqafzsr","subnet":"10.56.72.0/24","owner_id":"100855782518","security_group":{"id":"sg-0842ff11aec220048","name":"default","description":"default VPC security group","owner_id":"100855782518"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8beec3ef-13dd-4f52-bdb8-48d95c992a71
+        status: 200 OK
+        code: 200
+        duration: 1.019525919s
+    - id: 37
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1225
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 9173e0ea-05f7-4f07-a325-2c5c89cf4258
+        status: 204 No Content
+        code: 204
+        duration: 55.067553ms
+    - id: 38
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1226
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 2ffbd8a9-a261-4306-a4ef-900fbf381161
+        status: 204 No Content
+        code: 204
+        duration: 56.417403ms

@@ -107,7 +107,6 @@ func (r *pluginBatchResource) Create(ctx context.Context, req resource.CreateReq
 
 	instanceID := plan.InstanceID.ValueInt64()
 	sleep := plan.Sleep.ValueInt64()
-	timeout := plan.Timeout.ValueInt64()
 
 	planPlugins, diags := pluginsMapToBoolMap(ctx, plan.Plugins)
 	resp.Diagnostics.Append(diags...)
@@ -122,7 +121,7 @@ func (r *pluginBatchResource) Create(ctx context.Context, req resource.CreateReq
 		}
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 60*time.Minute)
 	defer cancel()
 
 	jobResp, err := r.client.CreatePluginBatch(timeoutCtx, instanceID, instancemodel.PluginBatchRequest{
@@ -150,9 +149,8 @@ func (r *pluginBatchResource) Read(ctx context.Context, req resource.ReadRequest
 		return
 	}
 
-	instanceID := int(state.InstanceID.ValueInt64())
-	sleep := int(state.Sleep.ValueInt64())
-	timeout := int(state.Timeout.ValueInt64())
+	instanceID := state.InstanceID.ValueInt64()
+	sleep := state.Sleep.ValueInt64()
 
 	statePlugins, diags := pluginsMapToBoolMap(ctx, state.Plugins)
 	resp.Diagnostics.Append(diags...)
@@ -160,7 +158,10 @@ func (r *pluginBatchResource) Read(ctx context.Context, req resource.ReadRequest
 		return
 	}
 
-	apiPlugins, err := r.client.ListPlugins(ctx, instanceID, sleep, timeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 60*time.Minute)
+	defer cancel()
+
+	apiPlugins, err := r.client.ListPlugins(timeoutCtx, instanceID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Error reading plugins", err.Error())
 		return
@@ -175,12 +176,10 @@ func (r *pluginBatchResource) Read(ctx context.Context, req resource.ReadRequest
 	// Index API response by plugin name.
 	apiIndex := make(map[string]bool, len(apiPlugins))
 	for _, p := range apiPlugins {
-		name, ok := p["name"].(string)
-		if !ok {
+		if p.Name == "" {
 			continue
 		}
-		enabled, _ := p["enabled"].(bool)
-		apiIndex[name] = enabled
+		apiIndex[p.Name] = p.Enabled
 	}
 
 	// Rebuild the plugins map using only the keys tracked in state.
@@ -214,7 +213,6 @@ func (r *pluginBatchResource) Update(ctx context.Context, req resource.UpdateReq
 
 	instanceID := plan.InstanceID.ValueInt64()
 	sleep := plan.Sleep.ValueInt64()
-	timeout := plan.Timeout.ValueInt64()
 
 	planPlugins, diags := pluginsMapToBoolMap(ctx, plan.Plugins)
 	resp.Diagnostics.Append(diags...)
@@ -252,7 +250,7 @@ func (r *pluginBatchResource) Update(ctx context.Context, req resource.UpdateReq
 		return
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 60*time.Minute)
 	defer cancel()
 
 	jobResp, err := r.client.UpdatePluginBatch(timeoutCtx, instanceID, instancemodel.PluginBatchRequest{
@@ -283,7 +281,6 @@ func (r *pluginBatchResource) Delete(ctx context.Context, req resource.DeleteReq
 
 	instanceID := state.InstanceID.ValueInt64()
 	sleep := state.Sleep.ValueInt64()
-	timeout := state.Timeout.ValueInt64()
 
 	statePlugins, diags := pluginsMapToBoolMap(ctx, state.Plugins)
 	resp.Diagnostics.Append(diags...)
@@ -308,7 +305,7 @@ func (r *pluginBatchResource) Delete(ctx context.Context, req resource.DeleteReq
 		return
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 60*time.Minute)
 	defer cancel()
 
 	jobResp, err := r.client.DeletePluginBatch(timeoutCtx, instanceID, instancemodel.PluginBatchRequest{

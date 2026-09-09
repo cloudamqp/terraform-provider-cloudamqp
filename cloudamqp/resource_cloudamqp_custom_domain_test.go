@@ -71,6 +71,37 @@ func TestAccCustomDomain_Basic(t *testing.T) {
 	})
 }
 
+func TestAccCustomDomain_Import(t *testing.T) {
+	t.Parallel()
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: `
+					resource "cloudamqp_custom_domain" "settings" {
+						instance_id = 386127 // pre-existing instance
+						hostname    = "vcr-test.ddns.net"
+						sleep       = 1
+					}
+				`,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("cloudamqp_custom_domain.settings", "hostname", "vcr-test.ddns.net"),
+					resource.TestCheckResourceAttr("cloudamqp_custom_domain.settings", "sleep", "1"),
+					resource.TestCheckResourceAttr("cloudamqp_custom_domain.settings", "timeout", "1800"),
+				),
+			},
+			{
+				ResourceName:            "cloudamqp_custom_domain.settings",
+				ImportStateId:           "386127",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"sleep"},
+			},
+		},
+	})
+}
+
 // testAccImportCustomDomainStateIdFunc returns the instance_id for import.
 func testAccImportCustomDomainStateIdFunc(instanceResourceName string) resource.ImportStateIdFunc {
 	return func(state *terraform.State) (string, error) {

@@ -1,0 +1,512 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 138
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"TestAccVPCGCPInfoDataSource_Basic","region":"google-compute-engine::europe-north2","subnet":"10.56.73.0/24","tags":["vcr-test"]}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 83
+        uncompressed: false
+        body: '{"id":1215,"message":"VPC created","apikey":"dc98333d-5bb7-4ce5-8454-38ccff4bc44c"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "83"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - c163fb19-87eb-4a35-89c4-69ef3731daa5
+        status: 200 OK
+        code: 200
+        duration: 47.649029ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1215/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 155
+        uncompressed: false
+        body: '{"network":"https://www.googleapis.com/compute/v1/projects/playground-84codes/global/networks/vpc-gzgykwu4","name":"vpc-gzgykwu4","subnet":"10.56.73.0/24"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "155"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 7fce459f-24cf-46fa-adae-c71bab047121
+        status: 200 OK
+        code: 200
+        duration: 503.095341ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1215/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 155
+        uncompressed: false
+        body: '{"network":"https://www.googleapis.com/compute/v1/projects/playground-84codes/global/networks/vpc-gzgykwu4","name":"vpc-gzgykwu4","subnet":"10.56.73.0/24"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "155"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - cb2e3a4f-3441-4bc6-97c6-d9e90ed37912
+        status: 200 OK
+        code: 200
+        duration: 508.77525ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1215/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 155
+        uncompressed: false
+        body: '{"network":"https://www.googleapis.com/compute/v1/projects/playground-84codes/global/networks/vpc-gzgykwu4","name":"vpc-gzgykwu4","subnet":"10.56.73.0/24"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "155"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - d5c7110c-f62f-4f3d-8105-4be3b987b61a
+        status: 200 OK
+        code: 200
+        duration: 501.337629ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1215/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 155
+        uncompressed: false
+        body: '{"network":"https://www.googleapis.com/compute/v1/projects/playground-84codes/global/networks/vpc-gzgykwu4","name":"vpc-gzgykwu4","subnet":"10.56.73.0/24"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "155"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - d2a6c6ec-744c-4809-a32f-750c73d7f334
+        status: 200 OK
+        code: 200
+        duration: 528.541447ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1215
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 227
+        uncompressed: false
+        body: '{"id":1215,"name":"TestAccVPCGCPInfoDataSource_Basic","plan":"vpc","subnet":"10.56.73.0/24","region":"google-compute-engine::europe-north2","tags":["vcr-test"],"providerid":"9af74b53-dffa-4050-881b-98eefa6e85e5","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "227"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 052dfd4f-2598-458b-9a89-22ca2134b252
+        status: 200 OK
+        code: 200
+        duration: 7.992179ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1215/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 155
+        uncompressed: false
+        body: '{"network":"https://www.googleapis.com/compute/v1/projects/playground-84codes/global/networks/vpc-gzgykwu4","name":"vpc-gzgykwu4","subnet":"10.56.73.0/24"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "155"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 6902a0f1-c8c9-4df6-b6f3-79f17b0d246b
+        status: 200 OK
+        code: 200
+        duration: 510.080851ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1215/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 155
+        uncompressed: false
+        body: '{"network":"https://www.googleapis.com/compute/v1/projects/playground-84codes/global/networks/vpc-gzgykwu4","name":"vpc-gzgykwu4","subnet":"10.56.73.0/24"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "155"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 9b3a57ce-a642-40dc-bb83-ad4f51affc5c
+        status: 200 OK
+        code: 200
+        duration: 610.280611ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1215/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 155
+        uncompressed: false
+        body: '{"network":"https://www.googleapis.com/compute/v1/projects/playground-84codes/global/networks/vpc-gzgykwu4","name":"vpc-gzgykwu4","subnet":"10.56.73.0/24"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "155"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 980893fd-44bd-476e-bb62-1d1e05c05efc
+        status: 200 OK
+        code: 200
+        duration: 674.687309ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/1215
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8739783c-a801-441b-8f25-612d8b9e8527
+        status: 204 No Content
+        code: 204
+        duration: 38.589199ms

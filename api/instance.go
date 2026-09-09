@@ -118,64 +118,6 @@ func (api *API) waitUntilAllNodesReady(ctx context.Context, instanceID string) e
 	}
 }
 
-func (api *API) waitUntilAllNodesConfigured(ctx context.Context, instanceID string, attempt, sleep int) error {
-	path := fmt.Sprintf("api/instances/%s/nodes", instanceID)
-	timeoutCtx, cancel := context.WithTimeout(ctx, 10800*time.Second) // 3 hours
-	defer cancel()
-
-	tflog.Debug(ctx, fmt.Sprintf("waiting for all nodes to be configured, instanceID=%s sleep=%d timeout=%d", instanceID, sleep, 10800))
-
-	for {
-		if timeoutCtx.Err() != nil {
-			return fmt.Errorf("timeout reached after %d seconds, while waiting on all nodes configured", 10800)
-		}
-
-		var (
-			data   []map[string]any
-			failed map[string]any
-		)
-
-		tflog.Debug(ctx, fmt.Sprintf("Checking nodes configured status, attempt=%d", attempt))
-		err := api.callWithRetry(timeoutCtx, api.sling.New().Get(path), retryRequest{
-			functionName: "waitUntilAllNodesConfigured",
-			resourceName: "Instance Nodes",
-			attempt:      attempt,
-			sleep:        time.Duration(sleep) * time.Second,
-			data:         &data,
-			failed:       &failed,
-		})
-		if err != nil {
-			return err
-		}
-
-		tflog.Debug(ctx, fmt.Sprintf("response data=%v", data))
-
-		// Check if all nodes are configured
-		ready := true
-		for _, node := range data {
-			if configured, ok := node["configured"].(bool); ok {
-				ready = ready && configured
-			} else {
-				ready = false
-			}
-		}
-
-		if ready {
-			return nil
-		}
-
-		// Not all nodes configured yet, sleep and retry
-		tflog.Debug(ctx, fmt.Sprintf("Not all nodes configured yet, attempt=%d", attempt))
-		attempt++
-		select {
-		case <-timeoutCtx.Done():
-			return fmt.Errorf("timeout reached after %d seconds, while waiting on all nodes configured", 10800)
-		case <-time.After(time.Duration(sleep) * time.Second):
-			continue
-		}
-	}
-}
-
 func (api *API) waitUntilDeletion(ctx context.Context, instanceID string) error {
 	path := fmt.Sprintf("/api/instances/%s", instanceID)
 	ctxTimeout, cancel := context.WithTimeout(ctx, 1800*time.Second) // 30 minutes
@@ -370,4 +312,59 @@ func (api *API) UrlInformation(url string) map[string]any {
 	}
 
 	return paramsMap
+}
+
+// PollAllNodesConfigured polls instance nodes until all nodes are marked as configured.
+// Timeout and cancel behavior is controlled by ctx.
+func (api *API) PollAllNodesConfigured(ctx context.Context, instanceID, attempt, sleep int64) error {
+	path := fmt.Sprintf("api/instances/%d/nodes", instanceID)
+	sleepDuration := time.Duration(sleep) * time.Second
+
+	tflog.Debug(ctx, fmt.Sprintf("waiting for all nodes to be configured, instanceID=%d sleep=%d", instanceID, sleep))
+
+	for {
+		if ctx.Err() != nil {
+			return fmt.Errorf("timeout reached while waiting for all nodes to be configured: %w", ctx.Err())
+		}
+
+		var (
+			data   []map[string]any
+			failed map[string]any
+		)
+
+		tflog.Debug(ctx, fmt.Sprintf("Checking nodes configured status, attempt=%d", attempt))
+		err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+			functionName: "PollAllNodesConfigured",
+			resourceName: "Instance Nodes",
+			attempt:      int(attempt),
+			sleep:        sleepDuration,
+			data:         &data,
+			failed:       &failed,
+		})
+		if err != nil {
+			return err
+		}
+
+		ready := true
+		for _, node := range data {
+			if configured, ok := node["configured"].(bool); ok {
+				ready = ready && configured
+			} else {
+				ready = false
+			}
+		}
+
+		if ready {
+			return nil
+		}
+
+		tflog.Debug(ctx, fmt.Sprintf("Not all nodes configured yet, attempt=%d", attempt))
+		attempt++
+		select {
+		case <-ctx.Done():
+			return fmt.Errorf("timeout reached while waiting for all nodes to be configured: %w", ctx.Err())
+		case <-time.After(sleepDuration):
+			continue
+		}
+	}
 }
