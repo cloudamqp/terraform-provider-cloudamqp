@@ -5,8 +5,10 @@
 IMPROVEMENTS:
 
 * resource/cloudamqp_integration_metric_prometheus: Added oauth2 authentication to the Prometheus Remote Write metric integration ([#542])
+* docs/resource/integration_log_agent: Clarified CloudWatch IAM permissions and log stream setup ([#544])
 
 [#542]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/542
+[#544]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/544
 
 ## 1.48.0 (3 Sep, 2026)
 
