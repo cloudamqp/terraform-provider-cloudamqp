@@ -2,7 +2,7 @@
 layout: "cloudamqp"
 page_title: "CloudAMQP: cloudamqp_integration_log_agent"
 description: |-
-  Creates and manages agent based log integrations for a CloudAMQP instance.
+  Creates and manages agent-based log integrations for a CloudAMQP instance.
 ---
 
 <!-- markdownlint-disable MD033 -->
@@ -11,7 +11,7 @@ description: |-
 
 ~> **Note:** This resource is available from [v1.47.0].
 
-This resource allows you to create and manage agent based log integrations for a CloudAMQP instance.
+This resource allows you to create and manage agent-based log integrations for a CloudAMQP instance.
 Once configured, the logs produced will be forwarded to the corresponding integration. More information
 can be found for all supported [CloudAMQP Logs Integration].
 
@@ -26,6 +26,9 @@ Only available for dedicated subscription plans.
     </b>
   </summary>
 
+~> **Note:** The CloudWatch log group and log stream must exist before logs can be delivered.
+Configure retention and tags for the log group according to your AWS logging policy.
+
 ```hcl
 resource "cloudamqp_integration_log_agent" "cloudwatch" {
   instance_id = cloudamqp_instance.instance.id
@@ -39,12 +42,6 @@ resource "cloudamqp_integration_log_agent" "cloudwatch" {
 }
 ```
 
-* AWS IAM role: `arn:aws:iam::ACCOUNT-ID:role/ROLE-NAME`
-* External id: Create your own external identifier that matches the role created. E.g. `cloudamqp-abc123`.
-
-See the [CloudAMQP CloudWatch documentation] for a step-by-step guide on setting up the IAM role and
-trust relationship.
-
 </details>
 
 <details>
@@ -54,9 +51,21 @@ trust relationship.
     </b>
   </summary>
 
+~> **Note:** The CloudWatch log group must already exist before applying this example. Configure
+retention and tags for the log group according to your AWS logging policy.
+
 ```hcl
+locals {
+  cloudwatch_log_group = "CloudAMQP"
+}
+
 provider "aws" {
   region = var.aws_region
+}
+
+resource "aws_cloudwatch_log_stream" "this" {
+  name           = cloudamqp_instance.instance.cluster_name
+  log_group_name = local.cloudwatch_log_group
 }
 
 resource "cloudamqp_integration_log_agent" "cloudwatch" {
@@ -65,23 +74,9 @@ resource "cloudamqp_integration_log_agent" "cloudwatch" {
     iam_role        = var.aws_iam_role
     iam_external_id = var.aws_iam_external_id
     region          = var.aws_region
-    log_group       = "CloudAMQP"
-    log_stream      = cloudamqp_instance.instance.cluster_name
+    log_group       = local.cloudwatch_log_group
+    log_stream      = aws_cloudwatch_log_stream.this.name
   }
-}
-
-resource "aws_cloudwatch_log_group" "this" {
-  name              = "CloudAMQP"
-  retention_in_days = 30
-
-  tags = {
-    Environment = "Production"
-  }
-}
-
-resource "aws_cloudwatch_log_stream" "this" {
-  name           = cloudamqp_instance.instance.cluster_name
-  log_group_name = aws_cloudwatch_log_group.this.name
 }
 ```
 
@@ -226,9 +221,30 @@ The following arguments are used by the `cloudwatch` block.
 * `iam_external_id` - (Required) External identifier that matches the trust policy of the IAM role.
 * `region`          - (Required) AWS region hosting the CloudWatch log group.
 * `log_group`       - (Optional/Computed) The name of the CloudWatch log group. Defaults to `CloudAMQP` if not set.
-* `log_stream`      - (Required) The name of the CloudWatch log stream. Recommended to use the cluster name, found in `cloudamqp_instance.instance.cluster_name`.
+* `log_stream`      - (Optional) The name of the CloudWatch log stream. Defaults to the cluster name if not set. Recommended to set explicitly to `cloudamqp_instance.instance.cluster_name`.
 
 ### IAM permissions
+
+The AWS IAM role configured with `iam_role` is assumed by CloudAMQP to write logs to the configured
+CloudWatch log stream. The agent-based integration does not create the CloudWatch log group or log
+stream, so the role only needs permission to write log events.
+
+Required by the CloudAMQP IAM role:
+
+* `logs:PutLogEvents`
+
+When using the AWS Terraform provider to create the CloudWatch log stream, the AWS provider
+credentials need permission to manage the log stream. For the example above, managing the log stream
+requires:
+
+* `logs:CreateLogStream`
+* `logs:DescribeLogStreams`
+* `logs:DeleteLogStream`
+
+If Terraform also reads or manages the CloudWatch log group, permissions such as
+`logs:DescribeLogGroups`, `logs:ListTagsForResource`, `logs:CreateLogGroup`,
+`logs:PutRetentionPolicy`, and `logs:TagResource` may be required. Scope the permissions to the
+target AWS account, region, log group, and log stream where supported.
 
 See the [CloudAMQP CloudWatch documentation] for a step-by-step setup guide on configuring the IAM
 role and trust relationship, or the [AWS IAM role documentation] for how to create a role with a
