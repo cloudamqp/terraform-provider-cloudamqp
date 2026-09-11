@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.49.0 (Unreleased)
+## 1.49.0 (11 Sep, 2026)
 
 IMPROVEMENTS:
 
@@ -9,11 +9,11 @@ IMPROVEMENTS:
 
 BUG FIXES:
 
-* resource/cloudamqp_integration_log, resource/cloudamqp_integration_metric: Redact credentials from debug logging of create and update requests ([#545])
+* resource/cloudamqp_integration_log, resource/cloudamqp_integration_metric: Redact credentials from debug logging of create and update requests ([#546])
 
 [#542]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/542
 [#544]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/544
-[#545]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/545
+[#546]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/546
 
 ## 1.48.0 (3 Sep, 2026)
 
