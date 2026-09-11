@@ -59,3 +59,16 @@ type LogConfigResponse struct {
 	Token             *string `json:"token,omitempty"`
 	URL               *string `json:"url,omitempty"`
 }
+
+// Sanitized returns a copy safe for logging, with credential fields redacted.
+func (r LogRequest) Sanitized() LogRequest {
+	sanitized := r
+	sanitized.AccessKeyID = redactedString(r.AccessKeyID)
+	sanitized.APIKey = redactedString(r.APIKey)
+	sanitized.ApplicationSecret = redactedString(r.ApplicationSecret)
+	sanitized.PrivateKey = redactedString(r.PrivateKey)
+	sanitized.PrivateKeyID = redactedString(r.PrivateKeyID)
+	sanitized.SecretAccessKey = redactedString(r.SecretAccessKey)
+	sanitized.Token = redactedString(r.Token)
+	return sanitized
+}
