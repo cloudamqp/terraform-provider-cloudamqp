@@ -18,7 +18,7 @@ func (api *API) CreateIntegrationMetric(ctx context.Context, instanceID int64, i
 		path   = fmt.Sprintf("/api/instances/%d/integrations/metrics/%s", instanceID, intName)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%+v ", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%+v ", path, params.Sanitized()))
 	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
 		functionName: "CreateIntegrationMetric",
 		resourceName: "IntegrationMetric",
@@ -73,7 +73,7 @@ func (api *API) UpdateIntegrationMetric(ctx context.Context, instanceID int64, m
 		path   = fmt.Sprintf("/api/instances/%d/integrations/metrics/%s", instanceID, metricID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v ", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v ", path, params.Sanitized()))
 	return api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
 		functionName: "UpdateIntegrationMetric",
 		resourceName: "IntegrationMetric",

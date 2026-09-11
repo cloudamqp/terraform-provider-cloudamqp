@@ -18,7 +18,7 @@ func (api *API) CreateIntegrationLog(ctx context.Context, instanceID int64, intN
 		path   = fmt.Sprintf("/api/instances/%d/integrations/logs/%s", instanceID, intName)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%+v ", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%+v ", path, params.Sanitized()))
 	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
 		functionName: "CreateIntegrationLog",
 		resourceName: "IntegrationLog",
@@ -74,7 +74,7 @@ func (api *API) UpdateIntegrationLog(ctx context.Context, instanceID int64, logI
 		path   = fmt.Sprintf("/api/instances/%d/integrations/logs/%s", instanceID, logID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v ", path, params))
+	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v ", path, params.Sanitized()))
 	return api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
 		functionName: "UpdateIntegrationLog",
 		resourceName: "IntegrationLog",

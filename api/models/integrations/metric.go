@@ -47,3 +47,15 @@ type MetricConfigResponse struct {
 	Token           *string `json:"token,omitempty"`
 	VhostRegex      *string `json:"vhost_regex,omitempty"`
 }
+
+// Sanitized returns a copy safe for logging, with credential fields redacted.
+func (r MetricRequest) Sanitized() MetricRequest {
+	sanitized := r
+	sanitized.AccessKeyID = redactedString(r.AccessKeyID)
+	sanitized.APIKey = redactedString(r.APIKey)
+	sanitized.PrivateKey = redactedString(r.PrivateKey)
+	sanitized.PrivateKeyID = redactedString(r.PrivateKeyID)
+	sanitized.SecretAccessKey = redactedString(r.SecretAccessKey)
+	sanitized.Token = redactedString(r.Token)
+	return sanitized
+}
