@@ -168,7 +168,8 @@ The following arguments are supported:
 - `vm_memory_high_watermark`      - (Optional/Computed) When the server will enter memory based flow-control as relative to the maximum available memory.
 - `queue_index_embed_msgs_below`  - (Optional/Computed) Size in bytes below which to embed messages in the queue index. 0 will turn off payload embedding in the queue index.
 - `max_message_size`              - (Optional/Computed) The largest allowed message payload size in bytes.
-- `log_exchange_level`            - (Optional/Computed) Log level for the logger used for log integrations and the CloudAMQP Console log view.
+- `log_level`                     - (Optional/Computed) Log level for all RabbitMQ log outputs: log integrations, the CloudAMQP Console log view and the log file. Also sets `log_exchange_level`.
+- `log_exchange_level`            - (Optional/Computed) Log level for the log exchange only, which feeds the CloudAMQP Console log view and legacy log integrations. Prefer `log_level`.
 - `cluster_partition_handling`    - (Optional/Computed) Set how the cluster should handle network partition.
 - `message_interceptors_timestamp_overwrite` (Optional/Computed) Sets a timestamp header on incoming messages. ***enabled_with_overwrite*** will overwrite any existing timestamps in the header.
 - `mqtt_vhost`                    - (Optional/Computed) Virtual host for MQTT connections. Default set to newly created vhost, same as `cloudamqp_instance.instance.vhost`.
@@ -241,6 +242,16 @@ Note: Existing queues requires restart
 | Type | Default | Min | Max | Unit | Affect |
 | --- | --- | --- | --- | --- | --- |
 | int | 134217728 | 1 | 536870912 | bytes | Only effects new channels |
+
+### log_level
+
+| Type | Default | Affect | Allowed values |
+| --- | --- | --- | --- |
+| string | info | Applied immediately | `debug, info, warning, error, critical, none` |
+
+Note: Setting `log_level` also sets `log_exchange_level` to the same value. Do not
+set both arguments to different values, the plan will never converge. `debug`
+increases log volume on every output, use it for a limited period while troubleshooting.
 
 ### log_exchange_level
 

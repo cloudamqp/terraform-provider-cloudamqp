@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.50.0 (Unreleased)
+
+IMPROVEMENTS:
+
+* resource/cloudamqp_rabbitmq_configuration: Added `log_level` setting that changes the level of every RabbitMQ log output without a restart ([#XXX])
+
+[#XXX]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/XXX
+
 ## 1.49.0 (11 Sep, 2026)
 
 IMPROVEMENTS:

@@ -50,6 +50,7 @@ type rabbitMqConfigurationResourceModel struct {
 	VmMemoryHighWatermark                 types.Float64 `tfsdk:"vm_memory_high_watermark"`
 	QueueIndexEmbedMsgsBelow              types.Int64   `tfsdk:"queue_index_embed_msgs_below"`
 	MaxMessageSize                        types.Int64   `tfsdk:"max_message_size"`
+	LogLevel                              types.String  `tfsdk:"log_level"`
 	LogExchangeLevel                      types.String  `tfsdk:"log_exchange_level"`
 	ClusterPartitionHandling              types.String  `tfsdk:"cluster_partition_handling"`
 	MessageInterceptorsTimestampOverwrite types.String  `tfsdk:"message_interceptors_timestamp_overwrite"`
@@ -173,11 +174,23 @@ func (r *rabbitMqConfigurationResource) Schema(ctx context.Context, req resource
 					int64planmodifier.UseStateForUnknown(),
 				},
 			},
+			"log_level": schema.StringAttribute{
+				Optional: true,
+				Computed: true,
+				Description: "Log level for all RabbitMQ log outputs: log integrations, the CloudAMQP " +
+					"Console log view and the log file. Also sets log_exchange_level.",
+				Validators: []validator.String{
+					stringvalidator.OneOf("debug", "info", "warning", "error", "critical", "none"),
+				},
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
 			"log_exchange_level": schema.StringAttribute{
 				Optional: true,
 				Computed: true,
-				Description: "Log level for the logger used for log integrations and the CloudAMQP " +
-					"Console log view.",
+				Description: "Log level for the log exchange only, which feeds the CloudAMQP Console " +
+					"log view and legacy log integrations. Prefer log_level.",
 				Validators: []validator.String{
 					stringvalidator.OneOf("debug", "info", "warning", "error", "critical", "none"),
 				},
@@ -443,6 +456,7 @@ func (r *rabbitMqConfigurationResource) populateResourceModel(resourceModel *rab
 	resourceModel.Heartbeat = types.Int64Value(data.Heartbeat)
 	resourceModel.ChannelMax = types.Int64Value(data.ChannelMax)
 	resourceModel.MaxMessageSize = types.Int64Value(data.MaxMessageSize)
+	resourceModel.LogLevel = types.StringPointerValue(data.LogLevel)
 	resourceModel.LogExchangeLevel = types.StringValue(data.LogExchangeLevel)
 	resourceModel.ClusterPartitionHandling = types.StringValue(data.ClusterPartitionHandling)
 	resourceModel.VmMemoryHighWatermark = types.Float64Value(data.VmMemoryHighWatermark)
@@ -524,6 +538,10 @@ func (r *rabbitMqConfigurationResource) populateCreateRequest(plan rabbitMqConfi
 
 	if !plan.MaxMessageSize.IsUnknown() {
 		request.MaxMessageSize = plan.MaxMessageSize.ValueInt64Pointer()
+	}
+
+	if !plan.LogLevel.IsUnknown() {
+		request.LogLevel = plan.LogLevel.ValueStringPointer()
 	}
 
 	if !plan.LogExchangeLevel.IsUnknown() {
@@ -620,6 +638,11 @@ func (r *rabbitMqConfigurationResource) populateUpdateRequest(plan, state rabbit
 
 	if !plan.MaxMessageSize.IsNull() && !plan.MaxMessageSize.Equal(state.MaxMessageSize) {
 		request.MaxMessageSize = plan.MaxMessageSize.ValueInt64Pointer()
+		changed = true
+	}
+
+	if !plan.LogLevel.IsNull() && !plan.LogLevel.Equal(state.LogLevel) {
+		request.LogLevel = plan.LogLevel.ValueStringPointer()
 		changed = true
 	}
 

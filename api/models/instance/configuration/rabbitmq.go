@@ -13,6 +13,7 @@ type RabbitMqConfigRequest struct {
 	VmMemoryHighWatermark                 *float64                      `json:"rabbit.vm_memory_high_watermark,omitempty"`
 	QueueIndexEmbedMsgsBelow              *int64                        `json:"rabbit.queue_index_embed_msgs_below,omitempty"`
 	MaxMessageSize                        *int64                        `json:"rabbit.max_message_size,omitempty"`
+	LogLevel                              *string                       `json:"log.level,omitempty"`
 	LogExchangeLevel                      string                        `json:"rabbit.log.exchange.level,omitempty"`
 	ClusterPartitionHandling              string                        `json:"rabbit.cluster_partition_handling,omitempty"`
 	MQTTVhost                             *string                       `json:"rabbitmq_mqtt.vhost,omitempty"`
@@ -33,6 +34,7 @@ type RabbitMqConfigResponse struct {
 	VmMemoryHighWatermark                 float64                       `json:"rabbit.vm_memory_high_watermark"`
 	QueueIndexEmbedMsgsBelow              *int64                        `json:"rabbit.queue_index_embed_msgs_below,omitempty"`
 	MaxMessageSize                        int64                         `json:"rabbit.max_message_size"`
+	LogLevel                              *string                       `json:"log.level,omitempty"`
 	LogExchangeLevel                      string                        `json:"rabbit.log.exchange.level"`
 	ClusterPartitionHandling              string                        `json:"rabbit.cluster_partition_handling"`
 	MQTTVhost                             string                        `json:"rabbitmq_mqtt.vhost"`
