@@ -92,6 +92,38 @@ func TestAccRabbitMqConfiguration_LogExhangeLevel(t *testing.T) {
 	})
 }
 
+func TestAccRabbitMqConfiguration_LogLevel(t *testing.T) {
+	t.Parallel()
+
+	var (
+		fileNames                  = []string{"instance", "rabbitmq_configuration/config"}
+		instanceResourceName       = "cloudamqp_instance.instance"
+		rabbitMqConfigResourceName = "cloudamqp_rabbitmq_configuration.rabbitmq_config"
+
+		params = map[string]string{
+			"InstanceName":     "TestAccRabbitMqConfiguration_LogLevel",
+			"InstanceID":       fmt.Sprintf("%s.id", instanceResourceName),
+			"InstancePlan":     "bunny-1",
+			"LogExchangeLevel": "debug",
+			"LogLevel":         "debug",
+		}
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
+					resource.TestCheckResourceAttr(rabbitMqConfigResourceName, "log_level", params["LogLevel"]),
+					resource.TestCheckResourceAttr(rabbitMqConfigResourceName, "log_exchange_level", params["LogLevel"]),
+				),
+			},
+		},
+	})
+}
+
 // TestAccRabbitMqConfiguration_ZeroValue: While using Framework 0 int values can be detected correctly.
 // Issue in Terraform SDK v2, where 0 value cannot be detected due to default int value being 0.
 func TestAccRabbitMqConfiguration_ZeroValue(t *testing.T) {
