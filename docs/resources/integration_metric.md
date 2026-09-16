@@ -15,6 +15,15 @@ integration.
 
 Only available for dedicated subscription plans.
 
+~> **Note:** For `newrelic`/`newrelic_v2`, `datadog`/`datadog_v2`, `cloudwatch`/`cloudwatch_v2`, and
+`stackdriver`, we recommend the newer, **Prometheus**/**OpenTelemetry**-based
+[`cloudamqp_integration_metric_prometheus`][metric-prometheus] resource instead of this one — see its
+`newrelic_v3`, `datadog_v3`, `cloudwatch_v3`, and `stackdriver_v2` blocks respectively. It's where new
+metrics integration features land going forward. This resource remains fully supported for `librato`,
+which has no Prometheus-based equivalent.
+
+[metric-prometheus]: integration_metric_prometheus.md
+
 ## Example Usage
 
 <details>

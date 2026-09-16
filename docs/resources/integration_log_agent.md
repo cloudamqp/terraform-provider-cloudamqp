@@ -11,7 +11,7 @@ description: |-
 
 ~> **Note:** This resource is available from [v1.47.0].
 
-This resource allows you to create and manage agent-based log integrations for a CloudAMQP instance.
+This resource allows you to create and manage OpenTelemetry agent-based log integrations for a CloudAMQP instance.
 Once configured, the logs produced will be forwarded to the corresponding integration. More information
 can be found for all supported [CloudAMQP Logs Integration].
 
