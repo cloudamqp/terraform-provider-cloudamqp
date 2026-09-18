@@ -22,6 +22,27 @@ Only available for dedicated subscription plans.
 <details>
   <summary>
     <b>
+      <i>Azure Monitor v2 log agent integration</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_integration_log_agent" "azure_monitor_v2" {
+  instance_id = cloudamqp_instance.instance.id
+  azure_monitor_v2 {
+    tenant_id          = "00000000-0000-0000-0000-000000000000"
+    application_id     = "11111111-1111-1111-1111-111111111111"
+    application_secret = var.azure_application_secret
+    logs_endpoint      = "https://example.region-1.ingest.monitor.azure.com/datacollectionRules/dcr-example/streams/Microsoft-OTLP-Logs/otlp/v1/logs"
+  }
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
       <i>CloudWatch log agent integration</i>
     </b>
   </summary>
@@ -212,6 +233,30 @@ Exactly one of the following integration blocks must be configured:
 
 <details>
   <summary>
+    <b>Azure Monitor v2</b>
+  </summary>
+
+The following arguments are used by the `azure_monitor_v2` block.
+
+* `tenant_id`                 - (Required) Microsoft Entra Directory (tenant) ID as a UUID.
+* `application_id`            - (Required) Microsoft Entra Application (client) ID as a UUID.
+* `application_secret`        - (Required, Write-only) Microsoft Entra client secret value, not the secret ID. This value is write-only and will not be stored in state.
+* `application_secret_version` - (Optional/Computed) Version of the write-only `application_secret`. Increment to trigger an update when the secret changes (default: `1`).
+* `logs_endpoint`             - (Required) Complete Azure Monitor OTLP logs endpoint. The URL must use HTTPS and end in `/otlp/v1/logs`.
+
+The integration sends broker logs through Azure Monitor native OTLP ingestion. Azure resources such
+as the Data Collection Endpoint (DCE), Data Collection Rule (DCR), and Microsoft Entra application
+must exist before configuring this resource. See the [CloudAMQP Azure Monitor v2 setup guide] and
+[Azure native OTLP ingestion documentation] for setup details.
+
+Because `application_secret` is write-only, it cannot be recovered when importing an existing
+integration. Add the secret to the Terraform configuration after import. Increment
+`application_secret_version` when rotating the configured secret.
+
+</details>
+
+<details>
+  <summary>
     <b>CloudWatch</b>
   </summary>
 
@@ -391,6 +436,8 @@ import {
 
 [v1.47.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.47.0
 [CloudAMQP Logs Integration]: https://www.cloudamqp.com/docs/cloudamqp-integrations.html
+[CloudAMQP Azure Monitor v2 setup guide]: https://www.cloudamqp.com/docs/logs_azure_monitor_v2.html
+[Azure native OTLP ingestion documentation]: https://learn.microsoft.com/en-us/azure/azure-monitor/containers/opentelemetry-protocol-ingestion
 [CloudAMQP CloudWatch documentation]: https://www.cloudamqp.com/docs/monitoring_logs_cloudwatch_v2.html
 [AWS IAM role documentation]: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html
 [Coralogix region documentation]: https://coralogix.com/docs/coralogix-domain/
