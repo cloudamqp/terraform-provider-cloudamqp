@@ -66,6 +66,7 @@ type integrationLogResourceModel struct {
 	Table             types.String `tfsdk:"table"`
 	DcrID             types.String `tfsdk:"dcr_id"`
 	Retention         types.Int64  `tfsdk:"retention"`
+	Username          types.String `tfsdk:"username"`
 }
 
 func (r *integrationLogResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -115,6 +116,7 @@ func (r *integrationLogResource) Schema(ctx context.Context, req resource.Schema
 						"datadog",
 						"logentries",
 						"loggly",
+						"loki_otlp",
 						"papertrail",
 						"scalyr",
 						"splunk",
@@ -133,7 +135,7 @@ func (r *integrationLogResource) Schema(ctx context.Context, req resource.Schema
 			"token": schema.StringAttribute{
 				Optional:    true,
 				Sensitive:   true,
-				Description: "The token used for authentication. (Loggly, Logentries, Splunk, Scalyr)",
+				Description: "The token used for authentication. (Loggly, Logentries, Splunk, Scalyr, Loki OTLP)",
 			},
 			"region": schema.StringAttribute{
 				Optional:    true,
@@ -251,6 +253,10 @@ func (r *integrationLogResource) Schema(ctx context.Context, req resource.Schema
 			"retention": schema.Int64Attribute{
 				Optional:    true,
 				Description: "The number of days to retain logs. (Cloudwatch)",
+			},
+			"username": schema.StringAttribute{
+				Optional:    true,
+				Description: "The username for the integration service. (Loki OTLP)",
 			},
 		},
 	}
@@ -461,6 +467,10 @@ func (r *integrationLogResource) populateResourceModel(resourceModel *integratio
 		resourceModel.Token = types.StringValue(*data.Config.Token)
 	case "loggly":
 		resourceModel.Token = types.StringValue(*data.Config.Token)
+	case "loki_otlp":
+		resourceModel.Endpoint = types.StringValue(*data.Config.Endpoint)
+		resourceModel.Token = types.StringValue(*data.Config.Password)
+		resourceModel.Username = types.StringValue(*data.Config.Username)
 	case "papertrail":
 		resourceModel.Url = types.StringValue(*data.Config.URL)
 	case "scalyr":
@@ -525,6 +535,12 @@ func (r *integrationLogResource) populateRequest(plan *integrationLogResourceMod
 	case "loggly":
 		request = model.LogRequest{
 			Token: plan.Token.ValueString(),
+		}
+	case "loki_otlp":
+		request = model.LogRequest{
+			Endpoint: plan.Endpoint.ValueString(),
+			Password: plan.Token.ValueString(),
+			Username: plan.Username.ValueString(),
 		}
 	case "papertrail":
 		request = model.LogRequest{
