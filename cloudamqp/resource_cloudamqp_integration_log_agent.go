@@ -10,6 +10,7 @@ import (
 	"regexp"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/utils/validators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -41,15 +42,24 @@ func NewIntegrationLogAgentResource() resource.Resource {
 }
 
 type integrationLogAgentResourceModel struct {
-	ID          types.String      `tfsdk:"id"`
-	InstanceID  types.Int64       `tfsdk:"instance_id"`
-	Cloudwatch  *cloudwatchModel  `tfsdk:"cloudwatch"`
-	Coralogix   *coralogixModel   `tfsdk:"coralogix"`
-	Datadog     *datadogModel     `tfsdk:"datadog"`
-	GoogleCloud *googleCloudModel `tfsdk:"google_cloud"`
-	Grafana     *grafanaModel     `tfsdk:"grafana"`
-	Splunk      *splunkModel      `tfsdk:"splunk"`
-	Uptrace     *uptraceModel     `tfsdk:"uptrace"`
+	ID             types.String         `tfsdk:"id"`
+	InstanceID     types.Int64          `tfsdk:"instance_id"`
+	AzureMonitorV2 *azureMonitorV2Model `tfsdk:"azure_monitor_v2"`
+	Cloudwatch     *cloudwatchModel     `tfsdk:"cloudwatch"`
+	Coralogix      *coralogixModel      `tfsdk:"coralogix"`
+	Datadog        *datadogModel        `tfsdk:"datadog"`
+	GoogleCloud    *googleCloudModel    `tfsdk:"google_cloud"`
+	Grafana        *grafanaModel        `tfsdk:"grafana"`
+	Splunk         *splunkModel         `tfsdk:"splunk"`
+	Uptrace        *uptraceModel        `tfsdk:"uptrace"`
+}
+
+type azureMonitorV2Model struct {
+	TenantID                 types.String `tfsdk:"tenant_id"`
+	ApplicationID            types.String `tfsdk:"application_id"`
+	ApplicationSecret        types.String `tfsdk:"application_secret"`
+	ApplicationSecretVersion types.Int64  `tfsdk:"application_secret_version"`
+	LogsEndpoint             types.String `tfsdk:"logs_endpoint"`
 }
 
 type cloudwatchModel struct {
@@ -142,6 +152,50 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 			},
 		},
 		Blocks: map[string]schema.Block{
+			"azure_monitor_v2": schema.SingleNestedBlock{
+				Description: "Azure Monitor native OTLP log integration configuration",
+				Attributes: map[string]schema.Attribute{
+					"tenant_id": schema.StringAttribute{
+						Optional:    true,
+						Description: "Microsoft Entra Directory (tenant) ID",
+						Validators: []validator.String{
+							validators.UUIDValidator{},
+						},
+					},
+					"application_id": schema.StringAttribute{
+						Optional:    true,
+						Description: "Microsoft Entra Application (client) ID",
+						Validators: []validator.String{
+							validators.UUIDValidator{},
+						},
+					},
+					"application_secret": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Microsoft Entra application secret value",
+					},
+					"application_secret_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only application_secret. Increment to trigger an update when the secret changes (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
+					},
+					"logs_endpoint": schema.StringAttribute{
+						Optional:    true,
+						Description: "Complete Azure Monitor OTLP logs endpoint",
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(
+								regexp.MustCompile(`^https://[^/?#\s]+(?:/[^?#\s]*)*/otlp/v1/logs$`),
+								"must be an HTTPS URL ending in /otlp/v1/logs",
+							),
+						},
+					},
+				},
+			},
 			"cloudwatch": schema.SingleNestedBlock{
 				Description: "CloudWatch OTLP log integration configuration",
 				Attributes: map[string]schema.Attribute{
