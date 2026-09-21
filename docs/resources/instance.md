@@ -334,6 +334,7 @@ All attributes reference are computed
                     to manage alarms, integration and more, full description [CloudAMQP API].
 * `host`          - The external hostname for the CloudAMQP instance.
 * `host_internal` - The internal hostname for the CloudAMQP instance.
+* `cluster_name`  - The cluster name of the CloudAMQP instance.
 * `vhost`         - The virtual host used by Rabbit MQ.
 * `dedicated`     - Information if the CloudAMQP instance is shared or dedicated.
 * `backend`       - Information if the CloudAMQP instance runs either RabbitMQ or LavinMQ.
