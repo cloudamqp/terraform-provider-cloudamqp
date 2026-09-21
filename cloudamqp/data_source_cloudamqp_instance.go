@@ -3,7 +3,6 @@ package cloudamqp
 import (
 	"context"
 	"strconv"
-	"strings"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -90,7 +89,7 @@ func dataSourceInstance() *schema.Resource {
 			"cluster_name": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "Cluster name, extracted from the external hostname",
+				Description: "Cluster name",
 			},
 			"vhost": {
 				Type:        schema.TypeString,
@@ -170,10 +169,6 @@ func dataSourceInstanceRead(ctx context.Context, d *schema.ResourceData, meta an
 
 	if err = d.Set("host_internal", data["hostname_internal"].(string)); err != nil {
 		return diag.Errorf("error setting host for resource %s: %s", d.Id(), err)
-	}
-
-	if err = d.Set("cluster_name", strings.SplitN(hostStr, ".", 2)[0]); err != nil {
-		return diag.Errorf("error setting cluster_name for resource %s: %s", d.Id(), err)
 	}
 
 	if data["no_default_alarms"] == nil {
