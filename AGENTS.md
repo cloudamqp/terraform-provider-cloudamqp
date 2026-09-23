@@ -159,7 +159,7 @@ func (api *API) CreateVPC(ctx context.Context, params model.VpcRequest) (model.V
 
 * Formatting Rules:
   * Past tense verbs: "Added", "Fixed", "Updated", "Removed", "Deprecated", "Bumped"
-  * PR references: Always include ([#XXX]) at the end of each entry
+  * PR references: Always include ([#X]) at the end of each entry
   * PR links: Add reference links at the bottom of each release section
   * Consistent structure: Bullet points for all entries
   * Clear descriptions: Brief but informative
@@ -171,19 +171,19 @@ func (api *API) CreateVPC(ctx context.Context, params model.VpcRequest) (model.V
 
 FEATURES
 
-* **New Resource:** `cloudamqp_custom_certificate` - Upload custom certificates to cluster ([#XXX])
+* **New Resource:** `cloudamqp_custom_certificate` - Upload custom certificates to cluster ([#X])
 
 IMPROVEMENTS
 
-* resource/cloudamqp_instance: Added support for new plan types ([#XXX])
+* resource/cloudamqp_instance: Added support for new plan types ([#X])
 
 BUG FIXES
 
-* resource/cloudamqp_alarm: Fixed panic when alarm was deleted outside Terraform ([#XXX])
+* resource/cloudamqp_alarm: Fixed panic when alarm was deleted outside Terraform ([#X])
 
 DEPENDENCIES
 
-* Bumped github.com/hashicorp/terraform-plugin-framework to v1.4.2 ([#XXX])
+* Bumped github.com/hashicorp/terraform-plugin-framework to v1.4.2 ([#X])
 
-[#XXX]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/XXX
+[#X]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/X
 ```
