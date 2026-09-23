@@ -2,7 +2,6 @@ package cloudamqp
 
 import (
 	"context"
-	"strings"
 	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
@@ -100,7 +99,7 @@ func resourceInstance() *schema.Resource {
 			"cluster_name": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "Cluster name, extracted from the external hostname",
+				Description: "Cluster name",
 			},
 			"vhost": {
 				Type:        schema.TypeString,
@@ -299,10 +298,6 @@ func resourceRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Di
 		return diag.Errorf("error setting host for resource %s: %s", d.Id(), err)
 	}
 
-	if err = d.Set("cluster_name", strings.SplitN(hostStr, ".", 2)[0]); err != nil {
-		return diag.Errorf("error setting cluster_name for resource %s: %s", d.Id(), err)
-	}
-
 	urlStr, ok := data["url"].(string)
 	if !ok || urlStr == "" {
 		return diag.Errorf("missing URL in instance response for resource %s", d.Id())
@@ -407,7 +402,8 @@ func validateInstanceSchemaAttribute(key string) bool {
 		"no_default_alarms",
 		"ready",
 		"backend",
-		"vpc_id":
+		"vpc_id",
+		"cluster_name":
 		return true
 	}
 	return false
