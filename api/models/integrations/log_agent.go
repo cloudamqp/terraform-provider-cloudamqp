@@ -1,6 +1,11 @@
 package integrations
 
 type LogAgentRequest struct {
+	// Azure Monitor native OTLP (azure_monitor_v2)
+	TenantID          string `json:"tenant_id,omitempty"`
+	ApplicationID     string `json:"application_id,omitempty"`
+	ApplicationSecret string `json:"application_secret,omitempty"`
+	LogsEndpoint      string `json:"logs_endpoint,omitempty"`
 	// CloudWatch (cloudwatch_v2)
 	IAMRole       string `json:"iam_role,omitempty"`
 	IAMExternalID string `json:"iam_external_id,omitempty"`
@@ -46,6 +51,11 @@ type LogAgentResponse struct {
 }
 
 type LogAgentConfigResponse struct {
+	// Azure Monitor native OTLP (azure_monitor_v2)
+	TenantID          *string `json:"tenant_id,omitempty"`
+	ApplicationID     *string `json:"application_id,omitempty"`
+	ApplicationSecret *string `json:"application_secret,omitempty"`
+	LogsEndpoint      *string `json:"logs_endpoint,omitempty"`
 	// CloudWatch (cloudwatch_v2)
 	IAMRole       *string `json:"iam_role,omitempty"`
 	IAMExternalID *string `json:"iam_external_id,omitempty"`
@@ -98,6 +108,7 @@ func redactedStringPtr(s *string) *string {
 
 func (r LogAgentRequest) Sanitized() LogAgentRequest {
 	sanitized := r
+	sanitized.ApplicationSecret = redactedString(r.ApplicationSecret)
 	sanitized.DSN = redactedString(r.DSN)
 	sanitized.Token = redactedString(r.Token)
 	sanitized.PrivateKey = redactedString(r.PrivateKey)
@@ -122,6 +133,7 @@ func (r LogAgentResponse) Sanitized() LogAgentResponse {
 
 func (c LogAgentConfigResponse) Sanitized() LogAgentConfigResponse {
 	sanitized := c
+	sanitized.ApplicationSecret = redactedStringPtr(c.ApplicationSecret)
 	sanitized.DSN = redactedStringPtr(c.DSN)
 	sanitized.Token = redactedStringPtr(c.Token)
 	sanitized.PrivateKey = redactedStringPtr(c.PrivateKey)
