@@ -170,8 +170,7 @@ resource "cloudamqp_integration_log_agent" "grafana" {
 
 ~> **Note:** The `otlp` block is available from [v1.50.0].
 
-Send logs to any OpenTelemetry-compatible backend over OTLP/HTTP, such as SigNoz, Honeycomb or a
-self-hosted OpenTelemetry Collector. Authentication can be done with headers, basic auth or OAuth2
+Send logs to any OpenTelemetry-compatible backend over OTLP/HTTP, such as SigNoz or Honeycomb. Authentication can be done with headers, basic auth or OAuth2
 client credentials.
 
 ```hcl
