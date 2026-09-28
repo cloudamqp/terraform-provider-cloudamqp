@@ -164,6 +164,58 @@ resource "cloudamqp_integration_log_agent" "grafana" {
 <details>
   <summary>
     <b>
+      <i>OTLP log agent integration</i>
+    </b>
+  </summary>
+
+~> **Note:** The `otlp` block is available from [v1.50.0].
+
+Send logs to any OpenTelemetry-compatible backend over OTLP/HTTP, such as SigNoz, Honeycomb or a
+self-hosted OpenTelemetry Collector. Authentication can be done with headers, basic auth or OAuth2
+client credentials.
+
+```hcl
+resource "cloudamqp_integration_log_agent" "otlp" {
+  instance_id = cloudamqp_instance.instance.id
+  otlp {
+    endpoint  = "https://api.honeycomb.io/v1/logs"
+    auth_type = "headers"
+    headers   = "x-honeycomb-team: ${var.honeycomb_api_key}"
+  }
+}
+```
+
+```hcl
+resource "cloudamqp_integration_log_agent" "otlp" {
+  instance_id = cloudamqp_instance.instance.id
+  otlp {
+    endpoint  = "https://otlp.example.com:4318/v1/logs"
+    auth_type = "basic_auth"
+    username  = var.otlp_username
+    password  = var.otlp_password
+  }
+}
+```
+
+```hcl
+resource "cloudamqp_integration_log_agent" "otlp" {
+  instance_id = cloudamqp_instance.instance.id
+  otlp {
+    endpoint      = "https://otlp.example.com:4318/v1/logs"
+    auth_type     = "oauth2"
+    client_id     = var.otlp_client_id
+    client_secret = var.otlp_client_secret
+    token_url     = "https://auth.example.com/oauth2/token"
+    scopes        = "logs:write"
+  }
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
       <i>Splunk log agent integration</i>
     </b>
   </summary>
@@ -331,6 +383,27 @@ See the [Grafana Cloud OTLP setup guide] for step-by-step instructions.
 
 <details>
   <summary>
+    <b>OTLP</b>
+  </summary>
+
+The following arguments are used by the `otlp` block.
+
+* `endpoint`              - (Required) Full https URL the backend receives logs on, including the path. For most OTLP backends this is the base URL followed by `/v1/logs`, e.g. `https://otlp.example.com:4318/v1/logs`.
+* `auth_type`             - (Optional) Authentication for the endpoint. Valid values: `none`, `basic_auth`, `headers`, `oauth2`. Defaults to `none`.
+* `headers`               - (Optional, Sensitive) Headers sent with every request, one `key: value` pair per line. Required when `auth_type` is `headers`. Honeycomb takes its API key here, for example `x-honeycomb-team: <api-key>`.
+* `username`              - (Optional) Username. Required when `auth_type` is `basic_auth`.
+* `password`              - (Optional, Write-only) Password or token. Required when `auth_type` is `basic_auth`. This value is write-only and will not be stored in state.
+* `password_version`      - (Optional/Computed) Version of the write-only `password`. Increment to trigger an update when the password changes (default: `1`).
+* `client_id`             - (Optional) OAuth2 client identifier. Required when `auth_type` is `oauth2`.
+* `client_secret`         - (Optional, Write-only) OAuth2 client secret. Required when `auth_type` is `oauth2`. This value is write-only and will not be stored in state.
+* `client_secret_version` - (Optional/Computed) Version of the write-only `client_secret`. Increment to trigger an update when the secret changes (default: `1`).
+* `token_url`             - (Optional) OAuth2 token endpoint over HTTPS. Required when `auth_type` is `oauth2`.
+* `scopes`                - (Optional) Scopes requested with the OAuth2 token, space or comma separated.
+
+</details>
+
+<details>
+  <summary>
     <b>Splunk</b>
   </summary>
 
@@ -390,6 +463,7 @@ import {
 `terraform import cloudamqp_integration_log_agent.cloudwatch <id>,<instance_id>`
 
 [v1.47.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.47.0
+[v1.50.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.50.0
 [CloudAMQP Logs Integration]: https://www.cloudamqp.com/docs/cloudamqp-integrations.html
 [CloudAMQP CloudWatch documentation]: https://www.cloudamqp.com/docs/monitoring_logs_cloudwatch_v2.html
 [AWS IAM role documentation]: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html

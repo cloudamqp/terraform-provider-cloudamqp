@@ -2,6 +2,10 @@
 
 ## 1.50.0 (Unreleased)
 
+FEATURES:
+
+* resource/cloudamqp_integration_log_agent: Added `otlp` block to send logs to any OpenTelemetry-compatible backend, with none, basic auth, headers or oauth2 authentication ([#OTLP])
+
 IMPROVEMENTS:
 
 * resource/cloudamqp_rabbitmq_configuration: Added `log_level` setting that changes the level of every RabbitMQ log output without a restart ([#547])
@@ -9,6 +13,7 @@ IMPROVEMENTS:
 
 [#547]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/547
 [#550]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/550
+[#OTLP]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/OTLP
 
 ## 1.49.0 (11 Sep, 2026)
 

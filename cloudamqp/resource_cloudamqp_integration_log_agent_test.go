@@ -556,3 +556,175 @@ func TestAccIntegrationLogAgent_Uptrace_Basic(t *testing.T) {
 		},
 	})
 }
+
+// TestAccIntegrationLogAgent_Otlp_Basic: Create OTLP log agent integration with header auth, import, and update to basic auth (ignoring write-only password).
+func TestAccIntegrationLogAgent_Otlp_Basic(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized values for playback and use real values for recording
+	testHeadersToken := "OTLP_HEADERS_TOKEN"
+	testPassword := "OTLP_PASSWORD"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testHeadersToken = os.Getenv("OTLP_HEADERS_TOKEN")
+		testPassword = os.Getenv("OTLP_PASSWORD")
+	}
+
+	var (
+		instanceResourceName = "cloudamqp_instance.instance"
+		otlpResourceName     = "cloudamqp_integration_log_agent.otlp"
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_instance" "instance" {
+					  name   = "TestAccIntegrationLogAgent_Otlp_Basic"
+					  plan   = "penguin-1"
+					  region = "amazon-web-services::eu-central-1"
+					  tags   = ["vcr-test"]
+					}
+
+					resource "cloudamqp_integration_log_agent" "otlp" {
+					  instance_id = cloudamqp_instance.instance.id
+					  otlp {
+					    endpoint  = "https://otlp.example.com:4318/v1/logs"
+					    auth_type = "headers"
+					    headers   = "x-honeycomb-team: %s"
+					  }
+					}
+				`, testHeadersToken),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccIntegrationLogAgent_Otlp_Basic"),
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.endpoint", "https://otlp.example.com:4318/v1/logs"),
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.auth_type", "headers"),
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.headers", "x-honeycomb-team: "+testHeadersToken),
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.password_version", "1"),
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.client_secret_version", "1"),
+				),
+			},
+			{
+				ResourceName:            otlpResourceName,
+				ImportStateIdFunc:       testAccImportCombinedStateIdFunc(instanceResourceName, otlpResourceName),
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"otlp.password", "otlp.client_secret"},
+			},
+			{
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_instance" "instance" {
+					  name   = "TestAccIntegrationLogAgent_Otlp_Basic"
+					  plan   = "penguin-1"
+					  region = "amazon-web-services::eu-central-1"
+					  tags   = ["vcr-test"]
+					}
+
+					resource "cloudamqp_integration_log_agent" "otlp" {
+					  instance_id = cloudamqp_instance.instance.id
+					  otlp {
+					    endpoint  = "https://otlp.example.com:4318/v1/logs"
+					    auth_type = "basic_auth"
+					    username  = "otlp-user"
+					    password  = "%s"
+					  }
+					}
+				`, testPassword),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.endpoint", "https://otlp.example.com:4318/v1/logs"),
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.auth_type", "basic_auth"),
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.username", "otlp-user"),
+					resource.TestCheckNoResourceAttr(otlpResourceName, "otlp.headers"),
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.password_version", "1"),
+				),
+			},
+		},
+	})
+}
+
+// TestAccIntegrationLogAgent_Otlp_OAuth2: Create OTLP log agent integration with oauth2 auth, import (ignoring write-only client_secret), and update by incrementing client_secret_version.
+func TestAccIntegrationLogAgent_Otlp_OAuth2(t *testing.T) {
+	t.Parallel()
+
+	// Set sanitized value for playback and use real value for recording
+	testClientSecret := "OTLP_CLIENT_SECRET"
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		testClientSecret = os.Getenv("OTLP_CLIENT_SECRET")
+	}
+
+	var (
+		instanceResourceName = "cloudamqp_instance.instance"
+		otlpResourceName     = "cloudamqp_integration_log_agent.otlp"
+	)
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_instance" "instance" {
+					  name   = "TestAccIntegrationLogAgent_Otlp_OAuth2"
+					  plan   = "penguin-1"
+					  region = "amazon-web-services::eu-central-1"
+					  tags   = ["vcr-test"]
+					}
+
+					resource "cloudamqp_integration_log_agent" "otlp" {
+					  instance_id = cloudamqp_instance.instance.id
+					  otlp {
+					    endpoint      = "https://otlp.example.com:4318/v1/logs"
+					    auth_type     = "oauth2"
+					    client_id     = "otlp-client"
+					    client_secret = "%s"
+					    token_url     = "https://auth.example.com/oauth2/token"
+					    scopes        = "logs:write"
+					  }
+					}
+				`, testClientSecret),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccIntegrationLogAgent_Otlp_OAuth2"),
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.endpoint", "https://otlp.example.com:4318/v1/logs"),
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.auth_type", "oauth2"),
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.client_id", "otlp-client"),
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.token_url", "https://auth.example.com/oauth2/token"),
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.scopes", "logs:write"),
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.client_secret_version", "1"),
+				),
+			},
+			{
+				ResourceName:            otlpResourceName,
+				ImportStateIdFunc:       testAccImportCombinedStateIdFunc(instanceResourceName, otlpResourceName),
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"otlp.password", "otlp.client_secret"},
+			},
+			{
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_instance" "instance" {
+					  name   = "TestAccIntegrationLogAgent_Otlp_OAuth2"
+					  plan   = "penguin-1"
+					  region = "amazon-web-services::eu-central-1"
+					  tags   = ["vcr-test"]
+					}
+
+					resource "cloudamqp_integration_log_agent" "otlp" {
+					  instance_id = cloudamqp_instance.instance.id
+					  otlp {
+					    endpoint              = "https://otlp.example.com:4318/v1/logs"
+					    auth_type             = "oauth2"
+					    client_id             = "otlp-client"
+					    client_secret         = "%s"
+					    client_secret_version = 2
+					    token_url             = "https://auth.example.com/oauth2/token"
+					    scopes                = "logs:write"
+					  }
+					}
+				`, testClientSecret),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.client_id", "otlp-client"),
+					resource.TestCheckResourceAttr(otlpResourceName, "otlp.client_secret_version", "2"),
+				),
+			},
+		},
+	})
+}
