@@ -4,7 +4,7 @@
 
 FEATURES:
 
-* resource/cloudamqp_integration_log_agent: Added `otlp` block to send logs to any OpenTelemetry-compatible backend, with none, basic auth, headers or oauth2 authentication ([#OTLP])
+* resource/cloudamqp_integration_log_agent: Added `otlp` block to send logs to any OpenTelemetry-compatible backend, with none, basic auth, headers or oauth2 authentication ([#551])
 
 IMPROVEMENTS:
 
@@ -13,7 +13,7 @@ IMPROVEMENTS:
 
 [#547]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/547
 [#550]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/550
-[#OTLP]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/OTLP
+[#551]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/551
 
 ## 1.49.0 (11 Sep, 2026)
 
