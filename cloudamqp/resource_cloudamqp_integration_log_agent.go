@@ -42,20 +42,20 @@ func NewIntegrationLogAgentResource() resource.Resource {
 }
 
 type integrationLogAgentResourceModel struct {
-	ID             types.String         `tfsdk:"id"`
-	InstanceID     types.Int64          `tfsdk:"instance_id"`
-	AzureMonitorV2 *azureMonitorV2Model `tfsdk:"azure_monitor_v2"`
-	Cloudwatch     *cloudwatchModel     `tfsdk:"cloudwatch"`
-	Coralogix      *coralogixModel      `tfsdk:"coralogix"`
-	Datadog        *datadogModel        `tfsdk:"datadog"`
-	GoogleCloud    *googleCloudModel    `tfsdk:"google_cloud"`
-	Grafana        *grafanaModel        `tfsdk:"grafana"`
-  Otlp           *otlpModel           `tfsdk:"otlp"`
-	Splunk         *splunkModel         `tfsdk:"splunk"`
-	Uptrace        *uptraceModel        `tfsdk:"uptrace"`
+	ID           types.String       `tfsdk:"id"`
+	InstanceID   types.Int64        `tfsdk:"instance_id"`
+	AzureMonitor *azureMonitorModel `tfsdk:"azure_monitor"`
+	Cloudwatch   *cloudwatchModel   `tfsdk:"cloudwatch"`
+	Coralogix    *coralogixModel    `tfsdk:"coralogix"`
+	Datadog      *datadogModel      `tfsdk:"datadog"`
+	GoogleCloud  *googleCloudModel  `tfsdk:"google_cloud"`
+	Grafana      *grafanaModel      `tfsdk:"grafana"`
+	Otlp         *otlpModel         `tfsdk:"otlp"`
+	Splunk       *splunkModel       `tfsdk:"splunk"`
+	Uptrace      *uptraceModel      `tfsdk:"uptrace"`
 }
 
-type azureMonitorV2Model struct {
+type azureMonitorModel struct {
 	TenantID                 types.String `tfsdk:"tenant_id"`
 	ApplicationID            types.String `tfsdk:"application_id"`
 	ApplicationSecret        types.String `tfsdk:"application_secret"`
@@ -167,7 +167,7 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 			},
 		},
 		Blocks: map[string]schema.Block{
-			"azure_monitor_v2": schema.SingleNestedBlock{
+			"azure_monitor": schema.SingleNestedBlock{
 				Description: "Azure Monitor native OTLP log integration configuration",
 				Attributes: map[string]schema.Attribute{
 					"tenant_id": schema.StringAttribute{

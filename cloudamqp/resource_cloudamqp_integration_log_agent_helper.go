@@ -12,11 +12,11 @@ import (
 // copyWriteOnlyFields copies write-only field values from config into the plan.
 // Write-only fields are not available in the plan, only in the config.
 func copyWriteOnlyFields(plan *integrationLogAgentResourceModel, config *integrationLogAgentResourceModel) {
-	if config.AzureMonitorV2 != nil && !config.AzureMonitorV2.ApplicationSecret.IsNull() {
-		if plan.AzureMonitorV2 == nil {
-			plan.AzureMonitorV2 = &azureMonitorV2Model{}
+	if config.AzureMonitor != nil && !config.AzureMonitor.ApplicationSecret.IsNull() {
+		if plan.AzureMonitor == nil {
+			plan.AzureMonitor = &azureMonitorModel{}
 		}
-		plan.AzureMonitorV2.ApplicationSecret = config.AzureMonitorV2.ApplicationSecret
+		plan.AzureMonitor.ApplicationSecret = config.AzureMonitor.ApplicationSecret
 	}
 	if config.Coralogix != nil && !config.Coralogix.PrivateKey.IsNull() {
 		if plan.Coralogix == nil {
@@ -69,7 +69,7 @@ func copyWriteOnlyFields(plan *integrationLogAgentResourceModel, config *integra
 // Uses key-field null checks rather than nil checks to handle protocol v5 (mux),
 // where absent blocks arrive as non-nil empty objects.
 func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentResourceModel) (string, error) {
-	if m.AzureMonitorV2 != nil && !m.AzureMonitorV2.TenantID.IsNull() {
+	if m.AzureMonitor != nil && !m.AzureMonitor.TenantID.IsNull() {
 		return "azure_monitor_v2", nil
 	}
 	if m.Cloudwatch != nil && !m.Cloudwatch.IAMRole.IsNull() {
@@ -96,7 +96,7 @@ func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentR
 	if m.Uptrace != nil && !m.Uptrace.DSNVersion.IsNull() {
 		return "uptrace", nil
 	}
-	return "", fmt.Errorf("exactly one integration block must be set (e.g. azure_monitor_v2, cloudwatch, coralogix, datadog, google_cloud, grafana, otlp, splunk, uptrace)")
+	return "", fmt.Errorf("exactly one integration block must be set (e.g. azure_monitor, cloudwatch, coralogix, datadog, google_cloud, grafana, otlp, splunk, uptrace)")
 }
 
 // extractGoogleCloudCredentials returns the required credential fields from a Google service account key JSON.
@@ -121,10 +121,10 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 	switch intType {
 	case "azure_monitor_v2":
 		return model.LogAgentRequest{
-			TenantID:          plan.AzureMonitorV2.TenantID.ValueString(),
-			ApplicationID:     plan.AzureMonitorV2.ApplicationID.ValueString(),
-			ApplicationSecret: plan.AzureMonitorV2.ApplicationSecret.ValueString(),
-			LogsEndpoint:      plan.AzureMonitorV2.LogsEndpoint.ValueString(),
+			TenantID:          plan.AzureMonitor.TenantID.ValueString(),
+			ApplicationID:     plan.AzureMonitor.ApplicationID.ValueString(),
+			ApplicationSecret: plan.AzureMonitor.ApplicationSecret.ValueString(),
+			LogsEndpoint:      plan.AzureMonitor.LogsEndpoint.ValueString(),
 		}, nil
 	case "cloudwatch_v2":
 		req := model.LogAgentRequest{
@@ -222,12 +222,12 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAgentResourceModel, data *model.LogAgentResponse) {
 	switch data.Type {
 	case "azure_monitor_v2":
-		if m.AzureMonitorV2 == nil {
-			m.AzureMonitorV2 = &azureMonitorV2Model{}
+		if m.AzureMonitor == nil {
+			m.AzureMonitor = &azureMonitorModel{}
 		}
-		m.AzureMonitorV2.TenantID = types.StringPointerValue(data.Config.TenantID)
-		m.AzureMonitorV2.ApplicationID = types.StringPointerValue(data.Config.ApplicationID)
-		m.AzureMonitorV2.LogsEndpoint = types.StringPointerValue(data.Config.LogsEndpoint)
+		m.AzureMonitor.TenantID = types.StringPointerValue(data.Config.TenantID)
+		m.AzureMonitor.ApplicationID = types.StringPointerValue(data.Config.ApplicationID)
+		m.AzureMonitor.LogsEndpoint = types.StringPointerValue(data.Config.LogsEndpoint)
 	case "cloudwatch_v2":
 		if m.Cloudwatch == nil {
 			m.Cloudwatch = &cloudwatchModel{}
