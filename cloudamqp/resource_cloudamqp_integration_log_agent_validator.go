@@ -19,11 +19,11 @@ func (r *integrationLogAgentResource) ConfigValidators(ctx context.Context) []re
 type exactlyOneIntegrationBlockValidator struct{}
 
 func (v exactlyOneIntegrationBlockValidator) Description(_ context.Context) string {
-	return "Exactly one integration block must be set (cloudwatch, coralogix, datadog, google_cloud, grafana, splunk, uptrace)"
+	return "Exactly one integration block must be set (cloudwatch, coralogix, datadog, google_cloud, grafana, otlp, splunk, uptrace)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) MarkdownDescription(_ context.Context) string {
-	return "Exactly one integration block must be set (`cloudwatch`, `coralogix`, `datadog`, `google_cloud`, `grafana`, `splunk`, `uptrace`)"
+	return "Exactly one integration block must be set (`cloudwatch`, `coralogix`, `datadog`, `google_cloud`, `grafana`, `otlp`, `splunk`, `uptrace`)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
@@ -41,6 +41,7 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	datadogConfigured := config.Datadog != nil && !config.Datadog.APIKey.IsNull()
 	googleCloudConfigured := config.GoogleCloud != nil && !config.GoogleCloud.ServiceAccountFile.IsNull()
 	grafanaConfigured := config.Grafana != nil && !config.Grafana.Endpoint.IsNull()
+	otlpConfigured := config.Otlp != nil && !config.Otlp.Endpoint.IsNull()
 	splunkConfigured := config.Splunk != nil && !config.Splunk.Endpoint.IsNull()
 	uptraceConfigured := config.Uptrace != nil && !config.Uptrace.DSN.IsNull()
 
@@ -60,6 +61,9 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	if grafanaConfigured {
 		count++
 	}
+	if otlpConfigured {
+		count++
+	}
 	if splunkConfigured {
 		count++
 	}
@@ -70,7 +74,7 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	if count != 1 {
 		resp.Diagnostics.AddError(
 			"Invalid Configuration",
-			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, coralogix, datadog, google_cloud, grafana, splunk, uptrace), got %d", count),
+			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, coralogix, datadog, google_cloud, grafana, otlp, splunk, uptrace), got %d", count),
 		)
 		return
 	}
@@ -142,6 +146,10 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 		}
 	}
 
+	if otlpConfigured {
+		validateOtlpAuth(config.Otlp, resp)
+	}
+
 	if splunkConfigured {
 		if config.Splunk.Endpoint.IsNull() {
 			resp.Diagnostics.AddAttributeError(path.Root("splunk").AtName("endpoint"),
@@ -158,6 +166,30 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 			resp.Diagnostics.AddAttributeError(path.Root("uptrace").AtName("dsn"),
 				"Missing required attribute", "dsn is required for uptrace integration")
 		}
+	}
+}
+
+func validateOtlpAuth(otlp *otlpModel, resp *resource.ValidateConfigResponse) {
+	if otlp.AuthType.IsUnknown() {
+		return
+	}
+	root := path.Root("otlp")
+	required := func(name string, value types.String) {
+		if value.IsNull() {
+			resp.Diagnostics.AddAttributeError(root.AtName(name),
+				"Missing required attribute", fmt.Sprintf("%s is required for otlp integration when auth_type is %s", name, otlp.AuthType.ValueString()))
+		}
+	}
+	switch otlp.AuthType.ValueString() {
+	case "basic_auth":
+		required("username", otlp.Username)
+		required("password", otlp.Password)
+	case "headers":
+		required("headers", otlp.Headers)
+	case "oauth2":
+		required("client_id", otlp.ClientID)
+		required("client_secret", otlp.ClientSecret)
+		required("token_url", otlp.TokenURL)
 	}
 }
 

@@ -48,6 +48,7 @@ type integrationLogAgentResourceModel struct {
 	Datadog     *datadogModel     `tfsdk:"datadog"`
 	GoogleCloud *googleCloudModel `tfsdk:"google_cloud"`
 	Grafana     *grafanaModel     `tfsdk:"grafana"`
+	Otlp        *otlpModel        `tfsdk:"otlp"`
 	Splunk      *splunkModel      `tfsdk:"splunk"`
 	Uptrace     *uptraceModel     `tfsdk:"uptrace"`
 }
@@ -89,6 +90,20 @@ type grafanaModel struct {
 	GrafanaInstanceID types.String `tfsdk:"grafana_instance_id"`
 	APIToken          types.String `tfsdk:"api_token"`
 	APITokenVersion   types.Int64  `tfsdk:"api_token_version"`
+}
+
+type otlpModel struct {
+	Endpoint            types.String `tfsdk:"endpoint"`
+	AuthType            types.String `tfsdk:"auth_type"`
+	Headers             types.String `tfsdk:"headers"`
+	Username            types.String `tfsdk:"username"`
+	Password            types.String `tfsdk:"password"`
+	PasswordVersion     types.Int64  `tfsdk:"password_version"`
+	ClientID            types.String `tfsdk:"client_id"`
+	ClientSecret        types.String `tfsdk:"client_secret"`
+	ClientSecretVersion types.Int64  `tfsdk:"client_secret_version"`
+	TokenURL            types.String `tfsdk:"token_url"`
+	Scopes              types.String `tfsdk:"scopes"`
 }
 
 type splunkModel struct {
@@ -318,6 +333,87 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 						PlanModifiers: []planmodifier.Int64{
 							int64planmodifier.UseStateForUnknown(),
 						},
+					},
+				},
+			},
+			"otlp": schema.SingleNestedBlock{
+				Description: "OTLP log integration configuration for any OpenTelemetry-compatible backend",
+				Attributes: map[string]schema.Attribute{
+					"endpoint": schema.StringAttribute{
+						Optional:    true,
+						Description: "Full https URL the backend receives logs on, including the path (e.g. https://otlp.example.com:4318/v1/logs)",
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(
+								regexp.MustCompile(`^https://[^/\s]+/.+$`),
+								"must be an https URL including the logs path (https://otlp.example.com:4318/v1/logs)",
+							),
+						},
+					},
+					"auth_type": schema.StringAttribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("none"),
+						Description: "Authentication for the endpoint; none, basic_auth, headers or oauth2 (default: none)",
+						Validators: []validator.String{
+							stringvalidator.OneOf("none", "basic_auth", "headers", "oauth2"),
+						},
+					},
+					"headers": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						Description: "Headers sent with every request, one 'key: value' pair per line. Required when auth_type is headers",
+					},
+					"username": schema.StringAttribute{
+						Optional:    true,
+						Description: "Username, used when auth_type is basic_auth",
+					},
+					"password": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Password or token, used when auth_type is basic_auth",
+					},
+					"password_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only password. Increment to trigger an update when the password changes (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
+					},
+					"client_id": schema.StringAttribute{
+						Optional:    true,
+						Description: "Client identifier, used when auth_type is oauth2",
+					},
+					"client_secret": schema.StringAttribute{
+						Optional:    true,
+						Sensitive:   true,
+						WriteOnly:   true,
+						Description: "Client secret, used when auth_type is oauth2",
+					},
+					"client_secret_version": schema.Int64Attribute{
+						Optional:    true,
+						Computed:    true,
+						Default:     int64default.StaticInt64(1),
+						Description: "Version of the write-only client_secret. Increment to trigger an update when the secret changes (default: 1).",
+						PlanModifiers: []planmodifier.Int64{
+							int64planmodifier.UseStateForUnknown(),
+						},
+					},
+					"token_url": schema.StringAttribute{
+						Optional:    true,
+						Description: "OAuth2 token endpoint over HTTPS, used when auth_type is oauth2",
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(
+								regexp.MustCompile(`^https://[^/\s]+`),
+								"must be an https URL",
+							),
+						},
+					},
+					"scopes": schema.StringAttribute{
+						Optional:    true,
+						Description: "Scopes requested with the OAuth2 token, space or comma separated",
 					},
 				},
 			},
