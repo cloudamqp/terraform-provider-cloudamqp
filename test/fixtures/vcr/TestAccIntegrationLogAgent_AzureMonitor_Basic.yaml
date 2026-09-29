@@ -319,7 +319,7 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"TestAccIntegrationLogAgent_AzureMonitorV2_Basic","no_default_alarms":false,"plan":"penguin-1","preferred_az":[],"region":"amazon-web-services::eu-central-1","tags":["vcr-test"]}
+            {"name":"TestAccIntegrationLogAgent_AzureMonitor_Basic","no_default_alarms":false,"plan":"penguin-1","preferred_az":[],"region":"amazon-web-services::eu-central-1","tags":["vcr-test"]}
         form: {}
         headers:
             Authorization:
@@ -389,7 +389,7 @@ interactions:
         trailer: {}
         content_length: 774
         uncompressed: false
-        body: '{"id":44,"name":"TestAccIntegrationLogAgent_AzureMonitorV2_Basic","plan":"penguin-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"f72dd430-78a0-482f-ad31-e68afe1683f9","url":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","ready":true,"apikey":"5b15a063-5ec8-465f-b409-6705b7f7a144","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","internal":"amqp://aywzebgx:***@dev-cold-gibbon.in.lmq.dev.cloudamqp.com/aywzebgx"},"rmq_version":"2.9.2","hostname_external":"dev-cold-gibbon.lmq.dev.cloudamqp.com","hostname_internal":"dev-cold-gibbon.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":44,"name":"TestAccIntegrationLogAgent_AzureMonitor_Basic","plan":"penguin-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"f72dd430-78a0-482f-ad31-e68afe1683f9","url":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","ready":true,"apikey":"5b15a063-5ec8-465f-b409-6705b7f7a144","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","internal":"amqp://aywzebgx:***@dev-cold-gibbon.in.lmq.dev.cloudamqp.com/aywzebgx"},"rmq_version":"2.9.2","hostname_external":"dev-cold-gibbon.lmq.dev.cloudamqp.com","hostname_internal":"dev-cold-gibbon.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -440,7 +440,7 @@ interactions:
         trailer: {}
         content_length: 774
         uncompressed: false
-        body: '{"id":44,"name":"TestAccIntegrationLogAgent_AzureMonitorV2_Basic","plan":"penguin-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"f72dd430-78a0-482f-ad31-e68afe1683f9","url":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","ready":true,"apikey":"5b15a063-5ec8-465f-b409-6705b7f7a144","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","internal":"amqp://aywzebgx:***@dev-cold-gibbon.in.lmq.dev.cloudamqp.com/aywzebgx"},"rmq_version":"2.9.2","hostname_external":"dev-cold-gibbon.lmq.dev.cloudamqp.com","hostname_internal":"dev-cold-gibbon.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":44,"name":"TestAccIntegrationLogAgent_AzureMonitor_Basic","plan":"penguin-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"f72dd430-78a0-482f-ad31-e68afe1683f9","url":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","ready":true,"apikey":"5b15a063-5ec8-465f-b409-6705b7f7a144","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","internal":"amqp://aywzebgx:***@dev-cold-gibbon.in.lmq.dev.cloudamqp.com/aywzebgx"},"rmq_version":"2.9.2","hostname_external":"dev-cold-gibbon.lmq.dev.cloudamqp.com","hostname_internal":"dev-cold-gibbon.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -545,7 +545,7 @@ interactions:
         trailer: {}
         content_length: 774
         uncompressed: false
-        body: '{"id":44,"name":"TestAccIntegrationLogAgent_AzureMonitorV2_Basic","plan":"penguin-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"f72dd430-78a0-482f-ad31-e68afe1683f9","url":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","ready":true,"apikey":"5b15a063-5ec8-465f-b409-6705b7f7a144","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","internal":"amqp://aywzebgx:***@dev-cold-gibbon.in.lmq.dev.cloudamqp.com/aywzebgx"},"rmq_version":"2.9.2","hostname_external":"dev-cold-gibbon.lmq.dev.cloudamqp.com","hostname_internal":"dev-cold-gibbon.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":44,"name":"TestAccIntegrationLogAgent_AzureMonitor_Basic","plan":"penguin-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"f72dd430-78a0-482f-ad31-e68afe1683f9","url":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","ready":true,"apikey":"5b15a063-5ec8-465f-b409-6705b7f7a144","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","internal":"amqp://aywzebgx:***@dev-cold-gibbon.in.lmq.dev.cloudamqp.com/aywzebgx"},"rmq_version":"2.9.2","hostname_external":"dev-cold-gibbon.lmq.dev.cloudamqp.com","hostname_internal":"dev-cold-gibbon.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -698,7 +698,7 @@ interactions:
         trailer: {}
         content_length: 774
         uncompressed: false
-        body: '{"id":44,"name":"TestAccIntegrationLogAgent_AzureMonitorV2_Basic","plan":"penguin-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"f72dd430-78a0-482f-ad31-e68afe1683f9","url":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","ready":true,"apikey":"5b15a063-5ec8-465f-b409-6705b7f7a144","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","internal":"amqp://aywzebgx:***@dev-cold-gibbon.in.lmq.dev.cloudamqp.com/aywzebgx"},"rmq_version":"2.9.2","hostname_external":"dev-cold-gibbon.lmq.dev.cloudamqp.com","hostname_internal":"dev-cold-gibbon.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":44,"name":"TestAccIntegrationLogAgent_AzureMonitor_Basic","plan":"penguin-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"f72dd430-78a0-482f-ad31-e68afe1683f9","url":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","ready":true,"apikey":"5b15a063-5ec8-465f-b409-6705b7f7a144","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","internal":"amqp://aywzebgx:***@dev-cold-gibbon.in.lmq.dev.cloudamqp.com/aywzebgx"},"rmq_version":"2.9.2","hostname_external":"dev-cold-gibbon.lmq.dev.cloudamqp.com","hostname_internal":"dev-cold-gibbon.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -850,7 +850,7 @@ interactions:
         trailer: {}
         content_length: 774
         uncompressed: false
-        body: '{"id":44,"name":"TestAccIntegrationLogAgent_AzureMonitorV2_Basic","plan":"penguin-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"f72dd430-78a0-482f-ad31-e68afe1683f9","url":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","ready":true,"apikey":"5b15a063-5ec8-465f-b409-6705b7f7a144","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","internal":"amqp://aywzebgx:***@dev-cold-gibbon.in.lmq.dev.cloudamqp.com/aywzebgx"},"rmq_version":"2.9.2","hostname_external":"dev-cold-gibbon.lmq.dev.cloudamqp.com","hostname_internal":"dev-cold-gibbon.in.lmq.dev.cloudamqp.com"}'
+        body: '{"id":44,"name":"TestAccIntegrationLogAgent_AzureMonitor_Basic","plan":"penguin-1","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"f72dd430-78a0-482f-ad31-e68afe1683f9","url":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","ready":true,"apikey":"5b15a063-5ec8-465f-b409-6705b7f7a144","backend":"lavinmq","nodes":1,"urls":{"external":"amqps://aywzebgx:***@dev-cold-gibbon.lmq.dev.cloudamqp.com/aywzebgx","internal":"amqp://aywzebgx:***@dev-cold-gibbon.in.lmq.dev.cloudamqp.com/aywzebgx"},"rmq_version":"2.9.2","hostname_external":"dev-cold-gibbon.lmq.dev.cloudamqp.com","hostname_internal":"dev-cold-gibbon.in.lmq.dev.cloudamqp.com"}'
         headers:
             Cache-Control:
                 - no-cache
