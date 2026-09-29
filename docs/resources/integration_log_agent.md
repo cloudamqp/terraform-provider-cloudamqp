@@ -26,6 +26,8 @@ Only available for dedicated subscription plans.
     </b>
   </summary>
 
+~> **Note:** The `azure_monitor` block is available from [v1.50.0].
+
 ```hcl
 resource "cloudamqp_integration_log_agent" "azure_monitor" {
   instance_id = cloudamqp_instance.instance.id
