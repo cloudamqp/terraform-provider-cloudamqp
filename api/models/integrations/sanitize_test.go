@@ -60,3 +60,66 @@ func TestMetricRequestSanitizedRedactsCredentials(t *testing.T) {
 		t.Error("Sanitized must not mutate the receiver")
 	}
 }
+
+func TestLogAgentRequestSanitizedRedactsCredentials(t *testing.T) {
+	secrets := []string{"apikey", "apitoken", "csecret", "dsn", "hdrs", "pass", "pkey", "pkeyid", "tok"}
+	r := LogAgentRequest{
+		APIKey:       secrets[0],
+		APIToken:     secrets[1],
+		ClientSecret: secrets[2],
+		DSN:          secrets[3],
+		Headers:      secrets[4],
+		Password:     secrets[5],
+		PrivateKey:   secrets[6],
+		PrivateKeyID: secrets[7],
+		Token:        secrets[8],
+		Endpoint:     "https://otlp.example.com/v1/logs",
+		ClientID:     "client",
+	}
+
+	out := fmt.Sprintf("%+v", r.Sanitized())
+
+	for _, s := range secrets {
+		if strings.Contains(out, s) {
+			t.Errorf("sanitized output leaks %q: %s", s, out)
+		}
+	}
+	if !strings.Contains(out, "Endpoint:https://otlp.example.com/v1/logs") || !strings.Contains(out, "ClientID:client") {
+		t.Errorf("sanitized output lost non-secret field: %s", out)
+	}
+	if r.ClientSecret != "csecret" {
+		t.Error("Sanitized must not mutate the receiver")
+	}
+}
+
+func TestLogAgentResponseSanitizedRedactsCredentials(t *testing.T) {
+	secrets := []string{"apikey", "dsn", "hdrs", "pkey", "tok"}
+	str := func(s string) *string { return &s }
+	r := LogAgentResponse{
+		ID:   1,
+		Type: "otlp",
+		Config: LogAgentConfigResponse{
+			APIKey:     str(secrets[0]),
+			DSN:        str(secrets[1]),
+			Headers:    str(secrets[2]),
+			PrivateKey: str(secrets[3]),
+			Token:      str(secrets[4]),
+			Endpoint:   str("https://otlp.example.com/v1/logs"),
+		},
+	}
+
+	out := fmt.Sprintf("%+v", r.Sanitized())
+	sanitized := r.Sanitized().Config
+
+	for _, s := range []*string{sanitized.APIKey, sanitized.DSN, sanitized.Headers, sanitized.PrivateKey, sanitized.Token} {
+		if s == nil || *s != "***" {
+			t.Errorf("sanitized output leaks credential: %s", out)
+		}
+	}
+	if sanitized.Endpoint == nil || *sanitized.Endpoint != "https://otlp.example.com/v1/logs" {
+		t.Errorf("sanitized output lost non-secret field: %s", out)
+	}
+	if *r.Config.Headers != "hdrs" {
+		t.Error("Sanitized must not mutate the receiver")
+	}
+}

@@ -42,6 +42,15 @@ func copyWriteOnlyFields(plan *integrationLogAgentResourceModel, config *integra
 		}
 		plan.Grafana.APIToken = config.Grafana.APIToken
 	}
+	if config.Otlp != nil {
+		if !config.Otlp.Password.IsNull() || !config.Otlp.ClientSecret.IsNull() {
+			if plan.Otlp == nil {
+				plan.Otlp = &otlpModel{}
+			}
+			plan.Otlp.Password = config.Otlp.Password
+			plan.Otlp.ClientSecret = config.Otlp.ClientSecret
+		}
+	}
 	if config.Splunk != nil && !config.Splunk.Token.IsNull() {
 		if plan.Splunk == nil {
 			plan.Splunk = &splunkModel{}
@@ -78,13 +87,16 @@ func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentR
 	if m.Grafana != nil && !m.Grafana.Endpoint.IsNull() {
 		return "grafana", nil
 	}
+	if m.Otlp != nil && !m.Otlp.Endpoint.IsNull() {
+		return "otlp", nil
+	}
 	if m.Splunk != nil && !m.Splunk.Endpoint.IsNull() {
 		return "splunk_v2", nil
 	}
 	if m.Uptrace != nil && !m.Uptrace.DSNVersion.IsNull() {
 		return "uptrace", nil
 	}
-	return "", fmt.Errorf("exactly one integration block must be set (e.g. azure_monitor_v2, cloudwatch, coralogix, datadog, google_cloud, grafana, splunk, uptrace)")
+	return "", fmt.Errorf("exactly one integration block must be set (e.g. azure_monitor_v2, cloudwatch, coralogix, datadog, google_cloud, grafana, otlp, splunk, uptrace)")
 }
 
 // extractGoogleCloudCredentials returns the required credential fields from a Google service account key JSON.
@@ -168,6 +180,27 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 			GrafanaInstanceID: plan.Grafana.GrafanaInstanceID.ValueString(),
 			APIToken:          plan.Grafana.APIToken.ValueString(),
 		}, nil
+	case "otlp":
+		req := model.LogAgentRequest{
+			Endpoint: plan.Otlp.Endpoint.ValueString(),
+			AuthType: plan.Otlp.AuthType.ValueString(),
+		}
+		if !plan.Otlp.Headers.IsNull() && !plan.Otlp.Headers.IsUnknown() {
+			req.Headers = plan.Otlp.Headers.ValueString()
+		}
+		switch req.AuthType {
+		case "basic_auth":
+			req.Username = plan.Otlp.Username.ValueString()
+			req.Password = plan.Otlp.Password.ValueString()
+		case "oauth2":
+			req.ClientID = plan.Otlp.ClientID.ValueString()
+			req.ClientSecret = plan.Otlp.ClientSecret.ValueString()
+			req.TokenURL = plan.Otlp.TokenURL.ValueString()
+			if !plan.Otlp.Scopes.IsNull() && !plan.Otlp.Scopes.IsUnknown() {
+				req.Scopes = plan.Otlp.Scopes.ValueString()
+			}
+		}
+		return req, nil
 	case "splunk_v2":
 		req := model.LogAgentRequest{
 			Endpoint: plan.Splunk.Endpoint.ValueString(),
@@ -242,6 +275,31 @@ func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAge
 		m.Grafana.Endpoint = types.StringPointerValue(data.Config.Endpoint)
 		m.Grafana.GrafanaInstanceID = types.StringPointerValue(data.Config.GrafanaInstanceID)
 		// api_token is WriteOnly, not returned by the API, not stored in state
+	case "otlp":
+		if m.Otlp == nil {
+			m.Otlp = &otlpModel{}
+		}
+		m.Otlp.Endpoint = types.StringPointerValue(data.Config.Endpoint)
+		if data.Config.AuthType != nil {
+			m.Otlp.AuthType = types.StringValue(*data.Config.AuthType)
+		} else {
+			m.Otlp.AuthType = types.StringValue("none")
+		}
+		if !m.Otlp.Headers.IsNull() || data.Config.Headers != nil {
+			m.Otlp.Headers = types.StringPointerValue(data.Config.Headers)
+		}
+		if !m.Otlp.Username.IsNull() || data.Config.Username != nil {
+			m.Otlp.Username = types.StringPointerValue(data.Config.Username)
+		}
+		if !m.Otlp.ClientID.IsNull() || data.Config.ClientID != nil {
+			m.Otlp.ClientID = types.StringPointerValue(data.Config.ClientID)
+		}
+		if !m.Otlp.TokenURL.IsNull() || data.Config.TokenURL != nil {
+			m.Otlp.TokenURL = types.StringPointerValue(data.Config.TokenURL)
+		}
+		if !m.Otlp.Scopes.IsNull() || data.Config.Scopes != nil {
+			m.Otlp.Scopes = types.StringPointerValue(data.Config.Scopes)
+		}
 	case "splunk_v2":
 		if m.Splunk == nil {
 			m.Splunk = &splunkModel{}

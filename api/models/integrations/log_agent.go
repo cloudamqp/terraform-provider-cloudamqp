@@ -26,7 +26,7 @@ type LogAgentRequest struct {
 	// Grafana (grafana)
 	GrafanaInstanceID string `json:"instance_id,omitempty"`
 	APIToken          string `json:"api_token,omitempty"`
-	// Splunk (splunk_v2) and Grafana (grafana)
+	// Splunk (splunk_v2), Grafana (grafana) and OTLP (otlp)
 	Endpoint string `json:"endpoint,omitempty"`
 	// Splunk (splunk_v2)
 	Token      string `json:"token,omitempty"`
@@ -37,11 +37,15 @@ type LogAgentRequest struct {
 	Tags string `json:"tags,omitempty"`
 	// Shared: CloudWatch (cloudwatch_v2) and Datadog (datadog_v2)
 	Region string `json:"region,omitempty"`
-	// Custom OTLP (future)
-	AuthType string            `json:"auth_type,omitempty"`
-	Headers  map[string]string `json:"headers,omitempty"`
-	Username string            `json:"username,omitempty"`
-	Password string            `json:"password,omitempty"`
+	// OTLP (otlp)
+	AuthType     string `json:"auth_type,omitempty"`
+	Headers      string `json:"headers,omitempty"`
+	Username     string `json:"username,omitempty"`
+	Password     string `json:"password,omitempty"`
+	ClientID     string `json:"client_id,omitempty"`
+	ClientSecret string `json:"client_secret,omitempty"`
+	TokenURL     string `json:"token_url,omitempty"`
+	Scopes       string `json:"scopes,omitempty"`
 }
 
 type LogAgentResponse struct {
@@ -72,7 +76,7 @@ type LogAgentConfigResponse struct {
 	PrivateKeyID *string `json:"private_key_id,omitempty"`
 	// Grafana (grafana)
 	GrafanaInstanceID *string `json:"instance_id,omitempty"`
-	// Splunk (splunk_v2) and Grafana (grafana)
+	// Splunk (splunk_v2), Grafana (grafana) and OTLP (otlp)
 	Endpoint *string `json:"endpoint,omitempty"`
 	// Splunk (splunk_v2)
 	Token      *string `json:"token,omitempty"`
@@ -85,10 +89,13 @@ type LogAgentConfigResponse struct {
 	Tags *string `json:"tags,omitempty"`
 	// Shared: CloudWatch (cloudwatch_v2) and Datadog (datadog_v2)
 	Region *string `json:"region,omitempty"`
-	// Custom OTLP (future)
-	AuthType *string           `json:"auth_type,omitempty"`
-	Headers  map[string]string `json:"headers,omitempty"`
-	Username *string           `json:"username,omitempty"`
+	// OTLP (otlp)
+	AuthType *string `json:"auth_type,omitempty"`
+	Headers  *string `json:"headers,omitempty"`
+	Username *string `json:"username,omitempty"`
+	ClientID *string `json:"client_id,omitempty"`
+	TokenURL *string `json:"token_url,omitempty"`
+	Scopes   *string `json:"scopes,omitempty"`
 }
 
 func redactedString(s string) string {
@@ -116,12 +123,8 @@ func (r LogAgentRequest) Sanitized() LogAgentRequest {
 	sanitized.APIKey = redactedString(r.APIKey)
 	sanitized.Password = redactedString(r.Password)
 	sanitized.APIToken = redactedString(r.APIToken)
-	if len(r.Headers) > 0 {
-		sanitized.Headers = make(map[string]string, len(r.Headers))
-		for k := range r.Headers {
-			sanitized.Headers[k] = "***"
-		}
-	}
+	sanitized.ClientSecret = redactedString(r.ClientSecret)
+	sanitized.Headers = redactedString(r.Headers)
 	return sanitized
 }
 
@@ -138,11 +141,6 @@ func (c LogAgentConfigResponse) Sanitized() LogAgentConfigResponse {
 	sanitized.Token = redactedStringPtr(c.Token)
 	sanitized.PrivateKey = redactedStringPtr(c.PrivateKey)
 	sanitized.APIKey = redactedStringPtr(c.APIKey)
-	if len(c.Headers) > 0 {
-		sanitized.Headers = make(map[string]string, len(c.Headers))
-		for k := range c.Headers {
-			sanitized.Headers[k] = "***"
-		}
-	}
+	sanitized.Headers = redactedStringPtr(c.Headers)
 	return sanitized
 }
