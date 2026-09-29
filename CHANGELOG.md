@@ -1,10 +1,10 @@
 # CHANGELOG
 
-## 1.50.0 (29 Sep, 2026)
+## 1.50.0 (Unreleased)
 
 FEATURES:
 
-* resource/cloudamqp_integration_log_agent: Added `azure_montior` block to send logs to any OpenTelemetry-compatible backend, oauth2 authentication ([#549])
+* resource/cloudamqp_integration_log_agent: Added `azure_montior` block to send logs to Azure Monitor OTLP ingestion with oauth2 authentication ([#549])
 * resource/cloudamqp_integration_log_agent: Added `otlp` block to send logs to any OpenTelemetry-compatible backend, with none, basic auth, headers or oauth2 authentication ([#551])
 
 IMPROVEMENTS:
