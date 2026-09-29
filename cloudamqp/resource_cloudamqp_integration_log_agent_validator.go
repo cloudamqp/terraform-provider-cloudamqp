@@ -19,11 +19,11 @@ func (r *integrationLogAgentResource) ConfigValidators(ctx context.Context) []re
 type exactlyOneIntegrationBlockValidator struct{}
 
 func (v exactlyOneIntegrationBlockValidator) Description(_ context.Context) string {
-	return "Exactly one integration block must be set (cloudwatch, coralogix, datadog, google_cloud, grafana, otlp, splunk, uptrace)"
+	return "Exactly one integration block must be set (azure_monitor, cloudwatch, coralogix, datadog, google_cloud, grafana, otlp, splunk, uptrace)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) MarkdownDescription(_ context.Context) string {
-	return "Exactly one integration block must be set (`cloudwatch`, `coralogix`, `datadog`, `google_cloud`, `grafana`, `otlp`, `splunk`, `uptrace`)"
+	return "Exactly one integration block must be set (`azure_monitor`, `cloudwatch`, `coralogix`, `datadog`, `google_cloud`, `grafana`, `otlp`, `splunk`, `uptrace`)"
 }
 
 func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
@@ -36,6 +36,7 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	// Detect configured blocks by checking a key field for non-null.
 	// With protocol v5 (mux), absent blocks arrive as non-nil empty objects,
 	// so a nil-check alone is insufficient.
+	azureMonitorConfigured := config.AzureMonitor != nil && !config.AzureMonitor.TenantID.IsNull()
 	cloudwatchConfigured := config.Cloudwatch != nil && !config.Cloudwatch.IAMRole.IsNull()
 	coralogixConfigured := config.Coralogix != nil && !config.Coralogix.PrivateKey.IsNull()
 	datadogConfigured := config.Datadog != nil && !config.Datadog.APIKey.IsNull()
@@ -46,6 +47,9 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	uptraceConfigured := config.Uptrace != nil && !config.Uptrace.DSN.IsNull()
 
 	count := 0
+	if azureMonitorConfigured {
+		count++
+	}
 	if cloudwatchConfigured {
 		count++
 	}
@@ -74,9 +78,28 @@ func (v exactlyOneIntegrationBlockValidator) ValidateResource(ctx context.Contex
 	if count != 1 {
 		resp.Diagnostics.AddError(
 			"Invalid Configuration",
-			fmt.Sprintf("Exactly one integration block must be set (cloudwatch, coralogix, datadog, google_cloud, grafana, otlp, splunk, uptrace), got %d", count),
+			fmt.Sprintf("Exactly one integration block must be set (azure_monitor, cloudwatch, coralogix, datadog, google_cloud, grafana, otlp, splunk, uptrace), got %d", count),
 		)
 		return
+	}
+
+	if azureMonitorConfigured {
+		if config.AzureMonitor.TenantID.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("azure_monitor").AtName("tenant_id"),
+				"Missing required attribute", "tenant_id is required for azure_monitor integration")
+		}
+		if config.AzureMonitor.ApplicationID.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("azure_monitor").AtName("application_id"),
+				"Missing required attribute", "application_id is required for azure_monitor integration")
+		}
+		if config.AzureMonitor.ApplicationSecret.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("azure_monitor").AtName("application_secret"),
+				"Missing required attribute", "application_secret is required for azure_monitor integration")
+		}
+		if config.AzureMonitor.LogsEndpoint.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("azure_monitor").AtName("logs_endpoint"),
+				"Missing required attribute", "logs_endpoint is required for azure_monitor integration")
+		}
 	}
 
 	if cloudwatchConfigured {

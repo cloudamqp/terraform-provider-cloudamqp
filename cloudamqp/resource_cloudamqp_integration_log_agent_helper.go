@@ -12,6 +12,12 @@ import (
 // copyWriteOnlyFields copies write-only field values from config into the plan.
 // Write-only fields are not available in the plan, only in the config.
 func copyWriteOnlyFields(plan *integrationLogAgentResourceModel, config *integrationLogAgentResourceModel) {
+	if config.AzureMonitor != nil && !config.AzureMonitor.ApplicationSecret.IsNull() {
+		if plan.AzureMonitor == nil {
+			plan.AzureMonitor = &azureMonitorModel{}
+		}
+		plan.AzureMonitor.ApplicationSecret = config.AzureMonitor.ApplicationSecret
+	}
 	if config.Coralogix != nil && !config.Coralogix.PrivateKey.IsNull() {
 		if plan.Coralogix == nil {
 			plan.Coralogix = &coralogixModel{}
@@ -63,6 +69,9 @@ func copyWriteOnlyFields(plan *integrationLogAgentResourceModel, config *integra
 // Uses key-field null checks rather than nil checks to handle protocol v5 (mux),
 // where absent blocks arrive as non-nil empty objects.
 func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentResourceModel) (string, error) {
+	if m.AzureMonitor != nil && !m.AzureMonitor.TenantID.IsNull() {
+		return "azure_monitor_v2", nil
+	}
 	if m.Cloudwatch != nil && !m.Cloudwatch.IAMRole.IsNull() {
 		return "cloudwatch_v2", nil
 	}
@@ -87,7 +96,7 @@ func (r *integrationLogAgentResource) getIntegrationType(m *integrationLogAgentR
 	if m.Uptrace != nil && !m.Uptrace.DSNVersion.IsNull() {
 		return "uptrace", nil
 	}
-	return "", fmt.Errorf("exactly one integration block must be set (e.g. cloudwatch, coralogix, datadog, google_cloud, grafana, otlp, splunk, uptrace)")
+	return "", fmt.Errorf("exactly one integration block must be set (e.g. azure_monitor, cloudwatch, coralogix, datadog, google_cloud, grafana, otlp, splunk, uptrace)")
 }
 
 // extractGoogleCloudCredentials returns the required credential fields from a Google service account key JSON.
@@ -110,6 +119,13 @@ func extractGoogleCloudCredentials(file string) (map[string]string, error) {
 // populateRequest converts the resource model to an API request
 func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentResourceModel, intType string) (model.LogAgentRequest, error) {
 	switch intType {
+	case "azure_monitor_v2":
+		return model.LogAgentRequest{
+			TenantID:          plan.AzureMonitor.TenantID.ValueString(),
+			ApplicationID:     plan.AzureMonitor.ApplicationID.ValueString(),
+			ApplicationSecret: plan.AzureMonitor.ApplicationSecret.ValueString(),
+			LogsEndpoint:      plan.AzureMonitor.LogsEndpoint.ValueString(),
+		}, nil
 	case "cloudwatch_v2":
 		req := model.LogAgentRequest{
 			Region:        plan.Cloudwatch.Region.ValueString(),
@@ -205,6 +221,13 @@ func (r *integrationLogAgentResource) populateRequest(plan *integrationLogAgentR
 // populateResourceModel fills the resource model from the API response
 func (r *integrationLogAgentResource) populateResourceModel(m *integrationLogAgentResourceModel, data *model.LogAgentResponse) {
 	switch data.Type {
+	case "azure_monitor_v2":
+		if m.AzureMonitor == nil {
+			m.AzureMonitor = &azureMonitorModel{}
+		}
+		m.AzureMonitor.TenantID = types.StringPointerValue(data.Config.TenantID)
+		m.AzureMonitor.ApplicationID = types.StringPointerValue(data.Config.ApplicationID)
+		m.AzureMonitor.LogsEndpoint = types.StringPointerValue(data.Config.LogsEndpoint)
 	case "cloudwatch_v2":
 		if m.Cloudwatch == nil {
 			m.Cloudwatch = &cloudwatchModel{}
