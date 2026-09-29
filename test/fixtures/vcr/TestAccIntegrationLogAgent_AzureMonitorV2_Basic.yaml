@@ -475,7 +475,7 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"AZM_APPLICATION_SECRET","logs_endpoint":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com/datacollectionRules/dcr-7cae904d070344d7ace2b8b33b743c84/streams/Microsoft-OTLP-Logs/otlp/v1/logs"}
+            {"tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"AZM_APPLICATION_SECRET","logs_endpoint":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com/dataCollectionRules/dcr-7cae904d070344d7ace2b8b33b743c84/streams/Microsoft-OTLP-Logs/otlp/v1/logs"}
         form: {}
         headers:
             Authorization:
@@ -596,7 +596,7 @@ interactions:
         trailer: {}
         content_length: 535
         uncompressed: false
-        body: '{"id":26,"type":"azure_monitor_v2","config":{"tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","logs_endpoint":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com/datacollectionRules/dcr-7cae904d070344d7ace2b8b33b743c84/streams/Microsoft-OTLP-Logs/otlp/v1/logs","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"AZM_APPLICATION_SECRET"},"error":null,"account_id":"f72dd430-78a0-482f-ad31-e68afe1683f9","created_at":"2026-09-18 13:29:11 UTC","deleted_at":null}'
+        body: '{"id":26,"type":"azure_monitor_v2","config":{"tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","logs_endpoint":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com/dataCollectionRules/dcr-7cae904d070344d7ace2b8b33b743c84/streams/Microsoft-OTLP-Logs/otlp/v1/logs","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"AZM_APPLICATION_SECRET"},"error":null,"account_id":"f72dd430-78a0-482f-ad31-e68afe1683f9","created_at":"2026-09-18 13:29:11 UTC","deleted_at":null}'
         headers:
             Cache-Control:
                 - no-cache
@@ -647,7 +647,7 @@ interactions:
         trailer: {}
         content_length: 535
         uncompressed: false
-        body: '{"id":26,"type":"azure_monitor_v2","config":{"tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","logs_endpoint":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com/datacollectionRules/dcr-7cae904d070344d7ace2b8b33b743c84/streams/Microsoft-OTLP-Logs/otlp/v1/logs","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"AZM_APPLICATION_SECRET"},"error":null,"account_id":"f72dd430-78a0-482f-ad31-e68afe1683f9","created_at":"2026-09-18 13:29:11 UTC","deleted_at":null}'
+        body: '{"id":26,"type":"azure_monitor_v2","config":{"tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","logs_endpoint":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com/dataCollectionRules/dcr-7cae904d070344d7ace2b8b33b743c84/streams/Microsoft-OTLP-Logs/otlp/v1/logs","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"AZM_APPLICATION_SECRET"},"error":null,"account_id":"f72dd430-78a0-482f-ad31-e68afe1683f9","created_at":"2026-09-18 13:29:11 UTC","deleted_at":null}'
         headers:
             Cache-Control:
                 - no-cache
@@ -749,7 +749,7 @@ interactions:
         trailer: {}
         content_length: 535
         uncompressed: false
-        body: '{"id":26,"type":"azure_monitor_v2","config":{"tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","logs_endpoint":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com/datacollectionRules/dcr-7cae904d070344d7ace2b8b33b743c84/streams/Microsoft-OTLP-Logs/otlp/v1/logs","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"AZM_APPLICATION_SECRET"},"error":null,"account_id":"f72dd430-78a0-482f-ad31-e68afe1683f9","created_at":"2026-09-18 13:29:11 UTC","deleted_at":null}'
+        body: '{"id":26,"type":"azure_monitor_v2","config":{"tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","logs_endpoint":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com/dataCollectionRules/dcr-7cae904d070344d7ace2b8b33b743c84/streams/Microsoft-OTLP-Logs/otlp/v1/logs","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"AZM_APPLICATION_SECRET"},"error":null,"account_id":"f72dd430-78a0-482f-ad31-e68afe1683f9","created_at":"2026-09-18 13:29:11 UTC","deleted_at":null}'
         headers:
             Cache-Control:
                 - no-cache
@@ -784,7 +784,7 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"AZM_APPLICATION_SECRET","logs_endpoint":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com/datacollectionRules/dcr-7cae904d070344d7ace2b8b33b743c84/streams/Microsoft-OTLP-Logs/otlp/v1/logs"}
+            {"tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"AZM_APPLICATION_SECRET","logs_endpoint":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com/dataCollectionRules/dcr-7cae904d070344d7ace2b8b33b743c84/streams/Microsoft-OTLP-Logs/otlp/v1/logs"}
         form: {}
         headers:
             Authorization:
@@ -901,7 +901,7 @@ interactions:
         trailer: {}
         content_length: 535
         uncompressed: false
-        body: '{"id":26,"type":"azure_monitor_v2","config":{"tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","logs_endpoint":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com/datacollectionRules/dcr-7cae904d070344d7ace2b8b33b743c84/streams/Microsoft-OTLP-Logs/otlp/v1/logs","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"AZM_APPLICATION_SECRET"},"error":null,"account_id":"f72dd430-78a0-482f-ad31-e68afe1683f9","created_at":"2026-09-18 13:29:11 UTC","deleted_at":null}'
+        body: '{"id":26,"type":"azure_monitor_v2","config":{"tenant_id":"71e89a32-14f3-4458-b136-7395bb6d1969","logs_endpoint":"https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com/dataCollectionRules/dcr-7cae904d070344d7ace2b8b33b743c84/streams/Microsoft-OTLP-Logs/otlp/v1/logs","application_id":"3e303e72-4024-494c-b5f6-f5ffbe8139de","application_secret":"AZM_APPLICATION_SECRET"},"error":null,"account_id":"f72dd430-78a0-482f-ad31-e68afe1683f9","created_at":"2026-09-18 13:29:11 UTC","deleted_at":null}'
         headers:
             Cache-Control:
                 - no-cache

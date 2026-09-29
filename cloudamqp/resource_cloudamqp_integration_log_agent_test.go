@@ -8,8 +8,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-// TestAccIntegrationLogAgent_AzureMonitorV2_Basic: Create Azure Monitor v2 log agent integration, import (ignoring write-only application_secret), and update by incrementing application_secret_version.
-func TestAccIntegrationLogAgent_AzureMonitorV2_Basic(t *testing.T) {
+// TestAccIntegrationLogAgent_AzureMonitor_Basic: Create Azure Monitor log agent integration, import (ignoring write-only application_secret), and update by incrementing application_secret_version.
+func TestAccIntegrationLogAgent_AzureMonitor_Basic(t *testing.T) {
 	t.Parallel()
 
 	// Set sanitized value for playback and use the configured value for recording
@@ -19,13 +19,13 @@ func TestAccIntegrationLogAgent_AzureMonitorV2_Basic(t *testing.T) {
 	}
 
 	var (
-		instanceResourceName       = "cloudamqp_instance.instance"
-		azureMonitorV2ResourceName = "cloudamqp_integration_log_agent.azure_monitor_v2"
-		testTenantID               = "71e89a32-14f3-4458-b136-7395bb6d1969" // Randomized token
-		testApplicationID          = "3e303e72-4024-494c-b5f6-f5ffbe8139de" // Randomized token
-		testDCRID                  = "dcr-7cae904d070344d7ace2b8b33b743c84"
-		testDCEURI                 = "https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com"
-		testLogsEndpoint           = fmt.Sprintf("%s/datacollectionRules/%s/streams/Microsoft-OTLP-Logs/otlp/v1/logs", testDCEURI, testDCRID)
+		instanceResourceName     = "cloudamqp_instance.instance"
+		azureMonitorResourceName = "cloudamqp_integration_log_agent.azure_monitor"
+		testTenantID             = "71e89a32-14f3-4458-b136-7395bb6d1969" // Randomized token
+		testApplicationID        = "3e303e72-4024-494c-b5f6-f5ffbe8139de" // Randomized token
+		testDCRID                = "dcr-7cae904d070344d7ace2b8b33b743c84"
+		testDCEURI               = "https://cloudamqp-log-integration.australiasoutheast-1.ingest.monitor.azure.com"
+		testLogsEndpoint         = fmt.Sprintf("%s/dataCollectionRules/%s/streams/Microsoft-OTLP-Logs/otlp/v1/logs", testDCEURI, testDCRID)
 	)
 
 	cloudamqpResourceTest(t, resource.TestCase{
@@ -34,15 +34,15 @@ func TestAccIntegrationLogAgent_AzureMonitorV2_Basic(t *testing.T) {
 			{
 				Config: fmt.Sprintf(`
 					resource "cloudamqp_instance" "instance" {
-					  name   = "TestAccIntegrationLogAgent_AzureMonitorV2_Basic"
+					  name   = "TestAccIntegrationLogAgent_AzureMonitor_Basic"
 					  plan   = "penguin-1"
 					  region = "amazon-web-services::eu-central-1"
 					  tags   = ["vcr-test"]
 					}
 
-					resource "cloudamqp_integration_log_agent" "azure_monitor_v2" {
+					resource "cloudamqp_integration_log_agent" "azure_monitor" {
 					  instance_id = cloudamqp_instance.instance.id
-					  azure_monitor_v2 {
+					  azure_monitor {
 					    tenant_id          = "%s"
 					    application_id     = "%s"
 					    application_secret = "%s"
@@ -51,32 +51,32 @@ func TestAccIntegrationLogAgent_AzureMonitorV2_Basic(t *testing.T) {
 					}
 				`, testTenantID, testApplicationID, testApplicationSecret, testLogsEndpoint),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccIntegrationLogAgent_AzureMonitorV2_Basic"),
-					resource.TestCheckResourceAttr(azureMonitorV2ResourceName, "azure_monitor_v2.tenant_id", testTenantID),
-					resource.TestCheckResourceAttr(azureMonitorV2ResourceName, "azure_monitor_v2.application_id", testApplicationID),
-					resource.TestCheckResourceAttr(azureMonitorV2ResourceName, "azure_monitor_v2.application_secret_version", "1"),
-					resource.TestCheckResourceAttr(azureMonitorV2ResourceName, "azure_monitor_v2.logs_endpoint", testLogsEndpoint),
+					resource.TestCheckResourceAttr(instanceResourceName, "name", "TestAccIntegrationLogAgent_AzureMonitor_Basic"),
+					resource.TestCheckResourceAttr(azureMonitorResourceName, "azure_monitor.tenant_id", testTenantID),
+					resource.TestCheckResourceAttr(azureMonitorResourceName, "azure_monitor.application_id", testApplicationID),
+					resource.TestCheckResourceAttr(azureMonitorResourceName, "azure_monitor.application_secret_version", "1"),
+					resource.TestCheckResourceAttr(azureMonitorResourceName, "azure_monitor.logs_endpoint", testLogsEndpoint),
 				),
 			},
 			{
-				ResourceName:            azureMonitorV2ResourceName,
-				ImportStateIdFunc:       testAccImportCombinedStateIdFunc(instanceResourceName, azureMonitorV2ResourceName),
+				ResourceName:            azureMonitorResourceName,
+				ImportStateIdFunc:       testAccImportCombinedStateIdFunc(instanceResourceName, azureMonitorResourceName),
 				ImportState:             true,
 				ImportStateVerify:       true,
-				ImportStateVerifyIgnore: []string{"azure_monitor_v2.application_secret"},
+				ImportStateVerifyIgnore: []string{"azure_monitor.application_secret"},
 			},
 			{
 				Config: fmt.Sprintf(`
 					resource "cloudamqp_instance" "instance" {
-					  name   = "TestAccIntegrationLogAgent_AzureMonitorV2_Basic"
+					  name   = "TestAccIntegrationLogAgent_AzureMonitor_Basic"
 					  plan   = "penguin-1"
 					  region = "amazon-web-services::eu-central-1"
 					  tags   = ["vcr-test"]
 					}
 
-					resource "cloudamqp_integration_log_agent" "azure_monitor_v2" {
+					resource "cloudamqp_integration_log_agent" "azure_monitor" {
 					  instance_id = cloudamqp_instance.instance.id
-					  azure_monitor_v2 {
+					  azure_monitor {
 					    tenant_id                  = "%s"
 					    application_id             = "%s"
 					    application_secret         = "%s"
@@ -86,9 +86,9 @@ func TestAccIntegrationLogAgent_AzureMonitorV2_Basic(t *testing.T) {
 					}
 				`, testTenantID, testApplicationID, testApplicationSecret, testLogsEndpoint),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(azureMonitorV2ResourceName, "azure_monitor_v2.tenant_id", testTenantID),
-					resource.TestCheckResourceAttr(azureMonitorV2ResourceName, "azure_monitor_v2.application_id", testApplicationID),
-					resource.TestCheckResourceAttr(azureMonitorV2ResourceName, "azure_monitor_v2.application_secret_version", "2"),
+					resource.TestCheckResourceAttr(azureMonitorResourceName, "azure_monitor.tenant_id", testTenantID),
+					resource.TestCheckResourceAttr(azureMonitorResourceName, "azure_monitor.application_id", testApplicationID),
+					resource.TestCheckResourceAttr(azureMonitorResourceName, "azure_monitor.application_secret_version", "2"),
 				),
 			},
 		},
