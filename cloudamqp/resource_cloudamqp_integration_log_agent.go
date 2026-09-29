@@ -204,8 +204,9 @@ func (r *integrationLogAgentResource) Schema(ctx context.Context, req resource.S
 						Description: "Complete Azure Monitor OTLP logs endpoint",
 						Validators: []validator.String{
 							stringvalidator.RegexMatches(
-								regexp.MustCompile(`^https://[^/?#\s]+(?:/[^?#\s]*)*/otlp/v1/logs$`),
-								"must be an HTTPS URL ending in /otlp/v1/logs",
+								regexp.MustCompile(`^https://[^/?#\s]+/dataCollectionRules/[^/]+/streams/Microsoft-OTLP-Logs/otlp/v1/logs$`),
+								"must be the complete Azure Monitor OTLP endpoint copied from the portal "+
+									"(…/dataCollectionRules/<dcr-id>/streams/Microsoft-OTLP-Logs/otlp/v1/logs)",
 							),
 						},
 					},
