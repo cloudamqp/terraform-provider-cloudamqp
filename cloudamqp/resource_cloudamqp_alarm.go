@@ -359,16 +359,35 @@ func (r *alarmResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 		return
 	}
 
-	if state.Type.ValueString() == "notice" {
-		tflog.Debug(ctx, "alarm type is 'notice', skip deletion and just remove from state")
-		resp.State.RemoveResource(ctx)
-		return
-	}
-
 	instanceID := state.InstanceID.ValueInt64()
 	alarmID := state.ID.ValueString()
 	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
 	defer cancel()
+
+	if state.Type.ValueString() == "notice" {
+		// The notice alarm is mandatory and cannot be deleted, so we only remove
+		// it from state. To avoid issues with attached recipients, we reset the recipients to the default before removing
+		// the resource from state.
+		tflog.Debug(ctx, "alarm type is 'notice', reset recipients to default before removing from state")
+		params := model.AlarmRequest{
+			Type:       "notice",
+			Enabled:    state.Enabled.ValueBool(),
+			Recipients: &[]int64{},
+		}
+		if !state.ReminderInterval.IsNull() && !state.ReminderInterval.IsUnknown() {
+			params.ReminderInterval = state.ReminderInterval.ValueInt64Pointer()
+		}
+		if err := r.client.UpdateAlarm(timeoutCtx, instanceID, alarmID, params); err != nil {
+			resp.Diagnostics.AddError(
+				"Failed to Reset Notice Alarm Recipients",
+				fmt.Sprintf("Could not reset recipients on the notice alarm before removing it from state: %s", err),
+			)
+			return
+		}
+
+		resp.State.RemoveResource(ctx)
+		return
+	}
 
 	err := r.client.DeleteAlarm(timeoutCtx, instanceID, alarmID)
 	if err != nil {
