@@ -98,10 +98,10 @@ func TestAccAlarm_Basic(t *testing.T) {
 					  name        = "Default"
 					}
 
-				  resource "cloudamqp_notification" "recipient" {
-				    instance_id = cloudamqp_instance.instance.id
-				    type        = "email"
-				    value       = "test@example.com"
+					resource "cloudamqp_notification" "recipient" {
+						instance_id = cloudamqp_instance.instance.id
+						type        = "email"
+						value       = "test@example.com"
 						name        = "test"
 					}
 
@@ -181,11 +181,21 @@ func TestAccAlarm_Notice(t *testing.T) {
 					  name        = "Default"
 					}
 
+					resource "cloudamqp_notification" "recipient" {
+						instance_id = cloudamqp_instance.instance.id
+						type        = "email"
+						value       = "test@example.com"
+						name        = "test"
+					}
+
 					resource "cloudamqp_alarm" "notice" {
 					  instance_id = cloudamqp_instance.instance.id
 					  type        = "notice"
 					  enabled     = true
-					  recipients  = [data.cloudamqp_notification.default_recipient.id]
+					  recipients  = [
+							data.cloudamqp_notification.default_recipient.id,
+							cloudamqp_notification.recipient.id
+					  ]
 					}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
@@ -193,7 +203,7 @@ func TestAccAlarm_Notice(t *testing.T) {
 					resource.TestCheckResourceAttr(notificationDataSourceName, "name", "Default"),
 					resource.TestCheckResourceAttr(notificationDataSourceName, "type", "email"),
 					resource.TestCheckResourceAttr(noticeAlarmResourceName, "type", "notice"),
-					resource.TestCheckResourceAttr(noticeAlarmResourceName, "recipients.#", "1"),
+					resource.TestCheckResourceAttr(noticeAlarmResourceName, "recipients.#", "2"),
 				),
 			},
 			{
