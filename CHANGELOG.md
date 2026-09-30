@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.50.1 (Unreleased)
+
+BUG FIXES:
+
+* resource/cloudamqp_alarm: Fixed recipient deletion blocked by notice alarm ([#553])
+
+[#553]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/553
+
 ## 1.50.0 (29 Sep, 2026)
 
 FEATURES:
