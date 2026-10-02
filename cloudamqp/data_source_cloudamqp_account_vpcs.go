@@ -2,97 +2,134 @@ package cloudamqp
 
 import (
 	"context"
-	"time"
+	"fmt"
+	"sort"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	networkModel "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/network"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-// Note: Cannot yet be migrated to framework while using "vpcs: schema.ListNestedAttribute" to build
-// up the data source schema.
-// Error: Failed to load plugin schema: AttributeName("vpcs"): protocol version 5 cannot have Attributes set..
-// Makes the provider crash when loading the provider.
-func dataSourceAccountVpcs() *schema.Resource {
-	return &schema.Resource{
-		ReadContext: dataSourceAccountVpcsRead,
+var _ datasource.DataSource = &accountVpcsDataSource{}
+var _ datasource.DataSourceWithConfigure = &accountVpcsDataSource{}
 
-		Schema: map[string]*schema.Schema{
-			"vpcs": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"id": {
-							Type:        schema.TypeInt,
-							Computed:    true,
-							Description: "The instance identifier",
-						},
-						"name": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The name of the instance",
-						},
-						"region": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The region were the instanece is located in",
-						},
-						"subnet": {
-							Type:        schema.TypeString,
-							Required:    true,
-							ForceNew:    true,
-							Description: "The VPC subnet",
-						},
-						"tags": {
-							Type:     schema.TypeList,
-							Optional: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-							Description: "Tag the VPC instance with optional tags",
-						},
-						"vpc_name": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "VPC name given when hosted at the cloud provider",
-						},
-					},
-				},
+type accountVpcsDataSource struct {
+	client *api.API
+}
+
+func NewAccountVpcsDataSource() datasource.DataSource {
+	return &accountVpcsDataSource{}
+}
+
+type accountVpcsDataSourceModel struct {
+	ID   types.String `tfsdk:"id"`
+	VPCs types.List   `tfsdk:"vpcs"`
+}
+
+func (d *accountVpcsDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = "cloudamqp_account_vpcs"
+}
+
+func (d *accountVpcsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	accountVpcObjectType := types.ObjectType{AttrTypes: map[string]attr.Type{
+		"id":       types.Int64Type,
+		"name":     types.StringType,
+		"region":   types.StringType,
+		"subnet":   types.StringType,
+		"tags":     types.ListType{ElemType: types.StringType},
+		"vpc_name": types.StringType,
+	}}
+
+	resp.Schema = schema.Schema{
+		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: "The account identifier",
+			},
+			"vpcs": schema.ListAttribute{
+				Computed:    true,
+				ElementType: accountVpcObjectType,
+				Description: "List of VPCs for the account.",
 			},
 		},
 	}
 }
 
-func dataSourceAccountVpcsRead(ctx context.Context, d *schema.ResourceData,
-	meta any) diag.Diagnostics {
+func (d *accountVpcsDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+	client, ok := req.ProviderData.(*api.API)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Provider Data Type",
+			fmt.Sprintf("Expected *api.API, got: %T", req.ProviderData),
+		)
+		return
+	}
+	d.client = client
+}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
-	defer cancel()
+func (d *accountVpcsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var state accountVpcsDataSourceModel
 
-	api := meta.(*api.API)
-	data, err := api.ListVpcs(timeoutCtx)
+	vpcs, err := d.client.ListVpcs(ctx)
 	if err != nil {
-		return diag.FromErr(err)
+		resp.Diagnostics.AddError("API Error", fmt.Sprintf("Failed to list VPCs: %s", err.Error()))
+		return
 	}
 
-	d.SetId("noId")
-	vpcs := make([]map[string]any, len(data))
-	for k, vpcData := range data {
-		vpc := map[string]any{
-			"id":       vpcData.ID,
-			"name":     vpcData.Name,
-			"region":   vpcData.Region,
-			"subnet":   vpcData.Subnet,
-			"tags":     vpcData.Tags,
-			"vpc_name": vpcData.VpcName,
+	accountVpcObjectType := types.ObjectType{AttrTypes: map[string]attr.Type{
+		"id":       types.Int64Type,
+		"name":     types.StringType,
+		"region":   types.StringType,
+		"subnet":   types.StringType,
+		"tags":     types.ListType{ElemType: types.StringType},
+		"vpc_name": types.StringType,
+	}}
+
+	sort.Slice(vpcs, func(i, j int) bool { return vpcs[i].ID < vpcs[j].ID })
+
+	values := make([]attr.Value, 0, len(vpcs))
+	for _, vpc := range vpcs {
+		obj, diags := accountVpcObjectValue(ctx, accountVpcObjectType.AttrTypes, vpc)
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
+			return
 		}
-		vpcs[k] = vpc
+		values = append(values, obj)
 	}
 
-	if err = d.Set("vpcs", vpcs); err != nil {
-		return diag.Errorf("error setting vpcs for resource %s, %s", d.Id(), err)
+	vpcsList, diags := types.ListValue(accountVpcObjectType, values)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	state.VPCs = vpcsList
+
+	state.ID = types.StringValue("account_vpcs")
+	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+}
+
+func accountVpcObjectValue(ctx context.Context, attrTypes map[string]attr.Type, vpc networkModel.VpcResponse) (types.Object, diag.Diagnostics) {
+	tags, diags := types.ListValueFrom(ctx, types.StringType, vpc.Tags)
+	if diags.HasError() {
+		return types.Object{}, diags
 	}
 
-	return diag.Diagnostics{}
+	return types.ObjectValue(attrTypes, map[string]attr.Value{
+		"id":       types.Int64Value(vpc.ID),
+		"name":     types.StringValue(vpc.Name),
+		"region":   types.StringValue(vpc.Region),
+		"subnet":   types.StringValue(vpc.Subnet),
+		"tags":     tags,
+		"vpc_name": types.StringValue(vpc.VpcName),
+	})
 }

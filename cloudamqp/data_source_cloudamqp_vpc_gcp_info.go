@@ -2,107 +2,159 @@ package cloudamqp
 
 import (
 	"context"
-	"errors"
+	"fmt"
+	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/network"
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func dataSourceVpcGcpInfo() *schema.Resource {
-	return &schema.Resource{
-		ReadContext: dataSourceVpcGcpInfoRead,
+var (
+	_ datasource.DataSource              = &vpcGcpInfoDataSource{}
+	_ datasource.DataSourceWithConfigure = &vpcGcpInfoDataSource{}
+)
 
-		Schema: map[string]*schema.Schema{
-			"instance_id": {
-				Type:        schema.TypeInt,
+type vpcGcpInfoDataSource struct {
+	client *api.API
+}
+
+func NewVpcGcpInfoDataSource() datasource.DataSource {
+	return &vpcGcpInfoDataSource{}
+}
+
+type vpcGcpInfoDataSourceModel struct {
+	ID         types.String `tfsdk:"id"`
+	InstanceID types.Int64  `tfsdk:"instance_id"`
+	VpcID      types.String `tfsdk:"vpc_id"`
+	Name       types.String `tfsdk:"name"`
+	VpcSubnet  types.String `tfsdk:"vpc_subnet"`
+	Network    types.String `tfsdk:"network"`
+	Sleep      types.Int64  `tfsdk:"sleep"`
+	Timeout    types.Int64  `tfsdk:"timeout"`
+}
+
+func (d *vpcGcpInfoDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = "cloudamqp_vpc_gcp_info"
+}
+
+func (d *vpcGcpInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		Description: "Use this data source to retrieve GCP VPC peering information. Either use instance_id or vpc_id to retrieve the VPC info.",
+		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: "The identifier for this data source",
+			},
+			"instance_id": schema.Int64Attribute{
 				Optional:    true,
 				Description: "Instance identifier",
 			},
-			"vpc_id": {
-				Type:        schema.TypeString,
+			"vpc_id": schema.StringAttribute{
 				Optional:    true,
 				Description: "VPC instance identifier",
 			},
-			"name": {
-				Type:        schema.TypeString,
+			"name": schema.StringAttribute{
 				Computed:    true,
 				Description: "VPC name",
 			},
-			"vpc_subnet": {
-				Type:        schema.TypeString,
+			"vpc_subnet": schema.StringAttribute{
 				Computed:    true,
 				Description: "VPC subnet",
 			},
-			"network": {
-				Type:        schema.TypeString,
+			"network": schema.StringAttribute{
 				Computed:    true,
 				Description: "VPC network uri",
 			},
-			"sleep": {
-				Type:        schema.TypeInt,
+			"sleep": schema.Int64Attribute{
 				Optional:    true,
-				Default:     10,
+				Computed:    true,
 				Description: "Configurable sleep in seconds between retries when reading peering",
 			},
-			"timeout": {
-				Type:        schema.TypeInt,
+			"timeout": schema.Int64Attribute{
 				Optional:    true,
-				Default:     1800,
+				Computed:    true,
 				Description: "Configurable timeout time (seconds) before retries times out",
 			},
 		},
 	}
 }
 
-func dataSourceVpcGcpInfoRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	var (
-		api         = meta.(*api.API)
-		data        = make(map[string]any)
-		err         = errors.New("")
-		instance_id = d.Get("instance_id").(int)
-		vpc_id      = d.Get("vpc_id").(string)
-		sleep       = d.Get("sleep").(int)
-		timeout     = d.Get("timeout").(int)
-	)
-
-	if instance_id == 0 && vpc_id == "" {
-		return diag.Errorf("you need to specify either instance_id or vpc_id")
-	} else if instance_id != 0 {
-		data, err = api.ReadVpcGcpInfo(ctx, instance_id, sleep, timeout)
-	} else if d.Get("vpc_id") != nil {
-		data, err = api.ReadVpcGcpInfoWithVpcId(ctx, vpc_id, sleep, timeout)
+func (d *vpcGcpInfoDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
 	}
-
-	if err != nil {
-		return diag.FromErr(err)
+	client, ok := req.ProviderData.(*api.API)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Data Source Configure Type",
+			fmt.Sprintf("Expected *api.API, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+		return
 	}
-
-	d.SetId(data["name"].(string))
-
-	for k, v := range data {
-		if validateVpcGcpInfoSchemaAttribute(k) {
-			if k == "subnet" {
-				err = d.Set("vpc_subnet", v)
-			} else {
-				err = d.Set(k, v)
-			}
-
-			if err != nil {
-				return diag.Errorf("error setting %s for resource %s: %s", k, d.Id(), err)
-			}
-		}
-	}
-	return diag.Diagnostics{}
+	d.client = client
 }
 
-func validateVpcGcpInfoSchemaAttribute(key string) bool {
-	switch key {
-	case "name",
-		"subnet",
-		"vpc_subnet",
-		"network":
-		return true
+func (d *vpcGcpInfoDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config vpcGcpInfoDataSourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	return false
+
+	if config.InstanceID.IsNull() && config.VpcID.IsNull() {
+		resp.Diagnostics.AddError(
+			"Missing required attribute",
+			"You need to specify either instance_id or vpc_id.",
+		)
+		return
+	}
+
+	sleep := int64(10)
+	if !config.Sleep.IsNull() && !config.Sleep.IsUnknown() {
+		sleep = config.Sleep.ValueInt64()
+	}
+	timeout := int64(1800)
+	if !config.Timeout.IsNull() && !config.Timeout.IsUnknown() {
+		timeout = config.Timeout.ValueInt64()
+	}
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	var (
+		data *model.VpcGcpInfoResponse
+		err  error
+	)
+
+	if !config.InstanceID.IsNull() {
+		data, err = d.client.ReadVpcGcpInfo(timeoutCtx, config.InstanceID.ValueInt64(), sleep)
+		if err != nil {
+			resp.Diagnostics.AddError(
+				"Failed to read VPC GCP info",
+				fmt.Sprintf("Could not read VPC GCP info for instance %d: %s", config.InstanceID.ValueInt64(), err.Error()),
+			)
+			return
+		}
+	} else {
+		data, err = d.client.ReadVpcGcpInfoWithVpcId(timeoutCtx, config.VpcID.ValueString(), sleep)
+		if err != nil {
+			resp.Diagnostics.AddError(
+				"Failed to read VPC GCP info",
+				fmt.Sprintf("Could not read VPC GCP info for VPC %s: %s", config.VpcID.ValueString(), err.Error()),
+			)
+			return
+		}
+	}
+
+	config.ID = types.StringValue(data.Name)
+	config.Name = types.StringValue(data.Name)
+	config.Network = types.StringValue(data.Network)
+	config.VpcSubnet = types.StringValue(data.Subnet)
+	config.Sleep = types.Int64Value(sleep)
+	config.Timeout = types.Int64Value(timeout)
+
+	resp.Diagnostics.Append(resp.State.Set(ctx, &config)...)
 }
