@@ -5,8 +5,11 @@ import (
 	"fmt"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	instanceModel "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -24,16 +27,8 @@ func NewAccountDataSource() datasource.DataSource {
 }
 
 type accountDataSourceModel struct {
-	ID        types.String           `tfsdk:"id"`
-	Instances []accountInstanceModel `tfsdk:"instances"`
-}
-
-type accountInstanceModel struct {
-	ID     types.Int64  `tfsdk:"id"`
-	Name   types.String `tfsdk:"name"`
-	Plan   types.String `tfsdk:"plan"`
-	Region types.String `tfsdk:"region"`
-	Tags   types.List   `tfsdk:"tags"`
+	ID        types.String `tfsdk:"id"`
+	Instances types.List   `tfsdk:"instances"`
 }
 
 func (d *accountDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -41,6 +36,14 @@ func (d *accountDataSource) Metadata(_ context.Context, req datasource.MetadataR
 }
 
 func (d *accountDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	accountInstanceObjectType := types.ObjectType{AttrTypes: map[string]attr.Type{
+		"id":     types.Int64Type,
+		"name":   types.StringType,
+		"plan":   types.StringType,
+		"region": types.StringType,
+		"tags":   types.ListType{ElemType: types.StringType},
+	}}
+
 	resp.Schema = schema.Schema{
 		Description: "Use this data source to retrieve information about all instances associated with the account.",
 		Attributes: map[string]schema.Attribute{
@@ -48,35 +51,10 @@ func (d *accountDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 				Computed:    true,
 				Description: "The account identifier",
 			},
-		},
-		Blocks: map[string]schema.Block{
-			"instances": schema.SetNestedBlock{
+			"instances": schema.ListAttribute{
+				Computed:    true,
+				ElementType: accountInstanceObjectType,
 				Description: "List of instances for the account.",
-				NestedObject: schema.NestedBlockObject{
-					Attributes: map[string]schema.Attribute{
-						"id": schema.Int64Attribute{
-							Computed:    true,
-							Description: "The instance identifier",
-						},
-						"name": schema.StringAttribute{
-							Computed:    true,
-							Description: "The name of the instance",
-						},
-						"plan": schema.StringAttribute{
-							Computed:    true,
-							Description: "The subscription plan used for the instance",
-						},
-						"region": schema.StringAttribute{
-							Computed:    true,
-							Description: "The region where the instance is located",
-						},
-						"tags": schema.ListAttribute{
-							Computed:    true,
-							ElementType: types.StringType,
-							Description: "Tag for the instance",
-						},
-					},
-				},
 			},
 		},
 	}
@@ -106,17 +84,46 @@ func (d *accountDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		return
 	}
 
-	state.Instances = make([]accountInstanceModel, 0, len(instances))
+	accountInstanceObjectType := types.ObjectType{AttrTypes: map[string]attr.Type{
+		"id":     types.Int64Type,
+		"name":   types.StringType,
+		"plan":   types.StringType,
+		"region": types.StringType,
+		"tags":   types.ListType{ElemType: types.StringType},
+	}}
+
+	values := make([]attr.Value, 0, len(instances))
 	for _, instance := range instances {
-		instanceState := accountInstanceModel{}
-		instanceState.ID = types.Int64Value(instance.ID)
-		instanceState.Name = types.StringValue(instance.Name)
-		instanceState.Plan = types.StringValue(instance.Plan)
-		instanceState.Region = types.StringValue(instance.Region)
-		instanceState.Tags, _ = types.ListValueFrom(ctx, types.StringType, instance.Tags)
-		state.Instances = append(state.Instances, instanceState)
+		obj, diags := accountInstanceObjectValue(ctx, accountInstanceObjectType.AttrTypes, instance)
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		values = append(values, obj)
 	}
+
+	instancesList, diags := types.ListValue(accountInstanceObjectType, values)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	state.Instances = instancesList
 
 	state.ID = types.StringValue("account")
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
+}
+
+func accountInstanceObjectValue(ctx context.Context, attrTypes map[string]attr.Type, instance instanceModel.InstanceResponse) (types.Object, diag.Diagnostics) {
+	tags, diags := types.ListValueFrom(ctx, types.StringType, instance.Tags)
+	if diags.HasError() {
+		return types.Object{}, diags
+	}
+
+	return types.ObjectValue(attrTypes, map[string]attr.Value{
+		"id":     types.Int64Value(instance.ID),
+		"name":   types.StringValue(instance.Name),
+		"plan":   types.StringValue(instance.Plan),
+		"region": types.StringValue(instance.Region),
+		"tags":   tags,
+	})
 }

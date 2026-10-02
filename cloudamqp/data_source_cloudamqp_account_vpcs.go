@@ -3,10 +3,14 @@ package cloudamqp
 import (
 	"context"
 	"fmt"
+	"sort"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
+	networkModel "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/network"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -22,17 +26,8 @@ func NewAccountVpcsDataSource() datasource.DataSource {
 }
 
 type accountVpcsDataSourceModel struct {
-	ID   types.String                `tfsdk:"id"`
-	VPCs []accountVpcDataSourceModel `tfsdk:"vpcs"`
-}
-
-type accountVpcDataSourceModel struct {
-	ID      types.Int64  `tfsdk:"id"`
-	Name    types.String `tfsdk:"name"`
-	Region  types.String `tfsdk:"region"`
-	Subnet  types.String `tfsdk:"subnet"`
-	Tags    types.List   `tfsdk:"tags"`
-	VpcName types.String `tfsdk:"vpc_name"`
+	ID   types.String `tfsdk:"id"`
+	VPCs types.List   `tfsdk:"vpcs"`
 }
 
 func (d *accountVpcsDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -40,45 +35,25 @@ func (d *accountVpcsDataSource) Metadata(ctx context.Context, req datasource.Met
 }
 
 func (d *accountVpcsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	accountVpcObjectType := types.ObjectType{AttrTypes: map[string]attr.Type{
+		"id":       types.Int64Type,
+		"name":     types.StringType,
+		"region":   types.StringType,
+		"subnet":   types.StringType,
+		"tags":     types.ListType{ElemType: types.StringType},
+		"vpc_name": types.StringType,
+	}}
+
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: "The account identifier",
 			},
-		},
-		Blocks: map[string]schema.Block{
-			"vpcs": schema.SetNestedBlock{
+			"vpcs": schema.ListAttribute{
+				Computed:    true,
+				ElementType: accountVpcObjectType,
 				Description: "List of VPCs for the account.",
-				NestedObject: schema.NestedBlockObject{
-					Attributes: map[string]schema.Attribute{
-						"id": schema.Int64Attribute{
-							Computed:    true,
-							Description: "The instance identifier",
-						},
-						"name": schema.StringAttribute{
-							Computed:    true,
-							Description: "The name of the instance",
-						},
-						"region": schema.StringAttribute{
-							Computed:    true,
-							Description: "The region where the instance is located",
-						},
-						"subnet": schema.StringAttribute{
-							Computed:    true,
-							Description: "The VPC subnet",
-						},
-						"tags": schema.ListAttribute{
-							Computed:    true,
-							ElementType: types.StringType,
-							Description: "Optional tags to associate with the VPC instance",
-						},
-						"vpc_name": schema.StringAttribute{
-							Computed:    true,
-							Description: "VPC name given when hosted at the cloud provider",
-						},
-					},
-				},
 			},
 		},
 	}
@@ -108,21 +83,53 @@ func (d *accountVpcsDataSource) Read(ctx context.Context, req datasource.ReadReq
 		return
 	}
 
-	state.VPCs = make([]accountVpcDataSourceModel, 0, len(vpcs))
+	accountVpcObjectType := types.ObjectType{AttrTypes: map[string]attr.Type{
+		"id":       types.Int64Type,
+		"name":     types.StringType,
+		"region":   types.StringType,
+		"subnet":   types.StringType,
+		"tags":     types.ListType{ElemType: types.StringType},
+		"vpc_name": types.StringType,
+	}}
+
+	sort.Slice(vpcs, func(i, j int) bool { return vpcs[i].ID < vpcs[j].ID })
+
+	values := make([]attr.Value, 0, len(vpcs))
 	for _, vpc := range vpcs {
-		vpcState := accountVpcDataSourceModel{}
-		vpcState.ID = types.Int64Value(vpc.ID)
-		vpcState.Name = types.StringValue(vpc.Name)
-		vpcState.Region = types.StringValue(vpc.Region)
-		vpcState.Subnet = types.StringValue(vpc.Subnet)
-		vpcState.Tags, _ = types.ListValueFrom(ctx, types.StringType, vpc.Tags)
-		vpcState.VpcName = types.StringValue(vpc.VpcName)
-		state.VPCs = append(state.VPCs, vpcState)
+		obj, diags := accountVpcObjectValue(ctx, accountVpcObjectType.AttrTypes, vpc)
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		values = append(values, obj)
 	}
+
+	vpcsList, diags := types.ListValue(accountVpcObjectType, values)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	state.VPCs = vpcsList
 
 	state.ID = types.StringValue("account_vpcs")
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
+}
+
+func accountVpcObjectValue(ctx context.Context, attrTypes map[string]attr.Type, vpc networkModel.VpcResponse) (types.Object, diag.Diagnostics) {
+	tags, diags := types.ListValueFrom(ctx, types.StringType, vpc.Tags)
+	if diags.HasError() {
+		return types.Object{}, diags
+	}
+
+	return types.ObjectValue(attrTypes, map[string]attr.Value{
+		"id":       types.Int64Value(vpc.ID),
+		"name":     types.StringValue(vpc.Name),
+		"region":   types.StringValue(vpc.Region),
+		"subnet":   types.StringValue(vpc.Subnet),
+		"tags":     tags,
+		"vpc_name": types.StringValue(vpc.VpcName),
+	})
 }
