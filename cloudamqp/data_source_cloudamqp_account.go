@@ -2,97 +2,128 @@ package cloudamqp
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	instanceModel "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func dataSourceAccount() *schema.Resource {
-	return &schema.Resource{
-		ReadContext: dataSourceAccountRead,
+var (
+	_ datasource.DataSource              = &accountDataSource{}
+	_ datasource.DataSourceWithConfigure = &accountDataSource{}
+)
 
-		Schema: map[string]*schema.Schema{
-			"instances": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"id": {
-							Type:        schema.TypeInt,
-							Computed:    true,
-							Description: "The instance identifier",
-						},
-						"name": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The name of the instance",
-						},
-						"plan": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The subscription plan used for the instance",
-						},
-						"region": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The region were the instanece is located in",
-						},
-						"tags": {
-							Type:     schema.TypeList,
-							Optional: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-							Description: "Tag for the instance",
-						},
-					},
-				},
+type accountDataSource struct {
+	client *api.API
+}
+
+func NewAccountDataSource() datasource.DataSource {
+	return &accountDataSource{}
+}
+
+type accountDataSourceModel struct {
+	ID        types.String `tfsdk:"id"`
+	Instances types.List   `tfsdk:"instances"`
+}
+
+func (d *accountDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = "cloudamqp_account"
+}
+
+func (d *accountDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	accountInstanceObjectType := types.ObjectType{AttrTypes: map[string]attr.Type{
+		"id":     types.Int64Type,
+		"name":   types.StringType,
+		"plan":   types.StringType,
+		"region": types.StringType,
+		"tags":   types.ListType{ElemType: types.StringType},
+	}}
+
+	resp.Schema = schema.Schema{
+		Description: "Use this data source to retrieve information about all instances associated with the account.",
+		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: "The account identifier",
+			},
+			"instances": schema.ListAttribute{
+				Computed:    true,
+				ElementType: accountInstanceObjectType,
+				Description: "List of instances for the account.",
 			},
 		},
 	}
 }
 
-func dataSourceAccountRead(ctx context.Context, d *schema.ResourceData,
-	meta any) diag.Diagnostics {
+func (d *accountDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+	client, ok := req.ProviderData.(*api.API)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Data Source Configure Type",
+			fmt.Sprintf("Expected *api.API, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+		return
+	}
+	d.client = client
+}
 
-	api := meta.(*api.API)
-	data, err := api.ListInstances(ctx)
+func (d *accountDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var state accountDataSourceModel
+
+	instances, err := d.client.ListInstances(ctx)
 	if err != nil {
-		return diag.FromErr(err)
+		resp.Diagnostics.AddError("Failed to list instances", err.Error())
+		return
 	}
 
-	d.SetId("noId")
-	instances := make([]map[string]any, len(data))
-	for k, v := range data {
-		instances[k] = readAccount(v)
-	}
+	accountInstanceObjectType := types.ObjectType{AttrTypes: map[string]attr.Type{
+		"id":     types.Int64Type,
+		"name":   types.StringType,
+		"plan":   types.StringType,
+		"region": types.StringType,
+		"tags":   types.ListType{ElemType: types.StringType},
+	}}
 
-	if err = d.Set("instances", instances); err != nil {
-		return diag.Errorf("error setting instances for resource %s, %s", d.Id(), err)
-	}
-
-	return diag.Diagnostics{}
-}
-
-func readAccount(data map[string]any) map[string]any {
-	instance := make(map[string]any)
-	for k, v := range data {
-		if validateAccountSchemaAttribute(k) {
-			instance[k] = v
+	values := make([]attr.Value, 0, len(instances))
+	for _, instance := range instances {
+		obj, diags := accountInstanceObjectValue(ctx, accountInstanceObjectType.AttrTypes, instance)
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
+			return
 		}
+		values = append(values, obj)
 	}
-	return instance
+
+	instancesList, diags := types.ListValue(accountInstanceObjectType, values)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	state.Instances = instancesList
+
+	state.ID = types.StringValue("account")
+	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
-func validateAccountSchemaAttribute(key string) bool {
-	switch key {
-	case "id",
-		"name",
-		"plan",
-		"region",
-		"tags":
-		return true
+func accountInstanceObjectValue(ctx context.Context, attrTypes map[string]attr.Type, instance instanceModel.InstanceResponse) (types.Object, diag.Diagnostics) {
+	tags, diags := types.ListValueFrom(ctx, types.StringType, instance.Tags)
+	if diags.HasError() {
+		return types.Object{}, diags
 	}
-	return false
+
+	return types.ObjectValue(attrTypes, map[string]attr.Value{
+		"id":     types.Int64Value(instance.ID),
+		"name":   types.StringValue(instance.Name),
+		"plan":   types.StringValue(instance.Plan),
+		"region": types.StringValue(instance.Region),
+		"tags":   tags,
+	})
 }
