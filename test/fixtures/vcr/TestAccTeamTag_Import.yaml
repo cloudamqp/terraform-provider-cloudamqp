@@ -1,0 +1,210 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 34
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"tf-acc-test-tag-import"}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/tags
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 41
+        uncompressed: false
+        body: '{"id":24,"name":"tf-acc-test-tag-import"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "41"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 5e971816-f652-40ec-b423-aec705f0d531
+        status: 201 Created
+        code: 201
+        duration: 22.448731ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/tags
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 210
+        uncompressed: false
+        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":21,"name":"new_tag"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":24,"name":"tf-acc-test-tag-import"},{"id":18,"name":"vcr-test"}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "210"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - e7e36e79-8844-4b65-8643-d91b263d2d22
+        status: 200 OK
+        code: 200
+        duration: 6.754936ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/tags
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 210
+        uncompressed: false
+        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":21,"name":"new_tag"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":24,"name":"tf-acc-test-tag-import"},{"id":18,"name":"vcr-test"}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "210"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 86e93acb-be8e-4b9e-9c96-e2d7f796e854
+        status: 200 OK
+        code: 200
+        duration: 6.533918ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/tags/24
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 25
+        uncompressed: false
+        body: '{"message":"Tag deleted"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "25"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 7472ffa1-419b-4b87-9833-85b74adf93a4
+        status: 200 OK
+        code: 200
+        duration: 17.029577ms
