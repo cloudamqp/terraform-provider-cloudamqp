@@ -468,6 +468,57 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/160
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 810
+        uncompressed: false
+        body: '{"id":160,"name":"TestAccOAuth2Configuration_MinimalConfig","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"af78f000-0e45-4e66-ad56-7c525a4dd802","url":"amqps://vgkowipz:***@dev-artistic-plum-macaw.rmq7.dev.cloudamqp.com/vgkowipz","ready":true,"apikey":"c8fbbbc9-799b-4659-9d1c-517ec83f32d3","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://vgkowipz:***@dev-artistic-plum-macaw.rmq7.dev.cloudamqp.com/vgkowipz","internal":"amqp://vgkowipz:***@dev-artistic-plum-macaw.in.rmq7.dev.cloudamqp.com/vgkowipz"},"rmq_version":"4.1.4","hostname_external":"dev-artistic-plum-macaw.rmq7.dev.cloudamqp.com","hostname_internal":"dev-artistic-plum-macaw.in.rmq7.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "810"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - e0d770ad-692c-4e46-9ddb-a1f128021628
+        status: 200 OK
+        code: 200
+        duration: 5.989084ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
         content_length: 108
         transfer_encoding: []
         trailer: {}
@@ -517,7 +568,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 13.660041ms
-    - id: 10
+    - id: 11
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -568,7 +619,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 9.123458ms
-    - id: 11
+    - id: 12
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -619,7 +670,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 7.74725ms
-    - id: 12
+    - id: 13
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -670,7 +721,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 7.221ms
-    - id: 13
+    - id: 14
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -721,7 +772,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 6.484334ms
-    - id: 14
+    - id: 15
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -772,7 +823,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 14.423875ms
-    - id: 15
+    - id: 16
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -823,7 +874,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 7.030416ms
-    - id: 16
+    - id: 17
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -870,7 +921,7 @@ interactions:
         status: 204 No Content
         code: 204
         duration: 17.868708ms
-    - id: 17
+    - id: 18
       request:
         proto: HTTP/1.1
         proto_major: 1

@@ -10,6 +10,8 @@ import (
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance/configuration"
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/utils"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -20,6 +22,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/mapplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -52,6 +55,8 @@ type oauth2ConfigurationResourceModel struct {
 	OauthScopes             types.List   `tfsdk:"oauth_scopes"`
 	Audience                types.String `tfsdk:"audience"`
 	DisableBasicAuth        types.Bool   `tfsdk:"disable_basic_auth"`
+	JwksCacheTtl            types.Int64  `tfsdk:"jwks_cache_ttl"`
+	MgmtScopes              types.String `tfsdk:"mgmt_scopes"`
 	Sleep                   types.Int64  `tfsdk:"sleep"`
 	Timeout                 types.Int64  `tfsdk:"timeout"`
 }
@@ -161,6 +166,17 @@ func (r *oauth2ConfigurationResource) Schema(ctx context.Context, req resource.S
 					boolplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"jwks_cache_ttl": schema.Int64Attribute{
+				Optional:    true,
+				Description: "LavinMQ only. How long JWKS signing keys are cached before being re-fetched, in seconds",
+				Validators: []validator.Int64{
+					int64validator.Between(0, 86400),
+				},
+			},
+			"mgmt_scopes": schema.StringAttribute{
+				Optional:    true,
+				Description: "LavinMQ only. Space-separated scopes requested during management UI SSO login",
+			},
 			"sleep": schema.Int64Attribute{
 				Optional:    true,
 				Default:     int64default.StaticInt64(60),
@@ -221,11 +237,23 @@ func (r *oauth2ConfigurationResource) Create(ctx context.Context, req resource.C
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
+	var config oauth2ConfigurationResourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	backend, diags := r.readOAuth2Backend(timeoutCtx, instanceID, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	request := model.OAuth2ConfigRequest{}
 	populateOAuth2ConfigRequestModel(ctx, &plan, &request)
 	tflog.Info(ctx, fmt.Sprintf("CreateOAuth2Configuration with request: %+v", request))
 
-	job, err := r.client.CreateOAuth2Configuration(timeoutCtx, instanceID, sleep, request)
+	job, err := r.client.CreateOAuth2Configuration(timeoutCtx, instanceID, backend, sleep, request)
 	if err != nil {
 		resp.Diagnostics.AddError("Error creating OAuth2 configuration", err.Error())
 		return
@@ -292,40 +320,27 @@ func (r *oauth2ConfigurationResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	instanceID := plan.InstanceID.ValueInt64()
-
-	preferredUsernameClaims := make([]string, 0)
-	plan.PreferredUsernameClaims.ElementsAs(ctx, &preferredUsernameClaims, false)
-
-	scopeAliases := make(map[string]string)
-	plan.ScopeAliases.ElementsAs(ctx, &scopeAliases, false)
-
-	oauthScopes := make([]string, 0)
-	plan.OauthScopes.ElementsAs(ctx, &oauthScopes, false)
-
-	additionalScopesKey := make([]string, 0)
-	plan.AdditionalScopesKey.ElementsAs(ctx, &additionalScopesKey, false)
-
-	params := model.OAuth2ConfigRequest{
-		ResourceServerId:        plan.ResourceServerId.ValueString(),
-		Issuer:                  plan.Issuer.ValueString(),
-		PreferredUsernameClaims: preferredUsernameClaims,
-		ScopeAliases:            scopeAliases,
-		VerifyAud:               utils.Pointer(plan.VerifyAud.ValueBool()),
-		OauthClientId:           plan.OauthClientId.ValueString(),
-		OauthScopes:             oauthScopes,
-		AdditionalScopesKey:     additionalScopesKey,
-		ScopePrefix:             plan.ScopePrefix.ValueString(),
-		Audience:                plan.Audience.ValueString(),
-		DisableBasicAuth:        utils.Pointer(plan.DisableBasicAuth.ValueBool()),
+	var config oauth2ConfigurationResourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
+	instanceID := plan.InstanceID.ValueInt64()
 	sleep, timeout := extractSleepAndTimeout(&plan)
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
+	backend, diags := r.readOAuth2Backend(timeoutCtx, instanceID, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	params := model.OAuth2ConfigRequest{}
+	populateOAuth2ConfigRequestModel(ctx, &plan, &params)
 	tflog.Info(ctx, fmt.Sprintf("Updating OAuth2 configuration with params: %+v", params))
-	job, err := r.client.UpdateOAuth2Configuration(timeoutCtx, instanceID, sleep, params)
+	job, err := r.client.UpdateOAuth2Configuration(timeoutCtx, instanceID, backend, sleep, params)
 	if err != nil {
 		resp.Diagnostics.AddError("Error updating OAuth2 configuration", err.Error())
 		return
@@ -375,6 +390,55 @@ func (r *oauth2ConfigurationResource) Delete(ctx context.Context, req resource.D
 }
 
 // Private methods
+
+// oauth2Attribute is a resource attribute that is only supported by one broker
+type oauth2Attribute struct {
+	name  string
+	isSet bool
+}
+
+// readOAuth2Backend looks up which broker the instance runs and checks that the configuration
+// only sets attributes that broker supports.
+func (r *oauth2ConfigurationResource) readOAuth2Backend(ctx context.Context, instanceID int64, config *oauth2ConfigurationResourceModel) (string, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	backend, err := r.client.ReadInstanceBackend(ctx, instanceID)
+	if err != nil {
+		diags.AddError("Error reading instance backend", err.Error())
+		return "", diags
+	}
+	tflog.Debug(ctx, fmt.Sprintf("OAuth2 configuration for instance %d with backend %q", instanceID, backend))
+
+	if backend == "lavinmq" {
+		diags.Append(validateOAuth2BrokerAttributes(instanceID, "LavinMQ", []oauth2Attribute{
+			{"scope_aliases", !config.ScopeAliases.IsNull()},
+			{"oauth_scopes", !config.OauthScopes.IsNull()},
+			{"disable_basic_auth", !config.DisableBasicAuth.IsNull()},
+		})...)
+	} else {
+		diags.Append(validateOAuth2BrokerAttributes(instanceID, "RabbitMQ", []oauth2Attribute{
+			{"jwks_cache_ttl", !config.JwksCacheTtl.IsNull()},
+			{"mgmt_scopes", !config.MgmtScopes.IsNull()},
+		})...)
+	}
+	return backend, diags
+}
+
+func validateOAuth2BrokerAttributes(instanceID int64, broker string, attributes []oauth2Attribute) diag.Diagnostics {
+	var diags diag.Diagnostics
+	for _, attribute := range attributes {
+		if attribute.isSet {
+			diags.AddAttributeError(
+				path.Root(attribute.name),
+				"Unsupported OAuth2 configuration attribute",
+				fmt.Sprintf("Attribute %q is not supported for instance %d, which runs %s. Remove it from the configuration.",
+					attribute.name, instanceID, broker),
+			)
+		}
+	}
+	return diags
+}
+
 func populateOAuth2ConfigurationStateModel(ctx context.Context, state *oauth2ConfigurationResourceModel, data *model.OAuth2ConfigResponse) {
 	state.ID = types.StringValue(data.ConfigurationId)
 	state.ResourceServerId = types.StringValue(data.ResourceServerId)
@@ -387,33 +451,49 @@ func populateOAuth2ConfigurationStateModel(ctx context.Context, state *oauth2Con
 		state.ScopePrefix = types.StringValue(*data.ScopePrefix)
 	}
 
-	state.AdditionalScopesKey, _ = types.ListValueFrom(ctx, types.StringType, data.AdditionalScopesKey)
+	state.AdditionalScopesKey, _ = types.ListValueFrom(ctx, types.StringType, data.AdditionalScopesKeys)
 	state.OauthScopes, _ = types.ListValueFrom(ctx, types.StringType, data.OauthScopes)
-	if data.OauthClientId != nil {
-		state.OauthClientId = types.StringValue(*data.OauthClientId)
+	if data.ClientId != nil {
+		state.OauthClientId = types.StringValue(*data.ClientId)
 	}
 
 	if data.Audience != nil {
 		state.Audience = types.StringValue(*data.Audience)
 	}
 
-	state.VerifyAud = types.BoolValue(*data.VerifyAud)
-	state.DisableBasicAuth = types.BoolValue(data.DisableBasicAuth)
+	if data.VerifyAud != nil {
+		state.VerifyAud = types.BoolValue(*data.VerifyAud)
+	}
+	// LavinMQ has no oauth_disable_basic_auth, default to false to keep the computed attribute stable
+	state.DisableBasicAuth = types.BoolValue(data.DisableBasicAuth != nil && *data.DisableBasicAuth)
+
+	state.JwksCacheTtl = types.Int64PointerValue(data.JwksCacheTtl)
+	state.MgmtScopes = types.StringPointerValue(data.MgmtScopes)
 }
 
+// populateOAuth2ConfigRequestModel only sets known values, the API client applies broker defaults
 func populateOAuth2ConfigRequestModel(ctx context.Context, plan *oauth2ConfigurationResourceModel, data *model.OAuth2ConfigRequest) {
 	plan.PreferredUsernameClaims.ElementsAs(ctx, &data.PreferredUsernameClaims, false)
+	plan.AdditionalScopesKey.ElementsAs(ctx, &data.AdditionalScopesKeys, false)
 	plan.ScopeAliases.ElementsAs(ctx, &data.ScopeAliases, false)
+	plan.OauthScopes.ElementsAs(ctx, &data.OauthScopes, false)
 
 	data.ResourceServerId = plan.ResourceServerId.ValueString()
 	data.Issuer = plan.Issuer.ValueString()
-	data.VerifyAud = utils.Pointer(plan.VerifyAud.ValueBool())
-	data.OauthClientId = plan.OauthClientId.ValueString()
-	plan.OauthScopes.ElementsAs(ctx, &data.OauthScopes, false)
-	plan.AdditionalScopesKey.ElementsAs(ctx, &data.AdditionalScopesKey, false)
+	data.VerifyAud = knownBoolPointer(plan.VerifyAud)
+	data.ClientId = plan.OauthClientId.ValueString()
 	data.ScopePrefix = plan.ScopePrefix.ValueString()
 	data.Audience = plan.Audience.ValueString()
-	data.DisableBasicAuth = utils.Pointer(plan.DisableBasicAuth.ValueBool())
+	data.DisableBasicAuth = knownBoolPointer(plan.DisableBasicAuth)
+	data.JwksCacheTtl = plan.JwksCacheTtl.ValueInt64Pointer()
+	data.MgmtScopes = plan.MgmtScopes.ValueString()
+}
+
+func knownBoolPointer(value types.Bool) *bool {
+	if value.IsNull() || value.IsUnknown() {
+		return nil
+	}
+	return utils.Pointer(value.ValueBool())
 }
 
 func extractSleepAndTimeout(plan *oauth2ConfigurationResourceModel) (time.Duration, time.Duration) {

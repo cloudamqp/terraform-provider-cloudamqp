@@ -468,6 +468,57 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/156
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 782
+        uncompressed: false
+        body: '{"id":156,"name":"TestAccOAuth2Configuration_Basic","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"08796550-3878-49ee-978e-274e4dcf3be5","url":"amqps://fklaihta:***@dev-cool-blue-snake.rmq3.dev.cloudamqp.com/fklaihta","ready":true,"apikey":"d812c33e-e717-4d56-a5dd-91dfe13c2d8a","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://fklaihta:***@dev-cool-blue-snake.rmq3.dev.cloudamqp.com/fklaihta","internal":"amqp://fklaihta:***@dev-cool-blue-snake.in.rmq3.dev.cloudamqp.com/fklaihta"},"rmq_version":"4.1.4","hostname_external":"dev-cool-blue-snake.rmq3.dev.cloudamqp.com","hostname_internal":"dev-cool-blue-snake.in.rmq3.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "782"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 38a48842-0de7-472c-92b5-892815b2bbd4
+        status: 200 OK
+        code: 200
+        duration: 7.145417ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
         content_length: 174
         transfer_encoding: []
         trailer: {}
@@ -517,7 +568,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 19.002458ms
-    - id: 10
+    - id: 11
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -568,7 +619,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 8.077958ms
-    - id: 11
+    - id: 12
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -619,7 +670,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 6.95125ms
-    - id: 12
+    - id: 13
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -670,7 +721,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 7.998042ms
-    - id: 13
+    - id: 14
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -721,7 +772,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 6.0395ms
-    - id: 14
+    - id: 15
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -772,7 +823,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 7.275458ms
-    - id: 15
+    - id: 16
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -823,7 +874,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 6.922125ms
-    - id: 16
+    - id: 17
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -874,7 +925,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 14.512416ms
-    - id: 17
+    - id: 18
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -925,7 +976,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 8.133833ms
-    - id: 18
+    - id: 19
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -972,7 +1023,7 @@ interactions:
         status: 204 No Content
         code: 204
         duration: 25.284334ms
-    - id: 19
+    - id: 20
       request:
         proto: HTTP/1.1
         proto_major: 1
