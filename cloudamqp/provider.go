@@ -99,6 +99,7 @@ func (p *cloudamqpProvider) DataSources(_ context.Context) []func() datasource.D
 	return []func() datasource.DataSource{
 		NewAlarmDataSource,
 		NewNotificationDataSource,
+		NewTeamTagsDataSource,
 	}
 }
 
@@ -117,6 +118,8 @@ func (p *cloudamqpProvider) Resources(_ context.Context) []func() resource.Resou
 		NewOAuth2ConfigurationResource,
 		NewPluginBatchResource,
 		NewRabbitMqConfigurationResource,
+		NewTeamMemberResource,
+		NewTeamTagResource,
 		NewTrustStoreResource,
 		NewVpcResource,
 		NewWebhookResource,
