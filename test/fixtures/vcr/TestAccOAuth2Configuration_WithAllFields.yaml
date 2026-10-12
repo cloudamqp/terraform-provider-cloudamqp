@@ -468,6 +468,57 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/instances/158
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 800
+        uncompressed: false
+        body: '{"id":158,"name":"TestAccOAuth2Configuration_WithAllFields","plan":"bunny-1","region":"amazon-web-services::us-east-1","tags":["terraform"],"providerid":"2b995065-ab85-4df7-a692-11d3eb3fbd04","url":"amqps://tmmccxmt:***@dev-brisk-crimson-yak.rmq2.dev.cloudamqp.com/tmmccxmt","ready":true,"apikey":"27899bf8-4e09-4db9-be29-51ba42d6ee51","backend":"rabbitmq","nodes":1,"urls":{"external":"amqps://tmmccxmt:***@dev-brisk-crimson-yak.rmq2.dev.cloudamqp.com/tmmccxmt","internal":"amqp://tmmccxmt:***@dev-brisk-crimson-yak.in.rmq2.dev.cloudamqp.com/tmmccxmt"},"rmq_version":"4.1.4","hostname_external":"dev-brisk-crimson-yak.rmq2.dev.cloudamqp.com","hostname_internal":"dev-brisk-crimson-yak.in.rmq2.dev.cloudamqp.com"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "800"
+            Content-Type:
+                - application/json
+            Nel:
+                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Report-To:
+                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8325bf02-5283-48bf-9d68-4d9d4c954319
+        status: 200 OK
+        code: 200
+        duration: 8.505958ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
         content_length: 361
         transfer_encoding: []
         trailer: {}
@@ -517,7 +568,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 20.840833ms
-    - id: 10
+    - id: 11
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -568,7 +619,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 8.099416ms
-    - id: 11
+    - id: 12
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -619,7 +670,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 7.156875ms
-    - id: 12
+    - id: 13
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -670,7 +721,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 7.577666ms
-    - id: 13
+    - id: 14
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -721,7 +772,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 8.332334ms
-    - id: 14
+    - id: 15
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -772,7 +823,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 13.838791ms
-    - id: 15
+    - id: 16
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -823,7 +874,7 @@ interactions:
         status: 200 OK
         code: 200
         duration: 11.2815ms
-    - id: 16
+    - id: 17
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -870,7 +921,7 @@ interactions:
         status: 204 No Content
         code: 204
         duration: 29.308625ms
-    - id: 17
+    - id: 18
       request:
         proto: HTTP/1.1
         proto_major: 1

@@ -2,16 +2,21 @@
 layout: "cloudamqp"
 page_title: "CloudAMQP: cloudamqp_oauth2_configuration"
 description: |-
-  Configure OAuth2 authentication for RabbitMQ
+  Configure OAuth2 authentication for RabbitMQ or LavinMQ
 ---
 
 <!-- markdownlint-disable MD033 -->
 
 # cloudamqp_oauth2_configuration
 
-This resource allows you to configure OAuth2 authentication for your RabbitMQ instance.
+This resource allows you to configure OAuth2 authentication for your RabbitMQ or LavinMQ instance.
 
-Only available for dedicated subscription plans running ***RabbitMQ***.
+Only available for dedicated subscription plans running ***RabbitMQ*** or ***LavinMQ***. LavinMQ
+requires version 2.7.0 or newer.
+
+The resource looks up which broker the instance runs when creating or updating the configuration.
+Some attributes are only supported by one of the brokers, see [Broker support](#broker-support).
+Setting an attribute the broker doesn't support fails the apply with an error.
 
 ## Example Usage
 
@@ -81,6 +86,48 @@ resource "cloudamqp_oauth2_configuration" "oauth2_config" {
 
 </details>
 
+<details>
+  <summary>
+    <b>
+      <i>LavinMQ OAuth2 configuration</i>
+    </b>
+  </summary>
+
+```hcl
+resource "cloudamqp_oauth2_configuration" "oauth2_config" {
+  instance_id               = cloudamqp_instance.instance.id
+  issuer                    = "https://auth.example.com/realms/lavinmq"
+  resource_server_id        = "lavinmq"
+  verify_aud                = true
+  preferred_username_claims = ["preferred_username"]
+}
+```
+
+</details>
+
+<details>
+  <summary>
+    <b>
+      <i>LavinMQ OAuth2 configuration with management UI SSO login</i>
+    </b>
+  </summary>
+
+Requires LavinMQ 2.9.0 or newer, and 2.9.1 or newer for `mgmt_scopes`.
+
+```hcl
+resource "cloudamqp_oauth2_configuration" "oauth2_config" {
+  instance_id           = cloudamqp_instance.instance.id
+  issuer                = "https://auth.example.com/realms/lavinmq"
+  resource_server_id    = "lavinmq"
+  additional_scopes_key = ["roles"]
+  oauth_client_id       = "lavinmq-mgmt"
+  mgmt_scopes           = "openid profile email"
+  jwks_cache_ttl        = 3600
+}
+```
+
+</details>
+
 ## Argument Reference
 
 The following arguments are supported:
@@ -99,18 +146,47 @@ The following arguments are supported:
 * `scope_aliases`              - (Optional) Map of scope aliases to translate scope names. This allows
                                  mapping OAuth2 scopes to RabbitMQ permission tags.
 * `verify_aud`                 - (Optional/Computed) Whether to verify the audience claim in the JWT
-                                 token. Defaults to true.
-* `oauth_client_id`            - (Optional) OAuth2 client ID used for token validation.
+                                 token. When not set, RabbitMQ is configured with false and LavinMQ
+                                 uses the API default, true.
+* `oauth_client_id`            - (Optional) OAuth2 client ID used for token validation. For LavinMQ,
+                                 this is the client ID for management UI SSO login, which requires
+                                 LavinMQ 2.9.0 or newer.
 * `oauth_scopes`               - (Optional) List of OAuth2 scopes to request. These scopes will be
                                  used when obtaining access tokens.
 * `audience`                   - (Optional) The audience to be passed along to the Oauth2 provider when
                                  logging in to the management interface. Must be configured for Auth0,
                                  cannot be configured for Entra ID v2.
 * `disable_basic_auth`         - (Optional/Computed) Disable static username/password management interface access.
+                                 RabbitMQ only.
+* `jwks_cache_ttl`             - (Optional) How long JWKS signing keys are cached before being re-fetched
+                                 from the identity provider, in seconds. Between 0 and 86400. LavinMQ only.
+* `mgmt_scopes`                - (Optional) Space-separated OAuth2 scopes requested during management UI
+                                 SSO login, used together with `oauth_client_id`. Requires LavinMQ 2.9.1 or newer.
+                                 LavinMQ only.
 * `sleep`                      - (Optional) Configurable sleep time in seconds between retries for
                                  OAuth2 configuration. Default set to 60 seconds.
 * `timeout`                    - (Optional) Configurable timeout time in seconds for OAuth2
                                  configuration. Default set to 3600 seconds.
+
+## Broker support
+
+| Attribute                   | RabbitMQ | LavinMQ                           |
+|-----------------------------|----------|-----------------------------------|
+| `resource_server_id`        | Yes      | Yes                               |
+| `issuer`                    | Yes      | Yes                               |
+| `preferred_username_claims` | Yes      | Yes                               |
+| `additional_scopes_key`     | Yes      | Yes                               |
+| `scope_prefix`              | Yes      | Yes                               |
+| `verify_aud`                | Yes      | Yes                               |
+| `audience`                  | Yes      | Yes                               |
+| `oauth_client_id`           | Yes      | Yes, LavinMQ 2.9.0 or newer       |
+| `scope_aliases`             | Yes      | No                                |
+| `oauth_scopes`              | Yes      | No                                |
+| `disable_basic_auth`        | Yes      | No                                |
+| `jwks_cache_ttl`            | No       | Yes                               |
+| `mgmt_scopes`               | No       | Yes, LavinMQ 2.9.1 or newer       |
+
+The CloudAMQP API requires LavinMQ 2.7.0 or newer for OAuth2 configuration.
 
 ## Attributes Reference
 
@@ -147,3 +223,6 @@ Or use Terraform CLI:
 * Only one OAuth2 configuration can exist per instance. Creating a new configuration will replace
   any existing configuration.
 * After a configuration has been applied, a restart of RabbitMQ is required for the changes to take effect.
+* For LavinMQ with `oauth_client_id` set, the management UI base URL used for the SSO login callback
+  defaults to the instance hostname. Overriding it (`mgmt_base_url` in the API) is not supported by
+  this resource.

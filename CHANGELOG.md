@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.51.0 (Unreleased)
+
+FEATURES:
+
+* resource/cloudamqp_oauth2_configuration: Added support for instances running LavinMQ, with LavinMQ only attributes `jwks_cache_ttl` and `mgmt_scopes` ([#556])
+
+[#556]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/556
+
 ## 1.50.1 (30 Sep, 2026)
 
 BUG FIXES:
