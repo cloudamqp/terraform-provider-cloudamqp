@@ -203,8 +203,8 @@ func TestOAuth2Configuration_LavinMQ_Create(t *testing.T) {
 	fake, server := newFakeOAuth2API(t, "lavinmq")
 
 	config := oauth2UnitTestConfig(server.URL, `
-  issuer                    = "https://lavinmq-demo-keycloak.84.codes/realms/lavinmq-demo"
-  resource_server_id        = "wamschat-prod"
+  issuer                    = "https://auth.example.com/realms/lavinmq"
+  resource_server_id        = "lavinmq"
   verify_aud                = true
   preferred_username_claims = ["preferred_username"]
 `)
@@ -214,13 +214,13 @@ func TestOAuth2Configuration_LavinMQ_Create(t *testing.T) {
 			Config: config,
 			Check: resource.ComposeAggregateTestCheckFunc(
 				fake.checkLastRequest(`{
-					"issuer": "https://lavinmq-demo-keycloak.84.codes/realms/lavinmq-demo",
-					"resource_server_id": "wamschat-prod",
+					"issuer": "https://auth.example.com/realms/lavinmq",
+					"resource_server_id": "lavinmq",
 					"verify_aud": true,
 					"preferred_username_claims": ["preferred_username"]
 				}`, 1),
-				resource.TestCheckResourceAttr(oauth2ResourceName, "issuer", "https://lavinmq-demo-keycloak.84.codes/realms/lavinmq-demo"),
-				resource.TestCheckResourceAttr(oauth2ResourceName, "resource_server_id", "wamschat-prod"),
+				resource.TestCheckResourceAttr(oauth2ResourceName, "issuer", "https://auth.example.com/realms/lavinmq"),
+				resource.TestCheckResourceAttr(oauth2ResourceName, "resource_server_id", "lavinmq"),
 				resource.TestCheckResourceAttr(oauth2ResourceName, "verify_aud", "true"),
 				resource.TestCheckResourceAttr(oauth2ResourceName, "preferred_username_claims.#", "1"),
 				resource.TestCheckResourceAttr(oauth2ResourceName, "preferred_username_claims.0", "preferred_username"),

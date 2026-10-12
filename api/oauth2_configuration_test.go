@@ -111,7 +111,7 @@ func TestOAuth2ConfigResponse(t *testing.T) {
 			name: "lavinmq",
 			body: `{"id":"abc","resource_server_id":"my-app","issuer":"https://auth.example.com",
 				"additional_scopes_keys":["roles"],"client_id":"client","jwks_cache_ttl":300,
-				"mgmt_scopes":"openid profile","mgmt_base_url":"https://host","audience":null,
+				"mgmt_scopes":"openid profile","mgmt_base_url":"https://lavinmq.example.com","audience":null,
 				"scope_prefix":null,"preferred_username_claims":null,"verify_aud":true}`,
 			expected: model.OAuth2ConfigResponse{
 				ConfigurationId:      "abc",

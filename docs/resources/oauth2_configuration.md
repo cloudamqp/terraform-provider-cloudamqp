@@ -96,8 +96,8 @@ resource "cloudamqp_oauth2_configuration" "oauth2_config" {
 ```hcl
 resource "cloudamqp_oauth2_configuration" "oauth2_config" {
   instance_id               = cloudamqp_instance.instance.id
-  issuer                    = "https://lavinmq-demo-keycloak.84.codes/realms/lavinmq-demo"
-  resource_server_id        = "wamschat-prod"
+  issuer                    = "https://auth.example.com/realms/lavinmq"
+  resource_server_id        = "lavinmq"
   verify_aud                = true
   preferred_username_claims = ["preferred_username"]
 }
