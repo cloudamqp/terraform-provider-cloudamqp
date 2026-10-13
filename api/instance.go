@@ -289,6 +289,23 @@ func (api *API) ReadInstance(ctx context.Context, instanceID string) (map[string
 	return data, nil
 }
 
+// ReadInstanceBackend returns the broker the instance runs, "rabbitmq" or "lavinmq"
+func (api *API) ReadInstanceBackend(ctx context.Context, instanceID int64) (string, error) {
+	data, err := api.ReadInstance(ctx, strconv.FormatInt(instanceID, 10))
+	if err != nil {
+		return "", err
+	}
+	if data == nil {
+		return "", fmt.Errorf("instance %d not found", instanceID)
+	}
+
+	backend, ok := data["backend"].(string)
+	if !ok {
+		return "", fmt.Errorf("instance %d has no backend", instanceID)
+	}
+	return backend, nil
+}
+
 func (api *API) UpdateInstance(ctx context.Context, instanceID string, params map[string]any) error {
 	var (
 		failed     map[string]any
