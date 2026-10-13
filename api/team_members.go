@@ -10,6 +10,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
+// teamAPIError re-extracts the backend's {"error": "..."} message, since
+// extractErrorMessage only checks {"message": "..."}.
+func teamAPIError(err error, failed map[string]any) error {
+	if msg, ok := failed["error"].(string); ok {
+		return fmt.Errorf("%s", msg)
+	}
+	return err
+}
+
 // InviteTeamMember invites an email, or updates an existing pending invite
 // (the backend upserts on email+team).
 func (api *API) InviteTeamMember(ctx context.Context, params model.InviteRequest) error {
@@ -28,7 +37,7 @@ func (api *API) InviteTeamMember(ctx context.Context, params model.InviteRequest
 		failed:       &failed,
 	})
 	if err != nil {
-		return teamTagError(err, failed)
+		return teamAPIError(err, failed)
 	}
 	return nil
 }
@@ -57,7 +66,7 @@ func (api *API) LookupTeamMember(ctx context.Context, email string) (*model.Memb
 		return nil, nil
 	}
 	if err != nil {
-		return nil, teamTagError(err, failed)
+		return nil, teamAPIError(err, failed)
 	}
 	return &data, nil
 }
@@ -80,7 +89,7 @@ func (api *API) UpdateTeamInvite(ctx context.Context, inviteID string, params mo
 		failed:       &failed,
 	})
 	if err != nil {
-		return teamTagError(err, failed)
+		return teamAPIError(err, failed)
 	}
 	return nil
 }
@@ -103,7 +112,7 @@ func (api *API) DeleteTeamInvite(ctx context.Context, inviteID string) error {
 		failed:       &failed,
 	})
 	if err != nil {
-		return teamTagError(err, failed)
+		return teamAPIError(err, failed)
 	}
 	return nil
 }
@@ -126,7 +135,7 @@ func (api *API) UpdateTeamMember(ctx context.Context, userID string, params mode
 		failed:       &failed,
 	})
 	if err != nil {
-		return teamTagError(err, failed)
+		return teamAPIError(err, failed)
 	}
 	return nil
 }
@@ -149,7 +158,7 @@ func (api *API) RemoveTeamMember(ctx context.Context, email string) error {
 		failed:       &failed,
 	})
 	if err != nil {
-		return teamTagError(err, failed)
+		return teamAPIError(err, failed)
 	}
 	return nil
 }
