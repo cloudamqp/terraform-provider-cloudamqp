@@ -15,12 +15,9 @@ which one currently applies. The resource transparently keeps working as the inv
 roles. A tag name that doesn't exist yet is created automatically, the same way tagging an instance
 or VPC works.
 
-For SAML-configured teams, `role`/`tags` are not managed by Terraform, the IdP controls them on
-login. Configured values are still sent once on invite, but any plan/apply against an existing
-SAML-configured member ignores configuration changes to `role`/`tags` with a warning, since the
-IdP may overwrite them again on the member's next login regardless of what Terraform does. Leave
-`role`/`tags` unset in config for a SAML-managed member so they can track whatever the IdP assigns
-without Terraform fighting it with a perpetual diff.
+For a SAML-configured team, the IdP may overwrite `role`/`tags` again on the member's next login
+regardless of what Terraform configures. If that happens, the next plan will show the drift like
+any other out-of-band change.
 
 ## Example Usage
 
@@ -56,8 +53,6 @@ All attributes reference are computed
   afterwards.
 * `invite_id`       - The pending invite's id. Null once `status` is `"member"`.
 * `user_id`         - The accepted member's user id. Null while `status` is `"pending"`.
-* `saml_configured` - True when the team has SAML configured, in which case `role`/`tags` are not
-  managed by Terraform.
 
 ## Import
 

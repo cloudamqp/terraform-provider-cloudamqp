@@ -13,7 +13,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -45,14 +44,13 @@ func NewTeamMemberResource() resource.Resource {
 }
 
 type teamMemberResourceModel struct {
-	ID             types.String `tfsdk:"id"`
-	Email          types.String `tfsdk:"email"`
-	Role           types.String `tfsdk:"role"`
-	Tags           types.List   `tfsdk:"tags"`
-	Status         types.String `tfsdk:"status"`
-	InviteID       types.String `tfsdk:"invite_id"`
-	UserID         types.String `tfsdk:"user_id"`
-	SamlConfigured types.Bool   `tfsdk:"saml_configured"`
+	ID       types.String `tfsdk:"id"`
+	Email    types.String `tfsdk:"email"`
+	Role     types.String `tfsdk:"role"`
+	Tags     types.List   `tfsdk:"tags"`
+	Status   types.String `tfsdk:"status"`
+	InviteID types.String `tfsdk:"invite_id"`
+	UserID   types.String `tfsdk:"user_id"`
 }
 
 func (r *teamMemberResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -63,9 +61,7 @@ func (r *teamMemberResource) Schema(ctx context.Context, req resource.SchemaRequ
 	resp.Schema = schema.Schema{
 		Description: "Manages a team member invite/membership as a single resource across both states: " +
 			"a pending invite before it's accepted, and an accepted member afterwards. \"status\" reports " +
-			"which one currently applies, it's computed, not configured. For SAML-configured teams, " +
-			"\"role\"/\"tags\" are not managed by Terraform (the IdP controls them on login); configured " +
-			"values are ignored with a warning.",
+			"which one currently applies, it's computed, not configured.",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Computed:    true,
@@ -123,13 +119,6 @@ func (r *teamMemberResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Description: "The accepted member's user id. Null while status is \"pending\".",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
-				},
-			},
-			"saml_configured": schema.BoolAttribute{
-				Computed:    true,
-				Description: "True when the team has SAML configured, in which case role/tags are not managed by Terraform.",
-				PlanModifiers: []planmodifier.Bool{
-					boolplanmodifier.UseStateForUnknown(),
 				},
 			},
 		},
@@ -251,41 +240,37 @@ func (r *teamMemberResource) Update(ctx context.Context, req resource.UpdateRequ
 
 	email := state.Email.ValueString()
 
-	// Skip pushing role/tags changes for a SAML-configured team - readState below adds the
-	// warning explaining why, once, after re-reading the actual backend state.
-	if !state.SamlConfigured.ValueBool() {
-		tags := make([]string, 0)
-		if !plan.Tags.IsNull() && !plan.Tags.IsUnknown() {
-			resp.Diagnostics.Append(plan.Tags.ElementsAs(ctx, &tags, false)...)
-			if resp.Diagnostics.HasError() {
-				return
-			}
-		}
-
-		role := ""
-		if !plan.Role.IsNull() && !plan.Role.IsUnknown() {
-			role = plan.Role.ValueString()
-		}
-
-		var err error
-		if state.Status.ValueString() == "pending" {
-			err = r.client.UpdateTeamInvite(ctx, state.InviteID.ValueString(), model.InviteUpdateRequest{
-				Role: role,
-				Tags: tags,
-			})
-		} else {
-			err = r.client.UpdateTeamMember(ctx, state.UserID.ValueString(), model.MemberUpdateRequest{
-				Role: role,
-				Tags: tags,
-			})
-		}
-		if err != nil {
-			resp.Diagnostics.AddError(
-				"Failed to Update Team Member",
-				fmt.Sprintf("Could not update %q: %s", email, err),
-			)
+	tags := make([]string, 0)
+	if !plan.Tags.IsNull() && !plan.Tags.IsUnknown() {
+		resp.Diagnostics.Append(plan.Tags.ElementsAs(ctx, &tags, false)...)
+		if resp.Diagnostics.HasError() {
 			return
 		}
+	}
+
+	role := ""
+	if !plan.Role.IsNull() && !plan.Role.IsUnknown() {
+		role = plan.Role.ValueString()
+	}
+
+	var err error
+	if state.Status.ValueString() == "pending" {
+		err = r.client.UpdateTeamInvite(ctx, state.InviteID.ValueString(), model.InviteUpdateRequest{
+			Role: role,
+			Tags: tags,
+		})
+	} else {
+		err = r.client.UpdateTeamMember(ctx, state.UserID.ValueString(), model.MemberUpdateRequest{
+			Role: role,
+			Tags: tags,
+		})
+	}
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Failed to Update Team Member",
+			fmt.Sprintf("Could not update %q: %s", email, err),
+		)
+		return
 	}
 
 	newState, diags := r.readState(ctx, email)
@@ -347,23 +332,14 @@ func (r *teamMemberResource) readState(ctx context.Context, displayEmail string)
 		return nil, diags
 	}
 
-	if data.SamlConfigured {
-		diags.AddWarning(
-			"Role/Tags Not Managed by Terraform",
-			fmt.Sprintf("Team member %q belongs to a SAML-configured team. Role and tags are controlled by "+
-				"the IdP's role mapping on login and are not managed by Terraform.", email),
-		)
-	}
-
 	state := &teamMemberResourceModel{
-		ID:             types.StringValue(email),
-		Email:          types.StringValue(displayEmail),
-		Role:           types.StringValue(data.Role),
-		Tags:           tagsList,
-		Status:         types.StringValue(data.Status),
-		SamlConfigured: types.BoolValue(data.SamlConfigured),
-		InviteID:       types.StringNull(),
-		UserID:         types.StringNull(),
+		ID:       types.StringValue(email),
+		Email:    types.StringValue(displayEmail),
+		Role:     types.StringValue(data.Role),
+		Tags:     tagsList,
+		Status:   types.StringValue(data.Status),
+		InviteID: types.StringNull(),
+		UserID:   types.StringNull(),
 	}
 	if data.Status == "pending" {
 		state.InviteID = types.StringValue(memberIDString(data.ID))

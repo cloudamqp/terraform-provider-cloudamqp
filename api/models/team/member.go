@@ -35,5 +35,4 @@ type MemberLookupResponse struct {
 	Role           string   `json:"role"`
 	Tags           []string `json:"tags"`
 	TfaAuthEnabled *bool    `json:"tfa_auth_enabled,omitempty"`
-	SamlConfigured bool     `json:"saml_configured"`
 }
