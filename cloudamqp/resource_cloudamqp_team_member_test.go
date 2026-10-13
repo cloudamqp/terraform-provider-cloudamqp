@@ -30,15 +30,6 @@ func TestAccTeamMember_PendingInvite(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: `
-					resource "cloudamqp_team_tag" "member_tag_a" {
-						name = "tf-acc-test-member-tag-a"
-					}
-
-					resource "cloudamqp_team_tag" "member_tag_b" {
-						name       = "tf-acc-test-member-tag-b"
-						depends_on = [cloudamqp_team_tag.member_tag_a]
-					}
-
 					resource "cloudamqp_team_member" "member" {
 						email = "test@example.com"
 						tags  = []
@@ -56,18 +47,9 @@ func TestAccTeamMember_PendingInvite(t *testing.T) {
 			},
 			{
 				Config: `
-					resource "cloudamqp_team_tag" "member_tag_a" {
-						name = "tf-acc-test-member-tag-a"
-					}
-
-					resource "cloudamqp_team_tag" "member_tag_b" {
-						name       = "tf-acc-test-member-tag-b"
-						depends_on = [cloudamqp_team_tag.member_tag_a]
-					}
-
 					resource "cloudamqp_team_member" "member" {
 						email = "test@example.com"
-						tags  = [cloudamqp_team_tag.member_tag_a.name]
+						tags  = ["tf-acc-test-member-tag-a"]
 					}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
@@ -95,19 +77,10 @@ func TestAccTeamMember_AcceptedMember(t *testing.T) {
 	memberResourceName := "cloudamqp_team_member.member"
 
 	pendingConfig := `
-		resource "cloudamqp_team_tag" "member_tag_a" {
-			name = "tf-acc-test-member-tag-a"
-		}
-
-		resource "cloudamqp_team_tag" "member_tag_b" {
-			name       = "tf-acc-test-member-tag-b"
-			depends_on = [cloudamqp_team_tag.member_tag_a]
-		}
-
 		resource "cloudamqp_team_member" "member" {
 			email = "test@example.com"
 			role  = "member"
-			tags  = [cloudamqp_team_tag.member_tag_a.name]
+			tags  = ["tf-acc-test-member-tag-a"]
 		}
 	`
 
@@ -141,19 +114,10 @@ func TestAccTeamMember_AcceptedMember(t *testing.T) {
 			},
 			{
 				Config: `
-					resource "cloudamqp_team_tag" "member_tag_a" {
-						name = "tf-acc-test-member-tag-a"
-					}
-
-					resource "cloudamqp_team_tag" "member_tag_b" {
-						name       = "tf-acc-test-member-tag-b"
-						depends_on = [cloudamqp_team_tag.member_tag_a]
-					}
-
 					resource "cloudamqp_team_member" "member" {
 						email = "test@example.com"
 						role  = "member"
-						tags  = [cloudamqp_team_tag.member_tag_a.name, cloudamqp_team_tag.member_tag_b.name]
+						tags  = ["tf-acc-test-member-tag-a", "tf-acc-test-member-tag-b"]
 					}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
@@ -164,15 +128,6 @@ func TestAccTeamMember_AcceptedMember(t *testing.T) {
 			{
 				// Clearing an accepted member's tags to [] via PUT /api/team/:user_id.
 				Config: `
-					resource "cloudamqp_team_tag" "member_tag_a" {
-						name = "tf-acc-test-member-tag-a"
-					}
-
-					resource "cloudamqp_team_tag" "member_tag_b" {
-						name       = "tf-acc-test-member-tag-b"
-						depends_on = [cloudamqp_team_tag.member_tag_a]
-					}
-
 					resource "cloudamqp_team_member" "member" {
 						email = "test@example.com"
 						role  = "member"

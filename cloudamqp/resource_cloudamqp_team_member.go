@@ -98,8 +98,8 @@ func (r *teamMemberResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional:    true,
 				Computed:    true,
 				ElementType: types.StringType,
-				Description: "Tags (created via cloudamqp_team_tag) granting access to tagged instances. " +
-					"Only meaningful for the \"member\"/\"monitor\" roles.",
+				Description: "Tag names granting access to tagged instances. A tag that doesn't exist yet " +
+					"is created automatically. Only meaningful for the \"member\"/\"monitor\" roles.",
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.UseStateForUnknown(),
 				},

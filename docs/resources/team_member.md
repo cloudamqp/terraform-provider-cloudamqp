@@ -12,8 +12,8 @@ be in: a pending invite before it's accepted, and an accepted member afterwards.
 which one currently applies. The resource transparently keeps working as the invite transitions from one to the other.
 
 `role` defaults to `"member"` if not set. `tags` are only meaningful for the `"member"`/`"monitor"`
-roles. Either create new ones with [`cloudamqp_team_tag`], or reference existing tags (created outside
-Terraform, or in another Terraform configuration) via the [`cloudamqp_team_tags`] data source.
+roles. A tag name that doesn't exist yet is created automatically, the same way tagging an instance
+or VPC works.
 
 For SAML-configured teams, `role`/`tags` are not managed by Terraform, the IdP controls them on
 login. Configured values are still sent once on invite, but any plan/apply against an existing
@@ -30,15 +30,11 @@ provider "cloudamqp" {
   apikey = var.cloudamqp_customer_api_key
 }
 
-resource "cloudamqp_team_tag" "production" {
-  name = "production"
-}
-
 # Invite a new team member
 resource "cloudamqp_team_member" "member" {
   email = "user@example.com"
   role  = "member"
-  tags  = [cloudamqp_team_tag.production.name]
+  tags  = ["production"]
 }
 ```
 
@@ -47,8 +43,8 @@ resource "cloudamqp_team_member" "member" {
 * `email` - (Required) Email address to invite. Changing this forces a new resource.
 * `role`  - (Optional/Computed) Role assigned to the team member. Defaults to `"member"` if omitted.
   One of: `admin`, `billing manager`, `member`, `monitor`, `devops`.
-* `tags`  - (Optional/Computed) Tags granting access to tagged instances. Only meaningful for the
-  `"member"`/`"monitor"` roles.
+* `tags`  - (Optional/Computed) Tag names granting access to tagged instances. A tag that doesn't
+  exist yet is created automatically. Only meaningful for the `"member"`/`"monitor"` roles.
 
 ## Attributes Reference
 
@@ -79,6 +75,3 @@ import {
 Or with Terraform CLI:
 
 `terraform import cloudamqp_team_member.member user@example.com`
-
-[`cloudamqp_team_tag`]: ./team_tag.md
-[`cloudamqp_team_tags`]: ../data-sources/team_tags.md
