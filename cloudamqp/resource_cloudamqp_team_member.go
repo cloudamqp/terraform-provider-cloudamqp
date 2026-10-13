@@ -3,6 +3,7 @@ package cloudamqp
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
@@ -151,9 +152,8 @@ func (r *teamMemberResource) Configure(ctx context.Context, req resource.Configu
 }
 
 func (r *teamMemberResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	email := strings.ToLower(strings.TrimSpace(req.ID))
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), email)...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("email"), email)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), normalizeEmail(req.ID))...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("email"), req.ID)...)
 }
 
 func (r *teamMemberResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -163,7 +163,8 @@ func (r *teamMemberResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
-	email := normalizeEmail(plan.Email.ValueString())
+	displayEmail := plan.Email.ValueString()
+	email := normalizeEmail(displayEmail)
 
 	tags := make([]string, 0)
 	if !plan.Tags.IsNull() && !plan.Tags.IsUnknown() {
@@ -203,7 +204,7 @@ func (r *teamMemberResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
-	state, diags := r.readState(ctx, email)
+	state, diags := r.readState(ctx, displayEmail)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -326,10 +327,10 @@ func (r *teamMemberResource) Delete(ctx context.Context, req resource.DeleteRequ
 	resp.State.RemoveResource(ctx)
 }
 
-// readState looks up email and builds the resource state, or returns nil if
-// neither a pending invite nor a member exists.
-func (r *teamMemberResource) readState(ctx context.Context, email string) (*teamMemberResourceModel, diag.Diagnostics) {
+func (r *teamMemberResource) readState(ctx context.Context, displayEmail string) (*teamMemberResourceModel, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	email := normalizeEmail(displayEmail)
 
 	data, err := r.client.LookupTeamMember(ctx, email)
 	if err != nil {
@@ -356,7 +357,7 @@ func (r *teamMemberResource) readState(ctx context.Context, email string) (*team
 
 	state := &teamMemberResourceModel{
 		ID:             types.StringValue(email),
-		Email:          types.StringValue(email),
+		Email:          types.StringValue(displayEmail),
 		Role:           types.StringValue(data.Role),
 		Tags:           tagsList,
 		Status:         types.StringValue(data.Status),
@@ -365,9 +366,9 @@ func (r *teamMemberResource) readState(ctx context.Context, email string) (*team
 		UserID:         types.StringNull(),
 	}
 	if data.Status == "pending" {
-		state.InviteID = types.StringValue(data.IDString())
+		state.InviteID = types.StringValue(memberIDString(data.ID))
 	} else {
-		state.UserID = types.StringValue(data.IDString())
+		state.UserID = types.StringValue(memberIDString(data.ID))
 	}
 
 	return state, diags
@@ -375,4 +376,15 @@ func (r *teamMemberResource) readState(ctx context.Context, email string) (*team
 
 func normalizeEmail(email string) string {
 	return strings.ToLower(strings.TrimSpace(email))
+}
+
+func memberIDString(id any) string {
+	switch v := id.(type) {
+	case string:
+		return v
+	case float64:
+		return strconv.FormatFloat(v, 'f', -1, 64)
+	default:
+		return ""
+	}
 }

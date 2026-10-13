@@ -1,7 +1,5 @@
 package team
 
-import "strconv"
-
 // InviteRequest is the body for POST /api/team/invite. Tags is comma-separated.
 type InviteRequest struct {
 	Email string `json:"email"`
@@ -38,17 +36,4 @@ type MemberLookupResponse struct {
 	Tags           []string `json:"tags"`
 	TfaAuthEnabled *bool    `json:"tfa_auth_enabled,omitempty"`
 	SamlConfigured bool     `json:"saml_configured"`
-}
-
-// IDString renders ID - a pending invite's JSON number or an accepted
-// member's UUID string - as a plain string either way.
-func (m MemberLookupResponse) IDString() string {
-	switch v := m.ID.(type) {
-	case string:
-		return v
-	case float64:
-		return strconv.FormatFloat(v, 'f', -1, 64)
-	default:
-		return ""
-	}
 }
