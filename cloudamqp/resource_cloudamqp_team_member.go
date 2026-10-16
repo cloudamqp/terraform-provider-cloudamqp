@@ -163,8 +163,8 @@ func (r *teamMemberResource) Create(ctx context.Context, req resource.CreateRequ
 		}
 	}
 
-	// POST /api/team/invite joins tags with "," and the backend splits on "," - a tag name
-	// containing a comma would silently become two different tags.
+	// POST /api/team/invite joins tags with "," and the backend splits on ",", so a tag
+	// name containing a comma would silently become two different tags.
 	for _, tag := range tags {
 		if strings.Contains(tag, ",") {
 			resp.Diagnostics.AddError(
@@ -180,7 +180,7 @@ func (r *teamMemberResource) Create(ctx context.Context, req resource.CreateRequ
 		role = plan.Role.ValueString()
 	}
 
-	err := r.client.InviteTeamMember(ctx, model.InviteRequest{
+	invite, err := r.client.InviteTeamMember(ctx, model.InviteRequest{
 		Email: email,
 		Role:  role,
 		Tags:  strings.Join(tags, ","),
@@ -193,16 +193,18 @@ func (r *teamMemberResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
-	state, diags := r.readState(ctx, displayEmail)
+	// POST /api/team/invite defaults an omitted role to "member" server-side.
+	if role == "" {
+		role = "member"
+	}
+
+	state, diags := inviteState(ctx, displayEmail, &model.InviteByEmailResponse{
+		ID:   invite.ID,
+		Role: role,
+		Tags: tags,
+	})
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
-		return
-	}
-	if state == nil {
-		resp.Diagnostics.AddError(
-			"Failed to Create Team Member",
-			fmt.Sprintf("Invite for %q succeeded but it could not be found immediately afterwards", email),
-		)
 		return
 	}
 
@@ -216,7 +218,7 @@ func (r *teamMemberResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
-	newState, diags := r.readState(ctx, state.Email.ValueString())
+	newState, diags := r.readState(ctx, state.Email.ValueString(), &state)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -273,7 +275,7 @@ func (r *teamMemberResource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 
-	newState, diags := r.readState(ctx, email)
+	newState, diags := r.readState(ctx, email, &state)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -312,55 +314,144 @@ func (r *teamMemberResource) Delete(ctx context.Context, req resource.DeleteRequ
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *teamMemberResource) readState(ctx context.Context, displayEmail string) (*teamMemberResourceModel, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
+// readState uses the previously known status, if any, to do a single direct
+// lookup by id instead of searching by email:
+//   - status "member": GET /api/team/:user_id. A member can't go back to
+//     pending, so a 404 here means genuinely removed, no fallback needed.
+//   - status "pending": GET /api/team/invites/:id. A 404 here means the
+//     invite was accepted since the last read, so we fall back to a member
+//     lookup by email, the only remaining possibility, to pick up the new
+//     user_id.
+//   - no previous status (Create, or anything unexpected): cold start, check
+//     pending invites by email first (the state right after inviting), then
+//     fall back to an accepted member.
+//
+// previous is nil on Create, where there's no id yet to look up by.
+func (r *teamMemberResource) readState(
+	ctx context.Context, displayEmail string, previous *teamMemberResourceModel,
+) (*teamMemberResourceModel, diag.Diagnostics) {
 	email := normalizeEmail(displayEmail)
 
-	data, err := r.client.LookupTeamMember(ctx, email)
+	if previous != nil {
+		switch previous.Status.ValueString() {
+		case "member":
+			return r.readMemberByID(ctx, displayEmail, email, previous.UserID.ValueString())
+		case "pending":
+			state, diags := r.readInviteByID(ctx, displayEmail, previous.InviteID.ValueString())
+			if diags.HasError() || state != nil {
+				return state, diags
+			}
+			return r.readMemberByEmail(ctx, displayEmail, email)
+		}
+	}
+
+	state, diags := r.readInviteByEmail(ctx, displayEmail, email)
+	if diags.HasError() || state != nil {
+		return state, diags
+	}
+	return r.readMemberByEmail(ctx, displayEmail, email)
+}
+
+func (r *teamMemberResource) readMemberByID(
+	ctx context.Context, displayEmail, email, userID string,
+) (*teamMemberResourceModel, diag.Diagnostics) {
+	var diags diag.Diagnostics
+	member, err := r.client.GetTeamMember(ctx, userID)
 	if err != nil {
 		diags.AddError("Failed to Read Team Member", fmt.Sprintf("Could not look up %q: %s", email, err))
 		return nil, diags
 	}
-	if data == nil {
+	if member == nil {
 		return nil, diags
 	}
+	return memberState(ctx, displayEmail, email, member)
+}
 
-	tagsList, tagsDiags := types.ListValueFrom(ctx, types.StringType, data.Tags)
+func (r *teamMemberResource) readMemberByEmail(
+	ctx context.Context, displayEmail, email string,
+) (*teamMemberResourceModel, diag.Diagnostics) {
+	var diags diag.Diagnostics
+	member, err := r.client.GetTeamMemberByEmail(ctx, email)
+	if err != nil {
+		diags.AddError("Failed to Read Team Member", fmt.Sprintf("Could not look up %q: %s", email, err))
+		return nil, diags
+	}
+	if member == nil {
+		return nil, diags
+	}
+	return memberState(ctx, displayEmail, email, member)
+}
+
+func (r *teamMemberResource) readInviteByID(
+	ctx context.Context, displayEmail, inviteID string,
+) (*teamMemberResourceModel, diag.Diagnostics) {
+	var diags diag.Diagnostics
+	invite, err := r.client.GetTeamInvite(ctx, inviteID)
+	if err != nil {
+		diags.AddError("Failed to Read Team Member", fmt.Sprintf("Could not look up pending invite for %q: %s", displayEmail, err))
+		return nil, diags
+	}
+	if invite == nil {
+		return nil, diags
+	}
+	return inviteState(ctx, displayEmail, invite)
+}
+
+func (r *teamMemberResource) readInviteByEmail(
+	ctx context.Context, displayEmail, email string,
+) (*teamMemberResourceModel, diag.Diagnostics) {
+	var diags diag.Diagnostics
+	invite, err := r.client.GetTeamInviteByEmail(ctx, email)
+	if err != nil {
+		diags.AddError("Failed to Read Team Member", fmt.Sprintf("Could not look up pending invite for %q: %s", email, err))
+		return nil, diags
+	}
+	if invite == nil {
+		return nil, diags
+	}
+	return inviteState(ctx, displayEmail, invite)
+}
+
+func memberState(
+	ctx context.Context, displayEmail, email string, member *model.MemberByEmailResponse,
+) (*teamMemberResourceModel, diag.Diagnostics) {
+	var diags diag.Diagnostics
+	tagsList, tagsDiags := types.ListValueFrom(ctx, types.StringType, member.Tags)
 	diags.Append(tagsDiags...)
 	if diags.HasError() {
 		return nil, diags
 	}
-
-	state := &teamMemberResourceModel{
+	return &teamMemberResourceModel{
 		ID:       types.StringValue(email),
 		Email:    types.StringValue(displayEmail),
-		Role:     types.StringValue(data.Role),
+		Role:     types.StringValue(member.Role),
 		Tags:     tagsList,
-		Status:   types.StringValue(data.Status),
+		Status:   types.StringValue("member"),
 		InviteID: types.StringNull(),
-		UserID:   types.StringNull(),
-	}
-	if data.Status == "pending" {
-		state.InviteID = types.StringValue(memberIDString(data.ID))
-	} else {
-		state.UserID = types.StringValue(memberIDString(data.ID))
-	}
+		UserID:   types.StringValue(member.ID),
+	}, diags
+}
 
-	return state, diags
+func inviteState(
+	ctx context.Context, displayEmail string, invite *model.InviteByEmailResponse,
+) (*teamMemberResourceModel, diag.Diagnostics) {
+	var diags diag.Diagnostics
+	tagsList, tagsDiags := types.ListValueFrom(ctx, types.StringType, invite.Tags)
+	diags.Append(tagsDiags...)
+	if diags.HasError() {
+		return nil, diags
+	}
+	return &teamMemberResourceModel{
+		ID:       types.StringValue(normalizeEmail(displayEmail)),
+		Email:    types.StringValue(displayEmail),
+		Role:     types.StringValue(invite.Role),
+		Tags:     tagsList,
+		Status:   types.StringValue("pending"),
+		InviteID: types.StringValue(strconv.Itoa(invite.ID)),
+		UserID:   types.StringNull(),
+	}, diags
 }
 
 func normalizeEmail(email string) string {
 	return strings.ToLower(strings.TrimSpace(email))
-}
-
-func memberIDString(id any) string {
-	switch v := id.(type) {
-	case string:
-		return v
-	case float64:
-		return strconv.FormatFloat(v, 'f', -1, 64)
-	default:
-		return ""
-	}
 }

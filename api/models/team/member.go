@@ -7,6 +7,11 @@ type InviteRequest struct {
 	Tags  string `json:"tags,omitempty"`
 }
 
+// InviteResponse is the shape returned by POST /api/team/invite.
+type InviteResponse struct {
+	ID int `json:"id"`
+}
+
 // InviteUpdateRequest is the body for PUT /api/team/invites/:id. An empty
 // Tags list clears all tags.
 type InviteUpdateRequest struct {
@@ -26,13 +31,21 @@ type RemoveRequest struct {
 	Email string `json:"email"`
 }
 
-// MemberLookupResponse is the shape returned by GET /api/team/member?email=.
-// ID is a pending invite's integer id or an accepted member's UUID - see IDString.
-type MemberLookupResponse struct {
-	Status         string   `json:"status"`
-	ID             any      `json:"id"`
+// MemberByEmailResponse is the shape returned by GET /api/team?email=. Only
+// accepted members are returned, ID is always a UUID.
+type MemberByEmailResponse struct {
+	ID             string   `json:"id"`
 	Email          string   `json:"email"`
 	Role           string   `json:"role"`
 	Tags           []string `json:"tags"`
 	TfaAuthEnabled *bool    `json:"tfa_auth_enabled,omitempty"`
+}
+
+// InviteByEmailResponse is the shape returned by GET /api/team/invites?email=.
+type InviteByEmailResponse struct {
+	ID      int      `json:"id"`
+	Email   string   `json:"email"`
+	Role    string   `json:"role"`
+	Tags    []string `json:"tags"`
+	Created string   `json:"created"`
 }

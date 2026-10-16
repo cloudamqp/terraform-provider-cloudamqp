@@ -19,10 +19,11 @@ func teamAPIError(err error, failed map[string]any) error {
 	return err
 }
 
-// InviteTeamMember invites an email, or updates an existing pending invite
-// (the backend upserts on email+team).
-func (api *API) InviteTeamMember(ctx context.Context, params model.InviteRequest) error {
+// InviteTeamMember invites an email
+// POST /api/team/invite. Return the invite response or an error.
+func (api *API) InviteTeamMember(ctx context.Context, params model.InviteRequest) (*model.InviteResponse, error) {
 	var (
+		data   model.InviteResponse
 		failed map[string]any
 		path   = "/api/team/invite"
 	)
@@ -33,29 +34,118 @@ func (api *API) InviteTeamMember(ctx context.Context, params model.InviteRequest
 		resourceName: "Team Member",
 		attempt:      1,
 		sleep:        5 * time.Second,
-		data:         nil,
+		data:         &data,
 		failed:       &failed,
 	})
 	if err != nil {
-		return teamAPIError(err, failed)
+		return nil, teamAPIError(err, failed)
 	}
-	return nil
+	return &data, nil
 }
 
-// LookupTeamMember finds an email as either a pending invite or an accepted
-// member via GET /api/team/member?email=. Returns nil, nil if neither exists.
-func (api *API) LookupTeamMember(ctx context.Context, email string) (*model.MemberLookupResponse, error) {
+// GetTeamMemberByEmail looks up an accepted member by email via
+// GET /api/team?email=, which always returns an array (filtered to 0-or-1
+// members). Returns nil, nil if no accepted member exists for that email (a
+// pending invite doesn't count).
+func (api *API) GetTeamMemberByEmail(ctx context.Context, email string) (*model.MemberByEmailResponse, error) {
 	var (
-		data   model.MemberLookupResponse
+		data   []model.MemberByEmailResponse
 		failed map[string]any
-		path   = fmt.Sprintf("/api/team/member?email=%s", url.QueryEscape(email))
+		path   = fmt.Sprintf("/api/team?email=%s", url.QueryEscape(email))
+	)
+
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
+	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+		functionName: "GetTeamMemberByEmail",
+		resourceName: "Team Member",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
+	if err != nil {
+		return nil, teamAPIError(err, failed)
+	}
+	if len(data) == 0 {
+		return nil, nil
+	}
+	return &data[0], nil
+}
+
+// GetTeamInviteByEmail looks up a pending invite by email via
+// GET /api/team/invites?email=, which always returns an array (filtered to
+// 0-or-1 invites). Returns nil, nil if no pending invite exists for that
+// email.
+func (api *API) GetTeamInviteByEmail(ctx context.Context, email string) (*model.InviteByEmailResponse, error) {
+	var (
+		data   []model.InviteByEmailResponse
+		failed map[string]any
+		path   = fmt.Sprintf("/api/team/invites?email=%s", url.QueryEscape(email))
+	)
+
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
+	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+		functionName: "GetTeamInviteByEmail",
+		resourceName: "Team Invite",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+	})
+	if err != nil {
+		return nil, teamAPIError(err, failed)
+	}
+	if len(data) == 0 {
+		return nil, nil
+	}
+	return &data[0], nil
+}
+
+// GetTeamMember fetches a specific accepted member by id via GET
+// /api/team/:user_id. A member can't go back to pending, so returns nil, nil
+// if no such member exists (404), meaning it was genuinely removed.
+func (api *API) GetTeamMember(ctx context.Context, userID string) (*model.MemberByEmailResponse, error) {
+	var (
+		data   model.MemberByEmailResponse
+		failed map[string]any
+		path   = fmt.Sprintf("/api/team/%s", url.PathEscape(userID))
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
 	statusCode := 0
 	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
-		functionName: "LookupTeamMember",
+		functionName: "GetTeamMember",
 		resourceName: "Team Member",
+		attempt:      1,
+		sleep:        5 * time.Second,
+		data:         &data,
+		failed:       &failed,
+		statusCode:   &statusCode,
+	})
+	if statusCode == 404 {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, teamAPIError(err, failed)
+	}
+	return &data, nil
+}
+
+// GetTeamInvite fetches a specific pending invite by id via GET
+// /api/team/invites/:id. Returns nil, nil if it no longer exists (404), e.g.
+// it was accepted or revoked since the last read.
+func (api *API) GetTeamInvite(ctx context.Context, inviteID string) (*model.InviteByEmailResponse, error) {
+	var (
+		data   model.InviteByEmailResponse
+		failed map[string]any
+		path   = fmt.Sprintf("/api/team/invites/%s", url.PathEscape(inviteID))
+	)
+
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
+	statusCode := 0
+	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+		functionName: "GetTeamInvite",
+		resourceName: "Team Invite",
 		attempt:      1,
 		sleep:        5 * time.Second,
 		data:         &data,
