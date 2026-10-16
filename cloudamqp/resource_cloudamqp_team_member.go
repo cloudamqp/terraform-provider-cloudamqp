@@ -3,6 +3,7 @@ package cloudamqp
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -29,10 +30,14 @@ var assignableTeamRoleNames = []string{
 	"devops",
 }
 
+// taggedTeamRoleNames are the roles that require at least one tag
+var taggedTeamRoleNames = []string{"member", "monitor"}
+
 var (
-	_ resource.Resource                = &teamMemberResource{}
-	_ resource.ResourceWithConfigure   = &teamMemberResource{}
-	_ resource.ResourceWithImportState = &teamMemberResource{}
+	_ resource.Resource                   = &teamMemberResource{}
+	_ resource.ResourceWithConfigure      = &teamMemberResource{}
+	_ resource.ResourceWithImportState    = &teamMemberResource{}
+	_ resource.ResourceWithValidateConfig = &teamMemberResource{}
 )
 
 type teamMemberResource struct {
@@ -95,7 +100,8 @@ func (r *teamMemberResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Computed:    true,
 				ElementType: types.StringType,
 				Description: "Tag names granting access to tagged instances. A tag that doesn't exist yet " +
-					"is created automatically. Only meaningful for the \"member\"/\"monitor\" roles.",
+					"is created automatically. Only meaningful for the \"member\"/\"monitor\" roles, " +
+					"which require at least one tag.",
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.UseStateForUnknown(),
 				},
@@ -122,6 +128,40 @@ func (r *teamMemberResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 		},
+	}
+}
+
+func (r *teamMemberResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	var config teamMemberResourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	if config.Role.IsUnknown() {
+		return
+	}
+
+	// A null role in config defaults to "member" server-side.
+	role := "member"
+	if !config.Role.IsNull() {
+		role = config.Role.ValueString()
+	}
+	if !slices.Contains(taggedTeamRoleNames, role) {
+		return
+	}
+
+	// Tags referencing another resource's output can't be checked yet either.
+	if config.Tags.IsUnknown() {
+		return
+	}
+
+	if config.Tags.IsNull() || len(config.Tags.Elements()) == 0 {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("tags"),
+			"Missing Required Tags",
+			fmt.Sprintf("The %q role requires at least one tag to be specified.", role),
+		)
 	}
 }
 

@@ -23,16 +23,16 @@ var teamMemberAcceptWindow = 60 * time.Second
 // TestAccTeamMember_* tests, they share the one test@example.com mailbox and
 // must run one at a time.
 func TestAccTeamMember_PendingInvite(t *testing.T) {
-	memberResourceName := "cloudamqp_team_member.member"
+	memberResourceName := "cloudamqp_team_member.this"
 
 	cloudamqpResourceTest(t, resource.TestCase{
 		PreCheck: func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
 				Config: `
-					resource "cloudamqp_team_member" "member" {
+					resource "cloudamqp_team_member" "this" {
 						email = "test@example.com"
-						tags  = []
+						tags  = ["tf-acc-test-member-tag-a"]
 					}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
@@ -42,20 +42,20 @@ func TestAccTeamMember_PendingInvite(t *testing.T) {
 					resource.TestCheckResourceAttr(memberResourceName, "status", "pending"),
 					resource.TestCheckResourceAttrSet(memberResourceName, "invite_id"),
 					resource.TestCheckNoResourceAttr(memberResourceName, "user_id"),
-					resource.TestCheckResourceAttr(memberResourceName, "tags.#", "0"),
+					resource.TestCheckResourceAttr(memberResourceName, "tags.#", "1"),
+					resource.TestCheckResourceAttr(memberResourceName, "tags.0", "tf-acc-test-member-tag-a"),
 				),
 			},
 			{
 				Config: `
-					resource "cloudamqp_team_member" "member" {
+					resource "cloudamqp_team_member" "this" {
 						email = "test@example.com"
-						tags  = ["tf-acc-test-member-tag-a"]
+						tags  = ["tf-acc-test-member-tag-a", "tf-acc-test-member-tag-b"]
 					}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(memberResourceName, "status", "pending"),
-					resource.TestCheckResourceAttr(memberResourceName, "tags.#", "1"),
-					resource.TestCheckResourceAttr(memberResourceName, "tags.0", "tf-acc-test-member-tag-a"),
+					resource.TestCheckResourceAttr(memberResourceName, "tags.#", "2"),
 				),
 			},
 			{
@@ -70,14 +70,14 @@ func TestAccTeamMember_PendingInvite(t *testing.T) {
 // TestAccTeamMember_AcceptedMember: invite a member, manually accept it (see
 // teamMemberAcceptWindow above), confirm the resource picks up "member"
 // status, update the member's tags, import it, then let the implicit destroy
-// remove the member. Exercises POST /invite, GET /api/team/member, PUT
+// remove the member. Exercises POST /invite, GET /api/team?email=, PUT
 // /api/team/:user_id and POST /api/team/remove. Does NOT run in parallel with
-// the other TestAccTeamMember_* tests - see teamMemberAcceptWindow.
+// the other TestAccTeamMember_* tests, see teamMemberAcceptWindow.
 func TestAccTeamMember_AcceptedMember(t *testing.T) {
-	memberResourceName := "cloudamqp_team_member.member"
+	memberResourceName := "cloudamqp_team_member.this"
 
 	pendingConfig := `
-		resource "cloudamqp_team_member" "member" {
+		resource "cloudamqp_team_member" "this" {
 			email = "test@example.com"
 			role  = "member"
 			tags  = ["tf-acc-test-member-tag-a"]
@@ -99,7 +99,7 @@ func TestAccTeamMember_AcceptedMember(t *testing.T) {
 				// fresh Read after the invite has (hopefully) been accepted.
 				PreConfig: func() {
 					if os.Getenv("CLOUDAMQP_RECORD") != "" {
-						t.Logf("Accept the invite sent to test@example.com via the web UI now - waiting %s...",
+						t.Logf("Accept the invite sent to test@example.com via the web UI now, waiting %s...",
 							teamMemberAcceptWindow)
 						time.Sleep(teamMemberAcceptWindow)
 					}
@@ -114,7 +114,7 @@ func TestAccTeamMember_AcceptedMember(t *testing.T) {
 			},
 			{
 				Config: `
-					resource "cloudamqp_team_member" "member" {
+					resource "cloudamqp_team_member" "this" {
 						email = "test@example.com"
 						role  = "member"
 						tags  = ["tf-acc-test-member-tag-a", "tf-acc-test-member-tag-b"]
@@ -126,16 +126,29 @@ func TestAccTeamMember_AcceptedMember(t *testing.T) {
 				),
 			},
 			{
-				// Clearing an accepted member's tags to [] via PUT /api/team/:user_id.
 				Config: `
-					resource "cloudamqp_team_member" "member" {
+					resource "cloudamqp_team_member" "this" {
 						email = "test@example.com"
 						role  = "member"
+						tags  = ["tf-acc-test-member-tag-a"]
+					}
+				`,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(memberResourceName, "status", "member"),
+					resource.TestCheckResourceAttr(memberResourceName, "tags.#", "1"),
+				),
+			},
+			{
+				Config: `
+					resource "cloudamqp_team_member" "this" {
+						email = "test@example.com"
+						role  = "billing manager"
 						tags  = []
 					}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(memberResourceName, "status", "member"),
+					resource.TestCheckResourceAttr(memberResourceName, "role", "billing manager"),
 					resource.TestCheckResourceAttr(memberResourceName, "tags.#", "0"),
 				),
 			},
@@ -159,10 +172,42 @@ func TestAccTeamMember_InvalidEmail(t *testing.T) {
 				Config: `
 					resource "cloudamqp_team_member" "member" {
 						email = "not-an-email"
-						tags  = []
+						tags  = ["tf-acc-test-invalid-email"]
 					}
 				`,
 				ExpectError: regexp.MustCompile(`(?i)invalid email`),
+			},
+		},
+	})
+}
+
+// TestAccTeamMember_TaggedRoleRequiresTags: the "member" and "monitor" roles
+// require at least one tag, whether the role is set explicitly or left to
+// its default.
+func TestAccTeamMember_TaggedRoleRequiresTags(t *testing.T) {
+	t.Parallel()
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: `
+					resource "cloudamqp_team_member" "this" {
+						email = "test@example.com"
+						role  = "monitor"
+						tags  = []
+					}
+				`,
+				ExpectError: regexp.MustCompile(`(?i)"monitor" role requires at least one tag`),
+			},
+			{
+				Config: `
+					resource "cloudamqp_team_member" "this" {
+						email = "test@example.com"
+						tags  = []
+					}
+				`,
+				ExpectError: regexp.MustCompile(`(?i)"member" role requires at least one tag`),
 			},
 		},
 	})

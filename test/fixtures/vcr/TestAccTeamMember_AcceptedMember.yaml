@@ -6,114 +6,6 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 36
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"name":"tf-acc-test-member-tag-a"}
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            Content-Type:
-                - application/json
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
-        method: POST
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 43
-        uncompressed: false
-        body: '{"id":37,"name":"tf-acc-test-member-tag-a"}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "43"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 125c0e69-935b-4e7a-82ff-c3d6f5d994ba
-        status: 201 Created
-        code: 201
-        duration: 32.996343ms
-    - id: 1
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 36
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"name":"tf-acc-test-member-tag-b"}
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            Content-Type:
-                - application/json
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
-        method: POST
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 43
-        uncompressed: false
-        body: '{"id":38,"name":"tf-acc-test-member-tag-b"}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "43"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 01f9a569-3f94-44d8-a509-dd26f786dbc8
-        status: 201 Created
-        code: 201
-        duration: 24.000926ms
-    - id: 2
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
         content_length: 79
         transfer_encoding: []
         trailer: {}
@@ -138,31 +30,121 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 35
+        content_length: 43
         uncompressed: false
-        body: '{"message":"Email invitation sent"}'
+        body: '{"message":"Email invitation sent","id":23}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "35"
+                - "43"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - bee86a42-14de-4c51-916f-6c2165749d1d
+                - 7a0b7267-e5d7-4af6-bb39-63c059f9b081
         status: 200 OK
         code: 200
-        duration: 30.30834ms
+        duration: 34.318122ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/invites/23
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 124
+        uncompressed: false
+        body: '{"id":23,"email":"test@example.com","role":"member","tags":["tf-acc-test-member-tag-a"],"created":"2026-10-16 09:30:59 UTC"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "124"
+            Content-Type:
+                - application/json
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 5177d98b-da89-4eda-a99d-81c816973d68
+        status: 200 OK
+        code: 200
+        duration: 6.361922ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/invites/23
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 40
+        uncompressed: false
+        body: '{"error":"Pending invite 23 not found."}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "40"
+            Content-Type:
+                - application/json
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - eb6b559f-8f88-4867-bc1d-7e22d7fa095e
+        status: 404 Not Found
+        code: 404
+        duration: 7.284143ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -181,7 +163,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/member?email=test%40example.com
+        url: http://localhost:9393/api/team?email=test%40example.com
         method: GET
       response:
         proto: HTTP/1.1
@@ -189,31 +171,27 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 131
+        content_length: 197
         uncompressed: false
-        body: '{"status":"pending","id":15,"email":"test@example.com","role":"member","tags":["tf-acc-test-member-tag-a"],"saml_configured":false}'
+        body: '[{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"roles":["member","tf-acc-test-member-tag-a"],"role":"member","tags":["tf-acc-test-member-tag-a"]}]'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "131"
+                - "197"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - fa47ea27-8efa-4070-80c2-8a68be3f5ef5
+                - 94537390-9521-4966-8a51-92af922d18c8
         status: 200 OK
         code: 200
-        duration: 9.212697ms
+        duration: 6.821715ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -232,7 +210,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
+        url: http://localhost:9393/api/team/8849c6b5-a975-4a3e-8991-f31cc49d5784
         method: GET
       response:
         proto: HTTP/1.1
@@ -240,31 +218,27 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 229
+        content_length: 149
         uncompressed: false
-        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":37,"name":"tf-acc-test-member-tag-a"},{"id":38,"name":"tf-acc-test-member-tag-b"},{"id":18,"name":"vcr-test"}]'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "229"
+                - "149"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - f1ec0750-926e-4224-a1c0-19aa1c44b88d
+                - 42be5e6e-8df3-4b98-9a44-188a2c3afe67
         status: 200 OK
         code: 200
-        duration: 8.137838ms
+        duration: 7.940697ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -283,7 +257,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
+        url: http://localhost:9393/api/team/8849c6b5-a975-4a3e-8991-f31cc49d5784
         method: GET
       response:
         proto: HTTP/1.1
@@ -291,542 +265,28 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 229
+        content_length: 149
         uncompressed: false
-        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":37,"name":"tf-acc-test-member-tag-a"},{"id":38,"name":"tf-acc-test-member-tag-b"},{"id":18,"name":"vcr-test"}]'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "229"
+                - "149"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 36a6b97e-4423-414b-a437-bad31ccdc188
+                - 0acccea0-ed74-421a-82a0-949f4f21089b
         status: 200 OK
         code: 200
-        duration: 13.905764ms
+        duration: 10.383941ms
     - id: 6
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/member?email=test%40example.com
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 131
-        uncompressed: false
-        body: '{"status":"pending","id":15,"email":"test@example.com","role":"member","tags":["tf-acc-test-member-tag-a"],"saml_configured":false}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "131"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 09f5f300-86ad-4aa2-aa0f-5593fe81ea3f
-        status: 200 OK
-        code: 200
-        duration: 15.818865ms
-    - id: 7
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 229
-        uncompressed: false
-        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":37,"name":"tf-acc-test-member-tag-a"},{"id":38,"name":"tf-acc-test-member-tag-b"},{"id":18,"name":"vcr-test"}]'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "229"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 999b441c-a11c-4a07-8b90-7182bbbc1e91
-        status: 200 OK
-        code: 200
-        duration: 7.344242ms
-    - id: 8
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 229
-        uncompressed: false
-        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":37,"name":"tf-acc-test-member-tag-a"},{"id":38,"name":"tf-acc-test-member-tag-b"},{"id":18,"name":"vcr-test"}]'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "229"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 03535d7b-3243-40fe-bf16-3467921146cc
-        status: 200 OK
-        code: 200
-        duration: 11.695664ms
-    - id: 9
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/member?email=test%40example.com
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 191
-        uncompressed: false
-        body: '{"status":"member","id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a"],"saml_configured":false}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "191"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 6c84ce5a-f763-4907-9fa5-a5219c4346fa
-        status: 200 OK
-        code: 200
-        duration: 12.680854ms
-    - id: 10
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 229
-        uncompressed: false
-        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":37,"name":"tf-acc-test-member-tag-a"},{"id":38,"name":"tf-acc-test-member-tag-b"},{"id":18,"name":"vcr-test"}]'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "229"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - f8f94f16-86e3-497d-b958-2c9396a9938b
-        status: 200 OK
-        code: 200
-        duration: 8.86952ms
-    - id: 11
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 229
-        uncompressed: false
-        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":37,"name":"tf-acc-test-member-tag-a"},{"id":38,"name":"tf-acc-test-member-tag-b"},{"id":18,"name":"vcr-test"}]'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "229"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - d055ba73-bf07-466e-8feb-eed2053baba7
-        status: 200 OK
-        code: 200
-        duration: 12.867265ms
-    - id: 12
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/member?email=test%40example.com
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 191
-        uncompressed: false
-        body: '{"status":"member","id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a"],"saml_configured":false}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "191"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - f7c3378f-3df5-4015-aa6b-613c94f19cf7
-        status: 200 OK
-        code: 200
-        duration: 14.565611ms
-    - id: 13
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 229
-        uncompressed: false
-        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":37,"name":"tf-acc-test-member-tag-a"},{"id":38,"name":"tf-acc-test-member-tag-b"},{"id":18,"name":"vcr-test"}]'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "229"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - f9044a39-d66e-468d-9b27-0ebe803e1d3f
-        status: 200 OK
-        code: 200
-        duration: 9.663158ms
-    - id: 14
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 229
-        uncompressed: false
-        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":37,"name":"tf-acc-test-member-tag-a"},{"id":38,"name":"tf-acc-test-member-tag-b"},{"id":18,"name":"vcr-test"}]'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "229"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 4f0f2c3f-5cc7-4cca-826a-b57db0c6e26e
-        status: 200 OK
-        code: 200
-        duration: 7.444791ms
-    - id: 15
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/member?email=test%40example.com
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 191
-        uncompressed: false
-        body: '{"status":"member","id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a"],"saml_configured":false}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "191"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - cd7e7167-d25a-4118-a008-89b93193345c
-        status: 200 OK
-        code: 200
-        duration: 8.389374ms
-    - id: 16
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -865,22 +325,18 @@ interactions:
                 - "45"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - b3c27b5c-0a82-4ef1-95c4-ef4512ed0f89
+                - e59eb2b4-e013-4f4c-92f9-dc6b0979c920
         status: 200 OK
         code: 200
-        duration: 27.224513ms
-    - id: 17
+        duration: 25.926934ms
+    - id: 7
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -898,7 +354,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/member?email=test%40example.com
+        url: http://localhost:9393/api/team/8849c6b5-a975-4a3e-8991-f31cc49d5784
         method: GET
       response:
         proto: HTTP/1.1
@@ -906,32 +362,28 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 218
+        content_length: 176
         uncompressed: false
-        body: '{"status":"member","id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"],"saml_configured":false}'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "218"
+                - "176"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 64680629-f224-447c-837a-cd69b1ca10dd
+                - 916e2639-efba-4991-a8ab-448c2aa770fb
         status: 200 OK
         code: 200
-        duration: 7.668273ms
-    - id: 18
+        duration: 10.776716ms
+    - id: 8
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -949,7 +401,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
+        url: http://localhost:9393/api/team/8849c6b5-a975-4a3e-8991-f31cc49d5784
         method: GET
       response:
         proto: HTTP/1.1
@@ -957,32 +409,28 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 229
+        content_length: 176
         uncompressed: false
-        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":37,"name":"tf-acc-test-member-tag-a"},{"id":38,"name":"tf-acc-test-member-tag-b"},{"id":18,"name":"vcr-test"}]'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "229"
+                - "176"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - d5539d52-bafe-4f60-b374-202f3edd2763
+                - 6b940696-3f72-4f47-929a-77136ead4566
         status: 200 OK
         code: 200
-        duration: 6.170366ms
-    - id: 19
+        duration: 8.428272ms
+    - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1000,7 +448,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
+        url: http://localhost:9393/api/team/8849c6b5-a975-4a3e-8991-f31cc49d5784
         method: GET
       response:
         proto: HTTP/1.1
@@ -1008,248 +456,40 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 229
+        content_length: 176
         uncompressed: false
-        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":37,"name":"tf-acc-test-member-tag-a"},{"id":38,"name":"tf-acc-test-member-tag-b"},{"id":18,"name":"vcr-test"}]'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "229"
+                - "176"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 0abf87ee-7744-4e1a-8f5d-789de07c8deb
+                - bf833297-bea4-4b9d-83fe-a30ed8be128c
         status: 200 OK
         code: 200
-        duration: 6.762283ms
-    - id: 20
+        duration: 9.025525ms
+    - id: 10
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/member?email=test%40example.com
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 218
-        uncompressed: false
-        body: '{"status":"member","id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"],"saml_configured":false}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "218"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 4b538503-d9d0-45f7-b59b-080ac457e492
-        status: 200 OK
-        code: 200
-        duration: 5.140222ms
-    - id: 21
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 229
-        uncompressed: false
-        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":37,"name":"tf-acc-test-member-tag-a"},{"id":38,"name":"tf-acc-test-member-tag-b"},{"id":18,"name":"vcr-test"}]'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "229"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 2207b630-fe02-4930-979a-d17b6e2c1abf
-        status: 200 OK
-        code: 200
-        duration: 9.727078ms
-    - id: 22
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/member?email=test%40example.com
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 218
-        uncompressed: false
-        body: '{"status":"member","id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"],"saml_configured":false}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "218"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - eab74650-9670-448f-859c-e7cde6d94789
-        status: 200 OK
-        code: 200
-        duration: 11.083017ms
-    - id: 23
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
-        method: GET
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 229
-        uncompressed: false
-        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":37,"name":"tf-acc-test-member-tag-a"},{"id":38,"name":"tf-acc-test-member-tag-b"},{"id":18,"name":"vcr-test"}]'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "229"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 0f015eab-f500-4744-9c9c-060da04db084
-        status: 200 OK
-        code: 200
-        duration: 6.741584ms
-    - id: 24
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 28
+        content_length: 54
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"role":"member","tags":[]}
+            {"role":"member","tags":["tf-acc-test-member-tag-a"]}
         form: {}
         headers:
             Authorization:
@@ -1276,22 +516,18 @@ interactions:
                 - "45"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 664dc3c9-3653-4fff-bbe5-9280732d60f3
+                - 6e9b012e-13cf-44b2-8c65-5d46f7dc6e66
         status: 200 OK
         code: 200
-        duration: 22.458658ms
-    - id: 25
+        duration: 27.9443ms
+    - id: 11
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1309,7 +545,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/member?email=test%40example.com
+        url: http://localhost:9393/api/team/8849c6b5-a975-4a3e-8991-f31cc49d5784
         method: GET
       response:
         proto: HTTP/1.1
@@ -1317,32 +553,28 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 165
+        content_length: 149
         uncompressed: false
-        body: '{"status":"member","id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":[],"saml_configured":false}'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "165"
+                - "149"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 28f7f48d-8d02-45bf-a1f1-dd6d92b8fbfa
+                - 0cdc6509-3ab0-44db-bc23-1538d7287d10
         status: 200 OK
         code: 200
-        duration: 5.256952ms
-    - id: 26
+        duration: 8.641296ms
+    - id: 12
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1360,7 +592,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
+        url: http://localhost:9393/api/team/8849c6b5-a975-4a3e-8991-f31cc49d5784
         method: GET
       response:
         proto: HTTP/1.1
@@ -1368,32 +600,28 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 229
+        content_length: 149
         uncompressed: false
-        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":37,"name":"tf-acc-test-member-tag-a"},{"id":38,"name":"tf-acc-test-member-tag-b"},{"id":18,"name":"vcr-test"}]'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "229"
+                - "149"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 8bf52667-59fb-4c74-a406-32fc1b3df7f9
+                - 290fd72c-99d2-4b50-848d-65bfcc252b0e
         status: 200 OK
         code: 200
-        duration: 8.629878ms
-    - id: 27
+        duration: 8.054193ms
+    - id: 13
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1411,7 +639,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/member?email=test%40example.com
+        url: http://localhost:9393/api/team/8849c6b5-a975-4a3e-8991-f31cc49d5784
         method: GET
       response:
         proto: HTTP/1.1
@@ -1419,32 +647,78 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 165
+        content_length: 149
         uncompressed: false
-        body: '{"status":"member","id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":[],"saml_configured":false}'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "165"
+                - "149"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - b462317d-28d6-4a02-ab40-26bebe5bd4c6
+                - 3ca44b3e-9688-4650-b069-fa94e9e32d6d
         status: 200 OK
         code: 200
-        duration: 9.752417ms
-    - id: 28
+        duration: 10.042282ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 37
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"role":"billing manager","tags":[]}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/8849c6b5-a975-4a3e-8991-f31cc49d5784
+        method: PUT
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 45
+        uncompressed: false
+        body: '{"message":"Role and tags updated for user."}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "45"
+            Content-Type:
+                - application/json
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - d9769422-d4b4-4fba-a95c-10c851ffba92
+        status: 200 OK
+        code: 200
+        duration: 25.188894ms
+    - id: 15
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1462,7 +736,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags
+        url: http://localhost:9393/api/team/8849c6b5-a975-4a3e-8991-f31cc49d5784
         method: GET
       response:
         proto: HTTP/1.1
@@ -1470,32 +744,28 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 229
+        content_length: 132
         uncompressed: false
-        body: '[{"id":17,"name":"aws-test"},{"id":20,"name":"lavinmq"},{"id":16,"name":"rabbitmq"},{"id":15,"name":"terraform"},{"id":37,"name":"tf-acc-test-member-tag-a"},{"id":38,"name":"tf-acc-test-member-tag-b"},{"id":18,"name":"vcr-test"}]'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"billing manager","tags":[]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "229"
+                - "132"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 69cebff2-e6df-45a3-999f-aeac840f44e5
+                - 4184aa82-094a-4cbe-b994-9fb4ce62aa65
         status: 200 OK
         code: 200
-        duration: 4.744675ms
-    - id: 29
+        duration: 8.906659ms
+    - id: 16
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1513,7 +783,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/member?email=test%40example.com
+        url: http://localhost:9393/api/team/8849c6b5-a975-4a3e-8991-f31cc49d5784
         method: GET
       response:
         proto: HTTP/1.1
@@ -1521,32 +791,122 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 165
+        content_length: 132
         uncompressed: false
-        body: '{"status":"member","id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":[],"saml_configured":false}'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"billing manager","tags":[]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "165"
+                - "132"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 1cb718b4-75cf-40d7-8ec8-6517fe6a9270
+                - aef8ad81-1201-4734-8a34-6a87dd1ea7cc
         status: 200 OK
         code: 200
-        duration: 9.903342ms
-    - id: 30
+        duration: 7.512877ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/invites?email=test%40example.com
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '[]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "2"
+            Content-Type:
+                - application/json
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - e8c49911-de67-49b9-af32-22e1af9f7fa3
+        status: 200 OK
+        code: 200
+        duration: 9.194294ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team?email=test%40example.com
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 162
+        uncompressed: false
+        body: '[{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"roles":["billing manager"],"role":"billing manager","tags":[]}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "162"
+            Content-Type:
+                - application/json
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 93da399d-14d7-4fe3-93d4-a95ea47b419d
+        status: 200 OK
+        code: 200
+        duration: 9.270239ms
+    - id: 19
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1585,120 +945,14 @@ interactions:
                 - "49"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 7604624f-14bd-4b1d-a321-12966fe3bded
+                - 96c9c908-ea56-495c-8cbe-155ed4e03a67
         status: 200 OK
         code: 200
-        duration: 26.416358ms
-    - id: 31
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags/38
-        method: DELETE
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 25
-        uncompressed: false
-        body: '{"message":"Tag deleted"}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "25"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - 9b57584f-e2b8-4ff2-b600-d3e36d766bfe
-        status: 200 OK
-        code: 200
-        duration: 27.660796ms
-    - id: 32
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: localhost:9393
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Authorization:
-                - REDACTED
-            User-Agent:
-                - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/tags/37
-        method: DELETE
-      response:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        transfer_encoding: []
-        trailer: {}
-        content_length: 25
-        uncompressed: false
-        body: '{"message":"Tag deleted"}'
-        headers:
-            Cache-Control:
-                - no-cache
-            Content-Length:
-                - "25"
-            Content-Type:
-                - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
-            Referrer-Policy:
-                - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
-            Set-Cookie:
-                - REDACTED
-            X-Content-Type-Options:
-                - nosniff
-            X-Request-Id:
-                - f7f9d2cf-1f52-492e-817c-827ff619d08e
-        status: 200 OK
-        code: 200
-        duration: 15.106341ms
+        duration: 22.168597ms
