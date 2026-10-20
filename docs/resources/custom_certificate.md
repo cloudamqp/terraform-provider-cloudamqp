@@ -9,13 +9,10 @@ description: |-
 
 # cloudamqp_custom_certificate
 
-This resource allows you to upload a custom certificate to all servers in your cluster. Update is
-not supported, all changes require replacement. The certificate can be used for one or more SNI
-hostnames. `ca`, `cert` and `private_key` all use **WriteOnly**, meaning no information is present
-in plan phase, logs or stored in the state for security purposes.
-
-~> **WARNING:** Please note that when uploading a custom certificate or restoring to default certificate,
-all current connections will be closed.
+This resource allows you to upload a custom certificate to all servers in your cluster. The
+certificate can be used for one or more SNI hostnames. `ca`, `cert` and `private_key` all use
+**WriteOnly**, meaning no information is present in plan phase, logs or stored in the state for
+security purposes.
 
 -> **Note:** Destroying this resource will restore the cluster to use the default CloudAMQP certificate.
 
@@ -76,12 +73,12 @@ resource "cloudamqp_custom_certificate" "cert" {
     </b>
   </summary>
 
-Example of incrementing certificate version, this will trigger a replacement of the current installed
+Example of incrementing certificate version, this will trigger an update of the current installed
 custom certificate and use a newer version.
 
 ```hcl
 locals {
-  cert_version = 2  # Increment this to force certificate replacement
+  cert_version = 2  # Increment this to upload a new certificate version
 }
 
 resource "cloudamqp_custom_certificate" "cert" {
@@ -105,8 +102,8 @@ resource "cloudamqp_custom_certificate" "cert" {
     </b>
   </summary>
 
-Example of new key identifier, this will trigger a replacement of the current installed
-custom certificate and use a another.
+Example of new key identifier, this will trigger an update of the current installed
+custom certificate and use another.
 
 ```hcl
 locals {
@@ -125,7 +122,7 @@ resource "cloudamqp_custom_certificate" "cert" {
 }
 ```
 
-Change key identifier to force replacement. E.g. Azure key value identifier.
+Change key identifier to trigger an update with a new certificate. E.g. Azure key value identifier.
 
 ```hcl
 locals {
@@ -154,10 +151,10 @@ The following arguments are supported:
 * `ca` - (Required/WriteOnly) The PEM-encoded Certificate Authority (CA).
 * `cert` - (Required/WriteOnly) The PEM-encoded server certificate.
 * `private_key` - (Required/WriteOnly) The PEM-encoded private key corresponding to the certificate.
-* `sni_hosts` - (Required/ForceNew) Hostname(s) (Server Name Indication) that this certificate
+* `sni_hosts` - (Required) Hostname(s) (Server Name Indication) that this certificate
   applies to. Use a comma or space separated string for multiple hostnames.
-* `version` - (Optional/Computed/ForceNew) An integer based argument to trigger force new (default: 1).
-* `key_id` - (Optional/Computed/ForceNew) A string based argument to trigger force new (default: "").
+* `version` - (Optional/Computed) An integer based argument to trigger a new certificate upload on change (default: 1).
+* `key_id` - (Optional/Computed) A string based argument to trigger a new certificate upload on change (default: "").
 
 ## Attributes Reference
 
