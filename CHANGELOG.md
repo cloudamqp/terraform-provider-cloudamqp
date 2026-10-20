@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.52.0 (Unreleased)
+
+IMPROVEMENTS:
+
+* resource/cloudamqp_custom_certificate: `version`, `sni_hosts` and `key_id` changes now update the certificate in place instead of forcing a replace ([#559])
+
+[#559]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/559
+
 ## 1.51.0 (13 Oct, 2026)
 
 FEATURES:
