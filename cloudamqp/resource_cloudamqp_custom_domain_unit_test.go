@@ -16,8 +16,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
-// Unit test for cloudamqp_custom_domain against a fake CloudAMQP API. Documents how changing
-// hostname is currently handled: a DELETE followed by a POST to /custom-domain.
+// Unit test for cloudamqp_custom_domain against a fake CloudAMQP API. Asserts that changing
+// hostname sends a new POST to /custom-domain, with no DELETE calls.
 
 const customDomainTestInstanceID = 4321
 
@@ -119,8 +119,8 @@ resource "cloudamqp_custom_domain" "custom_domain" {
 
 const customDomainUnitResourceName = "cloudamqp_custom_domain.custom_domain"
 
-// TestCustomDomain_Update: changing hostname currently sends a DELETE followed by a new POST to
-// /custom-domain.
+// TestCustomDomain_Update: changing hostname sends a new POST to /custom-domain, with no DELETE
+// calls.
 func TestCustomDomain_Update(t *testing.T) {
 	t.Parallel()
 	fake, server := newFakeCustomDomainAPI(t)
@@ -135,10 +135,10 @@ func TestCustomDomain_Update(t *testing.T) {
 			),
 		},
 		{
-			// Change hostname: a DELETE, then a second POST.
+			// Change hostname: a second POST, still no deletes.
 			Config: customDomainUnitTestConfig(server.URL, `hostname = "other.example.com"`),
 			Check: resource.ComposeAggregateTestCheckFunc(
-				fake.checkCounts(2, 1),
+				fake.checkCounts(2, 0),
 				resource.TestCheckResourceAttr(customDomainUnitResourceName, "hostname", "other.example.com"),
 			),
 		},

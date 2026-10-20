@@ -95,22 +95,7 @@ func (api *API) UpdateCustomDomain(ctx context.Context, instanceID int, hostname
 	tflog.Debug(ctx, fmt.Sprintf("update custom domain, instanceID=%d hostname=%s ",
 		instanceID, hostname))
 
-	// delete and wait
-	_, err := api.DeleteCustomDomain(ctx, instanceID, sleep)
-	if err != nil {
-		return nil, err
-	}
-	_, err = api.waitUntilCustomDomainConfigured(ctx, instanceID, false, sleep)
-	if err != nil {
-		return nil, err
-	}
-
-	// create and wait
-	_, err = api.CreateCustomDomain(ctx, instanceID, hostname, sleep)
-	if err != nil {
-		return nil, err
-	}
-	return api.waitUntilCustomDomainConfigured(ctx, instanceID, true, sleep)
+	return api.CreateCustomDomain(ctx, instanceID, hostname, sleep)
 }
 
 func (api *API) DeleteCustomDomain(ctx context.Context, instanceID int, sleep time.Duration) (
