@@ -120,5 +120,10 @@ func (api *API) DeleteCustomDomain(ctx context.Context, instanceID int64, sleep 
 		data:         nil,
 		failed:       &failed,
 	})
+	if err != nil {
+		return err
+	}
+
+	_, err = api.waitUntilCustomDomainConfigured(ctx, instanceID, false, "", sleep)
 	return err
 }
