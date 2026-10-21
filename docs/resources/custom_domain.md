@@ -13,9 +13,8 @@ Adding a custom domain to your instance will generate a TLS certificate from [Le
 the given hostname, and install it on all servers in your cluster. The certificate will be
 automatically renewed going forward.
 
-~> **WARNING:** Please note that when creating, changing or deleting the custom domain, the
-listeners on your servers will be restarted in order to apply the changes. This will close your
-current connections.
+-> **Note:** Installing, changing or removing the custom domain hot-reloads the new certificate on
+the AMQP, MQTT and other TLS listeners, without dropping existing connections.
 
 Your custom domain name needs to point to your CloudAMQP hostname, preferably using a CNAME DNS
 record.
