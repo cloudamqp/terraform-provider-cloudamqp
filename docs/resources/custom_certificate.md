@@ -16,6 +16,8 @@ security purposes.
 
 -> **Note:** Destroying this resource will restore the cluster to use the default CloudAMQP certificate.
 
+-> **Note:** Updating the certificate (e.g. via `version` or `key_id`) hot-loads the new certificate on the AMQP/MQTT listeners without dropping existing connections.
+
 Only available for dedicated subscription plans running ***RabbitMQ***.
 
 ## Example Usage

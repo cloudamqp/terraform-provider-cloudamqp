@@ -141,7 +141,7 @@ func TestAccCustomCertificate_KeyID(t *testing.T) {
 						tags   = []
 					}
 					
-					# Increment version to trigger force new, restore default and re-upload custom certificate.
+					# Increment key_id to trigger an in-place update and re-upload  custom certificate.
 					resource "cloudamqp_custom_certificate" "custom_cert" {
 						instance_id = cloudamqp_instance.instance.id
 						ca          = "%s"
