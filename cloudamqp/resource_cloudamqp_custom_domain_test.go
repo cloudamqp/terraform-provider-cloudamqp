@@ -8,8 +8,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-// TestAccCustomDomain_Basic: Create custom domain, import and update hostname.
-func TestAccCustomDomain_Basic(t *testing.T) {
+// TestAccCustomDomain_Update: Create custom domain, then update hostname.
+func TestAccCustomDomain_Update(t *testing.T) {
 	t.Parallel()
 
 	var (
@@ -43,13 +43,6 @@ func TestAccCustomDomain_Basic(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:            customDomainResourceName,
-				ImportStateId:           testInstanceID,
-				ImportState:             true,
-				ImportStateVerify:       true,
-				ImportStateVerifyIgnore: []string{"sleep"},
-			},
-			{
 				Config: fmt.Sprintf(`
 					resource "cloudamqp_custom_domain" "custom_domain" {
 						instance_id = %s
@@ -67,6 +60,7 @@ func TestAccCustomDomain_Basic(t *testing.T) {
 	})
 }
 
+// TestAccCustomDomain_Import: Import existing custom domain.
 func TestAccCustomDomain_Import(t *testing.T) {
 	t.Parallel()
 
