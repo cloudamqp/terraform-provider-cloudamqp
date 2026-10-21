@@ -17,7 +17,8 @@ import (
 )
 
 // Unit test for cloudamqp_custom_domain against a fake CloudAMQP API. Asserts that changing
-// hostname sends a new POST to /custom-domain, with no DELETE calls.
+// hostname sends a new POST to /custom-domain, with no DELETE calls, and that the update waits
+// for the new hostname to actually be reported before completing.
 
 const customDomainTestInstanceID = 4321
 
@@ -26,6 +27,12 @@ type fakeCustomDomainAPI struct {
 	requests []map[string]any // POST bodies to /custom-domain
 	deletes  int
 	hostname string
+
+	// Simulates the real backend: replacing an already-configured hostname keeps
+	// "configured" true while the new hostname propagates asynchronously, so GET
+	// keeps returning the old hostname for staleReads more reads before flipping.
+	pendingHostname string
+	staleReads      int
 }
 
 func newFakeCustomDomainAPI(t *testing.T) (*fakeCustomDomainAPI, *httptest.Server) {
@@ -46,7 +53,14 @@ func (f *fakeCustomDomainAPI) handle(w http.ResponseWriter, r *http.Request) {
 	case r.Method == http.MethodGet && r.URL.Path == instancePath:
 		writeJSON(w, http.StatusOK, map[string]any{"id": customDomainTestInstanceID, "ready": true})
 	case r.URL.Path == instancePath+"/custom-domain" && r.Method == http.MethodGet:
-		writeJSON(w, http.StatusOK, map[string]any{"hostname": f.hostname, "configured": f.hostname != ""})
+		hostname := f.hostname
+		if f.staleReads > 0 {
+			f.staleReads--
+			if f.staleReads == 0 {
+				f.hostname = f.pendingHostname
+			}
+		}
+		writeJSON(w, http.StatusOK, map[string]any{"hostname": hostname, "configured": hostname != ""})
 	case r.URL.Path == instancePath+"/custom-domain" && r.Method == http.MethodPost:
 		var body map[string]any
 		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
@@ -54,7 +68,13 @@ func (f *fakeCustomDomainAPI) handle(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		f.requests = append(f.requests, body)
-		f.hostname, _ = body["hostname"].(string)
+		newHostname, _ := body["hostname"].(string)
+		if f.hostname != "" && f.hostname != newHostname {
+			f.pendingHostname = newHostname
+			f.staleReads = 2
+		} else {
+			f.hostname = newHostname
+		}
 		writeJSON(w, http.StatusOK, map[string]any{})
 	case r.URL.Path == instancePath+"/custom-domain" && r.Method == http.MethodDelete:
 		f.deletes++
@@ -120,7 +140,9 @@ resource "cloudamqp_custom_domain" "custom_domain" {
 const customDomainUnitResourceName = "cloudamqp_custom_domain.custom_domain"
 
 // TestCustomDomain_Update: changing hostname sends a new POST to /custom-domain, with no DELETE
-// calls.
+// calls. The fake keeps reporting the old hostname as still "configured" for a couple of reads
+// after the POST, mimicking the real backend, so this also guards against returning early with
+// the stale hostname.
 func TestCustomDomain_Update(t *testing.T) {
 	t.Parallel()
 	fake, server := newFakeCustomDomainAPI(t)
