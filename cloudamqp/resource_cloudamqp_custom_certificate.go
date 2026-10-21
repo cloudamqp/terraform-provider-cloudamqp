@@ -80,28 +80,23 @@ func (r *customCertificateResource) Schema(ctx context.Context, req resource.Sch
 			"sni_hosts": schema.StringAttribute{
 				Required:    true,
 				Description: "A hostname (Server Name Indication) that this certificate applies to.",
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
 			},
 			"version": schema.Int64Attribute{
 				Optional:    true,
 				Computed:    true,
 				Default:     int64default.StaticInt64(1),
-				Description: " An argument to trigger force new (default: 1)",
+				Description: "An argument to trigger a new certificate upload on change (default: 1)",
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.UseStateForUnknown(),
-					int64planmodifier.RequiresReplace(),
 				},
 			},
 			"key_id": schema.StringAttribute{
 				Optional:    true,
 				Computed:    true,
 				Default:     stringdefault.StaticString(""),
-				Description: " An argument to trigger force new (default: empty string)",
+				Description: "An argument to trigger a new certificate upload on change (default: empty string)",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
-					stringplanmodifier.RequiresReplace(),
 				},
 			},
 		},
@@ -164,7 +159,39 @@ func (r *customCertificateResource) Read(ctx context.Context, req resource.ReadR
 }
 
 func (r *customCertificateResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	// Update is not supported - all changes require replacement
+	var plan customCertificateResourceModel
+	var config customCertificateResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	instanceID := plan.InstanceID.ValueInt64()
+	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
+	defer cancel()
+
+	request := model.CustomCertificateRequest{
+		CA:         config.CA.ValueString(),
+		Cert:       config.Cert.ValueString(),
+		PrivateKey: config.PrivateKey.ValueString(),
+		SNIHosts:   plan.SNIHosts.ValueString(),
+	}
+
+	jobResponse, err := r.client.CreateCustomCertificate(timeoutCtx, instanceID, request)
+	if err != nil {
+		resp.Diagnostics.AddError("Error updating custom certificate", err.Error())
+		return
+	}
+
+	_, err = r.client.PollForJobCompleted(timeoutCtx, instanceID, *jobResponse.ID, 10*time.Second)
+	if err != nil {
+		resp.Diagnostics.AddError("Error polling for custom certificate job", err.Error())
+		return
+	}
+
+	plan.ID = types.Int64Value(instanceID)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
 func (r *customCertificateResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
