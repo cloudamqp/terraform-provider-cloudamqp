@@ -9,8 +9,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
+// waitUntilCustomDomainConfigured polls until the domain reaches the desired configured state.
+// When configured is true, hostname must also match
 func (api *API) waitUntilCustomDomainConfigured(ctx context.Context, instanceID int64,
-	configured bool, sleep time.Duration) (*model.CustomDomainResponse, error) {
+	configured bool, hostname string, sleep time.Duration) (*model.CustomDomainResponse, error) {
 
 	for {
 		select {
@@ -30,7 +32,7 @@ func (api *API) waitUntilCustomDomainConfigured(ctx context.Context, instanceID 
 				// Domain not found, treat as not configured
 				return nil, nil
 			}
-		} else if response.Configured == configured {
+		} else if response.Configured == configured && (!configured || response.Hostname == hostname) {
 			return response, nil
 		}
 
@@ -61,7 +63,7 @@ func (api *API) CreateCustomDomain(ctx context.Context, instanceID int64, hostna
 		return nil, err
 	}
 
-	return api.waitUntilCustomDomainConfigured(ctx, instanceID, true, sleep)
+	return api.waitUntilCustomDomainConfigured(ctx, instanceID, true, hostname, sleep)
 }
 
 func (api *API) ReadCustomDomain(ctx context.Context, instanceID int64, sleep time.Duration) (
