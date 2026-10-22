@@ -5,8 +5,10 @@
 IMPROVEMENTS:
 
 * resource/cloudamqp_custom_certificate: `version`, `sni_hosts` and `key_id` changes now update the certificate in place instead of forcing a replace ([#559])
+* resource/cloudamqp_custom_domain: Hostname changes now update in place instead of delete and recreate ([#560])
 
 [#559]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/559
+[#560]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/560
 
 ## 1.51.0 (13 Oct, 2026)
 

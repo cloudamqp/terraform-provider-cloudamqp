@@ -2,82 +2,100 @@ package cloudamqp
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
-	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/vcr-testing/configuration"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
-// Recording the test benefits from having sleep set to default (10 s).
-// While replaying the test, using lower sleep (1 s), will speed up the test.
-
-// TestAccCustomDomain_Basic: Create custom domain, import and update hostname.
-func TestAccCustomDomain_Basic(t *testing.T) {
+// TestAccCustomDomain_Update: Create custom domain, then update hostname.
+func TestAccCustomDomain_Update(t *testing.T) {
 	t.Parallel()
 
 	var (
-		fileNames                = []string{"instance", "custom_domain"}
-		instanceResourceName     = "cloudamqp_instance.instance"
 		customDomainResourceName = "cloudamqp_custom_domain.custom_domain"
+		testInstanceID           = "407805" // pre-existing instance
 
-		params = map[string]string{
-			"InstanceName":         "TestAccCustomDomain_Basic",
-			"InstanceID":           fmt.Sprintf("%s.id", instanceResourceName),
-			"InstancePlan":         "bunny-1",
-			"CustomDomainHostname": "vcr-test.ddns.net",
-			"CustomDomainSleep":    "1",
-			"CustomDomainTimeout":  "1800",
-		}
-
-		paramsUpdated = map[string]string{
-			"InstanceName":         "TestAccCustomDomain_Basic",
-			"InstanceID":           fmt.Sprintf("%s.id", instanceResourceName),
-			"InstancePlan":         "bunny-1",
-			"CustomDomainHostname": "vcr-update.ddns.net",
-			"CustomDomainSleep":    "1",
-			"CustomDomainTimeout":  "1800",
-		}
+		// Recording benefits from the default sleep (10 s) between retries, matching
+		// production behavior. Replaying the cassette doesn't need the real wait, so a
+		// lower sleep speeds up the test.
+		sleep = "1"
 	)
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		sleep = "10"
+	}
 
 	cloudamqpResourceTest(t, resource.TestCase{
 		PreCheck: func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: configuration.GetTemplatedConfig(t, fileNames, params),
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_custom_domain" "custom_domain" {
+						instance_id = %s
+						hostname    = "vcr-test.myddns.me"
+						sleep       = %s
+					}
+				`, testInstanceID, sleep),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(instanceResourceName, "name", params["InstanceName"]),
-					resource.TestCheckResourceAttr(customDomainResourceName, "hostname", params["CustomDomainHostname"]),
-					resource.TestCheckResourceAttr(customDomainResourceName, "sleep", params["CustomDomainSleep"]),
-					resource.TestCheckResourceAttr(customDomainResourceName, "timeout", params["CustomDomainTimeout"]),
+					resource.TestCheckResourceAttr(customDomainResourceName, "hostname", "vcr-test.myddns.me"),
+					resource.TestCheckResourceAttr(customDomainResourceName, "sleep", sleep),
+					resource.TestCheckResourceAttr(customDomainResourceName, "timeout", "1800"),
 				),
 			},
 			{
-				ResourceName:            customDomainResourceName,
-				ImportStateIdFunc:       testAccImportCustomDomainStateIdFunc(instanceResourceName),
-				ImportState:             true,
-				ImportStateVerify:       true,
-				ImportStateVerifyIgnore: []string{"sleep", "timeout"},
-			},
-			{
-				Config: configuration.GetTemplatedConfig(t, fileNames, paramsUpdated),
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_custom_domain" "custom_domain" {
+						instance_id = %s
+						hostname    = "vcr-update.myddns.me"
+						sleep       = %s
+					}
+				`, testInstanceID, sleep),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(customDomainResourceName, "hostname", paramsUpdated["CustomDomainHostname"]),
-					resource.TestCheckResourceAttr(customDomainResourceName, "sleep", paramsUpdated["CustomDomainSleep"]),
-					resource.TestCheckResourceAttr(customDomainResourceName, "timeout", paramsUpdated["CustomDomainTimeout"]),
+					resource.TestCheckResourceAttr(customDomainResourceName, "hostname", "vcr-update.myddns.me"),
+					resource.TestCheckResourceAttr(customDomainResourceName, "sleep", sleep),
+					resource.TestCheckResourceAttr(customDomainResourceName, "timeout", "1800"),
 				),
 			},
 		},
 	})
 }
 
-// testAccImportCustomDomainStateIdFunc returns the instance_id for import.
-func testAccImportCustomDomainStateIdFunc(instanceResourceName string) resource.ImportStateIdFunc {
-	return func(state *terraform.State) (string, error) {
-		rs, ok := state.RootModule().Resources[instanceResourceName]
-		if !ok {
-			return "", fmt.Errorf("Resource %s not found", instanceResourceName)
-		}
-		return rs.Primary.Attributes["id"], nil
+// TestAccCustomDomain_Import: Import existing custom domain.
+func TestAccCustomDomain_Import(t *testing.T) {
+	t.Parallel()
+
+	var (
+		testInstanceID = "407805" // pre-existing instance
+		sleep          = "1"
+	)
+	if os.Getenv("CLOUDAMQP_RECORD") != "" {
+		sleep = "10"
 	}
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(`
+					resource "cloudamqp_custom_domain" "settings" {
+						instance_id = %s
+						hostname    = "vcr-test.myddns.me"
+						sleep       = %s
+					}
+				`, testInstanceID, sleep),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("cloudamqp_custom_domain.settings", "hostname", "vcr-test.myddns.me"),
+					resource.TestCheckResourceAttr("cloudamqp_custom_domain.settings", "sleep", sleep),
+					resource.TestCheckResourceAttr("cloudamqp_custom_domain.settings", "timeout", "1800"),
+				),
+			},
+			{
+				ResourceName:            "cloudamqp_custom_domain.settings",
+				ImportStateId:           testInstanceID,
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"sleep"},
+			},
+		},
+	})
 }
