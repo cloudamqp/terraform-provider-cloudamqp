@@ -12,15 +12,8 @@ type InviteResponse struct {
 	ID int `json:"id"`
 }
 
-// InviteUpdateRequest is the body for PUT /api/team/invites/:id. An empty
-// Tags list clears all tags.
-type InviteUpdateRequest struct {
-	Role string   `json:"role"`
-	Tags []string `json:"tags"`
-}
-
 // MemberUpdateRequest is the body for PUT /api/team/:user_id. An empty Tags
-// list clears the member's tags.
+// list leaves the member's tags unchanged.
 type MemberUpdateRequest struct {
 	Role string   `json:"role"`
 	Tags []string `json:"tags"`

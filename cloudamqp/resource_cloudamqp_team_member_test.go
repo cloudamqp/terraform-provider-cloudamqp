@@ -1,6 +1,7 @@
 package cloudamqp
 
 import (
+	"fmt"
 	"os"
 	"regexp"
 	"testing"
@@ -16,14 +17,16 @@ import (
 // and re-record if it isn't enough time in practice.
 var teamMemberAcceptWindow = 60 * time.Second
 
-// TestAccTeamMember_PendingInvite: invite a member, update the pending
-// invite's tags, import it, then let the implicit destroy revoke it, the
-// invite is never accepted in this test. Exercises POST /api/team/invite and
-// PUT/DELETE /api/team/invites/:id. Does NOT run in parallel with the other
+// TestAccTeamMember_PendingInvite: invite a member, change the pending
+// invite's tags (which replaces the invite, a pending invite can't be
+// updated), import it, then let the implicit destroy revoke it, the invite is
+// never accepted in this test. Exercises POST /api/team/invite and
+// DELETE /api/team/invites/:id. Does NOT run in parallel with the other
 // TestAccTeamMember_* tests, they share the one test@example.com mailbox and
 // must run one at a time.
 func TestAccTeamMember_PendingInvite(t *testing.T) {
 	memberResourceName := "cloudamqp_team_member.this"
+	var firstInviteID string
 
 	cloudamqpResourceTest(t, resource.TestCase{
 		PreCheck: func() { testAccPreCheck(t) },
@@ -44,6 +47,10 @@ func TestAccTeamMember_PendingInvite(t *testing.T) {
 					resource.TestCheckNoResourceAttr(memberResourceName, "user_id"),
 					resource.TestCheckResourceAttr(memberResourceName, "tags.#", "1"),
 					resource.TestCheckResourceAttr(memberResourceName, "tags.0", "tf-acc-test-member-tag-a"),
+					resource.TestCheckResourceAttrWith(memberResourceName, "invite_id", func(value string) error {
+						firstInviteID = value
+						return nil
+					}),
 				),
 			},
 			{
@@ -56,6 +63,12 @@ func TestAccTeamMember_PendingInvite(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(memberResourceName, "status", "pending"),
 					resource.TestCheckResourceAttr(memberResourceName, "tags.#", "2"),
+					resource.TestCheckResourceAttrWith(memberResourceName, "invite_id", func(value string) error {
+						if value == firstInviteID {
+							return fmt.Errorf("expected the pending invite to be replaced, invite_id is still %s", value)
+						}
+						return nil
+					}),
 				),
 			},
 			{

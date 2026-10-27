@@ -16,6 +16,15 @@ and all other roles can't have tags. A tag name that doesn't exist yet is create
 the same way tagging an instance or VPC works. Tags are case-sensitive, so `"Prod"` and `"prod"` are
 two different tags. Tags are only cleared as a side effect of switching to a different role.
 
+A pending invite can't be updated. Changing `role` or `tags` while `status` is `pending` replaces
+the resource: the invite is revoked and a new one is sent, with a new `invite_id`. The plan shows
+this as a replacement with a warning, so it needs to be approved like any other replacement. Note
+that `terraform apply -auto-approve` skips that confirmation. Once the invite is accepted, the same
+changes are updated in place.
+
+If the invite is accepted between plan and apply, the planned replacement removes the new member
+from the team and sends a new invite.
+
 For a SAML-configured team, the IdP may overwrite `role`/`tags` again on the member's next login
 regardless of what Terraform configures. If that happens, the next plan will show the drift like
 any other out-of-band change.
@@ -35,10 +44,11 @@ resource "cloudamqp_team_member" "this" {
 
 * `email` - (Required) Email address to invite. Changing this forces a new resource.
 * `role`  - (Optional/Computed) Role assigned to the team member. Defaults to `member` if omitted.
-  One of: `admin`, `billing manager`, `member`, `monitor`, `devops`.
+  One of: `admin`, `billing manager`, `member`, `monitor`, `devops`. Changing this forces a new
+  resource while the invite is pending.
 * `tags`  - (Optional/Computed) Tag names granting access to tagged instances. A tag that doesn't
   exist yet is created automatically. Required (at least one) for the `member`/`monitor` roles,
-  not allowed for other roles.
+  not allowed for other roles. Changing this forces a new resource while the invite is pending.
 
 ## Attributes Reference
 

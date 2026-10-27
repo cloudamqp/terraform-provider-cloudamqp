@@ -18,6 +18,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
+	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -90,6 +91,11 @@ func (r *teamMemberResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"this unset to let it track whatever the IdP assigns without producing a perpetual diff.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
+					stringplanmodifier.RequiresReplaceIf(
+						pendingInviteRequiresReplaceString,
+						pendingInviteReplaceDescription,
+						pendingInviteReplaceDescription,
+					),
 				},
 				Validators: []validator.String{
 					stringvalidator.OneOfCaseInsensitive(assignableTeamRoleNames...),
@@ -104,6 +110,11 @@ func (r *teamMemberResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"which require at least one tag.",
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.UseStateForUnknown(),
+					listplanmodifier.RequiresReplaceIf(
+						pendingInviteRequiresReplaceList,
+						pendingInviteReplaceDescription,
+						pendingInviteReplaceDescription,
+					),
 				},
 			},
 			"status": schema.StringAttribute{
@@ -173,6 +184,34 @@ func (r *teamMemberResource) ValidateConfig(ctx context.Context, req resource.Va
 				role, strings.Join(taggedTeamRoleNames, "/")),
 		)
 	}
+}
+
+const pendingInviteReplaceDescription = "A pending invite can't be updated. Changing role or tags " +
+	"while the invite is pending revokes it and sends a new invite."
+
+func pendingInviteRequiresReplaceString(ctx context.Context, req planmodifier.StringRequest, resp *stringplanmodifier.RequiresReplaceIfFuncResponse) {
+	resp.RequiresReplace, resp.Diagnostics = pendingInviteRequiresReplace(ctx, req.State, req.Path)
+}
+
+func pendingInviteRequiresReplaceList(ctx context.Context, req planmodifier.ListRequest, resp *listplanmodifier.RequiresReplaceIfFuncResponse) {
+	resp.RequiresReplace, resp.Diagnostics = pendingInviteRequiresReplace(ctx, req.State, req.Path)
+}
+
+func pendingInviteRequiresReplace(ctx context.Context, state tfsdk.State, attr path.Path) (bool, diag.Diagnostics) {
+	var status, email types.String
+	diags := state.GetAttribute(ctx, path.Root("status"), &status)
+	diags.Append(state.GetAttribute(ctx, path.Root("email"), &email)...)
+	if diags.HasError() || status.ValueString() != "pending" {
+		return false, diags
+	}
+
+	diags.AddAttributeWarning(
+		attr,
+		"Pending Invite Will Be Replaced",
+		fmt.Sprintf("The invite for %q is still pending and can't be updated. Applying this change "+
+			"revokes the invite and sends a new one.", email.ValueString()),
+	)
+	return true, diags
 }
 
 func (r *teamMemberResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
@@ -305,18 +344,19 @@ func (r *teamMemberResource) Update(ctx context.Context, req resource.UpdateRequ
 		role = plan.Role.ValueString()
 	}
 
-	var err error
+	// Role/tag changes on a pending invite force a replacement, so this is only reached for members.
 	if state.Status.ValueString() == "pending" {
-		err = r.client.UpdateTeamInvite(ctx, state.InviteID.ValueString(), model.InviteUpdateRequest{
-			Role: role,
-			Tags: tags,
-		})
-	} else {
-		err = r.client.UpdateTeamMember(ctx, state.UserID.ValueString(), model.MemberUpdateRequest{
-			Role: role,
-			Tags: tags,
-		})
+		resp.Diagnostics.AddError(
+			"Failed to Update Team Member",
+			fmt.Sprintf("The invite for %q is still pending and can't be updated.", email),
+		)
+		return
 	}
+
+	err := r.client.UpdateTeamMember(ctx, state.UserID.ValueString(), model.MemberUpdateRequest{
+		Role: role,
+		Tags: tags,
+	})
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Failed to Update Team Member",

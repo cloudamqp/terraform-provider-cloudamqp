@@ -161,29 +161,6 @@ func (api *API) GetTeamInvite(ctx context.Context, inviteID string) (*model.Invi
 	return &data, nil
 }
 
-// UpdateTeamInvite updates a pending invite's role/tags via the new
-// PUT /api/team/invites/:id.
-func (api *API) UpdateTeamInvite(ctx context.Context, inviteID string, params model.InviteUpdateRequest) error {
-	var (
-		failed map[string]any
-		path   = fmt.Sprintf("/api/team/invites/%s", url.PathEscape(inviteID))
-	)
-
-	tflog.Debug(ctx, fmt.Sprintf("method=PUT path=%s params=%v", path, params))
-	err := api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
-		functionName: "UpdateTeamInvite",
-		resourceName: "Team Invite",
-		attempt:      1,
-		sleep:        5 * time.Second,
-		data:         nil,
-		failed:       &failed,
-	})
-	if err != nil {
-		return teamAPIError(err, failed)
-	}
-	return nil
-}
-
 // DeleteTeamInvite revokes a pending invite via the new
 // DELETE /api/team/invites/:id.
 func (api *API) DeleteTeamInvite(ctx context.Context, inviteID string) error {
