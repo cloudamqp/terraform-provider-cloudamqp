@@ -147,20 +147,30 @@ func (r *teamMemberResource) ValidateConfig(ctx context.Context, req resource.Va
 	if !config.Role.IsNull() {
 		role = config.Role.ValueString()
 	}
-	if !slices.Contains(taggedTeamRoleNames, role) {
-		return
-	}
 
 	// Tags referencing another resource's output can't be checked yet either.
 	if config.Tags.IsUnknown() {
 		return
 	}
 
-	if config.Tags.IsNull() || len(config.Tags.Elements()) == 0 {
+	hasTags := !config.Tags.IsNull() && len(config.Tags.Elements()) > 0
+	tagged := slices.Contains(taggedTeamRoleNames, role)
+
+	if tagged && !hasTags {
 		resp.Diagnostics.AddAttributeError(
 			path.Root("tags"),
 			"Missing Required Tags",
 			fmt.Sprintf("The %q role requires at least one tag to be specified.", role),
+		)
+	}
+
+	// The backend clears all tags when switching to a role other than member/monitor.
+	if !tagged && hasTags {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("tags"),
+			"Tags Not Allowed",
+			fmt.Sprintf("The %q role can't have tags, only the %s roles can.",
+				role, strings.Join(taggedTeamRoleNames, "/")),
 		)
 	}
 }

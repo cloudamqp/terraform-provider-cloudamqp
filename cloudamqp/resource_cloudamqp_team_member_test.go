@@ -212,3 +212,25 @@ func TestAccTeamMember_TaggedRoleRequiresTags(t *testing.T) {
 		},
 	})
 }
+
+// TestAccTeamMember_UntaggedRoleRejectsTags: roles other than "member" and
+// "monitor" can't have tags, the backend clears them on role change.
+func TestAccTeamMember_UntaggedRoleRejectsTags(t *testing.T) {
+	t.Parallel()
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: `
+					resource "cloudamqp_team_member" "this" {
+						email = "test@example.com"
+						role  = "admin"
+						tags  = ["tf-acc-test-member-tag-a"]
+					}
+				`,
+				ExpectError: regexp.MustCompile(`(?i)"admin" role can't have tags`),
+			},
+		},
+	})
+}
