@@ -162,14 +162,16 @@ func (api *API) GetTeamInvite(ctx context.Context, inviteID string) (*model.Invi
 }
 
 // DeleteTeamInvite revokes a pending invite via the new
-// DELETE /api/team/invites/:id.
-func (api *API) DeleteTeamInvite(ctx context.Context, inviteID string) error {
+// DELETE /api/team/invites/:id. Returns false, nil if the invite no longer
+// exists (404), e.g. it was accepted or revoked since the last read.
+func (api *API) DeleteTeamInvite(ctx context.Context, inviteID string) (bool, error) {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/team/invites/%s", url.PathEscape(inviteID))
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=DELETE path=%s", path))
+	statusCode := 0
 	err := api.callWithRetry(ctx, api.sling.New().Delete(path), retryRequest{
 		functionName: "DeleteTeamInvite",
 		resourceName: "Team Invite",
@@ -177,11 +179,15 @@ func (api *API) DeleteTeamInvite(ctx context.Context, inviteID string) error {
 		sleep:        5 * time.Second,
 		data:         nil,
 		failed:       &failed,
+		statusCode:   &statusCode,
 	})
-	if err != nil {
-		return teamAPIError(err, failed)
+	if statusCode == 404 {
+		return false, nil
 	}
-	return nil
+	if err != nil {
+		return false, teamAPIError(err, failed)
+	}
+	return true, nil
 }
 
 // UpdateTeamMember updates an accepted member's role/tags via

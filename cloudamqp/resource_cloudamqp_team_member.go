@@ -388,20 +388,50 @@ func (r *teamMemberResource) Delete(ctx context.Context, req resource.DeleteRequ
 		return
 	}
 
+	email := state.Email.ValueString()
+
 	var err error
 	if state.Status.ValueString() == "pending" {
-		err = r.client.DeleteTeamInvite(ctx, state.InviteID.ValueString())
+		var revoked bool
+		revoked, err = r.client.DeleteTeamInvite(ctx, state.InviteID.ValueString())
+		if err == nil && !revoked {
+			resp.Diagnostics.Append(r.checkInviteNotAccepted(ctx, email)...)
+			if resp.Diagnostics.HasError() {
+				return
+			}
+		}
 	} else {
-		err = r.client.RemoveTeamMember(ctx, state.Email.ValueString())
+		err = r.client.RemoveTeamMember(ctx, email)
 	}
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Failed to Delete Team Member",
-			fmt.Sprintf("Could not remove %q: %s", state.Email.ValueString(), err),
+			fmt.Sprintf("Could not remove %q: %s", email, err),
 		)
 		return
 	}
 	resp.State.RemoveResource(ctx)
+}
+
+// checkInviteNotAccepted gives an error if a pending invite that's already gone was accepted
+// since the last refresh, e.g. between plan and apply. Removing the resource from state then
+// would make the next invite fail with "already in this team" on every apply. Keeping the state
+// lets the next plan pick up the member and update it in place.
+func (r *teamMemberResource) checkInviteNotAccepted(ctx context.Context, email string) diag.Diagnostics {
+	var diags diag.Diagnostics
+	member, err := r.client.GetTeamMemberByEmail(ctx, normalizeEmail(email))
+	if err != nil {
+		diags.AddError("Failed to Delete Team Member", fmt.Sprintf("Could not look up %q: %s", email, err))
+		return diags
+	}
+	if member != nil {
+		diags.AddError(
+			"Invite Already Accepted",
+			fmt.Sprintf("The invite for %q was accepted after the plan was made, so it can't be "+
+				"replaced. Run plan again to update the member instead.", email),
+		)
+	}
+	return diags
 }
 
 // readState uses the previously known status, if any, to do a single direct

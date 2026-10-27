@@ -22,8 +22,8 @@ this as a replacement with a warning, so it needs to be approved like any other 
 that `terraform apply -auto-approve` skips that confirmation. Once the invite is accepted, the same
 changes are updated in place.
 
-If the invite is accepted between plan and apply, the planned replacement removes the new member
-from the team and sends a new invite.
+If the invite is accepted between plan and apply, the apply stops with an error and nothing is
+changed. Run plan again: it picks up the new member and updates its role and tags in place.
 
 For a SAML-configured team, the IdP may overwrite `role`/`tags` again on the member's next login
 regardless of what Terraform configures. If that happens, the next plan will show the drift like
