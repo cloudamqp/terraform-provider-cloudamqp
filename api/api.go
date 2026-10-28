@@ -52,6 +52,10 @@ func (api *API) callWithRetry(ctx context.Context, sling *sling.Sling, request r
 	}
 
 	response, err := sling.Receive(request.data, request.failed)
+	// No response means the request never reached the API, e.g. connection refused
+	if response == nil {
+		return fmt.Errorf("%s: %w", request.functionName, err)
+	}
 	if err != nil {
 		tflog.Warn(ctx, fmt.Sprintf("callWithRetry function=%s attempt=%d error=%s", request.functionName,
 			request.attempt, err.Error()))
