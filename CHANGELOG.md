@@ -7,7 +7,12 @@ FEATURES:
 * Migrated `cloudamqp_upgrade_rabbitmq` and `cloudamqp_upgrade_lavinmq` resources towards Terraform plugin framework ([#562])
 * Migrated `cloudamqp_upgradable_versions` data source towards Terraform plugin framework ([#562])
 
+IMPROVEMENTS:
+
+* Tests: Shared mux provider factory between unit and VCR tests ([#563])
+
 [#562]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/562
+[#563]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/563
 
 
 ## 1.52.0 (29 Oct, 2026)
