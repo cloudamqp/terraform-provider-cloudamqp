@@ -145,7 +145,7 @@ func (d *vpcInfoDataSource) Read(ctx context.Context, req datasource.ReadRequest
 	config.Name = types.StringValue(data.Name)
 	config.VpcSubnet = types.StringValue(data.Subnet)
 	config.OwnerID = types.StringValue(data.OwnerId)
-	config.SecurityGroupID = types.StringValue(data.SecurityGroupId.Id)
+	config.SecurityGroupID = types.StringValue(data.SecurityGroup.Id)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &config)...)
 }

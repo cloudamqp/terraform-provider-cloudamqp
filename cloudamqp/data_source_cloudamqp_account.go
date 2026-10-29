@@ -109,12 +109,17 @@ func (d *accountDataSource) Read(ctx context.Context, req datasource.ReadRequest
 	}
 	state.Instances = instancesList
 
-	state.ID = types.StringValue("account")
+	state.ID = types.StringValue("noId")
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
 func accountInstanceObjectValue(ctx context.Context, attrTypes map[string]attr.Type, instance instanceModel.InstanceResponse) (types.Object, diag.Diagnostics) {
-	tags, diags := types.ListValueFrom(ctx, types.StringType, instance.Tags)
+	// Null tags from the API give an empty list, same as SDK v2
+	tagValues := instance.Tags
+	if tagValues == nil {
+		tagValues = []string{}
+	}
+	tags, diags := types.ListValueFrom(ctx, types.StringType, tagValues)
 	if diags.HasError() {
 		return types.Object{}, diags
 	}

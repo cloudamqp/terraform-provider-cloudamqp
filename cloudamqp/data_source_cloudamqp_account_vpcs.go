@@ -3,7 +3,6 @@ package cloudamqp
 import (
 	"context"
 	"fmt"
-	"sort"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	networkModel "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/network"
@@ -92,8 +91,6 @@ func (d *accountVpcsDataSource) Read(ctx context.Context, req datasource.ReadReq
 		"vpc_name": types.StringType,
 	}}
 
-	sort.Slice(vpcs, func(i, j int) bool { return vpcs[i].ID < vpcs[j].ID })
-
 	values := make([]attr.Value, 0, len(vpcs))
 	for _, vpc := range vpcs {
 		obj, diags := accountVpcObjectValue(ctx, accountVpcObjectType.AttrTypes, vpc)
@@ -111,7 +108,7 @@ func (d *accountVpcsDataSource) Read(ctx context.Context, req datasource.ReadReq
 	}
 	state.VPCs = vpcsList
 
-	state.ID = types.StringValue("account_vpcs")
+	state.ID = types.StringValue("noId")
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -119,7 +116,12 @@ func (d *accountVpcsDataSource) Read(ctx context.Context, req datasource.ReadReq
 }
 
 func accountVpcObjectValue(ctx context.Context, attrTypes map[string]attr.Type, vpc networkModel.VpcResponse) (types.Object, diag.Diagnostics) {
-	tags, diags := types.ListValueFrom(ctx, types.StringType, vpc.Tags)
+	// Null tags from the API give an empty list, same as SDK v2
+	tagValues := vpc.Tags
+	if tagValues == nil {
+		tagValues = []string{}
+	}
+	tags, diags := types.ListValueFrom(ctx, types.StringType, tagValues)
 	if diags.HasError() {
 		return types.Object{}, diags
 	}

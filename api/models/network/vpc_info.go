@@ -1,11 +1,11 @@
 package network
 
 type VpcInfoResponse struct {
-	Id              string                       `json:"id"`
-	Name            string                       `json:"name"`
-	Subnet          string                       `json:"subnet"`
-	OwnerId         string                       `json:"owner_id"`
-	SecurityGroupId VpcInfoSecurityGroupResponse `json:"security_group_id"`
+	Id            string                       `json:"id"`
+	Name          string                       `json:"name"`
+	Subnet        string                       `json:"subnet"`
+	OwnerId       string                       `json:"owner_id"`
+	SecurityGroup VpcInfoSecurityGroupResponse `json:"security_group"`
 }
 
 type VpcInfoSecurityGroupResponse struct {
