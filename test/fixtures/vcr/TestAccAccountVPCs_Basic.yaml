@@ -1,0 +1,1990 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 129
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"TestAccAccountVPCs_Basic-01","region":"amazon-web-services::eu-central-1","subnet":"10.56.72.0/24","tags":["vcr-test"]}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 81
+        uncompressed: false
+        body: '{"id":76,"message":"VPC created","apikey":"61410bc4-d6f9-4fee-942c-9b414b6e53f6"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "81"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 4812b6ff-56f1-4d67-aeee-7a9497f305c4
+        status: 200 OK
+        code: 200
+        duration: 49.205099ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-042db066c3d42c105","name":"vpc-fb6hlc2o","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0dc9a3c21d671399b","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - db2d04cf-de03-413f-986b-47e54fe0f81a
+        status: 200 OK
+        code: 200
+        duration: 892.141572ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-042db066c3d42c105","name":"vpc-fb6hlc2o","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0dc9a3c21d671399b","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 793e054f-700e-4709-adbe-551a31d361af
+        status: 200 OK
+        code: 200
+        duration: 759.033097ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 216
+        uncompressed: false
+        body: '{"id":76,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"223d07cd-b9dc-4128-b83d-430b2ea25048","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "216"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 5ac2796a-d876-4cdc-8fc3-261916e49876
+        status: 200 OK
+        code: 200
+        duration: 9.617885ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-042db066c3d42c105","name":"vpc-fb6hlc2o","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0dc9a3c21d671399b","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - b3d1e35a-780b-4e38-be1f-dc82dee00942
+        status: 200 OK
+        code: 200
+        duration: 854.785656ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 216
+        uncompressed: false
+        body: '{"id":76,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"223d07cd-b9dc-4128-b83d-430b2ea25048","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "216"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - e4ddc2f2-8d28-4a5a-902f-b6b20523b9b8
+        status: 200 OK
+        code: 200
+        duration: 9.099263ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-042db066c3d42c105","name":"vpc-fb6hlc2o","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0dc9a3c21d671399b","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 52682146-98de-4474-bdfb-bb6dae533bc8
+        status: 200 OK
+        code: 200
+        duration: 897.550377ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 129
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"TestAccAccountVPCs_Basic-02","region":"amazon-web-services::eu-central-1","subnet":"10.56.72.0/24","tags":["vcr-test"]}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 81
+        uncompressed: false
+        body: '{"id":77,"message":"VPC created","apikey":"d20f03f2-719e-40c3-a649-25bcf725a1aa"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "81"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 6981028c-baf1-47b4-a730-280432c1c054
+        status: 200 OK
+        code: 200
+        duration: 39.97754ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/77/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0216dcfdc3c628476","name":"vpc-kbi4acge","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0a8e2eb266fb45b33","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 384a35ae-e708-4bf4-b2ef-7624628577ee
+        status: 200 OK
+        code: 200
+        duration: 1.077248243s
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/77/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0216dcfdc3c628476","name":"vpc-kbi4acge","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0a8e2eb266fb45b33","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8b5f5339-6102-411d-88d8-651bbfa97a0a
+        status: 200 OK
+        code: 200
+        duration: 757.618366ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/77
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 216
+        uncompressed: false
+        body: '{"id":77,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"0b22f37f-03f4-4315-aa9d-b9b08172f454","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "216"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - e2804f54-cce5-4de3-a9fe-b7e52a1233b4
+        status: 200 OK
+        code: 200
+        duration: 15.422151ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 216
+        uncompressed: false
+        body: '{"id":76,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"223d07cd-b9dc-4128-b83d-430b2ea25048","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "216"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 9dff3434-c5d6-4bcc-9c4a-f31fcd86ea8f
+        status: 200 OK
+        code: 200
+        duration: 15.763988ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-042db066c3d42c105","name":"vpc-fb6hlc2o","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0dc9a3c21d671399b","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - b327c0c8-6c0c-4910-ba05-0de26bfcc4c7
+        status: 200 OK
+        code: 200
+        duration: 874.548687ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/77/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0216dcfdc3c628476","name":"vpc-kbi4acge","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0a8e2eb266fb45b33","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 6bcddf28-a35a-49d1-8792-7cf6e2904073
+        status: 200 OK
+        code: 200
+        duration: 901.677677ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 435
+        uncompressed: false
+        body: '[{"id":77,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"0b22f37f-03f4-4315-aa9d-b9b08172f454","instances":[]},{"id":76,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"223d07cd-b9dc-4128-b83d-430b2ea25048","instances":[]}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "435"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 5cd9d32e-6e27-4d0b-9030-f4cc47f26cc7
+        status: 200 OK
+        code: 200
+        duration: 20.073555ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 216
+        uncompressed: false
+        body: '{"id":76,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"223d07cd-b9dc-4128-b83d-430b2ea25048","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "216"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f495b189-cf54-4fb9-b9e8-5dec2f3b7bc5
+        status: 200 OK
+        code: 200
+        duration: 23.05055ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/77
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 216
+        uncompressed: false
+        body: '{"id":77,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"0b22f37f-03f4-4315-aa9d-b9b08172f454","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "216"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 39b26efd-52d7-4ffc-bee0-bb1612d72db2
+        status: 200 OK
+        code: 200
+        duration: 25.301691ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-042db066c3d42c105","name":"vpc-fb6hlc2o","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0dc9a3c21d671399b","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - c4e79de6-44b7-4c68-b7af-fbe40a1d6fc1
+        status: 200 OK
+        code: 200
+        duration: 748.540025ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/77/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0216dcfdc3c628476","name":"vpc-kbi4acge","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0a8e2eb266fb45b33","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 21255695-5ba9-4e45-8425-491faf9907c3
+        status: 200 OK
+        code: 200
+        duration: 794.431899ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/77/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0216dcfdc3c628476","name":"vpc-kbi4acge","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0a8e2eb266fb45b33","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 2eb2c163-7202-45ad-8422-f909876e2cfd
+        status: 200 OK
+        code: 200
+        duration: 1.293300789s
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-042db066c3d42c105","name":"vpc-fb6hlc2o","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0dc9a3c21d671399b","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 645bd045-9b42-4ce3-a1c3-23089663eab6
+        status: 200 OK
+        code: 200
+        duration: 509.796042ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 435
+        uncompressed: false
+        body: '[{"id":77,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"0b22f37f-03f4-4315-aa9d-b9b08172f454","instances":[]},{"id":76,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"223d07cd-b9dc-4128-b83d-430b2ea25048","instances":[]}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "435"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f8bc464d-8124-447b-be9f-c46ab2b188de
+        status: 200 OK
+        code: 200
+        duration: 7.947964ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/77/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0216dcfdc3c628476","name":"vpc-kbi4acge","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0a8e2eb266fb45b33","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 6eb89f0a-8fab-4cd1-9439-e034baeb6bd6
+        status: 200 OK
+        code: 200
+        duration: 498.739093ms
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-042db066c3d42c105","name":"vpc-fb6hlc2o","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0dc9a3c21d671399b","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8f9cad0b-cd71-4800-884c-933f144e5957
+        status: 200 OK
+        code: 200
+        duration: 527.375866ms
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 435
+        uncompressed: false
+        body: '[{"id":77,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"0b22f37f-03f4-4315-aa9d-b9b08172f454","instances":[]},{"id":76,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"223d07cd-b9dc-4128-b83d-430b2ea25048","instances":[]}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "435"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 27e7d161-ad2f-41f0-871b-ef80b78bbb83
+        status: 200 OK
+        code: 200
+        duration: 7.529952ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/77/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0216dcfdc3c628476","name":"vpc-kbi4acge","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0a8e2eb266fb45b33","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - b6ff8b1c-ded4-452d-8e15-fda82793aa46
+        status: 200 OK
+        code: 200
+        duration: 518.107721ms
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-042db066c3d42c105","name":"vpc-fb6hlc2o","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0dc9a3c21d671399b","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 75391c73-d251-4834-8857-8dbcbbf6741d
+        status: 200 OK
+        code: 200
+        duration: 504.436533ms
+    - id: 27
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 435
+        uncompressed: false
+        body: '[{"id":77,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"0b22f37f-03f4-4315-aa9d-b9b08172f454","instances":[]},{"id":76,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"223d07cd-b9dc-4128-b83d-430b2ea25048","instances":[]}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "435"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - d9d539a2-3d7c-4cd1-8710-df8666064cbc
+        status: 200 OK
+        code: 200
+        duration: 18.331307ms
+    - id: 28
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 216
+        uncompressed: false
+        body: '{"id":76,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"223d07cd-b9dc-4128-b83d-430b2ea25048","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "216"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8441ee1d-a95b-40fc-b146-2619f3b287e7
+        status: 200 OK
+        code: 200
+        duration: 21.137819ms
+    - id: 29
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/77
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 216
+        uncompressed: false
+        body: '{"id":77,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"0b22f37f-03f4-4315-aa9d-b9b08172f454","instances":[]}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "216"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - b6e6328c-8190-45f5-bb69-d2f094b733e1
+        status: 200 OK
+        code: 200
+        duration: 21.488002ms
+    - id: 30
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-042db066c3d42c105","name":"vpc-fb6hlc2o","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0dc9a3c21d671399b","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 54e58add-8120-4b3d-9a96-1a7648b5ea39
+        status: 200 OK
+        code: 200
+        duration: 530.234642ms
+    - id: 31
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/77/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0216dcfdc3c628476","name":"vpc-kbi4acge","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0a8e2eb266fb45b33","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 0bcee277-7a1d-4b14-8161-7b8ccb6e36d5
+        status: 200 OK
+        code: 200
+        duration: 541.375479ms
+    - id: 32
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-042db066c3d42c105","name":"vpc-fb6hlc2o","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0dc9a3c21d671399b","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 41c6a071-cb65-455c-ba85-3b29e27d539d
+        status: 200 OK
+        code: 200
+        duration: 480.004948ms
+    - id: 33
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/77/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0216dcfdc3c628476","name":"vpc-kbi4acge","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0a8e2eb266fb45b33","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 967102b8-748c-4a4a-86af-0cf0291bb847
+        status: 200 OK
+        code: 200
+        duration: 1.023423573s
+    - id: 34
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 435
+        uncompressed: false
+        body: '[{"id":77,"name":"TestAccAccountVPCs_Basic-02","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"0b22f37f-03f4-4315-aa9d-b9b08172f454","instances":[]},{"id":76,"name":"TestAccAccountVPCs_Basic-01","plan":"vpc","subnet":"10.56.72.0/24","region":"amazon-web-services::eu-central-1","tags":["vcr-test"],"providerid":"223d07cd-b9dc-4128-b83d-430b2ea25048","instances":[]}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "435"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 5ee3cebb-8b29-411b-a687-6820595bd085
+        status: 200 OK
+        code: 200
+        duration: 7.435715ms
+    - id: 35
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/77/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-0216dcfdc3c628476","name":"vpc-kbi4acge","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0a8e2eb266fb45b33","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - abe4e612-b1e1-41b7-9fd5-b0c7cf76bdf0
+        status: 200 OK
+        code: 200
+        duration: 504.362758ms
+    - id: 36
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76/vpc-peering/info
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 236
+        uncompressed: false
+        body: '{"id":"vpc-042db066c3d42c105","name":"vpc-fb6hlc2o","subnet":"10.56.72.0/24","owner_id":"123456789012","security_group":{"id":"sg-0dc9a3c21d671399b","name":"default","description":"default VPC security group","owner_id":"123456789012"}}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "236"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 66bd7c14-9856-47f5-85aa-4df22449a6bf
+        status: 200 OK
+        code: 200
+        duration: 564.75126ms
+    - id: 37
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/77
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 7698c1e6-e570-466a-8db8-aae828f0181b
+        status: 204 No Content
+        code: 204
+        duration: 54.029515ms
+    - id: 38
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/vpcs/76
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Cache-Control:
+                - no-cache
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - c10643f7-f270-4903-9502-f801a3ab2f2d
+        status: 204 No Content
+        code: 204
+        duration: 61.433038ms

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/network"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
@@ -42,18 +43,15 @@ func (api *API) AcceptVpcPeering(ctx context.Context, instanceID int, peeringID 
 	return data, nil
 }
 
-func (api *API) ReadVpcInfo(ctx context.Context, instanceID int) (map[string]any, error) {
+func (api *API) ReadVpcInfo(ctx context.Context, instanceID int64) (*model.VpcInfoResponse, error) {
 	var (
-		data   map[string]any
+		data   *model.VpcInfoResponse
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/vpc-peering/info", instanceID)
 	)
 
-	ctxTimeout, cancel := context.WithTimeout(ctx, 100*time.Second)
-	defer cancel()
-
 	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s", path))
-	err := api.callWithRetry(ctxTimeout, api.sling.New().Get(path), retryRequest{
+	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
 		functionName:    "ReadVpcInfo",
 		resourceName:    "VPC Info",
 		attempt:         1,
@@ -66,7 +64,7 @@ func (api *API) ReadVpcInfo(ctx context.Context, instanceID int) (map[string]any
 		return nil, err
 	}
 
-	if len(data) == 0 {
+	if data == nil {
 		return nil, nil
 	}
 
