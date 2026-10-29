@@ -75,3 +75,26 @@ output "vpcs_count" {
 		},
 	})
 }
+
+// TestAccountVpcsDataSource_Unavailable: a 503 when looking up a VPC name at the cloud provider
+// is retried instead of failing the read. Retries need a deadline on the request.
+func TestAccountVpcsDataSource_Unavailable(t *testing.T) {
+	t.Parallel()
+	fake, server := newFakeAccountAPI(t)
+	fake.vpcs = []map[string]any{
+		{"id": 20, "name": "vpc", "region": "amazon-web-services::us-east-1", "subnet": "10.56.72.0/24",
+			"tags": []string{}},
+	}
+	fake.vpcInfo["/api/vpcs/20/vpc-peering/info"] = map[string]any{"name": "vpc-aws-20"}
+	fake.unavailable["/api/vpcs/20/vpc-peering/info"] = 1
+
+	accountUnitTest(t, []resource.TestStep{
+		{
+			Config: accountUnitTestConfig(server.URL, `data "cloudamqp_account_vpcs" "vpcs" {}`),
+			Check: resource.ComposeAggregateTestCheckFunc(
+				resource.TestCheckResourceAttr(accountVpcsDataSourceName, "vpcs.#", "1"),
+				resource.TestCheckResourceAttr(accountVpcsDataSourceName, "vpcs.0.vpc_name", "vpc-aws-20"),
+			),
+		},
+	})
+}

@@ -105,7 +105,7 @@ func (d *vpcInfoDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		return
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(1800)*time.Second)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 100*time.Second)
 	defer cancel()
 
 	var (

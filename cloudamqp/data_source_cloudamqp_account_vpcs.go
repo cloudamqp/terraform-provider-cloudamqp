@@ -3,6 +3,7 @@ package cloudamqp
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	networkModel "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/network"
@@ -13,8 +14,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-var _ datasource.DataSource = &accountVpcsDataSource{}
-var _ datasource.DataSourceWithConfigure = &accountVpcsDataSource{}
+var (
+	_ datasource.DataSource              = &accountVpcsDataSource{}
+	_ datasource.DataSourceWithConfigure = &accountVpcsDataSource{}
+)
 
 type accountVpcsDataSource struct {
 	client *api.API
@@ -29,21 +32,22 @@ type accountVpcsDataSourceModel struct {
 	VPCs types.List   `tfsdk:"vpcs"`
 }
 
-func (d *accountVpcsDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+var accountVpcObjectType = types.ObjectType{AttrTypes: map[string]attr.Type{
+	"id":       types.Int64Type,
+	"name":     types.StringType,
+	"region":   types.StringType,
+	"subnet":   types.StringType,
+	"tags":     types.ListType{ElemType: types.StringType},
+	"vpc_name": types.StringType,
+}}
+
+func (d *accountVpcsDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = "cloudamqp_account_vpcs"
 }
 
-func (d *accountVpcsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	accountVpcObjectType := types.ObjectType{AttrTypes: map[string]attr.Type{
-		"id":       types.Int64Type,
-		"name":     types.StringType,
-		"region":   types.StringType,
-		"subnet":   types.StringType,
-		"tags":     types.ListType{ElemType: types.StringType},
-		"vpc_name": types.StringType,
-	}}
-
+func (d *accountVpcsDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		Description: "Use this data source to retrieve information about all standalone VPCs associated with the account.",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Computed:    true,
@@ -58,15 +62,15 @@ func (d *accountVpcsDataSource) Schema(ctx context.Context, req datasource.Schem
 	}
 }
 
-func (d *accountVpcsDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (d *accountVpcsDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
 	client, ok := req.ProviderData.(*api.API)
 	if !ok {
 		resp.Diagnostics.AddError(
-			"Unexpected Provider Data Type",
-			fmt.Sprintf("Expected *api.API, got: %T", req.ProviderData),
+			"Unexpected Data Source Configure Type",
+			fmt.Sprintf("Expected *api.API, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 		return
 	}
@@ -76,20 +80,16 @@ func (d *accountVpcsDataSource) Configure(ctx context.Context, req datasource.Co
 func (d *accountVpcsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var state accountVpcsDataSourceModel
 
-	vpcs, err := d.client.ListVpcs(ctx)
+	// Listing VPCs looks up each VPC name at the cloud provider, the deadline lets slow or
+	// rate limited calls be retried
+	timeoutCtx, cancel := context.WithTimeout(ctx, 10*time.Minute)
+	defer cancel()
+
+	vpcs, err := d.client.ListVpcs(timeoutCtx)
 	if err != nil {
-		resp.Diagnostics.AddError("API Error", fmt.Sprintf("Failed to list VPCs: %s", err.Error()))
+		resp.Diagnostics.AddError("Failed to list VPCs", err.Error())
 		return
 	}
-
-	accountVpcObjectType := types.ObjectType{AttrTypes: map[string]attr.Type{
-		"id":       types.Int64Type,
-		"name":     types.StringType,
-		"region":   types.StringType,
-		"subnet":   types.StringType,
-		"tags":     types.ListType{ElemType: types.StringType},
-		"vpc_name": types.StringType,
-	}}
 
 	values := make([]attr.Value, 0, len(vpcs))
 	for _, vpc := range vpcs {
@@ -110,9 +110,6 @@ func (d *accountVpcsDataSource) Read(ctx context.Context, req datasource.ReadReq
 
 	state.ID = types.StringValue("noId")
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
 }
 
 func accountVpcObjectValue(ctx context.Context, attrTypes map[string]attr.Type, vpc networkModel.VpcResponse) (types.Object, diag.Diagnostics) {

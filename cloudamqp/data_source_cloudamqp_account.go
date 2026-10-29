@@ -31,19 +31,19 @@ type accountDataSourceModel struct {
 	Instances types.List   `tfsdk:"instances"`
 }
 
+var accountInstanceObjectType = types.ObjectType{AttrTypes: map[string]attr.Type{
+	"id":     types.Int64Type,
+	"name":   types.StringType,
+	"plan":   types.StringType,
+	"region": types.StringType,
+	"tags":   types.ListType{ElemType: types.StringType},
+}}
+
 func (d *accountDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = "cloudamqp_account"
 }
 
 func (d *accountDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	accountInstanceObjectType := types.ObjectType{AttrTypes: map[string]attr.Type{
-		"id":     types.Int64Type,
-		"name":   types.StringType,
-		"plan":   types.StringType,
-		"region": types.StringType,
-		"tags":   types.ListType{ElemType: types.StringType},
-	}}
-
 	resp.Schema = schema.Schema{
 		Description: "Use this data source to retrieve information about all instances associated with the account.",
 		Attributes: map[string]schema.Attribute{
@@ -83,14 +83,6 @@ func (d *accountDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		resp.Diagnostics.AddError("Failed to list instances", err.Error())
 		return
 	}
-
-	accountInstanceObjectType := types.ObjectType{AttrTypes: map[string]attr.Type{
-		"id":     types.Int64Type,
-		"name":   types.StringType,
-		"plan":   types.StringType,
-		"region": types.StringType,
-		"tags":   types.ListType{ElemType: types.StringType},
-	}}
 
 	values := make([]attr.Value, 0, len(instances))
 	for _, instance := range instances {

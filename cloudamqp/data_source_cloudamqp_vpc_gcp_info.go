@@ -149,6 +149,14 @@ func (d *vpcGcpInfoDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		}
 	}
 
+	if data == nil {
+		resp.Diagnostics.AddError(
+			"Failed to read VPC GCP info",
+			"No VPC info found, the data source is used for GCP VPC peering.",
+		)
+		return
+	}
+
 	config.ID = types.StringValue(data.Name)
 	config.Name = types.StringValue(data.Name)
 	config.Network = types.StringValue(data.Network)

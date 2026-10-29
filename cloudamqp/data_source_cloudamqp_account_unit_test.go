@@ -26,10 +26,13 @@ type fakeAccountAPI struct {
 	// Number of 400 responses for vpc-peering/info before the info is returned, like a VPC that
 	// is not ready yet
 	notReady int
+	// Number of 503 responses by path before the normal response, like a short outage at the
+	// cloud provider
+	unavailable map[string]int
 }
 
 func newFakeAccountAPI(t *testing.T) (*fakeAccountAPI, *httptest.Server) {
-	fake := &fakeAccountAPI{vpcInfo: map[string]map[string]any{}}
+	fake := &fakeAccountAPI{vpcInfo: map[string]map[string]any{}, unavailable: map[string]int{}}
 	server := httptest.NewServer(http.HandlerFunc(fake.handle))
 	t.Cleanup(server.Close)
 	return fake, server
@@ -44,6 +47,9 @@ func (f *fakeAccountAPI) handle(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case r.Method != http.MethodGet:
 		writeJSON(w, http.StatusMethodNotAllowed, map[string]any{"error": "method not allowed"})
+	case f.unavailable[r.URL.Path] > 0:
+		f.unavailable[r.URL.Path]--
+		writeJSON(w, http.StatusServiceUnavailable, map[string]any{"error": "service unavailable"})
 	case r.URL.Path == "/api/instances":
 		writeJSON(w, http.StatusOK, f.instances)
 	case r.URL.Path == "/api/vpcs":

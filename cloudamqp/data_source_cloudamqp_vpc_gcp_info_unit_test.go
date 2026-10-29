@@ -91,3 +91,21 @@ func TestVpcGcpInfoDataSource_MissingID(t *testing.T) {
 		},
 	})
 }
+
+// TestVpcGcpInfoDataSource_NotFound: a 404 for the info gives an error instead of a crash. SDK v2
+// crashed here, so this test only passes on the framework version.
+func TestVpcGcpInfoDataSource_NotFound(t *testing.T) {
+	t.Parallel()
+	_, server := newFakeAccountAPI(t)
+
+	accountUnitTest(t, []resource.TestStep{
+		{
+			Config: accountUnitTestConfig(server.URL, `
+data "cloudamqp_vpc_gcp_info" "info" {
+  vpc_id = "10"
+}
+`),
+			ExpectError: regexp.MustCompile(`No VPC info found`),
+		},
+	})
+}
