@@ -89,12 +89,11 @@ func (d *upgradableVersionsDataSource) Read(ctx context.Context, req datasource.
 
 	config.ID = types.StringValue(strconv.FormatInt(config.InstanceID.ValueInt64(), 10))
 
-	if v, ok := data["new_rabbitmq_version"]; ok {
-		config.NewRabbitMQVersion = types.StringValue(fmt.Sprintf("%v", v))
-	}
-	if v, ok := data["new_erlang_version"]; ok {
-		config.NewErlangVersion = types.StringValue(fmt.Sprintf("%v", v))
-	}
+	// Missing or null versions are stored as empty strings, same as SDK v2
+	newRabbitMQVersion, _ := data["new_rabbitmq_version"].(string)
+	newErlangVersion, _ := data["new_erlang_version"].(string)
+	config.NewRabbitMQVersion = types.StringValue(newRabbitMQVersion)
+	config.NewErlangVersion = types.StringValue(newErlangVersion)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &config)...)
 }

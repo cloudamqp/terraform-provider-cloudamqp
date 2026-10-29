@@ -44,6 +44,9 @@ func (r *upgradeRabbitMQResource) Schema(_ context.Context, _ resource.SchemaReq
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: "Resource identifier",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"instance_id": schema.Int64Attribute{
 				Required:    true,
@@ -104,7 +107,14 @@ func (r *upgradeRabbitMQResource) Create(ctx context.Context, req resource.Creat
 func (r *upgradeRabbitMQResource) Read(_ context.Context, _ resource.ReadRequest, _ *resource.ReadResponse) {
 }
 
-func (r *upgradeRabbitMQResource) Update(_ context.Context, _ resource.UpdateRequest, _ *resource.UpdateResponse) {
+func (r *upgradeRabbitMQResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	// Nothing to send, the upgrade only runs on create. Keep the planned values, same as SDK v2.
+	var plan upgradeRabbitMQResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
 func (r *upgradeRabbitMQResource) Delete(_ context.Context, _ resource.DeleteRequest, resp *resource.DeleteResponse) {

@@ -43,6 +43,9 @@ func (r *upgradeLavinMQResource) Schema(_ context.Context, _ resource.SchemaRequ
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: "Resource identifier",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"instance_id": schema.Int64Attribute{
 				Required:    true,
@@ -98,7 +101,14 @@ func (r *upgradeLavinMQResource) Create(ctx context.Context, req resource.Create
 func (r *upgradeLavinMQResource) Read(_ context.Context, _ resource.ReadRequest, _ *resource.ReadResponse) {
 }
 
-func (r *upgradeLavinMQResource) Update(_ context.Context, _ resource.UpdateRequest, _ *resource.UpdateResponse) {
+func (r *upgradeLavinMQResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	// Nothing to send, the upgrade only runs on create. Keep the planned values, same as SDK v2.
+	var plan upgradeLavinMQResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
 func (r *upgradeLavinMQResource) Delete(_ context.Context, _ resource.DeleteRequest, resp *resource.DeleteResponse) {
