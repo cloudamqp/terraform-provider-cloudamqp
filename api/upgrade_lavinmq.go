@@ -9,7 +9,7 @@ import (
 )
 
 // ReadVersions - Read versions LavinMQ can upgrade to
-func (api *API) ReadLavinMQVersions(ctx context.Context, instanceID int) (map[string]any, error) {
+func (api *API) ReadLavinMQVersions(ctx context.Context, instanceID int64) (map[string]any, error) {
 	var (
 		data   map[string]any
 		failed map[string]any
@@ -33,7 +33,7 @@ func (api *API) ReadLavinMQVersions(ctx context.Context, instanceID int) (map[st
 }
 
 // UpgradeLavinMQ - Upgrade to latest possible version or a specific available version
-func (api *API) UpgradeLavinMQ(ctx context.Context, instanceID int, new_version string) (
+func (api *API) UpgradeLavinMQ(ctx context.Context, instanceID int64, new_version string) (
 	string, error) {
 
 	if new_version == "" {
@@ -43,7 +43,7 @@ func (api *API) UpgradeLavinMQ(ctx context.Context, instanceID int, new_version 
 	}
 }
 
-func (api *API) UpgradeToSpecificLavinMQVersion(ctx context.Context, instanceID int, version string) (
+func (api *API) UpgradeToSpecificLavinMQVersion(ctx context.Context, instanceID int64, version string) (
 	string, error) {
 
 	var (
@@ -84,7 +84,7 @@ func (api *API) UpgradeToSpecificLavinMQVersion(ctx context.Context, instanceID 
 	return "", nil
 }
 
-func (api *API) UpgradeToLatestLavinMQVersion(ctx context.Context, instanceID int) (string, error) {
+func (api *API) UpgradeToLatestLavinMQVersion(ctx context.Context, instanceID int64) (string, error) {
 	var (
 		data       map[string]any
 		failed     map[string]any
@@ -114,7 +114,7 @@ func (api *API) UpgradeToLatestLavinMQVersion(ctx context.Context, instanceID in
 	return api.waitUntilLavinMQUpgraded(ctx, instanceID)
 }
 
-func (api *API) waitUntilLavinMQUpgraded(ctx context.Context, instanceID int) (string, error) {
+func (api *API) waitUntilLavinMQUpgraded(ctx context.Context, instanceID int64) (string, error) {
 	var path = fmt.Sprintf("api/instances/%d/nodes", instanceID)
 
 	tflog.Debug(ctx, fmt.Sprintf("waiting until LavinMQ been upgraded, method=GET path=%s", path))
