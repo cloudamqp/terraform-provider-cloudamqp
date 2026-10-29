@@ -2,6 +2,7 @@ package cloudamqp
 
 import (
 	"fmt"
+	"net/http"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -32,7 +33,7 @@ func TestUpgradableVersions_Read(t *testing.T) {
 	fake.versions = map[string]any{"new_rabbitmq_version": "4.2.7", "new_erlang_version": "28.4.2"}
 
 	resource.UnitTest(t, resource.TestCase{
-		ProtoV5ProviderFactories: upgradeUnitTestProviderFactories(),
+		ProtoV5ProviderFactories: muxProviderFactories(http.DefaultClient),
 		Steps: []resource.TestStep{
 			{
 				Config: upgradableVersionsUnitTestConfig(server.URL),
@@ -55,7 +56,7 @@ func TestUpgradableVersions_NullVersions(t *testing.T) {
 	fake.versions = map[string]any{"new_rabbitmq_version": nil, "new_erlang_version": nil}
 
 	resource.UnitTest(t, resource.TestCase{
-		ProtoV5ProviderFactories: upgradeUnitTestProviderFactories(),
+		ProtoV5ProviderFactories: muxProviderFactories(http.DefaultClient),
 		Steps: []resource.TestStep{
 			{
 				Config: upgradableVersionsUnitTestConfig(server.URL),
