@@ -16,16 +16,16 @@ func TestAccUpgradableVersionsDataSource_Basic(t *testing.T) {
 			{
 				Config: `
 					resource "cloudamqp_instance" "instance" {
-            name        = "TestAccUpgradableVersionsDataSource_Basic"
-            region      = "amazon-web-services::eu-central-1"
-            plan        = "squirrel-1"
-            tags        = ["vcr-test"]
+						name        = "TestAccUpgradableVersionsDataSource_Basic"
+						region      = "amazon-web-services::eu-central-1"
+						plan        = "squirrel-1"
+						tags        = ["vcr-test"]
 						rmq_version = "4.0.0"
-				  }
+					}
 
-          data "cloudamqp_upgradable_versions" "versions" {
-            instance_id = cloudamqp_instance.instance.id
-          }
+					data "cloudamqp_upgradable_versions" "versions" {
+						instance_id = cloudamqp_instance.instance.id
+					}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("data.cloudamqp_upgradable_versions.versions", "new_rabbitmq_version", "4.2.8"),
