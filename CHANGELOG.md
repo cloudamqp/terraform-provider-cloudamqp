@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.53.0 (Unreleased)
+
+FEATURES:
+
+* Migrated `cloudamqp_upgrade_rabbitmq` and `cloudamqp_upgrade_lavinmq` resources towards Terraform plugin framework ([#562])
+* Migrated `cloudamqp_upgradable_versions` data source towards Terraform plugin framework ([#562])
+
+[#562]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/562
+
+
 ## 1.52.0 (29 Oct, 2026)
 
 IMPROVEMENTS:
