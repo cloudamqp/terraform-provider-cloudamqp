@@ -16,15 +16,15 @@ func TestAccVPCGCPInfoDataSource_Basic(t *testing.T) {
 			{
 				Config: `
 					resource "cloudamqp_vpc" "vpc" {
-            name   = "TestAccVPCGCPInfoDataSource_Basic"
-            region = "google-compute-engine::europe-north2"
-            subnet = "10.56.73.0/24"
-            tags   = ["vcr-test"]
-          }
+						name   = "TestAccVPCGCPInfoDataSource_Basic"
+						region = "google-compute-engine::europe-north2"
+						subnet = "10.56.73.0/24"
+						tags   = ["vcr-test"]
+					}
 
-          data "cloudamqp_vpc_gcp_info" "vpc_info" {
-            	vpc_id = cloudamqp_vpc.vpc.id
-          }
+					data "cloudamqp_vpc_gcp_info" "vpc_info" {
+						vpc_id = cloudamqp_vpc.vpc.id
+					}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttrPair("cloudamqp_vpc.vpc", "vpc_name", "data.cloudamqp_vpc_gcp_info.vpc_info", "name"),

@@ -16,15 +16,15 @@ func TestAccVPCInfoDataSource_Basic(t *testing.T) {
 			{
 				Config: `
 					resource "cloudamqp_vpc" "vpc" {
-            name   = "TestAccVPCInfoDataSource_Basic"
-            region = "amazon-web-services::eu-central-1"
-            subnet = "10.56.72.0/24"
-            tags   = ["aws"]
-          }
+						name   = "TestAccVPCInfoDataSource_Basic"
+						region = "amazon-web-services::eu-central-1"
+						subnet = "10.56.72.0/24"
+						tags   = ["aws"]
+					}
 
-          data "cloudamqp_vpc_info" "vpc_info" {
-            	vpc_id = cloudamqp_vpc.vpc.id
-          }
+					data "cloudamqp_vpc_info" "vpc_info" {
+						vpc_id = cloudamqp_vpc.vpc.id
+					}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttrPair("cloudamqp_vpc.vpc", "vpc_name", "data.cloudamqp_vpc_info.vpc_info", "name"),

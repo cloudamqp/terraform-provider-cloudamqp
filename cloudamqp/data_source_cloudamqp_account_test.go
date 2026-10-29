@@ -15,12 +15,12 @@ func TestAccAccount_Basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: `
-				  resource "cloudamqp_instance" "instance-01" {
-            name   = "TestAccAccount_Basic-01"
-            plan   = "penguin-1"
-            region = "amazon-web-services::eu-central-1"
-            tags   = ["vcr-test"]
-          }
+					resource "cloudamqp_instance" "instance-01" {
+						name   = "TestAccAccount_Basic-01"
+						plan   = "penguin-1"
+						region = "amazon-web-services::eu-central-1"
+						tags   = ["vcr-test"]
+					}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudamqp_instance.instance-01", "name", "TestAccAccount_Basic-01"),
@@ -32,19 +32,19 @@ func TestAccAccount_Basic(t *testing.T) {
 			},
 			{
 				Config: `
-				  resource "cloudamqp_instance" "instance-01" {
-            name   = "TestAccAccount_Basic-01"
-            plan   = "penguin-1"
-            region = "amazon-web-services::eu-central-1"
-            tags   = ["vcr-test"]
-          }
+					resource "cloudamqp_instance" "instance-01" {
+						name   = "TestAccAccount_Basic-01"
+						plan   = "penguin-1"
+						region = "amazon-web-services::eu-central-1"
+						tags   = ["vcr-test"]
+					}
 
 					resource "cloudamqp_instance" "instance-02" {
-            name   = "TestAccAccount_Basic-02"
-            plan   = "squirrel-1"
-            region = "amazon-web-services::eu-central-1"
-            tags   = ["vcr-test"]
-          }
+						name   = "TestAccAccount_Basic-02"
+						plan   = "squirrel-1"
+						region = "amazon-web-services::eu-central-1"
+						tags   = ["vcr-test"]
+					}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudamqp_instance.instance-02", "name", "TestAccAccount_Basic-02"),
@@ -56,23 +56,23 @@ func TestAccAccount_Basic(t *testing.T) {
 			},
 			{
 				Config: `
-				  resource "cloudamqp_instance" "instance-01" {
-            name   = "TestAccAccount_Basic-01"
-            plan   = "penguin-1"
-            region = "amazon-web-services::eu-central-1"
-            tags   = ["vcr-test"]
-          }
+					resource "cloudamqp_instance" "instance-01" {
+						name   = "TestAccAccount_Basic-01"
+						plan   = "penguin-1"
+						region = "amazon-web-services::eu-central-1"
+						tags   = ["vcr-test"]
+					}
 
-          resource "cloudamqp_instance" "instance-02" {
-            name   = "TestAccAccount_Basic-02"
-            plan   = "squirrel-1"
-            region = "amazon-web-services::eu-central-1"
-            tags   = ["vcr-test"]
-          }
+					resource "cloudamqp_instance" "instance-02" {
+						name   = "TestAccAccount_Basic-02"
+						plan   = "squirrel-1"
+						region = "amazon-web-services::eu-central-1"
+						tags   = ["vcr-test"]
+					}
 
-          data "cloudamqp_account" "this" {
-          }
-        `,
+					data "cloudamqp_account" "this" {
+					}
+				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("data.cloudamqp_account.this", "instances.#", "2"),
 					resource.TestCheckTypeSetElemNestedAttrs("data.cloudamqp_account.this", "instances.*", map[string]string{

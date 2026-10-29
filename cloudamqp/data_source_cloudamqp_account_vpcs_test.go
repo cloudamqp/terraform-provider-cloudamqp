@@ -15,12 +15,12 @@ func TestAccAccountVPCs_Basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: `
-				  resource "cloudamqp_vpc" "vpc-01" {
-					  name   = "TestAccAccountVPCs_Basic-01"
-					  region = "amazon-web-services::eu-central-1"
-					  subnet = "10.56.72.0/24"
+					resource "cloudamqp_vpc" "vpc-01" {
+						name   = "TestAccAccountVPCs_Basic-01"
+						region = "amazon-web-services::eu-central-1"
+						subnet = "10.56.72.0/24"
 						tags   = ["vcr-test"]
-          }
+					}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudamqp_vpc.vpc-01", "name", "TestAccAccountVPCs_Basic-01"),
@@ -32,19 +32,19 @@ func TestAccAccountVPCs_Basic(t *testing.T) {
 			},
 			{
 				Config: `
-				  resource "cloudamqp_vpc" "vpc-01" {
-					  name   = "TestAccAccountVPCs_Basic-01"
-					  region = "amazon-web-services::eu-central-1"
-					  subnet = "10.56.72.0/24"
+					resource "cloudamqp_vpc" "vpc-01" {
+						name   = "TestAccAccountVPCs_Basic-01"
+						region = "amazon-web-services::eu-central-1"
+						subnet = "10.56.72.0/24"
 						tags   = ["vcr-test"]
-          }
+					}
 
 					resource "cloudamqp_vpc" "vpc-02" {
-					  name   = "TestAccAccountVPCs_Basic-02"
-					  region = "amazon-web-services::eu-central-1"
-					  subnet = "10.56.72.0/24"
+						name   = "TestAccAccountVPCs_Basic-02"
+						region = "amazon-web-services::eu-central-1"
+						subnet = "10.56.72.0/24"
 						tags   = ["vcr-test"]
-          }
+					}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudamqp_vpc.vpc-02", "name", "TestAccAccountVPCs_Basic-02"),
@@ -56,22 +56,23 @@ func TestAccAccountVPCs_Basic(t *testing.T) {
 			},
 			{
 				Config: `
-				  resource "cloudamqp_vpc" "vpc-01" {
-					  name   = "TestAccAccountVPCs_Basic-01"
-					  region = "amazon-web-services::eu-central-1"
-					  subnet = "10.56.72.0/24"
+					resource "cloudamqp_vpc" "vpc-01" {
+						name   = "TestAccAccountVPCs_Basic-01"
+						region = "amazon-web-services::eu-central-1"
+						subnet = "10.56.72.0/24"
 						tags   = ["vcr-test"]
-          }
+					}
 
 					resource "cloudamqp_vpc" "vpc-02" {
-					  name   = "TestAccAccountVPCs_Basic-02"
-					  region = "amazon-web-services::eu-central-1"
-					  subnet = "10.56.72.0/24"
+						name   = "TestAccAccountVPCs_Basic-02"
+						region = "amazon-web-services::eu-central-1"
+						subnet = "10.56.72.0/24"
 						tags   = ["vcr-test"]
-          }
+					}
 
-          data "cloudamqp_account_vpcs" "this" {
-          }`,
+					data "cloudamqp_account_vpcs" "this" {
+					}
+				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("data.cloudamqp_account_vpcs.this", "vpcs.#", "2"),
 					resource.TestCheckTypeSetElemNestedAttrs("data.cloudamqp_account_vpcs.this", "vpcs.*", map[string]string{
