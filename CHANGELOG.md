@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.52.0 (Unreleased)
+## 1.52.0 (29 Oct, 2026)
 
 IMPROVEMENTS:
 
