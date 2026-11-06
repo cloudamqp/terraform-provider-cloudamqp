@@ -102,6 +102,30 @@ func TestPluginCommunity_InstallUninstall(t *testing.T) {
 	))
 }
 
+// TestPluginCommunity_CreateDisabled: create with enabled = false installs the plugin and
+// disables it in the same apply.
+func TestPluginCommunity_CreateDisabled(t *testing.T) {
+	t.Parallel()
+	fake, server := newFakePluginAPIWithCommunity(t)
+	config := pluginCommunityResourceConfig(server.URL, "false")
+
+	pluginUnitTest(t, fake, []resource.TestStep{
+		{
+			Config: config,
+			Check: resource.ComposeAggregateTestCheckFunc(
+				fake.checkRequests(pluginCommunityInstallRequest, pluginCommunityDisableRequest),
+				fake.checkEnabled("rabbitmq_delayed_message_exchange", false),
+				resource.TestCheckResourceAttr(pluginCommunityResourceName, "enabled", "false"),
+				resource.TestCheckResourceAttr(pluginCommunityResourceName, "require", "3.4.0"),
+			),
+		},
+		{
+			Config:   config,
+			PlanOnly: true,
+		},
+	}, nil)
+}
+
 // TestPluginCommunity_Import: import with "{name},{instance_id}" reads the installed plugin.
 func TestPluginCommunity_Import(t *testing.T) {
 	t.Parallel()

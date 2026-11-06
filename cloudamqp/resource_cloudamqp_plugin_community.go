@@ -168,7 +168,7 @@ func (r *pluginCommunityResource) Create(ctx context.Context, req resource.Creat
 	instanceID := plan.InstanceID.ValueInt64()
 	params := model.PluginRequest{
 		Name:    plan.Name.ValueString(),
-		Enabled: plan.Enabled.ValueBool(),
+		Enabled: true,
 	}
 	sleep := plan.Sleep.ValueInt64()
 
@@ -194,6 +194,15 @@ func (r *pluginCommunityResource) Create(ctx context.Context, req resource.Creat
 		return
 	}
 
+	// The backend always enables on install, disable it afterwards when configured
+	if !plan.Enabled.ValueBool() {
+		params.Enabled = false
+		data, err = r.client.UpdatePluginCommunity(timeoutCtx, instanceID, params, sleep)
+		if err != nil {
+			resp.Diagnostics.AddError("Failed to Create Community Plugin", err.Error())
+			return
+		}
+	}
 
 	plan.ID = types.StringValue(plan.Name.ValueString())
 	plan.Description = types.StringValue(data.Description)

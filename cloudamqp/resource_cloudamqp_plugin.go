@@ -168,7 +168,7 @@ func (r *pluginResource) Create(ctx context.Context, req resource.CreateRequest,
 	instanceID := plan.InstanceID.ValueInt64()
 	params := model.PluginRequest{
 		Name:    plan.Name.ValueString(),
-		Enabled: plan.Enabled.ValueBool(),
+		Enabled: true,
 	}
 	sleep := plan.Sleep.ValueInt64()
 
@@ -187,6 +187,15 @@ func (r *pluginResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
+	// The backend always enables on create, disable it afterwards when configured
+	if !plan.Enabled.ValueBool() {
+		params.Enabled = false
+		data, err = r.client.UpdatePlugin(timeoutCtx, instanceID, params, sleep)
+		if err != nil {
+			resp.Diagnostics.AddError("Failed to Create Plugin", err.Error())
+			return
+		}
+	}
 
 	plan.ID = types.StringValue(plan.Name.ValueString())
 	plan.Description = types.StringValue(data.Description)

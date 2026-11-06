@@ -256,6 +256,30 @@ func TestPlugin_EnableDisable(t *testing.T) {
 	))
 }
 
+// TestPlugin_CreateDisabled: create with enabled = false on a plugin that is already enabled
+// disables it in the same apply.
+func TestPlugin_CreateDisabled(t *testing.T) {
+	t.Parallel()
+	fake, server := newFakePluginAPIWithMQTT(t)
+	fake.plugin("rabbitmq_mqtt").Enabled = true
+	config := pluginResourceConfig(server.URL, "false", "")
+
+	pluginUnitTest(t, fake, []resource.TestStep{
+		{
+			Config: config,
+			Check: resource.ComposeAggregateTestCheckFunc(
+				fake.checkRequests(pluginEnableRequest, pluginDisableRequest),
+				fake.checkEnabled("rabbitmq_mqtt", false),
+				resource.TestCheckResourceAttr(pluginResourceName, "enabled", "false"),
+			),
+		},
+		{
+			Config:   config,
+			PlanOnly: true,
+		},
+	}, nil)
+}
+
 // TestPlugin_Required: a required plugin cannot be disabled, the API ignores it and destroy does
 // not wait for it.
 func TestPlugin_Required(t *testing.T) {
