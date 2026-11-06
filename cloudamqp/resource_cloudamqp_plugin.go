@@ -10,6 +10,7 @@ import (
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
 	"github.com/hashicorp/terraform-plugin-framework-timeouts/resource/timeouts"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -195,6 +196,7 @@ func (r *pluginResource) Create(ctx context.Context, req resource.CreateRequest,
 			resp.Diagnostics.AddError("Failed to Create Plugin", err.Error())
 			return
 		}
+		resp.Diagnostics.Append(requiredPluginWarning(data)...)
 	}
 
 	plan.ID = types.StringValue(plan.Name.ValueString())
@@ -270,6 +272,9 @@ func (r *pluginResource) Update(ctx context.Context, req resource.UpdateRequest,
 		resp.Diagnostics.AddError("Failed to Update Plugin", err.Error())
 		return
 	}
+	if !params.Enabled {
+		resp.Diagnostics.Append(requiredPluginWarning(data)...)
+	}
 
 	plan.Description = types.StringValue(data.Description)
 	plan.Version = types.StringValue(data.Version)
@@ -315,3 +320,13 @@ func (r *pluginResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	}
 }
 
+// requiredPluginWarning: the backend ignores disabling a required plugin, tell the user why the
+// change shows up again in the next plan.
+func requiredPluginWarning(data *model.PluginResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+	if data != nil && data.Enabled && data.Required != nil && *data.Required != "" {
+		diags.AddWarning("Required plugin not disabled",
+			fmt.Sprintf("Plugin %s is required and cannot be disabled, it stays enabled.", data.Name))
+	}
+	return diags
+}

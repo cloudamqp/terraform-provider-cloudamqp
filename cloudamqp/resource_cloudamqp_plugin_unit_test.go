@@ -13,6 +13,7 @@ import (
 	"sync"
 	"testing"
 
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
@@ -310,6 +311,52 @@ resource "cloudamqp_plugin" "management" {
 		),
 		fake.checkEnabled("rabbitmq_management", true),
 	))
+}
+
+// TestPlugin_RequiredDisabled: disabling a required plugin is ignored by the API, the apply
+// succeeds with a warning and the next plan shows the change again.
+func TestPlugin_RequiredDisabled(t *testing.T) {
+	t.Parallel()
+	fake, server := newFakePluginAPI(t)
+	required := "Used for health and metrics"
+	fake.plugins = []*fakePlugin{
+		{Name: "rabbitmq_management", Version: "4.0.2", Description: "RabbitMQ Management Console",
+			Enabled: true, Required: &required},
+	}
+
+	pluginUnitTest(t, fake, []resource.TestStep{
+		{
+			Config: pluginUnitTestConfig(server.URL, fmt.Sprintf(`
+resource "cloudamqp_plugin" "management" {
+  instance_id = %d
+  name        = "rabbitmq_management"
+  enabled     = false
+  sleep       = 1
+}
+`, pluginTestInstanceID)),
+			Check:              fake.checkEnabled("rabbitmq_management", true),
+			ExpectNonEmptyPlan: true,
+		},
+	}, nil)
+}
+
+func TestRequiredPluginWarning(t *testing.T) {
+	required := "Used for health and metrics"
+	for name, tc := range map[string]struct {
+		data *model.PluginResponse
+		warn bool
+	}{
+		"required and enabled":  {&model.PluginResponse{Name: "rabbitmq_management", Enabled: true, Required: &required}, true},
+		"required and disabled": {&model.PluginResponse{Name: "rabbitmq_management", Required: &required}, false},
+		"not required":          {&model.PluginResponse{Name: "rabbitmq_mqtt", Enabled: true}, false},
+		"no data":               {nil, false},
+	} {
+		t.Run(name, func(t *testing.T) {
+			if got := requiredPluginWarning(tc.data).WarningsCount() > 0; got != tc.warn {
+				t.Errorf("warning = %t, want %t", got, tc.warn)
+			}
+		})
+	}
 }
 
 // TestPlugin_Timeout: create stops waiting at the timeout attribute or the timeouts block,
