@@ -384,8 +384,7 @@ func TestPlugin_DisabledOutsideTerraform(t *testing.T) {
 }
 
 // TestPlugin_InstanceGone: when the instance is deleted outside of Terraform, the plugin list
-// responds 404 and the plugin is kept in the state. The instance comes back before destroy,
-// since deleting a plugin on a deleted instance waits for the whole timeout.
+// responds 404 and the plugin is removed from the state, so the plan creates it again.
 func TestPlugin_InstanceGone(t *testing.T) {
 	t.Parallel()
 	fake, server := newFakePluginAPIWithMQTT(t)
@@ -403,14 +402,10 @@ func TestPlugin_InstanceGone(t *testing.T) {
 			Config: config,
 		},
 		{
-			PreConfig: setGone(true),
-			Config:    config,
-			PlanOnly:  true,
-		},
-		{
-			PreConfig: setGone(false),
-			Config:    config,
-			PlanOnly:  true,
+			PreConfig:          setGone(true),
+			Config:             config,
+			PlanOnly:           true,
+			ExpectNonEmptyPlan: true,
 		},
 	}, nil)
 }

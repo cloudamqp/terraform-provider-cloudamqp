@@ -1,7 +1,7 @@
 package instance
 
 type PluginRequest struct {
-	Name    string `json:"name"`
+	Name    string `json:"plugin_name"`
 	Enabled bool   `json:"enabled"`
 }
 

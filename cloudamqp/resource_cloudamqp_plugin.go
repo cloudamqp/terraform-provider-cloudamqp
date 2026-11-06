@@ -80,10 +80,16 @@ func (r *pluginResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"description": schema.StringAttribute{
 				Computed:    true,
 				Description: "The description of the plugin",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"version": schema.StringAttribute{
 				Computed:    true,
 				Description: "The version of the plugin",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"sleep": schema.Int64Attribute{
 				Optional:    true,
@@ -92,11 +98,10 @@ func (r *pluginResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: "Configurable sleep time in seconds between retries for plugins",
 			},
 			"timeout": schema.Int64Attribute{
-				Optional:           true,
-				Computed:           true,
-				Default:            int64default.StaticInt64(1800),
-				Description:        "Configurable timeout time in seconds for plugins",
-				DeprecationMessage: "The timeout attribute is deprecated and will be removed in next 2.0.0 version. Use the timeouts block instead.",
+				Optional:    true,
+				Computed:    true,
+				Default:     int64default.StaticInt64(1800),
+				Description: "Configurable timeout time in seconds for plugins",
 			},
 		},
 		Blocks: map[string]schema.Block{
@@ -173,7 +178,7 @@ func (r *pluginResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, createTimeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, min(createTimeout, time.Duration(plan.Timeout.ValueInt64())*time.Second))
 	defer cancel()
 
 	data, err := r.client.EnablePlugin(timeoutCtx, instanceID, params, sleep)
@@ -181,6 +186,7 @@ func (r *pluginResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError("Failed to Create Plugin", err.Error())
 		return
 	}
+
 
 	plan.ID = types.StringValue(plan.Name.ValueString())
 	plan.Description = types.StringValue(data.Description)
@@ -199,13 +205,13 @@ func (r *pluginResource) Read(ctx context.Context, req resource.ReadRequest, res
 	name := state.Name.ValueString()
 	sleep := state.Sleep.ValueInt64()
 
-	createTimeout, diags := state.Timeouts.Read(ctx, 60*time.Minute)
+	readTimeout, diags := state.Timeouts.Read(ctx, 60*time.Minute)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, createTimeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, min(readTimeout, time.Duration(state.Timeout.ValueInt64())*time.Second))
 	defer cancel()
 
 	data, err := r.client.ReadPlugin(timeoutCtx, instanceID, name, sleep)
@@ -247,7 +253,7 @@ func (r *pluginResource) Update(ctx context.Context, req resource.UpdateRequest,
 		return
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, updateTimeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, min(updateTimeout, time.Duration(plan.Timeout.ValueInt64())*time.Second))
 	defer cancel()
 
 	data, err := r.client.UpdatePlugin(timeoutCtx, instanceID, params, sleep)
@@ -274,19 +280,20 @@ func (r *pluginResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	}
 
 	instanceID := state.InstanceID.ValueInt64()
+	// Deleting disables the plugin, wait until it is disabled
 	params := model.PluginRequest{
 		Name:    state.Name.ValueString(),
-		Enabled: state.Enabled.ValueBool(),
+		Enabled: false,
 	}
 	sleep := state.Sleep.ValueInt64()
 
-	updateTimeout, diags := state.Timeouts.Update(ctx, 60*time.Minute)
+	deleteTimeout, diags := state.Timeouts.Delete(ctx, 60*time.Minute)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, updateTimeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, min(deleteTimeout, time.Duration(state.Timeout.ValueInt64())*time.Second))
 	defer cancel()
 
 	_, err := r.client.DeletePlugin(timeoutCtx, instanceID, params, sleep)
@@ -298,3 +305,4 @@ func (r *pluginResource) Delete(ctx context.Context, req resource.DeleteRequest,
 		resp.Diagnostics.AddError("Failed to Delete Plugin", err.Error())
 	}
 }
+

@@ -107,6 +107,7 @@ func (r *pluginBatchResource) Create(ctx context.Context, req resource.CreateReq
 
 	instanceID := plan.InstanceID.ValueInt64()
 	sleep := plan.Sleep.ValueInt64()
+	timeout := plan.Timeout.ValueInt64()
 
 	planPlugins, diags := pluginsMapToBoolMap(ctx, plan.Plugins)
 	resp.Diagnostics.Append(diags...)
@@ -121,7 +122,7 @@ func (r *pluginBatchResource) Create(ctx context.Context, req resource.CreateReq
 		}
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, 60*time.Minute)
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
 	defer cancel()
 
 	jobResp, err := r.client.CreatePluginBatch(timeoutCtx, instanceID, instancemodel.PluginBatchRequest{
@@ -151,6 +152,7 @@ func (r *pluginBatchResource) Read(ctx context.Context, req resource.ReadRequest
 
 	instanceID := state.InstanceID.ValueInt64()
 	sleep := state.Sleep.ValueInt64()
+	timeout := state.Timeout.ValueInt64()
 
 	statePlugins, diags := pluginsMapToBoolMap(ctx, state.Plugins)
 	resp.Diagnostics.Append(diags...)
@@ -158,7 +160,7 @@ func (r *pluginBatchResource) Read(ctx context.Context, req resource.ReadRequest
 		return
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, 60*time.Minute)
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
 	defer cancel()
 
 	apiPlugins, err := r.client.ListPlugins(timeoutCtx, instanceID, sleep)
@@ -213,6 +215,7 @@ func (r *pluginBatchResource) Update(ctx context.Context, req resource.UpdateReq
 
 	instanceID := plan.InstanceID.ValueInt64()
 	sleep := plan.Sleep.ValueInt64()
+	timeout := plan.Timeout.ValueInt64()
 
 	planPlugins, diags := pluginsMapToBoolMap(ctx, plan.Plugins)
 	resp.Diagnostics.Append(diags...)
@@ -250,7 +253,7 @@ func (r *pluginBatchResource) Update(ctx context.Context, req resource.UpdateReq
 		return
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, 60*time.Minute)
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
 	defer cancel()
 
 	jobResp, err := r.client.UpdatePluginBatch(timeoutCtx, instanceID, instancemodel.PluginBatchRequest{
@@ -281,6 +284,7 @@ func (r *pluginBatchResource) Delete(ctx context.Context, req resource.DeleteReq
 
 	instanceID := state.InstanceID.ValueInt64()
 	sleep := state.Sleep.ValueInt64()
+	timeout := state.Timeout.ValueInt64()
 
 	statePlugins, diags := pluginsMapToBoolMap(ctx, state.Plugins)
 	resp.Diagnostics.Append(diags...)
@@ -305,7 +309,7 @@ func (r *pluginBatchResource) Delete(ctx context.Context, req resource.DeleteReq
 		return
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, 60*time.Minute)
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
 	defer cancel()
 
 	jobResp, err := r.client.DeletePluginBatch(timeoutCtx, instanceID, instancemodel.PluginBatchRequest{

@@ -18,7 +18,7 @@ func (api *API) InstallPluginCommunity(ctx context.Context, instanceID int64, pa
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d params=%+v", path, sleep, params))
-	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
+	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(map[string]any{"plugin_name": params.Name}), retryRequest{
 		functionName: "InstallPluginCommunity",
 		resourceName: "CommunityPlugin",
 		attempt:      1,

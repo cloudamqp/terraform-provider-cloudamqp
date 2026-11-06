@@ -47,8 +47,8 @@ func (d *pluginsDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 		"version":     types.StringType,
 		"description": types.StringType,
 		"enabled":     types.BoolType,
-		"recommended": types.StringType,
-		"required":    types.StringType,
+		"recommended": types.BoolType,
+		"required":    types.BoolType,
 	}}
 
 	resp.Schema = schema.Schema{
@@ -144,8 +144,8 @@ func (d *pluginsDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		"version":     types.StringType,
 		"description": types.StringType,
 		"enabled":     types.BoolType,
-		"recommended": types.StringType,
-		"required":    types.StringType,
+		"recommended": types.BoolType,
+		"required":    types.BoolType,
 	}}
 
 	values := make([]attr.Value, 0, len(data))
@@ -163,22 +163,13 @@ func (d *pluginsDataSource) Read(ctx context.Context, req datasource.ReadRequest
 			continue
 		}
 
-		recommendedVal := ""
-		if p.Recommended != nil {
-			recommendedVal = *p.Recommended
-		}
-		requiredVal := ""
-		if p.Required != nil {
-			requiredVal = *p.Required
-		}
-
 		obj, diags := types.ObjectValue(pluginObjectType.AttrTypes, map[string]attr.Value{
 			"name":        types.StringValue(p.Name),
 			"version":     types.StringValue(p.Version),
 			"description": types.StringValue(p.Description),
 			"enabled":     types.BoolValue(p.Enabled),
-			"recommended": types.StringValue(recommendedVal),
-			"required":    types.StringValue(requiredVal),
+			"recommended": types.BoolValue(recommendedBool),
+			"required":    types.BoolValue(requiredBool),
 		})
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {

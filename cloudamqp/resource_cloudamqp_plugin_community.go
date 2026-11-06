@@ -80,10 +80,16 @@ func (r *pluginCommunityResource) Schema(ctx context.Context, req resource.Schem
 			"description": schema.StringAttribute{
 				Computed:    true,
 				Description: "The description of the plugin",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"require": schema.StringAttribute{
 				Computed:    true,
 				Description: "Required version of RabbitMQ",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"sleep": schema.Int64Attribute{
 				Optional:    true,
@@ -92,11 +98,10 @@ func (r *pluginCommunityResource) Schema(ctx context.Context, req resource.Schem
 				Description: "Configurable sleep time in seconds between retries for plugins",
 			},
 			"timeout": schema.Int64Attribute{
-				Optional:           true,
-				Computed:           true,
-				Default:            int64default.StaticInt64(1800),
-				Description:        "Configurable timeout time in seconds for plugins",
-				DeprecationMessage: "The timeout attribute is deprecated and will be removed in next 2.0.0 version. Use the timeouts block instead.",
+				Optional:    true,
+				Computed:    true,
+				Default:     int64default.StaticInt64(1800),
+				Description: "Configurable timeout time in seconds for plugins",
 			},
 		},
 		Blocks: map[string]schema.Block{
@@ -173,8 +178,15 @@ func (r *pluginCommunityResource) Create(ctx context.Context, req resource.Creat
 		return
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, createTimeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, min(createTimeout, time.Duration(plan.Timeout.ValueInt64())*time.Second))
 	defer cancel()
+
+	// The required RabbitMQ version is only listed for available community plugins, same as SDK v2
+	community, err := r.client.ReadPluginCommunity(timeoutCtx, instanceID, params.Name, sleep)
+	if err != nil {
+		resp.Diagnostics.AddError("Failed to Create Community Plugin", err.Error())
+		return
+	}
 
 	data, err := r.client.InstallPluginCommunity(timeoutCtx, instanceID, params, sleep)
 	if err != nil {
@@ -182,13 +194,13 @@ func (r *pluginCommunityResource) Create(ctx context.Context, req resource.Creat
 		return
 	}
 
+
 	plan.ID = types.StringValue(plan.Name.ValueString())
 	plan.Description = types.StringValue(data.Description)
 	plan.Enabled = types.BoolValue(data.Enabled)
-	if data.Require != "" {
-		plan.Require = types.StringValue(data.Require)
-	} else {
-		plan.Require = types.StringNull()
+	plan.Require = types.StringNull()
+	if community != nil && community.Require != "" {
+		plan.Require = types.StringValue(community.Require)
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
@@ -210,7 +222,7 @@ func (r *pluginCommunityResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, readTimeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, min(readTimeout, time.Duration(state.Timeout.ValueInt64())*time.Second))
 	defer cancel()
 
 	data, err := r.client.ReadPlugin(timeoutCtx, instanceID, name, sleep)
@@ -227,11 +239,6 @@ func (r *pluginCommunityResource) Read(ctx context.Context, req resource.ReadReq
 
 	state.Description = types.StringValue(data.Description)
 	state.Enabled = types.BoolValue(data.Enabled)
-	if data.Require != "" {
-		state.Require = types.StringValue(data.Require)
-	} else {
-		state.Require = types.StringNull()
-	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
@@ -256,7 +263,7 @@ func (r *pluginCommunityResource) Update(ctx context.Context, req resource.Updat
 		return
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, updateTimeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, min(updateTimeout, time.Duration(plan.Timeout.ValueInt64())*time.Second))
 	defer cancel()
 
 	// TODO: Do this work? Shouldn't UpdatePlugin be used instead?
@@ -268,11 +275,6 @@ func (r *pluginCommunityResource) Update(ctx context.Context, req resource.Updat
 
 	plan.Description = types.StringValue(data.Description)
 	plan.Enabled = types.BoolValue(data.Enabled)
-	if data.Require != "" {
-		plan.Require = types.StringValue(data.Require)
-	} else {
-		plan.Require = types.StringNull()
-	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
@@ -298,7 +300,7 @@ func (r *pluginCommunityResource) Delete(ctx context.Context, req resource.Delet
 		return
 	}
 
-	timeoutCtx, cancel := context.WithTimeout(ctx, deleteTimeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, min(deleteTimeout, time.Duration(state.Timeout.ValueInt64())*time.Second))
 	defer cancel()
 
 	err := r.client.UninstallPluginCommunity(timeoutCtx, instanceID, name, sleep)

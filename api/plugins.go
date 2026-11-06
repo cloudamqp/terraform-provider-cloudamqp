@@ -17,7 +17,7 @@ func (api *API) EnablePlugin(ctx context.Context, instanceID int64, params model
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s sleep=%d params=%+v", path, sleep, params))
-	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
+	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(map[string]any{"plugin_name": params.Name}), retryRequest{
 		functionName: "EnablePlugin",
 		resourceName: "Plugin",
 		attempt:      1,
@@ -165,6 +165,11 @@ func (api *API) pollPluginChanged(ctx context.Context, instanceID int64, params 
 			case <-time.After(time.Duration(sleep) * time.Second):
 				continue
 			}
+		}
+
+		// Required plugins cannot be disabled, the backend ignores the change
+		if response.Required != nil && *response.Required != "" {
+			return response, nil
 		}
 
 		if status := response.Enabled; status == params.Enabled {
