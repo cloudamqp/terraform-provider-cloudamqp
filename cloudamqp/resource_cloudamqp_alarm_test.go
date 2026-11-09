@@ -289,6 +289,90 @@ func TestAccAlarm_DiskAutoResize(t *testing.T) {
 	})
 }
 
+// TestAccAlarm_DiskAutoResizeMaxDiskSize: Create a disk_auto_resize alarm with max_disk_size,
+// import it, update the ceiling and then remove it.
+func TestAccAlarm_DiskAutoResizeMaxDiskSize(t *testing.T) {
+	t.Parallel()
+
+	var (
+		instanceResourceName      = "cloudamqp_instance.instance"
+		resizeAlarmResourceName   = "cloudamqp_alarm.disk_auto_resize"
+		resizeAlarmDataSourceName = "data.cloudamqp_alarm.disk_auto_resize"
+	)
+
+	config := func(maxDiskSize string) string {
+		return fmt.Sprintf(`
+			resource "cloudamqp_instance" "instance" {
+				name   = "TestAccAlarm_DiskAutoResizeMaxDiskSize"
+				region = "amazon-web-services::us-east-1"
+				plan   = "penguin-1"
+				tags   = ["vcr-test"]
+			}
+
+			resource "cloudamqp_notification" "recipient" {
+				instance_id = cloudamqp_instance.instance.id
+				type        = "email"
+				value       = "test@example.com"
+				name        = "test"
+			}
+
+			resource "cloudamqp_alarm" "disk_auto_resize" {
+				instance_id       = cloudamqp_instance.instance.id
+				type              = "disk_auto_resize"
+				enabled           = true
+				time_threshold    = 600
+				value_threshold   = 5
+				value_calculation = "percentage"
+				recipients        = [cloudamqp_notification.recipient.id]
+				%s
+			}
+
+			data "cloudamqp_alarm" "disk_auto_resize" {
+				instance_id = cloudamqp_instance.instance.id
+				type        = "disk_auto_resize"
+
+				depends_on = [
+					cloudamqp_alarm.disk_auto_resize,
+				]
+			}
+		`, maxDiskSize)
+	}
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: config(`max_disk_size = 100`),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(resizeAlarmResourceName, "type", "disk_auto_resize"),
+					resource.TestCheckResourceAttr(resizeAlarmResourceName, "max_disk_size", "100"),
+					resource.TestCheckResourceAttr(resizeAlarmDataSourceName, "max_disk_size", "100"),
+				),
+			},
+			{
+				ResourceName:      resizeAlarmResourceName,
+				ImportStateIdFunc: testAccImportCombinedStateIdFunc(instanceResourceName, resizeAlarmResourceName),
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				Config: config(`max_disk_size = 250`),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(resizeAlarmResourceName, "max_disk_size", "250"),
+					resource.TestCheckResourceAttr(resizeAlarmDataSourceName, "max_disk_size", "250"),
+				),
+			},
+			{
+				Config: config(""),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckNoResourceAttr(resizeAlarmResourceName, "max_disk_size"),
+					resource.TestCheckNoResourceAttr(resizeAlarmDataSourceName, "max_disk_size"),
+				),
+			},
+		},
+	})
+}
+
 // TestAccAlarm_DiskFieldsRejectedOnWrongType: disk specific arguments are
 // rejected at plan time on alarm types that do not support them.
 func TestAccAlarm_DiskFieldsRejectedOnWrongType(t *testing.T) {

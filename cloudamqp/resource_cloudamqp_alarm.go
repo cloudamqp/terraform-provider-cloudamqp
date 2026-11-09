@@ -12,6 +12,7 @@ import (
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/utils"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -49,6 +50,7 @@ type alarmResourceModel struct {
 	ValueCalculation types.String `tfsdk:"value_calculation"`
 	TimeThreshold    types.Int64  `tfsdk:"time_threshold"`
 	AllowDowntime    types.Bool   `tfsdk:"allow_downtime"`
+	MaxDiskSize      types.Int64  `tfsdk:"max_disk_size"`
 	VhostRegex       types.String `tfsdk:"vhost_regex"`
 	QueueRegex       types.String `tfsdk:"queue_regex"`
 	MessageType      types.String `tfsdk:"message_type"`
@@ -74,9 +76,10 @@ func (r *alarmResource) ValidateConfig(ctx context.Context, req resource.Validat
 		return
 	}
 	alarmType := data.Type.ValueString()
+	diskType := alarmType == "disk" || alarmType == "disk_auto_resize"
+	autoResize := alarmType == "disk_auto_resize"
 
-	if !data.ValueCalculation.IsNull() && !data.ValueCalculation.IsUnknown() &&
-		alarmType != "disk" && alarmType != "disk_auto_resize" {
+	if isSet(data.ValueCalculation) && !diskType {
 		resp.Diagnostics.AddAttributeError(
 			path.Root("value_calculation"),
 			"Invalid attribute combination",
@@ -84,14 +87,27 @@ func (r *alarmResource) ValidateConfig(ctx context.Context, req resource.Validat
 		)
 	}
 
-	if !data.AllowDowntime.IsNull() && !data.AllowDowntime.IsUnknown() &&
-		alarmType != "disk_auto_resize" {
+	if isSet(data.AllowDowntime) && !autoResize {
 		resp.Diagnostics.AddAttributeError(
 			path.Root("allow_downtime"),
 			"Invalid attribute combination",
 			fmt.Sprintf("allow_downtime can only be set when type is \"disk_auto_resize\", got: %q.", alarmType),
 		)
 	}
+
+	if isSet(data.MaxDiskSize) && !autoResize {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("max_disk_size"),
+			"Invalid attribute combination",
+			fmt.Sprintf("max_disk_size can only be set when type is \"disk_auto_resize\", got: %q.", alarmType),
+		)
+	}
+}
+
+// isSet reports whether the value is known and not null. Unknown values are not rejected at
+// validation time since they may still turn out to be null.
+func isSet(v attr.Value) bool {
+	return !v.IsNull() && !v.IsUnknown()
 }
 
 func (r *alarmResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
@@ -167,6 +183,14 @@ func (r *alarmResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"allow_downtime": schema.BoolAttribute{
 				Optional:    true,
 				Description: "For disk_auto_resize, allow the resize to proceed even if it requires brief downtime",
+			},
+			"max_disk_size": schema.Int64Attribute{
+				Optional: true,
+				Description: "For disk_auto_resize, the maximum additional disk size (in GiB) to resize up to. " +
+					"One of 25, 50, 100, 250, 500, 1000 or 2000. Leave unset to allow resizing up to the largest size (2000 GiB)",
+				Validators: []validator.Int64{
+					int64validator.OneOf(25, 50, 100, 250, 500, 1000, 2000),
+				},
 			},
 			"vhost_regex": schema.StringAttribute{
 				Optional:    true,
@@ -420,6 +444,9 @@ func (r *alarmResource) populateRequest(ctx context.Context, plan alarmResourceM
 	if !plan.AllowDowntime.IsUnknown() && !plan.AllowDowntime.IsNull() {
 		params.AllowDowntime = plan.AllowDowntime.ValueBoolPointer()
 	}
+	if !plan.MaxDiskSize.IsUnknown() && !plan.MaxDiskSize.IsNull() {
+		params.MaxDiskSize = plan.MaxDiskSize.ValueInt64Pointer()
+	}
 	if !plan.VhostRegex.IsUnknown() && !plan.VhostRegex.IsNull() {
 		params.VhostRegex = plan.VhostRegex.ValueString()
 	}
@@ -473,6 +500,8 @@ func (a *alarmResource) populateResourceModel(ctx context.Context, data model.Al
 	} else {
 		state.AllowDowntime = types.BoolNull()
 	}
+
+	state.MaxDiskSize = types.Int64PointerValue(data.MaxDiskSize.Int64Pointer())
 
 	if data.VhostRegex != nil {
 		state.VhostRegex = types.StringValue(*data.VhostRegex)

@@ -52,6 +52,8 @@ Specific attributes for `disk` and `disk_auto_resize` alarms
                           remaining.
 * `allow_downtime`      - For `disk_auto_resize`, whether the resize may proceed even if it requires
                           brief downtime.
+* `max_disk_size`       - For `disk_auto_resize`, the maximum additional disk size (in GiB) to resize
+                          up to. Not set means up to the largest size (2000 GiB).
 
 ## Dependency
 
