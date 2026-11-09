@@ -112,9 +112,12 @@ resource "cloudamqp_alarm" "disk_autoscale" {
   value_calculation = "percentage"
   time_threshold    = 600
   allow_downtime    = false
+  max_disk_size     = 250
   recipients        = [cloudamqp_notification.recipient.id]
 }
 ```
+
+`max_disk_size` is available from v1.53.0.
 
 </details>
 
@@ -142,9 +145,14 @@ Specific arguments for `disk` and `disk_auto_resize` alarms
                         space remaining.
 * `allow_downtime`    - (Optional) For `disk_auto_resize`, allow the resize to proceed even if it
                         requires brief downtime. The Default is `false`.
+* `max_disk_size`     - (Optional) For `disk_auto_resize`, the maximum additional disk size (in GiB)
+                        to resize up to. Valid values are `25, 50, 100, 250, 500, 1000, 2000`.
+                        Leave unset to allow resizing up to the largest size (2000 GiB). Set it
+                        larger than the instance's current additional disk size, otherwise auto
+                        resize will not run.
 
-Setting `value_calculation` on any other alarm type, or `allow_downtime` on a non
-`disk_auto_resize` alarm, is rejected at plan time.
+Setting `value_calculation` on any other alarm type, or `allow_downtime` and `max_disk_size` on a
+non `disk_auto_resize` alarm, is rejected at plan time.
 
 ~> **Warning:** A `disk_auto_resize` alarm grows the instance's additional disk out of band from
 Terraform. Do not use it together with the `cloudamqp_extra_disk_size` resource on the same instance;
@@ -173,7 +181,7 @@ Optional argument for all alarms: `tags, queue_regex, vhost_regex`
 | CPU | cpu | - | &#10004; | time_threshold, value_threshold |
 | Memory | memory | - | &#10004; | time_threshold, value_threshold |
 | Disk space | disk | - | &#10004; | time_threshold, value_threshold |
-| Disk auto-resize | disk_auto_resize | - | &#10004; | time_threshold, value_threshold, value_calculation, allow_downtime |
+| Disk auto-resize | disk_auto_resize | - | &#10004; | time_threshold, value_threshold, value_calculation, allow_downtime, max_disk_size |
 | Queue | queue | &#10004; | &#10004; | time_threshold, value_threshold, queue_regex, vhost_regex, message_type |
 | Connection | connection | &#10004; | &#10004; | time_threshold, value_threshold |
 | Connection flow | flow | &#10004; | &#10004; | time_threshold, value_threshold |
