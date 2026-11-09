@@ -49,6 +49,7 @@ type alarmResourceModel struct {
 	ValueCalculation types.String `tfsdk:"value_calculation"`
 	TimeThreshold    types.Int64  `tfsdk:"time_threshold"`
 	AllowDowntime    types.Bool   `tfsdk:"allow_downtime"`
+	MaxDiskSize      types.Int64  `tfsdk:"max_disk_size"`
 	VhostRegex       types.String `tfsdk:"vhost_regex"`
 	QueueRegex       types.String `tfsdk:"queue_regex"`
 	MessageType      types.String `tfsdk:"message_type"`
@@ -90,6 +91,15 @@ func (r *alarmResource) ValidateConfig(ctx context.Context, req resource.Validat
 			path.Root("allow_downtime"),
 			"Invalid attribute combination",
 			fmt.Sprintf("allow_downtime can only be set when type is \"disk_auto_resize\", got: %q.", alarmType),
+		)
+	}
+
+	if !data.MaxDiskSize.IsNull() && !data.MaxDiskSize.IsUnknown() &&
+		alarmType != "disk_auto_resize" {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("max_disk_size"),
+			"Invalid attribute combination",
+			fmt.Sprintf("max_disk_size can only be set when type is \"disk_auto_resize\", got: %q.", alarmType),
 		)
 	}
 }
@@ -167,6 +177,14 @@ func (r *alarmResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"allow_downtime": schema.BoolAttribute{
 				Optional:    true,
 				Description: "For disk_auto_resize, allow the resize to proceed even if it requires brief downtime",
+			},
+			"max_disk_size": schema.Int64Attribute{
+				Optional: true,
+				Description: "For disk_auto_resize, the maximum additional disk size (in GiB) to resize up to. " +
+					"One of 25, 50, 100, 250, 500, 1000 or 2000. Leave unset to allow resizing up to the largest size (2000 GiB)",
+				Validators: []validator.Int64{
+					int64validator.OneOf(25, 50, 100, 250, 500, 1000, 2000),
+				},
 			},
 			"vhost_regex": schema.StringAttribute{
 				Optional:    true,
@@ -420,6 +438,9 @@ func (r *alarmResource) populateRequest(ctx context.Context, plan alarmResourceM
 	if !plan.AllowDowntime.IsUnknown() && !plan.AllowDowntime.IsNull() {
 		params.AllowDowntime = plan.AllowDowntime.ValueBoolPointer()
 	}
+	if !plan.MaxDiskSize.IsUnknown() && !plan.MaxDiskSize.IsNull() {
+		params.MaxDiskSize = plan.MaxDiskSize.ValueInt64Pointer()
+	}
 	if !plan.VhostRegex.IsUnknown() && !plan.VhostRegex.IsNull() {
 		params.VhostRegex = plan.VhostRegex.ValueString()
 	}
@@ -473,6 +494,8 @@ func (a *alarmResource) populateResourceModel(ctx context.Context, data model.Al
 	} else {
 		state.AllowDowntime = types.BoolNull()
 	}
+
+	state.MaxDiskSize = types.Int64PointerValue(data.MaxDiskSize.Int64Pointer())
 
 	if data.VhostRegex != nil {
 		state.VhostRegex = types.StringValue(*data.VhostRegex)
