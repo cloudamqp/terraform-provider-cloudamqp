@@ -12,6 +12,7 @@ import (
 	"github.com/cloudamqp/terraform-provider-cloudamqp/cloudamqp/utils"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -75,9 +76,10 @@ func (r *alarmResource) ValidateConfig(ctx context.Context, req resource.Validat
 		return
 	}
 	alarmType := data.Type.ValueString()
+	diskType := alarmType == "disk" || alarmType == "disk_auto_resize"
+	autoResize := alarmType == "disk_auto_resize"
 
-	if !data.ValueCalculation.IsNull() && !data.ValueCalculation.IsUnknown() &&
-		alarmType != "disk" && alarmType != "disk_auto_resize" {
+	if isSet(data.ValueCalculation) && !diskType {
 		resp.Diagnostics.AddAttributeError(
 			path.Root("value_calculation"),
 			"Invalid attribute combination",
@@ -85,8 +87,7 @@ func (r *alarmResource) ValidateConfig(ctx context.Context, req resource.Validat
 		)
 	}
 
-	if !data.AllowDowntime.IsNull() && !data.AllowDowntime.IsUnknown() &&
-		alarmType != "disk_auto_resize" {
+	if isSet(data.AllowDowntime) && !autoResize {
 		resp.Diagnostics.AddAttributeError(
 			path.Root("allow_downtime"),
 			"Invalid attribute combination",
@@ -94,14 +95,19 @@ func (r *alarmResource) ValidateConfig(ctx context.Context, req resource.Validat
 		)
 	}
 
-	if !data.MaxDiskSize.IsNull() && !data.MaxDiskSize.IsUnknown() &&
-		alarmType != "disk_auto_resize" {
+	if isSet(data.MaxDiskSize) && !autoResize {
 		resp.Diagnostics.AddAttributeError(
 			path.Root("max_disk_size"),
 			"Invalid attribute combination",
 			fmt.Sprintf("max_disk_size can only be set when type is \"disk_auto_resize\", got: %q.", alarmType),
 		)
 	}
+}
+
+// isSet reports whether the value is known and not null. Unknown values are not rejected at
+// validation time since they may still turn out to be null.
+func isSet(v attr.Value) bool {
+	return !v.IsNull() && !v.IsUnknown()
 }
 
 func (r *alarmResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
