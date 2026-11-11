@@ -40,6 +40,7 @@ type alarmDataSourceModel struct {
 	ValueCalculation types.String `tfsdk:"value_calculation"`
 	TimeThreshold    types.Int64  `tfsdk:"time_threshold"`
 	AllowDowntime    types.Bool   `tfsdk:"allow_downtime"`
+	MaxDiskSize      types.Int64  `tfsdk:"max_disk_size"`
 	VhostRegex       types.String `tfsdk:"vhost_regex"`
 	QueueRegex       types.String `tfsdk:"queue_regex"`
 	MessageType      types.String `tfsdk:"message_type"`
@@ -114,6 +115,10 @@ func (d *alarmDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"allow_downtime": schema.BoolAttribute{
 				Computed:    true,
 				Description: "For disk_auto_resize, allow the resize to proceed even if it requires brief downtime",
+			},
+			"max_disk_size": schema.Int64Attribute{
+				Computed:    true,
+				Description: "For disk_auto_resize, the maximum additional disk size (in GiB) to resize up to",
 			},
 			"vhost_regex": schema.StringAttribute{
 				Computed:    true,
@@ -238,6 +243,8 @@ func (d *alarmDataSource) populateResourceModel(ctx context.Context, data model.
 	} else {
 		config.AllowDowntime = types.BoolNull()
 	}
+
+	config.MaxDiskSize = types.Int64PointerValue(data.MaxDiskSize.Int64Pointer())
 
 	if data.VhostRegex != nil {
 		config.VhostRegex = types.StringValue(*data.VhostRegex)
