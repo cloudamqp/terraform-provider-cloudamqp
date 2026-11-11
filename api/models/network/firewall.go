@@ -4,7 +4,7 @@ type FirewallRuleRequest struct {
 	Ip          string   `json:"ip"`
 	Services    []string `json:"services"`
 	Ports       []int64  `json:"ports"`
-	Description string   `json:"description,omitempty"`
+	Description string   `json:"description"`
 }
 
 type FirewallRuleResponse struct {

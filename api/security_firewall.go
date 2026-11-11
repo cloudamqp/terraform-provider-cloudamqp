@@ -47,7 +47,7 @@ func (api *API) ReadFirewallSettings(ctx context.Context, instanceID int64, slee
 	}
 
 	tflog.Info(ctx, fmt.Sprintf("method=GET path=%s data=%+v ", path, data))
-	if data == nil {
+	if data == nil || len(*data) == 0 {
 		return nil, nil
 	}
 
@@ -60,8 +60,8 @@ func (api *API) UpdateFirewallSettings(ctx context.Context, instanceID int64, pa
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	)
 
-	tflog.Info(ctx, fmt.Sprintf("method=POST path=%s params=%+v ", path, params))
-	return api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
+	tflog.Info(ctx, fmt.Sprintf("method=PUT path=%s params=%+v ", path, params))
+	return api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
 		functionName: "UpdateFirewallSettings",
 		resourceName: "FirewallSettings",
 		attempt:      1,
@@ -77,8 +77,9 @@ func (api *API) DeleteFirewallSettings(ctx context.Context, instanceID int64, pa
 		path   = fmt.Sprintf("/api/instances/%d/security/firewall", instanceID)
 	)
 
-	tflog.Info(ctx, fmt.Sprintf("method=DELETE path=%s params=%+v ", path, params))
-	return api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
+	// Deleting replaces the rules with an empty list
+	tflog.Info(ctx, fmt.Sprintf("method=PUT path=%s params=%+v ", path, params))
+	return api.callWithRetry(ctx, api.sling.New().Put(path).BodyJSON(params), retryRequest{
 		functionName: "DeleteFirewallSettings",
 		resourceName: "FirewallSettings",
 		attempt:      1,

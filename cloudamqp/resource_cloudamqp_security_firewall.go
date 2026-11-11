@@ -79,7 +79,7 @@ func (r *firewallResource) Schema(ctx context.Context, req resource.SchemaReques
 			"sleep": schema.Int64Attribute{
 				Optional:    true,
 				Computed:    true,
-				Default:     int64default.StaticInt64(10),
+				Default:     int64default.StaticInt64(30),
 				Description: "Configurable sleep time in seconds between retries for firewall configuration",
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.UseStateForUnknown(),
@@ -88,7 +88,7 @@ func (r *firewallResource) Schema(ctx context.Context, req resource.SchemaReques
 			"timeout": schema.Int64Attribute{
 				Optional:    true,
 				Computed:    true,
-				Default:     int64default.StaticInt64(600),
+				Default:     int64default.StaticInt64(1800),
 				Description: "Configurable timeout time in seconds for firewall configuration",
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.UseStateForUnknown(),
@@ -170,8 +170,8 @@ func (r *firewallResource) ImportState(ctx context.Context, req resource.ImportS
 	resp.State.SetAttribute(ctx, path.Root("id"), req.ID)
 	resp.State.SetAttribute(ctx, path.Root("instance_id"), instanceID)
 	// Default values
-	resp.State.SetAttribute(ctx, path.Root("sleep"), int64(10))
-	resp.State.SetAttribute(ctx, path.Root("timeout"), int64(600))
+	resp.State.SetAttribute(ctx, path.Root("sleep"), int64(30))
+	resp.State.SetAttribute(ctx, path.Root("timeout"), int64(1800))
 }
 
 func (r *firewallResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -227,6 +227,15 @@ func (r *firewallResource) Create(ctx context.Context, req resource.CreateReques
 		resp.Diagnostics.AddError(
 			"Error Waiting for Security Firewall Configuration",
 			fmt.Sprintf("Error while waiting for security firewall to be configured for instance %d: %s", instanceID, err),
+		)
+		return
+	}
+
+	// Read back the rules once configured, the same requests as SDK v2
+	if _, err = r.client.ReadFirewallSettings(timeoutCtx, instanceID, sleep); err != nil {
+		resp.Diagnostics.AddError(
+			"Error Reading Security Firewall",
+			fmt.Sprintf("Could not read security firewall for instance %d: %s", instanceID, err),
 		)
 		return
 	}
@@ -381,6 +390,15 @@ func (r *firewallResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 
+	// Read back the rules once configured, the same requests as SDK v2
+	if _, err = r.client.ReadFirewallSettings(timeoutCtx, instanceID, sleep); err != nil {
+		resp.Diagnostics.AddError(
+			"Error Reading Security Firewall",
+			fmt.Sprintf("Could not read security firewall for instance %d: %s", instanceID, err),
+		)
+		return
+	}
+
 	normalizeRules(plan.Rules)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
@@ -418,6 +436,15 @@ func (r *firewallResource) Delete(ctx context.Context, req resource.DeleteReques
 		resp.Diagnostics.AddError(
 			"Error Waiting for Security Firewall Configuration",
 			fmt.Sprintf("Error while waiting for security firewall to be configured for instance %d: %s", instanceID, err),
+		)
+		return
+	}
+
+	// Read back the rules once configured, the same requests as SDK v2
+	if _, err = r.client.ReadFirewallSettings(timeoutCtx, instanceID, sleep); err != nil {
+		resp.Diagnostics.AddError(
+			"Error Reading Security Firewall",
+			fmt.Sprintf("Could not read security firewall for instance %d: %s", instanceID, err),
 		)
 		return
 	}
@@ -472,7 +499,7 @@ func (v *portNotServiceValidator) ValidateInt64(ctx context.Context, req validat
 
 	for _, sp := range servicePorts {
 		if sp.Port == port {
-			resp.Diagnostics.AddAttributeError(
+			resp.Diagnostics.AddAttributeWarning(
 				req.Path,
 				"Port should use 'services' attribute",
 				fmt.Sprintf("Port %d is a predefined service port. Please add '%s' to the 'services' list instead of using the 'ports' list.", port, sp.Service),
