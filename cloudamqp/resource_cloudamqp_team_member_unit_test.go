@@ -386,7 +386,7 @@ func teamMemberUnitTest(t *testing.T, steps []resource.TestStep) {
 	})
 }
 
-func teamMemberUnitTestConfig(baseURL, attributes string) string {
+func teamMemberUnitTestConfig(baseURL, role, attributes string) string {
 	return fmt.Sprintf(`
 provider "cloudamqp" {
   apikey  = "test"
@@ -395,9 +395,10 @@ provider "cloudamqp" {
 
 resource "cloudamqp_team_member" "this" {
   email = %q
+  role  = %q
   %s
 }
-`, baseURL, teamMemberTestEmail, attributes)
+`, baseURL, teamMemberTestEmail, role, attributes)
 }
 
 // TestTeamMember_TagOrder: tags are a set, so tags in another order than the backend's sorted
@@ -405,7 +406,7 @@ resource "cloudamqp_team_member" "this" {
 func TestTeamMember_TagOrder(t *testing.T) {
 	t.Parallel()
 	fake, server := newFakeTeamAPI(t)
-	config := teamMemberUnitTestConfig(server.URL, `tags = ["b", "a"]`)
+	config := teamMemberUnitTestConfig(server.URL, "member", `tags = ["b", "a"]`)
 
 	teamMemberUnitTest(t, []resource.TestStep{
 		{
@@ -438,7 +439,7 @@ func TestTeamMember_TagCase(t *testing.T) {
 
 	teamMemberUnitTest(t, []resource.TestStep{
 		{
-			Config: teamMemberUnitTestConfig(server.URL, `tags = ["production"]`),
+			Config: teamMemberUnitTestConfig(server.URL, "member", `tags = ["production"]`),
 			Check: resource.ComposeAggregateTestCheckFunc(
 				fake.checkWrites("POST /api/team/invites"),
 				resource.TestCheckTypeSetElemAttr(teamMemberResourceName, "tags.*", "production"),
@@ -452,14 +453,14 @@ func TestTeamMember_TagCase(t *testing.T) {
 		},
 		{
 			PreConfig: func() { fake.accept(teamMemberTestEmail) },
-			Config:    teamMemberUnitTestConfig(server.URL, `tags = ["production"]`),
+			Config:    teamMemberUnitTestConfig(server.URL, "member", `tags = ["production"]`),
 			Check: resource.ComposeAggregateTestCheckFunc(
 				resource.TestCheckResourceAttr(teamMemberResourceName, "status", "member"),
 				resource.TestCheckTypeSetElemAttr(teamMemberResourceName, "tags.*", "production"),
 			),
 		},
 		{
-			Config: teamMemberUnitTestConfig(server.URL, `tags = ["production", "staging"]`),
+			Config: teamMemberUnitTestConfig(server.URL, "member", `tags = ["production", "staging"]`),
 			Check: resource.ComposeAggregateTestCheckFunc(
 				fake.checkWrites("PUT /api/team/"+teamMemberTestUserID),
 				fake.checkLastPutBody(`{"role":"member","tags":["production","staging"]}`),
@@ -479,11 +480,11 @@ func TestTeamMember_PendingInviteTagCaseChange(t *testing.T) {
 
 	teamMemberUnitTest(t, []resource.TestStep{
 		{
-			Config: teamMemberUnitTestConfig(server.URL, `tags = ["production"]`),
+			Config: teamMemberUnitTestConfig(server.URL, "member", `tags = ["production"]`),
 			Check:  fake.checkWrites("POST /api/team/invites"),
 		},
 		{
-			Config: teamMemberUnitTestConfig(server.URL, `tags = ["Production"]`),
+			Config: teamMemberUnitTestConfig(server.URL, "member", `tags = ["Production"]`),
 			Check: resource.ComposeAggregateTestCheckFunc(
 				fake.checkWrites(),
 				resource.TestCheckResourceAttr(teamMemberResourceName, "invite_id", "1"),
@@ -517,7 +518,7 @@ func TestTeamMember_TagLimits(t *testing.T) {
 			fake, server := newFakeTeamAPI(t)
 			teamMemberUnitTest(t, []resource.TestStep{
 				{
-					Config:      teamMemberUnitTestConfig(server.URL, "tags = "+c.tags),
+					Config:      teamMemberUnitTestConfig(server.URL, "member", "tags = "+c.tags),
 					ExpectError: regexp.MustCompile(c.error),
 				},
 			})
@@ -540,7 +541,7 @@ func TestTeamMember_RateLimit(t *testing.T) {
 
 		teamMemberUnitTest(t, []resource.TestStep{
 			{
-				Config: teamMemberUnitTestConfig(server.URL, `tags = ["a"]`),
+				Config: teamMemberUnitTestConfig(server.URL, "member", `tags = ["a"]`),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					fake.checkWrites("POST /api/team/invites", "POST /api/team/invites"),
 					resource.TestCheckResourceAttr(teamMemberResourceName, "status", "pending"),
@@ -556,7 +557,7 @@ func TestTeamMember_RateLimit(t *testing.T) {
 
 		teamMemberUnitTest(t, []resource.TestStep{
 			{
-				Config:      teamMemberUnitTestConfig(server.URL, `tags = ["a"]`),
+				Config:      teamMemberUnitTestConfig(server.URL, "member", `tags = ["a"]`),
 				ExpectError: regexp.MustCompile(`Invite limit reached \(max 80 per day\)`),
 			},
 		})
@@ -574,7 +575,7 @@ func TestTeamMember_PendingInviteReplace(t *testing.T) {
 
 	teamMemberUnitTest(t, []resource.TestStep{
 		{
-			Config: teamMemberUnitTestConfig(server.URL, `tags = ["a"]`),
+			Config: teamMemberUnitTestConfig(server.URL, "member", `tags = ["a"]`),
 			Check: resource.ComposeAggregateTestCheckFunc(
 				fake.checkWrites("POST /api/team/invites"),
 				resource.TestCheckResourceAttr(teamMemberResourceName, "status", "pending"),
@@ -583,7 +584,7 @@ func TestTeamMember_PendingInviteReplace(t *testing.T) {
 			),
 		},
 		{
-			Config: teamMemberUnitTestConfig(server.URL, `tags = ["a", "b"]`),
+			Config: teamMemberUnitTestConfig(server.URL, "member", `tags = ["a", "b"]`),
 			Check: resource.ComposeAggregateTestCheckFunc(
 				fake.checkWrites("DELETE /api/team/invites/1", "POST /api/team/invites"),
 				resource.TestCheckResourceAttr(teamMemberResourceName, "status", "pending"),
@@ -592,10 +593,7 @@ func TestTeamMember_PendingInviteReplace(t *testing.T) {
 			),
 		},
 		{
-			Config: teamMemberUnitTestConfig(server.URL, `
-  role = "monitor"
-  tags = ["a", "b"]
-`),
+			Config: teamMemberUnitTestConfig(server.URL, "monitor", `tags = ["a", "b"]`),
 			Check: resource.ComposeAggregateTestCheckFunc(
 				fake.checkWrites("DELETE /api/team/invites/2", "POST /api/team/invites"),
 				resource.TestCheckResourceAttr(teamMemberResourceName, "invite_id", "3"),
@@ -614,12 +612,12 @@ func TestTeamMember_AcceptedInvite(t *testing.T) {
 
 	teamMemberUnitTest(t, []resource.TestStep{
 		{
-			Config: teamMemberUnitTestConfig(server.URL, `tags = ["a"]`),
+			Config: teamMemberUnitTestConfig(server.URL, "member", `tags = ["a"]`),
 			Check:  fake.checkWrites("POST /api/team/invites"),
 		},
 		{
 			PreConfig: func() { fake.accept(teamMemberTestEmail) },
-			Config:    teamMemberUnitTestConfig(server.URL, `tags = ["a"]`),
+			Config:    teamMemberUnitTestConfig(server.URL, "member", `tags = ["a"]`),
 			Check: resource.ComposeAggregateTestCheckFunc(
 				fake.checkWrites(),
 				resource.TestCheckResourceAttr(teamMemberResourceName, "status", "member"),
@@ -628,7 +626,7 @@ func TestTeamMember_AcceptedInvite(t *testing.T) {
 			),
 		},
 		{
-			Config: teamMemberUnitTestConfig(server.URL, `tags = ["a", "b"]`),
+			Config: teamMemberUnitTestConfig(server.URL, "member", `tags = ["a", "b"]`),
 			Check: resource.ComposeAggregateTestCheckFunc(
 				fake.checkWrites("PUT "+memberPath),
 				fake.checkLastPutBody(`{"role": "member", "tags": ["a", "b"]}`),
@@ -638,10 +636,7 @@ func TestTeamMember_AcceptedInvite(t *testing.T) {
 		},
 		{
 			// The backend clears the tags when switching to a role other than member/monitor
-			Config: teamMemberUnitTestConfig(server.URL, `
-  role = "admin"
-  tags = []
-`),
+			Config: teamMemberUnitTestConfig(server.URL, "admin", `tags = []`),
 			Check: resource.ComposeAggregateTestCheckFunc(
 				fake.checkWrites("PUT "+memberPath),
 				fake.checkLastPutBody(`{"role": "admin", "tags": []}`),
@@ -657,7 +652,7 @@ func TestTeamMember_AcceptedInvite(t *testing.T) {
 func TestTeamMember_RefreshLooksUpByID(t *testing.T) {
 	t.Parallel()
 	fake, server := newFakeTeamAPI(t)
-	config := teamMemberUnitTestConfig(server.URL, `tags = ["a"]`)
+	config := teamMemberUnitTestConfig(server.URL, "member", `tags = ["a"]`)
 
 	teamMemberUnitTest(t, []resource.TestStep{
 		{
@@ -698,7 +693,7 @@ func TestTeamMember_RemovedOutsideTerraform(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			fake, server := newFakeTeamAPI(t)
-			config := teamMemberUnitTestConfig(server.URL, `tags = ["a"]`)
+			config := teamMemberUnitTestConfig(server.URL, "member", `tags = ["a"]`)
 
 			teamMemberUnitTest(t, []resource.TestStep{
 				{
@@ -729,11 +724,11 @@ func TestTeamMember_RemovedOutsideTerraform(t *testing.T) {
 func TestTeamMember_AcceptedBetweenPlanAndApply(t *testing.T) {
 	t.Parallel()
 	fake, server := newFakeTeamAPI(t)
-	config := teamMemberUnitTestConfig(server.URL, `tags = ["a", "b"]`)
+	config := teamMemberUnitTestConfig(server.URL, "member", `tags = ["a", "b"]`)
 
 	teamMemberUnitTest(t, []resource.TestStep{
 		{
-			Config: teamMemberUnitTestConfig(server.URL, `tags = ["a"]`),
+			Config: teamMemberUnitTestConfig(server.URL, "member", `tags = ["a"]`),
 			Check:  fake.checkWrites("POST /api/team/invites"),
 		},
 		{

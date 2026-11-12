@@ -11,10 +11,9 @@ This resource allows you to manage a team member as a single resource across bot
 be in: a pending invite before it's accepted, and an accepted member afterwards. `status` reports
 which one currently applies. The resource transparently keeps working as the invite transitions from one to the other.
 
-`role` defaults to `"member"` if not set. The `"member"`/`"monitor"` roles require at least one tag,
-and all other roles can't have tags. A tag name that doesn't exist yet is created automatically,
-the same way tagging an instance or VPC works. Tags are only cleared as a side effect of switching
-to a different role.
+The `"member"`/`"monitor"` roles require at least one tag, and all other roles can't have tags.
+A tag name that doesn't exist yet is created automatically, the same way tagging an instance or VPC
+works. Tags are only cleared as a side effect of switching to a role without tags.
 
 Tags are case-sensitive for access. If the team already has a tag that only differs in letter case,
 for example `"Prod"` when you configure `"prod"`, the member gets the team's `"Prod"` tag instead of
@@ -31,7 +30,21 @@ changed. Run plan again: it picks up the new member and updates its role and tag
 
 For a SAML-configured team, the IdP may overwrite `role`/`tags` again on the member's next login
 regardless of what Terraform configures. If that happens, the next plan will show the drift like
-any other out-of-band change.
+any other out-of-band change, and applying it sets the configured values again until the next
+login. To let the IdP own `role`/`tags`, ignore changes to them. Terraform still sends the invite
+and removes the member:
+
+```hcl
+resource "cloudamqp_team_member" "this" {
+  email = "user@example.com"
+  role  = "member"
+  tags  = ["production"]
+
+  lifecycle {
+    ignore_changes = [role, tags]
+  }
+}
+```
 
 ## Example Usage
 
@@ -47,9 +60,8 @@ resource "cloudamqp_team_member" "this" {
 ## Argument Reference
 
 * `email` - (Required) Email address to invite. Changing this forces a new resource.
-* `role`  - (Optional/Computed) Role assigned to the team member. Defaults to `member` if omitted.
-  One of: `admin`, `billing manager`, `member`, `monitor`, `devops`. Changing this forces a new
-  resource while the invite is pending.
+* `role`  - (Required) Role assigned to the team member. One of: `admin`, `billing manager`,
+  `member`, `monitor`, `devops`. Changing this forces a new resource while the invite is pending.
 * `tags`  - (Optional/Computed) Set of tag names granting access to tagged instances. The order
   doesn't matter. A tag that doesn't exist yet is created automatically. Required (at least one)
   for the `member`/`monitor` roles, not allowed for other roles. At most 300 tags, each shorter

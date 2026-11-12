@@ -89,12 +89,10 @@ func (r *teamMemberResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"role": schema.StringAttribute{
-				Optional: true,
-				Computed: true,
-				Description: "Role assigned to the member. Defaults to \"member\" if omitted. One of: " +
+				Required: true,
+				Description: "Role assigned to the member. One of: " +
 					strings.Join(assignableTeamRoleNames, ", ") + ".",
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.UseStateForUnknown(),
 					stringplanmodifier.RequiresReplaceIf(
 						pendingInviteRequiresReplaceString,
 						pendingInviteReplaceDescription,
@@ -160,12 +158,7 @@ func (r *teamMemberResource) ValidateConfig(ctx context.Context, req resource.Va
 	if config.Role.IsUnknown() {
 		return
 	}
-
-	// A null role in config defaults to "member" server-side.
-	role := "member"
-	if !config.Role.IsNull() {
-		role = config.Role.ValueString()
-	}
+	role := config.Role.ValueString()
 
 	// Tags referencing another resource's output can't be checked yet either.
 	if config.Tags.IsUnknown() {
@@ -266,14 +259,9 @@ func (r *teamMemberResource) Create(ctx context.Context, req resource.CreateRequ
 		}
 	}
 
-	role := ""
-	if !plan.Role.IsNull() && !plan.Role.IsUnknown() {
-		role = plan.Role.ValueString()
-	}
-
 	invite, err := r.client.CreateTeamInvite(ctx, model.InviteRequest{
 		Email: email,
-		Role:  role,
+		Role:  plan.Role.ValueString(),
 		Tags:  tags,
 	})
 	if err != nil {
@@ -352,11 +340,6 @@ func (r *teamMemberResource) Update(ctx context.Context, req resource.UpdateRequ
 		}
 	}
 
-	role := ""
-	if !plan.Role.IsNull() && !plan.Role.IsUnknown() {
-		role = plan.Role.ValueString()
-	}
-
 	// Other role/tag changes on a pending invite replace it, see pendingInviteRequiresReplace.
 	if state.Status.ValueString() == "pending" {
 		state.Tags = plan.Tags
@@ -365,7 +348,7 @@ func (r *teamMemberResource) Update(ctx context.Context, req resource.UpdateRequ
 	}
 
 	err := r.client.UpdateTeamMember(ctx, state.UserID.ValueString(), model.MemberUpdateRequest{
-		Role: role,
+		Role: plan.Role.ValueString(),
 		Tags: tags,
 	})
 	if err != nil {

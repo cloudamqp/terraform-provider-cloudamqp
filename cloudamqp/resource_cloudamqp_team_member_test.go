@@ -35,6 +35,7 @@ func TestAccTeamMember_PendingInvite(t *testing.T) {
 				Config: `
 					resource "cloudamqp_team_member" "this" {
 						email = "test@example.com"
+						role  = "member"
 						tags  = ["tf-acc-test-member-tag-a"]
 					}
 				`,
@@ -57,6 +58,7 @@ func TestAccTeamMember_PendingInvite(t *testing.T) {
 				Config: `
 					resource "cloudamqp_team_member" "this" {
 						email = "test@example.com"
+						role  = "member"
 						tags  = ["tf-acc-test-member-tag-a", "tf-acc-test-member-tag-b"]
 					}
 				`,
@@ -185,6 +187,7 @@ func TestAccTeamMember_InvalidEmail(t *testing.T) {
 				Config: `
 					resource "cloudamqp_team_member" "member" {
 						email = "not-an-email"
+						role  = "member"
 						tags  = ["tf-acc-test-invalid-email"]
 					}
 				`,
@@ -207,11 +210,13 @@ func TestAccTeamMember_TagCase(t *testing.T) {
 				Config: `
 					resource "cloudamqp_team_member" "first" {
 						email = "tag-case-first@example.com"
+						role  = "member"
 						tags  = ["TF-Acc-Test-Case"]
 					}
 
 					resource "cloudamqp_team_member" "second" {
 						email      = "tag-case-second@example.com"
+						role       = "member"
 						tags       = ["tf-acc-test-case"]
 						depends_on = [cloudamqp_team_member.first]
 					}
@@ -226,8 +231,7 @@ func TestAccTeamMember_TagCase(t *testing.T) {
 }
 
 // TestAccTeamMember_TaggedRoleRequiresTags: the "member" and "monitor" roles
-// require at least one tag, whether the role is set explicitly or left to
-// its default.
+// require at least one tag.
 func TestAccTeamMember_TaggedRoleRequiresTags(t *testing.T) {
 	t.Parallel()
 
@@ -248,6 +252,7 @@ func TestAccTeamMember_TaggedRoleRequiresTags(t *testing.T) {
 				Config: `
 					resource "cloudamqp_team_member" "this" {
 						email = "test@example.com"
+						role  = "member"
 						tags  = []
 					}
 				`,
