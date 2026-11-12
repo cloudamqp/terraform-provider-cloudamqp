@@ -87,8 +87,7 @@ func (r *teamMemberResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional: true,
 				Computed: true,
 				Description: "Role assigned to the member. Defaults to \"member\" if omitted. One of: " +
-					strings.Join(assignableTeamRoleNames, ", ") + ". For SAML-configured teams, leave " +
-					"this unset to let it track whatever the IdP assigns without producing a perpetual diff.",
+					strings.Join(assignableTeamRoleNames, ", ") + ".",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 					stringplanmodifier.RequiresReplaceIf(
