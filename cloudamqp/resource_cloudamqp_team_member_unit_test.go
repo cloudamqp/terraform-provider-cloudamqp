@@ -293,6 +293,16 @@ func nonNilTags(tags []string) []string {
 	return sorted
 }
 
+// reissue revokes the pending invite for email and sends a new one, outside Terraform. The new
+// invite gets a new id.
+func (f *fakeTeamAPI) reissue(email string) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	invite := f.find(f.invites, email)
+	invite.id = strconv.Itoa(f.nextInviteID)
+	f.nextInviteID++
+}
+
 // accept turns the pending invite for email into an accepted member, like the invitee
 // accepting it in the web UI.
 func (f *fakeTeamAPI) accept(email string) {
@@ -607,6 +617,33 @@ func TestTeamMember_TagsOnlyDifferInCase(t *testing.T) {
 	if len(fake.writes) > 0 {
 		t.Errorf("expected no requests, got %v", fake.writes)
 	}
+}
+
+// TestTeamMember_InviteReissuedOutsideTerraform: a pending invite revoked and sent again outside
+// Terraform is found by email on refresh, instead of being removed from state.
+func TestTeamMember_InviteReissuedOutsideTerraform(t *testing.T) {
+	t.Parallel()
+	fake, server := newFakeTeamAPI(t)
+	config := teamMemberUnitTestConfig(server.URL, "member", `tags = ["a"]`)
+
+	teamMemberUnitTest(t, []resource.TestStep{
+		{
+			Config: config,
+			Check: resource.ComposeAggregateTestCheckFunc(
+				fake.checkWrites("POST /api/team/invites"),
+				resource.TestCheckResourceAttr(teamMemberResourceName, "invite_id", "1"),
+			),
+		},
+		{
+			PreConfig: func() { fake.reissue(teamMemberTestEmail) },
+			Config:    config,
+			Check: resource.ComposeAggregateTestCheckFunc(
+				fake.checkWrites(),
+				resource.TestCheckResourceAttr(teamMemberResourceName, "status", "pending"),
+				resource.TestCheckResourceAttr(teamMemberResourceName, "invite_id", "2"),
+			),
+		},
+	})
 }
 
 // TestTeamMember_PendingInviteReplace: changing tags or role on a pending invite revokes it and

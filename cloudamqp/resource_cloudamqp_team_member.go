@@ -466,9 +466,8 @@ func (r *teamMemberResource) checkInviteNotAccepted(ctx context.Context, email s
 //   - status "member": GET /api/team/:user_id. A member can't go back to
 //     pending, so a 404 here means genuinely removed, no fallback needed.
 //   - status "pending": GET /api/team/invites/:id. A 404 here means the
-//     invite was accepted since the last read, so we fall back to a member
-//     lookup by email, the only remaining possibility, to pick up the new
-//     user_id.
+//     invite was accepted, or revoked and sent again, since the last read, so
+//     we fall back to the lookups by email.
 //   - no previous status (Create, or anything unexpected): cold start, check
 //     pending invites by email first (the state right after inviting), then
 //     fall back to an accepted member.
@@ -488,7 +487,7 @@ func (r *teamMemberResource) readState(
 			if diags.HasError() || state != nil {
 				return state, diags
 			}
-			return r.readMemberByEmail(ctx, displayEmail, email)
+			// The invite was accepted, or revoked and sent again, look up by email
 		}
 	}
 
