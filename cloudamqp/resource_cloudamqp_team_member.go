@@ -194,6 +194,9 @@ func pendingInviteRequiresReplaceString(ctx context.Context, req planmodifier.St
 }
 
 func pendingInviteRequiresReplaceSet(ctx context.Context, req planmodifier.SetRequest, resp *setplanmodifier.RequiresReplaceIfFuncResponse) {
+	if tagsEqualIgnoringCase(ctx, req.StateValue, req.PlanValue) {
+		return
+	}
 	resp.RequiresReplace, resp.Diagnostics = pendingInviteRequiresReplace(ctx, req.State, req.Path)
 }
 
@@ -275,6 +278,10 @@ func (r *teamMemberResource) Create(ctx context.Context, req resource.CreateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	resp.Diagnostics.Append(keepConfiguredTagCase(ctx, state, tags)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, state)...)
 }
@@ -294,6 +301,16 @@ func (r *teamMemberResource) Read(ctx context.Context, req resource.ReadRequest,
 
 	if newState == nil {
 		resp.State.RemoveResource(ctx)
+		return
+	}
+
+	var known []string
+	if !state.Tags.IsNull() && !state.Tags.IsUnknown() {
+		resp.Diagnostics.Append(state.Tags.ElementsAs(ctx, &known, false)...)
+	}
+	_, diags = tagsWithKnownCase(ctx, newState, known)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
 		return
 	}
 
@@ -323,12 +340,10 @@ func (r *teamMemberResource) Update(ctx context.Context, req resource.UpdateRequ
 		role = plan.Role.ValueString()
 	}
 
-	// Role/tag changes on a pending invite force a replacement, so this is only reached for members.
+	// Other role/tag changes on a pending invite replace it, see pendingInviteRequiresReplace.
 	if state.Status.ValueString() == "pending" {
-		resp.Diagnostics.AddError(
-			"Failed to Update Team Member",
-			fmt.Sprintf("The invite for %q is still pending and can't be updated.", email),
-		)
+		state.Tags = plan.Tags
+		resp.Diagnostics.Append(resp.State.Set(ctx, state)...)
 		return
 	}
 
@@ -354,6 +369,10 @@ func (r *teamMemberResource) Update(ctx context.Context, req resource.UpdateRequ
 			"Failed to Update Team Member",
 			fmt.Sprintf("%q could not be found after updating", email),
 		)
+		return
+	}
+	resp.Diagnostics.Append(keepConfiguredTagCase(ctx, newState, tags)...)
+	if resp.Diagnostics.HasError() {
 		return
 	}
 
@@ -549,6 +568,74 @@ func inviteState(
 		InviteID: types.StringValue(strconv.Itoa(invite.ID)),
 		UserID:   types.StringNull(),
 	}, diags
+}
+
+// tagsWithKnownCase keeps the spelling from known for tags the backend matched to a team tag
+// that only differs in letter case. Returns the replaced tags as known => assigned.
+func tagsWithKnownCase(
+	ctx context.Context, state *teamMemberResourceModel, known []string,
+) (map[string]string, diag.Diagnostics) {
+	var assigned []string
+	diags := state.Tags.ElementsAs(ctx, &assigned, false)
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	replaced := map[string]string{}
+	tags := make([]string, 0, len(assigned))
+	for _, tag := range assigned {
+		i := slices.IndexFunc(known, func(k string) bool { return strings.EqualFold(k, tag) })
+		if i < 0 || slices.Contains(known, tag) {
+			tags = append(tags, tag)
+			continue
+		}
+		tags = append(tags, known[i])
+		replaced[known[i]] = tag
+	}
+
+	state.Tags, diags = types.SetValueFrom(ctx, types.StringType, tags)
+	return replaced, diags
+}
+
+// keepConfiguredTagCase is tagsWithKnownCase for the configured tags, with a warning.
+func keepConfiguredTagCase(ctx context.Context, state *teamMemberResourceModel, configured []string) diag.Diagnostics {
+	replaced, diags := tagsWithKnownCase(ctx, state, configured)
+	if diags.HasError() || len(replaced) == 0 {
+		return diags
+	}
+
+	names := make([]string, 0, len(replaced))
+	for tag, teamTag := range replaced {
+		names = append(names, fmt.Sprintf("%q was assigned the team's tag %q", tag, teamTag))
+	}
+	slices.Sort(names)
+	diags.AddAttributeWarning(
+		path.Root("tags"),
+		"Tag Assigned With Different Letter Case",
+		fmt.Sprintf("The team already has tags that only differ in letter case, and tags are case-sensitive "+
+			"for access, so those were assigned instead: %s. Consider using the team's spelling.",
+			strings.Join(names, ", ")),
+	)
+	return diags
+}
+
+// tagsEqualIgnoringCase reports whether two tag sets only differ in letter case.
+func tagsEqualIgnoringCase(ctx context.Context, a, b types.Set) bool {
+	if a.IsNull() || a.IsUnknown() || b.IsNull() || b.IsUnknown() {
+		return false
+	}
+	var aTags, bTags []string
+	if a.ElementsAs(ctx, &aTags, false).HasError() || b.ElementsAs(ctx, &bTags, false).HasError() {
+		return false
+	}
+	lower := func(tags []string) []string {
+		for i, tag := range tags {
+			tags[i] = strings.ToLower(tag)
+		}
+		slices.Sort(tags)
+		return slices.Compact(tags)
+	}
+	return slices.Equal(lower(aTags), lower(bTags))
 }
 
 func normalizeEmail(email string) string {

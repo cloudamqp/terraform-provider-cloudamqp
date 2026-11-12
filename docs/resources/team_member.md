@@ -13,8 +13,12 @@ which one currently applies. The resource transparently keeps working as the inv
 
 `role` defaults to `"member"` if not set. The `"member"`/`"monitor"` roles require at least one tag,
 and all other roles can't have tags. A tag name that doesn't exist yet is created automatically,
-the same way tagging an instance or VPC works. Tags are case-sensitive, so `"Prod"` and `"prod"` are
-two different tags. Tags are only cleared as a side effect of switching to a different role.
+the same way tagging an instance or VPC works. Tags are only cleared as a side effect of switching
+to a different role.
+
+Tags are case-sensitive for access. If the team already has a tag that only differs in letter case,
+for example `"Prod"` when you configure `"prod"`, the member gets the team's `"Prod"` tag instead of
+a new one. Terraform keeps your spelling in state, so there's no diff, and shows a warning on apply.
 
 A pending invite can't be updated. Changing `role` or `tags` while `status` is `pending` replaces
 the resource: the invite is revoked and a new one is sent, with a new `invite_id`. The plan shows

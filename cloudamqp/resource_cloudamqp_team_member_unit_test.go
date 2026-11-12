@@ -40,6 +40,7 @@ type fakeTeamAPI struct {
 	nextInviteID int
 	invites      []*fakeTeamEntry
 	members      []*fakeTeamEntry
+	teamTags     []string
 	reads        []string // GET requests
 	writes       []string // POST, PUT and DELETE requests
 	lastPutBody  string
@@ -127,7 +128,7 @@ func (f *fakeTeamAPI) invite(w http.ResponseWriter, r *http.Request) {
 		id:    strconv.Itoa(f.nextInviteID),
 		email: body.Email,
 		role:  role,
-		tags:  body.Tags,
+		tags:  f.teamTagsFor(body.Tags),
 	}
 	f.nextInviteID++
 	f.invites = append(f.invites, invite)
@@ -206,9 +207,29 @@ func (f *fakeTeamAPI) updateMember(w http.ResponseWriter, r *http.Request, membe
 		member.role = role
 	}
 	if len(tags) > 0 {
-		member.tags = tags
+		member.tags = f.teamTagsFor(tags)
 	}
 	writeJSON(w, http.StatusOK, map[string]any{"message": "Role and tags updated for user."})
+}
+
+// teamTagsFor mimics how the backend matches tags to the team's tags: an exact match first, then
+// one that only differs in letter case. A tag that matches none is created.
+func (f *fakeTeamAPI) teamTagsFor(tags []string) []string {
+	result := []string{}
+	for _, tag := range tags {
+		index := slices.Index(f.teamTags, tag)
+		if index < 0 {
+			index = slices.IndexFunc(f.teamTags, func(t string) bool { return strings.EqualFold(t, tag) })
+		}
+		if index < 0 {
+			f.teamTags = append(f.teamTags, tag)
+			index = len(f.teamTags) - 1
+		}
+		if !slices.Contains(result, f.teamTags[index]) {
+			result = append(result, f.teamTags[index])
+		}
+	}
+	return result
 }
 
 func (f *fakeTeamAPI) remove(w http.ResponseWriter, r *http.Request) {
@@ -389,6 +410,71 @@ func TestTeamMember_TagOrder(t *testing.T) {
 		{
 			Config:   config,
 			PlanOnly: true,
+		},
+	})
+}
+
+// TestTeamMember_TagCase: a tag that only differs in letter case from a team tag is assigned the
+// team's tag by the backend. The configured spelling is kept in state, so there's no diff, both
+// for a pending invite and after it's accepted.
+func TestTeamMember_TagCase(t *testing.T) {
+	t.Parallel()
+	fake, server := newFakeTeamAPI(t)
+	fake.teamTags = []string{"Production"}
+
+	teamMemberUnitTest(t, []resource.TestStep{
+		{
+			Config: teamMemberUnitTestConfig(server.URL, `tags = ["production"]`),
+			Check: resource.ComposeAggregateTestCheckFunc(
+				fake.checkWrites("POST /api/team/invites"),
+				resource.TestCheckTypeSetElemAttr(teamMemberResourceName, "tags.*", "production"),
+				func(_ *terraform.State) error {
+					if tags := fake.invites[0].tags; !slices.Equal(tags, []string{"Production"}) {
+						return fmt.Errorf("expected the team's tag Production to be assigned, got %v", tags)
+					}
+					return nil
+				},
+			),
+		},
+		{
+			PreConfig: func() { fake.accept(teamMemberTestEmail) },
+			Config:    teamMemberUnitTestConfig(server.URL, `tags = ["production"]`),
+			Check: resource.ComposeAggregateTestCheckFunc(
+				resource.TestCheckResourceAttr(teamMemberResourceName, "status", "member"),
+				resource.TestCheckTypeSetElemAttr(teamMemberResourceName, "tags.*", "production"),
+			),
+		},
+		{
+			Config: teamMemberUnitTestConfig(server.URL, `tags = ["production", "staging"]`),
+			Check: resource.ComposeAggregateTestCheckFunc(
+				fake.checkWrites("PUT /api/team/"+teamMemberTestUserID),
+				fake.checkLastPutBody(`{"role":"member","tags":["production","staging"]}`),
+				resource.TestCheckTypeSetElemAttr(teamMemberResourceName, "tags.*", "production"),
+				resource.TestCheckTypeSetElemAttr(teamMemberResourceName, "tags.*", "staging"),
+			),
+		},
+	})
+}
+
+// TestTeamMember_PendingInviteTagCaseChange: changing only the letter case of a tag on a pending
+// invite updates the state, it doesn't revoke and resend the invite.
+func TestTeamMember_PendingInviteTagCaseChange(t *testing.T) {
+	t.Parallel()
+	fake, server := newFakeTeamAPI(t)
+	fake.teamTags = []string{"Production"}
+
+	teamMemberUnitTest(t, []resource.TestStep{
+		{
+			Config: teamMemberUnitTestConfig(server.URL, `tags = ["production"]`),
+			Check:  fake.checkWrites("POST /api/team/invites"),
+		},
+		{
+			Config: teamMemberUnitTestConfig(server.URL, `tags = ["Production"]`),
+			Check: resource.ComposeAggregateTestCheckFunc(
+				fake.checkWrites(),
+				resource.TestCheckResourceAttr(teamMemberResourceName, "invite_id", "1"),
+				resource.TestCheckTypeSetElemAttr(teamMemberResourceName, "tags.*", "Production"),
+			),
 		},
 	})
 }

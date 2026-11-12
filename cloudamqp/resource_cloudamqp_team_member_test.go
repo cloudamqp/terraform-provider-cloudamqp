@@ -194,6 +194,37 @@ func TestAccTeamMember_InvalidEmail(t *testing.T) {
 	})
 }
 
+// TestAccTeamMember_TagCase: the second invite uses a tag that only differs in letter case from
+// the tag the first invite created. The backend assigns the existing tag, and the configured
+// spelling is kept in state, so there's no diff. Both invites stay pending, nothing to accept.
+func TestAccTeamMember_TagCase(t *testing.T) {
+	t.Parallel()
+
+	cloudamqpResourceTest(t, resource.TestCase{
+		PreCheck: func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: `
+					resource "cloudamqp_team_member" "first" {
+						email = "tag-case-first@example.com"
+						tags  = ["TF-Acc-Test-Case"]
+					}
+
+					resource "cloudamqp_team_member" "second" {
+						email      = "tag-case-second@example.com"
+						tags       = ["tf-acc-test-case"]
+						depends_on = [cloudamqp_team_member.first]
+					}
+				`,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckTypeSetElemAttr("cloudamqp_team_member.first", "tags.*", "TF-Acc-Test-Case"),
+					resource.TestCheckTypeSetElemAttr("cloudamqp_team_member.second", "tags.*", "tf-acc-test-case"),
+				),
+			},
+		},
+	})
+}
+
 // TestAccTeamMember_TaggedRoleRequiresTags: the "member" and "monitor" roles
 // require at least one tag, whether the role is set explicitly or left to
 // its default.
