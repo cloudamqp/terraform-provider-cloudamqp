@@ -46,9 +46,10 @@ resource "cloudamqp_team_member" "this" {
 * `role`  - (Optional/Computed) Role assigned to the team member. Defaults to `member` if omitted.
   One of: `admin`, `billing manager`, `member`, `monitor`, `devops`. Changing this forces a new
   resource while the invite is pending.
-* `tags`  - (Optional/Computed) Tag names granting access to tagged instances. A tag that doesn't
-  exist yet is created automatically. Required (at least one) for the `member`/`monitor` roles,
-  not allowed for other roles. Changing this forces a new resource while the invite is pending.
+* `tags`  - (Optional/Computed) Set of tag names granting access to tagged instances. The order
+  doesn't matter. A tag that doesn't exist yet is created automatically. Required (at least one)
+  for the `member`/`monitor` roles, not allowed for other roles. Changing this forces a new
+  resource while the invite is pending.
 
 ## Attributes Reference
 

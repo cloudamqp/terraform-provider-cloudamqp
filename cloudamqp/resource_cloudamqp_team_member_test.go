@@ -46,7 +46,7 @@ func TestAccTeamMember_PendingInvite(t *testing.T) {
 					resource.TestCheckResourceAttrSet(memberResourceName, "invite_id"),
 					resource.TestCheckNoResourceAttr(memberResourceName, "user_id"),
 					resource.TestCheckResourceAttr(memberResourceName, "tags.#", "1"),
-					resource.TestCheckResourceAttr(memberResourceName, "tags.0", "tf-acc-test-member-tag-a"),
+					resource.TestCheckTypeSetElemAttr(memberResourceName, "tags.*", "tf-acc-test-member-tag-a"),
 					resource.TestCheckResourceAttrWith(memberResourceName, "invite_id", func(value string) error {
 						firstInviteID = value
 						return nil

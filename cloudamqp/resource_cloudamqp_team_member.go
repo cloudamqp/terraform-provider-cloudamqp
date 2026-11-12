@@ -14,8 +14,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/setplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
@@ -53,7 +53,7 @@ type teamMemberResourceModel struct {
 	ID       types.String `tfsdk:"id"`
 	Email    types.String `tfsdk:"email"`
 	Role     types.String `tfsdk:"role"`
-	Tags     types.List   `tfsdk:"tags"`
+	Tags     types.Set    `tfsdk:"tags"`
 	Status   types.String `tfsdk:"status"`
 	InviteID types.String `tfsdk:"invite_id"`
 	UserID   types.String `tfsdk:"user_id"`
@@ -101,17 +101,17 @@ func (r *teamMemberResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringvalidator.OneOfCaseInsensitive(assignableTeamRoleNames...),
 				},
 			},
-			"tags": schema.ListAttribute{
+			"tags": schema.SetAttribute{
 				Optional:    true,
 				Computed:    true,
 				ElementType: types.StringType,
 				Description: "Tag names granting access to tagged instances. A tag that doesn't exist yet " +
 					"is created automatically. Only meaningful for the \"member\"/\"monitor\" roles, " +
 					"which require at least one tag.",
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.UseStateForUnknown(),
-					listplanmodifier.RequiresReplaceIf(
-						pendingInviteRequiresReplaceList,
+				PlanModifiers: []planmodifier.Set{
+					setplanmodifier.UseStateForUnknown(),
+					setplanmodifier.RequiresReplaceIf(
+						pendingInviteRequiresReplaceSet,
 						pendingInviteReplaceDescription,
 						pendingInviteReplaceDescription,
 					),
@@ -193,7 +193,7 @@ func pendingInviteRequiresReplaceString(ctx context.Context, req planmodifier.St
 	resp.RequiresReplace, resp.Diagnostics = pendingInviteRequiresReplace(ctx, req.State, req.Path)
 }
 
-func pendingInviteRequiresReplaceList(ctx context.Context, req planmodifier.ListRequest, resp *listplanmodifier.RequiresReplaceIfFuncResponse) {
+func pendingInviteRequiresReplaceSet(ctx context.Context, req planmodifier.SetRequest, resp *setplanmodifier.RequiresReplaceIfFuncResponse) {
 	resp.RequiresReplace, resp.Diagnostics = pendingInviteRequiresReplace(ctx, req.State, req.Path)
 }
 
@@ -515,7 +515,7 @@ func memberState(
 	ctx context.Context, displayEmail, email string, member *model.MemberByEmailResponse,
 ) (*teamMemberResourceModel, diag.Diagnostics) {
 	var diags diag.Diagnostics
-	tagsList, tagsDiags := types.ListValueFrom(ctx, types.StringType, member.Tags)
+	tags, tagsDiags := types.SetValueFrom(ctx, types.StringType, member.Tags)
 	diags.Append(tagsDiags...)
 	if diags.HasError() {
 		return nil, diags
@@ -524,7 +524,7 @@ func memberState(
 		ID:       types.StringValue(email),
 		Email:    types.StringValue(displayEmail),
 		Role:     types.StringValue(member.Role),
-		Tags:     tagsList,
+		Tags:     tags,
 		Status:   types.StringValue("member"),
 		InviteID: types.StringNull(),
 		UserID:   types.StringValue(member.ID),
@@ -535,7 +535,7 @@ func inviteState(
 	ctx context.Context, displayEmail string, invite *model.InviteResponse,
 ) (*teamMemberResourceModel, diag.Diagnostics) {
 	var diags diag.Diagnostics
-	tagsList, tagsDiags := types.ListValueFrom(ctx, types.StringType, invite.Tags)
+	tags, tagsDiags := types.SetValueFrom(ctx, types.StringType, invite.Tags)
 	diags.Append(tagsDiags...)
 	if diags.HasError() {
 		return nil, diags
@@ -544,7 +544,7 @@ func inviteState(
 		ID:       types.StringValue(normalizeEmail(displayEmail)),
 		Email:    types.StringValue(displayEmail),
 		Role:     types.StringValue(invite.Role),
-		Tags:     tagsList,
+		Tags:     tags,
 		Status:   types.StringValue("pending"),
 		InviteID: types.StringValue(strconv.Itoa(invite.ID)),
 		UserID:   types.StringNull(),

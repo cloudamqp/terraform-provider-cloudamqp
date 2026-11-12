@@ -248,11 +248,14 @@ func memberJSON(member *fakeTeamEntry) map[string]any {
 		"role": member.role, "tags": nonNilTags(member.tags)}
 }
 
+// nonNilTags returns the tags sorted by name, like the backend does
 func nonNilTags(tags []string) []string {
-	if tags == nil {
-		return []string{}
+	sorted := slices.Clone(tags)
+	if sorted == nil {
+		sorted = []string{}
 	}
-	return tags
+	slices.Sort(sorted)
+	return sorted
 }
 
 // accept turns the pending invite for email into an accepted member, like the invitee
@@ -360,6 +363,34 @@ resource "cloudamqp_team_member" "this" {
   %s
 }
 `, baseURL, teamMemberTestEmail, attributes)
+}
+
+// TestTeamMember_TagOrder: tags are a set, so tags in another order than the backend's sorted
+// order give no diff, neither for a pending invite nor for a member.
+func TestTeamMember_TagOrder(t *testing.T) {
+	t.Parallel()
+	fake, server := newFakeTeamAPI(t)
+	config := teamMemberUnitTestConfig(server.URL, `tags = ["b", "a"]`)
+
+	teamMemberUnitTest(t, []resource.TestStep{
+		{
+			Config: config,
+			Check: resource.ComposeAggregateTestCheckFunc(
+				fake.checkWrites("POST /api/team/invites"),
+				resource.TestCheckTypeSetElemAttr(teamMemberResourceName, "tags.*", "a"),
+				resource.TestCheckTypeSetElemAttr(teamMemberResourceName, "tags.*", "b"),
+			),
+		},
+		{
+			PreConfig: func() { fake.accept(teamMemberTestEmail) },
+			Config:    config,
+			Check:     resource.TestCheckResourceAttr(teamMemberResourceName, "status", "member"),
+		},
+		{
+			Config:   config,
+			PlanOnly: true,
+		},
+	})
 }
 
 // TestTeamMember_PendingInviteReplace: changing tags or role on a pending invite revokes it and
