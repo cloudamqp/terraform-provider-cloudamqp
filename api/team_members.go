@@ -27,8 +27,8 @@ func isInviteLimitReached(failed map[string]any) bool {
 	return strings.HasPrefix(msg, "Invite limit reached")
 }
 
-// InviteTeamMember invites an email via POST /api/team/invites and returns the created invite.
-func (api *API) InviteTeamMember(ctx context.Context, params model.InviteRequest) (*model.InviteResponse, error) {
+// CreateTeamInvite invites an email via POST /api/team/invites and returns the created invite.
+func (api *API) CreateTeamInvite(ctx context.Context, params model.InviteRequest) (*model.InviteResponse, error) {
 	var (
 		data   model.InviteResponse
 		failed map[string]any
@@ -37,7 +37,7 @@ func (api *API) InviteTeamMember(ctx context.Context, params model.InviteRequest
 
 	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%v", path, params))
 	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
-		functionName:       "InviteTeamMember",
+		functionName:       "CreateTeamInvite",
 		resourceName:       "Team Member",
 		attempt:            1,
 		sleep:              5 * time.Second,

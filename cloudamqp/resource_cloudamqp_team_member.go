@@ -271,7 +271,7 @@ func (r *teamMemberResource) Create(ctx context.Context, req resource.CreateRequ
 		role = plan.Role.ValueString()
 	}
 
-	invite, err := r.client.InviteTeamMember(ctx, model.InviteRequest{
+	invite, err := r.client.CreateTeamInvite(ctx, model.InviteRequest{
 		Email: email,
 		Role:  role,
 		Tags:  tags,
