@@ -445,8 +445,8 @@ func (r *teamMemberResource) checkInviteNotAccepted(ctx context.Context, email s
 	if member != nil {
 		diags.AddError(
 			"Invite Already Accepted",
-			fmt.Sprintf("The invite for %q was accepted after the plan was made, so it can't be "+
-				"replaced. Run plan again to update the member instead.", email),
+			fmt.Sprintf("The invite for %q was accepted after the plan was made, so the planned "+
+				"change no longer applies. Run plan again to get a plan for the member.", email),
 		)
 	}
 	return diags
