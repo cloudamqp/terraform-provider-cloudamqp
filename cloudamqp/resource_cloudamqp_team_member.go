@@ -419,7 +419,7 @@ func (r *teamMemberResource) Delete(ctx context.Context, req resource.DeleteRequ
 			}
 		}
 	} else {
-		err = r.client.RemoveTeamMember(ctx, email)
+		err = r.client.RemoveTeamMember(ctx, normalizeEmail(email))
 	}
 	if err != nil {
 		resp.Diagnostics.AddError(
