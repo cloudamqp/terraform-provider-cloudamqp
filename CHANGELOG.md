@@ -1,5 +1,43 @@
 # CHANGELOG
 
+## 1.53.0 (Unreleased)
+
+FEATURES:
+
+* Migrated towards Terraform plugin framework:
+  * Resources:
+    * `cloudamqp_upgrade_rabbitmq` and `cloudamqp_upgrade_lavinmq` ([#562])
+  * Data sources:
+    * `cloudamqp_upgradable_versions` ([#562])
+    * `cloudamqp_account` and `cloudamqp_account_vpcs` ([#564])
+    * `cloudamqp_vpc_info` and `cloudamqp_vpc_gcp_info` ([#564])
+
+IMPROVEMENTS:
+
+* Tests: Shared mux provider factory between unit and VCR tests ([#563])
+* resource/cloudamqp_alarm: Added `max_disk_size` argument to set a ceiling for `disk_auto_resize` alarms, also exposed in data source `cloudamqp_alarm` ([#565])
+
+[#562]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/562
+[#563]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/563
+[#564]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/564
+[#565]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/565
+
+
+## 1.52.0 (29 Oct, 2026)
+
+IMPROVEMENTS:
+
+* resource/cloudamqp_custom_certificate: `version`, `sni_hosts` and `key_id` changes now update the certificate in place instead of forcing a replace ([#559])
+* resource/cloudamqp_custom_domain: Hostname changes now update in place instead of delete and recreate ([#560])
+
+BUG FIXES:
+
+* provider: Fixed panic when a request gets no response, e.g. connection refused, the error is now returned instead ([#561])
+
+[#559]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/559
+[#560]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/560
+[#561]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/561
+
 ## 1.51.0 (13 Oct, 2026)
 
 FEATURES:

@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"time"
 
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/network"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func (api *API) waitUntilCustomDomainConfigured(ctx context.Context, instanceID int,
-	configured bool, sleep time.Duration) (map[string]any, error) {
+// waitUntilCustomDomainConfigured polls until the domain reaches the desired configured state.
+// When configured is true, hostname must also match
+func (api *API) waitUntilCustomDomainConfigured(ctx context.Context, instanceID int64,
+	configured bool, hostname string, sleep time.Duration) (*model.CustomDomainResponse, error) {
 
 	for {
 		select {
@@ -24,7 +27,12 @@ func (api *API) waitUntilCustomDomainConfigured(ctx context.Context, instanceID 
 			return nil, err
 		}
 
-		if response["configured"] == configured {
+		if response == nil {
+			if !configured {
+				// Domain not found, treat as not configured
+				return nil, nil
+			}
+		} else if response.Configured == configured && (!configured || response.Hostname == hostname) {
 			return response, nil
 		}
 
@@ -33,17 +41,16 @@ func (api *API) waitUntilCustomDomainConfigured(ctx context.Context, instanceID 
 	}
 }
 
-func (api *API) CreateCustomDomain(ctx context.Context, instanceID int, hostname string,
-	sleep time.Duration) (map[string]any, error) {
+func (api *API) CreateCustomDomain(ctx context.Context, instanceID int64, hostname string,
+	sleep time.Duration) (*model.CustomDomainResponse, error) {
 
 	var (
 		failed map[string]any
-		params = make(map[string]string)
 		path   = fmt.Sprintf("/api/instances/%d/custom-domain", instanceID)
 	)
 
-	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s hostname=%s ", path, hostname))
-	params["hostname"] = hostname
+	params := model.CustomDomainRequest{Hostname: hostname}
+	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%v", path, params))
 	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
 		functionName: "CreateCustomDomain",
 		resourceName: "CustomDomain",
@@ -56,14 +63,14 @@ func (api *API) CreateCustomDomain(ctx context.Context, instanceID int, hostname
 		return nil, err
 	}
 
-	return api.waitUntilCustomDomainConfigured(ctx, instanceID, true, sleep)
+	return api.waitUntilCustomDomainConfigured(ctx, instanceID, true, hostname, sleep)
 }
 
-func (api *API) ReadCustomDomain(ctx context.Context, instanceID int, sleep time.Duration) (
-	map[string]any, error) {
+func (api *API) ReadCustomDomain(ctx context.Context, instanceID int64, sleep time.Duration) (
+	*model.CustomDomainResponse, error) {
 
 	var (
-		data   map[string]any
+		data   model.CustomDomainResponse
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/custom-domain", instanceID)
 	)
@@ -82,40 +89,23 @@ func (api *API) ReadCustomDomain(ctx context.Context, instanceID int, sleep time
 	}
 
 	// Handle resource drift
-	if len(data) == 0 {
+	if data.Hostname == "" {
 		return nil, nil
 	}
 
-	return data, nil
+	return &data, nil
 }
 
-func (api *API) UpdateCustomDomain(ctx context.Context, instanceID int, hostname string,
-	sleep time.Duration) (map[string]any, error) {
+func (api *API) UpdateCustomDomain(ctx context.Context, instanceID int64, hostname string,
+	sleep time.Duration) (*model.CustomDomainResponse, error) {
 
 	tflog.Debug(ctx, fmt.Sprintf("update custom domain, instanceID=%d hostname=%s ",
 		instanceID, hostname))
 
-	// delete and wait
-	_, err := api.DeleteCustomDomain(ctx, instanceID, sleep)
-	if err != nil {
-		return nil, err
-	}
-	_, err = api.waitUntilCustomDomainConfigured(ctx, instanceID, false, sleep)
-	if err != nil {
-		return nil, err
-	}
-
-	// create and wait
-	_, err = api.CreateCustomDomain(ctx, instanceID, hostname, sleep)
-	if err != nil {
-		return nil, err
-	}
-	return api.waitUntilCustomDomainConfigured(ctx, instanceID, true, sleep)
+	return api.CreateCustomDomain(ctx, instanceID, hostname, sleep)
 }
 
-func (api *API) DeleteCustomDomain(ctx context.Context, instanceID int, sleep time.Duration) (
-	map[string]any, error) {
-
+func (api *API) DeleteCustomDomain(ctx context.Context, instanceID int64, sleep time.Duration) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/instances/%d/custom-domain", instanceID)
@@ -131,8 +121,9 @@ func (api *API) DeleteCustomDomain(ctx context.Context, instanceID int, sleep ti
 		failed:       &failed,
 	})
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return api.waitUntilCustomDomainConfigured(ctx, instanceID, false, sleep)
+	_, err = api.waitUntilCustomDomainConfigured(ctx, instanceID, false, "", sleep)
+	return err
 }

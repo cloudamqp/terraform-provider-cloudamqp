@@ -185,24 +185,26 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		return req.URL.Path == "/login"
 	})
 
-	c.ProtoV5ProviderFactories = map[string]func() (tfprotov5.ProviderServer, error){
+	c.ProtoV5ProviderFactories = muxProviderFactories(rec.GetDefaultClient())
+
+	resource.Test(t, c)
+}
+
+// muxProviderFactories serves the SDK v2 and framework providers as one provider, the same way
+// as main.go. Unit tests pass http.DefaultClient, VCR tests pass the recorder client.
+func muxProviderFactories(client *http.Client) map[string]func() (tfprotov5.ProviderServer, error) {
+	return map[string]func() (tfprotov5.ProviderServer, error){
 		"cloudamqp": func() (tfprotov5.ProviderServer, error) {
-			ctx := context.Background()
-
-			muxServer, err := tf5muxserver.NewMuxServer(ctx,
-				Provider("1.0", rec.GetDefaultClient()).GRPCProvider,
-				providerserver.NewProtocol5(New("1.0", rec.GetDefaultClient())),
+			muxServer, err := tf5muxserver.NewMuxServer(context.Background(),
+				Provider("1.0", client).GRPCProvider,
+				providerserver.NewProtocol5(New("1.0", client)),
 			)
-
 			if err != nil {
 				return nil, err
 			}
-
 			return muxServer.ProviderServer(), nil
 		},
 	}
-
-	resource.Test(t, c)
 }
 
 func requestURIMatcher(request *http.Request, interaction cassette.Request) bool {

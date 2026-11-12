@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"time"
 
-	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/network"
+	instanceModel "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/instance"
+	networkModel "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/network"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func (api *API) ListInstances(ctx context.Context) ([]map[string]any, error) {
+func (api *API) ListInstances(ctx context.Context) ([]instanceModel.InstanceResponse, error) {
 	var (
-		data   []map[string]any
+		data   []instanceModel.InstanceResponse
 		failed map[string]any
 		path   = "api/instances"
 	)
@@ -32,9 +33,9 @@ func (api *API) ListInstances(ctx context.Context) ([]map[string]any, error) {
 	return data, nil
 }
 
-func (api *API) ListVpcs(ctx context.Context) ([]model.VpcResponse, error) {
+func (api *API) ListVpcs(ctx context.Context) ([]networkModel.VpcResponse, error) {
 	var (
-		data   []model.VpcResponse
+		data   []networkModel.VpcResponse
 		failed map[string]any
 		path   = "/api/vpcs"
 	)
@@ -49,13 +50,13 @@ func (api *API) ListVpcs(ctx context.Context) ([]model.VpcResponse, error) {
 		failed:       &failed,
 	})
 	if err != nil {
-		return []model.VpcResponse{}, fmt.Errorf("failed to read VPC: %w", err)
+		return []networkModel.VpcResponse{}, fmt.Errorf("failed to read VPC: %w", err)
 	}
 
 	for i := range data {
 		name, err := api.readVpcName(ctx, data[i].ID)
 		if err != nil {
-			return []model.VpcResponse{}, fmt.Errorf("failed to read VPC name: %w", err)
+			return []networkModel.VpcResponse{}, fmt.Errorf("failed to read VPC name: %w", err)
 		}
 		data[i].VpcName = name
 	}

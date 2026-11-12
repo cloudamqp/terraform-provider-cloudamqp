@@ -109,7 +109,7 @@ func (api *API) DeleteVPC(ctx context.Context, vpcID int) error {
 	})
 }
 
-func (api *API) pollForVpcReady(ctx context.Context, vpcID int) error {
+func (api *API) pollForVpcReady(ctx context.Context, vpcID int64) error {
 	var (
 		failed map[string]any
 		path   = fmt.Sprintf("/api/vpcs/%d/vpc-peering/info", vpcID)
@@ -129,7 +129,7 @@ func (api *API) pollForVpcReady(ctx context.Context, vpcID int) error {
 }
 
 // readVpcName - retrieves external cloud provider VPC name
-func (api *API) readVpcName(ctx context.Context, vpcID int) (string, error) {
+func (api *API) readVpcName(ctx context.Context, vpcID int64) (string, error) {
 	var (
 		data   map[string]any
 		failed map[string]any

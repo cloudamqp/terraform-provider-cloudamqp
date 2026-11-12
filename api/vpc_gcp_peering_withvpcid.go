@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/network"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
@@ -118,20 +119,16 @@ func (api *API) RemoveVpcGcpPeeringWithVpcId(ctx context.Context, vpcID, peerID 
 }
 
 // ReadVpcGcpInfoWithVpcId: reads the VPC info from the API
-func (api *API) ReadVpcGcpInfoWithVpcId(ctx context.Context, vpcID string, sleep, timeout int) (
-	map[string]any, error) {
+func (api *API) ReadVpcGcpInfoWithVpcId(ctx context.Context, vpcID string, sleep int64) (*model.VpcGcpInfoResponse, error) {
 
 	var (
-		data   map[string]any
+		data   *model.VpcGcpInfoResponse
 		failed map[string]any
 		path   = fmt.Sprintf("/api/vpcs/%s/vpc-peering/info", vpcID)
 	)
 
-	ctxTimeout, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-	defer cancel()
-
-	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d timeout=%d", path, sleep, timeout))
-	err := api.callWithRetry(ctxTimeout, api.sling.New().Get(path), retryRequest{
+	tflog.Debug(ctx, fmt.Sprintf("method=GET path=%s sleep=%d", path, sleep))
+	err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
 		functionName:    "ReadVpcGcpInfoWithVpcId",
 		resourceName:    "VPC GCP Info",
 		attempt:         1,
@@ -144,7 +141,7 @@ func (api *API) ReadVpcGcpInfoWithVpcId(ctx context.Context, vpcID string, sleep
 		return nil, err
 	}
 
-	if len(data) == 0 {
+	if data == nil {
 		return nil, nil
 	}
 

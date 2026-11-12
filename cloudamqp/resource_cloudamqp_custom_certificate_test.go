@@ -15,7 +15,7 @@ import (
 // export TEST_CERTIFICATE_PRIVATE_KEY=$(awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' certs/server.key)
 
 // TestAccCustomCertificate_Version: Creating dedicated AWS instance, upload custom certificate and
-// trigger replacement with version change.
+// trigger an in-place update with version change.
 func TestAccCustomCertificate_Version(t *testing.T) {
 	t.Parallel()
 
@@ -67,7 +67,7 @@ func TestAccCustomCertificate_Version(t *testing.T) {
 						tags   = []
 					}
 					
-					# Increment version to trigger force new, restore default and re-upload custom certificate.
+					# Increment version to trigger an in-place update and re-upload custom certificate.
 					resource "cloudamqp_custom_certificate" "custom_cert" {
 						instance_id = cloudamqp_instance.instance.id
 						ca          = "%s"
@@ -141,7 +141,7 @@ func TestAccCustomCertificate_KeyID(t *testing.T) {
 						tags   = []
 					}
 					
-					# Increment version to trigger force new, restore default and re-upload custom certificate.
+					# Increment key_id to trigger an in-place update and re-upload  custom certificate.
 					resource "cloudamqp_custom_certificate" "custom_cert" {
 						instance_id = cloudamqp_instance.instance.id
 						ca          = "%s"

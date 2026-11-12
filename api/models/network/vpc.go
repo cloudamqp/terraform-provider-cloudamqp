@@ -8,7 +8,7 @@ type VpcRequest struct {
 }
 
 type VpcResponse struct {
-	ID      int      `json:"id"`
+	ID      int64    `json:"id"`
 	Name    string   `json:"name"`
 	Region  string   `json:"region"`
 	Subnet  string   `json:"subnet"`
