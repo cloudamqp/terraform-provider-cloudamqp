@@ -98,7 +98,7 @@ func (r *teamMemberResource) Schema(ctx context.Context, req resource.SchemaRequ
 					),
 				},
 				Validators: []validator.String{
-					stringvalidator.OneOfCaseInsensitive(assignableTeamRoleNames...),
+					stringvalidator.OneOf(assignableTeamRoleNames...),
 				},
 			},
 			"tags": schema.SetAttribute{
