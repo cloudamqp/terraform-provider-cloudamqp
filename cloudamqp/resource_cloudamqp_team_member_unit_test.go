@@ -70,7 +70,7 @@ func (f *fakeTeamAPI) handle(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	email := r.URL.Query().Get("email")
 	switch {
-	case r.Method == http.MethodPost && path == "/api/team/invite":
+	case r.Method == http.MethodPost && path == "/api/team/invites":
 		f.invite(w, r)
 	case r.Method == http.MethodPost && path == "/api/team/remove":
 		f.remove(w, r)
@@ -103,9 +103,9 @@ func (f *fakeTeamAPI) handle(w http.ResponseWriter, r *http.Request) {
 
 func (f *fakeTeamAPI) invite(w http.ResponseWriter, r *http.Request) {
 	var body struct {
-		Email string `json:"email"`
-		Role  string `json:"role"`
-		Tags  string `json:"tags"`
+		Email string   `json:"email"`
+		Role  string   `json:"role"`
+		Tags  []string `json:"tags"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]any{"error": err.Error()})
@@ -127,12 +127,11 @@ func (f *fakeTeamAPI) invite(w http.ResponseWriter, r *http.Request) {
 		id:    strconv.Itoa(f.nextInviteID),
 		email: body.Email,
 		role:  role,
-		tags:  splitTags(body.Tags),
+		tags:  body.Tags,
 	}
 	f.nextInviteID++
 	f.invites = append(f.invites, invite)
-	id, _ := strconv.Atoi(invite.id)
-	writeJSON(w, http.StatusOK, map[string]any{"message": "Email invitation sent", "id": id})
+	writeJSON(w, http.StatusCreated, inviteJSON(invite))
 }
 
 func (f *fakeTeamAPI) handleInvite(w http.ResponseWriter, r *http.Request, id string) {
@@ -236,16 +235,6 @@ func (f *fakeTeamAPI) find(entries []*fakeTeamEntry, email string) *fakeTeamEntr
 		}
 	}
 	return nil
-}
-
-func splitTags(tags string) []string {
-	result := []string{}
-	for _, tag := range strings.Split(tags, ",") {
-		if tag != "" {
-			result = append(result, tag)
-		}
-	}
-	return result
 }
 
 func inviteJSON(invite *fakeTeamEntry) map[string]any {
@@ -383,7 +372,7 @@ func TestTeamMember_PendingInviteReplace(t *testing.T) {
 		{
 			Config: teamMemberUnitTestConfig(server.URL, `tags = ["a"]`),
 			Check: resource.ComposeAggregateTestCheckFunc(
-				fake.checkWrites("POST /api/team/invite"),
+				fake.checkWrites("POST /api/team/invites"),
 				resource.TestCheckResourceAttr(teamMemberResourceName, "status", "pending"),
 				resource.TestCheckResourceAttr(teamMemberResourceName, "invite_id", "1"),
 				resource.TestCheckResourceAttr(teamMemberResourceName, "role", "member"),
@@ -392,7 +381,7 @@ func TestTeamMember_PendingInviteReplace(t *testing.T) {
 		{
 			Config: teamMemberUnitTestConfig(server.URL, `tags = ["a", "b"]`),
 			Check: resource.ComposeAggregateTestCheckFunc(
-				fake.checkWrites("DELETE /api/team/invites/1", "POST /api/team/invite"),
+				fake.checkWrites("DELETE /api/team/invites/1", "POST /api/team/invites"),
 				resource.TestCheckResourceAttr(teamMemberResourceName, "status", "pending"),
 				resource.TestCheckResourceAttr(teamMemberResourceName, "invite_id", "2"),
 				resource.TestCheckResourceAttr(teamMemberResourceName, "tags.#", "2"),
@@ -404,7 +393,7 @@ func TestTeamMember_PendingInviteReplace(t *testing.T) {
   tags = ["a", "b"]
 `),
 			Check: resource.ComposeAggregateTestCheckFunc(
-				fake.checkWrites("DELETE /api/team/invites/2", "POST /api/team/invite"),
+				fake.checkWrites("DELETE /api/team/invites/2", "POST /api/team/invites"),
 				resource.TestCheckResourceAttr(teamMemberResourceName, "invite_id", "3"),
 				resource.TestCheckResourceAttr(teamMemberResourceName, "role", "monitor"),
 			),
@@ -422,7 +411,7 @@ func TestTeamMember_AcceptedInvite(t *testing.T) {
 	teamMemberUnitTest(t, []resource.TestStep{
 		{
 			Config: teamMemberUnitTestConfig(server.URL, `tags = ["a"]`),
-			Check:  fake.checkWrites("POST /api/team/invite"),
+			Check:  fake.checkWrites("POST /api/team/invites"),
 		},
 		{
 			PreConfig: func() { fake.accept(teamMemberTestEmail) },
@@ -541,7 +530,7 @@ func TestTeamMember_AcceptedBetweenPlanAndApply(t *testing.T) {
 	teamMemberUnitTest(t, []resource.TestStep{
 		{
 			Config: teamMemberUnitTestConfig(server.URL, `tags = ["a"]`),
-			Check:  fake.checkWrites("POST /api/team/invite"),
+			Check:  fake.checkWrites("POST /api/team/invites"),
 		},
 		{
 			PreConfig: func() {

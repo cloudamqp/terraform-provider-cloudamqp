@@ -252,18 +252,6 @@ func (r *teamMemberResource) Create(ctx context.Context, req resource.CreateRequ
 		}
 	}
 
-	// POST /api/team/invite joins tags with "," and the backend splits on ",", so a tag
-	// name containing a comma would silently become two different tags.
-	for _, tag := range tags {
-		if strings.Contains(tag, ",") {
-			resp.Diagnostics.AddError(
-				"Invalid Tag Name",
-				fmt.Sprintf("Tag %q contains a comma, which isn't supported when inviting a member.", tag),
-			)
-			return
-		}
-	}
-
 	role := ""
 	if !plan.Role.IsNull() && !plan.Role.IsUnknown() {
 		role = plan.Role.ValueString()
@@ -272,7 +260,7 @@ func (r *teamMemberResource) Create(ctx context.Context, req resource.CreateRequ
 	invite, err := r.client.InviteTeamMember(ctx, model.InviteRequest{
 		Email: email,
 		Role:  role,
-		Tags:  strings.Join(tags, ","),
+		Tags:  tags,
 	})
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -282,16 +270,7 @@ func (r *teamMemberResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
-	// POST /api/team/invite defaults an omitted role to "member" server-side.
-	if role == "" {
-		role = "member"
-	}
-
-	state, diags := inviteState(ctx, displayEmail, &model.InviteByEmailResponse{
-		ID:   invite.ID,
-		Role: role,
-		Tags: tags,
-	})
+	state, diags := inviteState(ctx, displayEmail, invite)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -553,7 +532,7 @@ func memberState(
 }
 
 func inviteState(
-	ctx context.Context, displayEmail string, invite *model.InviteByEmailResponse,
+	ctx context.Context, displayEmail string, invite *model.InviteResponse,
 ) (*teamMemberResourceModel, diag.Diagnostics) {
 	var diags diag.Diagnostics
 	tagsList, tagsDiags := types.ListValueFrom(ctx, types.StringType, invite.Tags)

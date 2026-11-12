@@ -1,15 +1,10 @@
 package team
 
-// InviteRequest is the body for POST /api/team/invite. Tags is comma-separated.
+// InviteRequest is the body for POST /api/team/invites.
 type InviteRequest struct {
-	Email string `json:"email"`
-	Role  string `json:"role,omitempty"`
-	Tags  string `json:"tags,omitempty"`
-}
-
-// InviteResponse is the shape returned by POST /api/team/invite.
-type InviteResponse struct {
-	ID int `json:"id"`
+	Email string   `json:"email"`
+	Role  string   `json:"role,omitempty"`
+	Tags  []string `json:"tags,omitempty"`
 }
 
 // MemberUpdateRequest is the body for PUT /api/team/:user_id. An empty Tags
@@ -34,8 +29,9 @@ type MemberByEmailResponse struct {
 	TfaAuthEnabled *bool    `json:"tfa_auth_enabled,omitempty"`
 }
 
-// InviteByEmailResponse is the shape returned by GET /api/team/invites?email=.
-type InviteByEmailResponse struct {
+// InviteResponse is the shape of a pending invite, returned by POST /api/team/invites
+// and the GET /api/team/invites endpoints.
+type InviteResponse struct {
 	ID      int      `json:"id"`
 	Email   string   `json:"email"`
 	Role    string   `json:"role"`

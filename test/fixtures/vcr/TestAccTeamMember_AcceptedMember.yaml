@@ -6,14 +6,14 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 79
+        content_length: 81
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"email":"test@example.com","role":"member","tags":"tf-acc-test-member-tag-a"}
+            {"email":"test@example.com","role":"member","tags":["tf-acc-test-member-tag-a"]}
         form: {}
         headers:
             Authorization:
@@ -22,7 +22,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/invite
+        url: http://localhost:9393/api/team/invites
         method: POST
       response:
         proto: HTTP/1.1
@@ -30,27 +30,33 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 43
+        content_length: 124
         uncompressed: false
-        body: '{"message":"Email invitation sent","id":23}'
+        body: '{"id":27,"email":"test@example.com","role":"member","tags":["tf-acc-test-member-tag-a"],"created":"2026-11-12 09:50:12 UTC"}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "43"
+                - "124"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 7a0b7267-e5d7-4af6-bb39-63c059f9b081
-        status: 200 OK
-        code: 200
-        duration: 34.318122ms
+                - f3fec16a-0776-4a5c-b40b-36d9b9df57d5
+        status: 201 Created
+        code: 201
+        duration: 131.72468ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -69,7 +75,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/invites/23
+        url: http://localhost:9393/api/team/invites/27
         method: GET
       response:
         proto: HTTP/1.1
@@ -79,7 +85,7 @@ interactions:
         trailer: {}
         content_length: 124
         uncompressed: false
-        body: '{"id":23,"email":"test@example.com","role":"member","tags":["tf-acc-test-member-tag-a"],"created":"2026-10-16 09:30:59 UTC"}'
+        body: '{"id":27,"email":"test@example.com","role":"member","tags":["tf-acc-test-member-tag-a"],"created":"2026-11-12 09:50:12 UTC"}'
         headers:
             Cache-Control:
                 - no-cache
@@ -87,17 +93,23 @@ interactions:
                 - "124"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 5177d98b-da89-4eda-a99d-81c816973d68
+                - 8703cd99-9e99-465b-8cd1-21558ef02c71
         status: 200 OK
         code: 200
-        duration: 6.361922ms
+        duration: 7.76979ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -116,7 +128,7 @@ interactions:
                 - REDACTED
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/invites/23
+        url: http://localhost:9393/api/team/invites/27
         method: GET
       response:
         proto: HTTP/1.1
@@ -126,7 +138,7 @@ interactions:
         trailer: {}
         content_length: 40
         uncompressed: false
-        body: '{"error":"Pending invite 23 not found."}'
+        body: '{"error":"Pending invite 27 not found."}'
         headers:
             Cache-Control:
                 - no-cache
@@ -134,17 +146,23 @@ interactions:
                 - "40"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - eb6b559f-8f88-4867-bc1d-7e22d7fa095e
+                - 89fd5a02-676a-4a75-9d5f-cf44cedb8bd4
         status: 404 Not Found
         code: 404
-        duration: 7.284143ms
+        duration: 9.488828ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -181,17 +199,23 @@ interactions:
                 - "197"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 94537390-9521-4966-8a51-92af922d18c8
+                - 1fe7bae3-ab2c-434d-83cf-d2cf8836c60c
         status: 200 OK
         code: 200
-        duration: 6.821715ms
+        duration: 7.909418ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -218,27 +242,33 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 149
+        content_length: 195
         uncompressed: false
-        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a"]}'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"roles":["member","tf-acc-test-member-tag-a"],"role":"member","tags":["tf-acc-test-member-tag-a"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "149"
+                - "195"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 42be5e6e-8df3-4b98-9a44-188a2c3afe67
+                - 493ffffe-a27b-44ce-ac27-10e0ad04db08
         status: 200 OK
         code: 200
-        duration: 7.940697ms
+        duration: 8.848485ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -265,27 +295,33 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 149
+        content_length: 195
         uncompressed: false
-        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a"]}'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"roles":["member","tf-acc-test-member-tag-a"],"role":"member","tags":["tf-acc-test-member-tag-a"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "149"
+                - "195"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 0acccea0-ed74-421a-82a0-949f4f21089b
+                - 87b72ca6-21f7-4bb2-9a50-2a0746718667
         status: 200 OK
         code: 200
-        duration: 10.383941ms
+        duration: 8.150515ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -325,17 +361,23 @@ interactions:
                 - "45"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - e59eb2b4-e013-4f4c-92f9-dc6b0979c920
+                - af1de87f-65ac-4fad-bd81-eb50dd59f60a
         status: 200 OK
         code: 200
-        duration: 25.926934ms
+        duration: 34.38897ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -362,27 +404,33 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 176
+        content_length: 249
         uncompressed: false
-        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"]}'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"roles":["member","tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"],"role":"member","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "176"
+                - "249"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 916e2639-efba-4991-a8ab-448c2aa770fb
+                - d05506cf-23bb-484c-92c9-9fcbdcf5460a
         status: 200 OK
         code: 200
-        duration: 10.776716ms
+        duration: 9.921817ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -409,27 +457,33 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 176
+        content_length: 249
         uncompressed: false
-        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"]}'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"roles":["member","tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"],"role":"member","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "176"
+                - "249"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 6b940696-3f72-4f47-929a-77136ead4566
+                - a668ad58-baa6-4bf7-9cd7-0c6bc4322dad
         status: 200 OK
         code: 200
-        duration: 8.428272ms
+        duration: 7.951508ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -456,27 +510,33 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 176
+        content_length: 249
         uncompressed: false
-        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"]}'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"roles":["member","tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"],"role":"member","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "176"
+                - "249"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - bf833297-bea4-4b9d-83fe-a30ed8be128c
+                - 93db0aea-9d9c-4bab-bbed-39b1939bf63e
         status: 200 OK
         code: 200
-        duration: 9.025525ms
+        duration: 7.886134ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -516,17 +576,23 @@ interactions:
                 - "45"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 6e9b012e-13cf-44b2-8c65-5d46f7dc6e66
+                - ba110b96-574c-4d67-863c-f43df68ccbe0
         status: 200 OK
         code: 200
-        duration: 27.9443ms
+        duration: 32.210958ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -553,27 +619,33 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 149
+        content_length: 195
         uncompressed: false
-        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a"]}'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"roles":["member","tf-acc-test-member-tag-a"],"role":"member","tags":["tf-acc-test-member-tag-a"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "149"
+                - "195"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 0cdc6509-3ab0-44db-bc23-1538d7287d10
+                - 71f4a43d-0ceb-490f-b1ef-e8a1c0380cda
         status: 200 OK
         code: 200
-        duration: 8.641296ms
+        duration: 7.617866ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -600,27 +672,33 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 149
+        content_length: 195
         uncompressed: false
-        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a"]}'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"roles":["member","tf-acc-test-member-tag-a"],"role":"member","tags":["tf-acc-test-member-tag-a"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "149"
+                - "195"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 290fd72c-99d2-4b50-848d-65bfcc252b0e
+                - 897c350d-3140-47ab-9723-0f04a687ea16
         status: 200 OK
         code: 200
-        duration: 8.054193ms
+        duration: 7.768521ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -647,27 +725,33 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 149
+        content_length: 195
         uncompressed: false
-        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"member","tags":["tf-acc-test-member-tag-a"]}'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"roles":["member","tf-acc-test-member-tag-a"],"role":"member","tags":["tf-acc-test-member-tag-a"]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "149"
+                - "195"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 3ca44b3e-9688-4650-b069-fa94e9e32d6d
+                - 1dc2a5aa-55c4-457a-a6ba-6138905f3196
         status: 200 OK
         code: 200
-        duration: 10.042282ms
+        duration: 7.495485ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -707,17 +791,23 @@ interactions:
                 - "45"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - d9769422-d4b4-4fba-a95c-10c851ffba92
+                - d52d0800-8adc-455a-bf35-c37f2f046773
         status: 200 OK
         code: 200
-        duration: 25.188894ms
+        duration: 27.531512ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -744,27 +834,33 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 132
+        content_length: 160
         uncompressed: false
-        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"billing manager","tags":[]}'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"roles":["billing manager"],"role":"billing manager","tags":[]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "132"
+                - "160"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 4184aa82-094a-4cbe-b994-9fb4ce62aa65
+                - 16302b61-ac01-4d4a-a7d4-eec47bcc3eab
         status: 200 OK
         code: 200
-        duration: 8.906659ms
+        duration: 7.32399ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -791,27 +887,33 @@ interactions:
         proto_minor: 1
         transfer_encoding: []
         trailer: {}
-        content_length: 132
+        content_length: 160
         uncompressed: false
-        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"role":"billing manager","tags":[]}'
+        body: '{"id":"8849c6b5-a975-4a3e-8991-f31cc49d5784","email":"test@example.com","tfa_auth_enabled":false,"roles":["billing manager"],"role":"billing manager","tags":[]}'
         headers:
             Cache-Control:
                 - no-cache
             Content-Length:
-                - "132"
+                - "160"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - aef8ad81-1201-4734-8a34-6a87dd1ea7cc
+                - d2d135cc-3236-49a1-b786-b0e42219a4a9
         status: 200 OK
         code: 200
-        duration: 7.512877ms
+        duration: 7.375919ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -848,17 +950,23 @@ interactions:
                 - "2"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - e8c49911-de67-49b9-af32-22e1af9f7fa3
+                - f8913d07-c0d4-4519-94da-88d602633dff
         status: 200 OK
         code: 200
-        duration: 9.194294ms
+        duration: 7.486788ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -895,17 +1003,23 @@ interactions:
                 - "162"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 93da399d-14d7-4fe3-93d4-a95ea47b419d
+                - c48aca76-58ce-48ec-91e8-f7742fc12008
         status: 200 OK
         code: 200
-        duration: 9.270239ms
+        duration: 7.012581ms
     - id: 19
       request:
         proto: HTTP/1.1
@@ -945,14 +1059,20 @@ interactions:
                 - "49"
             Content-Type:
                 - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 96c9c908-ea56-495c-8cbe-155ed4e03a67
+                - c043505c-283e-45c8-b74f-b1aaa1bfa885
         status: 200 OK
         code: 200
-        duration: 22.168597ms
+        duration: 22.503727ms

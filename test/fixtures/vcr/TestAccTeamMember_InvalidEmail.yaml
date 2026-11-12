@@ -6,14 +6,14 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 25
+        content_length: 62
         transfer_encoding: []
         trailer: {}
         host: localhost:9393
         remote_addr: ""
         request_uri: ""
         body: |
-            {"email":"not-an-email"}
+            {"email":"not-an-email","tags":["tf-acc-test-invalid-email"]}
         form: {}
         headers:
             Authorization:
@@ -22,7 +22,7 @@ interactions:
                 - application/json
             User-Agent:
                 - terraform-provider-cloudamqp_v1.0
-        url: http://localhost:9393/api/team/invite
+        url: http://localhost:9393/api/team/invites
         method: POST
       response:
         proto: HTTP/1.1
@@ -40,18 +40,20 @@ interactions:
                 - "25"
             Content-Type:
                 - application/json
-            Nel:
-                - '{"report_to":"default","max_age":31536000,"include_subdomains":true}'
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
             Referrer-Policy:
                 - strict-origin-when-cross-origin
-            Report-To:
-                - '{"group":"default","max_age":31536000,"endpoints":[{"url":"https://84codes.report-uri.com/a/t/g"}],"include_subdomains":true}'
             Set-Cookie:
                 - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
             X-Content-Type-Options:
                 - nosniff
             X-Request-Id:
-                - 397ecfbb-de85-4ed1-81d5-89931e2ddf7c
+                - c4ef0d4e-613c-468a-8522-46eb24750fba
         status: 400 Bad Request
         code: 400
-        duration: 8.30878ms
+        duration: 59.032565ms

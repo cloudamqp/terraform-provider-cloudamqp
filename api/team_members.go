@@ -19,13 +19,12 @@ func teamAPIError(err error, failed map[string]any) error {
 	return err
 }
 
-// InviteTeamMember invites an email
-// POST /api/team/invite. Return the invite response or an error.
+// InviteTeamMember invites an email via POST /api/team/invites and returns the created invite.
 func (api *API) InviteTeamMember(ctx context.Context, params model.InviteRequest) (*model.InviteResponse, error) {
 	var (
 		data   model.InviteResponse
 		failed map[string]any
-		path   = "/api/team/invite"
+		path   = "/api/team/invites"
 	)
 
 	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%v", path, params))
@@ -76,9 +75,9 @@ func (api *API) GetTeamMemberByEmail(ctx context.Context, email string) (*model.
 // GET /api/team/invites?email=, which always returns an array (filtered to
 // 0-or-1 invites). Returns nil, nil if no pending invite exists for that
 // email.
-func (api *API) GetTeamInviteByEmail(ctx context.Context, email string) (*model.InviteByEmailResponse, error) {
+func (api *API) GetTeamInviteByEmail(ctx context.Context, email string) (*model.InviteResponse, error) {
 	var (
-		data   []model.InviteByEmailResponse
+		data   []model.InviteResponse
 		failed map[string]any
 		path   = fmt.Sprintf("/api/team/invites?email=%s", url.QueryEscape(email))
 	)
@@ -134,9 +133,9 @@ func (api *API) GetTeamMember(ctx context.Context, userID string) (*model.Member
 // GetTeamInvite fetches a specific pending invite by id via GET
 // /api/team/invites/:id. Returns nil, nil if it no longer exists (404), e.g.
 // it was accepted or revoked since the last read.
-func (api *API) GetTeamInvite(ctx context.Context, inviteID string) (*model.InviteByEmailResponse, error) {
+func (api *API) GetTeamInvite(ctx context.Context, inviteID string) (*model.InviteResponse, error) {
 	var (
-		data   model.InviteByEmailResponse
+		data   model.InviteResponse
 		failed map[string]any
 		path   = fmt.Sprintf("/api/team/invites/%s", url.PathEscape(inviteID))
 	)
