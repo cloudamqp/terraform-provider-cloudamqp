@@ -47,6 +47,10 @@ type fakeTeamAPI struct {
 
 	// Simulates the invite being accepted right before the provider revokes it.
 	acceptOnRevoke bool
+	// Number of invites answered with the API's rate limit before one goes through.
+	rateLimitedInvites int
+	// Simulates the team having sent its maximum number of invites for the day.
+	inviteLimitReached bool
 }
 
 func newFakeTeamAPI(t *testing.T) (*fakeTeamAPI, *httptest.Server) {
@@ -103,6 +107,16 @@ func (f *fakeTeamAPI) handle(w http.ResponseWriter, r *http.Request) {
 }
 
 func (f *fakeTeamAPI) invite(w http.ResponseWriter, r *http.Request) {
+	if f.inviteLimitReached {
+		writeJSON(w, http.StatusTooManyRequests,
+			map[string]any{"error": "Invite limit reached (max 80 per day). Try again later."})
+		return
+	}
+	if f.rateLimitedInvites > 0 {
+		f.rateLimitedInvites--
+		writeJSON(w, http.StatusTooManyRequests, map[string]any{"error": "Too many requests"})
+		return
+	}
 	var body struct {
 		Email string   `json:"email"`
 		Role  string   `json:"role"`
@@ -512,6 +526,44 @@ func TestTeamMember_TagLimits(t *testing.T) {
 			}
 		})
 	}
+}
+
+// TestTeamMember_RateLimit: the API's rate limit is retried with backoff, the daily invite
+// limit fails at once since retrying within minutes doesn't help.
+func TestTeamMember_RateLimit(t *testing.T) {
+	t.Parallel()
+
+	t.Run("retried", func(t *testing.T) {
+		t.Parallel()
+		fake, server := newFakeTeamAPI(t)
+		fake.rateLimitedInvites = 1
+
+		teamMemberUnitTest(t, []resource.TestStep{
+			{
+				Config: teamMemberUnitTestConfig(server.URL, `tags = ["a"]`),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					fake.checkWrites("POST /api/team/invites", "POST /api/team/invites"),
+					resource.TestCheckResourceAttr(teamMemberResourceName, "status", "pending"),
+				),
+			},
+		})
+	})
+
+	t.Run("daily invite limit", func(t *testing.T) {
+		t.Parallel()
+		fake, server := newFakeTeamAPI(t)
+		fake.inviteLimitReached = true
+
+		teamMemberUnitTest(t, []resource.TestStep{
+			{
+				Config:      teamMemberUnitTestConfig(server.URL, `tags = ["a"]`),
+				ExpectError: regexp.MustCompile(`Invite limit reached \(max 80 per day\)`),
+			},
+		})
+		if writes := len(fake.writes); writes != 1 {
+			t.Errorf("expected 1 invite request, got %d: %v", writes, fake.writes)
+		}
+	})
 }
 
 // TestTeamMember_PendingInviteReplace: changing tags or role on a pending invite revokes it and

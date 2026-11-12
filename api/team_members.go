@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"strings"
 	"time"
 
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/team"
@@ -19,6 +20,13 @@ func teamAPIError(err error, failed map[string]any) error {
 	return err
 }
 
+// isInviteLimitReached is true for the 429 the backend gives when the team has sent its maximum
+// number of invites for the day, unlike the rate limit it doesn't help to retry within minutes.
+func isInviteLimitReached(failed map[string]any) bool {
+	msg, _ := failed["error"].(string)
+	return strings.HasPrefix(msg, "Invite limit reached")
+}
+
 // InviteTeamMember invites an email via POST /api/team/invites and returns the created invite.
 func (api *API) InviteTeamMember(ctx context.Context, params model.InviteRequest) (*model.InviteResponse, error) {
 	var (
@@ -29,12 +37,13 @@ func (api *API) InviteTeamMember(ctx context.Context, params model.InviteRequest
 
 	tflog.Debug(ctx, fmt.Sprintf("method=POST path=%s params=%v", path, params))
 	err := api.callWithRetry(ctx, api.sling.New().Post(path).BodyJSON(params), retryRequest{
-		functionName: "InviteTeamMember",
-		resourceName: "Team Member",
-		attempt:      1,
-		sleep:        5 * time.Second,
-		data:         &data,
-		failed:       &failed,
+		functionName:       "InviteTeamMember",
+		resourceName:       "Team Member",
+		attempt:            1,
+		sleep:              5 * time.Second,
+		data:               &data,
+		failed:             &failed,
+		stopRateLimitRetry: isInviteLimitReached,
 	})
 	if err != nil {
 		return nil, teamAPIError(err, failed)

@@ -6,6 +6,7 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/team"
@@ -22,6 +23,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
+
+// teamMemberTimeout lets requests retry the API's rate limit, which needs a deadline.
+const teamMemberTimeout = 5 * time.Minute
 
 // assignableTeamRoleNames are the base roles a member can be assigned.
 var assignableTeamRoleNames = []string{
@@ -242,6 +246,9 @@ func (r *teamMemberResource) ImportState(ctx context.Context, req resource.Impor
 }
 
 func (r *teamMemberResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	ctx, cancel := context.WithTimeout(ctx, teamMemberTimeout)
+	defer cancel()
+
 	var plan teamMemberResourceModel
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -291,6 +298,9 @@ func (r *teamMemberResource) Create(ctx context.Context, req resource.CreateRequ
 }
 
 func (r *teamMemberResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	ctx, cancel := context.WithTimeout(ctx, teamMemberTimeout)
+	defer cancel()
+
 	var state teamMemberResourceModel
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
@@ -322,6 +332,9 @@ func (r *teamMemberResource) Read(ctx context.Context, req resource.ReadRequest,
 }
 
 func (r *teamMemberResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	ctx, cancel := context.WithTimeout(ctx, teamMemberTimeout)
+	defer cancel()
+
 	var plan, state teamMemberResourceModel
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
@@ -384,6 +397,9 @@ func (r *teamMemberResource) Update(ctx context.Context, req resource.UpdateRequ
 }
 
 func (r *teamMemberResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	ctx, cancel := context.WithTimeout(ctx, teamMemberTimeout)
+	defer cancel()
+
 	var state teamMemberResourceModel
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
