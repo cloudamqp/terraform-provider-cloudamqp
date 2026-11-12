@@ -7,51 +7,12 @@ description: |-
 
 # cloudamqp_team_member
 
-This resource allows you to manage a team member as a single resource across both states it can
-be in: a pending invite before it's accepted, and an accepted member afterwards. `status` reports
-which one currently applies. The resource transparently keeps working as the invite transitions from one to the other.
-
-The `"member"`/`"monitor"` roles require at least one tag, and all other roles can't have tags.
-A tag name that doesn't exist yet is created automatically, the same way tagging an instance or VPC
-works. Tags are only cleared as a side effect of switching to a role without tags.
-
-Tags are case-sensitive for access. If the team already has a tag that only differs in letter case,
-for example `"Prod"` when you configure `"prod"`, the member gets the team's `"Prod"` tag instead of
-a new one. Terraform keeps your spelling in state, so there's no diff, and shows a warning on apply.
-For the same reason, tags that only differ in letter case from each other, like `["Prod", "prod"]`,
-are rejected.
-
-A pending invite can't be updated. Changing `role` or `tags` while `status` is `pending` replaces
-the resource: the invite is revoked and a new one is sent, with a new `invite_id`. The plan shows
-this as a replacement with a warning, so it needs to be approved like any other replacement. Note
-that `terraform apply -auto-approve` skips that confirmation. Once the invite is accepted, the same
-changes are updated in place.
-
-If the invite is accepted between plan and apply, the apply stops with an error and nothing is
-changed. Run plan again: it picks up the new member and updates its role and tags in place.
-
-For a SAML-configured team, the IdP may overwrite `role`/`tags` again on the member's next login
-regardless of what Terraform configures. If that happens, the next plan will show the drift like
-any other out-of-band change, and applying it sets the configured values again until the next
-login. To let the IdP own `role`/`tags`, ignore changes to them. Terraform still sends the invite
-and removes the member:
-
-```hcl
-resource "cloudamqp_team_member" "this" {
-  email = "user@example.com"
-  role  = "member"
-  tags  = ["production"]
-
-  lifecycle {
-    ignore_changes = [role, tags]
-  }
-}
-```
+This resource manages a team member through both of its states: a pending invite, and an
+accepted member once the invite is accepted. `status` shows which state applies.
 
 ## Example Usage
 
 ```hcl
-# Invite a new team member
 resource "cloudamqp_team_member" "this" {
   email = "user@example.com"
   role  = "member"
@@ -66,8 +27,8 @@ resource "cloudamqp_team_member" "this" {
   `member`, `monitor`, `devops`. Changing this forces a new resource while the invite is pending.
 * `tags`  - (Optional) Set of tag names granting access to tagged instances. The order
   doesn't matter. A tag that doesn't exist yet is created automatically. Required (at least one)
-  for the `member`/`monitor` roles, not allowed for other roles. At most 300 tags, each shorter
-  than 500 characters. Changing this forces a new resource while the invite is pending.
+  for the `member`/`monitor` roles, not allowed for other roles. Changing this forces a new
+  resource while the invite is pending.
 
 ## Attributes Reference
 
@@ -96,3 +57,33 @@ import {
 Or with Terraform CLI:
 
 `terraform import cloudamqp_team_member.this user@example.com`
+
+## Notes
+
+### Pending invites
+
+A pending invite can't be updated. If you change `role` or `tags` while `status` is `pending`,
+the invite is revoked and a new one is sent. The plan shows this as a replacement. Note that
+`terraform apply -auto-approve` skips the confirmation. After the invite is accepted, the same
+changes are updated in place.
+
+If the invite is accepted between plan and apply, the apply stops and nothing is changed. Run
+plan again to update the member instead.
+
+### Tag letter case
+
+Tag access is case-sensitive. If the team already has `"Prod"` and you configure `"prod"`, the
+member gets the existing `"Prod"` tag. Terraform keeps your spelling in state and shows a
+warning on apply. For the same reason, tags that only differ in case, like `["Prod", "prod"]`,
+are rejected.
+
+### SAML teams
+
+The IdP may overwrite `role` and `tags` on the member's next login. The next plan then shows
+this as drift. To let the IdP own these values, ignore changes to them:
+
+```hcl
+  lifecycle {
+    ignore_changes = [role, tags]
+  }
+```
