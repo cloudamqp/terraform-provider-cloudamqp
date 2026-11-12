@@ -39,6 +39,7 @@ type fakeFirewallAPI struct {
 	notConfigured int                // 400 responses left
 	gone          bool               // the instance is deleted, everything responds 404
 	failWrite     map[string]any     // body of a 400 response to write calls
+	failConfigure int                // status code returned by the configured endpoint, when set
 }
 
 func newFakeFirewallAPI(t *testing.T) (*fakeFirewallAPI, *httptest.Server) {
@@ -83,6 +84,10 @@ func (f *fakeFirewallAPI) handle(w http.ResponseWriter, r *http.Request) {
 		}
 		writeJSON(w, http.StatusOK, rules)
 	case r.Method == http.MethodGet && r.URL.Path == firewallPath+"/configured":
+		if f.failConfigure != 0 {
+			writeJSON(w, f.failConfigure, map[string]any{"error": "internal error"})
+			return
+		}
 		if f.notConfigured > 0 {
 			f.notConfigured--
 			writeJSON(w, http.StatusBadRequest, map[string]any{"error_code": 40001,
@@ -399,6 +404,41 @@ func TestFirewall_ValidationError(t *testing.T) {
 			ExpectError: regexp.MustCompile(`Port 80 is not allowed for public IP addresses`),
 		},
 	}, nil)
+}
+
+// TestFirewall_ConfiguredError: an error from the configured endpoint that is not "still
+// configuring" fails the create at once, instead of waiting until the timeout.
+func TestFirewall_ConfiguredError(t *testing.T) {
+	t.Parallel()
+	fake, server := newFakeFirewallAPI(t)
+	fake.failConfigure = http.StatusInternalServerError
+
+	firewallUnitTest(t, []resource.TestStep{
+		{
+			Config:      firewallResourceConfig(server.URL, firewallDefaultRule),
+			ExpectError: regexp.MustCompile(`unexpected status code: 500`),
+		},
+	}, nil)
+}
+
+// TestFirewall_OnlyTimeoutChanged: changing only sleep or timeout updates the state without
+// sending the rules to the API.
+func TestFirewall_OnlyTimeoutChanged(t *testing.T) {
+	t.Parallel()
+	fake, server := newFakeFirewallAPI(t)
+
+	firewallUnitTest(t, []resource.TestStep{
+		{
+			Config: firewallResourceConfig(server.URL, firewallDefaultRule),
+		},
+		{
+			Config: firewallResourceConfig(server.URL, firewallDefaultRule+"\n  timeout = 600\n"),
+			Check: resource.ComposeAggregateTestCheckFunc(
+				fake.checkRequests(firewallCreateRequest),
+				resource.TestCheckResourceAttr(firewallResourceName, "timeout", "600"),
+			),
+		},
+	}, fake.checkRequests(firewallCreateRequest, firewallDeleteRequest))
 }
 
 // TestFirewall_NotConfigured: create keeps waiting while the rules are being configured.

@@ -187,31 +187,7 @@ func (r *firewallResource) Create(ctx context.Context, req resource.CreateReques
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	params := make([]model.FirewallRuleRequest, len(plan.Rules))
-
-	for i, rule := range plan.Rules {
-		params[i].Ip = rule.IP.ValueString()
-
-		if !rule.Description.IsNull() && !rule.Description.IsUnknown() {
-			params[i].Description = rule.Description.ValueString()
-		}
-
-		if !rule.Services.IsNull() && !rule.Services.IsUnknown() {
-			var services []string
-			rule.Services.ElementsAs(ctx, &services, false)
-			params[i].Services = services
-		} else {
-			params[i].Services = []string{}
-		}
-
-		if !rule.Ports.IsNull() && !rule.Ports.IsUnknown() {
-			var ports []int64
-			rule.Ports.ElementsAs(ctx, &ports, false)
-			params[i].Ports = ports
-		} else {
-			params[i].Ports = []int64{}
-		}
-	}
+	params := firewallRuleRequests(ctx, plan.Rules)
 
 	err := r.client.CreateFirewallSettings(timeoutCtx, instanceID, params, sleep)
 	if err != nil {
@@ -312,31 +288,7 @@ func (r *firewallResource) Update(ctx context.Context, req resource.UpdateReques
 	timeoutCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	params := make([]model.FirewallRuleRequest, len(plan.Rules))
-
-	for i, rule := range plan.Rules {
-		params[i].Ip = rule.IP.ValueString()
-
-		if !rule.Description.IsNull() && !rule.Description.IsUnknown() {
-			params[i].Description = rule.Description.ValueString()
-		}
-
-		if !rule.Services.IsNull() && !rule.Services.IsUnknown() {
-			var services []string
-			rule.Services.ElementsAs(ctx, &services, false)
-			params[i].Services = services
-		} else {
-			params[i].Services = []string{}
-		}
-
-		if !rule.Ports.IsNull() && !rule.Ports.IsUnknown() {
-			var ports []int64
-			rule.Ports.ElementsAs(ctx, &ports, false)
-			params[i].Ports = ports
-		} else {
-			params[i].Ports = []int64{}
-		}
-	}
+	params := firewallRuleRequests(ctx, plan.Rules)
 
 	// Check if rules changed (order-independent set comparison by hashing each rule).
 	// If only sleep/timeout changed, skip API call and just persist new state.
@@ -448,6 +400,28 @@ func (r *firewallResource) Delete(ctx context.Context, req resource.DeleteReques
 		)
 		return
 	}
+}
+
+func firewallRuleRequests(ctx context.Context, rules []ruleResourceModel) []model.FirewallRuleRequest {
+	params := make([]model.FirewallRuleRequest, len(rules))
+	for i, rule := range rules {
+		params[i].Ip = rule.IP.ValueString()
+
+		if !rule.Description.IsNull() && !rule.Description.IsUnknown() {
+			params[i].Description = rule.Description.ValueString()
+		}
+
+		params[i].Services = []string{}
+		if !rule.Services.IsNull() && !rule.Services.IsUnknown() {
+			rule.Services.ElementsAs(ctx, &params[i].Services, false)
+		}
+
+		params[i].Ports = []int64{}
+		if !rule.Ports.IsNull() && !rule.Ports.IsUnknown() {
+			rule.Ports.ElementsAs(ctx, &params[i].Ports, false)
+		}
+	}
+	return params
 }
 
 // normalizeRules ensures services and ports are always known (empty list) in state,

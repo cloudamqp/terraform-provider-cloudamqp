@@ -89,48 +89,22 @@ func (api *API) DeleteFirewallSettings(ctx context.Context, instanceID int64, pa
 	})
 }
 
+// PollForFirewallConfigured waits until the new rules are configured. The endpoint responds
+// 400 with error code 40001 until then, which callWithRetry retries until the context is done.
 func (api *API) PollForFirewallConfigured(ctx context.Context, instanceID int64, sleep time.Duration) error {
 	var (
-		data    map[string]any
-		failed  map[string]any
-		path    = fmt.Sprintf("/api/instances/%d/security/firewall/configured", instanceID)
-		attempt = 1
+		data   map[string]any
+		failed map[string]any
+		path   = fmt.Sprintf("/api/instances/%d/security/firewall/configured", instanceID)
 	)
 
-	_, ok := ctx.Deadline()
-	if !ok {
-		return fmt.Errorf("context has no deadline")
-	}
-
-	ticker := time.NewTicker(sleep)
-	defer ticker.Stop()
-
-	for {
-		tflog.Info(ctx, fmt.Sprintf("method=GET path=%s ", path))
-		err := api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
-			functionName: "pollForFirewallConfigured",
-			resourceName: "FirewallSettings",
-			attempt:      attempt,
-			sleep:        sleep,
-			data:         &data,
-			failed:       &failed,
-		})
-		if err != nil {
-			tflog.Error(ctx, fmt.Sprintf("error reading firewall configured status: %v", err))
-		} else if configured, exists := data["configured"]; exists && configured.(bool) {
-			tflog.Info(ctx, "firewall is configured")
-			return nil
-		} else {
-			tflog.Info(ctx, fmt.Sprintf("firewall not yet configured, will retry, attempt=%d ", attempt))
-			attempt++
-		}
-
-		select {
-		case <-ctx.Done():
-			msg := "timeout reached while polling for firewall configured"
-			tflog.Error(ctx, msg)
-			return fmt.Errorf("%s", msg)
-		case <-ticker.C:
-		}
-	}
+	tflog.Info(ctx, fmt.Sprintf("method=GET path=%s ", path))
+	return api.callWithRetry(ctx, api.sling.New().Get(path), retryRequest{
+		functionName: "PollForFirewallConfigured",
+		resourceName: "FirewallSettings",
+		attempt:      1,
+		sleep:        sleep,
+		data:         &data,
+		failed:       &failed,
+	})
 }

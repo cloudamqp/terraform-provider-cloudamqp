@@ -145,14 +145,6 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 				fmt.Println("SKIP: GET /api/vpcs/{id}/vpc-peering/info", i.Request.URL, "error:", errStr)
 				i.DiscardOnSave = true
 			}
-		case i.Response.Code == 200 && i.Request.Method == "GET" &&
-			regexp.MustCompile(`api/instances/\d+/security/firewall/configured$`).MatchString(i.Request.URL):
-			// Filter polling for Job state, skip pending response
-			configured := gjson.Get(i.Response.Body, "configured").Bool()
-			if !configured {
-				fmt.Println("SKIP: GET /api/instances/{id}/security/firewall/configured", i.Request.URL)
-				i.DiscardOnSave = true
-			}
 		case i.Response.Code == 400 && i.Request.Method == "GET" &&
 			regexp.MustCompile(`api/instances/\d+/security/firewall/configured$`).MatchString(i.Request.URL):
 			fmt.Println("SKIP: GET /api/vpcs/{id}/security/firewall/configured", i.Request.URL)
