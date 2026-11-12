@@ -62,7 +62,7 @@ resource "cloudamqp_team_member" "this" {
 * `email` - (Required) Email address to invite. Changing this forces a new resource.
 * `role`  - (Required) Role assigned to the team member. One of: `admin`, `billing manager`,
   `member`, `monitor`, `devops`. Changing this forces a new resource while the invite is pending.
-* `tags`  - (Optional/Computed) Set of tag names granting access to tagged instances. The order
+* `tags`  - (Optional) Set of tag names granting access to tagged instances. The order
   doesn't matter. A tag that doesn't exist yet is created automatically. Required (at least one)
   for the `member`/`monitor` roles, not allowed for other roles. At most 300 tags, each shorter
   than 500 characters. Changing this forces a new resource while the invite is pending.

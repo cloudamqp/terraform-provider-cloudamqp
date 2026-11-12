@@ -567,6 +567,31 @@ func TestTeamMember_RateLimit(t *testing.T) {
 	})
 }
 
+// TestTeamMember_UntaggedRoleOmitsTags: switching a member to a role without tags and leaving out
+// tags clears them, instead of keeping the previous tags in the plan.
+func TestTeamMember_UntaggedRoleOmitsTags(t *testing.T) {
+	t.Parallel()
+	fake, server := newFakeTeamAPI(t)
+	memberPath := "/api/team/" + teamMemberTestUserID
+
+	teamMemberUnitTest(t, []resource.TestStep{
+		{
+			Config: teamMemberUnitTestConfig(server.URL, "member", `tags = ["a"]`),
+			Check:  fake.checkWrites("POST /api/team/invites"),
+		},
+		{
+			PreConfig: func() { fake.accept(teamMemberTestEmail) },
+			Config:    teamMemberUnitTestConfig(server.URL, "admin", ""),
+			Check: resource.ComposeAggregateTestCheckFunc(
+				fake.checkWrites("PUT "+memberPath),
+				fake.checkLastPutBody(`{"role": "admin", "tags": []}`),
+				resource.TestCheckResourceAttr(teamMemberResourceName, "role", "admin"),
+				resource.TestCheckNoResourceAttr(teamMemberResourceName, "tags"),
+			),
+		},
+	})
+}
+
 // TestTeamMember_PendingInviteReplace: changing tags or role on a pending invite revokes it and
 // sends a new invite, it's never updated in place.
 func TestTeamMember_PendingInviteReplace(t *testing.T) {

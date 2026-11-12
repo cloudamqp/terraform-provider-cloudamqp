@@ -105,7 +105,6 @@ func (r *teamMemberResource) Schema(ctx context.Context, req resource.SchemaRequ
 			},
 			"tags": schema.SetAttribute{
 				Optional:    true,
-				Computed:    true,
 				ElementType: types.StringType,
 				Description: "Tag names granting access to tagged instances. A tag that doesn't exist yet " +
 					"is created automatically. Only meaningful for the \"member\"/\"monitor\" roles, " +
@@ -115,7 +114,6 @@ func (r *teamMemberResource) Schema(ctx context.Context, req resource.SchemaRequ
 					setvalidator.ValueStringsAre(stringvalidator.LengthBetween(1, 499)),
 				},
 				PlanModifiers: []planmodifier.Set{
-					setplanmodifier.UseStateForUnknown(),
 					setplanmodifier.RequiresReplaceIf(
 						pendingInviteRequiresReplaceSet,
 						pendingInviteReplaceDescription,
@@ -277,6 +275,7 @@ func (r *teamMemberResource) Create(ctx context.Context, req resource.CreateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	keepEmptyTags(state, plan.Tags)
 	resp.Diagnostics.Append(keepConfiguredTagCase(ctx, state, tags)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -310,6 +309,7 @@ func (r *teamMemberResource) Read(ctx context.Context, req resource.ReadRequest,
 	if !state.Tags.IsNull() && !state.Tags.IsUnknown() {
 		resp.Diagnostics.Append(state.Tags.ElementsAs(ctx, &known, false)...)
 	}
+	keepEmptyTags(newState, state.Tags)
 	_, diags = tagsWithKnownCase(ctx, newState, known)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
@@ -371,6 +371,7 @@ func (r *teamMemberResource) Update(ctx context.Context, req resource.UpdateRequ
 		)
 		return
 	}
+	keepEmptyTags(newState, plan.Tags)
 	resp.Diagnostics.Append(keepConfiguredTagCase(ctx, newState, tags)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -537,7 +538,7 @@ func memberState(
 	ctx context.Context, displayEmail, email string, member *model.MemberByEmailResponse,
 ) (*teamMemberResourceModel, diag.Diagnostics) {
 	var diags diag.Diagnostics
-	tags, tagsDiags := types.SetValueFrom(ctx, types.StringType, member.Tags)
+	tags, tagsDiags := tagsValue(ctx, member.Tags)
 	diags.Append(tagsDiags...)
 	if diags.HasError() {
 		return nil, diags
@@ -557,7 +558,7 @@ func inviteState(
 	ctx context.Context, displayEmail string, invite *model.InviteResponse,
 ) (*teamMemberResourceModel, diag.Diagnostics) {
 	var diags diag.Diagnostics
-	tags, tagsDiags := types.SetValueFrom(ctx, types.StringType, invite.Tags)
+	tags, tagsDiags := tagsValue(ctx, invite.Tags)
 	diags.Append(tagsDiags...)
 	if diags.HasError() {
 		return nil, diags
@@ -578,6 +579,9 @@ func inviteState(
 func tagsWithKnownCase(
 	ctx context.Context, state *teamMemberResourceModel, known []string,
 ) (map[string]string, diag.Diagnostics) {
+	if state.Tags.IsNull() {
+		return nil, nil
+	}
 	var assigned []string
 	diags := state.Tags.ElementsAs(ctx, &assigned, false)
 	if diags.HasError() {
@@ -596,7 +600,10 @@ func tagsWithKnownCase(
 		replaced[known[i]] = tag
 	}
 
-	state.Tags, diags = types.SetValueFrom(ctx, types.StringType, tags)
+	if len(replaced) == 0 {
+		return replaced, diags
+	}
+	state.Tags, diags = tagsValue(ctx, tags)
 	return replaced, diags
 }
 
@@ -639,6 +646,22 @@ func tagsEqualIgnoringCase(ctx context.Context, a, b types.Set) bool {
 		return slices.Compact(tags)
 	}
 	return slices.Equal(lower(aTags), lower(bTags))
+}
+
+// keepEmptyTags keeps an explicit empty tags set, which the API's no tags would otherwise
+// read back as null.
+func keepEmptyTags(state *teamMemberResourceModel, known types.Set) {
+	if state.Tags.IsNull() && !known.IsNull() && !known.IsUnknown() && len(known.Elements()) == 0 {
+		state.Tags = known
+	}
+}
+
+// tagsValue is null for no tags, like an omitted tags attribute
+func tagsValue(ctx context.Context, tags []string) (types.Set, diag.Diagnostics) {
+	if len(tags) == 0 {
+		return types.SetNull(types.StringType), nil
+	}
+	return types.SetValueFrom(ctx, types.StringType, tags)
 }
 
 func normalizeEmail(email string) string {
