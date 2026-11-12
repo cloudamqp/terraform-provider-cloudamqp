@@ -592,6 +592,23 @@ func TestTeamMember_UntaggedRoleOmitsTags(t *testing.T) {
 	})
 }
 
+// TestTeamMember_TagsOnlyDifferInCase: tags that only differ in letter case are rejected before
+// any request, the backend would assign both the same team tag.
+func TestTeamMember_TagsOnlyDifferInCase(t *testing.T) {
+	t.Parallel()
+	fake, server := newFakeTeamAPI(t)
+
+	teamMemberUnitTest(t, []resource.TestStep{
+		{
+			Config:      teamMemberUnitTestConfig(server.URL, "member", `tags = ["Prod", "prod"]`),
+			ExpectError: regexp.MustCompile(`only differ in letter case`),
+		},
+	})
+	if len(fake.writes) > 0 {
+		t.Errorf("expected no requests, got %v", fake.writes)
+	}
+}
+
 // TestTeamMember_PendingInviteReplace: changing tags or role on a pending invite revokes it and
 // sends a new invite, it's never updated in place.
 func TestTeamMember_PendingInviteReplace(t *testing.T) {

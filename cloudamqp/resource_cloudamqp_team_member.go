@@ -153,15 +153,16 @@ func (r *teamMemberResource) ValidateConfig(ctx context.Context, req resource.Va
 		return
 	}
 
+	// Tags referencing another resource's output can't be checked yet.
+	if config.Tags.IsUnknown() {
+		return
+	}
+	resp.Diagnostics.Append(validateTagCase(config.Tags)...)
+
 	if config.Role.IsUnknown() {
 		return
 	}
 	role := config.Role.ValueString()
-
-	// Tags referencing another resource's output can't be checked yet either.
-	if config.Tags.IsUnknown() {
-		return
-	}
 
 	hasTags := !config.Tags.IsNull() && len(config.Tags.Elements()) > 0
 	tagged := slices.Contains(taggedTeamRoleNames, role)
@@ -183,6 +184,30 @@ func (r *teamMemberResource) ValidateConfig(ctx context.Context, req resource.Va
 				role, strings.Join(taggedTeamRoleNames, "/")),
 		)
 	}
+}
+
+// validateTagCase rejects tags that only differ in letter case, the backend assigns both the same
+// team tag, like it rejects for instance and VPC tags.
+func validateTagCase(tags types.Set) diag.Diagnostics {
+	var diags diag.Diagnostics
+	var seen []string
+	for _, element := range tags.Elements() {
+		tag, ok := element.(types.String)
+		if !ok || tag.IsUnknown() || tag.IsNull() {
+			continue
+		}
+		name := tag.ValueString()
+		if i := slices.IndexFunc(seen, func(t string) bool { return strings.EqualFold(t, name) }); i >= 0 {
+			diags.AddAttributeError(
+				path.Root("tags"),
+				"Tags Only Differ in Letter Case",
+				fmt.Sprintf("Tags %q and %q only differ in letter case. Use one spelling.", seen[i], name),
+			)
+			return diags
+		}
+		seen = append(seen, name)
+	}
+	return diags
 }
 
 const pendingInviteReplaceDescription = "A pending invite can't be updated. Changing role or tags " +

@@ -18,6 +18,8 @@ works. Tags are only cleared as a side effect of switching to a role without tag
 Tags are case-sensitive for access. If the team already has a tag that only differs in letter case,
 for example `"Prod"` when you configure `"prod"`, the member gets the team's `"Prod"` tag instead of
 a new one. Terraform keeps your spelling in state, so there's no diff, and shows a warning on apply.
+For the same reason, tags that only differ in letter case from each other, like `["Prod", "prod"]`,
+are rejected.
 
 A pending invite can't be updated. Changing `role` or `tags` while `status` is `pending` replaces
 the resource: the invite is revoked and a new one is sent, with a new `invite_id`. The plan shows
