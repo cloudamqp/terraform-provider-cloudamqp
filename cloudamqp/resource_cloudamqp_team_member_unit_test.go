@@ -479,6 +479,41 @@ func TestTeamMember_PendingInviteTagCaseChange(t *testing.T) {
 	})
 }
 
+// TestTeamMember_TagLimits: tags over the backend's limits are rejected at plan time, without
+// any request to the API.
+func TestTeamMember_TagLimits(t *testing.T) {
+	t.Parallel()
+	tooMany := make([]string, 301)
+	for i := range tooMany {
+		tooMany[i] = fmt.Sprintf("%q", fmt.Sprintf("tag-%d", i))
+	}
+
+	cases := []struct {
+		name  string
+		tags  string
+		error string
+	}{
+		{"TooMany", "[" + strings.Join(tooMany, ", ") + "]", `set must contain at most 300 elements`},
+		{"TooLong", fmt.Sprintf("[%q]", strings.Repeat("a", 500)), `string length must be between 1 and 499`},
+		{"Empty", `[""]`, `string length must be between 1 and 499`},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel()
+			fake, server := newFakeTeamAPI(t)
+			teamMemberUnitTest(t, []resource.TestStep{
+				{
+					Config:      teamMemberUnitTestConfig(server.URL, "tags = "+c.tags),
+					ExpectError: regexp.MustCompile(c.error),
+				},
+			})
+			if len(fake.writes) > 0 {
+				t.Errorf("expected no requests, got %v", fake.writes)
+			}
+		})
+	}
+}
+
 // TestTeamMember_PendingInviteReplace: changing tags or role on a pending invite revokes it and
 // sends a new invite, it's never updated in place.
 func TestTeamMember_PendingInviteReplace(t *testing.T) {

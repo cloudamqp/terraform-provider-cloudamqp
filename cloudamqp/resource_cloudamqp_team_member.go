@@ -9,6 +9,7 @@ import (
 
 	"github.com/cloudamqp/terraform-provider-cloudamqp/api"
 	model "github.com/cloudamqp/terraform-provider-cloudamqp/api/models/team"
+	"github.com/hashicorp/terraform-plugin-framework-validators/setvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -106,7 +107,11 @@ func (r *teamMemberResource) Schema(ctx context.Context, req resource.SchemaRequ
 				ElementType: types.StringType,
 				Description: "Tag names granting access to tagged instances. A tag that doesn't exist yet " +
 					"is created automatically. Only meaningful for the \"member\"/\"monitor\" roles, " +
-					"which require at least one tag.",
+					"which require at least one tag. At most 300 tags, each shorter than 500 characters.",
+				Validators: []validator.Set{
+					setvalidator.SizeAtMost(300),
+					setvalidator.ValueStringsAre(stringvalidator.LengthBetween(1, 499)),
+				},
 				PlanModifiers: []planmodifier.Set{
 					setplanmodifier.UseStateForUnknown(),
 					setplanmodifier.RequiresReplaceIf(

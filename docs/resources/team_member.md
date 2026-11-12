@@ -52,8 +52,8 @@ resource "cloudamqp_team_member" "this" {
   resource while the invite is pending.
 * `tags`  - (Optional/Computed) Set of tag names granting access to tagged instances. The order
   doesn't matter. A tag that doesn't exist yet is created automatically. Required (at least one)
-  for the `member`/`monitor` roles, not allowed for other roles. Changing this forces a new
-  resource while the invite is pending.
+  for the `member`/`monitor` roles, not allowed for other roles. At most 300 tags, each shorter
+  than 500 characters. Changing this forces a new resource while the invite is pending.
 
 ## Attributes Reference
 
