@@ -11,7 +11,7 @@ require (
 	github.com/hashicorp/terraform-plugin-mux v0.23.1
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.40.1
 	github.com/tidwall/gjson v1.20.2
-	github.com/tidwall/sjson v1.2.5
+	github.com/tidwall/sjson v1.2.9
 	gopkg.in/dnaeon/go-vcr.v3 v3.2.0
 )
 
