@@ -244,7 +244,7 @@ func (d *alarmDataSource) populateResourceModel(ctx context.Context, data model.
 		config.AllowDowntime = types.BoolNull()
 	}
 
-	config.MaxDiskSize = types.Int64PointerValue(data.MaxDiskSize.Int64Pointer())
+	config.MaxDiskSize = types.Int64PointerValue(data.MaxDiskSize)
 
 	if data.VhostRegex != nil {
 		config.VhostRegex = types.StringValue(*data.VhostRegex)
