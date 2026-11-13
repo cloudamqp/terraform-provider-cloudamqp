@@ -150,9 +150,9 @@ func (r *pluginBatchResource) Read(ctx context.Context, req resource.ReadRequest
 		return
 	}
 
-	instanceID := int(state.InstanceID.ValueInt64())
-	sleep := int(state.Sleep.ValueInt64())
-	timeout := int(state.Timeout.ValueInt64())
+	instanceID := state.InstanceID.ValueInt64()
+	sleep := state.Sleep.ValueInt64()
+	timeout := state.Timeout.ValueInt64()
 
 	statePlugins, diags := pluginsMapToBoolMap(ctx, state.Plugins)
 	resp.Diagnostics.Append(diags...)
@@ -160,7 +160,10 @@ func (r *pluginBatchResource) Read(ctx context.Context, req resource.ReadRequest
 		return
 	}
 
-	apiPlugins, err := r.client.ListPlugins(ctx, instanceID, sleep, timeout)
+	timeoutCtx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	defer cancel()
+
+	apiPlugins, err := r.client.ListPlugins(timeoutCtx, instanceID, sleep)
 	if err != nil {
 		resp.Diagnostics.AddError("Error reading plugins", err.Error())
 		return
@@ -175,12 +178,10 @@ func (r *pluginBatchResource) Read(ctx context.Context, req resource.ReadRequest
 	// Index API response by plugin name.
 	apiIndex := make(map[string]bool, len(apiPlugins))
 	for _, p := range apiPlugins {
-		name, ok := p["name"].(string)
-		if !ok {
+		if p.Name == "" {
 			continue
 		}
-		enabled, _ := p["enabled"].(bool)
-		apiIndex[name] = enabled
+		apiIndex[p.Name] = p.Enabled
 	}
 
 	// Rebuild the plugins map using only the keys tracked in state.
