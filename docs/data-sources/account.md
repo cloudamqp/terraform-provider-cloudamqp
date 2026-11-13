@@ -34,7 +34,7 @@ output "instance_id" {
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `id`        - The identifier for this data source. Set to `na` since there is no unique
                 identifier.

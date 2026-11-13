@@ -28,9 +28,9 @@ data "cloudamqp_alarms" "queue_alarms" {
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
-*`alarms`               - List of alarms (see [below for nested schema](#nestedatt--alarms))
+* `alarms` - List of alarms (see [below for nested schema](#nestedatt--alarms))
 
 <a id="nestedatt--alarms"></a>
 

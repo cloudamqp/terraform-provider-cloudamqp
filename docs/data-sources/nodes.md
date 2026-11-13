@@ -23,7 +23,7 @@ data "cloudamqp_nodes" "nodes" {
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `id`    - The identifier for this resource.
 * `nodes` - An array of node information. Each `nodes` block consists of the fields documented below.

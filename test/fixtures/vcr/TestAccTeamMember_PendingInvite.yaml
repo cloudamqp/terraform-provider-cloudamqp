@@ -1,0 +1,433 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 65
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"email":"test@example.com","tags":["tf-acc-test-member-tag-a"]}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/invites
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 124
+        uncompressed: false
+        body: '{"id":28,"email":"test@example.com","role":"member","tags":["tf-acc-test-member-tag-a"],"created":"2026-11-12 09:51:26 UTC"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "124"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 6c27c526-0a4a-4515-9cb5-875298e84bf4
+        status: 201 Created
+        code: 201
+        duration: 30.93604ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/invites/28
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 124
+        uncompressed: false
+        body: '{"id":28,"email":"test@example.com","role":"member","tags":["tf-acc-test-member-tag-a"],"created":"2026-11-12 09:51:26 UTC"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "124"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - a63115fc-8f18-4720-82bc-b4eed08e2ddf
+        status: 200 OK
+        code: 200
+        duration: 6.965731ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/invites/28
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 124
+        uncompressed: false
+        body: '{"id":28,"email":"test@example.com","role":"member","tags":["tf-acc-test-member-tag-a"],"created":"2026-11-12 09:51:26 UTC"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "124"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 2678ea4e-4062-4e07-b0d3-5abe5ba9008d
+        status: 200 OK
+        code: 200
+        duration: 6.777856ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/invites/28
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 28
+        uncompressed: false
+        body: '{"message":"Invite revoked"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "28"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 605f7d3c-c7c8-49ef-b655-459dda37dfdb
+        status: 200 OK
+        code: 200
+        duration: 21.210056ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 92
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"email":"test@example.com","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"]}
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            Content-Type:
+                - application/json
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/invites
+        method: POST
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 151
+        uncompressed: false
+        body: '{"id":29,"email":"test@example.com","role":"member","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"],"created":"2026-11-12 09:51:27 UTC"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "151"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - c32e0dde-77bc-4679-bd78-46877f54b8bf
+        status: 201 Created
+        code: 201
+        duration: 25.441363ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/invites/29
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 151
+        uncompressed: false
+        body: '{"id":29,"email":"test@example.com","role":"member","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"],"created":"2026-11-12 09:51:27 UTC"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "151"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 8aff0464-ba92-47e7-9630-a1b468d8642b
+        status: 200 OK
+        code: 200
+        duration: 8.000569ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/invites?email=test%40example.com
+        method: GET
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 153
+        uncompressed: false
+        body: '[{"id":29,"email":"test@example.com","role":"member","tags":["tf-acc-test-member-tag-a","tf-acc-test-member-tag-b"],"created":"2026-11-12 09:51:27 UTC"}]'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "153"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - f0f66c89-1724-4dd1-98ad-ab2204d1a122
+        status: 200 OK
+        code: 200
+        duration: 8.102202ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: localhost:9393
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Authorization:
+                - REDACTED
+            User-Agent:
+                - terraform-provider-cloudamqp_v1.0
+        url: http://localhost:9393/api/team/invites/29
+        method: DELETE
+      response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        transfer_encoding: []
+        trailer: {}
+        content_length: 28
+        uncompressed: false
+        body: '{"message":"Invite revoked"}'
+        headers:
+            Cache-Control:
+                - no-cache
+            Content-Length:
+                - "28"
+            Content-Type:
+                - application/json
+            Cross-Origin-Opener-Policy:
+                - same-origin
+            Cross-Origin-Resource-Policy:
+                - same-site
+            Referrer-Policy:
+                - strict-origin-when-cross-origin
+            Set-Cookie:
+                - REDACTED
+            Vary:
+                - Sec-Fetch-Site, Sec-Fetch-Mode, Sec-Fetch-Dest
+            X-Content-Type-Options:
+                - nosniff
+            X-Request-Id:
+                - 778529fa-ed25-4a5d-8628-d1df2534fab1
+        status: 200 OK
+        code: 200
+        duration: 24.611853ms

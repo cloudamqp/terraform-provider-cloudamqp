@@ -38,6 +38,8 @@ type retryRequest struct {
 	failed          *map[string]any
 	customRetryCode int
 	statusCode      *int // Optional: populated with HTTP status code on success
+	// Optional: returns true for a 429 that waiting won't fix, so it's returned without retrying
+	stopRateLimitRetry func(failed map[string]any) bool
 }
 
 type statusDecision struct {
@@ -213,6 +215,9 @@ func (api *API) handleResourceLocked(ctx context.Context, request retryRequest) 
 }
 
 func (api *API) handleRateLimit(ctx context.Context, request retryRequest) statusDecision {
+	if request.stopRateLimitRetry != nil && request.failed != nil && request.stopRateLimitRetry(*request.failed) {
+		return statusDecision{shouldRetry: false, err: extractErrorMessage(request.failed, request.resourceName)}
+	}
 	if _, ok := ctx.Deadline(); !ok {
 		return statusDecision{shouldRetry: false, err: fmt.Errorf("context has no deadline")}
 	}

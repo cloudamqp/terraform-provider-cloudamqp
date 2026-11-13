@@ -112,7 +112,7 @@ Valid values are: ["on", "off"]
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `id`  - The identifier for this resource (will be same as instance identifier).
 

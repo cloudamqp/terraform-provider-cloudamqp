@@ -518,7 +518,7 @@ Optional arguments for older provider versions.
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `id`  - The identifier for this resource
 

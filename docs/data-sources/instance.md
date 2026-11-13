@@ -52,7 +52,7 @@ resource "lavinmq_vhost" "new_vhost" {
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `id`          - The identifier for this resource.
 * `name`        - The name of the CloudAMQP instance.

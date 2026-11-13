@@ -76,6 +76,8 @@ The following arguments are supported:
 
 ## Attributes Reference
 
+All attributes are computed.
+
 * `id`          - The identifier for this resource.
 * `description` - The description of the plugin.
 * `require`     - Required version of RabbitMQ.
