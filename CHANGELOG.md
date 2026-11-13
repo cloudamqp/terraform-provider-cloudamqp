@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.53.0 (Unreleased)
+## 1.53.0 (13 Nov, 2026)
 
 FEATURES:
 
