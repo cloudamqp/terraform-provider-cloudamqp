@@ -24,7 +24,7 @@ data "cloudamqp_upgradable_versions" "versions" {
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `new_rabbitmq_version`  - Possible upgradable version for RabbitMQ.
 * `new_erlang_version`    - Possible upgradable version for Erlang.

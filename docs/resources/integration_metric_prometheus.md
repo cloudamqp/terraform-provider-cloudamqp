@@ -268,7 +268,7 @@ The following arguments are supported:
 
 ## Attributes Reference
 
-In addition to all arguments above, the following attributes are exported:
+All attributes are computed.
 
 * `id` - The integration identifier.
 

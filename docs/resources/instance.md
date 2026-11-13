@@ -324,7 +324,7 @@ See more below, [copy settings].
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `id`            - The identifier (instance_id) for this resource, used as a reference by almost
                     all other resource and data sources

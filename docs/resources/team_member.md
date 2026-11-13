@@ -32,7 +32,7 @@ resource "cloudamqp_team_member" "this" {
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `id`              - The member's normalized (lowercased) email, used as this resource's
   identifier.

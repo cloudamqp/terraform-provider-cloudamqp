@@ -194,7 +194,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `id`                  - The identifier for this resource.
 * `state`               - VPC peering state

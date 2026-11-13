@@ -120,7 +120,7 @@ Allowed principals format: <br>
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `id`            - The identifier for this resource. Will be same as `instance_id`
 * `status`        - PrivateLink status [enable, pending, disable]

@@ -28,7 +28,7 @@ data "cloudamqp_plugins_community" "communit_plugins" {
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `id`      - The identifier for this resource.
 * `plugins` - An array of community plugins. Each `plugins` block consists of the fields documented

@@ -484,7 +484,7 @@ The following arguments are used by the `uptrace` block.
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `id` - The identifier for this resource.
 

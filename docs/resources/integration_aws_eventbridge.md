@@ -81,7 +81,7 @@ resource "cloudamqp_integration_aws_eventbridge" "this" {
 
 </details>
 
-## Argument References
+## Argument Reference
 
 The following arguments are supported:
 
@@ -98,7 +98,7 @@ The following arguments are supported:
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `id`      - The identifier for this resource.
 * `status`  - Always set to null, unless there is an error starting the EventBridge.
