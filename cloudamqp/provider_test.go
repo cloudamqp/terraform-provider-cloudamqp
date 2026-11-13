@@ -69,8 +69,8 @@ func cloudamqpResourceTest(t *testing.T, c resource.TestCase) {
 		// Sanitize URLs containing passwords
 		i.Response.Body = sanitizer.URL(i.Response.Body)
 		// Filter sensitive data API keys, secrects and tokens from request and response bodies
-		i.Request.Body = sanitizeSensistiveData(i.Request.Body)
-		i.Response.Body = sanitizeSensistiveData(i.Response.Body)
+		i.Request.Body = sanitizeSensitiveData(i.Request.Body)
+		i.Response.Body = sanitizeSensitiveData(i.Response.Body)
 		return nil
 	}
 	rec.SetMatcher(requestURIMatcher)
@@ -218,7 +218,7 @@ func requestURIMatcher(request *http.Request, interaction cassette.Request) bool
 	return request.Method == interaction.Method && request.URL.RequestURI() == interactionURI.RequestURI()
 }
 
-func sanitizeSensistiveData(body string) string {
+func sanitizeSensitiveData(body string) string {
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("AZM_APPLICATION_SECRET"), "AZM_APPLICATION_SECRET")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("AZM_INSTRUMENTATION_KEY"), "AZM_INSTRUMENTATION_KEY")
 	body = sanitizer.FilterSensitiveData(body, os.Getenv("AZM_INSTRUMENTATION_KEY_2"), "AZM_INSTRUMENTATION_KEY_2")
