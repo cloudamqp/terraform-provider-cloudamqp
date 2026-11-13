@@ -32,7 +32,7 @@ data "cloudamqp_alarm" "default_cpu_alarm" {
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `id`                  - The identifier for this resource.
 * `enabled`             - Enable/disable status of the alarm.

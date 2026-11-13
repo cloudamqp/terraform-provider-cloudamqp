@@ -26,7 +26,7 @@ data "cloudamqp_notifications" "default_recipient" {
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `recipients` - List of alarms (see [below for nested schema](#nestedatt--recipients))
 
@@ -34,7 +34,7 @@ All attributes reference are computed
 
 ### Nested Schema for `recipients`
 
-All attributes reference are computed
+All attributes are computed.
 
 * `recipient_id`  - The identifier for the recipient.
 * `name`          - The name of the recipient.

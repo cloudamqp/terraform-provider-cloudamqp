@@ -1,8 +1,10 @@
 # CHANGELOG
 
-## 1.53.0 (Unreleased)
+## 1.53.0 (13 Nov, 2026)
 
 FEATURES:
+
+* **New Resource:** `cloudamqp_team_member` - Invite and manage team members ([#557])
 
 * Migrated towards Terraform plugin framework:
   * Resources:
@@ -17,11 +19,11 @@ IMPROVEMENTS:
 * Tests: Shared mux provider factory between unit and VCR tests ([#563])
 * resource/cloudamqp_alarm: Added `max_disk_size` argument to set a ceiling for `disk_auto_resize` alarms, also exposed in data source `cloudamqp_alarm` ([#565])
 
+[#557]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/557
 [#562]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/562
 [#563]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/563
 [#564]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/564
 [#565]: https://github.com/cloudamqp/terraform-provider-cloudamqp/pull/565
-
 
 ## 1.52.0 (29 Oct, 2026)
 

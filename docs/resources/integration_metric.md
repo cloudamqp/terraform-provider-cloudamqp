@@ -236,7 +236,7 @@ resource "cloudamqp_integration_metric" "stackdriver" {
 
 </details>
 
-## Argument References
+## Argument Reference
 
 The following arguments are supported:
 
@@ -308,7 +308,7 @@ client_email
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `id`  - The identifier for this resource.
 

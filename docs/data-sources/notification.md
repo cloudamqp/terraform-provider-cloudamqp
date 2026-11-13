@@ -28,7 +28,7 @@ data "cloudamqp_notification" "default_recipient" {
 
 ## Attributes Reference
 
-All attributes reference are computed
+All attributes are computed.
 
 * `id`          - The identifier for this resource.
 * `type`        - The type of the recipient.

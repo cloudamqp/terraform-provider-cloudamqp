@@ -26,7 +26,7 @@ data "cloudamqp_credentials" "credentials" {
 
 ## Attributes Reference
 
-All attributes reference are computed.
+All attributes are computed.
 
 * `id`          - The identifier for this data source.
 * `username`    - (Sensitive) The username for the configured user in Rabbit MQ.

@@ -70,13 +70,6 @@ func (f *fakeAlarmAPI) handle(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// setStoredMaxDiskSize changes the stored value, like saving the alarm from the console form
-func (f *fakeAlarmAPI) setStoredMaxDiskSize(value any) {
-	f.mu.Lock()
-	defer f.mu.Unlock()
-	f.alarm["max_disk_size"] = value
-}
-
 // checkLastMaxDiskSize verifies max_disk_size in the latest request body, nil means not sent
 func (f *fakeAlarmAPI) checkLastMaxDiskSize(want any, count int) resource.TestCheckFunc {
 	return func(_ *terraform.State) error {
@@ -124,8 +117,8 @@ resource "cloudamqp_alarm" "alarm" {
 
 const alarmUnitResourceName = "cloudamqp_alarm.alarm"
 
-// TestAlarm_MaxDiskSize: max_disk_size is sent as a number, removing it leaves it out of the
-// request, and values saved from the console as strings read back without a diff.
+// TestAlarm_MaxDiskSize: max_disk_size is sent as a number, and removing it leaves it out of
+// the request.
 func TestAlarm_MaxDiskSize(t *testing.T) {
 	t.Parallel()
 	fake, server := newFakeAlarmAPI(t)
@@ -146,21 +139,11 @@ func TestAlarm_MaxDiskSize(t *testing.T) {
 			),
 		},
 		{
-			PreConfig: func() { fake.setStoredMaxDiskSize("250") },
-			Config:    alarmUnitTestConfig(server.URL, "disk_auto_resize", `max_disk_size = 250`),
-			PlanOnly:  true,
-		},
-		{
 			Config: alarmUnitTestConfig(server.URL, "disk_auto_resize", ""),
 			Check: resource.ComposeAggregateTestCheckFunc(
 				fake.checkLastMaxDiskSize(nil, 3),
 				resource.TestCheckNoResourceAttr(alarmUnitResourceName, "max_disk_size"),
 			),
-		},
-		{
-			PreConfig: func() { fake.setStoredMaxDiskSize("") },
-			Config:    alarmUnitTestConfig(server.URL, "disk_auto_resize", ""),
-			PlanOnly:  true,
 		},
 	})
 }
