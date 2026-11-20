@@ -65,8 +65,7 @@ All attributes are computed.
 
 ## Import
 
-`cloudamqp_vpc` can be imported using the CloudAMQP VPC identifier. To retrieve the identifier of an
-instance, use [CloudAMQP API list vpcs].
+`cloudamqp_vpc` can be imported using the CloudAMQP VPC identifier. To retrieve the identifier of a VPC, use [CloudAMQP API list vpcs].
 
 From Terraform v1.5.0, the `import` block can be used to import this resource:
 

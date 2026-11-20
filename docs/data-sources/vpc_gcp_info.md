@@ -18,7 +18,7 @@ Use this data source to retrieve information about VPC for a CloudAMQP instance.
 <details>
   <summary>
     <b>
-      <i>AWS VPC peering before v1.16.0</i>
+      <i>GCP VPC peering before v1.16.0</i>
     </b>
   </summary>
 
@@ -33,7 +33,7 @@ data "cloudamqp_vpc_gcp_info" "vpc_info" {
 <details>
   <summary>
     <b>
-      <i>AWS VPC peering from [v1.16.0] (Managed VPC)</i>
+      <i>GCP VPC peering from [v1.16.0] (Managed VPC)</i>
     </b>
   </summary>
 

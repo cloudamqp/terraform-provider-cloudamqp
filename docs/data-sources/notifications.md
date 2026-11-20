@@ -28,7 +28,7 @@ data "cloudamqp_notifications" "default_recipient" {
 
 All attributes are computed.
 
-* `recipients` - List of alarms (see [below for nested schema](#nestedatt--recipients))
+* `recipients` - List of recipients (see [below for nested schema](#nestedatt--recipients))
 
 <a id="nestedatt--recipients"></a>
 

@@ -240,7 +240,7 @@ resource "cloudamqp_integration_metric" "stackdriver" {
 
 The following arguments are supported:
 
-* `name`              - (Required) The name of the third party log integration. See
+* `name`              - (Required) The name of the third party metrics integration. See
                         `Integration service reference`
 * `region`            - (Optional) Region hosting the integration service.
 * `access_key_id`     - (Optional) AWS access key identifier.
@@ -271,7 +271,7 @@ integration used. See [integration type reference] below for more information.
 
 ## Integration service references
 
-Valid names for third party log integration.
+Valid names for third party metrics integration.
 
 | Name | Description |
 | ------------- | ------------------------------------------------------------- |

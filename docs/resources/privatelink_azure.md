@@ -148,7 +148,6 @@ Or use Terraform CLI:
 
 `terraform import cloudamqp_privatelink_azure.privatelink <id>`
 
-`cloudamqp_privatelink_aws` can be imported using CloudAMQP instance identifier.
 
 ## Create PrivateLink with additional firewall rules
 

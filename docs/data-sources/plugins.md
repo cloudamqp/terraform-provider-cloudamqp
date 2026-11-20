@@ -42,7 +42,7 @@ ___
 
 The `plugins` block consist of
 
-* `name`        - The type of the recipient.
+* `name`        - The name of the plugin.
 * `version`     - Rabbit MQ version that the plugins are shipped with.
 * `description` - Description of what the plugin does.
 * `enabled`     - Information if the plugin is enabled or disabled (true/false).

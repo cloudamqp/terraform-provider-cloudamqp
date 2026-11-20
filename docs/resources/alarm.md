@@ -14,8 +14,7 @@ triggerd a notification will be sent to the assigned recipients. When creating a
 will also be a set of default alarms (cpu, memory and disk) created. All default alarms uses the
 default recipient for notifications.
 
-By setting `no_default_alarms` to *true* in `cloudamqp_instance`. This will create the instance
-without default alarms and avoid the need to import them to get full control.
+By setting `no_default_alarm` to *true* in `cloudamqp_instance`, the instance will be created without default alarms, avoiding the need to import them to get full control.
 
 Available for all subscription plans, but `lemur`and `tiger` are limited to fewer alarm types. The
 limited types supported can be seen in the table below in [Alarm Type Reference].

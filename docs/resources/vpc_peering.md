@@ -2,7 +2,7 @@
 layout: "cloudamqp"
 page_title: "CloudAMQP: cloudamqp_vpc_peering"
 description: |-
-  Accepting VPC peering request from an AWS accepter.
+  Accepting VPC peering request from an AWS requester.
 ---
 
 <!-- markdownlint-disable MD033 -->
