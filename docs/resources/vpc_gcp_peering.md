@@ -9,7 +9,7 @@ description: |-
 
 # cloudamqp_vpc_gcp_peering
 
-This resouce creates a VPC peering configuration for the CloudAMQP instance. The configuration will
+This resource creates a VPC peering configuration for the CloudAMQP instance. The configuration will
 connect to another VPC network hosted on Google Cloud Platform (GCP). See the [GCP documentation]
 for more information on how to create the VPC peering configuration.
 
@@ -153,7 +153,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 ```
 
 Peering request and waiting for peering status of the state to change to ACTIVE before the create
-resource is consider complete. This is done once both side have done the peering.
+resource is considered complete. This is done once both sides have done the peering.
 
 ```hcl
 resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
@@ -175,7 +175,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 
   ***Note:*** Available from [v1.16.0], will be required in next major version (v2.0)
 
-* `peer_network_uri`        - (Required) Network URI of the VPC network to which you will peer with.
+* `peer_network_uri`        - (Required) Network URI of the VPC network to which you will peer.
                               See examples above for the format.
 * `wait_on_peering_status`  - (Optional) Makes the resource wait until the peering is connected.
                               Default set to false.
@@ -214,7 +214,7 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ***From v1.32.2:***
 `cloudamqp_vpc_gcp_peering` can be imported while using the resource type, with CloudAMQP VPC
-identifier or instance identifier together with *peering_network_uri* (CSV seperated).
+identifier or instance identifier together with *peering_network_uri* (CSV separated).
 
 ### Resource type VPC
 
@@ -237,7 +237,7 @@ terraform import cloudamqp_vpc_gcp_peering.vpc_peering_request vpc,<vpc_id>,<pee
 
 ### Resource type instance
 
-To use the Cloudamqp instance identifier set the resource type to *instance*
+To use the CloudAMQP instance identifier set the resource type to *instance*
 
 From Terraform v1.5.0, the `import` block can be used to import this resource:
 
@@ -273,7 +273,7 @@ To create a VPC peering configuration with additional firewall rules, it's requi
 adding dependency from the firewall resource to the VPC peering resource.
 
 Furthermore, since all firewall rules are overwritten, the otherwise automatically added rules for
-the VPC peering also needs to be added.
+the VPC peering also need to be added.
 
 See example below.
 

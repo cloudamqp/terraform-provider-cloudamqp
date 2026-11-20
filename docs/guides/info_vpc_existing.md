@@ -10,13 +10,12 @@ description: |-
 
 If you already have a CloudAMQP instance with a VPC for a given `region`, it's possible to create
 another CloudAMQP instance in the same `region` and add this to the existing VPC. In order to do
-this, the internal CloudAMQP VPC indentifier (vpc_id) must been known and then added to new
+this, the internal CloudAMQP VPC identifier (vpc_id) must be known and then added to new
 CloudAMQP instance.
 
 ## Example Usage
 
-To extract the existing VPC identifier, the CloudAMQP used to create the VPC can be loaded as an
-data source. Either by using the CloudAMQP instance name or identifier (instance_id).
+To extract the existing VPC identifier, the CloudAMQP used to create the VPC can be loaded as a data source. Either by using the CloudAMQP instance name or identifier (instance_id).
 
 ```hcl
 # by instance name
@@ -56,7 +55,7 @@ resource "cloudamqp_instance" "my_instance" {
 }
 ```
 
-Or by already knowing the internal CloudAMQP VPC identifier
+Or by already knowing the internal CloudAMQP VPC identifier.
 
 ```hcl
 resource "cloudamqp_instance" "my_instance" {
@@ -67,6 +66,5 @@ resource "cloudamqp_instance" "my_instance" {
 }
 ```
 
-You don't need to supply `vpc_subnet`, but if you supply both `vpc_id` and `vpc_subnet`. `vpc_id`
-has preference in the backend API (mismatch with the correct `vpc_subnet` value won't create a new
+You don't need to supply `vpc_subnet`, but if you supply both `vpc_id` and `vpc_subnet`, `vpc_id` has preference in the backend API (mismatch with the correct `vpc_subnet` value won't create a new
 VPC when `vpc_id` is supplied).

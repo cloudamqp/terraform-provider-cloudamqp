@@ -9,7 +9,7 @@ description: |-
 
 This resource allows you to manage standalone VPC.
 
-New Cloudamqp instances can be added to the managed VPC. Set the instance *vpc_id* attribute to the
+New CloudAMQP instances can be added to the managed VPC. Set the instance *vpc_id* attribute to the
 managed vpc identifier, see example below, when creating the instance.
 
 Only available for dedicated subscription plans.

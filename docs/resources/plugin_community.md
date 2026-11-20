@@ -62,14 +62,14 @@ resource "cloudamqp_plugin_community" "rabbitmq_delayed_message_exchange" {
 The following arguments are supported:
 
 * `instance_id` - (Required) The CloudAMQP instance ID.
-* `name`        - (Required) The name of the Rabbit MQ community plugin.
+* `name`        - (Required) The name of the RabbitMQ community plugin.
 * `enabled`     - (Required) Enable or disable the plugins.
 * `sleep`       - (Optional) Configurable sleep time (seconds) for retries when requesting
                   information about community plugins. Default set to 10 seconds.
 
   ***Note:*** Available from [v1.29.0]
 
-* `timeout`     - (Optional) - Configurable timeout time (seconds) for retries when requesting
+* `timeout`     - (Optional) Configurable timeout time (seconds) for retries when requesting
                   information about community plugins. Default set to 1800 seconds.
 
   ***Note:*** Available from [v1.29.0]
@@ -88,7 +88,7 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-`cloudamqp_plugin_community` can be imported if it's has already been installed by using the name
+`cloudamqp_plugin_community` can be imported if it has already been installed by using the name
 argument of the resource together with CloudAMQP instance identifier (CSV separated). To retrieve
 list of available community plugins, use [CloudAMQP API list community plugins].
 

@@ -43,12 +43,12 @@ All attributes are computed.
 
 ___
 
-The `instances` block consist of
+The `instances` block consists of
 
 * `id`      - The instance identifier.
 * `name`    - The name of the instance.
 * `plan`    - The subscription plan used for the instance.
-* `region`  - The region were the instanece is located in.
+* `region`  - The region where the instance is located.
 * `tags`    - Optional tags set for the instance.
 
 ## Dependency

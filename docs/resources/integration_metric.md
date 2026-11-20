@@ -10,7 +10,7 @@ description: |-
 # cloudamqp_integration_metric
 
 This resource allows you to create and manage, forwarding metrics to third party integrations for a
-CloudAMQP instance. Once configured, the metrics produced will be forward to corresponding
+CloudAMQP instance. Once configured, the metrics produced will be forwarded to the corresponding
 integration.
 
 Only available for dedicated subscription plans.
@@ -74,7 +74,7 @@ resource "cloudamqp_integration_metric" "cloudwatch_v2" {
 ```
 
 * AWS IAM role: arn:aws:iam::ACCOUNT-ID:role/ROLE-NAME
-* External id: Create own external identifier that match the role created. E.g. "cloudamqp-abc123".
+* External id: Create own external identifier that matches the role created. E.g. "cloudamqp-abc123".
 
 </details>
 
@@ -246,9 +246,9 @@ The following arguments are supported:
 * `access_key_id`     - (Optional) AWS access key identifier.
 * `secret_access_key` - (Optional) AWS secret access key.
 * `iam_role`          - (Optional) The ARN of the role to be assumed when publishing metrics.
-* `iam_external_id`   - (Optional) External identifier that match the role you created.
+* `iam_external_id`   - (Optional) External identifier that matches the role you created.
 * `api_key`           - (Optional) The API key for the integration service.
-* `email`             - (Optional) The email address registred for the integration service.
+* `email`             - (Optional) The email address registered for the integration service.
 * `credentials`       - (Optional) Google Service Account private key credentials.
 * `project_id`        - (Optional/Computed) The project identifier.
 * `private_key`       - (Optional/Computed) The private access key.
@@ -266,7 +266,7 @@ The following arguments are supported:
 * `vhost_whitelist`   - **Deprecated** Use vhost_allowlist instead
 * `include_ad_queues` - (Optional) Include auto delete queues.
 
-This is the full list of all arguments. Only a subset of arguments are used based on which type of
+This is the full list of all arguments. Only a subset of arguments is used based on which type of
 integration used. See [integration type reference] below for more information.
 
 ## Integration service references
@@ -318,7 +318,7 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-`cloudamqp_integration_metric`can be imported using the resource identifier together with CloudAMQP
+`cloudamqp_integration_metric` can be imported using the resource identifier together with CloudAMQP
 instance identifier (CSV separated). To retrieve the resource identifier, use
 [CloudAMQP API list integrations].
 

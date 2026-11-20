@@ -8,18 +8,18 @@ description: |-
 
 # Subscription plans
 
-Tables below shows general subscription plans for CloudAMQP for either [**LavinMQ**] or
+The tables below show general subscription plans for CloudAMQP for either [**LavinMQ**] or
 [**RabbitMQ**]. For full price list see [CloudAMQP plans].
 
--> Information can differ from your actually valid plans, e.g. your team have been given preview
+-> Information can differ from your actual plans, e.g. if your team has been given preview
 access to unreleased plans. To retrieve an up to date list check out [CloudAMQP API plans].
 
 ## Plans using LavinMQ
 
 All plans running LavinMQ backend.
 
-`Lemming`and `Ermine` are shared instances and share underlying hardware with other instances. They
-are also limited to which CloudAMQP provider resources that can be used. Further information on
+`Lemming` and `Ermine` are shared instances and share underlying hardware with other instances. They
+are also limited in which CloudAMQP provider resources can be used. Further information on
 availability on each resource page.
 
 -> With LavinMQ 2.0 version, [clustering] is supported to ensure high availability.
@@ -41,7 +41,7 @@ Outstanding Orca    | orca-1,3,5     | dedicated | 1,3,5
 All plans running RabbitMQ backend.
 
 `Lemur` and `Tiger` are shared instances and share underlying hardware with other instances. They
-are also limited to which CloudAMQP provider resources that can be used. Further information on
+are also limited in which CloudAMQP provider resources can be used. Further information on
 availability on each resource page.
 
 Name            | Plan          | Type      | Nodes
@@ -63,7 +63,7 @@ Raging Rhino    | rhino-1       | dedicated | 1
 All plans running RabbitMQ backend.
 
 Table below shows deprecated subscription plans for CloudAMQP. Existing plans will still work, but
-there will not be possible to create new ones.
+it will not be possible to create new ones.
 
 Name            | Plan    | Type
 ----------------|---------| ----

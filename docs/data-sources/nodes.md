@@ -30,13 +30,13 @@ All attributes are computed.
 
 ___
 
-The `nodes` block consist of
+The `nodes` block consists of
 
 * `hostname`              - External hostname assigned to the node.
 * `hostname_internal`     - Internal hostname assigned to the node.
 * `name`                  - Name of the node.
 * `running`               - Is the node running?
-* `rabbitmq_version`      - Currently configured Rabbit MQ version on the node.
+* `rabbitmq_version`      - Currently configured RabbitMQ version on the node.
 * `erlang_version`        - Currently used Erlang version on the node.
 * `hipe`                  - Enable or disable High-performance Erlang.
 * `configured`            - Is the node configured?

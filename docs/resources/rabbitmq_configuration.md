@@ -2,12 +2,12 @@
 layout: "cloudamqp"
 page_title: "CloudAMQP: cloudamqp_rabbitmq_configuration"
 description: |-
-  Update Rabbit MQ config
+  Update RabbitMQ config
 ---
 
 # cloudamqp_rabbitmq_configuration
 
-This resource allows you update RabbitMQ config.
+This resource allows you to update RabbitMQ config.
 
 Only available for dedicated subscription plans running ***RabbitMQ***.
 
@@ -162,16 +162,16 @@ The following arguments are supported:
 
 - `instance_id`                   - (Required) The CloudAMQP instance ID.
 - `heartbeat`                     - (Optional/Computed) Set the server AMQP 0-9-1 heartbeat timeout in seconds.
-- `connection_max`                - (Optional/Computed) Set the maximum permissible number of connection.
+- `connection_max`                - (Optional/Computed) Set the maximum permissible number of connections.
 - `channel_max`                   - (Optional/Computed) Set the maximum permissible number of channels per connection.
-- `consumer_timeout`              - (Optional/Computed) A consumer that has received a message and does not acknowledge that message within the timeout in milliseconds
+- `consumer_timeout`              - (Optional/Computed) A consumer that has received a message and does not acknowledge that message within the timeout, in milliseconds.
 - `vm_memory_high_watermark`      - (Optional/Computed) When the server will enter memory based flow-control as relative to the maximum available memory.
 - `queue_index_embed_msgs_below`  - (Optional/Computed) Size in bytes below which to embed messages in the queue index. 0 will turn off payload embedding in the queue index.
 - `max_message_size`              - (Optional/Computed) The largest allowed message payload size in bytes.
 - `log_level`                     - (Optional/Computed) Log level for all RabbitMQ log outputs: log integrations, the CloudAMQP Console log view and the log file. Also sets `log_exchange_level`.
 - `log_exchange_level`            - (Optional/Computed) Log level for the log exchange only, which feeds the CloudAMQP Console log view and legacy log integrations. Prefer `log_level`.
 - `cluster_partition_handling`    - (Optional/Computed) Set how the cluster should handle network partition.
-- `message_interceptors_timestamp_overwrite` (Optional/Computed) Sets a timestamp header on incoming messages. ***enabled_with_overwrite*** will overwrite any existing timestamps in the header.
+- `message_interceptors_timestamp_overwrite` - (Optional/Computed) Sets a timestamp header on incoming messages. ***enabled_with_overwrite*** will overwrite any existing timestamps in the header.
 - `mqtt_vhost`                    - (Optional/Computed) Virtual host for MQTT connections. Default set to newly created vhost, same as `cloudamqp_instance.instance.vhost`.
 - `mqtt_exchange`                 - (Optional/Computed) The exchange option determines which exchange messages from MQTT clients are published to.
 - `mqtt_ssl_cert_login`           - (Optional/Computed) Enable SSL certificate-based authentication for MQTT connections.
@@ -180,10 +180,10 @@ The following arguments are supported:
 - `ssl_options_fail_if_no_peer_cert` - (Optional/Computed) When set to true, TLS connections will fail if the client does not provide a certificate.
 - `ssl_options_verify`            - (Optional/Computed) Controls peer certificate verification for TLS connections.
 
-Configure sleep and timeout for API requests retries
+Configure sleep and timeout for API request retries
 
 - `sleep`                         - (Optional) Configurable sleep time in seconds between retries for RabbitMQ configuration. Default set to 60 seconds.
-- `timeout`                       - (Optional) - Configurable timeout time in seconds for RabbitMQ configuration. Default set to 3600 seconds.
+- `timeout`                       - (Optional) Configurable timeout time in seconds for RabbitMQ configuration. Default set to 3600 seconds.
 
 ## Attributes Reference
 
@@ -195,13 +195,13 @@ All attributes are computed.
 
 ### heartbeat
 
-| Type | Default | Min | Affect |
+| Type | Default | Min | Effect |
 | --- | --- | --- | --- |
-| int | 120 | 0 | Only effects new connection |
+| int | 120 | 0 | Only affects new connections |
 
 ### connection_max
 
-| Type | Default | Min | Affect |
+| Type | Default | Min | Effect |
 | --- | --- | --- | --- |
 | int | -1 | 1 | Applied immediately (RabbitMQ restart required before 3.11.13) |
 
@@ -209,7 +209,7 @@ Note: -1 in the provider corresponds to INFINITY in the RabbitMQ config
 
 ### channel_max
 
-| Type | Default | Min | Affect |
+| Type | Default | Min | Effect |
 | --- | --- | --- | --- |
 | int | 128 | 0 | Only affects new connections |
 
@@ -217,35 +217,35 @@ Note: 0 means "no limit"
 
 ### consumer_timeout
 
-| Type | Default | Min | Max | Unit | Affect |
+| Type | Default | Min | Max | Unit | Effect |
 | --- | --- | --- | --- | --- | --- |
-| int | 7200000 | 10000 | 86400000 | milliseconds | Only effects new channels |
+| int | 7200000 | 10000 | 86400000 | milliseconds | Only affects new channels |
 
 Note: -1 in the provider corresponds to false (disable) in the RabbitMQ config
 
 ### vm_memory_high_watermark
 
-| Type | Default | Min | Max | Affect |
+| Type | Default | Min | Max | Effect |
 | --- | --- | --- | --- | --- |
 | float | 0.81 | 0.4 | 0.9 | Applied immediately |
 
 ### queue_index_embed_msgs_below
 
-| Type | Default | Min | Max | Unit | Affect |
+| Type | Default | Min | Max | Unit | Effect |
 | --- | --- | --- | --- | --- | --- |
 | int | 4096 | 0 | 10485760 | bytes | Applied immediately for new queues |
 
-Note: Existing queues requires restart
+Note: Existing queues require restart
 
 ### max_message_size
 
-| Type | Default | Min | Max | Unit | Affect |
+| Type | Default | Min | Max | Unit | Effect |
 | --- | --- | --- | --- | --- | --- |
-| int | 134217728 | 1 | 536870912 | bytes | Only effects new channels |
+| int | 134217728 | 1 | 536870912 | bytes | Only affects new channels |
 
 ### log_level
 
-| Type | Default | Affect | Allowed values |
+| Type | Default | Effect | Allowed values |
 | --- | --- | --- | --- |
 | string | info | Applied immediately | `debug, info, warning, error, critical, none` |
 
@@ -255,22 +255,22 @@ increases log volume on every output, use it for a limited period while troubles
 
 ### log_exchange_level
 
-| Type | Default | Affect | Allowed values |
+| Type | Default | Effect | Allowed values |
 | --- | --- | --- | --- |
 | string | error | RabbitMQ restart required | `debug, info, warning, error, critical, none` |
 
 ### cluster_partition_handling
 
-| Type | Affect | Allowed values |
+| Type | Effect | Allowed values |
 | --- | --- | --- |
 | string | Applied immediately | `autoheal, pause_minority, ignore` |
 
 Recommended setting for cluster_partition_handling: `autoheal` for cluster with 1-2
-nodes, `pause_minority` for cluster with 3 or more nodes. While `ignore` setting is not recommended.
+nodes, `pause_minority` for cluster with 3 or more nodes. The `ignore` setting is not recommended.
 
 ### message_interceptors_timestamp_overwrite
 
-| Type | Affect | Allowed values |
+| Type | Effect | Allowed values |
 | --- | --- | --- |
 | string | RabbitMQ restart required | `enabled_with_overwrite, enabled, disabled` |
 
@@ -278,21 +278,21 @@ Note: Corresponds to setting `message_interceptors.incoming.set_header_timestamp
 
 ### mqtt_vhost
 
-| Type | Affect |
+| Type | Effect |
 | --- | --- |
 | string | Only affects new connections |
 
-Note: A vhost is automatically created when `cloudamqp_instance` is created. This attribute defaults to that vhost (I.e. `cloudamqp_instance.instance.vhost`).
+Note: A vhost is automatically created when `cloudamqp_instance` is created. This attribute defaults to that vhost (i.e. `cloudamqp_instance.instance.vhost`).
 
 ### mqtt_exchange
 
-| Type | Affect |
+| Type | Effect |
 | --- | --- |
 | string | Only affects new connections |
 
 ### mqtt_max_session_expiry_interval_seconds
 
-| Type | Affect | Allowed values |
+| Type | Effect | Allowed values |
 | --- | --- | --- |
 | int | Only affects new connections | 0 or more, default 1800. -1 will set it to no limit |
 
@@ -300,7 +300,7 @@ Note: Available from RabbitMQ broker version 3.13.x.
 
 ### mqtt_ssl_cert_login
 
-| Type | Affect |
+| Type | Effect |
 | --- | --- |
 | bool | RabbitMQ restart required |
 
@@ -309,13 +309,13 @@ Note: When enabled, `rabbit.ssl_options.fail_if_no_peer_cert` should be set to *
 
 ### ssl_cert_login_from
 
-| Type | Affect | Allowed values |
+| Type | Effect | Allowed values |
 | --- | --- | --- |
 | string | Only affects new connections | `common_name`, `distinguished_name` |
 
 ### ssl_options_fail_if_no_peer_cert
 
-| Type | Affect |
+| Type | Effect |
 | --- | --- |
 | string | RabbitMQ restart required |
 
@@ -323,7 +323,7 @@ Note: When enabled, `rabbit.ssl_options.verify` must be set to ***verify_peer***
 
 ### ssl_options_verify
 
-| Type | Affect | Allowed values |
+| Type | Effect | Allowed values |
 | --- | --- | --- |
 | string | RabbitMQ restart required | `verify_none`, `verify_peer` |
 
@@ -336,7 +336,7 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 ## Import
 
 `cloudamqp_rabbitmq_configuration` can be imported using the CloudAMQP instance identifier.  To
-retrieve the identifier, use [CloudAMQP API list intances].
+retrieve the identifier, use [CloudAMQP API list instances].
 
 From Terraform v1.5.0, the `import` block can be used to import this resource:
 
@@ -359,7 +359,7 @@ Or use Terraform CLI:
 -> **Note:** This is no longer the case from [v1.35.0].
 
 The provider is built by older `Terraform Plugin SDK` which doesn't support nullable configuration
-values. Instead the values will be set to it's default value based on it's schema primitive type.
+values. Instead the values will be set to its default value based on its schema primitive type.
 
 - schema.TypeString = ""
 - schema.TypeInt = 0
@@ -367,7 +367,7 @@ values. Instead the values will be set to it's default value based on it's schem
 - schema.TypeBool = false
 
 During initial create of this resource, we need to exclude all arguments that can take these default
-values. Argument such as `hearbeat`, `channel_max`, etc. cannot be set to its default value, 0 in
+values. Argument such as `heartbeat`, `channel_max`, etc. cannot be set to its default value, 0 in
 these cases. Current workaround is to use the default value in the initial create run, then change
 to the wanted value in the re-run.
 
@@ -375,5 +375,5 @@ Will be solved once we migrate the current provider to `Terraform Plugin Framewo
 
 </details>
 
-[CloudAMQP API list intances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
+[CloudAMQP API list instances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
 [v1.35.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.35.0

@@ -10,7 +10,7 @@ description: |-
 # cloudamqp_integration_log
 
 This resource allows you to create and manage third party log integrations for a CloudAMQP instance.
-Once configured, the logs produced will be forward to corresponding integration.
+Once configured, the logs produced will be forwarded to the corresponding integration.
 
 Only available for dedicated subscription plans.
 
@@ -324,7 +324,7 @@ found here [CloudAMQP API add integration].
     <b>Azure monitoring</b>
   </summary>
 
-The following arguments used by Azure monitoring.
+The following arguments are used by Azure monitoring.
 
 * `name`               - (Required) The name of the third party log integration (`azure_monitoring`).
 * `application_id`     - (Required) The application identifier.
@@ -343,7 +343,7 @@ Use Azure portal to configure external access for Azure Monitor. [Tutorial to fi
     <b>Cloudwatch</b>
   </summary>
 
-The following arguments used by CloudWatch.
+The following arguments are used by CloudWatch.
 
 * `name`              - (Required) The name of the third party log integration (`cloudwatchlog`).
 * `access_key_id`     - (Required/Sensitive) AWS access key identifier.
@@ -359,14 +359,14 @@ Optional arguments introduced in version [v1.38.0].
 
 * `tags` - (Optional) Enter tags to `CloudAMQP` log group like this: `Project=A,Environment=Development`.
 
-  ***Note:*** Tags are only added, unwanted tags needs to be removed manually in the AWS console.
+  ***Note:*** Tags are only added, unwanted tags need to be removed manually in the AWS console.
   Read more about tags format in the [Cloudwatch Log tags]
 
 #### IAM permissions
 
 Create an IAM user with programmatic access and the following permissions: `CreateLogGroup`, `CreateLogStream`, `DescribeLogGroups`, `DescribeLogStreams` and `PutLogEvents`.
 
-Optional arguments requires IAM permission: `PutRetentionPolicy`, `DeleteRetentionPolicy` and `TagResource`.
+Optional arguments require IAM permission: `PutRetentionPolicy`, `DeleteRetentionPolicy` and `TagResource`.
 
 </details>
 
@@ -375,7 +375,7 @@ Optional arguments requires IAM permission: `PutRetentionPolicy`, `DeleteRetenti
     <b>Coralogix</b>
   </summary>
 
-The following arguments used by Coralogix.
+The following arguments are used by Coralogix.
 
 * `name`        - (Required) The name of the third party log integration (`coralogix`).
 * `application` - (Required) The application name for Coralogix.
@@ -403,7 +403,7 @@ Existing integrations created before this change will show a configuration drift
     <b>Datadog</b>
   </summary>
 
-The following arguments used by Data dog.
+The following arguments are used by Datadog.
 
 * `name`    - (Required) The name of the third party log integration (`datadog`).
 * `api_key` - (Required/Sensitive) The API key.
@@ -427,7 +427,7 @@ Optional arguments:
     <b>Log Entries</b>
   </summary>
 
-The following arguments used by Log entries.
+The following arguments are used by Log entries.
 
 * `name`  - (Required) The name of the third party log integration (`logentries`).
 * `token` - (Required/Sensitive) Token used for authentication.
@@ -441,7 +441,7 @@ Create a Logentries token at [logentries add-log]
     <b>Loggly</b>
   </summary>
 
-The following arguments used by Loggly.
+The following arguments are used by Loggly.
 
 * `name`  - (Required) The name of the third party log integration (`loggly`).
 * `token` - (Required/Sensitive) Token used for authentication.
@@ -455,7 +455,7 @@ Create a Loggly token at `https://{your-company}.loggly.com/tokens`
     <b>Papertrail</b>
   </summary>
 
-The following arguments used by Papertrail.
+The following arguments are used by Papertrail.
 
 * `name` - (Required) The name of the third party log integration (`papertrail`).
 * `url`  - (Required) Endpoint to log integration.
@@ -469,7 +469,7 @@ Create a Papertrail endpoint at [papertrail setup]
     <b>Scalyr</b>
   </summary>
 
-The following arguments used by Scalyr.
+The following arguments are used by Scalyr.
 
 * `name`  - (Required) The name of the third party log integration (`scalyr`).
 * `token` - (Required/Sensitive) Token used for authentication.
@@ -485,12 +485,12 @@ Create a Log write token at [Scalyr keys]
     <b>Splunk</b>
   </summary>
 
-The following arguments used by Splunk.
+The following arguments are used by Splunk.
 
 * `name`       - (Required) The name of the third party log integration (`splunk`).
 * `token`      - (Required/Sensitive) Token used for authentication.
 * `host_port`  - (Required) Destination to send the logs.
-* `sourcetype` - (Required) Assign source type to the data exported, eg. generic_single_line.
+* `sourcetype` - (Required) Assign source type to the data exported, e.g. generic_single_line.
 
 Create a HTTP Event Collector token at `https://<your-splunk>.cloud.splunk.com/en-US/manager/search/http-eventcollector`
 
@@ -501,7 +501,7 @@ Create a HTTP Event Collector token at `https://<your-splunk>.cloud.splunk.com/e
     <b>Stackdriver</b>
   </summary>
 
-The following arguments used by Stackdriver.
+The following arguments are used by Stackdriver.
 
 * `name`        - (Required) The name of the third party log integration (`stackdriver`).
 * `credentials` - (Required/Sensitive) Google Service Account private key credentials.
@@ -528,7 +528,7 @@ This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.inst
 
 ## Import
 
-`cloudamqp_integration_log`can be imported using the resource identifier together with CloudAMQP
+`cloudamqp_integration_log` can be imported using the resource identifier together with CloudAMQP
 instance identifier. The identifiers are CSV separated, see example below. To retrieve the resource,
 use [CloudAMQP API list integration].
 

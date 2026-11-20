@@ -9,7 +9,7 @@ description: |-
 
 # cloudamqp_vpc_peering
 
-This resouce allows you to accepting VPC peering request from an AWS requester. This is only
+This resource allows you to accept VPC peering request from an AWS requester. This is only
 available for CloudAMQP instance hosted in AWS.
 
 ~> **Note:** Creating a VPC peering will automatically add firewall rules for the peered subnet.
@@ -247,10 +247,10 @@ resource "aws_route" "accepter_route" {
 
   ***Note:*** Available from [v1.16.0], will be required in next major version (v2.0)
 
-* `peering_id`  - (Required) Peering identifier created by AW peering request.
+* `peering_id`  - (Required) Peering identifier created by AWS peering request.
 * `sleep`       - (Optional) Configurable sleep time (seconds) between retries for accepting or
                   removing peering. Default set to 60 seconds.
-* `timeout`     - (Optional) - Configurable timeout time (seconds) for accepting or removing
+* `timeout`     - (Optional) Configurable timeout time (seconds) for accepting or removing
                   peering. Default set to 3600 seconds.
 
 ## Attributes Reference
@@ -276,7 +276,7 @@ Not possible to import this resource.
 
 ***From [v1.32.2]:***
 `cloudamqp_vpc_peering` can be imported while using the resource type, with CloudAMQP VPC
-identifier or instance identifier together with *peering_id* (CSV seperated).
+identifier or instance identifier together with *peering_id* (CSV separated).
 
 ### Resource type VPC
 
@@ -299,7 +299,7 @@ terraform import cloudamqp_vpc_peering.this vpc,<vpc_id>,<peering_id>
 
 ### Resource type instance
 
-To use the Cloudamqp instance identifier set the resource type to *instance*
+To use the CloudAMQP instance identifier set the resource type to *instance*
 
 From Terraform v1.5.0, the `import` block can be used to import this resource:
 
@@ -331,7 +331,7 @@ by making the firewall resource depend on the VPC peering resource
 `cloudamqp_vpc_peering.vpc_accept_peering`.
 
 Furthermore, since all firewall rules are overwritten, the otherwise automatically added rules for
-the VPC peering also needs to be added.
+the VPC peering also need to be added.
 
 See example below.
 

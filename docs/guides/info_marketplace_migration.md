@@ -9,7 +9,7 @@ description: |-
 # Marketplace migration
 
 If you migrate your CloudAMQP billing from a cloud marketplace to directly with CloudAMQP (or vice
-versa), the resource identifiers will change. Below follows an example on how to fetch the new
+versa), the resource identifiers will change. Below is an example of how to fetch the new
 identifiers and update them.
 
 ## Configuration file
@@ -53,11 +53,10 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 
 ## Fetch new identifier
 
-For the basic example above we need to fetch two identifiers to be used when manually update the
-state file. The identifiers are both the *VPC ID* and *Instance ID*.
+For the basic example above we need to fetch two identifiers to be used when manually updating the state file. The identifiers are both the *VPC ID* and *Instance ID*.
 
 This can be done by using the [CloudAMQP API list instances] and listing all the CloudAMQP instances
-in the new team. From the response, the new CloudAMQP instance have the identifier `209` and the
+in the new team. From the response, the new CloudAMQP instance has the identifier `209` and the
 VPC `208`.
 
 ```json
@@ -83,7 +82,7 @@ identifier.
 
 ### VPC resource
 
-The VPC resource identifier needs to be update with, `id: "208"`.
+The VPC resource identifier needs to be updated with, `id: "208"`.
 
 ```json
 {
@@ -111,7 +110,7 @@ The VPC resource identifier needs to be update with, `id: "208"`.
 
 ### CloudAMQP instance resource
 
-Two identifier needs to be updated,  first `id: "209"` and then `vpc_id: 208`.
+Two identifiers need to be updated,  first `id: "209"` and then `vpc_id: 208`.
 
 ```json
 {
@@ -203,9 +202,9 @@ The firewall resource shares the same `id` as `instance_id` update these to `id:
 
 ### More resources
 
-Depending on the resources to update even more identifiers needs to be fetched from the API.
+Depending on the resources to update even more identifiers need to be fetched from the API.
 
-### Apply new indentifiers
+### Apply new identifiers
 
 Run `terraform apply` to use the new identifiers.
 

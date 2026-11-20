@@ -2,7 +2,7 @@
 layout: "cloudamqp"
 page_title: "CloudAMQP: data source cloudamqp_plugins"
 description: |-
-  Get information installed and available plugins.
+  Get information on installed and available plugins.
 ---
 
 # cloudamqp_plugins
@@ -25,7 +25,7 @@ data "cloudamqp_plugins" "plugins" {
 * `instance_id` - (Required) The CloudAMQP instance identifier.
 * `enabled`     - (Optional) Only store enabled plugins to state.
 * `recommended` - (Optional) Only store plugins as recommended to state.
-* `required`    - (Optional) Only store plugins as reqired to state.
+* `required`    - (Optional) Only store plugins as required to state.
 * `sleep`       - (Optional) Configurable sleep time (seconds) for retries when requesting
                   information about plugins. Default set to 10 seconds.
 * `timeout`     - (Optional) Configurable timeout time (seconds) for retries when requesting
@@ -40,13 +40,13 @@ All attributes are computed.
 
 ___
 
-The `plugins` block consist of
+The `plugins` block consists of
 
 * `name`        - The type of the recipient.
-* `version`     - Rabbit MQ version that the plugins are shipped with.
+* `version`     - RabbitMQ version that the plugins are shipped with.
 * `description` - Description of what the plugin does.
 * `enabled`     - Information if the plugin is enabled or disabled (true/false).
-* `recommended` - Information if the plugin is recommeded (true/false).
+* `recommended` - Information if the plugin is recommended (true/false).
 * `required`    - Information if the plugin is required (true/false).
 
 ## Dependency

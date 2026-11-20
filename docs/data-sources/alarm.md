@@ -27,7 +27,7 @@ data "cloudamqp_alarm" "default_cpu_alarm" {
 * `alarm_id`    - (Optional) The alarm identifier. Either use this or `type` to give
                   `cloudamqp_alarm` necessary information to retrieve the alarm.
 * `type`        - (Optional) The alarm type. Either use this or `alarm_id` to give `cloudamqp_alarm`
-                  necessary information when retrieve the alarm. Supported
+                  necessary information when retrieving the alarm. Supported
                   [alarm types](#alarm-types).
 
 ## Attributes Reference
@@ -40,7 +40,7 @@ All attributes are computed.
 * `reminder_interval`   - The reminder interval (in seconds) to resend the alarm if not resolved.
                           Set to 0 for no reminders.
 * `time_threshold`      - The time interval (in seconds) the `value_threshold` should be active
-                          before trigger an alarm.
+                          before triggering an alarm.
 * `queue_regex`         - Regular expression for which queue to check.
 * `vhost_regex`         - Regular expression for which vhost to check
 * `recipients`          - Identifier for recipient to be notified.
