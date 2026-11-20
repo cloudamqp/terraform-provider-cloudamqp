@@ -77,8 +77,8 @@ resource "cloudamqp_integration_metric" "cloudwatch" {
 The following arguments are supported in the `provider` block:
 
 * `apikey` - (Required) This is the CloudAMQP Customer API key needed to make calls to the customer
-             API. It can be sourced from login in to your CloudAMQP account and go to API access or
-             go directly to [API Keys]. The API key can also be read from the environment variable
+             API. It can be sourced from logging in to your CloudAMQP account and going to API access or
+             going directly to [API Keys]. The API key can also be read from the environment variable
              `CLOUDAMQP_APIKEY`.
 
 * `enable_faster_instance_destroy` - (Optional) This will speed up the destroy action for

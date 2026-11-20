@@ -11,11 +11,10 @@ description: |-
 # cloudamqp_vpc_connect
 
 This resource is a generic way to handle PrivateLink (AWS and Azure) and Private Service Connect
-(GCP). Communication between resources can be done just as they were living inside a VPC. CloudAMQP
-creates an Endpoint Service to connect the VPC and creating a new network interface to handle the
-communicate.
+(GCP). Communication between resources can be done just as if they were living inside a VPC. CloudAMQP
+creates an Endpoint Service to connect the VPC and creates a new network interface to handle the communication.
 
-If no existing VPC available when enable VPC connect, a new VPC will be created with subnet
+If no existing VPC is available when enabling VPC connect, a new VPC will be created with subnet
 `10.52.72.0/24`.
 
 More information can be found at: [CloudAMQP VPC Connect]
@@ -221,13 +220,13 @@ resource "cloudamqp_vpc_connect" "vpc_connect" {
 
 * `instance_id`             - (Required) The CloudAMQP instance identifier.
 * `region`                  - (Required) The region where the CloudAMQP instance is hosted.
-* `allowed_principals`      - (Optional) List of allowed prinicpals used by AWS, see below table.
+* `allowed_principals`      - (Optional) List of allowed principals used by AWS, see below table.
 * `approved_subscriptions`  - (Optional) List of approved subscriptions used by Azure, see below
                               table.
 * `allowed_projects`        - (Optional) List of allowed projects used by GCP, see below table.
-* `sleep`                   - (Optional) Configurable sleep time (seconds) when enable Private
+* `sleep`                   - (Optional) Configurable sleep time (seconds) when enabling Private
                               Service Connect. Default set to 10 seconds.
-* `timeout`                 - (Optional) Configurable timeout time (seconds) when enable Private
+* `timeout`                 - (Optional) Configurable timeout time (seconds) when enabling Private
                               Service Connect. Default set to 1800 seconds.
 
 ___
@@ -254,13 +253,13 @@ All attributes are computed.
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
-Since `region` also is required, suggest to reuse the argument from CloudAMQP instance,
+Since `region` is also required, we suggest reusing the argument from CloudAMQP instance,
 `cloudamqp_instance.instance.region`.
 
 ## Import
 
 `cloudamqp_vpc_connect` can be imported using CloudAMQP instance identifier. To
-retrieve the identifier, use [CloudAMQP API list intances].
+retrieve the identifier, use [CloudAMQP API list instances].
 
 From Terraform v1.5.0, the `import` block can be used to import this resource:
 
@@ -283,7 +282,7 @@ calls. You can do this by making the firewall resource depend on the VPC Connect
 `cloudamqp_vpc_connect.vpc_connect`.
 
 Furthermore, since all firewall rules are overwritten, the otherwise automatically added rules for
-the VPC Connect also needs to be added.
+the VPC Connect also need to be added.
 
 ## Example usage with additional firewall rules
 
@@ -343,7 +342,7 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 
 </details>
 
-[CloudAMQP API list intances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
+[CloudAMQP API list instances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
 [CloudAMQP VPC Connect]: https://www.cloudamqp.com/docs/cloudamqp-vpc-connect.html
 [cloudamqp_security_firewall]: https://registry.terraform.io/providers/cloudamqp/cloudamqp/latest/docs/resources/security_firewall
 [Google docs]: https://cloud.google.com/resource-manager/reference/rest/v1/projects

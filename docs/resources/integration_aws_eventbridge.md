@@ -9,16 +9,16 @@ description: |-
 
 # cloudamqp_integration_aws_eventbridge
 
-This resource allows you to create and manage, an [AWS EventBridge] for a CloudAMQP instance. Once
+This resource allows you to create and manage an [AWS EventBridge] for a CloudAMQP instance. Once
 created, continue to map the EventBridge in the [AWS Eventbridge console].
 
 ~>  Our consumer needs to have exclusive usage to the configured queue and the maximum body size
-allowed on msgs by AWS is 256kb. The message body has to be valid JSON for AWS Eventbridge to accept
-it. If messages are too large or are not valid JSON, they will be rejected (tip: setup a dead-letter
+allowed on msgs by AWS is 256 KB. The message body has to be valid JSON for AWS Eventbridge to accept
+it. If messages are too large or are not valid JSON, they will be rejected (tip: set up a dead-letter
 queue to catch them).
 
 Not possible to update this resource. Any changes made to the argument will destroy and recreate the
-resource. Hence why all arguments use ForceNew.
+resource. Hence all arguments use ForceNew.
 
 Only available for dedicated subscription plans.
 
@@ -87,13 +87,13 @@ The following arguments are supported:
 
 * `aws_account_id`  - (ForceNew/Required) The 12 digit AWS Account ID where you want the events to
                       be sent to.
-* `aws_region`      - (ForceNew/Required) The AWS region where you the events to be sent to.
+* `aws_region`      - (ForceNew/Required) The AWS region where you want the events to be sent to.
                       (e.g. us-west-1, us-west-2, ..., etc.)
 * `vhost`           - (ForceNew/Required) The VHost the queue resides in.
 * `queue`           - (ForceNew/Required) A (durable) queue on your RabbitMQ instance.
 * `with_headers`    - (ForceNew/Required) Include message headers in the event data.
                       `({ "headers": { }, "body": { "your": "message" } })`
-* `prefetch`        - (ForceNew/Optional) Set the prefetch for the Eventbrigde consumer to increase
+* `prefetch`        - (ForceNew/Optional) Set the prefetch for the EventBridge consumer to increase
                       throughput. Supported from [v1.38.0].
 
 ## Attributes Reference

@@ -15,21 +15,20 @@ This resource allows you to resize the disk with additional storage capacity.
 
 ***From v1.25.0***: Google Compute Engine (GCE) and Azure available.
 
-Introducing a new optional argument called `allow_downtime`. Leaving it out or set it to false will
+Introducing a new optional argument called `allow_downtime`. Leaving it out or setting it to false will
 proceed to try and resize the disk without downtime, available for *AWS*, *GCE* and *Azure*.
 
-`allow_downtime` also makes it possible to circumvent the time rate limit or shrinking the disk.
+`allow_downtime` also makes it possible to circumvent the rate limit or shrink the disk.
 
 | Cloud Platform        | allow_downtime=false | allow_downtime=true           | Possible to resize |
 |-----------------------|----------------------|-------------------------------|--------------------|
-| amazon-web-services   | Expand current disk* | Try to expand, otherwise swap | Every 6 hour       |
-| google-compute-engine | Expand current disk* | Try to expand, otherwise swap | Every 4 hour       |
+| amazon-web-services   | Expand current disk* | Try to expand, otherwise swap | Every 6 hours       |
+| google-compute-engine | Expand current disk* | Try to expand, otherwise swap | Every 4 hours       |
 | azure-arm             | Expand current disk* | Expand current disk           | No time rate limit |
 
-*Preferable method to use.
+*Preferred method to use.
 
--> **Note:** Due to restrictions from cloud providers, it's only possible to resize the disk after
-the rate time limit. See `Possible to resize` column above for the different cloud platforms.
+-> **Note:** Due to restrictions from cloud providers, it's only possible to resize the disk after the rate limit. See `Possible to resize` column above for the different cloud platforms.
 
 -> **Note:** Shrinking the disk will always need to swap the old disk to a new one and require
 `allow_downtime` set to *true*.
@@ -42,7 +41,7 @@ resource will resize back to the declared value — which shrinks the disk (with
 alarm has already grown it beyond that value. Manage the disk with either this resource or the
 `disk_auto_resize` alarm, not both.
 
-Pricing is available at [CloudAMQP] and only available for dedicated subscription plans.
+Pricing is available at [CloudAMQP]. Only available for dedicated subscription plans.
 
 ## Example Usage
 
@@ -229,7 +228,7 @@ All attributes are computed.
 
 ___
 
-The `nodes` block consist of
+The `nodes` block consists of
 
 * `name`                  - Name of the node.
 * `disk_size`             - Subscription plan disk size

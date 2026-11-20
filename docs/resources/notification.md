@@ -168,7 +168,7 @@ The following arguments are supported:
 * `value`       - (Required) Integration/API key or endpoint to send the notification.
 * `name`        - (Optional) Display name of the recipient.
 * `options`     - (Optional) Options argument (e.g. `rk` used for VictorOps routing key).
-* `responders`  - (Optional) An array of reponders (only for OpsGenie). Each `responders` block
+* `responders`  - (Optional) An array of responders (only for OpsGenie). Each `responders` block
                   consists of the field documented below.
 
 ___
@@ -176,8 +176,7 @@ ___
 The options parameter:
 
 * rk        - (Optional) Routing key to route alarm notification (can be used with Victorops).
-* dedupkey  - (Optional) If multiple alarms are triggered using a recipient with this key, only the
-              the first alarm will trigger a notification (can be used with PagerDuty). Leave blank
+* dedupkey  - (Optional) If multiple alarms are triggered using a recipient with this key, only the first alarm will trigger a notification (can be used with PagerDuty). Leave blank
               to use the generated dedup key.
 
 ___

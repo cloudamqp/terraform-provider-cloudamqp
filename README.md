@@ -165,7 +165,7 @@ export TF_LOG_PROVIDER=DEBUG
 
 ### CloudAMQP API
 
-The provider communicates with two CloudAMQP APIs, both using the same* API key:
+The provider communicates with two CloudAMQP APIs, both using the same API key*:
 
 | API | Base URL | Purpose |
 | --- | --- | --- |

@@ -3,10 +3,10 @@ layout: "cloudamqp"
 page_title: "CloudAMQP: Managed VPC"
 subcategory: "info"
 description: |-
-  Example of handle managed VPC, post v1.16.0
+  Example of handling managed VPC, post v1.16.0
 ---
 
-# Guide to handle managed VPC
+# Guide to handling managed VPC
 
 From v1.16.0 it is possible to handle standalone VPC as a managed VPC resource.
 
@@ -52,7 +52,7 @@ Both instances can be deleted and the managed VPC can still be used.
 
 ~>  ***Deprecated:*** Will be removed in next major version (v2.0)
 
-Creating dedicated instance with attribute vpc_subnet. This will both create an instance and a
+Creating a dedicated instance with the attribute vpc_subnet. This will both create an instance and a
 standalone VPC.
 
 ```hcl
@@ -131,7 +131,7 @@ resource "cloudamqp_instance" "instance_01" {
 }
 ```
 
-In order to keep the associated VPC the attribute `keep_associated_vpc` must be set to *true*.
+In order to keep the associated VPC, the attribute `keep_associated_vpc` must be set to *true*.
 
 Run `terraform apply` to update the state file with the correct data, then the instance can be
 deleted.

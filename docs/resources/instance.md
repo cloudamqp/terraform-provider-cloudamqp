@@ -2,7 +2,7 @@
 layout: "cloudamqp"
 page_title: "CloudAMQP: cloudamqp_instance"
 description: |-
-  Creates and manages a Rabbit MQ instance within CloudAMQP.
+  Creates and manages a RabbitMQ or LavinMQ instance within CloudAMQP.
 ---
 
 <!-- markdownlint-disable MD033 -->
@@ -10,11 +10,11 @@ description: |-
 # cloudamqp_instance
 
 This resource allows you to create and manage a CloudAMQP instance running either [**RabbitMQ**] or
-[**LavinMQ**] and can be deployed to multiple cloud platforms provider and regions, see
+[**LavinMQ**] and can be deployed to multiple cloud platform providers and regions, see
 [instance regions] for more information.
 
 Once the instance is created it will be assigned a unique identifier. All other resources and data
-sources created for this instance needs to reference this unique instance identifier.
+sources created for this instance need to reference this unique instance identifier.
 
 Pricing is available at [CloudAMQP plans].
 
@@ -167,7 +167,7 @@ resource "cloudamqp_instance" "instance_02" {
 }
 ```
 
-Set attribute `keep_associated_vpc` to true, will keep managed VPC when deleting the instances.
+Setting attribute `keep_associated_vpc` to true will keep managed VPC when deleting the instances.
 
 </details>
 
@@ -280,8 +280,8 @@ The following arguments are supported:
                     change number of nodes the `plan` needs to be updated.
 
 * `tags`        - (Optional) One or more tags for the CloudAMQP instance, makes it possible to
-                  categories multiple instances in console view. Default there is no tags assigned.
-* `rmq_version` - (Optional/Computed) The Rabbit MQ version. Can be left out, will then be set to
+                  categorize multiple instances in console view. Default there is no tags assigned.
+* `rmq_version` - (Optional/Computed) The RabbitMQ version. Can be left out, will then be set to
                   default value used by CloudAMQP API.
 
   ***Note:*** There is not yet any support in the provider to change the RMQ version. Once it's set
@@ -301,7 +301,7 @@ The following arguments are supported:
                           value = false.
 * `keep_associated_vpc` - (Optional) Keep associated VPC when deleting instance. Default set to
                           false.
-* `copy_settings`       - (Optional) Copy settings from one CloudAMQP instance to a new. Consists of
+* `copy_settings`       - (Optional) Copy settings from one CloudAMQP instance to a new one. Consists of
                           the block documented below.
 * `preferred_az`        - (Optional) The AZs to place your nodes in. Each entry corresponds to a server in your cluster, so for a 3 node cluster, provide 3 AZs in the list.
 
@@ -335,7 +335,7 @@ All attributes are computed.
 * `host`          - The external hostname for the CloudAMQP instance.
 * `host_internal` - The internal hostname for the CloudAMQP instance.
 * `cluster_name`  - The cluster name of the CloudAMQP instance.
-* `vhost`         - The virtual host used by Rabbit MQ.
+* `vhost`         - The virtual host used by RabbitMQ.
 * `dedicated`     - Information if the CloudAMQP instance is shared or dedicated.
 * `backend`       - Information if the CloudAMQP instance runs either RabbitMQ or LavinMQ.
 * `credentials`   - (Sensitive) Broker credentials block with information extracted from URL.
@@ -349,8 +349,8 @@ The `credentials` block consists of:
 
 ## Import
 
-`cloudamqp_instance`can be imported using resource identifier. To retrieve the resource identifier,
-use [CloudAMQP API list instances]
+`cloudamqp_instance` can be imported using resource identifier. To retrieve the resource identifier,
+use [CloudAMQP API list instances].
 
 From Terraform v1.5.0, the `import` block can be used to import this resource:
 
@@ -367,8 +367,8 @@ Or use Terraform CLI:
 
 ## Upgrade and downgrade
 
-It's possible to upgrade or downgrade your subscription plan, this will either increase or decrease
-the underlying resource used for by the CloudAMQP instance. To do this, change the argument `plan`
+It's possible to upgrade or downgrade your subscription plan. This will either increase or decrease
+the underlying resource used by the CloudAMQP instance. To do this, change the argument `plan`
 in the configuration and apply the changes. See available [plans].
 
 <details>

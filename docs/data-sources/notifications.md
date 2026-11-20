@@ -41,7 +41,7 @@ All attributes are computed.
 * `type`          - The type of the recipient.
 * `value`         - The notification endpoint, where to send the notification.
 * `options`       - Options argument (e.g. `rk` used for VictorOps routing key).
-* `responders`  - An array of reponders (only for OpsGenie). Each `responders` block
+* `responders`  - An array of responders (only for OpsGenie). Each `responders` block
                   consists of the field documented below.
 
 ___
@@ -49,8 +49,7 @@ ___
 The options parameter:
 
 * rk        - (Optional) Routing key to route alarm notification (can be used with Victorops).
-* dedupkey  - (Optional) If multiple alarms are triggered using a recipient with this key, only the
-              the first alarm will trigger a notification (can be used with PagerDuty). Leave blank
+* dedupkey  - (Optional) If multiple alarms are triggered using a recipient with this key, only the first alarm will trigger a notification (can be used with PagerDuty). Leave blank
               to use the generated dedup key.
 
 ___

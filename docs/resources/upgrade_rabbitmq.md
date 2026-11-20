@@ -11,9 +11,9 @@ description: |-
 
 This resource allows you to upgrade RabbitMQ version. Depending on initial versions of RabbitMQ and
 Erlang of the CloudAMQP instance, multiple runs may be needed to get to the latest or wanted version.
-Reason for this is certain supported RabbitMQ version will also automatically upgrade Erlang version.
+The reason for this is that certain supported RabbitMQ versions will also automatically upgrade Erlang version.
 
-There is three different ways to trigger the version upgrade
+There are three different ways to trigger the version upgrade
 
 > * Specify RabbitMQ version to upgrade to
 > * Upgrade to latest RabbitMQ version
@@ -33,10 +33,10 @@ Only available for dedicated subscription plans running ***RabbitMQ***.
     </b>
   </summary>
 
-Specify the version to upgrade to. List available upgradable versions, use
+Specify the version to upgrade to. To list available upgradable versions, use
 [CloudAMQP API available versions].
 
-After the upgrade finished, there can still be newer versions available.
+After the upgrade has finished, there can still be newer versions available.
 
 ```hcl
 resource "cloudamqp_instance" "instance" {
@@ -90,7 +90,7 @@ resource "cloudamqp_upgrade_rabbitmq" "upgrade" {
     </b>
   </summary>
 
-Old behaviour of the upgrading the RabbitMQ version. No longer recommended.
+The old behaviour of upgrading the RabbitMQ version. No longer recommended.
 
 ```hcl
 # Retrieve latest possible upgradable versions for RabbitMQ and Erlang
@@ -154,7 +154,7 @@ Not possible to import this resource.
     (e.g. 3.8.x to 3.8.y) are possible without downtime in a multi-node cluster, but minor version
     upgrades will require downtime.
 > * Auto delete queues (queues that are marked AD) will be deleted during the update.
-> * Any custom plugins support has installed on your behalf will be disabled and you need to contact
+> * Any custom plugins that support has installed on your behalf will be disabled and you need to contact
     [support] and ask to have them re-installed.
 > * TLS 1.0 and 1.1 will not be supported after the update.
 
@@ -172,4 +172,4 @@ Example steps needed when starting at RabbitMQ version 3.12.2
 | 3.13.2           | -                                         | -                             |
 
 [CloudAMQP API available versions]: https://docs.cloudamqp.com/instance-api.html#tag/nodes/get/nodes/available-versions
-[support]: support@cloudamqp.com
+[support]: mailto:support@cloudamqp.com

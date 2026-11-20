@@ -147,12 +147,12 @@ All attributes are computed.
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
-If used together with [VPC GPC peering], see additional information.
+If used together with [VPC GCP peering], see additional information.
 
 ## Import
 
 `cloudamqp_security_firewall` can be imported using CloudAMQP instance identifier. To
-retrieve the identifier, use [CloudAMQP API list intances].
+retrieve the identifier, use [CloudAMQP API list instances].
 
 From Terraform v1.5.0, the `import` block can be used to import this resource:
 
@@ -170,7 +170,7 @@ Or use Terraform CLI:
 ## Destroy the resource
 
 From [v1.33.0] when destroying this resource the firewall on the servers will be removed. I.e. the
-firewall will be completly closed.
+firewall will be completely closed.
 
 Older version will instead update the firewall with a default rule.
 
@@ -185,7 +185,7 @@ rules {
 
 ## Enable faster instance destroy
 
-When running `terraform destroy` this resource will try configure the firewall with default rules
+When running `terraform destroy` this resource will try to configure the firewall with default rules
 before deleting `cloudamqp_instance`. This is not necessary since the servers will be deleted.
 
 Set `enable_faster_instance_destroy` to ***true*** in the provider configuration to skip this.
@@ -195,7 +195,7 @@ Set `enable_faster_instance_destroy` to ***true*** in the provider configuration
 <details>
   <summary>Custom ports trigger new update every time</summary>
 
-  Before release v1.15.1 using the custom ports can cause a missmatch upon reading data and
+  Before release v1.15.1 using the custom ports can cause a mismatch upon reading data and
   trigger a new update every time.
 
   Reason is that there is a bug in validating the response from the underlying API.
@@ -206,7 +206,7 @@ Set `enable_faster_instance_destroy` to ***true*** in the provider configuration
 <details>
   <summary>Using pre-defined service port in ports</summary>
 
-Using one of the port from the pre-defined services in ports argument, see example of using port
+Using one of the ports from the pre-defined services in ports argument, see example of using port
 5671 instead of the service *AMQPS*.
 
 ```hcl
@@ -222,10 +222,10 @@ resource "cloudamqp_security_firewall" "firewall_settings" {
 ```
 
 Will still create the firewall rule for the instance, but will trigger a new update each `plan` or
-`apply`. Due to a missmatch between state file and underlying API response.
+`apply`. Due to a mismatch between state file and underlying API response.
 
 To solve this, edit the configuration file and change port 5671 to service *AMQPS* and run
-`terraform apply -refresh-only` to only update the state file and remove the missmatch.
+`terraform apply -refresh-only` to only update the state file and remove the mismatch.
 
 ```hcl
 resource "cloudamqp_security_firewall" "firewall_settings" {
@@ -243,9 +243,9 @@ The provider from [v1.15.2] will start to warn about using this.
 
  </details>
 
-[CloudAMQP API list intances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
+[CloudAMQP API list instances]: https://docs.cloudamqp.com/index.html#tag/instances/get/instances
 [v1.15.1]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.15.1
 [v1.15.2]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.15.2
 [v1.27.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.27.0
 [v1.33.0]: https://github.com/cloudamqp/terraform-provider-cloudamqp/releases/tag/v1.33.0
-[VPC GPC peering]: ./vpc_gcp_peering#create-vpc-peering-with-additional-firewall-rules
+[VPC GCP peering]: ./vpc_gcp_peering#create-vpc-peering-with-additional-firewall-rules

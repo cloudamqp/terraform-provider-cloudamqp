@@ -2,14 +2,14 @@
 layout: "cloudamqp"
 page_title: "CloudAMQP: cloudamqp_plugin"
 description: |-
-  Enable and disable Rabbit MQ plugin.
+  Enable and disable RabbitMQ plugin.
 ---
 
 <!-- markdownlint-disable MD033 -->
 
 # cloudamqp_plugin
 
-This resource allows you to enable or disable Rabbit MQ plugins.
+This resource allows you to enable or disable RabbitMQ plugins.
 
 Only available for dedicated subscription plans running ***RabbitMQ***.
 
@@ -30,8 +30,8 @@ resource "cloudamqp_plugin" "rabbitmq_top" {
     </b>
   </summary>
 
-Rabbit MQ can only change one plugin at a time. It will fail if multiple plugins resources are used,
-unless by creating dependencies with `depend_on` between the resources. Once one plugin has been
+RabbitMQ can only change one plugin at a time. It will fail if multiple plugins resources are used,
+unless by creating dependencies with `depends_on` between the resources. Once one plugin has been
 enabled, the other will continue. See example below.
 
 ```hcl
@@ -62,7 +62,7 @@ resource "cloudamqp_plugin" "rabbitmq_amqp1_0" {
     </b>
   </summary>
 
-CloudAMQP Terraform provider [v1.19.2] support asynchronous request for plugin actions.
+CloudAMQP Terraform provider [v1.19.2] supports asynchronous request for plugin actions.
 
 ```hcl
 resource "cloudamqp_plugin" "rabbitmq_top" {
@@ -125,7 +125,7 @@ resource "cloudamqp_plugin" "rabbitmq_amqp1_0" {
 The following arguments are supported:
 
 * `instance_id` - (Required) The CloudAMQP instance ID.
-* `name`        - (Required) The name of the Rabbit MQ plugin.
+* `name`        - (Required) The name of the RabbitMQ plugin.
 * `enabled`     - (Required) Enable or disable the plugins.
 * `sleep`       - (Optional) Configurable sleep time (seconds) for retries when requesting
                   information about plugins. Default set to 10 seconds.
@@ -149,7 +149,7 @@ All attributes are computed.
 
 This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
-If multiple plugins should be enable, create dependencies between the plugin resources. See example
+If multiple plugins should be enabled, create dependencies between the plugin resources. See example
 above.
 
 ## Import

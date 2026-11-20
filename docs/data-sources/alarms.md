@@ -43,7 +43,7 @@ All attributes are computed.
 * `reminder_interval`   - The reminder interval (in seconds) to resend the alarm if not resolved.
                           Set to 0 for no reminders.
 * `time_threshold`      - The time interval (in seconds) the `value_threshold` should be active
-                          before trigger an alarm.
+                          before triggering an alarm.
 * `queue_regex`         - Regular expression for which queue to check.
 * `vhost_regex`         - Regular expression for which vhost to check
 * `recipients`          - Identifier for recipient to be notified.
