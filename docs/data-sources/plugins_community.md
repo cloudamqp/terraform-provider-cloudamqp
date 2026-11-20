@@ -38,7 +38,7 @@ ___
 
 The `plugins` block consists of
 
-* `name`        - The type of the recipient.
+* `name`        - The name of the plugin.
 * `require`     - Min. required Rabbit MQ version to be used.
 * `description` - Description of what the plugin does.
 

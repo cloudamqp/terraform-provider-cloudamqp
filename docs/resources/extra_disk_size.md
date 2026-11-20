@@ -239,7 +239,7 @@ The `nodes` block consist of
 
 ## Dependency
 
-This data source depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
+This resource depends on CloudAMQP instance identifier, `cloudamqp_instance.instance.id`.
 
 ## Import
 

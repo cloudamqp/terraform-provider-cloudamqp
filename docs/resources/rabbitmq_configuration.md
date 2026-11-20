@@ -317,7 +317,7 @@ Note: When enabled, `rabbit.ssl_options.fail_if_no_peer_cert` should be set to *
 
 | Type | Affect |
 | --- | --- |
-| string | RabbitMQ restart required |
+| bool | RabbitMQ restart required |
 
 Note: When enabled, `rabbit.ssl_options.verify` must be set to ***verify_peer***.
 

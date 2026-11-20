@@ -31,7 +31,7 @@ Elegant Ermine      | ermine         | shared    | -
 Passionate Puffin   | puffin-1,3,5   | dedicated | 1,3,5
 Playful Penguin     | penguin-1,3,5  | dedicated | 1,3,5
 Lively Lynx         | lynx-1,3,5     | dedicated | 1,3,5
-Wild Wolverin       | wolverin-1,3,5 | dedicated | 1,3,5
+Wild Wolverine      | wolverine-1,3,5 | dedicated | 1,3,5
 Remarkable Reindeer | reindeer-1,3,5 | dedicated | 1,3,5
 Brave Bear          | bear-1,3,5     | dedicated | 1,3,5
 Outstanding Orca    | orca-1,3,5     | dedicated | 1,3,5
