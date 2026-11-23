@@ -41,7 +41,7 @@ All attributes are computed.
 
 ___
 
-The `vpcs` block consist of
+The `vpcs` block consists of
 
 * `id`          - The VPC identifier.
 * `name`        - The VPC instance name.

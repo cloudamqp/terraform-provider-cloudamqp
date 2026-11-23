@@ -23,7 +23,7 @@ Only available for dedicated subscription plans running ***LavinMQ***.
     </b>
   </summary>
 
-Specify the version to upgrade to. List available upgradable versions, use
+Specify the version to upgrade to. To list available upgradable versions, use
 [CloudAMQP API available versions].
 
 ```hcl

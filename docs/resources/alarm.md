@@ -10,14 +10,14 @@ description: |-
 # cloudamqp_alarm
 
 This resource allows you to create and manage alarms to trigger based on a set of conditions. Once
-triggerd a notification will be sent to the assigned recipients. When creating a new instance, there
-will also be a set of default alarms (cpu, memory and disk) created. All default alarms uses the
+triggered, a notification will be sent to the assigned recipients. When creating a new instance, there
+will also be a set of default alarms (cpu, memory and disk) created. All default alarms use the
 default recipient for notifications.
 
 By setting `no_default_alarms` to *true* in `cloudamqp_instance`. This will create the instance
 without default alarms and avoid the need to import them to get full control.
 
-Available for all subscription plans, but `lemur`and `tiger` are limited to fewer alarm types. The
+Available for all subscription plans, but `lemur` and `tiger` are limited to fewer alarm types. The
 limited types supported can be seen in the table below in [Alarm Type Reference].
 
 ## Example Usage
@@ -71,7 +71,7 @@ resource "cloudamqp_alarm" "memory_alarm" {
     </b>
   </summary>
 
-Only one notice alarm can exists and cannot be created, instead the alarm resource will be updated.
+Only one notice alarm can exist and cannot be created, instead the alarm resource will be updated.
 
 ```hcl
 # New recipient
@@ -129,7 +129,7 @@ The following arguments are supported:
 * `type`              - (Required) The alarm type, see valid options below.
 * `enabled`           - (Required) Enable or disable the alarm to trigger.
 * `reminder_interval` - (Optional) The reminder interval (in seconds) to resend the alarm if not
-                        resolved. Set to 0 for no reminders. The Default is 0.
+                        resolved. Set to 0 for no reminders. The default is 0.
 * `value_threshold`   - (Optional) The value to trigger the alarm for.
 * `time_threshold`    - (Optional) The time interval (in seconds) the `value_threshold` should be
                         active before triggering an alarm.
@@ -144,7 +144,7 @@ Specific arguments for `disk` and `disk_auto_resize` alarms
 * `value_calculation` - (Optional) Disk value threshold calculation, `fixed, percentage` of disk
                         space remaining.
 * `allow_downtime`    - (Optional) For `disk_auto_resize`, allow the resize to proceed even if it
-                        requires brief downtime. The Default is `false`.
+                        requires brief downtime. The default is `false`.
 * `max_disk_size`     - (Optional) For `disk_auto_resize`, the maximum additional disk size (in GiB)
                         to resize up to. Valid values are `25, 50, 100, 250, 500, 1000, 2000`.
                         Leave unset to allow resizing up to the largest size (2000 GiB). Set it
@@ -192,7 +192,7 @@ Optional argument for all alarms: `tags, queue_regex, vhost_regex`
 
 <br>
 
-~> Notice alarm is manadatory! Only one can exists and cannot be deleted. Setting `no_default_alarm`
+~> Notice alarm is mandatory! Only one can exist and cannot be deleted. Setting `no_default_alarm`
 to true, will still create this alarm. See updated changes to [notice alarm] below.
 
 ## Dependency
@@ -220,7 +220,7 @@ Or use Terraform CLI:
 ## Notice alarm
 
 There is a limitation for notice alarm in the API backend. This alarm is mandatory, multiple
-alarms cannot exists or be deleted.
+alarms cannot exist or be deleted.
 
 From provider version [v1.29.5] it's possible to manage the notice alarm and no longer needs to be
 imported. Just create the alarm resource as usually and it will be updated with given recipients.

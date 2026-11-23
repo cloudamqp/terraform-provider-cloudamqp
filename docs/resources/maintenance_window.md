@@ -40,7 +40,7 @@ resource "cloudamqp_maintenance_window" "this" {
   </summary>
 
 When setting the automatic updates to "on", a maintenance for version update will be scheduled once
-a new LavinMQ version been released.
+a new LavinMQ version has been released.
 
 ```hcl
 resource "cloudamqp_maintenance_window" "this" {
@@ -86,10 +86,10 @@ resource "cloudamqp_maintenance_window" "this" {
 The following arguments are supported:
 
 * `instance_id`       - (Required) The CloudAMQP instance ID.
-* `preferred_day`     - (Optional) Preferred day of the week when to schedule maintenance.
-* `preferred_time`    - (Optional) Preferred time (UTC) of the day when to schedule maintenance.
+* `preferred_day`     - (Optional) Preferred day of the week on which to schedule maintenance.
+* `preferred_time`    - (Optional) Preferred time (UTC) of the day at which to schedule maintenance.
 * `automatic_updates` - (Optional/Computed) Allow scheduling of a maintenance for version update
-                        when a new LavinMQ version been released.
+                        when a new LavinMQ version has been released.
 
 ### Valid preferred days
 

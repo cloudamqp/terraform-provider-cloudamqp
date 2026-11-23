@@ -10,7 +10,7 @@ description: |-
 
 This provider doesn't support using the Message Broker HTTP API to create user, vhost etc. on the underlying LavinMQ or RabbitMQ broker.
 
-From CloudAMQP provider [v1.44.0] the `cloudamqp_instance` resource exposes the credentials, that can be used for provider to provider configuration.
+From CloudAMQP provider [v1.44.0] the `cloudamqp_instance` resource exposes the credentials, which can be used for provider to provider configuration.
 
 There are other providers at the registry that are built for this.
 
@@ -102,7 +102,7 @@ The credentials exposed by `cloudamqp_instance` are sensitive. Ensure:
 
 ### Single provider configuration
 
-If multiple `cloudamqp_instance` resources are created, each resource need its own broker provider configuration. Alias can be used for this, but will increase the complexity of the configuration.
+If multiple `cloudamqp_instance` resources are created, each resource needs its own broker provider configuration. Alias can be used for this, but will increase the complexity of the configuration.
 
 ```hcl
 provider "lavinmq" {

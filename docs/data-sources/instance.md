@@ -10,7 +10,7 @@ description: |-
 # cloudamqp_instance
 
 Use this data source to retrieve information about an already created CloudAMQP instance. In order
-to retrieve the correct information, the CoudAMQP instance identifier is needed.
+to retrieve the correct information, the CloudAMQP instance identifier is needed.
 
 ## Example Usage
 
@@ -62,15 +62,15 @@ All attributes are computed.
 * `vpc_id`      - ID of the VPC configured for the CloudAMQP instance.
 * `vpc_subnet`  - Dedicated VPC subnet configured for the CloudAMQP instance.
 * `nodes`       - Number of nodes in the cluster of the CloudAMQP instance.
-* `rmq_version` - The version of installed Rabbit MQ.
+* `rmq_version` - The version of installed RabbitMQ.
 * `url`         - (Sensitive) The AMQP URL (uses the internal hostname if the instance was created
                   with VPC), used by clients to connect for pub/sub.
-* `apikey`      - (Sensitive) The API key to secondary API handing alarms, integration etc.
+* `apikey`      - (Sensitive) The API key to secondary API handling alarms, integration etc.
 * `tags`        - Tags the CloudAMQP instance with categories.
 * `host`        - The external hostname for the CloudAMQP instance.
 * `host_internal` - The internal hostname for the CloudAMQP instance.
 * `cluster_name` - The cluster name of the CloudAMQP instance.
-* `vhost`       - The virtual host configured in Rabbit MQ.
+* `vhost`       - The virtual host configured in RabbitMQ.
 * `dedicated`   - Information if the CloudAMQP instance is shared or dedicated.
 * `backend`     - Information if the CloudAMQP instance runs either RabbitMQ or LavinMQ.
 * `credentials`   - (Sensitive) Broker credentials block with information extracted from URL.

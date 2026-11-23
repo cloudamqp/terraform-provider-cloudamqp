@@ -9,7 +9,7 @@ description: |-
 
 # cloudamqp_account_actions
 
-This resource allows you to invoke an account action. Current supported actions are
+This resource allows you to invoke an account action. The currently supported actions are
 
 * Rotate password for RabbitMQ/LavinMQ user
 * Rotate API key for the CloudAMQP instance
@@ -47,12 +47,12 @@ resource "cloudamqp_account_actions" "enable_vpc" {
     </b>
   </summary>
 
-To add the enable VPC as a managed standalone VPC.
+Add the VPC created by the enable action as a managed standalone VPC.
 
 First fetch the VPC identifier <vpc_id> with either
 
 1. Run `terraform refresh` the `vpc_id` will be added to the state for the `cloudamqp_instance.instance` resource.
-2. Retrieve the `vpc_id` form the CloudAMQP HTTP API. Either via [list-instances] or [list-vpcs].
+2. Retrieve the `vpc_id` from the CloudAMQP HTTP API. Either via [list-instances] or [list-vpcs].
 
 ```hcl
 import {
@@ -83,7 +83,7 @@ resource "cloudamqp_account_actions" "enable_vpc" {
 
 </details>
 
-After the action have been invoked, the state need to be refreshed to get the latest changes in
+After the action has been invoked, the state needs to be refreshed to get the latest changes in
 ***cloudamqp_instance*** or ***data.cloudamqp_instance***. This can be done with
 `terraform refresh`.
 
@@ -104,7 +104,7 @@ Initiate rotation of the user password on your instance.
 Initiate rotation of the instance API key used for the CloudAMQP [HTTP API].
 
 **enable-vpc:**
-Enables the VPC feature on existing instance not using standalone VPC. You can't choose subnet when
+Enables the VPC feature on an existing instance not using standalone VPC. You can't choose subnet when
 enabling VPC features and it will be set to `10.56.72.0/24`.
 
 Extra cost will be applied: [CloudAMQP extra plans]

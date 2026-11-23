@@ -10,7 +10,7 @@ description: |-
 
 # cloudamqp_webhook
 
-This resource allows you to add, update or remove a swebhook for a specific vhost and queue.
+This resource allows you to add, update or remove a webhook for a specific vhost and queue.
 
 Only available for dedicated subscription plans.
 
@@ -25,7 +25,7 @@ Only available for dedicated subscription plans.
   </summary>
 
 Support to updating the resource which makes the argument no longer require `ForceNew` behaviour.
-The argument `retry_interval` have also been removed.
+The argument `retry_interval` has also been removed.
 
 ```hcl
 resource "cloudamqp_webhook" "webhook_queue" {
@@ -109,7 +109,7 @@ Information for older versions
     <i>Before v1.30.0</i>
   </summary>
 
-  Versions before v1.30.0 doesn't support updating the resource, therefore all arguments using the
+  Versions before v1.30.0 don't support updating the resource, therefore all arguments use the
   `ForceNew` behaviour. Any changes to an argument will destroy and re-create the resource. The
   argument `retry_interval` is set to required, even if it's no longer supported in the backend.
 
