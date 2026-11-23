@@ -110,7 +110,7 @@ The VPC resource identifier needs to be updated to `id: "208"`.
 
 ### CloudAMQP instance resource
 
-Two identifiers need to be updated,  first `id: "209"` and then `vpc_id: 208`.
+Two identifiers need to be updated: first `id: "209"` and then `vpc_id: 208`.
 
 ```json
 {

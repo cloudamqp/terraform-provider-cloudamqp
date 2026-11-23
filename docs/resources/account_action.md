@@ -47,7 +47,7 @@ resource "cloudamqp_account_actions" "enable_vpc" {
     </b>
   </summary>
 
-To add the enabled VPC as a managed standalone VPC.
+Add the VPC created by the enable action as a managed standalone VPC.
 
 First fetch the VPC identifier <vpc_id> with either
 

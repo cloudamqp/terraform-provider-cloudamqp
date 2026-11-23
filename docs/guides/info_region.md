@@ -8,7 +8,8 @@ description: |-
 
 # Instance region
 
-CloudAMQP supports hosting by multiple cloud platform providers and over multiple regions. Below are a few examples of supported platforms and regions. For fully updated list see [CloudAMQP plans] and
+CloudAMQP supports hosting by multiple cloud platform providers and over multiple regions. Below are
+a few examples of supported platforms and regions. For a fully updated list, see [CloudAMQP plans],
 scroll to the bottom and expand `List all available regions`.
 
 Platforms and regions with shared servers are also listed, for AWS we

@@ -152,8 +152,8 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 }
 ```
 
-Peering request and waiting for peering status of the state to change to ACTIVE before the create
-resource is considered complete. This is done once both sides have done the peering.
+Create the peering request and wait for the peering status to change to ACTIVE before the resource
+creation is considered complete. This happens once both sides have completed the peering.
 
 ```hcl
 resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
@@ -175,7 +175,7 @@ resource "cloudamqp_vpc_gcp_peering" "vpc_peering_request" {
 
   ***Note:*** Available from [v1.16.0], will be required in next major version (v2.0)
 
-* `peer_network_uri`        - (Required) Network URI of the VPC network to which you will peer.
+* `peer_network_uri`        - (Required) Network URI of the VPC network to peer with.
                               See examples above for the format.
 * `wait_on_peering_status`  - (Optional) Makes the resource wait until the peering is connected.
                               Default set to false.

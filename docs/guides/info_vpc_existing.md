@@ -10,12 +10,13 @@ description: |-
 
 If you already have a CloudAMQP instance with a VPC for a given `region`, it's possible to create
 another CloudAMQP instance in the same `region` and add this to the existing VPC. In order to do
-this, the internal CloudAMQP VPC identifier (vpc_id) must be known and then added to new
-CloudAMQP instance.
+this, the internal CloudAMQP VPC identifier (vpc_id) must be known and then added to the
+new CloudAMQP instance.
 
 ## Example Usage
 
-To extract the existing VPC identifier, the CloudAMQP used to create the VPC can be loaded as a data source. Either by using the CloudAMQP instance name or identifier (instance_id).
+To extract the existing VPC identifier, the CloudAMQP instance used to create the VPC can be loaded
+as a data source, using either the instance name or identifier (instance_id).
 
 ```hcl
 # by instance name

@@ -9,8 +9,8 @@ description: |-
 
 # cloudamqp_vpc_peering
 
-This resource allows you to accept VPC peering request from an AWS requester. This is only
-available for CloudAMQP instance hosted in AWS.
+This resource allows you to accept a VPC peering request from an AWS requester. This is only
+available for CloudAMQP instances hosted in AWS.
 
 ~> **Note:** Creating a VPC peering will automatically add firewall rules for the peered subnet.
 
