@@ -82,7 +82,7 @@ identifier.
 
 ### VPC resource
 
-The VPC resource identifier needs to be updated with, `id: "208"`.
+The VPC resource identifier needs to be updated to `id: "208"`.
 
 ```json
 {
